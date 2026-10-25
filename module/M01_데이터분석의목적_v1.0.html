@@ -1,0 +1,1062 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>데이터 분석의 목적</title>
+<!-- M01 데이터 분석의 목적 v1.0 · 기준 템플릿 v1.3로 제작 (2026-10-25) -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<style>
+:root{
+  --navy:#1B2A4A; --navy2:#2C4170; --navy3:#5B6E97; --navy-soft:#E4E9F2;
+  --ink:#22262E; --gray:#6B7280; --gray2:#9AA0AA; --panel:#EEF0F3; --line:#D5D9E0;
+  --amber:#E0A100; --amber-ink:#6E4F00; --amber-soft:#FCF3D9;
+  --ok:#23704F; --ok-soft:#E2F1E9; --ng:#B42318; --ng-soft:#FBE6E3;
+  --letterbox:#C7CCD4;
+}
+*{box-sizing:border-box}
+html,body{margin:0;height:100%;overflow:hidden;background:var(--letterbox)}
+body{font-family:"Pretendard Variable","Pretendard","Apple SD Gothic Neo","Malgun Gothic","Noto Sans KR",system-ui,sans-serif;color:var(--ink);-webkit-text-size-adjust:100%;font-feature-settings:"tnum"}
+button{font:inherit;color:inherit}
+:focus-visible{outline:3px solid var(--amber);outline-offset:2px;border-radius:4px}
+
+/* ---------- 16:9 무대 ---------- */
+.stage{position:absolute;left:50%;top:50%;width:960px;height:540px;transform:translate(-50%,-50%) scale(var(--s,1));transform-origin:center;background:#fff;overflow:hidden;box-shadow:0 10px 40px rgba(27,42,74,.25)}
+
+/* ---------- 상단 바: 모듈명 + 7단계 진행선 ---------- */
+.topbar{position:absolute;left:0;right:0;top:0;height:60px;background:var(--navy);display:flex;align-items:center}
+.brand{flex:0 0 200px;padding-left:22px;color:#fff;font-size:14px;font-weight:800;letter-spacing:-.3px;line-height:1.2;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.brand small{display:block;font-size:11px;font-weight:500;color:#A9B6CF;letter-spacing:0;margin-top:2px;overflow:hidden;text-overflow:ellipsis}
+.rail{position:relative;flex:1;height:60px;margin-right:22px}
+.rail .track{position:absolute;left:14px;right:14px;top:21px;height:3px;background:#3A4D78;border-radius:2px}
+.rail .fill{position:absolute;left:0;top:0;bottom:0;background:var(--amber);border-radius:2px;transition:width .35s ease}
+.station{position:absolute;top:10px;width:72px;margin-left:-36px;background:none;border:0;padding:0;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:4px}
+.station .dot{width:24px;height:24px;border-radius:50%;display:grid;place-items:center;font-size:11.5px;font-weight:800;background:var(--navy);color:#8E9DBD;border:2px solid #4A5D88;transition:all .25s}
+.station .lb{font-size:11.5px;color:#8E9DBD;white-space:nowrap}
+.station.done .dot{background:#C9D3E6;border-color:#C9D3E6;color:var(--navy)}
+.station.done .lb{color:#C9D3E6}
+.station.cur .dot{background:var(--amber);border-color:#FFE08A;color:var(--navy);transform:scale(1.12)}
+.station.cur .lb{color:#fff;font-weight:700}
+
+/* ---------- 화면 ---------- */
+.viewport{position:absolute;left:0;right:0;top:60px;bottom:46px}
+.slide{position:absolute;inset:0;padding:16px 36px 10px;display:none;flex-direction:column;gap:12px}
+.slide.on{display:flex;animation:fade .22s ease}
+@keyframes fade{from{opacity:0}to{opacity:1}}
+@media (prefers-reduced-motion:reduce){.slide.on{animation:none}.rail .fill,.station .dot{transition:none}}
+.sh{flex:0 0 auto}
+.sec{font-size:12.5px;font-weight:700;color:var(--navy3);display:flex;gap:8px;align-items:center;min-height:18px}
+h2{margin:3px 0 0;font-size:24px;line-height:1.3;font-weight:800;color:var(--navy);letter-spacing:-.6px;display:flex;gap:10px;align-items:flex-start}
+h2 .q{flex:0 0 auto;margin-top:2px;width:28px;height:28px;border-radius:6px;background:var(--navy);color:#fff;font-size:15px;display:grid;place-items:center}
+h2.big{font-size:30px;line-height:1.32}
+.body{flex:1 1 auto;min-height:0;display:grid;gap:24px}
+.split{grid-template-columns:1.2fr 1fr}
+.split.even{grid-template-columns:1fr 1fr}
+.full{grid-template-columns:1fr}
+.fig{background:var(--panel);border-radius:12px;padding:12px;min-height:0;display:flex;align-items:center;justify-content:center}
+.fig svg{width:100%;height:100%;display:block}
+.figcol{min-height:0;display:flex;flex-direction:column;gap:10px}
+.figcol .fig{flex:1 1 auto}
+.side{min-height:0;display:flex;flex-direction:column;gap:12px;justify-content:center}
+
+/* 핵심 문장: 40자 안팎, 1~2개 */
+.key{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:9px}
+.key li{position:relative;padding-left:16px;font-size:18.5px;line-height:1.42;font-weight:700;letter-spacing:-.4px}
+.key li::before{content:"";position:absolute;left:0;top:.28em;width:4px;height:1.05em;border-radius:2px;background:var(--navy2)}
+.key b{color:var(--navy);background:linear-gradient(transparent 62%,var(--amber-soft) 62%)}
+/* 해설 문단: 2~4문장, 150~250자 */
+.exp{margin:0;font-size:15px;line-height:1.62;letter-spacing:-.2px;color:var(--ink)}
+.exp b{color:var(--navy)}
+/* 연결 문장: 다음 소단원으로 넘기는 질문 */
+.next{margin:0;border-top:1px dashed var(--line);padding-top:9px;font-size:14px;font-weight:700;color:var(--navy2);display:flex;gap:8px;align-items:baseline}
+.next span{flex:0 0 auto;font-size:11.5px;font-weight:800;color:var(--navy3);background:var(--navy-soft);border-radius:4px;padding:0 6px;line-height:20px}
+/* 각주: 기호의 뜻과 출처 번호만 */
+.foot{flex:0 0 auto;font-size:12px;line-height:1.5;color:var(--gray);margin:0}
+.foot b{color:var(--ink)}
+.cite{font-size:.72em;font-weight:700;color:var(--navy3);vertical-align:super;line-height:0;margin-left:1px}
+.tag-v{display:inline-block;font-size:11px;font-weight:700;border-radius:4px;padding:0 6px;line-height:18px;white-space:nowrap;vertical-align:1px;color:var(--gray);background:#F3F4F6;box-shadow:inset 0 0 0 1px var(--line)}
+
+/* 핵심 수학 개념 박스 */
+.math{flex:0 0 auto;border-left:3px solid var(--navy3);background:#F6F7F9;border-radius:0 8px 8px 0;padding:9px 13px;font-size:13.5px;line-height:1.5}
+.math .mt{font-size:12px;font-weight:800;color:var(--navy3);margin-bottom:2px}
+.math .f{font-family:"Cambria Math","Times New Roman",serif;font-size:18px;font-weight:700;color:var(--navy);margin:1px 0 4px}
+.math .r{display:grid;grid-template-columns:34px 1fr;gap:6px}
+.math .r span:first-child{font-size:11.5px;font-weight:700;color:var(--gray2);padding-top:1px}
+.math .w{margin-top:5px;padding-top:5px;border-top:1px dashed var(--line);color:var(--ng);font-weight:700;font-size:12.5px}
+
+/* ---------- 하단 바 ---------- */
+.bottombar{position:absolute;left:0;right:0;bottom:0;height:46px;border-top:1px solid var(--line);display:flex;align-items:center;padding:0 22px 0 36px;gap:12px;background:#fff}
+.counter{font-size:13px;color:var(--gray);font-weight:600}
+.counter strong{color:var(--navy)}
+.spacer{flex:1}
+.nav{border:1.5px solid var(--navy);background:#fff;color:var(--navy);border-radius:8px;height:32px;padding:0 16px;font-size:14px;font-weight:700;cursor:pointer}
+.nav.primary{background:var(--navy);color:#fff}
+.nav:disabled{opacity:.3;cursor:default}
+
+/* ① 학습개요 */
+.meta{display:grid;grid-template-columns:auto 1fr;gap:6px 14px;margin:0;font-size:14px}
+.meta dt{font-weight:700;color:var(--gray)}
+.meta dd{margin:0;font-weight:700;color:var(--navy)}
+.prevlink{background:var(--panel);border-radius:10px;padding:12px 14px;font-size:14.5px;line-height:1.55}
+.prevlink small{display:block;font-size:12px;font-weight:800;color:var(--navy3);margin-bottom:3px}
+
+/* ② 학습목표: 목표 → 문항 → 실습 연결 */
+.gmap{display:grid;grid-template-columns:44px 1fr 150px 150px;align-items:stretch;row-gap:12px;column-gap:0}
+.gmap .hd{font-size:12px;font-weight:700;color:var(--gray);padding:0 14px 2px}
+.gmap .gn{background:var(--navy);color:#fff;font-weight:800;font-size:18px;display:grid;place-items:center;border-radius:10px 0 0 10px}
+.gmap .gt{background:var(--panel);padding:14px 18px;font-size:17px;font-weight:700;line-height:1.42;letter-spacing:-.3px;display:flex;align-items:center}
+.gmap .gt b{color:var(--navy)}
+.gmap .ga,.gmap .gp{background:var(--panel);display:flex;align-items:center;padding:0 10px;border-left:2px solid #fff}
+.gmap .gp{border-radius:0 10px 10px 0}
+.jump{border:1.5px solid var(--navy3);background:#fff;border-radius:7px;padding:6px 10px;font-size:13px;font-weight:700;color:var(--navy);cursor:pointer;text-align:left;line-height:1.3;width:100%}
+.jump:hover{background:var(--navy-soft)}
+
+/* ④ 본문 정리 표 */
+.sumtbl{width:100%;border-collapse:separate;border-spacing:0;font-size:14.5px;line-height:1.5}
+.sumtbl th{background:var(--navy);color:#fff;font-weight:800;text-align:left;padding:10px 14px}
+.sumtbl th:first-child{border-radius:10px 0 0 0;width:150px}
+.sumtbl th:last-child{border-radius:0 10px 0 0}
+.sumtbl td{padding:11px 14px;border-bottom:1px solid var(--line);vertical-align:top}
+.sumtbl td:first-child{font-weight:800;color:var(--navy)}
+.sumtbl tr:nth-child(even) td{background:#F8F9FB}
+
+/* ⑤ 형성평가 */
+.qchips{display:flex;gap:6px}
+.qchips span{font-size:11.5px;font-weight:700;color:var(--navy2);background:var(--navy-soft);border-radius:4px;padding:0 7px;line-height:19px}
+h2.stem{font-size:21px;line-height:1.42;font-weight:800}
+.opts{display:grid;gap:9px;align-content:center}
+.opts.ox{grid-template-columns:1fr 1fr}
+.opt{border:1.5px solid var(--line);background:#fff;border-radius:10px;padding:11px 14px;text-align:left;font-size:16px;font-weight:600;cursor:pointer;display:flex;gap:10px;align-items:center}
+.opt .n{flex:0 0 26px;height:26px;border-radius:50%;background:var(--panel);display:grid;place-items:center;font-size:13px;font-weight:800;color:var(--navy)}
+.opts.ox .opt{justify-content:center;font-size:40px;font-weight:800;padding:22px;color:var(--navy)}
+.opt:hover:not(:disabled){border-color:var(--navy3);background:#F8F9FB}
+.opt:disabled{cursor:default}
+.opt.ok{border-color:var(--ok);background:var(--ok-soft);color:var(--ok)}
+.opt.ok .n{background:var(--ok);color:#fff}
+.opt.ng{border-color:var(--ng);background:var(--ng-soft);color:var(--ng)}
+.opt.ng .n{background:var(--ng);color:#fff}
+.fbp{background:var(--panel);border-radius:12px;padding:18px 20px;display:flex;flex-direction:column;gap:10px;font-size:14.5px;line-height:1.6}
+.fbp .empty{color:var(--gray);margin:auto 0}
+.fbp .verdict{font-size:19px;font-weight:800}
+.fbp.ok{background:var(--ok-soft)} .fbp.ok .verdict{color:var(--ok)}
+.fbp.ng{background:var(--ng-soft)} .fbp.ng .verdict{color:var(--ng)}
+.fbp .back{align-self:flex-start}
+.fbp .tally{margin-top:auto;font-size:12.5px;color:var(--gray);font-weight:600}
+
+/* ⑥ 실습 */
+.plabel{font-size:12px;font-weight:800;color:var(--navy3);margin-bottom:6px}
+.pcol{min-height:0;display:flex;flex-direction:column}
+.mbtns{display:flex;flex-wrap:nowrap;gap:3px;margin-bottom:8px}
+.mbtn{border:1px solid var(--line);background:#fff;border-radius:6px;padding:2px 6px;font-size:12px;cursor:pointer;min-width:26px}
+.mbtn.on{background:var(--navy);border-color:var(--navy);color:#fff}
+.ctrl{display:flex;align-items:center;gap:10px;font-size:14px;font-weight:600}
+input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
+.stats{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.stats.three{grid-template-columns:1fr 1fr 1fr}
+.stats div{background:var(--panel);border-radius:10px;padding:8px 12px}
+.stats small{display:block;font-size:11.5px;color:var(--gray);font-weight:600;line-height:1.35}
+.stats strong{font-size:22px;color:var(--navy);letter-spacing:-.4px}
+.pmsg{font-size:14.5px;font-weight:700;min-height:22px;line-height:1.45}
+.pmsg.ok{color:var(--ok)} .pmsg.ng{color:var(--ng)}
+.think{flex:0 0 auto;background:var(--amber-soft);border-radius:10px;padding:9px 14px;font-size:14.5px;font-weight:700;color:var(--amber-ink);display:flex;gap:10px;align-items:baseline}
+.think span{flex:0 0 auto;font-size:12px;font-weight:800}
+.howto{font-size:13.5px;color:var(--gray);line-height:1.5;margin:0}
+.btn{border:0;background:var(--navy);color:#fff;border-radius:8px;height:32px;padding:0 14px;font-size:13.5px;font-weight:700;cursor:pointer}
+.btn.ghost{background:#fff;color:var(--navy);box-shadow:inset 0 0 0 1.5px var(--navy)}
+.pool{flex:1;min-height:0;display:grid;grid-template-columns:1fr 1fr;align-content:start;gap:8px;padding:10px;border:1.5px dashed var(--line);border-radius:10px;background:#FAFBFC}
+.dcard{background:#fff;border:1.5px solid var(--navy3);border-radius:8px;padding:7px 10px;font-size:13.5px;font-weight:600;line-height:1.4;cursor:grab;user-select:none;-webkit-user-select:none;touch-action:none}
+.dcard.sel{box-shadow:0 0 0 3px var(--amber)}
+.dcard.ok{border-color:var(--ok);background:var(--ok-soft);color:var(--ok);cursor:default;font-size:12.5px;padding:5px 8px}
+.dcard.shake{animation:shake .35s;border-color:var(--ng);background:var(--ng-soft)}
+@keyframes shake{25%{transform:translateX(-5px)}75%{transform:translateX(5px)}}
+.ghostc{position:absolute;pointer-events:none;z-index:50;opacity:.92;box-shadow:0 8px 20px rgba(27,42,74,.25);cursor:grabbing}
+.bins{flex:1 0 auto;min-height:0;display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.bin .dcard{font-size:12px;padding:3px 7px;line-height:1.3}
+.p2row{display:flex;gap:10px;align-items:center}.p2row .pmsg{flex:1;margin:0}.p2row .btn{flex:0 0 auto}
+.bin{border:1.5px solid var(--line);border-radius:10px;padding:6px;display:flex;flex-direction:column;gap:6px;background:#fff;cursor:pointer;min-height:0}
+.bin h4{margin:0;background:var(--navy);color:#fff;border-radius:6px;text-align:center;font-size:14px;padding:4px}
+.bin.hover{border-color:var(--amber);background:var(--amber-soft)}
+.res{display:none;flex-direction:column;gap:8px}
+.res.on{display:flex}
+
+/* ⑦ 용어해설·참고자료 */
+.gl{display:grid;grid-template-columns:1fr 1fr;grid-template-rows:repeat(3,1fr);gap:10px 22px;min-height:0}
+.gi{border-top:2px solid var(--navy);padding:8px 0 0;display:flex;flex-direction:column;gap:3px;min-height:0}
+.gi .t{font-size:16.5px;font-weight:800;color:var(--navy);display:flex;gap:6px;align-items:baseline;flex-wrap:wrap}
+.gi .t em{font-style:normal;font-weight:500;font-size:12.5px;color:var(--gray)}
+.gi .t i{font-style:normal;font-size:12px;font-weight:800;color:var(--navy3);width:22px}
+.gi .d{font-size:14px;line-height:1.5}
+.gi .e{font-size:12.5px;line-height:1.45;color:var(--gray)}
+.gi .e strong{color:var(--navy3)}
+.refs{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:8px;font-size:13.5px;line-height:1.5}
+.refs li{display:grid;grid-template-columns:30px 1fr;gap:4px}
+.refs li span{font-weight:800;color:var(--navy3)}
+.refs a{color:var(--navy2);word-break:break-all}
+.nextmod{background:var(--navy);color:#fff;border-radius:12px;padding:18px 22px;display:flex;flex-direction:column;gap:6px}
+.nextmod small{font-size:12px;font-weight:700;color:#A9B6CF}
+.nextmod strong{font-size:19px;line-height:1.45;letter-spacing:-.3px}
+
+.rotate{position:fixed;left:0;right:0;bottom:max(14px,env(safe-area-inset-bottom));text-align:center;font-size:13px;color:#3A4560;display:none}
+@media (orientation:portrait) and (max-width:700px){.rotate{display:block}}
+</style>
+</head>
+<body>
+<div class="stage" id="stage">
+  <header class="topbar">
+    <!-- [교체] 모듈명 / 과정명·모듈 번호 (장·절 번호는 쓰지 않음) -->
+    <div class="brand" id="brand">데이터 분석의 목적<small>데이터와 기술통계 · M01</small></div>
+    <nav class="rail" id="rail" aria-label="학습 단계"><div class="track"><div class="fill" id="fill"></div></div></nav>
+  </header>
+
+  <main class="viewport" id="vp">
+    <!-- ① 학습개요 ─────────────────────────────── -->
+    <section class="slide" data-step="0">
+      <div class="sh"><div class="sec">학습개요</div>
+        <h2 class="big">데이터 분석은 목적을 먼저 정하는 데서 시작합니다</h2></div>
+      <div class="body split">
+        <div class="fig"><svg viewBox="0 0 440 260" role="img" aria-label="데이터에서 목적을 정해 요약, 설명, 예측으로 나뉘는 흐름">
+          <defs><marker id="m-ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10z" fill="#5B6E97"/></marker></defs>
+          <rect x="14" y="100" width="88" height="60" rx="10" fill="#1B2A4A"/>
+          <text x="58" y="136" text-anchor="middle" font-size="16" font-weight="800" fill="#fff">데이터</text>
+          <line x1="104" y1="130" x2="132" y2="130" stroke="#5B6E97" stroke-width="2" marker-end="url(#m-ar)"/>
+          <rect x="136" y="100" width="100" height="60" rx="10" fill="#FCF3D9" stroke="#E0A100" stroke-width="2"/>
+          <text x="186" y="126" text-anchor="middle" font-size="14" font-weight="800" fill="#6E4F00">목적</text>
+          <text x="186" y="146" text-anchor="middle" font-size="14" font-weight="800" fill="#6E4F00">정하기</text>
+          <path d="M238 130 C252 130 252 58 266 58" fill="none" stroke="#5B6E97" stroke-width="2" marker-end="url(#m-ar)"/>
+          <line x1="238" y1="130" x2="266" y2="130" stroke="#5B6E97" stroke-width="2" marker-end="url(#m-ar)"/>
+          <path d="M238 130 C252 130 252 202 266 202" fill="none" stroke="#5B6E97" stroke-width="2" marker-end="url(#m-ar)"/>
+          <rect x="270" y="30" width="156" height="56" rx="10" fill="#fff" stroke="#1B2A4A" stroke-width="1.5"/>
+          <text x="284" y="53" font-size="14" font-weight="800" fill="#1B2A4A">① 요약</text>
+          <text x="284" y="73" font-size="12" fill="#6B7280">많은 수치를 값 하나로</text>
+          <rect x="270" y="102" width="156" height="56" rx="10" fill="#fff" stroke="#1B2A4A" stroke-width="1.5"/>
+          <text x="284" y="125" font-size="14" font-weight="800" fill="#1B2A4A">② 설명</text>
+          <text x="284" y="145" font-size="12" fill="#6B7280">성질과 관계를 밝힘</text>
+          <rect x="270" y="174" width="156" height="56" rx="10" fill="#fff" stroke="#1B2A4A" stroke-width="1.5"/>
+          <text x="284" y="197" font-size="14" font-weight="800" fill="#1B2A4A">③ 예측</text>
+          <text x="284" y="217" font-size="12" fill="#6B7280">아직 없는 값을 가늠</text>
+        </svg></div>
+        <div class="side">
+          <div class="prevlink"><small>과정 1 · 데이터와 기술통계</small>데이터 분석의 목적에서 출발해 모집단과 표본, 기술통계량을 거쳐 정규분포까지 7개 모듈로 이어집니다. 이 모듈이 첫 번째입니다.</div>
+          <dl class="meta"><dt>학습 시간</dt><dd>약 40분</dd><dt>본문</dt><dd>소단원 4개</dd><dt>실습</dt><dd>조작형 · 분류형 · 추정형</dd></dl>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" data-step="0">
+      <div class="sh"><div class="sec">학습개요 · 이 모듈의 예시</div>
+        <h2>세 가지 예시로 끝까지 배웁니다</h2></div>
+      <div class="body split">
+        <div class="fig"><svg viewBox="0 0 440 250" role="img" aria-label="요약, 설명, 예측에 쓰는 세 가지 예시">
+          <defs><marker id="m-ar0" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10z" fill="#5B6E97"/></marker></defs>
+          <rect x="10" y="12" width="420" height="68" rx="10" fill="#fff"/>
+          <rect x="22" y="30" width="60" height="32" rx="6" fill="#1B2A4A"/><text x="52" y="51" text-anchor="middle" font-size="13" font-weight="800" fill="#fff">요약</text>
+          <text x="98" y="40" font-size="12" fill="#22262E">1.2  2.1  2.1  2.4  0.8  0.7</text>
+          <text x="98" y="62" font-size="12" fill="#22262E">1.6  1.3  0.9  4.2  2.0  1.0</text>
+          <line x1="290" y1="46" x2="348" y2="46" stroke="#5B6E97" stroke-width="2" marker-end="url(#m-ar0)"/>
+          <circle cx="384" cy="46" r="24" fill="#fff" stroke="#E0A100" stroke-width="3"/><text x="384" y="52" text-anchor="middle" font-size="16" font-weight="800" fill="#1B2A4A">1.7</text>
+          <rect x="10" y="91" width="420" height="68" rx="10" fill="#fff"/>
+          <rect x="22" y="109" width="60" height="32" rx="6" fill="#1B2A4A"/><text x="52" y="130" text-anchor="middle" font-size="13" font-weight="800" fill="#fff">설명</text>
+          <rect x="112" y="118" width="26" height="30" rx="2" fill="#2C4170"/><rect x="148" y="102" width="26" height="46" rx="2" fill="#A9B8D4"/>
+          <text x="125" y="154" text-anchor="middle" font-size="9.5" fill="#6B7280"></text>
+          <text x="196" y="122" font-size="12.5" font-weight="700" fill="#22262E">신약 집단과 위약 집단의 혈압 비교</text>
+          <text x="196" y="142" font-size="12" fill="#6B7280">연소득과 행복도의 관계</text>
+          <rect x="10" y="170" width="420" height="68" rx="10" fill="#fff"/>
+          <rect x="22" y="188" width="60" height="32" rx="6" fill="#1B2A4A"/><text x="52" y="209" text-anchor="middle" font-size="13" font-weight="800" fill="#fff">예측</text>
+          <g fill="#5B6E97"><circle cx="110" cy="222" r="3"/><circle cx="122" cy="214" r="3"/><circle cx="132" cy="218" r="3"/><circle cx="144" cy="206" r="3"/><circle cx="154" cy="200" r="3"/><circle cx="166" cy="196" r="3"/><circle cx="176" cy="190" r="3"/></g>
+          <line x1="104" y1="224" x2="182" y2="186" stroke="#1B2A4A" stroke-width="2"/>
+          <text x="196" y="201" font-size="12.5" font-weight="700" fill="#22262E">여름 평균기온으로 가을 수확량 예측</text>
+          <text x="196" y="221" font-size="12" fill="#6B7280">30℃이면 15톤가량</text>
+        </svg></div>
+        <div class="side">
+          <ul class="key"><li>목적마다 예시 하나를 <b>끝까지</b> 씁니다.</li></ul>
+          <p class="exp">요약에는 원자료 12개를, 설명에는 신약 실험과 연소득·행복도를, 예측에는 여름 기온과 가을 수확량을 씁니다. 본문에서 만난 예시가 형성평가와 실습에도 그대로 나오므로, 숫자와 장면을 기억해 두면 문제를 풀 때 바로 떠올릴 수 있습니다.</p>
+        </div>
+      </div>
+      <p class="foot">혈압 막대와 기온·수확량 점은 관계를 보여 주려고 만든 값입니다 <span class="tag-v">가상 데이터</span></p>
+    </section>
+
+    <!-- ② 학습목표 ─────────────────────────────── -->
+    <section class="slide" data-step="1">
+      <div class="sh"><div class="sec">학습목표</div><h2>이 모듈을 마치면 이렇게 할 수 있습니다</h2></div>
+      <div class="body full" style="align-content:center">
+        <div class="gmap">
+          <div></div><div class="hd">목표</div><div class="hd">확인하는 문항</div><div class="hd">연결 실습</div>
+          <div class="gn">1</div><div class="gt"><span>분석 사례가 요약·설명·예측 중 어느 목적인지 <b>구분한다</b>.</span></div>
+          <div class="ga"><button class="jump" data-jump="q1">문항 1·2</button></div><div class="gp"><button class="jump" data-jump="p2">실습 2 분류</button></div>
+          <div class="gn">2</div><div class="gt"><span>원자료 12개의 평균값을 <b>계산하고</b>, 평균이 가리는 값을 찾는다.</span></div>
+          <div class="ga"><button class="jump" data-jump="q3">문항 3·4</button></div><div class="gp"><button class="jump" data-jump="p1">실습 1 조작</button></div>
+          <div class="gn">3</div><div class="gt"><span>두 변수의 관계가 인과인지 상관인지 <b>판단하고</b>, 관계로 새 값을 예측한다.</span></div>
+          <div class="ga"><button class="jump" data-jump="q5">문항 5·6</button></div><div class="gp"><button class="jump" data-jump="p3">실습 3 추정</button></div>
+        </div>
+      </div>
+      <p class="foot">버튼을 누르면 해당 문항이나 실습 화면으로 바로 이동합니다.</p>
+    </section>
+
+    <!-- ③ 일상의 예시 ─────────────────────────────── -->
+    <section class="slide" data-step="2">
+      <div class="sh"><div class="sec">일상의 예시 1/5</div><h2>걸음 수 앱에는 매일 숫자가 쌓입니다</h2></div>
+      <div class="body split">
+        <div class="fig"><svg viewBox="0 0 440 250" role="img" aria-label="요일별 걸음 수가 기록된 휴대폰 화면">
+          <rect x="140" y="12" width="160" height="226" rx="22" fill="#1B2A4A"/><rect x="150" y="34" width="140" height="186" rx="8" fill="#fff"/>
+          <text x="220" y="56" text-anchor="middle" font-size="12.5" font-weight="800" fill="#1B2A4A">오늘까지 걸음 수</text>
+          <g font-size="12" fill="#22262E">
+            <text x="162" y="84">월</text><rect x="184" y="75" width="35" height="11" rx="3" fill="#A9B8D4"/><text x="282" y="84" text-anchor="end">6,240</text>
+            <text x="162" y="112">화</text><rect x="184" y="103" width="45" height="11" rx="3" fill="#A9B8D4"/><text x="282" y="112" text-anchor="end">8,105</text>
+            <text x="162" y="140">수</text><rect x="184" y="131" width="28" height="11" rx="3" fill="#A9B8D4"/><text x="282" y="140" text-anchor="end">4,980</text>
+            <text x="162" y="168">목</text><rect x="184" y="159" width="41" height="11" rx="3" fill="#A9B8D4"/><text x="282" y="168" text-anchor="end">7,312</text>
+            <text x="162" y="196">금</text><rect x="184" y="187" width="50" height="11" rx="3" fill="#E0A100"/><text x="282" y="196" text-anchor="end">9,026</text>
+          </g>
+          <circle cx="76" cy="132" r="30" fill="#E4E9F2"/><path d="M64 148 q12 -36 24 -4" fill="none" stroke="#5B6E97" stroke-width="5" stroke-linecap="round"/>
+          <circle cx="364" cy="132" r="30" fill="#E4E9F2"/><path d="M352 148 q12 -36 24 -4" fill="none" stroke="#5B6E97" stroke-width="5" stroke-linecap="round"/>
+        </svg></div>
+        <div class="side">
+          <ul class="key"><li>걸음을 재면 숫자, 곧 데이터가 남습니다.</li></ul>
+          <p class="exp">휴대폰은 하루 동안 걸은 걸음을 세어 날마다 기록합니다. 무언가를 관찰하고 재면 이렇게 숫자가 쌓입니다. 하지만 숫자를 바라보기만 해서는 그 숫자가 무엇을 말하는지 알기 어렵습니다.</p>
+          <p class="next"><span>본문에서</span>4-1 데이터와 통계학으로 이어집니다.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" data-step="2">
+      <div class="sh"><div class="sec">일상의 예시 2/5</div><h2>한 달 지출은 ‘하루 평균’ 하나로 말합니다</h2></div>
+      <div class="body split">
+        <div class="fig"><svg viewBox="0 0 440 250" role="img" aria-label="영수증 여러 장이 하루 평균 한 값으로 정리되는 그림">
+          <defs><marker id="m-ar2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10z" fill="#5B6E97"/></marker></defs>
+          <g transform="rotate(-8 100 125)"><rect x="40" y="40" width="110" height="150" rx="6" fill="#fff" stroke="#C9D0DB" stroke-width="2"/></g>
+          <g transform="rotate(5 110 125)"><rect x="52" y="44" width="110" height="150" rx="6" fill="#fff" stroke="#C9D0DB" stroke-width="2"/></g>
+          <rect x="62" y="50" width="110" height="150" rx="6" fill="#fff" stroke="#5B6E97" stroke-width="2"/>
+          <text x="117" y="74" text-anchor="middle" font-size="12" font-weight="800" fill="#1B2A4A">영수증</text>
+          <g stroke="#A9B8D4" stroke-width="5" stroke-linecap="round"><line x1="76" y1="94" x2="158" y2="94"/><line x1="76" y1="114" x2="146" y2="114"/><line x1="76" y1="134" x2="152" y2="134"/><line x1="76" y1="154" x2="138" y2="154"/></g>
+          <text x="117" y="186" text-anchor="middle" font-size="11.5" fill="#6B7280">30일 치</text>
+          <line x1="190" y1="125" x2="262" y2="125" stroke="#5B6E97" stroke-width="3" marker-end="url(#m-ar2)"/>
+          <text x="226" y="114" text-anchor="middle" font-size="12" font-weight="700" fill="#5B6E97">한 값으로</text>
+          <circle cx="338" cy="125" r="62" fill="#fff" stroke="#E0A100" stroke-width="4"/>
+          <text x="338" y="118" text-anchor="middle" font-size="15" font-weight="800" fill="#1B2A4A">하루 평균</text>
+          <text x="338" y="142" text-anchor="middle" font-size="15" font-weight="800" fill="#6E4F00">○○원</text>
+        </svg></div>
+        <div class="side">
+          <ul class="key"><li>들쭉날쭉한 기록도 값 하나로 정리됩니다.</li></ul>
+          <p class="exp">30일 동안의 지출을 하나하나 말하면 듣는 사람이 기억하지 못합니다. ‘하루 평균 얼마’라고 하면 한 번에 감이 옵니다. 많은 숫자를 값 하나로 줄이는 이 일이 데이터 요약입니다.</p>
+          <p class="next"><span>본문에서</span>4-2 데이터 요약으로 이어집니다.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" data-step="2">
+      <div class="sh"><div class="sec">일상의 예시 3/5</div><h2>붉은 사과는 달고, 초록 사과는 시큼했습니다</h2></div>
+      <div class="body split">
+        <div class="fig"><svg viewBox="0 0 440 250" role="img" aria-label="붉은 사과는 달고 초록 사과는 시큼하다는 관계">
+          <path d="M120 70 c-46 -18 -82 18 -74 66 c8 48 44 74 74 62 c30 12 66 -14 74 -62 c8 -48 -28 -84 -74 -66z" fill="#C2413A"/>
+          <path d="M120 70 c0 -16 4 -26 12 -34" stroke="#6B4B2A" stroke-width="5" fill="none" stroke-linecap="round"/><path d="M128 44 c14 -12 30 -10 38 0 c-12 10 -26 10 -38 0z" fill="#3E8E4E"/>
+          <path d="M320 70 c-46 -18 -82 18 -74 66 c8 48 44 74 74 62 c30 12 66 -14 74 -62 c8 -48 -28 -84 -74 -66z" fill="#8DBB4C"/>
+          <path d="M320 70 c0 -16 4 -26 12 -34" stroke="#6B4B2A" stroke-width="5" fill="none" stroke-linecap="round"/><path d="M328 44 c14 -12 30 -10 38 0 c-12 10 -26 10 -38 0z" fill="#3E8E4E"/>
+          <rect x="80" y="210" width="80" height="28" rx="14" fill="#1B2A4A"/><text x="120" y="229" text-anchor="middle" font-size="13.5" font-weight="800" fill="#fff">달다</text>
+          <rect x="280" y="210" width="80" height="28" rx="14" fill="#1B2A4A"/><text x="320" y="229" text-anchor="middle" font-size="13.5" font-weight="800" fill="#fff">시큼하다</text>
+          <text x="220" y="140" text-anchor="middle" font-size="22" font-weight="800" fill="#5B6E97">vs</text>
+        </svg></div>
+        <div class="side">
+          <ul class="key"><li>경험으로 색과 맛의 관계를 짐작합니다.</li></ul>
+          <p class="exp">몇 번 먹어 본 경험만으로도 ‘붉은 사과는 달다’는 관계를 떠올립니다. 경험과 지식도 일종의 데이터입니다. 이렇게 대상의 성질과 관계를 밝히는 일이 대상 설명입니다. 다만 경험만으로는 그 관계가 우연인지 알 수 없습니다.</p>
+          <p class="next"><span>본문에서</span>4-3 대상 설명으로 이어집니다.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" data-step="2">
+      <div class="sh"><div class="sec">일상의 예시 4/5</div><h2>먹구름이 끼면 우산을 챙깁니다</h2></div>
+      <div class="body split">
+        <div class="fig"><svg viewBox="0 0 440 250" role="img" aria-label="먹구름을 보고 우산을 챙기는 장면">
+          <defs><marker id="m-ar3" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10z" fill="#5B6E97"/></marker></defs>
+          <path d="M60 120 a34 34 0 0 1 30 -50 a44 44 0 0 1 82 6 a30 30 0 0 1 6 58 h-112 a26 26 0 0 1 -6 -14z" fill="#6B7280"/>
+          <g stroke="#5B6E97" stroke-width="4" stroke-linecap="round"><line x1="84" y1="158" x2="78" y2="176"/><line x1="114" y1="158" x2="108" y2="176"/><line x1="144" y1="158" x2="138" y2="176"/><line x1="99" y1="188" x2="93" y2="206"/><line x1="129" y1="188" x2="123" y2="206"/></g>
+          <line x1="206" y1="125" x2="252" y2="125" stroke="#5B6E97" stroke-width="3" marker-end="url(#m-ar3)"/>
+          <path d="M270 120 a70 70 0 0 1 140 0 q-17 -12 -35 0 q-17 -12 -35 0 q-17 -12 -35 0 q-18 -12 -35 0z" fill="#1B2A4A"/>
+          <path d="M340 120 v70 a12 12 0 0 1 -24 0" fill="none" stroke="#1B2A4A" stroke-width="6" stroke-linecap="round"/>
+          <text x="340" y="232" text-anchor="middle" font-size="12" font-weight="700" fill="#6B7280">비가 오기 전에 챙김</text>
+        </svg></div>
+        <div class="side">
+          <ul class="key"><li>지금까지 본 것으로 앞일을 가늠합니다.</li></ul>
+          <p class="exp">먹구름이 낀 뒤에 비가 내리던 경험이 쌓여 있으면, 아직 내리지 않은 비를 미리 가늠할 수 있습니다. 이미 얻은 데이터로 앞으로 얻을 데이터를 가늠하는 일, 이것이 예측입니다.</p>
+          <p class="next"><span>본문에서</span>4-4 미지의 데이터 예측으로 이어집니다.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" data-step="2">
+      <div class="sh"><div class="sec">일상의 예시 5/5</div><h2>이 장면들을 숫자로 옮기면 무엇을 할 수 있을까요?</h2></div>
+      <div class="body split even">
+        <div class="fig"><svg viewBox="0 0 420 250" role="img" aria-label="네 가지 일상 장면이 데이터 분석으로 이어지는 그림">
+          <defs><marker id="m-ar4" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10z" fill="#5B6E97"/></marker></defs>
+          <g font-size="13" font-weight="700" fill="#1B2A4A" text-anchor="middle">
+            <rect x="14" y="18" width="150" height="44" rx="10" fill="#fff" stroke="#5B6E97" stroke-width="1.5"/><text x="89" y="45">기록이 쌓인다</text>
+            <rect x="14" y="74" width="150" height="44" rx="10" fill="#fff" stroke="#5B6E97" stroke-width="1.5"/><text x="89" y="101">하루 평균으로 말한다</text>
+            <rect x="14" y="130" width="150" height="44" rx="10" fill="#fff" stroke="#5B6E97" stroke-width="1.5"/><text x="89" y="157">색과 맛을 잇는다</text>
+            <rect x="14" y="186" width="150" height="44" rx="10" fill="#fff" stroke="#5B6E97" stroke-width="1.5"/><text x="89" y="213">비를 미리 가늠한다</text>
+          </g>
+          <g stroke="#5B6E97" stroke-width="2" fill="none"><path d="M166 40 C220 40 220 112 254 120" marker-end="url(#m-ar4)"/><path d="M166 96 C210 96 220 118 254 122" marker-end="url(#m-ar4)"/><path d="M166 152 C210 152 220 130 254 128" marker-end="url(#m-ar4)"/><path d="M166 208 C220 208 220 138 254 130" marker-end="url(#m-ar4)"/></g>
+          <rect x="258" y="84" width="150" height="82" rx="12" fill="#1B2A4A"/>
+          <text x="333" y="118" text-anchor="middle" font-size="16" font-weight="800" fill="#fff">데이터 분석</text>
+          <text x="333" y="142" text-anchor="middle" font-size="11.5" fill="#C9D3E6">얻기 · 요약 · 설명 · 예측</text>
+        </svg></div>
+        <div class="side">
+          <p class="exp">네 장면은 숫자를 모으고, 값 하나로 줄이고, 관계를 찾고, 앞일을 가늠하는 일입니다. 데이터 분석은 이 일들을 경험이 아니라 숫자와 분석 방법으로 정확하게 해내는 방법입니다.</p>
+          <p class="next"><span>다음 질문</span>데이터는 어디서 오고, 무엇을 위해 분석할까?</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ④ 본문 ─────────────────────────────── -->
+    <section class="slide" data-step="3" id="s-4-1a">
+      <div class="sh"><div class="sec">4-1 데이터와 통계학</div><h2><span class="q">Q</span>데이터는 어디서 올까요?</h2></div>
+      <div class="body split even">
+        <div class="fig"><svg viewBox="0 0 420 270" role="img" aria-label="실험과 설문조사로 데이터를 얻는 그림">
+          <defs><marker id="m-ar5" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10z" fill="#5B6E97"/></marker></defs>
+          <rect x="40" y="14" width="140" height="30" rx="15" fill="#1B2A4A"/><text x="110" y="34" text-anchor="middle" font-size="13.5" font-weight="800" fill="#fff">실험</text>
+          <rect x="240" y="14" width="140" height="30" rx="15" fill="#1B2A4A"/><text x="310" y="34" text-anchor="middle" font-size="13.5" font-weight="800" fill="#fff">설문조사</text>
+          <path d="M98 58 v26 l-22 38 a8 8 0 0 0 7 12 h54 a8 8 0 0 0 7 -12 l-22 -38 v-26z" fill="#fff" stroke="#5B6E97" stroke-width="2.5"/><path d="M84 112 h52 l6 10 a6 6 0 0 1 -5 8 h-54 a6 6 0 0 1 -5 -8z" fill="#A9B8D4"/>
+          <rect x="282" y="58" width="56" height="72" rx="6" fill="#fff" stroke="#5B6E97" stroke-width="2.5"/><rect x="298" y="52" width="24" height="12" rx="3" fill="#5B6E97"/>
+          <g stroke="#A9B8D4" stroke-width="4" stroke-linecap="round"><line x1="292" y1="80" x2="328" y2="80"/><line x1="292" y1="96" x2="322" y2="96"/><line x1="292" y1="112" x2="326" y2="112"/></g>
+          <line x1="110" y1="140" x2="110" y2="160" stroke="#5B6E97" stroke-width="2.5" marker-end="url(#m-ar5)"/>
+          <line x1="310" y1="140" x2="310" y2="160" stroke="#5B6E97" stroke-width="2.5" marker-end="url(#m-ar5)"/>
+          <rect x="45" y="166" width="130" height="92" rx="10" fill="#FCF3D9" stroke="#E0A100" stroke-width="1.5"/>
+          <g font-size="14" font-weight="700" fill="#1B2A4A"><text x="70" y="190">1</text><text x="150" y="190" text-anchor="end">3.1</text><text x="70" y="212">2</text><text x="150" y="212" text-anchor="end">2.4</text><text x="70" y="234">3</text><text x="150" y="234" text-anchor="end">3.8</text><text x="110" y="252" text-anchor="middle" fill="#6B7280">⋮</text></g>
+          <rect x="245" y="166" width="130" height="92" rx="10" fill="#E2F1E9" stroke="#23704F" stroke-width="1.5"/>
+          <g font-size="14" font-weight="700" fill="#1B2A4A"><text x="266" y="190">문항 1</text><text x="355" y="190" text-anchor="end">예</text><text x="266" y="212">문항 2</text><text x="355" y="212" text-anchor="end">아니요</text><text x="266" y="234">문항 3</text><text x="355" y="234" text-anchor="end">예</text><text x="310" y="252" text-anchor="middle" fill="#6B7280">⋮</text></g>
+        </svg></div>
+        <div class="side">
+          <ul class="key"><li>관찰·측정하면 <b>데이터</b>를 얻습니다.</li><li>바라보기만 해서는 뜻을 알 수 없습니다.</li></ul>
+          <p class="exp">왼쪽은 실험으로 잰 값, 오른쪽은 설문으로 모은 응답입니다. 쥐의 몸 크기나 고객 만족도처럼 대상을 관찰하고 재면 데이터가 모이며, 응답처럼 문자로 된 데이터도 있습니다. 모은 데이터는 분석해야 비로소 대상을 이해하거나 앞일을 예측할 수 있습니다. 분석 방법은 그 일을 돕는 도구입니다.</p>
+          <p class="next"><span>다음 질문</span>그렇다면 무엇을 위해 분석할까?</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" data-step="3" id="s-4-1b">
+      <div class="sh"><div class="sec">4-1 데이터와 통계학</div><h2><span class="q">Q</span>데이터를 분석하는 목적은 무엇일까요?</h2></div>
+      <div class="body split even">
+        <div class="fig"><svg viewBox="0 0 420 270" role="img" aria-label="데이터 분석의 세 가지 목적">
+          <defs><marker id="m-ar9" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10z" fill="#5B6E97"/></marker></defs>
+          <g>
+            <rect x="8" y="20" width="128" height="230" rx="12" fill="#fff" stroke="#1B2A4A" stroke-width="1.5"/>
+            <circle cx="72" cy="52" r="16" fill="#1B2A4A"/><text x="72" y="57" text-anchor="middle" font-size="14" font-weight="800" fill="#fff">1</text>
+            <text x="72" y="96" text-anchor="middle" font-size="16" font-weight="800" fill="#1B2A4A">요약</text>
+            <g fill="#A9B8D4"><circle cx="40" cy="128" r="5"/><circle cx="56" cy="140" r="5"/><circle cx="48" cy="156" r="5"/><circle cx="64" cy="122" r="5"/><circle cx="36" cy="146" r="5"/></g>
+            <path d="M74 140 h20" stroke="#5B6E97" stroke-width="2.5" marker-end="url(#m-ar9)"/><circle cx="108" cy="140" r="9" fill="#E0A100"/>
+            <text x="72" y="196" text-anchor="middle" font-size="12" fill="#22262E">많은 수치를</text><text x="72" y="214" text-anchor="middle" font-size="12" fill="#22262E">값 하나로 정리</text>
+          </g>
+          <g>
+            <rect x="146" y="20" width="128" height="230" rx="12" fill="#fff" stroke="#1B2A4A" stroke-width="1.5"/>
+            <circle cx="210" cy="52" r="16" fill="#1B2A4A"/><text x="210" y="57" text-anchor="middle" font-size="14" font-weight="800" fill="#fff">2</text>
+            <text x="210" y="96" text-anchor="middle" font-size="16" font-weight="800" fill="#1B2A4A">설명</text>
+            <circle cx="178" cy="140" r="13" fill="#A9B8D4"/><circle cx="242" cy="140" r="13" fill="#A9B8D4"/><line x1="192" y1="140" x2="228" y2="140" stroke="#E0A100" stroke-width="3"/>
+            <text x="178" y="145" text-anchor="middle" font-size="12" font-weight="800" fill="#1B2A4A">A</text><text x="242" y="145" text-anchor="middle" font-size="12" font-weight="800" fill="#1B2A4A">B</text>
+            <text x="210" y="196" text-anchor="middle" font-size="12" fill="#22262E">성질과 관계를</text><text x="210" y="214" text-anchor="middle" font-size="12" fill="#22262E">밝혀 이해</text>
+          </g>
+          <g>
+            <rect x="284" y="20" width="128" height="230" rx="12" fill="#fff" stroke="#1B2A4A" stroke-width="1.5"/>
+            <circle cx="348" cy="52" r="16" fill="#1B2A4A"/><text x="348" y="57" text-anchor="middle" font-size="14" font-weight="800" fill="#fff">3</text>
+            <text x="348" y="96" text-anchor="middle" font-size="16" font-weight="800" fill="#1B2A4A">예측</text>
+            <line x1="302" y1="160" x2="350" y2="128" stroke="#1B2A4A" stroke-width="2.5"/><line x1="350" y1="128" x2="380" y2="108" stroke="#1B2A4A" stroke-width="2.5" stroke-dasharray="4 4"/>
+            <g fill="#A9B8D4"><circle cx="310" cy="152" r="4"/><circle cx="324" cy="148" r="4"/><circle cx="336" cy="134" r="4"/></g><text x="388" y="112" font-size="16" font-weight="800" fill="#E0A100">?</text>
+            <text x="348" y="196" text-anchor="middle" font-size="12" fill="#22262E">아직 없는 값을</text><text x="348" y="214" text-anchor="middle" font-size="12" fill="#22262E">가늠</text>
+          </g>
+        </svg></div>
+        <div class="side">
+          <ul class="key"><li>목적은 <b>요약·설명·예측</b> 세 가지입니다.</li><li>목적에 따라 얻는 법·분석법이 달라집니다.</li></ul>
+          <p class="exp">같은 데이터라도 무엇을 알고 싶은지에 따라 모으는 방법과 분석하는 방법이 바뀝니다. 그래서 데이터를 얻기 전에 어떤 목적을 이루고 싶은지부터 정합니다. 분석의 바탕인 통계학은 확률론이라는 수학을 이용합니다. 이 모듈에서는 요약, 설명, 예측의 세 목적을 차례로 하나씩 살펴봅니다.</p>
+          <p class="next"><span>다음 질문</span>먼저 요약부터: 숫자 12개는 무엇을 말할까?</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" data-step="3" id="s-4-2a">
+      <div class="sh"><div class="sec">4-2 데이터 요약</div><h2><span class="q">Q</span>숫자 12개, 한눈에 보이나요?</h2></div>
+      <div class="body split even">
+        <div class="fig"><svg viewBox="0 0 420 270" role="img" aria-label="원자료 12개가 평균값 1.7로 요약되는 그림">
+          <text x="120" y="24" text-anchor="middle" font-size="14" font-weight="800" fill="#1B2A4A">원자료</text>
+          <circle cx="120" cy="140" r="104" fill="#fff" stroke="#5B6E97" stroke-width="2" stroke-dasharray="6 5"/>
+          <g font-size="16" font-weight="700" fill="#22262E" text-anchor="middle">
+            <text x="92" y="76">1.2</text><text x="150" y="76">2.1</text>
+            <text x="58" y="112">2.1</text><text x="116" y="116">0.8</text><text x="178" y="108">2.4</text>
+            <text x="50" y="152">0.7</text><text x="96" y="156">1.6</text><text x="148" y="148">1.3</text><text x="192" y="152">0.9</text>
+            <text x="74" y="196">4.2</text><text x="128" y="190">2.0</text><text x="172" y="198">1.0</text>
+          </g>
+          <line x1="236" y1="140" x2="300" y2="140" stroke="#5B6E97" stroke-width="10"/><path d="M298 124 l24 16 l-24 16z" fill="#5B6E97"/>
+          <text x="268" y="122" text-anchor="middle" font-size="13" font-weight="700" fill="#5B6E97">요약</text>
+          <circle cx="366" cy="140" r="42" fill="#fff" stroke="#E0A100" stroke-width="4"/>
+          <text x="366" y="150" text-anchor="middle" font-size="26" font-weight="800" fill="#1B2A4A">1.7</text>
+          <text x="366" y="206" text-anchor="middle" font-size="13" font-weight="800" fill="#6E4F00">평균값</text>
+        </svg></div>
+        <div class="side">
+          <ul class="key"><li><b>원자료</b>는 처리 전 수치의 나열입니다.</li><li><b>데이터 요약</b>: 많은 수치를 값 하나로</li></ul>
+          <p class="exp">원 안의 숫자 12개를 하나씩 읽어도 전체 경향은 잘 보이지 않습니다. 사람은 많은 수치를 한꺼번에 처리하기 어렵기 때문입니다. 12개를 값 하나 1.7로 바꾸면 경향이 한눈에 들어옵니다. 이렇게 정리하는 가장 흔한 방법이 평균값입니다. 계산 방법은 다음 화면에서 확인합니다.</p>
+          <p class="next"><span>다음 질문</span>평균값 1.7은 어떻게 나왔을까?</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" data-step="3" id="s-4-2b">
+      <div class="sh"><div class="sec">4-2 데이터 요약</div><h2><span class="q">Q</span>평균선을 그으면 무엇이 보일까요?</h2></div>
+      <div class="body split even">
+        <div class="figcol">
+          <div class="fig"><svg id="fig-bar" viewBox="0 0 420 200" role="img" aria-label="원자료 12개 막대와 평균선"></svg></div>
+          <div class="math">
+            <div class="mt">핵심 수학 개념 · 평균값</div>
+            <div class="f">평균값 = Σx ÷ n</div>
+            <div class="r"><span>기호</span><span>Σ(시그마) = 모두 더하기, x = 각 값, n = 값의 개수</span></div>
+            <div class="r"><span>계산</span><span>1.2 + 2.1 + ⋯ + 1.0 = 20.3 → 20.3 ÷ 12 = 1.69 ≈ 1.7</span></div>
+            <div class="w">오해: 평균만 보면 다 안다 ✕ (4.2와 0.7은 평균에 가려짐)</div>
+          </div>
+        </div>
+        <div class="side">
+          <ul class="key"><li><b>평균값</b>: 모두 더해 개수로 나눈 값</li></ul>
+          <p class="exp">막대는 원자료 12개이고, 가로 점선이 평균값 1.7입니다. 점선 하나로 전체 수준은 알 수 있지만, 10번 값 4.2나 6번 값 0.7처럼 평균과 크게 다른 값은 가려집니다. 요약은 경향을 보여 주는 대신 개별 값을 감춥니다. 평균값을 구하는 식은 그림 아래 수학 박스에 있습니다.</p>
+          <p class="next"><span>다음 질문</span>평균으로 경향은 봤다. 그런데 왜 그런 경향이 생길까?</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" data-step="3" id="s-4-3a">
+      <div class="sh"><div class="sec">4-3 대상 설명</div><h2><span class="q">Q</span>두 가지 사이에 정말 관계가 있을까요?</h2></div>
+      <div class="body split even">
+        <div class="fig"><svg id="fig-explain" viewBox="0 0 420 260" role="img" aria-label="신약과 위약의 혈압 비교, 연소득과 행복도의 산점도"></svg></div>
+        <div class="side">
+          <ul class="key"><li><b>대상 설명</b>: 성질과 관계를 밝혀 이해</li><li>눈으로만 보면 우연을 지울 수 없습니다.</li></ul>
+          <p class="exp">왼쪽은 신약 집단과 위약 집단의 혈압을 잰 실험으로, 신약 집단의 혈압이 낮습니다. 오른쪽은 연소득이 높을수록 행복도도 높은 경향입니다. 하지만 눈으로 본 경향은 우연일 수 있고 강도도 알 수 없어, 분석으로 객관적인 증거를 얻어야 합니다. 통계에 의거한 분석은 관계를 정량적이고 객관적으로 평가하려는 시도입니다.</p>
+          <p class="next"><span>다음 질문</span>신약 덕분이라고 확신하려면 무엇이 더 필요할까?</p>
+        </div>
+      </div>
+      <p class="foot">두 그래프의 값은 관계를 보여 주려고 만든 값입니다 <span class="tag-v">가상 데이터</span></p>
+    </section>
+
+    <section class="slide" data-step="3" id="s-4-3b">
+      <div class="sh"><div class="sec">4-3 대상 설명</div><h2><span class="q">Q</span>신약 덕분이라고 확신하려면 무엇이 필요할까요?</h2></div>
+      <div class="body split even">
+        <div class="fig"><svg viewBox="0 0 420 270" role="img" aria-label="환자를 실험군과 대조군으로 나눠 혈압을 비교하는 실험">
+          <defs><marker id="m-ar6" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10z" fill="#5B6E97"/></marker></defs>
+          <rect x="140" y="10" width="140" height="40" rx="10" fill="#1B2A4A"/><text x="210" y="36" text-anchor="middle" font-size="14" font-weight="800" fill="#fff">고혈압 환자</text>
+          <path d="M210 52 C210 70 110 66 110 86" fill="none" stroke="#5B6E97" stroke-width="2" marker-end="url(#m-ar6)"/>
+          <path d="M210 52 C210 70 310 66 310 86" fill="none" stroke="#5B6E97" stroke-width="2" marker-end="url(#m-ar6)"/>
+          <rect x="30" y="92" width="160" height="70" rx="10" fill="#FCF3D9" stroke="#E0A100" stroke-width="2"/>
+          <text x="110" y="116" text-anchor="middle" font-size="14" font-weight="800" fill="#1B2A4A">실험군</text>
+          <rect x="72" y="128" width="34" height="16" rx="8" fill="#2C4170"/><text x="140" y="141" text-anchor="middle" font-size="12.5" font-weight="700" fill="#22262E">신약</text>
+          <rect x="230" y="92" width="160" height="70" rx="10" fill="#fff" stroke="#5B6E97" stroke-width="2"/>
+          <text x="310" y="116" text-anchor="middle" font-size="14" font-weight="800" fill="#1B2A4A">대조군</text>
+          <rect x="272" y="128" width="34" height="16" rx="8" fill="#2C4170"/><text x="340" y="141" text-anchor="middle" font-size="12.5" font-weight="700" fill="#22262E">위약</text>
+          <path d="M110 164 C110 184 200 180 206 196" fill="none" stroke="#5B6E97" stroke-width="2" marker-end="url(#m-ar6)"/>
+          <path d="M310 164 C310 184 220 180 214 196" fill="none" stroke="#5B6E97" stroke-width="2" marker-end="url(#m-ar6)"/>
+          <rect x="150" y="200" width="120" height="34" rx="10" fill="#1B2A4A"/><text x="210" y="222" text-anchor="middle" font-size="13.5" font-weight="800" fill="#fff">혈압 비교</text>
+          <text x="210" y="256" text-anchor="middle" font-size="12" fill="#6B7280">두 약은 겉모습이 똑같아 누가 어느 약인지 모릅니다</text>
+        </svg></div>
+        <div class="side">
+          <ul class="key"><li><b>실험군</b>과 <b>대조군</b>을 비교합니다.</li><li>다른 가능성을 다 지운 것이 증거입니다.</li></ul>
+          <p class="exp">약을 먹지 않은 집단과 비교하면, 혈압이 내려간 까닭이 성분인지 약을 먹은 행위인지 가릴 수 없습니다. 그래서 대조군에 효과 없는 <b>위약</b>을 줍니다. 피험자가 어느 약인지 모르게 하면 <b>단일맹검법</b>, 연구자도 모르게 하면 <b>이중맹검법</b>입니다. 모든 가능성을 지우고 남은 설명만이 확고한 증거가 됩니다.</p>
+          <p class="next"><span>다음 질문</span>관계를 밝혔다면, 그 관계는 모두 같은 종류일까?</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" data-step="3" id="s-4-3c">
+      <div class="sh"><div class="sec">4-3 대상 설명</div><h2><span class="q">Q</span>관계라면 모두 같은 관계일까요?</h2></div>
+      <div class="body split even">
+        <div class="fig"><svg viewBox="0 0 420 270" role="img" aria-label="인과관계와 상관관계의 차이">
+          <defs><marker id="m-ar7" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#1B2A4A"/></marker><marker id="m-ar8" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#9AA0AA"/></marker></defs>
+          <rect x="10" y="8" width="400" height="116" rx="12" fill="#fff"/>
+          <text x="26" y="32" font-size="13.5" font-weight="800" fill="#1B2A4A">인과관계 · 깊은 이해</text>
+          <rect x="40" y="48" width="110" height="44" rx="10" fill="#1B2A4A"/><text x="95" y="68" text-anchor="middle" font-size="11.5" fill="#C9D3E6">원인</text><text x="95" y="84" text-anchor="middle" font-size="13.5" font-weight="800" fill="#fff">신약 복용</text>
+          <rect x="270" y="48" width="110" height="44" rx="10" fill="#1B2A4A"/><text x="325" y="68" text-anchor="middle" font-size="11.5" fill="#C9D3E6">결과</text><text x="325" y="84" text-anchor="middle" font-size="13.5" font-weight="800" fill="#fff">혈압 하강</text>
+          <line x1="154" y1="70" x2="264" y2="70" stroke="#1B2A4A" stroke-width="3" marker-end="url(#m-ar7)"/>
+          <rect x="182" y="96" width="54" height="22" rx="11" fill="#E0A100"/><text x="209" y="112" text-anchor="middle" font-size="12" font-weight="800" fill="#1B2A4A">개입</text>
+          <text x="209" y="58" text-anchor="middle" font-size="11.5" fill="#6B7280">바꾸면 바뀐다</text>
+          <rect x="10" y="136" width="400" height="126" rx="12" fill="#fff"/>
+          <text x="26" y="160" font-size="13.5" font-weight="800" fill="#6B7280">상관관계 · 얕은 이해</text>
+          <rect x="40" y="172" width="110" height="40" rx="10" fill="#fff" stroke="#9AA0AA" stroke-width="2"/><text x="95" y="197" text-anchor="middle" font-size="13.5" font-weight="800" fill="#22262E">연소득</text>
+          <rect x="270" y="172" width="110" height="40" rx="10" fill="#fff" stroke="#9AA0AA" stroke-width="2"/><text x="325" y="197" text-anchor="middle" font-size="13.5" font-weight="800" fill="#22262E">행복도</text>
+          <line x1="156" y1="192" x2="264" y2="192" stroke="#9AA0AA" stroke-width="3" marker-start="url(#m-ar8)" marker-end="url(#m-ar8)"/>
+          <text x="210" y="180" text-anchor="middle" font-size="11.5" fill="#6B7280">함께 커진다</text>
+          <rect x="160" y="226" width="100" height="28" rx="8" fill="#F3F4F6" stroke="#9AA0AA" stroke-dasharray="4 3"/><text x="210" y="245" text-anchor="middle" font-size="12" fill="#6B7280">가정환경?</text>
+          <path d="M160 238 C120 238 100 226 98 216" fill="none" stroke="#9AA0AA" stroke-width="1.5" stroke-dasharray="4 3" marker-end="url(#m-ar8)"/>
+          <path d="M260 238 C300 238 320 226 322 216" fill="none" stroke="#9AA0AA" stroke-width="1.5" stroke-dasharray="4 3" marker-end="url(#m-ar8)"/>
+        </svg></div>
+        <div class="side">
+          <ul class="key"><li><b>인과관계</b>: 원인을 바꾸면 결과가 바뀜</li><li><b>상관관계</b>: 함께 변하나 원인은 모름</li></ul>
+          <p class="exp">원인을 바꾸면 결과가 바뀌는 관계를 알면 원리를 깊이 이해한 것이며, 원인을 바꾸는 일을 <b>개입</b>이라 합니다. 소득과 행복도는 함께 커지지만 어느 쪽이 원인인지, 가정환경 같은 다른 요인 때문인지 가릴 수 없습니다. 그래도 상관관계가 있으면 예측에는 쓸 수 있습니다. 여기서 상관관계는 직선 모양의 관계로 한정합니다.</p>
+          <p class="next"><span>다음 질문</span>관계를 알면 아직 없는 값도 맞힐 수 있을까?</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" data-step="3" id="s-4-4a">
+      <div class="sh"><div class="sec">4-4 미지의 데이터 예측</div><h2><span class="q">Q</span>지난 기록으로 올가을 수확량을 맞힐 수 있을까요?</h2></div>
+      <div class="body split even">
+        <div class="fig"><svg id="fig-scatter" viewBox="0 0 420 260" role="img" aria-label="여름 평균기온과 가을 수확량의 산점도와 예측 직선"></svg></div>
+        <div class="side">
+          <ul class="key"><li><b>미지의 데이터 예측</b>: 새 값을 가늠</li><li>30℃면 수확량은 15톤가량입니다.</li></ul>
+          <p class="exp">점 하나는 한 해의 여름 평균기온과 그해 가을 수확량입니다. 30년 동안의 점에 가장 잘 맞는 직선을 긋고 올여름 기온 30℃에서 읽으면, 올가을 수확량을 미리 가늠할 수 있습니다. 이런 예측은 의료나 비즈니스의 의사결정에 쓰입니다. 예측하려면 두 값 사이에 관계가 있어야 합니다.</p>
+          <p class="next"><span>다음 질문</span>예측은 실제와 딱 맞을까?</p>
+        </div>
+      </div>
+      <p class="foot">점의 값은 관계를 보여 주려고 만든 값입니다 <span class="tag-v">가상 데이터</span></p>
+    </section>
+
+    <section class="slide" data-step="3" id="s-4-4b">
+      <div class="sh"><div class="sec">4-4 미지의 데이터 예측</div><h2><span class="q">Q</span>예측은 실제와 딱 맞을까요?</h2></div>
+      <div class="body split even">
+        <div class="fig"><svg id="fig-error" viewBox="0 0 420 260" role="img" aria-label="각 점과 예측 직선 사이의 오차"></svg></div>
+        <div class="side">
+          <ul class="key"><li>예측과 실제의 차이(<b>오차</b>)는 늘 생깁니다.</li><li>통계분석은 오차가 작은 관계를 찾습니다.</li></ul>
+          <p class="exp">세로 선은 각 해의 실제 수확량이 직선 예측에서 빗나간 정도입니다. 그래서 예측할 때는 차이가 얼마인지도 함께 평가합니다. 이처럼 직선 모양의 관계를 <b>선형관계</b>라 하며 다루고 해석하기 쉽습니다. 더 복잡한 관계는 <b>기계학습</b>으로 찾아 예측하기도 합니다. 오차가 작은 관계일수록 예측이 잘 맞습니다.</p>
+          <p class="next"><span>정리</span>세 목적을 나란히 놓아 봅시다.</p>
+        </div>
+      </div>
+      <p class="foot"><span class="tag-v">가상 데이터</span></p>
+    </section>
+
+    <section class="slide" data-step="3" id="s-4-sum">
+      <div class="sh"><div class="sec">4-5 정리</div><h2>데이터 분석은 목적에 따라 하는 일이 다릅니다</h2></div>
+      <div class="body full" style="align-content:center">
+        <table class="sumtbl">
+          <thead><tr><th>목적</th><th>무엇을 하나</th><th>이 모듈의 예시</th></tr></thead>
+          <tbody>
+            <tr><td>① 데이터 요약</td><td>많은 수치를 값 하나로 정리해 경향을 봅니다.</td><td>원자료 12개 → 평균값 1.7</td></tr>
+            <tr><td>② 대상 설명</td><td>성질과 관계를 밝힙니다. 관계에는 인과와 상관이 있습니다.</td><td>신약과 위약의 혈압 비교, 연소득과 행복도</td></tr>
+            <tr><td>③ 미지의 데이터 예측</td><td>얻은 데이터의 관계로 새 값을 가늠하고 오차를 평가합니다.</td><td>여름 평균기온 30℃ → 수확량 15톤가량</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="next"><span>형성평가로</span>이제 같은 예시로 문제를 풀어 봅니다.</p>
+    </section>
+
+    <!-- ⑤ 형성평가: 스크립트의 QUIZ 배열로 만듭니다 -->
+
+    <!-- ⑥ 실습 1 · 조작형 ─────────────────────── -->
+    <section class="slide" data-step="5" id="p1">
+      <div class="sh"><div class="sec">실습 1 · 조작형</div><h2>목표: 값 하나가 평균을 얼마나 움직이는지 확인합니다</h2></div>
+      <div class="body split">
+        <div class="pcol">
+          <div class="plabel">해보기 · 값 번호를 고르고 막대 값을 바꿔 보세요</div>
+          <div class="mbtns" id="p1-items"></div>
+          <div class="fig" style="flex:1"><svg id="p1-svg" viewBox="0 0 470 230" role="img" aria-label="원자료 값 조작 막대그래프"></svg></div>
+          <div class="ctrl" style="margin-top:8px"><span id="p1-label">-</span><input type="range" id="p1-range" min="0" max="8" step="0.1" aria-label="선택한 값"><span id="p1-val" style="min-width:42px;text-align:right">-</span><button class="btn ghost" id="p1-reset">원래대로</button></div>
+        </div>
+        <div class="pcol" style="gap:10px;justify-content:center">
+          <div class="plabel" style="margin:0">결과 확인</div>
+          <div class="stats"><div><small>합계 Σx</small><strong id="p1-sum">-</strong></div><div><small>평균 Σx ÷ 12</small><strong id="p1-mean">-</strong></div></div>
+          <p class="howto">도전: 값 하나만 바꿔 평균을 1.50으로 만들어 보세요.</p>
+          <p class="pmsg" id="p1-msg"></p>
+          <div class="think"><span>생각해보기</span>10번 값을 크게 바꿔도 평균은 조금만 움직입니다. 평균만 보고 유난히 큰 값을 알아챌 수 있을까요?</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ⑥ 실습 2 · 분류형 ─────────────────────── -->
+    <section class="slide" data-step="5" id="p2">
+      <div class="sh"><div class="sec">실습 2 · 분류형</div><h2>목표: 상황 카드를 요약·설명·예측으로 나눕니다</h2></div>
+      <div class="body split even">
+        <div class="pcol">
+          <div class="plabel">해보기 · 카드를 끌어다 칸에 놓으세요 (카드를 누른 뒤 칸을 눌러도 됩니다)</div>
+          <div class="pool" id="p2-pool"></div>
+        </div>
+        <div class="pcol" style="gap:8px">
+          <div class="plabel" style="margin:0">결과 확인 · <span id="p2-count">0 / 0</span></div>
+          <div class="bins" id="p2-bins"></div>
+          <div class="p2row"><p class="pmsg" id="p2-msg"></p><button class="btn ghost" id="p2-reset">다시 하기</button></div>
+          <div class="think"><span>생각해보기</span>설명과 예측은 둘 다 ‘관계’를 씁니다. 두 목적은 무엇이 다를까요?</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ⑥ 실습 3 · 추정형 ─────────────────────── -->
+    <section class="slide" data-step="5" id="p3">
+      <div class="sh"><div class="sec">실습 3 · 추정형</div><h2>목표: 먼저 추정하고, 직선 예측·실제값과 비교합니다</h2></div>
+      <div class="body split">
+        <div class="fig"><svg id="p3-svg" viewBox="0 0 400 250" role="img" aria-label="기온과 수확량 추정 그래프"></svg></div>
+        <div class="pcol" style="gap:10px;justify-content:center">
+          <div class="plabel" style="margin:0">해보기</div>
+          <p class="howto">올여름 평균기온이 <b id="p3-x0">-</b>℃라면 올가을 수확량은 몇 톤일까요? 슬라이더로 내 추정을 정한 뒤 「실제값 확인」을 누르세요.</p>
+          <div class="ctrl">내 추정<input type="range" id="p3-range" aria-label="내 추정 수확량(톤)"><strong id="p3-val" style="min-width:36px;text-align:right">-</strong></div>
+          <button class="btn" id="p3-check" style="align-self:flex-start">실제값 확인</button>
+          <div class="res" id="p3-res">
+            <div class="stats three"><div><small>내 추정(톤)</small><strong id="p3-mine">-</strong></div><div><small>직선 예측(톤)</small><strong id="p3-pred">-</strong></div><div><small>실제값 <span class="tag-v">가상</span></small><strong id="p3-act">-</strong></div></div>
+            <p class="pmsg" id="p3-msg"></p>
+          </div>
+          <div class="think"><span>생각해보기</span>기온 말고 수확량을 바꾸는 요인에는 무엇이 있을까요?</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ⑦ 용어해설·마무리: 스크립트의 GLOSSARY, REFS, NEXT로 만듭니다 -->
+  </main>
+
+  <footer class="bottombar">
+    <span class="counter" id="counter"></span><span class="spacer"></span>
+    <button class="nav" id="prev" type="button">이전</button>
+    <button class="nav primary" id="next" type="button">다음</button>
+  </footer>
+</div>
+<p class="rotate">화면을 가로로 돌리면 더 크게 볼 수 있습니다.</p>
+
+<script>
+(function(){
+"use strict";
+
+/* =====================================================================
+   [교체] 모듈 설정 — 새 모듈은 이 블록과 HTML 화면 문장만 바꿉니다.
+   ===================================================================== */
+var MODULE={title:"데이터 분석의 목적",sub:"데이터와 기술통계 · M01"};
+var STEPS=["학습개요","학습목표","일상의 예시","본문","형성평가","실습","용어해설"];
+
+/* 일관 사례 ① 요약: 원자료 12개(학습내용의 값, 합 20.3) */
+var CASE={unit:"", labels:["1","2","3","4","5","6","7","8","9","10","11","12"],
+          values:[1.2,2.1,2.1,2.4,0.8,0.7,1.6,1.3,0.9,4.2,2.0,1.0]};
+/* 일관 사례 ③ 예측: 여름 평균기온(℃)과 가을 수확량(톤) 30년 — 가상 데이터. 30℃에서 직선 예측 15.0톤 */
+var PAIRS={xs:[29.4,31.1,30.4,26.8,27.3,31.0,25.4,30.7,30.5,28.4,27.3,27.2,27.0,28.2,28.6,28.9,31.8,30.5,29.4,31.7,26.8,26.4,29.3,25.7,25.6,28.7,28.4,31.3,29.4,28.7],
+           ys:[13.5,15.2,14.4,12.6,14.2,14.9,12.4,16.0,14.8,14.0,13.5,13.4,12.4,14.0,15.2,13.2,16.6,15.3,14.1,17.4,13.7,12.1,14.6,13.0,12.4,14.7,14.0,16.1,15.7,13.7],
+           x0:30, actual:15.6,
+           xmin:25,xmax:32,xstep:1, ymin:11,ymax:18,ystep:1, xlabel:"평균기온(℃)", ylabel:"수확량(톤)", x0label:"올여름 30℃", unit:"톤", dp:1};
+var P1={target:1.5};
+
+var QUIZ=[
+ {goal:1,type:"상황 판단",stem:"고혈압 환자를 두 집단으로 나눠 한쪽에는 신약, 다른 쪽에는 위약을 주고 혈압을 비교했습니다. 이 분석의 목적은 무엇일까요?",
+  opts:["데이터 요약","대상 설명","미지의 데이터 예측","데이터 획득"],ans:1,
+  exp:"신약과 혈압 사이의 관계, 곧 신약의 효과를 밝히는 일이므로 대상 설명입니다. 두 집단의 혈압을 비교하는 과정이 있어 요약과 헷갈리기 쉽지만, 목적은 관계를 밝히는 데 있습니다.",back:"s-4-3a",backLabel:"4-3 대상 설명 다시 보기"},
+ {goal:1,type:"상황 판단",stem:"지난 30년 동안의 여름 평균기온과 가을 수확량 기록으로, 올여름 기온을 보고 올가을 수확량을 가늠했습니다. 어떤 목적일까요?",
+  opts:["데이터 요약","대상 설명","미지의 데이터 예측","데이터 획득"],ans:2,
+  exp:"아직 얻지 않은 올가을 수확량을 이미 얻은 데이터로 가늠하므로 예측입니다. 기온과 수확량의 관계를 쓰기 때문에 설명과 헷갈리기 쉽지만, 설명은 관계를 밝히는 일이고 예측은 그 관계로 새 값을 구하는 일입니다.",back:"s-4-4a",backLabel:"4-4 예측 다시 보기"},
+ {goal:2,type:"계산",stem:"원자료 12개를 모두 더하면 20.3입니다. 평균값은 얼마일까요?",
+  opts:["약 1.7","2.1","약 2.45","20.3"],ans:0,
+  exp:"평균값 = Σx ÷ n = 20.3 ÷ 12 = 1.69 ≈ 1.7입니다. 2.1은 두 번 나온 값, 약 2.45는 가장 큰 값 4.2와 가장 작은 값 0.7의 가운데, 20.3은 나누기를 빠뜨린 합계입니다.",back:"s-4-2b",backLabel:"4-2 수학 박스 다시 보기"},
+ {goal:2,type:"O/X 오개념",stem:"“평균값이 1.7이므로 원자료 12개는 모두 1.7 근처에 있다.”",
+  opts:["O","X"],ans:1,ox:true,
+  exp:"가장 작은 값은 0.7, 가장 큰 값은 4.2로 평균과 크게 다릅니다. 평균은 전체 경향을 값 하나로 보여 줄 뿐, 각 값이 어디에 있는지는 알려 주지 않습니다.",back:"s-4-2b",backLabel:"4-2 평균선 그래프 다시 보기"},
+ {goal:3,type:"O/X 오개념",stem:"“연소득이 높은 사람일수록 행복도가 높았다. 따라서 소득을 올리면 행복도가 오른다는 것이 확인되었다.”",
+  opts:["O","X"],ans:1,ox:true,
+  exp:"함께 커지는 관계는 상관관계이고, 상관관계만으로는 원인을 가릴 수 없습니다. 행복한 사람이 일을 잘해 소득이 올랐을 수도 있고, 가정환경이 둘 다에 영향을 주었을 수도 있습니다.",back:"s-4-3c",backLabel:"4-3 인과와 상관 다시 보기"},
+ {goal:3,type:"상황 판단",stem:"신약 실험에서 효과 없는 위약을 먹는 집단을 따로 두는 이유는 무엇일까요?",
+  opts:["약을 먹는 행위 자체의 효과를 가려내려고","실험 비용을 줄이려고","피험자 수를 늘려 평균을 정확히 내려고","신약의 부작용을 확인하려고"],ans:0,
+  exp:"약을 먹지 않은 집단과 비교하면 혈압이 내려간 까닭이 성분인지 약을 먹은 행위인지 가릴 수 없습니다. 위약 집단과 비교해야 성분의 효과만 남길 수 있습니다.",back:"s-4-3b",backLabel:"4-3 실험군과 대조군 다시 보기"}
+];
+
+var BINS=["요약","설명","예측"];
+var CARDS=[["원자료 12개를 평균값 1.7로 나타냈다","요약"],["고객 만족도 설문 결과를 점수 하나로 정리했다","요약"],
+           ["신약 집단과 위약 집단의 혈압을 비교했다","설명"],["붉은 사과가 달다는 관계를 밝혔다","설명"],
+           ["올여름 기온으로 올가을 수확량을 가늠했다","예측"],["연소득 데이터로 그 사람의 행복도를 가늠했다","예측"]];
+var HINT={"요약":"요약은 많은 수치를 값 하나로 정리하는 일입니다.","설명":"설명은 성질이나 관계를 밝히는 일입니다.","예측":"예측은 아직 없는 값을 가늠하는 일입니다."};
+
+var GLOSSARY=[
+ ["데이터","data","대상을 관찰하고 측정해 얻은 정보로, 수치의 모음입니다(문자로 된 데이터도 있음).","실험으로 잰 값, 설문 응답"],
+ ["원자료","raw data","아무 처리도 하지 않은 수치의 나열입니다.","1.2, 2.1, 2.1 … 1.0으로 적힌 12개 값"],
+ ["데이터 요약","summary","많은 수치를 값 하나로 정리해 경향을 파악하는 일입니다.","12개 값을 평균값 1.7로 나타내기"],
+ ["평균값","mean","값을 모두 더해 개수로 나눈 값입니다.","20.3 ÷ 12 ≈ 1.7"],
+ ["대상 설명","explanation","대상이 가진 성질과 관계를 밝히고 이해하는 일입니다.","신약이 혈압을 내리는지 밝히기"],
+ ["실험군","experimental group","효과가 기대되는 처리를 한 집단입니다.","신약을 먹은 집단"],
+ ["대조군(통제군)","control group","실험군과 비교·대조하기 위한 집단입니다.","위약을 먹은 집단"],
+ ["위약","placebo","효과 없는 성분으로 만들어 진짜 약과 똑같아 보이게 한 약입니다.","대조군이 먹은 약"],
+ ["단일맹검법","single-blind test","피험자에게 어느 약인지 알리지 않고 실험하는 방법입니다.","환자가 자기 약이 신약인지 위약인지 모름"],
+ ["이중맹검법","double-blind test","연구자도 어느 약인지 모른 채 실험하는 방법입니다.","혈압을 재는 연구자도 집단을 모름"],
+ ["인과관계","causation","원인을 바꾸면 결과도 바뀌는 관계입니다.","신약 복용(원인) → 혈압 하강(결과)"],
+ ["상관관계","correlation","한쪽이 크면 다른 쪽도 크거나 작은 관계로, 원인은 가릴 수 없습니다.","연소득이 높은 사람이 행복도도 높은 경향"],
+ ["개입","intervention","원하는 결과를 얻으려고 원인을 바꾸는 일입니다.","혈압을 낮추려고 신약을 먹게 하기"],
+ ["미지의 데이터 예측","prediction","이미 얻은 데이터로 앞으로 얻을 데이터를 가늠하는 일입니다.","올여름 기온 30℃ → 수확량 15톤가량"],
+ ["오차","error","예측값과 실제값의 차이입니다.","직선 예측과 실제 수확량의 차이"],
+ ["선형관계","linear relationship","두 요소의 관계가 직선 모양으로 나타나는 관계입니다.","기온이 오를수록 수확량이 고르게 느는 관계"],
+ ["기계학습","machine learning","해석하기 어려운 복잡한 관계를 데이터에서 찾아 예측하는 방법입니다.","기온 외에 여러 요인이 얽힌 수확량 예측"]
+];
+var REFS=[];
+var NEXT={title:"M02 통계학의 역할과 전체 모습",line:"데이터는 왜 제각각 흩어져 있을까요? 다음 모듈에서는 이 흩어짐이 바로 통계학이 필요한 이유임을 살펴봅니다."};
+
+/* =====================================================================
+   아래부터는 공통 엔진입니다. 모듈마다 바꾸지 않습니다.
+   ===================================================================== */
+var NS="http://www.w3.org/2000/svg";
+var C={navy:"#1B2A4A",navy2:"#2C4170",navy3:"#5B6E97",soft:"#A9B8D4",grid:"#DDE1E7",gray:"#6B7280",gray2:"#9AA0AA",amber:"#E0A100",amberInk:"#6E4F00",ok:"#23704F"};
+function el(t,a,p,x){var e=document.createElementNS(NS,t);for(var k in a)e.setAttribute(k,a[k]);if(x!=null)e.textContent=x;if(p)p.appendChild(e);return e;}
+function clear(s){while(s.firstChild)s.removeChild(s.firstChild);}
+function f1(v,d){return v.toFixed(d==null?1:d);}
+function sum(a){return a.reduce(function(x,y){return x+y;},0);}
+function r1(v){return Math.round(v*10)/10;}
+var stage=document.getElementById("stage"),vp=document.getElementById("vp");
+
+/* 계산은 모두 데이터에서 직접 합니다(R0-7) */
+var N=CASE?CASE.values.length:0,SUMV=CASE?r1(sum(CASE.values)):0,AVG=N?SUMV/N:0,MAXV=CASE?Math.max.apply(null,CASE.values):0;
+var LR=!PAIRS?null:(function(){var n=PAIRS.xs.length,mx=sum(PAIRS.xs)/n,my=sum(PAIRS.ys)/n,sxy=0,sxx=0;
+  for(var i=0;i<n;i++){sxy+=(PAIRS.xs[i]-mx)*(PAIRS.ys[i]-my);sxx+=(PAIRS.xs[i]-mx)*(PAIRS.xs[i]-mx);}
+  var b=sxy/sxx;return{b:b,a:my-b*mx};})();
+var PRED=PAIRS?LR.a+LR.b*PAIRS.x0:0;
+
+document.title=MODULE.title;
+document.getElementById("brand").innerHTML=MODULE.title+"<small>"+MODULE.sub+"</small>";
+
+/* 16:9 고정 무대를 창 크기에 맞춤 */
+var S=1;
+function fit(){S=Math.min(window.innerWidth/960,window.innerHeight/540);stage.style.setProperty("--s",S);}
+window.addEventListener("resize",fit);fit();
+
+/* ---------- 그래프 ---------- */
+function barChart(svg,vals,o){
+  clear(svg);o=o||{};
+  var vb=svg.viewBox.baseVal,W=vb.width,H=vb.height,L=34,R=o.mean!=null?70:8,T=26,Bt=24,ym=o.ymax||Math.ceil(Math.max.apply(null,vals)+1),pw=W-L-R,ph=H-T-Bt,bw=pw/vals.length;
+  function y(v){return T+ph-(v/ym)*ph;}
+  for(var g=0;g<=ym;g++){el("line",{x1:L,x2:W-R,y1:y(g),y2:y(g),stroke:C.grid},svg);el("text",{x:L-6,y:y(g)+4,"text-anchor":"end","font-size":10.5,fill:C.gray2},svg,g);}
+  vals.forEach(function(v,i){
+    var sel=o.sel===i,hi=o.hi===i;
+    el("rect",{x:L+i*bw+bw*.16,y:y(v),width:bw*.68,height:Math.max(0,y(0)-y(v)),rx:2,fill:sel?C.amber:hi?C.navy2:C.soft},svg);
+    el("text",{x:L+i*bw+bw/2,y:H-Bt+16,"text-anchor":"middle","font-size":10.5,fill:C.gray},svg,CASE.labels[i]);
+  });
+  if(o.mean!=null){var m=o.mean;
+    el("line",{x1:L,x2:W-R+4,y1:y(m),y2:y(m),stroke:C.navy,"stroke-width":2,"stroke-dasharray":"6 4"},svg);
+    el("rect",{x:W-R+6,y:y(m)-10,width:R-8,height:20,rx:4,fill:C.navy},svg);
+    el("text",{x:W-R+6+(R-8)/2,y:y(m)+4,"text-anchor":"middle","font-size":11,"font-weight":700,fill:"#fff"},svg,"평균 "+f1(m,2));}
+  /* 값 라벨은 마지막에 흰 테두리로 그려 점선에 가리지 않게 함 */
+  vals.forEach(function(v,i){var sel=o.sel===i,hi=o.hi===i;
+    if(o.labels||sel)el("text",{x:L+i*bw+bw/2,y:y(v)-5,"text-anchor":"middle","font-size":10.5,"font-weight":sel||hi?800:500,fill:sel?C.amberInk:hi?C.navy:C.gray,stroke:"#EEF0F3","stroke-width":3,"paint-order":"stroke"},svg,f1(v));});
+}
+function scatter(svg,o){
+  clear(svg);o=o||{};
+  var vb=svg.viewBox.baseVal,W=vb.width,H=vb.height,L=34,R=14,T=30,Bt=40,x0=PAIRS.xmin,x1=PAIRS.xmax,y0=PAIRS.ymin,y1=PAIRS.ymax;
+  function X(v){return L+(v-x0)/(x1-x0)*(W-L-R);}
+  function Y(v){return T+(H-T-Bt)-(v-y0)/(y1-y0)*(H-T-Bt);}
+  for(var g=y0;g<=y1+1e-9;g+=PAIRS.ystep){el("line",{x1:L,x2:W-R,y1:Y(g),y2:Y(g),stroke:C.grid},svg);el("text",{x:L-6,y:Y(g)+4,"text-anchor":"end","font-size":10.5,fill:C.gray2},svg,g);}
+  for(var h=x0;h<=x1+1e-9;h+=PAIRS.xstep)el("text",{x:X(h),y:H-Bt+16,"text-anchor":"middle","font-size":10.5,fill:C.gray},svg,h);
+  el("text",{x:(L+W-R)/2,y:H-6,"text-anchor":"middle","font-size":10.5,fill:C.gray},svg,PAIRS.xlabel);
+  el("text",{x:4,y:14,"font-size":10.5,fill:C.gray},svg,PAIRS.ylabel);
+  if(o.line){var la=x0+(x1-x0)*.04,lb=x1-(x1-x0)*.04;el("line",{x1:X(la),y1:Y(LR.a+LR.b*la),x2:X(lb),y2:Y(LR.a+LR.b*lb),stroke:C.navy,"stroke-width":2},svg);}
+  PAIRS.xs.forEach(function(x,i){el("circle",{cx:X(x),cy:Y(PAIRS.ys[i]),r:4.5,fill:C.navy3,"fill-opacity":.85},svg);});
+  if(o.x0!=null){el("line",{x1:X(o.x0),y1:Y(0),x2:X(o.x0),y2:Y(y1),stroke:C.amber,"stroke-dasharray":"3 3"},svg);
+    el("text",{x:X(o.x0),y:T-4,"text-anchor":"middle","font-size":10.5,"font-weight":700,fill:C.amberInk},svg,PAIRS.x0label);}
+  if(o.pred){el("circle",{cx:X(PAIRS.x0),cy:Y(PRED),r:6,fill:C.navy},svg);
+    el("text",{x:X(PAIRS.x0)-10,y:Y(PRED)+4,"text-anchor":"end","font-size":11,"font-weight":800,fill:C.navy,stroke:"#EEF0F3","stroke-width":3,"paint-order":"stroke"},svg,"예측 "+f1(PRED,PAIRS.dp)+PAIRS.unit);}
+  if(o.guess!=null){el("circle",{cx:X(PAIRS.x0),cy:Y(o.guess),r:7,fill:C.amber,stroke:"#fff","stroke-width":2},svg);}
+  if(o.actual){var ay=Y(PAIRS.actual);el("rect",{x:X(PAIRS.x0)-6,y:ay-6,width:12,height:12,fill:C.ok,transform:"rotate(45 "+X(PAIRS.x0)+" "+ay+")"},svg);
+    el("text",{x:X(PAIRS.x0)-10,y:ay-6,"text-anchor":"end","font-size":11,"font-weight":800,fill:C.ok,stroke:"#EEF0F3","stroke-width":3,"paint-order":"stroke"},svg,"실제 "+f1(PAIRS.actual)+PAIRS.unit);}
+  return {X:X,Y:Y};
+}
+function flow(svg,names){
+  clear(svg);var n=names.length,w=118,gap=(440-40-n*w)/(n-1),y=96,h=64;
+  el("defs",{},svg).innerHTML='<marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10z" fill="'+C.navy3+'"/></marker>';
+  names.forEach(function(t,i){var x=20+i*(w+gap);
+    el("rect",{x:x,y:y,width:w,height:h,rx:10,fill:i===n-1?C.navy:"#fff",stroke:C.navy,"stroke-width":1.5},svg);
+    el("text",{x:x+w/2,y:y+h/2-6,"text-anchor":"middle","font-size":11,"font-weight":700,fill:i===n-1?"#C9D3E6":C.navy3},svg,"4-"+(i+1));
+    el("text",{x:x+w/2,y:y+h/2+13,"text-anchor":"middle","font-size":14,"font-weight":800,fill:i===n-1?"#fff":C.navy},svg,t);
+    if(i<n-1)el("line",{x1:x+w+4,y1:y+h/2,x2:x+w+gap-5,y2:y+h/2,stroke:C.navy3,"stroke-width":2,"marker-end":"url(#ar)"},svg);});
+  el("text",{x:220,y:200,"text-anchor":"middle","font-size":12,fill:C.gray},svg,"본문 소단원을 배우는 순서");
+}
+/* 화면에 해당 id가 있을 때만 그립니다(모듈마다 쓰지 않는 그림은 건너뜀) */
+function on(id,fn){var e=document.getElementById(id);if(e)fn(e);}
+on("fig-flow",function(s){flow(s,["소단원 1","소단원 2","정리"]);});
+on("fig-case",function(s){barChart(s,CASE.values,{labels:true});});
+on("fig-bar",function(s){barChart(s,CASE.values,{labels:true,mean:AVG});});
+on("fig-scatter",function(s){scatter(s,{line:true,x0:PAIRS.x0,pred:true});});
+on("fig-bridge",function(s){
+  el("defs",{},s).innerHTML='<marker id="ar2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10z" fill="'+C.navy3+'"/></marker>';
+  [["장면 1",40],["장면 2",130]].forEach(function(p){el("rect",{x:24,y:p[1],width:130,height:64,rx:10,fill:"#fff",stroke:C.navy3,"stroke-width":1.5},s);el("text",{x:89,y:p[1]+37,"text-anchor":"middle","font-size":14,"font-weight":700,fill:C.navy},s,p[0]);
+    el("line",{x1:158,y1:p[1]+32,x2:246,y2:120,stroke:C.navy3,"stroke-width":2,"marker-end":"url(#ar2)"},s);});
+  el("rect",{x:252,y:84,width:150,height:72,rx:12,fill:C.navy},s);
+  el("text",{x:327,y:116,"text-anchor":"middle","font-size":14,"font-weight":800,fill:"#fff"},s,"본문 첫 질문");
+  el("text",{x:327,y:136,"text-anchor":"middle","font-size":11.5,fill:"#C9D3E6"},s,"4-1로 이어짐");});
+on("case-n",function(e){e.textContent=N+"개";});
+on("case-sum",function(e){e.textContent=f1(SUMV);});
+on("case-max",function(e){e.textContent=f1(MAXV);});
+on("math-calc",function(e){e.textContent=f1(LR.b,2)+" × "+PAIRS.x0+" + "+f1(LR.a,2)+" = "+f1(PRED,2);});
+
+/* =====================================================================
+   [교체] 모듈 전용 그림: 모듈마다 필요한 그림 함수는 이 자리에 둡니다.
+   ===================================================================== */
+/* M01 전용 그림 */
+/* 4-3 대상 설명: 신약·위약 혈압 막대(가상) + 연소득·행복도 산점도(가상) */
+on("fig-explain",function(s){
+  var seed=11;function rnd(){seed=(seed*16807)%2147483647;return (seed-1)/2147483646;}
+  el("rect",{x:6,y:6,width:196,height:248,rx:10,fill:"#fff"},s);
+  el("text",{x:104,y:26,"text-anchor":"middle","font-size":12.5,"font-weight":800,fill:C.navy},s,"신약은 혈압을 낮춘다");
+  var by=210,top=50;
+  el("line",{x1:28,x2:188,y1:by,y2:by,stroke:C.gray2},s);
+  el("rect",{x:52,y:top+46,width:44,height:by-top-46,rx:3,fill:C.navy2},s);
+  el("rect",{x:120,y:top,width:44,height:by-top,rx:3,fill:C.soft},s);
+  el("text",{x:74,y:by+18,"text-anchor":"middle","font-size":12.5,"font-weight":700,fill:C.navy},s,"신약");
+  el("text",{x:142,y:by+18,"text-anchor":"middle","font-size":12.5,"font-weight":700,fill:C.navy},s,"위약");
+  el("text",{x:20,y:by+36,"font-size":10.5,fill:C.gray},s,"막대 높이 = 최고혈압");
+  el("rect",{x:218,y:6,width:196,height:248,rx:10,fill:"#fff"},s);
+  el("text",{x:316,y:26,"text-anchor":"middle","font-size":12.5,"font-weight":800,fill:C.navy},s,"소득이 높을수록 행복도↑");
+  var L=236,R=402,T=62,B=214;
+  el("line",{x1:L,x2:R,y1:B,y2:B,stroke:C.gray2},s);el("line",{x1:L,x2:L,y1:T,y2:B,stroke:C.gray2},s);
+  for(var i=0;i<40;i++){var x=rnd(),y=Math.min(1,Math.max(0,0.15+0.65*x+(rnd()-0.5)*0.42));
+    el("circle",{cx:L+6+x*(R-L-12),cy:B-6-y*(B-T-12),r:3,fill:C.navy3,"fill-opacity":.8},s);}
+  el("text",{x:R,y:B+18,"text-anchor":"end","font-size":10.5,fill:C.gray},s,"연소득 →");
+  el("text",{x:L+4,y:T-8,"font-size":10.5,fill:C.gray},s,"행복도 ↑");
+});
+/* 4-4 오차: 산점도 위에 직선과의 차이를 세로 선으로 */
+on("fig-error",function(s){
+  var m=scatter(s,{line:true});
+  PAIRS.xs.forEach(function(x,i){var p=LR.a+LR.b*x;
+    el("line",{x1:m.X(x),x2:m.X(x),y1:m.Y(PAIRS.ys[i]),y2:m.Y(p),stroke:C.amber,"stroke-width":1.5,"stroke-opacity":.9},s);});
+  el("text",{x:m.X(25.3),y:m.Y(17.2),"font-size":11.5,"font-weight":700,fill:C.amberInk},s,"세로 선 = 오차");
+});
+
+
+/* ---------- ⑤ 형성평가 ---------- */
+function fill(t){return !CASE?t:t.replace(/SUM/g,f1(SUMV)).replace(/AVG/g,f1(AVG,2)).replace(/MAXV/g,f1(MAXV));}
+var firstPractice=document.getElementById("p1"),answered=0,correct=0;
+QUIZ.forEach(function(q,i){
+  var s=document.createElement("section");s.className="slide";s.dataset.step="4";s.id="q"+(i+1);
+  s.innerHTML='<div class="sh"><div class="sec"><span>문항 '+(i+1)+' / '+QUIZ.length+'</span><span class="qchips"><span>학습목표 '+q.goal+'</span><span>'+q.type+'</span></span></div><h2 class="stem">'+fill(q.stem)+'</h2></div>'+
+    '<div class="body split even"><div class="opts'+(q.ox?' ox':'')+'"></div><div class="fbp" aria-live="polite"><p class="empty">보기를 고르면 정답과 해설이 여기에 나타납니다.</p></div></div>';
+  var ob=s.querySelector(".opts"),fb=s.querySelector(".fbp");
+  q.opts.forEach(function(t,k){
+    var b=document.createElement("button");b.type="button";b.className="opt";
+    b.innerHTML=q.ox?t:'<span class="n">'+(k+1)+'</span>'+fill(t);
+    b.addEventListener("click",function(){
+      var all=ob.querySelectorAll(".opt");[].forEach.call(all,function(x){x.disabled=true;});
+      all[q.ans].classList.add("ok");var ok=k===q.ans;if(!ok)b.classList.add("ng");
+      answered++;if(ok)correct++;
+      fb.className="fbp "+(ok?"ok":"ng");
+      fb.innerHTML='<div class="verdict">'+(ok?"정답입니다":"오답입니다. 정답은 "+(q.ox?q.opts[q.ans]:(q.ans+1)+"번")+"입니다")+'</div><div>'+fill(q.exp)+'</div>'+
+        '<button type="button" class="jump back" data-jump="'+q.back+'">'+q.backLabel+'</button><div class="tally">지금까지 '+answered+'문항 중 '+correct+'문항 정답</div>';
+      bindJumps(fb);
+    });
+    ob.appendChild(b);
+  });
+  vp.insertBefore(s,firstPractice);
+});
+
+/* ---------- ⑦ 용어해설 · 참고자료 · 다음 모듈 ---------- */
+for(var gi=0;gi<GLOSSARY.length;gi+=6){
+  var part=GLOSSARY.slice(gi,gi+6),pg=gi/6+1,np=Math.ceil(GLOSSARY.length/6);
+  var s=document.createElement("section");s.className="slide";s.dataset.step="6";
+  var h='<div class="sh"><div class="sec">용어해설 '+pg+'/'+np+'</div><h2>'+(pg===1?"본문에서 굵게 표시한 용어를 나온 순서대로 모았습니다":"용어해설 계속")+'</h2></div><div class="body full"><div class="gl">';
+  part.forEach(function(g,k){h+='<div class="gi"><div class="t"><i>'+(gi+k+1)+'</i>'+g[0]+'<em>'+g[1]+'</em>'+(g[4]?'<span class="cite">['+g[4]+']</span>':'')+'</div><div class="d">'+g[2]+'</div><div class="e"><strong>예시</strong> '+g[3]+'</div></div>';});
+  h+='</div></div>';s.innerHTML=h;vp.appendChild(s);
+}
+(function(){
+  var s=document.createElement("section");s.className="slide";s.dataset.step="6";s.id="end";
+  var refs=REFS.length?'<div class="pcol" style="gap:10px"><div class="plabel" style="margin:0">참고자료</div><ol class="refs">'+REFS.map(function(r){return '<li><span>['+r.n+']</span><div>'+r.title+', '+r.org+'. <a href="'+r.url+'" target="_blank" rel="noopener">'+r.url+'</a> ('+r.date+')</div></li>';}).join("")+'</ol></div>':'';
+  s.innerHTML='<div class="sh"><div class="sec">마무리</div><h2>'+(REFS.length?"참고자료와 다음 모듈":"다음 모듈")+'</h2></div>'+
+    '<div class="body '+(REFS.length?'split even':'full')+'" style="align-content:center">'+refs+
+    '<div class="pcol" style="justify-content:center"><div class="nextmod"><small>다음 모듈 · '+NEXT.title+'</small><strong>'+NEXT.line+'</strong></div></div></div>'+
+    '<p class="foot">학습 상태는 저장되지 않습니다.</p>';
+  vp.appendChild(s);
+})();
+
+/* ---------- 이동 · 진행선 ---------- */
+var slides=[].slice.call(vp.querySelectorAll(".slide")),cur=0,seen={};
+var stepFirst=[],stepCount=[0,0,0,0,0,0,0];
+slides.forEach(function(s,i){var st=+s.dataset.step;if(stepFirst[st]==null)stepFirst[st]=i;stepCount[st]++;});
+var rail=document.getElementById("rail"),stations=[];
+STEPS.forEach(function(n,i){
+  var b=document.createElement("button");b.type="button";b.className="station";
+  b.style.left="calc(14px + (100% - 28px) * "+(i/6)+")";
+  b.innerHTML='<span class="dot">'+(i+1)+'</span><span class="lb">'+n+'</span>';
+  b.setAttribute("aria-label",(i+1)+"단계 "+n+"(으)로 이동");
+  b.addEventListener("click",function(){show(stepFirst[i]);});
+  rail.appendChild(b);stations.push(b);
+});
+function show(i){
+  cur=Math.max(0,Math.min(slides.length-1,i));
+  slides.forEach(function(s,k){s.classList.toggle("on",k===cur);});
+  var st=+slides[cur].dataset.step;seen[st]=true;
+  stations.forEach(function(b,k){b.classList.toggle("cur",k===st);b.classList.toggle("done",k<st||(!!seen[k]&&k!==st));if(k===st)b.setAttribute("aria-current","step");else b.removeAttribute("aria-current");});
+  var within=(cur-stepFirst[st])/Math.max(1,stepCount[st]);
+  var frac=st===6&&cur===slides.length-1?1:(st+within)/6;
+  document.getElementById("fill").style.width=(Math.min(1,frac)*100)+"%";
+  document.getElementById("counter").innerHTML="<strong>"+STEPS[st]+"</strong> "+(cur-stepFirst[st]+1)+" / "+stepCount[st];
+  document.getElementById("prev").disabled=cur===0;
+  var nx=document.getElementById("next");nx.disabled=cur===slides.length-1;
+  nx.textContent=(cur<slides.length-1&&+slides[cur+1].dataset.step!==st)?STEPS[+slides[cur+1].dataset.step]+"(으)로":"다음";
+}
+function bindJumps(root){[].forEach.call(root.querySelectorAll("[data-jump]"),function(b){b.addEventListener("click",function(){var t=document.getElementById(b.dataset.jump);if(t)show(slides.indexOf(t));});});}
+bindJumps(document);
+document.getElementById("prev").onclick=function(){show(cur-1);};
+document.getElementById("next").onclick=function(){show(cur+1);};
+document.addEventListener("keydown",function(e){
+  if(e.target&&(e.target.type==="range"))return;
+  if(e.key==="ArrowRight"||e.key==="PageDown"){show(cur+1);e.preventDefault();}
+  else if(e.key==="ArrowLeft"||e.key==="PageUp"){show(cur-1);e.preventDefault();}
+});
+var tx=null,ty=null;
+vp.addEventListener("touchstart",function(e){var t=e.target;if(t.closest&&(t.closest("input")||t.closest(".dcard"))){tx=null;return;}tx=e.touches[0].clientX;ty=e.touches[0].clientY;},{passive:true});
+vp.addEventListener("touchend",function(e){if(tx==null)return;var dx=e.changedTouches[0].clientX-tx,dy=e.changedTouches[0].clientY-ty;if(Math.abs(dx)>60&&Math.abs(dx)>Math.abs(dy)*1.5)show(cur+(dx<0?1:-1));tx=null;},{passive:true});
+
+/* ---------- 실습 1 · 조작형 ---------- */
+(function(){if(!document.getElementById("p1-items")||!CASE)return;
+var p1v=CASE.values.slice(),p1s=CASE.values.indexOf(MAXV),p1m=document.getElementById("p1-items"),p1r=document.getElementById("p1-range");
+CASE.labels.forEach(function(m,i){var b=document.createElement("button");b.type="button";b.className="mbtn";b.textContent=m;b.onclick=function(){p1s=i;p1d();};p1m.appendChild(b);});
+function p1d(){
+  [].forEach.call(p1m.children,function(b,i){b.classList.toggle("on",i===p1s);b.setAttribute("aria-pressed",i===p1s);});
+  p1r.value=p1v[p1s];document.getElementById("p1-label").textContent=CASE.labels[p1s]+"번";document.getElementById("p1-val").textContent=f1(p1v[p1s]);
+  var s=r1(sum(p1v)),m=s/N;
+  document.getElementById("p1-sum").textContent=f1(s);document.getElementById("p1-mean").textContent=f1(m,2);
+  barChart(document.getElementById("p1-svg"),p1v,{mean:m,sel:p1s,ymax:9});
+  var msg=document.getElementById("p1-msg");
+  if(P1.target!=null&&Math.abs(m-P1.target)<0.005){msg.className="pmsg ok";msg.textContent="성공했습니다. "+f1(s)+" ÷ "+N+" = "+f1(m,2);}
+  else if(Math.abs(s-SUMV)<1e-9){msg.className="pmsg";msg.textContent="원래 값입니다. "+f1(SUMV)+" ÷ "+N+" = "+f1(AVG,2);}
+  else{msg.className="pmsg";msg.textContent="원래 평균 "+f1(AVG,2)+"보다 "+f1(Math.abs(m-AVG),2)+" "+(m>AVG?"늘었습니다.":"줄었습니다.");}
+}
+p1r.addEventListener("input",function(){p1v[p1s]=r1(+p1r.value);p1d();});
+document.getElementById("p1-reset").onclick=function(){p1v=CASE.values.slice();p1d();};
+p1d();
+
+})();
+/* ---------- 실습 2 · 분류형 ---------- */
+(function(){if(!document.getElementById("p2-pool"))return;
+var pool=document.getElementById("p2-pool"),binWrap=document.getElementById("p2-bins"),selC=null,done2=0;
+var bins=BINS.map(function(n){var b=document.createElement("div");b.className="bin";b.dataset.bin=n;b.innerHTML="<h4>"+n+"</h4>";binWrap.appendChild(b);return b;});
+function p2msg(t,c){var m=document.getElementById("p2-msg");m.textContent=t;m.className="pmsg "+(c||"");document.getElementById("p2-count").textContent=done2+" / "+CARDS.length;}
+function p2init(){
+  pool.innerHTML="";bins.forEach(function(b){[].slice.call(b.querySelectorAll(".dcard")).forEach(function(c){c.remove();});});done2=0;selC=null;
+  var o=CARDS.map(function(_,i){return i;});for(var i=o.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1)),t=o[i];o[i]=o[j];o[j]=t;}
+  o.forEach(function(i){var d=document.createElement("div");d.className="dcard";d.tabIndex=0;d.setAttribute("role","button");d.textContent=CARDS[i][0];d.dataset.ans=CARDS[i][1];pool.appendChild(d);attach(d);});
+  p2msg("카드를 하나 골라 보세요.","");
+}
+function drop(c,b){
+  if(!b||c.classList.contains("ok"))return;
+  c.classList.remove("sel");selC=null;
+  if(c.dataset.ans===b.dataset.bin){c.classList.add("ok");c.removeAttribute("tabindex");b.appendChild(c);done2++;p2msg(done2===CARDS.length?"카드를 모두 맞게 분류했습니다.":"정답입니다.","ok");}
+  else{c.classList.add("shake");setTimeout(function(){c.classList.remove("shake");},400);p2msg("「"+b.dataset.bin+"」이 아닙니다. "+HINT[c.dataset.ans],"ng");}
+}
+function pick(d){if(selC===d){d.classList.remove("sel");selC=null;return;}if(selC)selC.classList.remove("sel");selC=d;d.classList.add("sel");p2msg("이제 알맞은 칸을 누르세요.","");}
+function attach(d){
+  var sx=null,sy,mv=false,gh=null,ov=null,offX=0,offY=0;
+  function pos(e){var r=stage.getBoundingClientRect();return{x:(e.clientX-r.left)/S,y:(e.clientY-r.top)/S};}
+  d.addEventListener("pointerdown",function(e){if(d.classList.contains("ok"))return;sx=e.clientX;sy=e.clientY;mv=false;d.setPointerCapture(e.pointerId);var r=d.getBoundingClientRect();offX=(e.clientX-r.left)/S;offY=(e.clientY-r.top)/S;});
+  d.addEventListener("pointermove",function(e){
+    if(sx==null)return;
+    if(!mv&&Math.hypot(e.clientX-sx,e.clientY-sy)>6){mv=true;gh=d.cloneNode(true);gh.classList.add("ghostc");gh.classList.remove("sel");gh.style.width=d.offsetWidth+"px";stage.appendChild(gh);d.style.opacity=".35";}
+    if(mv){var p=pos(e);gh.style.left=(p.x-offX)+"px";gh.style.top=(p.y-offY)+"px";
+      var t=document.elementFromPoint(e.clientX,e.clientY),b=t&&t.closest?t.closest(".bin"):null;
+      if(ov&&ov!==b)ov.classList.remove("hover");ov=b;if(b)b.classList.add("hover");}
+  });
+  d.addEventListener("pointerup",function(){
+    if(sx==null)return;sx=null;
+    if(mv){gh.remove();gh=null;d.style.opacity="";if(ov)ov.classList.remove("hover");var b=ov;ov=null;drop(d,b);}else pick(d);
+  });
+  d.addEventListener("pointercancel",function(){if(gh){gh.remove();gh=null;}d.style.opacity="";sx=null;if(ov)ov.classList.remove("hover");ov=null;});
+  d.addEventListener("keydown",function(e){if(e.key==="Enter"||e.key===" "){e.preventDefault();pick(d);}});
+}
+bins.forEach(function(b){b.tabIndex=0;b.setAttribute("role","button");b.setAttribute("aria-label",b.dataset.bin+" 칸에 놓기");
+  b.addEventListener("click",function(e){if(selC&&!e.target.closest(".dcard"))drop(selC,b);});
+  b.addEventListener("keydown",function(e){if((e.key==="Enter"||e.key===" ")&&selC){e.preventDefault();drop(selC,b);}});});
+document.getElementById("p2-reset").onclick=p2init;
+p2init();
+
+})();
+/* ---------- 실습 3 · 추정형 ---------- */
+(function(){if(!document.getElementById("p3-range")||!PAIRS)return;
+var p3r=document.getElementById("p3-range"),p3done=false;
+document.getElementById("p3-x0").textContent=PAIRS.x0;
+p3r.min=PAIRS.ymin;p3r.max=PAIRS.ymax;p3r.step=0.1;p3r.value=r1((PAIRS.ymin+PAIRS.ymax)/2);
+function p3d(){var g=+p3r.value;document.getElementById("p3-val").textContent=f1(g);scatter(document.getElementById("p3-svg"),{x0:PAIRS.x0,guess:g,line:p3done,pred:p3done,actual:p3done});}
+p3r.addEventListener("input",function(){if(p3done){p3done=false;document.getElementById("p3-res").classList.remove("on");}p3d();});
+document.getElementById("p3-check").onclick=function(){
+  p3done=true;var g=+p3r.value,mine=Math.abs(g-PAIRS.actual),line=Math.abs(PRED-PAIRS.actual);
+  document.getElementById("p3-mine").textContent=f1(g);document.getElementById("p3-pred").textContent=f1(PRED,PAIRS.dp);document.getElementById("p3-act").textContent=f1(PAIRS.actual);
+  var m=document.getElementById("p3-msg"),good=mine<=line;m.className="pmsg "+(good?"ok":"ng");
+  m.textContent="내 오차 "+f1(mine,PAIRS.dp)+PAIRS.unit+", 직선 오차 "+f1(line,PAIRS.dp)+PAIRS.unit+". "+(good?"직선만큼 또는 더 가깝게 추정했습니다.":"직선을 이용하면 오차를 줄일 수 있습니다.");
+  document.getElementById("p3-res").classList.add("on");p3d();
+};
+p3d();
+
+})();
+show(0);
+})();
+</script>
+</body>
+</html>
