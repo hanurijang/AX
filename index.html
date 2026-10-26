@@ -18,11 +18,12 @@
   p.sub { margin: 0; opacity: .66; font-size: 13px; }
 
   .courses { display: grid; gap: 16px; grid-template-columns: 1fr; }
+  /* 2열 구조: [번호 사각형] [과정명·모듈 목록] */
   a.course {
-    display: grid; gap: 4px 18px;
-    grid-template-columns: 52px 1fr auto;
-    align-items: center;
-    padding: 22px 22px 20px;
+    display: grid; gap: 0 18px;
+    grid-template-columns: 48px 1fr;
+    align-items: start;
+    padding: 22px 24px 20px;
     text-decoration: none; color: inherit;
     border: 1px solid var(--line); border-radius: 14px; background: #fff;
     box-shadow: 0 1px 2px rgba(0,0,0,.04);
@@ -34,14 +35,14 @@
   }
   a.course:focus-visible { outline: 3px solid var(--amber); outline-offset: 2px; }
   .cno {
-    grid-row: span 2; display: grid; place-items: center;
-    width: 52px; height: 52px; border-radius: 12px;
+    display: grid; place-items: center;
+    width: 48px; height: 48px; margin-top: -2px; border-radius: 11px;
     background: var(--navy); color: #fff;
     font-size: 13px; font-weight: 800; letter-spacing: .4px;
     font-variant-numeric: tabular-nums;
   }
-  .cttl { display: block; font-size: 17px; font-weight: 800; letter-spacing: -.4px; line-height: 1.35; }
-  .cmeta { display: block; font-size: 12.5px; opacity: .62; margin-top: 2px; }
+  .cttl { display: block; font-size: 17px; font-weight: 800; letter-spacing: -.4px; line-height: 1.4; }
+  .cmeta { display: block; font-size: 12.5px; opacity: .62; margin-top: 1px; }
   .mods {
     display: block; margin-top: 10px; padding-top: 9px;
     border-top: 1px dashed #e6e9ee;
@@ -52,19 +53,12 @@
     align-items: baseline; line-height: 1.55; padding: 1.5px 0;
   }
   .mods .mno { font-variant-numeric: tabular-nums; color: var(--navy2); font-weight: 700; }
-  .cgo {
-    grid-row: span 2; align-self: center;
-    font-size: 13px; font-weight: 700; color: var(--navy2);
-    border: 1.5px solid #d5deee; border-radius: 8px; padding: 7px 13px;
-    white-space: nowrap; background: #f8fafc;
-  }
-  a.course:hover .cgo { background: var(--navy); border-color: var(--navy); color: #fff; }
 
   @media (max-width: 620px) {
     body { padding-top: 32px; }
-    a.course { grid-template-columns: 44px 1fr; padding: 18px 16px; }
-    .cno { width: 44px; height: 44px; font-size: 12px; }
-    .cgo { grid-column: 2; grid-row: auto; justify-self: start; margin-top: 8px; }
+    a.course { grid-template-columns: 38px 1fr; gap: 0 12px; padding: 18px 16px; }
+    .cno { width: 38px; height: 38px; font-size: 12px; border-radius: 9px; }
+    .cttl { font-size: 16px; }
     .mods { font-size: 12px; }
     .mods .m { grid-template-columns: 30px 1fr; gap: 6px; }
   }
@@ -74,8 +68,6 @@
     a.course { background: #1f2227; border-color: #2c3036; }
     a.course:hover, a.course:focus-visible { border-color: #3a4d78; box-shadow: 0 8px 22px rgba(0,0,0,.5); }
     .cno { background: #2C4170; }
-    .cgo { background: #23272e; border-color: #3a4d78; color: #a9b6cf; }
-    a.course:hover .cgo { background: #2C4170; border-color: #2C4170; color: #fff; }
     .mods { border-top-color: #333840; }
     .mods .mno { color: #9fb0d0; }
   }
@@ -91,7 +83,7 @@
   <main class="courses">
     <a class="course" href="courses/course1.html">
       <span class="cno">01</span>
-      <span>
+      <span class="cbody">
         <span class="cttl">데이터와 기술통계</span>
         <span class="cmeta">7개 모듈 · M01–M07</span>
         <span class="mods">
@@ -104,12 +96,11 @@
           <span class="m"><span class="mno">M07</span><span>정규분포와 표준화</span></span>
         </span>
       </span>
-      <span class="cgo">들어가기 →</span>
     </a>
 
     <a class="course" href="courses/course2.html">
       <span class="cno">02</span>
-      <span>
+      <span class="cbody">
         <span class="cttl">추론통계와 가설검정</span>
         <span class="cmeta">9개 모듈 · M08–M16</span>
         <span class="mods">
@@ -124,12 +115,11 @@
           <span class="m"><span class="mno">M16</span><span>비율 비교</span></span>
         </span>
       </span>
-      <span class="cgo">들어가기 →</span>
     </a>
 
     <a class="course" href="courses/course3.html">
       <span class="cno">03</span>
-      <span>
+      <span class="cbody">
         <span class="cttl">상관·회귀·통계 모형</span>
         <span class="cmeta">6개 모듈 · M17–M22</span>
         <span class="mods">
@@ -141,7 +131,6 @@
           <span class="m"><span class="mno">M22</span><span>푸아송 회귀와 다양한 일반화선형모형</span></span>
         </span>
       </span>
-      <span class="cgo">들어가기 →</span>
     </a>
   </main>
 </div>
