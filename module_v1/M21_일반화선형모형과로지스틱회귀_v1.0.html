@@ -1,0 +1,1086 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>일반화선형모형과 로지스틱 회귀</title>
+<!-- M21 일반화선형모형과 로지스틱 회귀 v1.0 · 기준 템플릿 v1.3로 제작 (2026-10-26) -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<style>
+:root{
+  --navy:#1B2A4A; --navy2:#2C4170; --navy3:#5B6E97; --navy-soft:#E4E9F2;
+  --ink:#22262E; --gray:#6B7280; --gray2:#9AA0AA; --panel:#EEF0F3; --line:#D5D9E0;
+  --amber:#E0A100; --amber-ink:#6E4F00; --amber-soft:#FCF3D9;
+  --ok:#23704F; --ok-soft:#E2F1E9; --ng:#B42318; --ng-soft:#FBE6E3;
+  --letterbox:#C7CCD4;
+}
+*{box-sizing:border-box}
+html,body{margin:0;height:100%;overflow:hidden;background:var(--letterbox)}
+body{font-family:"Pretendard Variable","Pretendard","Apple SD Gothic Neo","Malgun Gothic","Noto Sans KR",system-ui,sans-serif;color:var(--ink);-webkit-text-size-adjust:100%;font-feature-settings:"tnum"}
+button{font:inherit;color:inherit}
+:focus-visible{outline:3px solid var(--amber);outline-offset:2px;border-radius:4px}
+
+/* ---------- 16:9 무대 ---------- */
+.stage{position:absolute;left:50%;top:50%;width:960px;height:540px;transform:translate(-50%,-50%) scale(var(--s,1));transform-origin:center;background:#fff;overflow:hidden;box-shadow:0 10px 40px rgba(27,42,74,.25)}
+
+/* ---------- 상단 바: 모듈명 + 7단계 진행선 ---------- */
+.topbar{position:absolute;left:0;right:0;top:0;height:60px;background:var(--navy);display:flex;align-items:center}
+.brand{flex:0 0 200px;padding-left:22px;color:#fff;font-size:14px;font-weight:800;letter-spacing:-.3px;line-height:1.2;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.brand small{display:block;font-size:11px;font-weight:500;color:#A9B6CF;letter-spacing:0;margin-top:2px;overflow:hidden;text-overflow:ellipsis}
+.rail{position:relative;flex:1;height:60px;margin-right:22px}
+.rail .track{position:absolute;left:14px;right:14px;top:21px;height:3px;background:#3A4D78;border-radius:2px}
+.rail .fill{position:absolute;left:0;top:0;bottom:0;background:var(--amber);border-radius:2px;transition:width .35s ease}
+.station{position:absolute;top:10px;width:72px;margin-left:-36px;background:none;border:0;padding:0;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:4px}
+.station .dot{width:24px;height:24px;border-radius:50%;display:grid;place-items:center;font-size:11.5px;font-weight:800;background:var(--navy);color:#8E9DBD;border:2px solid #4A5D88;transition:all .25s}
+.station .lb{font-size:11.5px;color:#8E9DBD;white-space:nowrap}
+.station.done .dot{background:#C9D3E6;border-color:#C9D3E6;color:var(--navy)}
+.station.done .lb{color:#C9D3E6}
+.station.cur .dot{background:var(--amber);border-color:#FFE08A;color:var(--navy);transform:scale(1.12)}
+.station.cur .lb{color:#fff;font-weight:700}
+
+/* ---------- 화면 ---------- */
+.viewport{position:absolute;left:0;right:0;top:60px;bottom:46px}
+.slide{position:absolute;inset:0;padding:16px 36px 10px;display:none;flex-direction:column;gap:12px}
+.slide.on{display:flex;animation:fade .22s ease}
+@keyframes fade{from{opacity:0}to{opacity:1}}
+@media (prefers-reduced-motion:reduce){.slide.on{animation:none}.rail .fill,.station .dot{transition:none}}
+.sh{flex:0 0 auto}
+.sec{font-size:12.5px;font-weight:700;color:var(--navy3);display:flex;gap:8px;align-items:center;min-height:18px}
+h2{margin:3px 0 0;font-size:24px;line-height:1.3;font-weight:800;color:var(--navy);letter-spacing:-.6px;display:flex;gap:10px;align-items:flex-start}
+h2 .q{flex:0 0 auto;margin-top:2px;width:28px;height:28px;border-radius:6px;background:var(--navy);color:#fff;font-size:15px;display:grid;place-items:center}
+h2.big{font-size:30px;line-height:1.32}
+.body{flex:1 1 auto;min-height:0;display:grid;gap:24px}
+.split{grid-template-columns:1.2fr 1fr}
+.split.even{grid-template-columns:1fr 1fr}
+.full{grid-template-columns:1fr}
+.fig{background:var(--panel);border-radius:12px;padding:12px;min-height:0;display:flex;align-items:center;justify-content:center}
+.fig svg{width:100%;height:100%;display:block}
+.figcol{min-height:0;display:flex;flex-direction:column;gap:10px}
+.figcol .fig{flex:1 1 auto}
+.side{min-height:0;display:flex;flex-direction:column;gap:12px;justify-content:center}
+
+/* 핵심 문장: 40자 안팎, 1~2개 */
+.key{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:9px}
+.key li{position:relative;padding-left:16px;font-size:18.5px;line-height:1.42;font-weight:700;letter-spacing:-.4px}
+.key li::before{content:"";position:absolute;left:0;top:.28em;width:4px;height:1.05em;border-radius:2px;background:var(--navy2)}
+.key b{color:var(--navy);background:linear-gradient(transparent 62%,var(--amber-soft) 62%)}
+/* 해설 문단: 2~4문장, 150~250자 */
+.exp{margin:0;font-size:15px;line-height:1.62;letter-spacing:-.2px;color:var(--ink)}
+.exp b{color:var(--navy)}
+/* 연결 문장: 다음 소단원으로 넘기는 질문 */
+.next{margin:0;border-top:1px dashed var(--line);padding-top:9px;font-size:14px;font-weight:700;color:var(--navy2);display:flex;gap:8px;align-items:baseline}
+.next span{flex:0 0 auto;font-size:11.5px;font-weight:800;color:var(--navy3);background:var(--navy-soft);border-radius:4px;padding:0 6px;line-height:20px}
+/* 각주: 기호의 뜻과 출처 번호만 */
+.foot{flex:0 0 auto;font-size:12px;line-height:1.5;color:var(--gray);margin:0}
+.foot b{color:var(--ink)}
+.cite{font-size:.72em;font-weight:700;color:var(--navy3);vertical-align:super;line-height:0;margin-left:1px}
+.tag-v{display:inline-block;font-size:11px;font-weight:700;border-radius:4px;padding:0 6px;line-height:18px;white-space:nowrap;vertical-align:1px;color:var(--gray);background:#F3F4F6;box-shadow:inset 0 0 0 1px var(--line)}
+
+/* 핵심 수학 개념 박스 */
+.math{flex:0 0 auto;border-left:3px solid var(--navy3);background:#F6F7F9;border-radius:0 8px 8px 0;padding:9px 13px;font-size:13.5px;line-height:1.5}
+.math .mt{font-size:12px;font-weight:800;color:var(--navy3);margin-bottom:2px}
+.math .f{font-family:"Cambria Math","Times New Roman",serif;font-size:18px;font-weight:700;color:var(--navy);margin:1px 0 4px}
+.math .r{display:grid;grid-template-columns:34px 1fr;gap:6px}
+.math .r span:first-child{font-size:11.5px;font-weight:700;color:var(--gray2);padding-top:1px}
+.math .w{margin-top:5px;padding-top:5px;border-top:1px dashed var(--line);color:var(--ng);font-weight:700;font-size:12.5px}
+
+/* ---------- 하단 바 ---------- */
+.bottombar{position:absolute;left:0;right:0;bottom:0;height:46px;border-top:1px solid var(--line);display:flex;align-items:center;padding:0 22px 0 36px;gap:12px;background:#fff}
+.counter{font-size:13px;color:var(--gray);font-weight:600}
+.counter strong{color:var(--navy)}
+.spacer{flex:1}
+.nav{border:1.5px solid var(--navy);background:#fff;color:var(--navy);border-radius:8px;height:32px;padding:0 16px;font-size:14px;font-weight:700;cursor:pointer}
+.nav.primary{background:var(--navy);color:#fff}
+.nav:disabled{opacity:.3;cursor:default}
+
+/* ---------- 홈으로 ---------- */
+.home{display:inline-flex;align-items:center;gap:6px;height:32px;padding:0 13px;border-radius:8px;border:1.5px solid var(--navy-soft);background:#fff;color:var(--navy2);font-size:13.5px;font-weight:700;line-height:1;text-decoration:none;white-space:nowrap}
+.home svg{width:14px;height:14px;flex:0 0 auto;display:block}
+.home:hover{background:var(--navy-soft);border-color:var(--navy3);color:var(--navy)}
+.home:focus-visible{outline:3px solid var(--amber);outline-offset:2px}
+@media (prefers-reduced-motion:reduce){.home{transition:none}}
+
+/* ① 학습개요 */
+.meta{display:grid;grid-template-columns:auto 1fr;gap:6px 14px;margin:0;font-size:14px}
+.meta dt{font-weight:700;color:var(--gray)}
+.meta dd{margin:0;font-weight:700;color:var(--navy)}
+.prevlink{background:var(--panel);border-radius:10px;padding:12px 14px;font-size:14.5px;line-height:1.55}
+.prevlink small{display:block;font-size:12px;font-weight:800;color:var(--navy3);margin-bottom:3px}
+
+/* ② 학습목표: 목표 → 문항 → 실습 연결 */
+.gmap{display:grid;grid-template-columns:44px 1fr 150px 150px;align-items:stretch;row-gap:12px;column-gap:0}
+.gmap .hd{font-size:12px;font-weight:700;color:var(--gray);padding:0 14px 2px}
+.gmap .gn{background:var(--navy);color:#fff;font-weight:800;font-size:18px;display:grid;place-items:center;border-radius:10px 0 0 10px}
+.gmap .gt{background:var(--panel);padding:14px 18px;font-size:17px;font-weight:700;line-height:1.42;letter-spacing:-.3px;display:flex;align-items:center}
+.gmap .gt b{color:var(--navy)}
+.gmap .ga,.gmap .gp{background:var(--panel);display:flex;align-items:center;padding:0 10px;border-left:2px solid #fff}
+.gmap .gp{border-radius:0 10px 10px 0}
+.jump{border:1.5px solid var(--navy3);background:#fff;border-radius:7px;padding:6px 10px;font-size:13px;font-weight:700;color:var(--navy);cursor:pointer;text-align:left;line-height:1.3;width:100%}
+.jump:hover{background:var(--navy-soft)}
+
+/* ④ 본문 정리 표 */
+.sumtbl{width:100%;border-collapse:separate;border-spacing:0;font-size:14.5px;line-height:1.5}
+.sumtbl th{background:var(--navy);color:#fff;font-weight:800;text-align:left;padding:10px 14px}
+.sumtbl th:first-child{border-radius:10px 0 0 0;width:150px}
+.sumtbl th:last-child{border-radius:0 10px 0 0}
+.sumtbl td{padding:11px 14px;border-bottom:1px solid var(--line);vertical-align:top}
+.sumtbl td:first-child{font-weight:800;color:var(--navy)}
+.sumtbl tr:nth-child(even) td{background:#F8F9FB}
+
+/* ⑤ 형성평가 */
+.qchips{display:flex;gap:6px}
+.qchips span{font-size:11.5px;font-weight:700;color:var(--navy2);background:var(--navy-soft);border-radius:4px;padding:0 7px;line-height:19px}
+h2.stem{font-size:21px;line-height:1.42;font-weight:800}
+.opts{display:grid;gap:9px;align-content:center}
+.opts.ox{grid-template-columns:1fr 1fr}
+.opt{border:1.5px solid var(--line);background:#fff;border-radius:10px;padding:11px 14px;text-align:left;font-size:16px;font-weight:600;cursor:pointer;display:flex;gap:10px;align-items:center}
+.opt .n{flex:0 0 26px;height:26px;border-radius:50%;background:var(--panel);display:grid;place-items:center;font-size:13px;font-weight:800;color:var(--navy)}
+.opts.ox .opt{justify-content:center;font-size:40px;font-weight:800;padding:22px;color:var(--navy)}
+.opt:hover:not(:disabled){border-color:var(--navy3);background:#F8F9FB}
+.opt:disabled{cursor:default}
+.opt.ok{border-color:var(--ok);background:var(--ok-soft);color:var(--ok)}
+.opt.ok .n{background:var(--ok);color:#fff}
+.opt.ng{border-color:var(--ng);background:var(--ng-soft);color:var(--ng)}
+.opt.ng .n{background:var(--ng);color:#fff}
+.fbp{background:var(--panel);border-radius:12px;padding:18px 20px;display:flex;flex-direction:column;gap:10px;font-size:14.5px;line-height:1.6}
+.fbp .empty{color:var(--gray);margin:auto 0}
+.fbp .verdict{font-size:19px;font-weight:800}
+.fbp.ok{background:var(--ok-soft)} .fbp.ok .verdict{color:var(--ok)}
+.fbp.ng{background:var(--ng-soft)} .fbp.ng .verdict{color:var(--ng)}
+.fbp .back{align-self:flex-start}
+.fbp .tally{margin-top:auto;font-size:12.5px;color:var(--gray);font-weight:600}
+
+/* ⑥ 실습 */
+.plabel{font-size:12px;font-weight:800;color:var(--navy3);margin-bottom:6px}
+.pcol{min-height:0;display:flex;flex-direction:column}
+.mbtns{display:flex;flex-wrap:nowrap;gap:3px;margin-bottom:8px}
+.mbtn{border:1px solid var(--line);background:#fff;border-radius:6px;padding:2px 6px;font-size:12px;cursor:pointer;min-width:26px}
+.mbtn.on{background:var(--navy);border-color:var(--navy);color:#fff}
+.ctrl{display:flex;align-items:center;gap:10px;font-size:14px;font-weight:600}
+input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
+.stats{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.stats.three{grid-template-columns:1fr 1fr 1fr}
+.stats div{background:var(--panel);border-radius:10px;padding:8px 12px}
+.stats small{display:block;font-size:11.5px;color:var(--gray);font-weight:600;line-height:1.35}
+.stats strong{font-size:22px;color:var(--navy);letter-spacing:-.4px}
+.pmsg{font-size:14.5px;font-weight:700;min-height:22px;line-height:1.45}
+.pmsg.ok{color:var(--ok)} .pmsg.ng{color:var(--ng)}
+.think{flex:0 0 auto;background:var(--amber-soft);border-radius:10px;padding:9px 14px;font-size:14.5px;font-weight:700;color:var(--amber-ink);display:flex;gap:10px;align-items:baseline}
+.think span{flex:0 0 auto;font-size:12px;font-weight:800}
+.howto{font-size:13.5px;color:var(--gray);line-height:1.5;margin:0}
+.btn{border:0;background:var(--navy);color:#fff;border-radius:8px;height:32px;padding:0 14px;font-size:13.5px;font-weight:700;cursor:pointer}
+.btn.ghost{background:#fff;color:var(--navy);box-shadow:inset 0 0 0 1.5px var(--navy)}
+.pool{flex:1;min-height:0;display:grid;grid-template-columns:1fr 1fr;align-content:start;gap:8px;padding:10px;border:1.5px dashed var(--line);border-radius:10px;background:#FAFBFC}
+.dcard{background:#fff;border:1.5px solid var(--navy3);border-radius:8px;padding:7px 10px;font-size:13.5px;font-weight:600;line-height:1.4;cursor:grab;user-select:none;-webkit-user-select:none;touch-action:none}
+.dcard.sel{box-shadow:0 0 0 3px var(--amber)}
+.dcard.ok{border-color:var(--ok);background:var(--ok-soft);color:var(--ok);cursor:default;font-size:12.5px;padding:5px 8px}
+.dcard.shake{animation:shake .35s;border-color:var(--ng);background:var(--ng-soft)}
+@keyframes shake{25%{transform:translateX(-5px)}75%{transform:translateX(5px)}}
+.ghostc{position:absolute;pointer-events:none;z-index:50;opacity:.92;box-shadow:0 8px 20px rgba(27,42,74,.25);cursor:grabbing}
+.bins{flex:1 0 auto;min-height:0;display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.bin .dcard{font-size:12px;padding:3px 7px;line-height:1.3}
+.p2row{display:flex;gap:10px;align-items:center}.p2row .pmsg{flex:1;margin:0}.p2row .btn{flex:0 0 auto}
+.bin{border:1.5px solid var(--line);border-radius:10px;padding:6px;display:flex;flex-direction:column;gap:6px;background:#fff;cursor:pointer;min-height:0}
+.bin h4{margin:0;background:var(--navy);color:#fff;border-radius:6px;text-align:center;font-size:14px;padding:4px}
+.bin.hover{border-color:var(--amber);background:var(--amber-soft)}
+.res{display:none;flex-direction:column;gap:8px}
+.res.on{display:flex}
+
+/* ⑦ 용어해설·참고자료 */
+.gl{display:grid;grid-template-columns:1fr 1fr;grid-template-rows:repeat(3,1fr);gap:10px 22px;min-height:0}
+.gi{border-top:2px solid var(--navy);padding:8px 0 0;display:flex;flex-direction:column;gap:3px;min-height:0}
+.gi .t{font-size:16.5px;font-weight:800;color:var(--navy);display:flex;gap:6px;align-items:baseline;flex-wrap:wrap}
+.gi .t em{font-style:normal;font-weight:500;font-size:12.5px;color:var(--gray)}
+.gi .t i{font-style:normal;font-size:12px;font-weight:800;color:var(--navy3);width:22px}
+.gi .d{font-size:14px;line-height:1.5}
+.gi .e{font-size:12.5px;line-height:1.45;color:var(--gray)}
+.gi .e strong{color:var(--navy3)}
+.refs{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:8px;font-size:13.5px;line-height:1.5}
+.refs li{display:grid;grid-template-columns:30px 1fr;gap:4px}
+.refs li span{font-weight:800;color:var(--navy3)}
+.refs a{color:var(--navy2);word-break:break-all}
+.nextmod{background:var(--navy);color:#fff;border-radius:12px;padding:18px 22px;display:flex;flex-direction:column;gap:6px}
+.nextmod small{font-size:12px;font-weight:700;color:#A9B6CF}
+.nextmod strong{font-size:19px;line-height:1.45;letter-spacing:-.3px}
+
+.rotate{position:fixed;left:0;right:0;bottom:max(14px,env(safe-area-inset-bottom));text-align:center;font-size:13px;color:#3A4560;display:none}
+@media (orientation:portrait) and (max-width:700px){.rotate{display:block}}
+</style>
+</head>
+<body>
+<div class="stage" id="stage">
+  <header class="topbar">
+    <!-- [교체] 모듈명 / 과정명·모듈 번호 (장·절 번호는 쓰지 않음) -->
+    <div class="brand" id="brand">일반화선형모형과 로지스틱 회귀<small>상관·회귀·통계 모형 · M21</small></div>
+    <nav class="rail" id="rail" aria-label="학습 단계"><div class="track"><div class="fill" id="fill"></div></div></nav>
+  </header>
+
+  <main class="viewport" id="vp">
+    <!-- ① 학습개요 ─────────────────────────────── -->
+    <section class="slide" data-step="0">
+      <div class="sh"><div class="sec">학습개요</div>
+        <h2 class="big">오차분포를 바꾸고 가능도로 추정해, 0/1 데이터도 회귀로 다룹니다</h2></div>
+      <div class="body split">
+        <div class="fig"><svg id="m21-ov" viewBox="0 0 440 260" role="img" aria-label="일반화선형모형의 세 부분: 오차분포, 선형예측변수, 연결함수와 최대가능도 추정"></svg></div>
+        <div class="side">
+          <div class="prevlink"><small>지난 모듈에서는</small>다중공선성을 점검하고, 상호작용과 비선형회귀로 회귀모형의 형태를 넓혔습니다.<small style="margin-top:8px">이번 모듈에서는</small>반응변수가 생존/사망처럼 값이 2개일 때 쓰는 일반화선형모형의 원리와 최대가능도 방법, 로지스틱 회귀와 오즈비를 배웁니다.</div>
+          <dl class="meta"><dt>학습 시간</dt><dd>약 45분</dd><dt>본문</dt><dd>소단원 4개</dd><dt>실습</dt><dd>조작형 · 분류형 · 추정형</dd></dl>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" data-step="0">
+      <div class="sh"><div class="sec">학습개요 · 이 모듈의 예시</div><h2>살충제 농도에 따라 벌레 30마리가 죽었는지 살았는지 봅니다</h2></div>
+      <div class="body split">
+        <div class="fig"><svg id="m21-case" viewBox="0 0 440 250" role="img" aria-label="살충제 농도에 따른 벌레 30마리의 생존 0, 사망 1 데이터"></svg></div>
+        <div class="side">
+          <ul class="key"><li>반응변수는 0(생존)과 1(사망) 두 값뿐입니다.</li></ul>
+          <p class="exp">벌레 30마리에게 0~12 사이의 서로 다른 농도로 살충제를 뿌린 뒤 각 개체가 살았는지(0) 죽었는지(1)를 기록했습니다(예시값). 30마리 중 17마리가 죽었고, 농도가 높을수록 죽은 개체가 많아 보입니다. 이 데이터로 ‘농도가 오르면 사망 확률이 얼마나 달라지는가’를 모듈 끝까지 분석합니다.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ② 학습목표 ─────────────────────────────── -->
+    <section class="slide" data-step="1">
+      <div class="sh"><div class="sec">학습목표</div><h2>이 모듈을 마치면 이렇게 할 수 있습니다</h2></div>
+      <div class="body full" style="align-content:center">
+        <div class="gmap">
+          <div></div><div class="hd">목표</div><div class="hd">확인하는 문항</div><div class="hd">연결 실습</div>
+          <div class="gn">1</div><div class="gt"><span>반응변수에 맞는 모형과 최대가능도 방법을 <b>구분한다</b>.</span></div>
+          <div class="ga"><button class="jump" data-jump="q1">문항 1·2</button></div><div class="gp"><button class="jump" data-jump="p1">실습 1 조작</button> <button class="jump" data-jump="p2">실습 2 분류</button></div>
+          <div class="gn">2</div><div class="gt"><span>로지스틱 회귀식으로 확률을 <b>계산한다</b>.</span></div>
+          <div class="ga"><button class="jump" data-jump="q3">문항 3·4</button></div><div class="gp"><button class="jump" data-jump="p3">실습 3 추정</button></div>
+          <div class="gn">3</div><div class="gt"><span>오즈비와 그 신뢰구간의 의미를 <b>판단한다</b>.</span></div>
+          <div class="ga"><button class="jump" data-jump="q5">문항 5·6</button></div><div class="gp"><button class="jump" data-jump="p3">실습 3 추정</button></div>
+        </div>
+      </div>
+      <p class="foot">버튼을 누르면 해당 문항이나 실습 화면으로 바로 이동합니다.</p>
+    </section>
+
+    <!-- ③ 일상의 예시 ─────────────────────────────── -->
+    <section class="slide" data-step="2">
+      <div class="sh"><div class="sec">일상의 예시 1/5</div><h2>비는 오거나 안 오거나인데, 예보는 ‘강수확률 30%’입니다</h2></div>
+      <div class="body split">
+        <div class="fig"><svg viewBox="0 0 440 250" role="img" aria-label="실제 결과는 비 옴 1 또는 안 옴 0이지만 예보는 0에서 1 사이의 확률">
+          <rect x="30" y="40" width="170" height="160" rx="12" fill="#fff"/><rect x="240" y="40" width="170" height="160" rx="12" fill="#fff"/>
+          <text x="115" y="66" text-anchor="middle" font-size="13" font-weight="800" fill="#1B2A4A">실제 결과</text><text x="325" y="66" text-anchor="middle" font-size="13" font-weight="800" fill="#1B2A4A">예보</text>
+          <g font-size="14" font-weight="800" text-anchor="middle"><text x="80" y="120" fill="#2B8CC4">비 옴 = 1</text><text x="150" y="160" fill="#9AA0AA">안 옴 = 0</text></g>
+          <text x="325" y="134" text-anchor="middle" font-size="30" font-weight="800" fill="#E0A100">30%</text><text x="325" y="164" text-anchor="middle" font-size="11.5" fill="#6B7280">0 ~ 1 사이의 확률</text>
+          <text x="220" y="228" text-anchor="middle" font-size="11.5" fill="#6B7280">결과는 두 값, 모형이 다루는 것은 확률</text>
+        </svg></div>
+        <div class="side">
+          <ul class="key"><li>결과가 두 값이어도 다루는 것은 확률입니다.</li></ul>
+          <p class="exp">내일 실제로 일어나는 일은 비가 오거나(1) 오지 않거나(0) 둘 중 하나지만, 일기예보는 ‘강수확률 30%’처럼 0과 1 사이의 확률을 알려 줍니다. 결과가 두 가지뿐인 일은 그 값 자체를 직선으로 맞추기보다, 일어날 확률을 설명하는 쪽이 자연스럽습니다.</p>
+          <p class="next"><span>본문에서</span>4-1 선형회귀 원리 확장하기로 이어집니다.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" data-step="2">
+      <div class="sh"><div class="sec">일상의 예시 2/5</div><h2>탐정은 증거를 가장 잘 설명하는 용의자를 고릅니다</h2></div>
+      <div class="body split">
+        <div class="fig"><svg viewBox="0 0 440 250" role="img" aria-label="세 용의자 중 발자국과 시간 증거가 가장 잘 들어맞는 용의자를 고름">
+          <g font-size="12.5" font-weight="800" text-anchor="middle">
+            <circle cx="90" cy="90" r="30" fill="#E4E9F2"/><text x="90" y="95" fill="#1B2A4A">A</text>
+            <circle cx="220" cy="90" r="30" fill="#FCF3D9" stroke="#E0A100" stroke-width="3"/><text x="220" y="95" fill="#6E4F00">B</text>
+            <circle cx="350" cy="90" r="30" fill="#E4E9F2"/><text x="350" y="95" fill="#1B2A4A">C</text></g>
+          <g font-size="11.5" fill="#22262E" text-anchor="middle"><text x="90" y="145">잘 안 맞음</text><text x="220" y="145" font-weight="800" fill="#6E4F00">가장 잘 맞음</text><text x="350" y="145">잘 안 맞음</text></g>
+          <rect x="60" y="170" width="320" height="40" rx="10" fill="#F3F5F9"/><text x="220" y="195" text-anchor="middle" font-size="12" font-weight="700" fill="#1B2A4A">증거: 발자국 크기, 도착 시간</text>
+        </svg></div>
+        <div class="side">
+          <ul class="key"><li>데이터가 가장 나타나기 쉬운 쪽을 고릅니다.</li></ul>
+          <p class="exp">탐정은 발자국 크기와 도착 시간 같은 증거를 놓고, 어느 용의자라면 이런 증거가 남을 가능성이 가장 높은지 따집니다. 증거는 이미 정해져 있고, 바꿔 보는 것은 용의자 쪽입니다. 통계에서도 얻은 데이터는 고정해 두고, 그 데이터가 가장 나타나기 쉬운 파라미터를 고르는 방법이 있습니다.</p>
+          <p class="next"><span>본문에서</span>4-2 가능도와 최대가능도 방법으로 이어집니다.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" data-step="2">
+      <div class="sh"><div class="sec">일상의 예시 3/5</div><h2>자전거는 어느 순간 갑자기 탈 수 있게 됩니다</h2></div>
+      <div class="body split">
+        <div class="fig"><svg viewBox="0 0 440 250" role="img" aria-label="연습 시간에 따라 성공 확률이 처음엔 낮다가 급격히 오르고 이후 거의 성공하는 S자 곡선">
+          <line x1="60" y1="200" x2="400" y2="200" stroke="#9AA0AA" stroke-width="1.5"/><line x1="60" y1="40" x2="60" y2="200" stroke="#9AA0AA" stroke-width="1.5"/>
+          <line x1="60" y1="50" x2="400" y2="50" stroke="#DDE1E7" stroke-dasharray="4 3"/><text x="54" y="54" text-anchor="end" font-size="10" fill="#9AA0AA">1</text><text x="54" y="204" text-anchor="end" font-size="10" fill="#9AA0AA">0</text>
+          <path d="M60 196 C160 196 190 190 220 125 C250 60 290 54 400 52" fill="none" stroke="#C2416E" stroke-width="3"/>
+          <g font-size="12" font-weight="700" fill="#6B7280"><text x="400" y="222" text-anchor="end">연습 시간 →</text><text x="66" y="38">성공 확률</text></g>
+        </svg></div>
+        <div class="side">
+          <ul class="key"><li>확률은 0과 1 사이에서 S자로 변합니다.</li></ul>
+          <p class="exp">자전거를 처음 배울 때는 한참 연습해도 거의 넘어지다가, 어느 순간 성공 확률이 빠르게 올라가고, 익숙해진 뒤에는 거의 매번 성공합니다. 확률은 0보다 작아지거나 1보다 커질 수 없으므로 양 끝에서는 완만하고 가운데서 가파른 S자 모양이 됩니다.</p>
+          <p class="next"><span>본문에서</span>4-3 로지스틱 회귀로 이어집니다.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" data-step="2">
+      <div class="sh"><div class="sec">일상의 예시 4/5</div><h2>“3 대 1로 이긴다”는 말은 확률이 아니라 비율입니다</h2></div>
+      <div class="body split">
+        <div class="fig"><svg viewBox="0 0 440 250" role="img" aria-label="4번 중 3번 이기고 1번 지면 확률 0.75, 이길 쪽과 질 쪽의 비 3 대 1">
+          <g><circle cx="110" cy="100" r="26" fill="#23704F"/><circle cx="175" cy="100" r="26" fill="#23704F"/><circle cx="240" cy="100" r="26" fill="#23704F"/><circle cx="305" cy="100" r="26" fill="#B42318"/></g>
+          <g font-size="13" font-weight="800" fill="#fff" text-anchor="middle"><text x="110" y="105">승</text><text x="175" y="105">승</text><text x="240" y="105">승</text><text x="305" y="105">패</text></g>
+          <rect x="60" y="150" width="150" height="56" rx="10" fill="#EEF4FB"/><text x="135" y="174" text-anchor="middle" font-size="12" font-weight="800" fill="#1C6EA4">이길 확률</text><text x="135" y="196" text-anchor="middle" font-size="14" font-weight="800" fill="#1C6EA4">3 ÷ 4 = 0.75</text>
+          <rect x="230" y="150" width="150" height="56" rx="10" fill="#FCF3D9"/><text x="305" y="174" text-anchor="middle" font-size="12" font-weight="800" fill="#6E4F00">이김 : 짐</text><text x="305" y="196" text-anchor="middle" font-size="14" font-weight="800" fill="#6E4F00">3 : 1 = 3</text>
+        </svg></div>
+        <div class="side">
+          <ul class="key"><li>확률과 ‘이길 쪽 ÷ 질 쪽’은 다른 값입니다.</li></ul>
+          <p class="exp">스포츠 중계에서 “3 대 1로 이길 것”이라는 말은 4번 중 3번 이긴다는 뜻으로, 이길 확률은 0.75이지만 이김과 짐의 비율은 3입니다. 같은 상황을 확률로 말할 수도, 비율로 말할 수도 있습니다. 두 값을 섞어 쓰면 ‘몇 배 더 잘 일어나는가’를 잘못 해석하기 쉽습니다.</p>
+          <p class="next"><span>본문에서</span>4-4 오즈비로 이어집니다.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" data-step="2">
+      <div class="sh"><div class="sec">일상의 예시 5/5</div><h2>현장에서는? 온도에 따라 결함 발생 확률이 어떻게 변할까요?</h2></div>
+      <div class="body split even">
+        <div class="fig"><svg viewBox="0 0 420 250" role="img" aria-label="네 장면이 로지스틱 회귀로 이어지는 그림">
+          <defs><marker id="b2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10z" fill="#5B6E97"/></marker></defs>
+          <g font-size="13" font-weight="700" fill="#1B2A4A" text-anchor="middle">
+            <rect x="14" y="18" width="150" height="44" rx="10" fill="#fff" stroke="#5B6E97" stroke-width="1.5"/><text x="89" y="45">결과는 0/1, 확률로</text>
+            <rect x="14" y="74" width="150" height="44" rx="10" fill="#fff" stroke="#5B6E97" stroke-width="1.5"/><text x="89" y="101">가장 그럴듯한 값</text>
+            <rect x="14" y="130" width="150" height="44" rx="10" fill="#fff" stroke="#5B6E97" stroke-width="1.5"/><text x="89" y="157">S자 곡선</text>
+            <rect x="14" y="186" width="150" height="44" rx="10" fill="#fff" stroke="#5B6E97" stroke-width="1.5"/><text x="89" y="213">이길 쪽 ÷ 질 쪽</text>
+          </g>
+          <g stroke="#5B6E97" stroke-width="2" fill="none"><path d="M166 40 C220 40 220 112 254 120" marker-end="url(#b2)"/><path d="M166 96 C210 96 220 118 254 122" marker-end="url(#b2)"/><path d="M166 152 C210 152 220 130 254 128" marker-end="url(#b2)"/><path d="M166 208 C220 208 220 138 254 130" marker-end="url(#b2)"/></g>
+          <rect x="258" y="84" width="150" height="82" rx="12" fill="#1B2A4A"/>
+          <text x="333" y="116" text-anchor="middle" font-size="15" font-weight="800" fill="#fff">일반화선형모형</text><text x="333" y="136" text-anchor="middle" font-size="15" font-weight="800" fill="#fff">로지스틱 회귀</text>
+          <text x="333" y="156" text-anchor="middle" font-size="11" fill="#C9D3E6">가능도 · 오즈비</text>
+        </svg></div>
+        <div class="side">
+          <p class="exp">네 장면은 결과가 두 값일 때 확률을 다루고, 데이터를 가장 잘 설명하는 값을 고르고, 확률이 S자로 변하며, 확률 대신 비율로 비교하기도 한다는 순서로 이어집니다. 가열 온도에 따른 코일 결함 발생이나 압력에 따른 부품 파손처럼 0/1로 기록되는 현장 데이터도 같은 방법으로 분석합니다.</p>
+          <p class="next"><span>다음 질문</span>선형회귀를 어떻게 넓힐까?</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ④ 본문 ─────────────────────────────── -->
+    <section class="slide" data-step="3" id="s-4-1a">
+      <div class="sh"><div class="sec">4-1 선형회귀 원리 확장하기</div><h2><span class="q">Q</span>일반선형모형과 일반화선형모형은 무엇이 다를까요?</h2></div>
+      <div class="body split even">
+        <div class="fig"><svg id="m21-glm" viewBox="0 0 420 270" role="img" aria-label="정규분포 오차의 일반선형모형을 포함하는 일반화선형모형, 그 위의 일반화선형혼합모형과 계층적 베이지안 모형"></svg></div>
+        <div class="side">
+          <ul class="key"><li><b>일반선형모형</b>: 정규 오차 + 최소제곱법</li><li><b>일반화선형모형</b>: 확률분포 + 최대가능도</li></ul>
+          <p class="exp">지금까지는 y = a + b₁x₁ + … + bₖxₖ + ε인 모형을 최소제곱법으로 추정했으며, 다중회귀부터 범주형 설명변수인 분산분석까지 포함하는 이 구조를 일반선형모형이라 합니다. 이 원리를 확장해 최소제곱법이 아닌 확률분포에 기반한 최대가능도 방법으로 추정하는 것이 일반화선형모형(GLM)이며, 이름이 비슷하므로 혼동하지 않도록 합니다. 데이터 성질을 고려해 확률 모형을 가정하고 파라미터를 추정해 평가하는 일련의 작업을 통계 모형화라 부릅니다.</p>
+          <p class="next"><span>다음 질문</span>선형회귀가 맞지 않는 데이터는?</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" data-step="3" id="s-4-1b">
+      <div class="sh"><div class="sec">4-1 선형회귀 원리 확장하기</div><h2><span class="q">Q</span>0/1 데이터나 개수 데이터에 직선을 그으면 어떻게 될까요?</h2></div>
+      <div class="body split even">
+        <div class="fig"><svg id="m21-bad" viewBox="0 0 420 270" role="img" aria-label="생존 사망 데이터에 그은 직선은 0보다 작거나 1보다 커지고, 꽃 개수 데이터의 직선은 음수로 뻗음"></svg></div>
+        <div class="side">
+          <ul class="key"><li>직선은 0~1이나 0 이상을 벗어나 버립니다.</li><li>반응변수에 맞는 확률분포가 필요합니다.</li></ul>
+          <p class="exp">지금까지의 회귀모형은 반응변수가 연속인 양적 변수이고, 오차분포가 정규분포이며 설명변수에 따라 오차분산이 변하지 않는다고 가정했습니다. 그러나 실제로는 반응변수가 ‘예/아니요’처럼 값이 2개인 변수이거나, 꽃의 수처럼 음이 아닌 정수인 상황을 종종 만납니다. 벌레 데이터에 직선을 그으면 사망 확률이 0보다 작거나 1보다 커지는 구간이 생겨 직선이 무엇을 뜻하는지 알 수 없습니다. 그래서 확률분포를 적절하게 고려해 모형화해야 합니다.</p>
+          <p class="next"><span>다음 질문</span>모형이 데이터에 잘 맞는지는 무엇으로 잴까?</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" data-step="3" id="s-4-2a">
+      <div class="sh"><div class="sec">4-2 가능도와 최대가능도 방법</div><h2><span class="q">Q</span>잔차 대신 무엇으로 모형과 데이터의 적합도를 잴까요?</h2></div>
+      <div class="body split even">
+        <div class="figcol">
+          <div class="fig"><svg id="m21-lik" viewBox="0 0 420 150" role="img" aria-label="같은 데이터 4개에 대해 평균 40인 분포와 평균 50인 분포에서의 확률 높이 비교"></svg></div>
+          <div class="math">
+            <div class="mt">핵심 수학 개념 · 가능도</div>
+            <div class="f">L(θ | x) = P(x₁ | θ) × P(x₂ | θ) × … × P(xₙ | θ)</div>
+            <div class="r"><span>기호</span><span>θ: 확률분포의 파라미터, P(xᵢ | θ): θ일 때 xᵢ가 나타날 확률(밀도)</span></div>
+            <div class="r"><span>해석</span><span>가능도가 크다 = 그 θ에서 이 데이터가 나타나기 쉽다</span></div>
+          </div>
+        </div>
+        <div class="side">
+          <ul class="key"><li><b>가능도</b>: 데이터가 나타날 확률을 θ의 함수로</li><li>잔차 대신 ‘얼마나 나타나기 쉬운가’로 평가</li></ul>
+          <p class="exp">값이 2개인 데이터나 음이 아닌 정수 데이터에는 거의 같은 값을 가지는 영역이나 퍼짐이 큰 영역이 있어, 거리(잔차)로 적합도를 재기보다 데이터가 확률적으로 생성되었다고 보고 ‘얼마나 나타나기 쉬운가’로 평가하는 편이 좋습니다. 얻은 데이터 x가 파라미터 θ의 확률분포에서 나타날 확률 P(x | θ)를 θ의 함수로 본 것을 가능도라 하며, 얻은 x는 고정한 채 θ를 바꾸면서 가능도가 변하는 모습을 봅니다.</p>
+          <p class="next"><span>다음 질문</span>가능도로 파라미터를 어떻게 정할까?</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" data-step="3" id="s-4-2b">
+      <div class="sh"><div class="sec">4-2 가능도와 최대가능도 방법</div><h2><span class="q">Q</span>가능도를 이용해 파라미터를 어떻게 정할까요?</h2></div>
+      <div class="body split even">
+        <div class="fig"><svg id="m21-mle" viewBox="0 0 420 270" role="img" aria-label="μ가 40, 50, 60인 정규분포와 데이터 히스토그램, μ에 따른 로그 가능도 곡선과 최댓값 49.4"></svg></div>
+        <div class="side">
+          <ul class="key"><li><b>최대가능도 방법</b>: 가능도를 최대화하는 θ</li><li>보통 로그 가능도 log L로 계산합니다.</li></ul>
+          <p class="exp">가능도를 최대화하는 θ를 찾아 추정값으로 삼으면 얻은 데이터에 가장 잘 들어맞는 파라미터를 정할 수 있으며, 이를 최대가능도 방법(최대가능도 추정)이라 합니다. 정규분포에서 얻은 데이터 100개에 μ = 40, 50, 60인 모형을 겹쳐 로그 가능도를 계산하면 −423.1, −379.2, −435.4로 μ = 50이 가장 잘 들어맞고, μ를 촘촘히 바꾸면 μ̂ = 49.4에서 최대가 됩니다. 정규분포 오차를 가정하면 최소제곱법과 결과가 일치하므로, 일반화선형모형은 자연스러운 일반화입니다.</p>
+          <p class="next"><span>다음 질문</span>0/1 반응변수에는 어떤 모형을 쓸까?</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" data-step="3" id="s-4-3a">
+      <div class="sh"><div class="sec">4-3 로지스틱 회귀</div><h2><span class="q">Q</span>생존/사망 데이터는 어떤 모형으로 나타낼까요?</h2></div>
+      <div class="body split even">
+        <div class="fig"><svg id="m21-logit" viewBox="0 0 420 270" role="img" aria-label="벌레 30마리의 생존 사망 데이터와 최대가능도로 추정한 로지스틱 곡선"></svg></div>
+        <div class="side">
+          <ul class="key"><li><b>로지스틱 회귀</b>: 반응변수가 2개 범주일 때</li><li>오차분포는 <b>이항분포</b>입니다.</li></ul>
+          <p class="exp">일반화선형모형의 일종인 로지스틱 회귀는 반응변수가 ‘생존/사망’처럼 값이 2개인 범주형 변수일 때 사용합니다. 범주 하나가 일어날 확률을 p로 두고, 설명변수 x가 바뀌었을 때 p가 얼마나 달라지는지를 조사합니다. 살충제 농도 xᵢ에 대해 사망 확률 pᵢ가 속한 이항분포 B(N, pᵢ)에서 각 데이터가 발생한다고 보며, N번 중 x번 일어날 확률은 ₙCₓpˣ(1 − p)ᴺ⁻ˣ, 평균은 Np, 분산은 Np(1 − p)입니다. 벌레 데이터에서 최대가능도 방법으로 a = −4.48, b = 0.877을 얻었습니다.</p>
+          <p class="next"><span>다음 질문</span>a + bx는 어떻게 확률이 될까?</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" data-step="3" id="s-4-3b">
+      <div class="sh"><div class="sec">4-3 로지스틱 회귀</div><h2><span class="q">Q</span>a + bx는 어떻게 0~1 사이의 확률로 바뀔까요?</h2></div>
+      <div class="body split even">
+        <div class="figcol">
+          <div class="fig"><svg id="m21-func" viewBox="0 0 420 150" role="img" aria-label="a를 바꾸면 곡선이 가로로 이동하고, b를 바꾸면 가파르기와 방향이 바뀜"></svg></div>
+          <div class="math">
+            <div class="mt">핵심 수학 개념 · 로지스틱 함수</div>
+            <div class="f">p = 1 ÷ (1 + exp(−(a + bx)))</div>
+            <div class="r"><span>기호</span><span>exp(x): 자연로그의 밑 e의 x제곱</span></div>
+            <div class="r"><span>계산</span><span>농도 8 → a + bx = −4.48 + 7.01 = 2.53 → p ≈ 0.93</span></div>
+          </div>
+        </div>
+        <div class="side">
+          <ul class="key"><li><b>로지스틱 함수</b>: 값을 0~1로 바꾸는 S자</li><li>a는 가로 이동, b는 변화의 정도</li></ul>
+          <p class="exp">가장 간단한 1차식 a + bx는 로지스틱 함수를 거쳐 확률 p로 변환됩니다. 로지스틱 함수는 정의역이 (−∞, +∞)이고 치역이 [0, 1]이므로 이항분포의 파라미터 p를 나타내기에 적합합니다. a는 곡선을 가로로 평행이동하고, b는 변화의 정도로 절댓값이 클수록 급격하게 변하며 부호는 증가인지 감소인지를 결정합니다. 0 또는 1인 데이터 실현값과 달리 회귀식의 반응변수는 연속값인 확률 p이며, b가 0이면 x가 바뀌어도 p는 달라지지 않습니다.</p>
+          <p class="next"><span>다음 질문</span>일반화선형모형의 구조로 보면?</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" data-step="3" id="s-4-3c">
+      <div class="sh"><div class="sec">4-3 로지스틱 회귀</div><h2><span class="q">Q</span>일반화선형모형은 어떤 부분으로 이루어질까요?</h2></div>
+      <div class="body split even">
+        <div class="fig"><svg id="m21-parts" viewBox="0 0 420 270" role="img" aria-label="선형예측변수 a + bx, 연결함수 로짓, 확률분포 이항분포의 세 부분"></svg></div>
+        <div class="side">
+          <ul class="key"><li><b>로짓 함수</b>: log(p ÷ (1 − p)) = a + bx</li><li><b>선형예측변수</b>와 <b>연결함수</b>가 핵심</li></ul>
+          <p class="exp">로지스틱 함수를 변형하면 a + bx = log(p ÷ (1 − p))가 되며, 우변을 로짓 함수라 합니다. 일반화선형모형에서는 좌변의 a + bx 부분을 선형예측변수라 하고, 선형예측변수와 반응변수의 확률분포 파라미터(이항분포에서는 p)를 잇는 함수를 연결함수라 합니다. 로지스틱 회귀의 연결함수는 로짓 함수입니다. 이 연결함수를 변경하고 목적함수의 오차 확률분포를 지정하여 유연하게 모형화할 수 있으며, 이것이 일반화선형모형의 주요 부분입니다.</p>
+          <p class="next"><span>다음 질문</span>로지스틱 회귀의 결과는 어떻게 평가할까?</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" data-step="3" id="s-4-4a">
+      <div class="sh"><div class="sec">4-4 오즈비</div><h2><span class="q">Q</span>‘얼마나 더 일어나기 쉬운가’는 어떻게 나타낼까요?</h2></div>
+      <div class="body split even">
+        <div class="figcol">
+          <div class="fig"><svg id="m21-odds" viewBox="0 0 420 150" role="img" aria-label="확률 p와 오즈 p ÷ (1 − p)의 관계, 감기약 예의 오즈비 6"></svg></div>
+          <div class="math">
+            <div class="mt">핵심 수학 개념 · 오즈와 오즈비</div>
+            <div class="f">OR = (p ÷ (1 − p)) ÷ (q ÷ (1 − q))</div>
+            <div class="r"><span>계산</span><span>(0.8 ÷ 0.2) ÷ (0.4 ÷ 0.6) = 4 ÷ 0.667 = 6</span></div>
+            <div class="r"><span>오해</span><span>OR = 6이라고 ‘6배 일어나기 쉽다’는 뜻은 아닙니다(p ÷ q = 2).</span></div>
+          </div>
+        </div>
+        <div class="side">
+          <ul class="key"><li><b>오즈</b>: p ÷ (1 − p), 0 ~ ∞</li><li><b>오즈비</b>: 두 오즈의 비, 1보다 크면 p 쪽이 쉬움</li></ul>
+          <p class="exp">어떤 사건이 일어날 확률 p와 일어나지 않을 확률 1 − p의 비율을 오즈라 하며, p = 0.8이면 오즈는 4입니다. 확률 p와 q에 대한 2개의 오즈 비율이 오즈비이며, 1보다 크면 p가 q보다 일어나기 쉽고 1보다 작으면 q가 더 쉽습니다. 감기약을 먹은 사람이 3일 안에 나을 확률 0.8, 먹지 않은 사람 0.4라면 오즈비는 6입니다. 다만 오즈비가 2라고 해서 말 그대로 2배 쉽다는 뜻은 아니므로 해석에 주의합니다.</p>
+          <p class="next"><span>다음 질문</span>오즈비는 왜 자주 쓰일까?</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" data-step="3" id="s-4-4b">
+      <div class="sh"><div class="sec">4-4 오즈비</div><h2><span class="q">Q</span>로지스틱 회귀의 계수와 오즈비는 어떤 관계일까요?</h2></div>
+      <div class="body split even">
+        <div class="fig"><svg id="m21-orci" viewBox="0 0 420 270" role="img" aria-label="벌레 데이터의 오즈비 2.40과 95% 신뢰구간 1.33~4.34, 1을 포함하지 않음"></svg></div>
+        <div class="side">
+          <ul class="key"><li>오즈비 = exp(b), b = 0이면 오즈비 = 1</li><li>95% 신뢰구간에 1이 없으면 유의합니다.</li></ul>
+          <p class="exp">로지스틱 회귀에서는 로짓 함수 안에 오즈가 나타나기 때문에 오즈비를 자연스럽게 다룰 수 있습니다. x가 1 늘 때의 오즈비는 exp(b)라는 간단한 형태이며, 회귀계수 b가 0인지 아닌지는 오즈비가 1인지 여부에 대응합니다. 벌레 데이터에서 농도가 1 늘 때 사망의 오즈비는 exp(0.877) = 2.40, 95% 신뢰구간은 1.33~4.34로 1이 들어 있지 않으므로, 기울기 검정(p = 0.004)처럼 설명변수의 효과가 유의하다고 판단합니다.</p>
+          <p class="next"><span>다음 질문</span>위험비 대신 오즈비를 쓰는 경우는?</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" data-step="3" id="s-4-4c">
+      <div class="sh"><div class="sec">4-4 오즈비</div><h2><span class="q">Q</span>사례-대조 연구에서는 왜 오즈비를 쓸까요?</h2></div>
+      <div class="body split even">
+        <div class="fig"><svg id="m21-cc" viewBox="0 0 420 270" role="img" aria-label="대조군 100명과 200명일 때 표에서 계산한 위험비는 1.83에서 2.25로 바뀌지만 오즈비는 3.5로 같음"></svg></div>
+        <div class="side">
+          <ul class="key"><li>사례-대조 연구는 환자 비율을 연구자가 정함</li><li>오즈비는 조사 대상 수의 비율과 무관</li></ul>
+          <p class="exp">의료 분야의 관찰 연구로 코호트 연구와 사례-대조 연구가 있습니다. 코호트 연구는 흡연자와 비흡연자를 추적해 폐암 발생 여부를 보고, 사례-대조 연구는 이미 폐암에 걸린 사람과 걸리지 않은 사람을 모아 과거 흡연 경험을 조사합니다. 사례-대조 연구에서는 사례 수와 대조 수의 비율을 연구자가 정하므로, 대조를 100명에서 200명으로 늘리면 표에서 계산한 위험비가 1.83에서 2.25로 바뀝니다. 반면 오즈비는 두 경우 모두 3.5로 같아 적절한 비교 지표가 됩니다.</p>
+          <p class="next"><span>정리</span>일반화선형모형과 로지스틱 회귀를 정리해 봅시다.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" data-step="3" id="s-4-sum">
+      <div class="sh"><div class="sec">4-5 정리</div><h2>확률분포를 고르고, 가능도로 추정하고, 오즈비로 해석합니다</h2></div>
+      <div class="body full" style="align-content:center">
+        <table class="sumtbl">
+          <thead><tr><th>개념</th><th>핵심</th><th>벌레 30마리 예시</th></tr></thead>
+          <tbody>
+            <tr><td>일반화선형모형</td><td>오차분포를 이항·푸아송 등으로 지정하고 최대가능도로 추정합니다.</td><td>사망 여부 → 이항분포</td></tr>
+            <tr><td>최대가능도 방법</td><td>데이터가 가장 나타나기 쉬운 θ를 고릅니다. 정규 오차면 최소제곱법과 같습니다.</td><td>최대 로그 가능도 −9.11</td></tr>
+            <tr><td>로지스틱 회귀</td><td>p = 1 ÷ (1 + exp(−(a + bx))). 연결함수는 로짓 함수입니다.</td><td>a = −4.48, b = 0.877, 50% 농도 5.1</td></tr>
+            <tr><td>오즈비</td><td>exp(b). 95% 신뢰구간에 1이 없으면 유의. 사례-대조 연구에 적합합니다.</td><td>2.40 (1.33 ~ 4.34)</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="next"><span>형성평가로</span>이제 같은 예시로 문제를 풀어 봅니다.</p>
+    </section>
+
+    <!-- ⑤ 형성평가: 스크립트의 QUIZ 배열로 만듭니다 -->
+
+    <!-- ⑥ 실습 1 · 조작형 (모듈 전용) ─────────────── -->
+    <section class="slide" data-step="5" id="p1">
+      <div class="sh"><div class="sec">실습 1 · 조작형</div><h2>목표: a와 b를 바꾸며 로그 가능도가 가장 커지는 로지스틱 곡선을 찾습니다</h2></div>
+      <div class="body split">
+        <div class="pcol" style="gap:8px">
+          <div class="plabel" style="margin:0">해보기 · 곡선의 위치 a와 가파르기 b를 움직여 보세요</div>
+          <div class="ctrl">a<input type="range" id="m21-a" min="-100" max="0" step="1" value="-20" aria-label="a"><strong id="m21-av" style="min-width:56px;text-align:right">-</strong></div>
+          <div class="ctrl">b<input type="range" id="m21-b" min="0" max="200" step="1" value="40" aria-label="b"><strong id="m21-bv" style="min-width:56px;text-align:right">-</strong></div>
+          <div class="fig" style="flex:1"><svg id="m21-p1-svg" viewBox="0 0 470 170" role="img" aria-label="벌레 데이터와 내가 정한 로지스틱 곡선"></svg></div>
+        </div>
+        <div class="pcol" style="gap:10px;justify-content:center">
+          <div class="plabel" style="margin:0">결과 확인</div>
+          <div class="stats"><div><small>내 곡선의 로그 가능도</small><strong id="m21-ll">-</strong></div><div><small>최댓값 (최대가능도)</small><strong>−9.11</strong></div></div>
+          <p class="howto">도전: 로그 가능도를 −9.5보다 크게 만들어 보세요. 0에 가까울수록 데이터가 나타나기 쉬운 곡선입니다.</p>
+          <p class="pmsg" id="m21-msg"></p>
+          <div class="think"><span>생각해보기</span>b를 아주 크게 하면 왜 오히려 로그 가능도가 나빠질까요?</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ⑥ 실습 2 · 분류형 ─────────────────────── -->
+    <section class="slide" data-step="5" id="p2">
+      <div class="sh"><div class="sec">실습 2 · 분류형</div><h2>목표: 반응변수를 알맞은 확률분포에 따라 나눕니다</h2></div>
+      <div class="body split even">
+        <div class="pcol">
+          <div class="plabel">해보기 · 반응변수가 연속값인지, 두 값인지, 개수인지 보고 칸에 놓으세요</div>
+          <div class="pool" id="p2-pool"></div>
+        </div>
+        <div class="pcol" style="gap:8px">
+          <div class="plabel" style="margin:0">결과 확인 · <span id="p2-count">0 / 0</span></div>
+          <div class="bins" id="p2-bins"></div>
+          <div class="p2row"><p class="pmsg" id="p2-msg"></p><button class="btn ghost" id="p2-reset">다시 하기</button></div>
+          <div class="think"><span>생각해보기</span>‘불량률(%)’을 반응변수로 하면 어느 칸에 가까울까요?</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ⑥ 실습 3 · 추정형 (모듈 전용) ─────────────── -->
+    <section class="slide" data-step="5" id="p3">
+      <div class="sh"><div class="sec">실습 3 · 추정형</div><h2>목표: 농도별 사망 확률을 예측하고 로지스틱 회귀식 값과 비교합니다</h2></div>
+      <div class="body split">
+        <div class="pcol">
+          <div class="plabel">해보기 · 농도를 고르고, 그 농도에서 벌레가 죽을 확률을 예측하세요</div>
+          <div class="fig" style="flex:1"><svg id="m21-p3-svg" viewBox="0 0 470 210" role="img" aria-label="벌레 데이터, 로지스틱 곡선과 내 예측"></svg></div>
+        </div>
+        <div class="pcol" style="gap:9px;justify-content:center">
+          <div class="mbtns" id="m21-qc" style="gap:6px"></div>
+          <div class="ctrl">내 예측<input type="range" id="m21-g" min="0" max="100" step="1" value="50" aria-label="사망 확률 예측(%)"><strong id="m21-gv" style="min-width:56px;text-align:right">-</strong></div>
+          <button class="btn" id="m21-check" style="align-self:flex-start">계산해서 확인</button>
+          <div class="stats three"><div><small>내 예측</small><strong id="m21-mine">-</strong></div><div><small>회귀식 p</small><strong id="m21-act">?</strong></div><div><small>오즈 p ÷ (1 − p)</small><strong id="m21-od">?</strong></div></div>
+          <p class="pmsg" id="m21-msg3"></p>
+          <div class="think"><span>생각해보기</span>농도가 1 오를 때마다 오즈는 몇 배가 되나요?</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ⑦ 용어해설·참고자료: 스크립트의 GLOSSARY, REFS, NEXT로 만듭니다 -->
+  </main>
+
+  <footer class="bottombar">
+    <a class="home" href="../index.html" title="홈으로 (학습 모듈 목록)" aria-label="홈으로"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 10.5 12 3l9 7.5"/><path d="M5.5 9.5V21h13V9.5"/></svg><span>홈</span></a><span class="counter" id="counter"></span><span class="spacer"></span>
+    <button class="nav" id="prev" type="button">이전</button>
+    <button class="nav primary" id="next" type="button">다음</button>
+  </footer>
+</div>
+<p class="rotate">화면을 가로로 돌리면 더 크게 볼 수 있습니다.</p>
+
+<script>
+(function(){
+"use strict";
+
+/* =====================================================================
+   [교체] 모듈 설정 — 새 모듈은 이 블록과 HTML 화면 문장만 바꿉니다.
+   ===================================================================== */
+var MODULE={title:"일반화선형모형과 로지스틱 회귀",sub:"상관·회귀·통계 모형 · M21"};
+var STEPS=["학습개요","학습목표","일상의 예시","본문","형성평가","실습","용어해설"];
+
+/* 예시 데이터(이 모듈에서 정한 값)
+   ① 살충제 농도 x(0~12)와 벌레 30마리 생사 y(0 생존, 1 사망), 사망 17
+      최대가능도 추정 a = −4.477, b = 0.8766 (SE 1.733, 0.3015), 기울기 z = 2.91, p = 0.0036, 최대 로그 가능도 −9.114
+      오즈비 exp(b) = 2.40 (95% CI 1.33 ~ 4.34), 사망 확률 50% 농도 −a/b = 5.11, p(2) = 0.062, p(5) = 0.476, p(8) = 0.927, p(10) = 0.986
+   ② 정규분포(σ = 10) 표본 100개: logL(μ=40) −423.1, (50) −379.2, (60) −435.4, 최대 μ̂ = 49.4(표본평균)
+   ③ 사례-대조: 사례 100(흡연 60), 대조 100(흡연 30) → OR 3.5, 표의 위험비 1.83 / 대조 200(흡연 60) → OR 3.5, 위험비 2.25 */
+var LA=-4.4774, LB=0.87663, LLMAX=-9.114;
+var CASE=null, PAIRS=null, P1={target:null};
+var BX=[0.3, 0.8, 1.5, 1.5, 1.6, 1.7, 1.8, 2.5, 2.8, 3.3, 4.2, 4.4, 5.8, 6.0, 6.1, 6.1, 6.6, 6.6, 7.1, 7.2, 7.5, 8.0, 8.0, 9.5, 9.6, 9.8, 10.4, 11.1, 11.4, 11.8], BY=[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 0, 0, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1];
+var MU=[70.4, 24.4, 54.2, 44.3, 45.5, 47.8, 29.8, 47.7, 41.3, 83.2, 52.3, 46.5, 47.2, 43.3, 39.4, 46.1, 54.8, 47.6, 59.6, 48.0, 50.2, 65.5, 55.5, 44.9, 48.2, 55.4, 69.4, 47.3, 47.6, 60.0, 41.1, 47.1, 58.8, 55.8, 50.9, 56.7, 21.7, 60.2, 40.4, 33.3, 52.8, 57.0, 45.6, 39.2, 50.3, 49.5, 64.1, 57.5, 51.9, 61.1, 47.9, 40.7, 55.8, 55.8, 47.9, 42.2, 52.3, 25.1, 56.9, 54.9, 33.6, 50.6, 40.4, 57.6, 29.7, 40.9, 57.1, 61.6, 28.4, 45.0, 53.3, 43.9, 65.9, 38.1, 53.5, 39.5, 64.1, 49.8, 46.3, 32.8, 66.8, 57.5, 57.5, 61.4, 53.5, 43.6, 42.0, 42.0, 63.7, 35.4, 44.0, 46.8, 52.2, 55.8, 37.5, 32.7, 50.0, 62.1, 57.6, 52.2];
+
+var QUIZ=[
+ {goal:1,type:"상황 판단",stem:"압연 코일마다 ‘표면 결함 있음(1)/없음(0)’을 기록하고, 이를 가열 온도로 설명하려 합니다. 가장 알맞은 방법은 무엇일까요?",
+  opts:["반응변수의 오차분포를 이항분포로 두는 로지스틱 회귀","정규분포 오차를 가정한 단순선형회귀","표면 결함 여부의 평균을 구해 t검정만 한다","온도를 반응변수로 두는 선형회귀"],ans:0,
+  exp:"반응변수가 값이 2개인 범주형 변수(0 또는 1)이므로 직선 모형을 적용하면 0~1을 벗어난 값이 나와 의미를 알 수 없습니다. 반응변수의 오차분포를 이항분포로 지정한 일반화선형모형, 곧 로지스틱 회귀를 씁니다.",back:"s-4-1b",backLabel:"4-1 선형회귀가 적절하지 않은 상황 다시 보기"},
+ {goal:1,type:"O/X 오개념",stem:"“가능도 L(θ | x)가 가장 큰 θ를 고르는 것은, 얻은 데이터가 가장 나타나기 쉬운 파라미터를 고르는 것이다.”",
+  opts:["O","X"],ans:0,ox:true,
+  exp:"가능도는 얻은 데이터 x가 파라미터 θ인 확률분포에서 얼마나 나타나기 쉬운가를 θ의 함수로 본 것입니다. 가능도를 최대화하는 θ를 추정값으로 삼으면 얻은 데이터에 가장 잘 들어맞는 파라미터가 되며, 이것이 최대가능도 방법입니다.",back:"s-4-2a",backLabel:"4-2 가능도 다시 보기"},
+ {goal:2,type:"계산",stem:"로지스틱 회귀로 a = −4.48, b = 0.877을 얻었습니다. 살충제 농도 x = 5.1일 때 사망 확률 p는 약 얼마일까요?",
+  opts:["약 0.5","약 0.88","약 0","약 4.47"],ans:0,
+  exp:"a + bx = −4.48 + 0.877 × 5.1 ≈ 0이므로 p = 1 ÷ (1 + exp(0)) = 1 ÷ 2 = 0.5입니다. 로지스틱 함수는 a + bx가 0일 때 0.5, 클수록 1에, 작을수록 0에 가까워지며 언제나 0~1 사이의 값을 냅니다.",back:"s-4-3b",backLabel:"4-3 로지스틱 함수 다시 보기"},
+ {goal:2,type:"O/X 오개념",stem:"“로지스틱 회귀에서 반응변수의 회귀식 값은 0 또는 1 둘 중 하나로만 나온다.”",
+  opts:["O","X"],ans:1,ox:true,
+  exp:"데이터 실현값은 0 또는 1이지만, 회귀식이 나타내는 반응변수는 0부터 1까지의 연속값인 확률 p입니다. 예를 들어 농도 2에서는 사망 확률 0.06, 농도 8에서는 0.93처럼 나옵니다.",back:"s-4-3a",backLabel:"4-3 로지스틱 회귀 다시 보기"},
+ {goal:3,type:"계산",stem:"감기약을 먹은 사람이 3일 안에 나을 확률 p = 0.8, 먹지 않은 사람이 3일 안에 나을 확률 q = 0.4입니다. 오즈비는 얼마일까요?",
+  opts:["6","2","0.5","3"],ans:0,
+  exp:"오즈비 = (p ÷ (1 − p)) ÷ (q ÷ (1 − q)) = (0.8 ÷ 0.2) ÷ (0.4 ÷ 0.6) = 4 ÷ 0.667 = 6입니다. 2는 확률의 비 p ÷ q(위험비)이므로, 오즈비가 6이라고 ‘6배 낫기 쉽다’고 해석하면 안 됩니다.",back:"s-4-4a",backLabel:"4-4 오즈와 오즈비 다시 보기"},
+ {goal:3,type:"상황 판단",stem:"로지스틱 회귀에서 어떤 설명변수의 오즈비 95% 신뢰구간이 [0.7, 2.9]였습니다. 가장 알맞은 판단은 무엇일까요?",
+  opts:["구간 안에 1이 있으므로 5% 수준에서 이 설명변수의 효과가 유의하다고 말할 수 없다","오즈비 추정값이 1보다 크므로 효과가 유의하다","구간이 넓으므로 효과가 매우 크다","오즈비는 신뢰구간을 구할 수 없다"],ans:0,
+  exp:"오즈비는 exp(b)이므로 회귀계수 b = 0인 것은 오즈비 = 1인 것과 같습니다. 오즈비의 95% 신뢰구간 안에 1이 있는지는 설명변수 효과에 관한 5% 수준 검정의 유의성에 대응하므로, [0.7, 2.9]는 유의하지 않고 [1.2, 4.8]처럼 1이 없으면 유의합니다.",back:"s-4-4b",backLabel:"4-4 오즈비와 회귀계수 다시 보기"}
+];
+
+var BINS=["정규분포 오차","이항분포","개수 데이터"];
+var CARDS=[["강판 두께(mm)","정규분포 오차"],["성인 몸무게(kg)","정규분포 오차"],
+           ["코일 결함 있음/없음","이항분포"],["벌레 생존/사망","이항분포"],
+           ["하루 설비 고장 건수","개수 데이터"],["나무 한 그루의 꽃 개수","개수 데이터"]];
+var HINT={"정규분포 오차":"연속인 양적 변수로, 지금까지의 선형회귀를 쓸 수 있습니다.","이항분포":"값이 2개인 범주형 반응변수로, 로지스틱 회귀를 씁니다.","개수 데이터":"음이 아닌 정수로, 직선을 쓰면 음수 쪽으로 뻗을 수 있어 다른 분포가 필요합니다."};
+
+var GLOSSARY=[
+ ["일반선형모형","general linear model","y = a + b₁x₁ + … + bₖxₖ + ε 구조를 최소제곱법으로 추정하는 모형으로, 다중회귀부터 분산분석까지 포함합니다.","공분산분석"],
+ ["일반화선형모형","generalized linear model, GLM","오차분포를 정규분포 이외(이항분포, 푸아송 분포 등)로 지정하고 최대가능도 방법으로 추정하는 회귀모형입니다.","로지스틱 회귀"],
+ ["가능도","likelihood","얻은 데이터 x가 파라미터 θ인 확률분포에서 나타날 확률 P(x | θ)를 θ의 함수 L(θ | x)로 본 것입니다.","μ = 50일 때 log L = −379.2"],
+ ["최대가능도 방법","maximum likelihood method","가능도(또는 로그 가능도)를 최대화하는 θ를 추정값으로 삼는 방법으로, 최대가능도 추정이라고도 합니다.","μ̂ = 49.4"],
+ ["로지스틱 회귀","logistic regression","반응변수가 값이 2개인 범주형 변수일 때, 한 범주가 일어날 확률 p를 로지스틱 함수로 나타내는 회귀입니다.","살충제 농도 → 사망 확률"],
+ ["이항분포","binomial distribution","확률 p인 일을 N번 독립 시행할 때 x번 일어날 확률의 분포 B(N, p)로, 평균 Np, 분산 Np(1 − p)입니다.","벌레 1마리의 사망(N = 1)"],
+ ["로지스틱 함수","logistic function","p = 1 ÷ (1 + exp(−(a + bx)))로, 정의역 전체를 0~1 범위로 바꾸는 S자 함수입니다.","a + bx = 0이면 p = 0.5"],
+ ["로짓 함수","logit function","로지스틱 함수를 변형한 log(p ÷ (1 − p))로, 로지스틱 회귀의 연결함수입니다.","log(p ÷ (1 − p)) = a + bx"],
+ ["선형예측변수","linear predictor","일반화선형모형에서 a + bx처럼 설명변수의 1차식으로 된 부분입니다.","−4.48 + 0.877x"],
+ ["연결함수","link function","선형예측변수와 반응변수의 확률분포 파라미터를 잇는 함수입니다.","로지스틱 회귀의 로짓 함수"],
+ ["오즈","odds","어떤 사건이 일어날 확률 p와 일어나지 않을 확률 1 − p의 비 p ÷ (1 − p)입니다.","p = 0.8이면 오즈 4"],
+ ["오즈비","odds ratio, OR","2개 확률 p, q에 대한 2개 오즈의 비로, 어느 쪽이 더 일어나기 쉬운지 나타냅니다.","농도 1당 OR = 2.40"]
+];
+var REFS=[];
+var NEXT={title:"M22 푸아송 회귀와 다양한 일반화선형모형",line:"반응변수가 개수일 때는 푸아송 분포를 씁니다. 다음 모듈에서는 푸아송 회귀와 함께 여러 가지 일반화선형모형을 정리합니다."};
+
+/* =====================================================================
+   아래부터는 공통 엔진입니다. 모듈마다 바꾸지 않습니다.
+   ===================================================================== */
+var NS="http://www.w3.org/2000/svg";
+var C={navy:"#1B2A4A",navy2:"#2C4170",navy3:"#5B6E97",soft:"#A9B8D4",grid:"#DDE1E7",gray:"#6B7280",gray2:"#9AA0AA",amber:"#E0A100",amberInk:"#6E4F00",ok:"#23704F"};
+function el(t,a,p,x){var e=document.createElementNS(NS,t);for(var k in a)e.setAttribute(k,a[k]);if(x!=null)e.textContent=x;if(p)p.appendChild(e);return e;}
+function clear(s){while(s.firstChild)s.removeChild(s.firstChild);}
+function f1(v,d){return v.toFixed(d==null?1:d);}
+function sum(a){return a.reduce(function(x,y){return x+y;},0);}
+function r1(v){return Math.round(v*10)/10;}
+var stage=document.getElementById("stage"),vp=document.getElementById("vp");
+
+/* 계산은 모두 데이터에서 직접 합니다(R0-7) */
+var N=CASE?CASE.values.length:0,SUMV=CASE?r1(sum(CASE.values)):0,AVG=N?SUMV/N:0,MAXV=CASE?Math.max.apply(null,CASE.values):0;
+var LR=!PAIRS?null:(function(){var n=PAIRS.xs.length,mx=sum(PAIRS.xs)/n,my=sum(PAIRS.ys)/n,sxy=0,sxx=0;
+  for(var i=0;i<n;i++){sxy+=(PAIRS.xs[i]-mx)*(PAIRS.ys[i]-my);sxx+=(PAIRS.xs[i]-mx)*(PAIRS.xs[i]-mx);}
+  var b=sxy/sxx;return{b:b,a:my-b*mx};})();
+var PRED=PAIRS?LR.a+LR.b*PAIRS.x0:0;
+
+document.title=MODULE.title;
+document.getElementById("brand").innerHTML=MODULE.title+"<small>"+MODULE.sub+"</small>";
+
+/* 16:9 고정 무대를 창 크기에 맞춤 */
+var S=1;
+function fit(){S=Math.min(window.innerWidth/960,window.innerHeight/540);stage.style.setProperty("--s",S);}
+window.addEventListener("resize",fit);fit();
+
+/* ---------- 그래프 ---------- */
+function barChart(svg,vals,o){
+  clear(svg);o=o||{};
+  var vb=svg.viewBox.baseVal,W=vb.width,H=vb.height,L=34,R=o.mean!=null?70:8,T=26,Bt=24,ym=o.ymax||Math.ceil(Math.max.apply(null,vals)+1),pw=W-L-R,ph=H-T-Bt,bw=pw/vals.length;
+  function y(v){return T+ph-(v/ym)*ph;}
+  for(var g=0;g<=ym;g++){el("line",{x1:L,x2:W-R,y1:y(g),y2:y(g),stroke:C.grid},svg);el("text",{x:L-6,y:y(g)+4,"text-anchor":"end","font-size":10.5,fill:C.gray2},svg,g);}
+  vals.forEach(function(v,i){
+    var sel=o.sel===i,hi=o.hi===i;
+    el("rect",{x:L+i*bw+bw*.16,y:y(v),width:bw*.68,height:Math.max(0,y(0)-y(v)),rx:2,fill:sel?C.amber:hi?C.navy2:C.soft},svg);
+    el("text",{x:L+i*bw+bw/2,y:H-Bt+16,"text-anchor":"middle","font-size":10.5,fill:C.gray},svg,CASE.labels[i]);
+  });
+  if(o.mean!=null){var m=o.mean;
+    el("line",{x1:L,x2:W-R+4,y1:y(m),y2:y(m),stroke:C.navy,"stroke-width":2,"stroke-dasharray":"6 4"},svg);
+    el("rect",{x:W-R+6,y:y(m)-10,width:R-8,height:20,rx:4,fill:C.navy},svg);
+    el("text",{x:W-R+6+(R-8)/2,y:y(m)+4,"text-anchor":"middle","font-size":11,"font-weight":700,fill:"#fff"},svg,"평균 "+f1(m,2));}
+  /* 값 라벨은 마지막에 흰 테두리로 그려 점선에 가리지 않게 함 */
+  vals.forEach(function(v,i){var sel=o.sel===i,hi=o.hi===i;
+    if(o.labels||sel)el("text",{x:L+i*bw+bw/2,y:y(v)-5,"text-anchor":"middle","font-size":10.5,"font-weight":sel||hi?800:500,fill:sel?C.amberInk:hi?C.navy:C.gray,stroke:"#EEF0F3","stroke-width":3,"paint-order":"stroke"},svg,f1(v));});
+}
+function scatter(svg,o){
+  clear(svg);o=o||{};
+  var vb=svg.viewBox.baseVal,W=vb.width,H=vb.height,L=34,R=14,T=30,Bt=40,x0=PAIRS.xmin,x1=PAIRS.xmax,y0=PAIRS.ymin,y1=PAIRS.ymax;
+  function X(v){return L+(v-x0)/(x1-x0)*(W-L-R);}
+  function Y(v){return T+(H-T-Bt)-(v-y0)/(y1-y0)*(H-T-Bt);}
+  for(var g=y0;g<=y1+1e-9;g+=PAIRS.ystep){el("line",{x1:L,x2:W-R,y1:Y(g),y2:Y(g),stroke:C.grid},svg);el("text",{x:L-6,y:Y(g)+4,"text-anchor":"end","font-size":10.5,fill:C.gray2},svg,g);}
+  for(var h=x0;h<=x1+1e-9;h+=PAIRS.xstep)el("text",{x:X(h),y:H-Bt+16,"text-anchor":"middle","font-size":10.5,fill:C.gray},svg,h);
+  el("text",{x:(L+W-R)/2,y:H-6,"text-anchor":"middle","font-size":10.5,fill:C.gray},svg,PAIRS.xlabel);
+  el("text",{x:4,y:14,"font-size":10.5,fill:C.gray},svg,PAIRS.ylabel);
+  if(o.line){var la=x0+(x1-x0)*.04,lb=x1-(x1-x0)*.04;el("line",{x1:X(la),y1:Y(LR.a+LR.b*la),x2:X(lb),y2:Y(LR.a+LR.b*lb),stroke:C.navy,"stroke-width":2},svg);}
+  PAIRS.xs.forEach(function(x,i){el("circle",{cx:X(x),cy:Y(PAIRS.ys[i]),r:4.5,fill:C.navy3,"fill-opacity":.85},svg);});
+  if(o.x0!=null){el("line",{x1:X(o.x0),y1:Y(0),x2:X(o.x0),y2:Y(y1),stroke:C.amber,"stroke-dasharray":"3 3"},svg);
+    el("text",{x:X(o.x0),y:T-4,"text-anchor":"middle","font-size":10.5,"font-weight":700,fill:C.amberInk},svg,PAIRS.x0label);}
+  if(o.pred){el("circle",{cx:X(PAIRS.x0),cy:Y(PRED),r:6,fill:C.navy},svg);
+    el("text",{x:X(PAIRS.x0)-10,y:Y(PRED)+4,"text-anchor":"end","font-size":11,"font-weight":800,fill:C.navy,stroke:"#EEF0F3","stroke-width":3,"paint-order":"stroke"},svg,"예측 "+f1(PRED,PAIRS.dp)+PAIRS.unit);}
+  if(o.guess!=null){el("circle",{cx:X(PAIRS.x0),cy:Y(o.guess),r:7,fill:C.amber,stroke:"#fff","stroke-width":2},svg);}
+  if(o.actual){var ay=Y(PAIRS.actual);el("rect",{x:X(PAIRS.x0)-6,y:ay-6,width:12,height:12,fill:C.ok,transform:"rotate(45 "+X(PAIRS.x0)+" "+ay+")"},svg);
+    el("text",{x:X(PAIRS.x0)-10,y:ay-6,"text-anchor":"end","font-size":11,"font-weight":800,fill:C.ok,stroke:"#EEF0F3","stroke-width":3,"paint-order":"stroke"},svg,"실제 "+f1(PAIRS.actual)+PAIRS.unit);}
+  return {X:X,Y:Y};
+}
+function flow(svg,names){
+  clear(svg);var n=names.length,w=118,gap=(440-40-n*w)/(n-1),y=96,h=64;
+  el("defs",{},svg).innerHTML='<marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10z" fill="'+C.navy3+'"/></marker>';
+  names.forEach(function(t,i){var x=20+i*(w+gap);
+    el("rect",{x:x,y:y,width:w,height:h,rx:10,fill:i===n-1?C.navy:"#fff",stroke:C.navy,"stroke-width":1.5},svg);
+    el("text",{x:x+w/2,y:y+h/2-6,"text-anchor":"middle","font-size":11,"font-weight":700,fill:i===n-1?"#C9D3E6":C.navy3},svg,"4-"+(i+1));
+    el("text",{x:x+w/2,y:y+h/2+13,"text-anchor":"middle","font-size":14,"font-weight":800,fill:i===n-1?"#fff":C.navy},svg,t);
+    if(i<n-1)el("line",{x1:x+w+4,y1:y+h/2,x2:x+w+gap-5,y2:y+h/2,stroke:C.navy3,"stroke-width":2,"marker-end":"url(#ar)"},svg);});
+  el("text",{x:220,y:200,"text-anchor":"middle","font-size":12,fill:C.gray},svg,"본문 소단원을 배우는 순서");
+}
+/* 화면에 해당 id가 있을 때만 그립니다(모듈마다 쓰지 않는 그림은 건너뜀) */
+function on(id,fn){var e=document.getElementById(id);if(e)fn(e);}
+on("fig-flow",function(s){flow(s,["소단원 1","소단원 2","정리"]);});
+on("fig-case",function(s){barChart(s,CASE.values,{labels:true});});
+on("fig-bar",function(s){barChart(s,CASE.values,{labels:true,mean:AVG});});
+on("fig-scatter",function(s){scatter(s,{line:true,x0:PAIRS.x0,pred:true});});
+on("fig-bridge",function(s){
+  el("defs",{},s).innerHTML='<marker id="ar2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10z" fill="'+C.navy3+'"/></marker>';
+  [["장면 1",40],["장면 2",130]].forEach(function(p){el("rect",{x:24,y:p[1],width:130,height:64,rx:10,fill:"#fff",stroke:C.navy3,"stroke-width":1.5},s);el("text",{x:89,y:p[1]+37,"text-anchor":"middle","font-size":14,"font-weight":700,fill:C.navy},s,p[0]);
+    el("line",{x1:158,y1:p[1]+32,x2:246,y2:120,stroke:C.navy3,"stroke-width":2,"marker-end":"url(#ar2)"},s);});
+  el("rect",{x:252,y:84,width:150,height:72,rx:12,fill:C.navy},s);
+  el("text",{x:327,y:116,"text-anchor":"middle","font-size":14,"font-weight":800,fill:"#fff"},s,"본문 첫 질문");
+  el("text",{x:327,y:136,"text-anchor":"middle","font-size":11.5,fill:"#C9D3E6"},s,"4-1로 이어짐");});
+on("case-n",function(e){e.textContent=N+"개";});
+on("case-sum",function(e){e.textContent=f1(SUMV);});
+on("case-max",function(e){e.textContent=f1(MAXV);});
+on("math-calc",function(e){e.textContent=f1(LR.b,2)+" × "+PAIRS.x0+" + "+f1(LR.a,2)+" = "+f1(PRED,2);});
+
+/* =====================================================================
+   [교체] 모듈 전용 그림: 모듈마다 필요한 그림 함수는 이 자리에 둡니다.
+   ===================================================================== */
+/* M21 전용 그림·실습 */
+function linN(a,b,c,d){return function(v){return c+(v-a)/(b-a)*(d-c);};}
+function tN(s,x,y,t,o){o=o||{};return el("text",{x:x,y:y,"text-anchor":o.a||"middle","font-size":o.fs||11,"font-weight":o.fw||600,fill:o.c||C.navy,stroke:o.halo?"#fff":"none","stroke-width":o.halo?3:0,"paint-order":"stroke"},s,t);}
+function bxN(s,x,y,w,h,fill,stroke){return el("rect",{x:x,y:y,width:w,height:h,rx:10,fill:fill||"#fff",stroke:stroke||"none","stroke-width":stroke?1.5:0},s);}
+function mkN(s,id,col){el("defs",{},s).innerHTML='<marker id="'+id+'" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10z" fill="'+col+'"/></marker>';}
+function sigN(z){return 1/(1+Math.exp(-z));}
+function pN(x,a,b){return sigN((a==null?LA:a)+(b==null?LB:b)*x);}
+function llN(a,b){var s=0;for(var i=0;i<BX.length;i++){var p=pN(BX[i],a,b);p=Math.min(1-1e-12,Math.max(1e-12,p));s+=BY[i]?Math.log(p):Math.log(1-p);}return s;}
+function npN(x,m,s){return Math.exp(-Math.pow(x-m,2)/(2*s*s))/(s*Math.sqrt(2*Math.PI));}
+function mlN(mu){var s=0;MU.forEach(function(v){s+=Math.log(npN(v,mu,10));});return s;}
+function fmN(v){return (v<0?"−":"")+Math.abs(v).toFixed(2);}
+function bugDots(s,X,Y,r){for(var i=0;i<BX.length;i++){var k=0;for(var j=0;j<i;j++)if(BY[j]===BY[i]&&Math.abs(BX[j]-BX[i])<.25)k++;el("circle",{cx:X(BX[i]),cy:Y(BY[i])+(BY[i]?1:-1)*k*7,r:r||4.5,fill:BY[i]?"#B42318":"#2B8CC4","fill-opacity":.85},s);}}
+function curveN(s,X,Y,a,b,x0,x1,col,w){var p=[];for(var i=0;i<=120;i++){var x=x0+(x1-x0)*i/120;p.push(X(x).toFixed(1)+" "+Y(pN(x,a,b)).toFixed(1));}el("path",{d:"M"+p.join(" L"),fill:"none",stroke:col||"#C2416E","stroke-width":w||2.5},s);}
+
+on("m21-ov",function(s){
+  mkN(s,"oN",C.navy3);
+  bxN(s,20,24,120,64,"#EEF4FB","#2B8CC4");tN(s,80,48,"선형예측변수",{fw:800,fs:12,c:"#1C6EA4"});tN(s,80,70,"a + bx",{fw:800,fs:13});
+  bxN(s,160,24,120,64,"#FCF3D9",C.amber);tN(s,220,48,"연결함수",{fw:800,fs:12,c:C.amberInk});tN(s,220,70,"로짓 함수",{fw:800,fs:12});
+  bxN(s,300,24,120,64,"#FBE4F0","#C2416E");tN(s,360,48,"확률분포",{fw:800,fs:12,c:"#C2416E"});tN(s,360,70,"이항분포 p",{fw:800,fs:12});
+  [[142,158],[282,298]].forEach(function(l){el("line",{x1:l[0],x2:l[1],y1:56,y2:56,stroke:C.navy3,"stroke-width":2,"marker-end":"url(#oN)"},s);});
+  bxN(s,80,118,280,56,C.navy);tN(s,220,142,"일반화선형모형 (GLM)",{fw:800,fs:13.5,c:"#fff"});tN(s,220,162,"최대가능도 방법으로 a, b 추정",{fs:10.5,c:"#C9D3E6"});
+  el("line",{x1:220,x2:220,y1:92,y2:114,stroke:C.navy3,"stroke-width":2,"marker-end":"url(#oN)"},s);
+  bxN(s,80,192,280,48,"#F3F5F9");tN(s,220,221,"해석: 오즈비 = exp(b)",{fw:800,fs:12.5});
+  el("line",{x1:220,x2:220,y1:176,y2:188,stroke:C.navy3,"stroke-width":2,"marker-end":"url(#oN)"},s);
+});
+
+on("m21-case",function(s){
+  bxN(s,4,4,432,242);var X=linN(0,12,60,410),Y=linN(0,1,190,60);
+  el("line",{x1:60,x2:410,y1:190,y2:190,stroke:C.grid},s);el("line",{x1:60,x2:410,y1:60,y2:60,stroke:C.grid},s);
+  [0,2,4,6,8,10,12].forEach(function(t){tN(s,X(t),214,t,{fs:10,c:C.gray,fw:500});});tN(s,410,232,"살충제 농도",{a:"end",fs:10.5,c:C.gray,fw:700});
+  tN(s,54,64,"사망 1",{a:"end",fw:800,fs:11,c:"#B42318"});tN(s,54,194,"생존 0",{a:"end",fw:800,fs:11,c:"#1C6EA4"});
+  bugDots(s,X,Y,5);tN(s,24,30,"벌레 30마리 (사망 17, 생존 13)",{a:"start",fw:800,fs:12});
+});
+
+on("m21-glm",function(s){
+  var R=[[10,10,400,250,"#F3F5F9","계층적 베이지안 모형","",C.gray],[30,46,360,206,"#FDF4EC","일반화선형혼합모형 (GLMM)","개체차 등 무작위 효과",C.amberInk],[50,96,320,148,"#FBE4F0","일반화선형모형 (GLM)","최대가능도 · 이항·푸아송 등","#C2416E"],[90,166,240,70,"#fff","일반선형모형","정규 오차 · 최소제곱법",C.navy]];
+  R.forEach(function(r){el("rect",{x:r[0],y:r[1],width:r[2],height:r[3],rx:12,fill:r[4],stroke:r[7],"stroke-width":1.5},s);tN(s,210,r[1]+20,r[5],{fw:800,fs:12,c:r[7]});if(r[6])tN(s,210,r[1]+38,r[6],{fs:10.5,c:C.gray});});
+  tN(s,210,224,"다중회귀 · 분산분석 · 공분산분석",{fs:10,c:C.gray});
+});
+
+on("m21-bad",function(s){
+  bxN(s,6,6,200,258);tN(s,106,26,"생존(0)/사망(1)",{fw:800,fs:11.5});var X=linN(0,12,20,196),Y=linN(-.35,1.35,236,40);
+  [0,1].forEach(function(v){el("line",{x1:20,x2:196,y1:Y(v),y2:Y(v),stroke:C.grid},s);tN(s,18,Y(v)+4,v,{a:"end",fs:9.5,c:C.gray});});
+  el("rect",{x:20,y:Y(1.35),width:176,height:Y(1)-Y(1.35),fill:"#FBE4E1"},s);el("rect",{x:20,y:Y(0),width:176,height:Y(-.35)-Y(0),fill:"#FBE4E1"},s);
+  bugDots(s,X,Y,3.5);el("line",{x1:X(0),y1:Y(-.2),x2:X(12),y2:Y(1.3),stroke:"#C2416E","stroke-width":2.5},s);
+  tN(s,106,252,"0~1을 벗어남 (빨간 영역)",{fw:800,fs:10,c:"#B42318"});
+  bxN(s,214,6,200,258);tN(s,314,26,"꽃의 개수",{fw:800,fs:11.5});var X2=linN(0,10,232,404),Y2=linN(-8,24,236,40);
+  el("line",{x1:232,x2:404,y1:Y2(0),y2:Y2(0),stroke:C.gray2},s);el("rect",{x:232,y:Y2(0),width:172,height:Y2(-8)-Y2(0),fill:"#FBE4E1"},s);
+  var fx=[.5,1.5,2.5,3.5,4.5,5,6,6.5,7,7.5,8,8.5,9,9.5],fy=[0,0,0,0,0,1,0,2,4,3,7,10,13,19];fx.forEach(function(x,i){el("circle",{cx:X2(x),cy:Y2(fy[i]),r:3.5,fill:C.amber},s);});
+  el("line",{x1:X2(0),y1:Y2(-6),x2:X2(10),y2:Y2(16),stroke:"#C2416E","stroke-width":2.5},s);tN(s,314,252,"음수 개수가 나옴",{fw:800,fs:10,c:"#B42318"});
+});
+
+on("m21-lik",function(s){
+  var pts=[44,52,55,61],X=linN(15,85,20,400),Y=linN(0,.045,130,20);
+  [[40,"#9AA0AA"],[52,"#C2416E"]].forEach(function(m){var p=[];for(var i=0;i<=120;i++){var x=15+70*i/120;p.push(X(x).toFixed(1)+" "+Y(npN(x,m[0],10)).toFixed(1));}el("path",{d:"M"+p.join(" L"),fill:"none",stroke:m[1],"stroke-width":2.2},s);});
+  el("line",{x1:20,x2:400,y1:130,y2:130,stroke:C.gray2},s);
+  pts.forEach(function(v){el("line",{x1:X(v),x2:X(v),y1:130,y2:Y(npN(v,52,10)),stroke:"#C2416E","stroke-width":1.2,"stroke-dasharray":"3 2"},s);el("circle",{cx:X(v),cy:130,r:5,fill:C.navy},s);
+    el("circle",{cx:X(v),cy:Y(npN(v,52,10)),r:3.5,fill:"#C2416E"},s);el("circle",{cx:X(v),cy:Y(npN(v,40,10)),r:3.5,fill:"#9AA0AA"},s);});
+  tN(s,X(28),Y(npN(28,40,10))-8,"θ = 40",{fw:800,fs:10.5,c:C.gray,halo:true});tN(s,X(70),Y(npN(70,52,10))-8,"θ = 52",{fw:800,fs:10.5,c:"#C2416E",halo:true});
+  tN(s,20,16,"데이터 4개(●)는 그대로, θ를 바꾸면 높이(확률밀도)의 곱이 달라짐",{a:"start",fw:800,fs:10});
+});
+
+on("m21-mle",function(s){
+  var H=[];for(var i=0;i<12;i++)H.push(0);MU.forEach(function(v){var k=Math.floor((v-20)/5);if(k>=0&&k<12)H[k]++;});var hm=Math.max.apply(null,H);
+  [[40,"−423.1","#9AA0AA"],[50,"−379.2","#C2416E"],[60,"−435.4","#9AA0AA"]].forEach(function(m,j){var x0=6+j*138,X=linN(20,80,x0+8,x0+124),Y=linN(0,hm,118,34);bxN(s,x0,6,130,128);
+    H.forEach(function(h,k){el("rect",{x:X(20+k*5)+.5,y:Y(h),width:X(25)-X(20)-1,height:118-Y(h),fill:"#BCD6EE"},s);});
+    var p=[];for(var q=0;q<=80;q++){var x=20+60*q/80;p.push(X(x).toFixed(1)+" "+Y(npN(x,m[0],10)*100*5).toFixed(1));}el("path",{d:"M"+p.join(" L"),fill:"none",stroke:m[2],"stroke-width":2.2},s);
+    tN(s,x0+65,22,"μ = "+m[0]+"  log L = "+m[1],{fw:800,fs:10,c:m[2]===C.gray2?C.navy:m[2]});});
+  bxN(s,6,142,408,122);var X=linN(35,65,50,400),Y=linN(-470,-370,250,160),p=[];for(var i2=0;i2<=120;i2++){var mu=35+30*i2/120;p.push(X(mu).toFixed(1)+" "+Y(mlN(mu)).toFixed(1));}
+  [35,40,45,50,55,60,65].forEach(function(t){tN(s,X(t),262-0,t,{fs:9,c:C.gray,fw:500});});tN(s,20,158,"log L",{a:"start",fw:800,fs:10});
+  el("path",{d:"M"+p.join(" L"),fill:"none",stroke:C.amber,"stroke-width":2.5},s);var mh=meanN();el("circle",{cx:X(mh),cy:Y(mlN(mh)),r:6,fill:"#B42318"},s);
+  tN(s,X(mh)+10,Y(mlN(mh))+4,"μ̂ = "+mh.toFixed(1)+" (최대)",{a:"start",fw:800,fs:10.5,c:"#B42318",halo:true});
+});
+function meanN(){return sum(MU)/MU.length;}
+
+on("m21-logit",function(s){
+  bxN(s,6,6,408,258);var X=linN(0,12,60,400),Y=linN(0,1,220,40);
+  [0,.25,.5,.75,1].forEach(function(t){el("line",{x1:60,x2:400,y1:Y(t),y2:Y(t),stroke:C.grid},s);tN(s,54,Y(t)+4,t,{a:"end",fs:9.5,c:C.gray2,fw:500});});
+  [0,2,4,6,8,10,12].forEach(function(t){tN(s,X(t),236,t,{fs:9.5,c:C.gray,fw:500});});tN(s,400,252,"살충제 농도",{a:"end",fs:10,c:C.gray,fw:700});tN(s,22,26,"사망 확률 p",{a:"start",fs:10,c:C.gray,fw:700});
+  bugDots(s,X,Y,4.2);curveN(s,X,Y,null,null,0,12,"#C2416E",3);
+  var x50=-LA/LB;el("path",{d:"M"+X(x50)+" "+Y(0)+" V"+Y(.5)+" H"+X(0),fill:"none",stroke:C.amber,"stroke-width":1.5,"stroke-dasharray":"4 3"},s);
+  tN(s,X(x50)+6,Y(.5)+16,"p = 0.5 (농도 "+x50.toFixed(1)+")",{a:"start",fw:800,fs:10.5,c:C.amberInk,halo:true});
+  tN(s,X(6.6),Y(.62),"이항분포의 p를 나타내는 곡선",{a:"start",fw:800,fs:10.5,c:"#C2416E",halo:true});
+});
+
+on("m21-func",function(s){
+  function pane(x0,title,list){bxN(s,x0,6,202,138,"#fff",C.grid);tN(s,x0+101,22,title,{fw:800,fs:10.5});var X=linN(-3,3,x0+14,x0+190),Y=linN(0,1,130,30);
+    el("line",{x1:x0+14,x2:x0+190,y1:130,y2:130,stroke:C.gray2},s);
+    list.forEach(function(l,k){var p=[];for(var i=0;i<=80;i++){var x=-3+6*i/80;p.push(X(x).toFixed(1)+" "+Y(sigN(l[0]+l[1]*x)).toFixed(1));}el("path",{d:"M"+p.join(" L"),fill:"none",stroke:l[2],"stroke-width":2.2},s);el("line",{x1:x0+20,x2:x0+34,y1:40+k*13,y2:40+k*13,stroke:l[2],"stroke-width":2.5},s);tN(s,x0+38,44+k*13,l[5],{a:"start",fw:800,fs:9.5,c:l[2]});});}
+  pane(4,"b = 2, a를 바꿈 → 가로 이동",[[2,2,"#2B8CC4",-2,0,"a = 2"],[0,2,"#C2416E",.15,4,"a = 0"],[-3,2,"#23704F",1.6,10,"a = −3"]]);
+  pane(214,"a = 0, b를 바꿈 → 가파르기·방향",[[0,4,"#2B8CC4",.4,-4,"b = 4"],[0,1,"#23704F",1.8,12,"b = 1"],[0,-1.5,C.amber,-2.6,-6,"b = −1.5"]]);
+});
+
+on("m21-parts",function(s){
+  mkN(s,"pN2",C.navy);
+  bxN(s,10,20,190,70,"#EEF4FB","#2B8CC4");tN(s,105,46,"선형예측변수",{fw:800,fs:12.5,c:"#1C6EA4"});tN(s,105,72,"a + bx = −4.48 + 0.877x",{fw:700,fs:11});
+  bxN(s,220,20,190,70,"#FBE4F0","#C2416E");tN(s,315,46,"확률분포 파라미터",{fw:800,fs:12.5,c:"#C2416E"});tN(s,315,72,"이항분포의 p (사망 확률)",{fw:700,fs:11});
+  el("line",{x1:202,x2:218,y1:55,y2:55,stroke:C.navy,"stroke-width":2,"marker-end":"url(#pN2)"},s);
+  bxN(s,60,112,300,70,"#FCF3D9",C.amber);tN(s,210,138,"연결함수 = 로짓 함수",{fw:800,fs:12.5,c:C.amberInk});tN(s,210,164,"log(p ÷ (1 − p)) = a + bx",{fw:800,fs:13});
+  el("path",{d:"M105 92 C105 110 120 112 132 112",fill:"none",stroke:C.amber,"stroke-width":1.8},s);el("path",{d:"M315 92 C315 110 300 112 288 112",fill:"none",stroke:C.amber,"stroke-width":1.8},s);
+  bxN(s,10,200,400,60,"#F3F5F9");tN(s,210,224,"연결함수와 오차분포를 바꾸면 다양한 데이터에 적용",{fw:800,fs:11.5});tN(s,210,246,"정규분포 + 항등함수 = 지금까지의 선형회귀",{fs:10.5,c:C.gray});
+});
+
+on("m21-odds",function(s){
+  var X=linN(0,1,40,240),Y=linN(0,9,130,14),p=[];for(var i=0;i<=100;i++){var q=.9*i/100;p.push(X(q).toFixed(1)+" "+Y(q/(1-q)).toFixed(1));}
+  [0,3,6,9].forEach(function(t){el("line",{x1:40,x2:240,y1:Y(t),y2:Y(t),stroke:C.grid},s);tN(s,34,Y(t)+4,t,{a:"end",fs:9,c:C.gray2,fw:500});});
+  [0,.5,1].forEach(function(t){tN(s,X(t),144,t,{fs:9,c:C.gray,fw:500});});tN(s,40,12,"오즈",{a:"start",fw:800,fs:10});tN(s,240,144-0,"",{});
+  el("path",{d:"M"+p.join(" L"),fill:"none",stroke:"#C2416E","stroke-width":2.5},s);
+  [[.4,"#2B8CC4","q = 0.4 → 0.67"],[.8,C.amber,"p = 0.8 → 4"]].forEach(function(m){el("circle",{cx:X(m[0]),cy:Y(m[0]/(1-m[0])),r:5,fill:m[1]},s);tN(s,X(m[0])-6,Y(m[0]/(1-m[0]))-6,m[2],{a:"end",fw:800,fs:9.5,c:m[1],halo:true});});
+  bxN(s,256,10,160,128,"#FCF3D9");tN(s,336,32,"감기약 예",{fw:800,fs:11,c:C.amberInk});tN(s,336,56,"먹음 p = 0.8 → 오즈 4",{fs:10,fw:700});tN(s,336,76,"안 먹음 q = 0.4 → 0.67",{fs:10,fw:700});
+  tN(s,336,102,"오즈비 = 4 ÷ 0.67 = 6",{fw:800,fs:11.5,c:"#B42318"});tN(s,336,124,"확률의 비 p ÷ q = 2",{fs:10,c:C.gray});
+});
+
+on("m21-orci",function(s){
+  bxN(s,6,6,408,130);var X=linN(.5,5,40,390),Yc=72;
+  [.5,1,2,3,4,5].forEach(function(t){el("line",{x1:X(t),x2:X(t),y1:36,y2:106,stroke:C.grid},s);tN(s,X(t),122,t,{fs:9.5,c:C.gray,fw:500});});
+  el("line",{x1:X(1),x2:X(1),y1:36,y2:110,stroke:"#B42318","stroke-width":2,"stroke-dasharray":"5 3"},s);tN(s,X(1)+4,46,"OR = 1 (b = 0)",{a:"start",fw:800,fs:10,c:"#B42318",halo:true});
+  el("line",{x1:X(1.33),x2:X(4.34),y1:Yc,y2:Yc,stroke:C.navy,"stroke-width":3},s);[1.33,4.34].forEach(function(v){el("line",{x1:X(v),x2:X(v),y1:Yc-8,y2:Yc+8,stroke:C.navy,"stroke-width":2.5},s);tN(s,X(v),Yc+22,v,{fw:800,fs:10});});
+  el("circle",{cx:X(2.40),cy:Yc,r:7,fill:C.amber},s);tN(s,X(2.40),Yc-14,"2.40",{fw:800,fs:11.5,c:C.amberInk});tN(s,400,22,"농도 1 증가당 오즈비와 95% 신뢰구간",{a:"end",fw:800,fs:11});
+  bxN(s,6,144,408,120,"#F3F5F9");var cx=[80,190,290,370];el("rect",{x:16,y:152,width:388,height:24,rx:6,fill:C.navy},s);["항목","추정값","표준오차","p값"].forEach(function(h,i){tN(s,cx[i],169,h,{fw:800,fs:10.5,c:"#fff"});});
+  [["a","−4.48","1.73",""],["b","0.877","0.302","0.004"],["exp(b)","2.40","",""]].forEach(function(r,j){var y=198+j*24;r.forEach(function(v,i){tN(s,cx[i],y,v,{fw:i===0||j===2?800:600,fs:11.5,c:j===2?C.amberInk:C.navy});});});
+});
+
+on("m21-cc",function(s){
+  function tbl(x0,title,ctl,ctlS){bxN(s,x0,6,200,200,"#fff",C.grid);tN(s,x0+100,26,title,{fw:800,fs:11.5});var cx=[x0+40,x0+100,x0+160];
+    tN(s,cx[1],50,"흡연",{fw:700,fs:10.5});tN(s,cx[2],50,"비흡연",{fw:700,fs:10.5});
+    [["사례",60,40,"#FBE4E1"],["대조",ctlS,ctl-ctlS,"#EEF4FB"]].forEach(function(r,i){var y=62+i*44;tN(s,cx[0],y+24,r[0],{fw:800,fs:11});[r[1],r[2]].forEach(function(v,j){el("rect",{x:cx[j+1]-26,y:y,width:52,height:38,rx:5,fill:r[3]},s);tN(s,cx[j+1],y+24,v,{fw:800,fs:14});});});
+    var rr=(60/(60+ctlS))/(40/(40+ctl-ctlS)),or=(60/40)/(ctlS/(ctl-ctlS));
+    tN(s,x0+100,168,"표의 위험비 = "+rr.toFixed(2),{fw:800,fs:11.5,c:C.gray});tN(s,x0+100,192,"오즈비 = "+or.toFixed(1),{fw:800,fs:12.5,c:"#B42318"});}
+  tbl(6,"대조 100명",100,30);tbl(214,"대조 200명",200,60);
+  bxN(s,6,214,408,50,"#FCF3D9");tN(s,210,236,"대조 수를 바꾸면 위험비는 1.83 → 2.25, 오즈비는 3.5 그대로",{fw:800,fs:11.5,c:C.amberInk});tN(s,210,255,"(사례-대조 연구에서는 사례와 대조의 비율을 연구자가 정함)",{fs:10,c:C.gray});
+});
+
+/* 실습 1 · 최대가능도 찾기(조작형) */
+(function(){
+  var as=document.getElementById("m21-a");if(!as)return;var bs=document.getElementById("m21-b"),svg=document.getElementById("m21-p1-svg");
+  function upd(){
+    var a=+as.value/10,b=+bs.value/100,ll=llN(a,b);document.getElementById("m21-av").textContent=fmN(a).replace(/0$/,"");document.getElementById("m21-bv").textContent=b.toFixed(2);document.getElementById("m21-ll").textContent=fmN(ll);
+    clear(svg);var X=linN(0,12,40,330),Y=linN(0,1,150,14);
+    [0,.5,1].forEach(function(t){el("line",{x1:40,x2:330,y1:Y(t),y2:Y(t),stroke:C.grid},svg);tN(svg,34,Y(t)+4,t,{a:"end",fs:9.5,c:C.gray2,fw:500});});
+    [0,4,8,12].forEach(function(t){tN(svg,X(t),164,t,{fs:9.5,c:C.gray,fw:500});});
+    curveN(svg,X,Y,LA,LB,0,12,"#C9D3E6",2);bugDots(svg,X,Y,3.8);curveN(svg,X,Y,a,b,0,12,"#C2416E",2.8);
+    var W=96;bxN(svg,346,14,118,140,"#F3F5F9");tN(svg,405,32,"로그 가능도",{fw:800,fs:10.5});var Yl=linN(-40,0,140,46);
+    el("rect",{x:366,y:46,width:80,height:94,fill:"#fff",stroke:C.grid},svg);var v=Math.max(-40,ll);el("rect",{x:368,y:Yl(v),width:36,height:140-Yl(v),fill:"#C2416E"},svg);el("rect",{x:408,y:Yl(LLMAX),width:36,height:140-Yl(LLMAX),fill:"#23704F"},svg);
+    tN(svg,386,152,"내 곡선",{fs:9,fw:700});tN(svg,426,152,"최대",{fs:9,fw:700});
+    var m=document.getElementById("m21-msg"),ok=ll>-9.5;m.className="pmsg"+(ok?" ok":"");
+    m.textContent=ok?"찾았습니다. 로그 가능도 "+fmN(ll)+"로 최댓값 −9.11에 가깝습니다. 최대가능도 추정값은 a = −4.48, b = 0.877입니다(연한 곡선).":"현재 로그 가능도는 "+fmN(ll)+"입니다. 빨간 점(사망)이 많은 곳에서 곡선이 1에, 파란 점(생존)이 많은 곳에서 0에 가깝도록 a와 b를 함께 움직이세요. 막대가 짧을수록(0에 가까울수록) 좋습니다.";
+  }
+  as.addEventListener("input",upd);bs.addEventListener("input",upd);upd();
+})();
+
+/* 실습 3 · 농도별 사망 확률 예측(추정형) */
+(function(){
+  var g=document.getElementById("m21-g");if(!g)return;var qb=document.getElementById("m21-qc"),svg=document.getElementById("m21-p3-svg"),XS=[2,4,5,6,8,10],cur=6,checked=false;
+  XS.forEach(function(v){var b=document.createElement("button");b.type="button";b.className="mbtn";b.textContent="농도 "+v;b.style.padding="3px 8px";b.onclick=function(){cur=v;checked=false;reset();};qb.appendChild(b);});
+  function draw(){clear(svg);var X=linN(0,12,44,456),Y=linN(0,1,180,14);
+    [0,.25,.5,.75,1].forEach(function(t){el("line",{x1:44,x2:456,y1:Y(t),y2:Y(t),stroke:C.grid},svg);tN(svg,38,Y(t)+4,(t*100)+"%",{a:"end",fs:9.5,c:C.gray2,fw:500});});
+    [0,2,4,6,8,10,12].forEach(function(t){tN(svg,X(t),196,t,{fs:9.5,c:C.gray,fw:500});});tN(svg,456,210,"살충제 농도",{a:"end",fs:10,c:C.gray});
+    bugDots(svg,X,Y,3.8);if(checked)curveN(svg,X,Y,null,null,0,12,"#C2416E",2.5);
+    el("line",{x1:X(cur),x2:X(cur),y1:14,y2:180,stroke:C.navy3,"stroke-dasharray":"4 3"},svg);
+    el("circle",{cx:X(cur),cy:Y(+g.value/100),r:7,fill:C.amber,stroke:"#fff","stroke-width":2},svg);tN(svg,X(cur)+(cur>8?-10:10),Y(+g.value/100)+4,"내 예측 "+g.value+"%",{a:cur>8?"end":"start",fw:800,c:C.amberInk,halo:true});
+    if(checked)el("circle",{cx:X(cur),cy:Y(pN(cur)),r:6,fill:"#C2416E",stroke:"#fff","stroke-width":1.5},svg);}
+  function reset(){[].forEach.call(qb.children,function(x,i){var on=XS[i]===cur;x.classList.toggle("on",on);x.setAttribute("aria-pressed",on);});
+    ["m21-act","m21-od"].forEach(function(id){document.getElementById(id).textContent="?";});var m=document.getElementById("m21-msg3");m.className="pmsg";m.textContent="농도 "+cur+" 근처의 빨간 점(사망)과 파란 점(생존)을 보고 사망 확률을 예측하세요.";draw();}
+  function txt(){document.getElementById("m21-gv").textContent=g.value+"%";document.getElementById("m21-mine").textContent=g.value+"%";}
+  g.addEventListener("input",function(){txt();draw();});
+  document.getElementById("m21-check").onclick=function(){checked=true;var p=pN(cur),od=p/(1-p),gv=+g.value/100,ok=Math.abs(gv-p)<=.1,m=document.getElementById("m21-msg3");
+    document.getElementById("m21-act").textContent=(p*100).toFixed(1)+"%";document.getElementById("m21-od").textContent=od<10?od.toFixed(2):od.toFixed(1);m.className="pmsg "+(ok?"ok":"ng");
+    m.textContent=(ok?"가깝게 예측했습니다. ":"차이가 있습니다. ")+"a + bx = −4.48 + 0.877 × "+cur+" = "+fmN(LA+LB*cur)+" → p = "+(p*100).toFixed(1)+"%입니다. 농도가 1 오를 때마다 오즈는 exp(0.877) = 2.40배가 됩니다.";draw();};
+  txt();reset();
+})();
+
+
+/* ---------- ⑤ 형성평가 ---------- */
+function fill(t){return !CASE?t:t.replace(/SUM/g,f1(SUMV)).replace(/AVG/g,f1(AVG,2)).replace(/MAXV/g,f1(MAXV));}
+var firstPractice=document.getElementById("p1"),answered=0,correct=0;
+QUIZ.forEach(function(q,i){
+  var s=document.createElement("section");s.className="slide";s.dataset.step="4";s.id="q"+(i+1);
+  s.innerHTML='<div class="sh"><div class="sec"><span>문항 '+(i+1)+' / '+QUIZ.length+'</span><span class="qchips"><span>학습목표 '+q.goal+'</span><span>'+q.type+'</span></span></div><h2 class="stem">'+fill(q.stem)+'</h2></div>'+
+    '<div class="body split even"><div class="opts'+(q.ox?' ox':'')+'"></div><div class="fbp" aria-live="polite"><p class="empty">보기를 고르면 정답과 해설이 여기에 나타납니다.</p></div></div>';
+  var ob=s.querySelector(".opts"),fb=s.querySelector(".fbp");
+  q.opts.forEach(function(t,k){
+    var b=document.createElement("button");b.type="button";b.className="opt";
+    b.innerHTML=q.ox?t:'<span class="n">'+(k+1)+'</span>'+fill(t);
+    b.addEventListener("click",function(){
+      var all=ob.querySelectorAll(".opt");[].forEach.call(all,function(x){x.disabled=true;});
+      all[q.ans].classList.add("ok");var ok=k===q.ans;if(!ok)b.classList.add("ng");
+      answered++;if(ok)correct++;
+      fb.className="fbp "+(ok?"ok":"ng");
+      fb.innerHTML='<div class="verdict">'+(ok?"정답입니다":"오답입니다. 정답은 "+(q.ox?q.opts[q.ans]:(q.ans+1)+"번")+"입니다")+'</div><div>'+fill(q.exp)+'</div>'+
+        '<button type="button" class="jump back" data-jump="'+q.back+'">'+q.backLabel+'</button><div class="tally">지금까지 '+answered+'문항 중 '+correct+'문항 정답</div>';
+      bindJumps(fb);
+    });
+    ob.appendChild(b);
+  });
+  vp.insertBefore(s,firstPractice);
+});
+
+/* ---------- ⑦ 용어해설 · 참고자료 · 다음 모듈 ---------- */
+for(var gi=0;gi<GLOSSARY.length;gi+=6){
+  var part=GLOSSARY.slice(gi,gi+6),pg=gi/6+1,np=Math.ceil(GLOSSARY.length/6);
+  var s=document.createElement("section");s.className="slide";s.dataset.step="6";
+  var h='<div class="sh"><div class="sec">용어해설 '+pg+'/'+np+'</div><h2>'+(pg===1?"본문에서 굵게 표시한 용어를 나온 순서대로 모았습니다":"용어해설 계속")+'</h2></div><div class="body full"><div class="gl">';
+  part.forEach(function(g,k){h+='<div class="gi"><div class="t"><i>'+(gi+k+1)+'</i>'+g[0]+'<em>'+g[1]+'</em>'+(g[4]?'<span class="cite">['+g[4]+']</span>':'')+'</div><div class="d">'+g[2]+'</div><div class="e"><strong>예시</strong> '+g[3]+'</div></div>';});
+  h+='</div></div>';s.innerHTML=h;vp.appendChild(s);
+}
+(function(){
+  var s=document.createElement("section");s.className="slide";s.dataset.step="6";s.id="end";
+  var refs=REFS.length?'<div class="pcol" style="gap:10px"><div class="plabel" style="margin:0">참고자료</div><ol class="refs">'+REFS.map(function(r){return '<li><span>['+r.n+']</span><div>'+r.title+', '+r.org+'. <a href="'+r.url+'" target="_blank" rel="noopener">'+r.url+'</a> ('+r.date+')</div></li>';}).join("")+'</ol></div>':'';
+  s.innerHTML='<div class="sh"><div class="sec">마무리</div><h2>'+(REFS.length?"참고자료와 다음 모듈":"다음 모듈")+'</h2></div>'+
+    '<div class="body '+(REFS.length?'split even':'full')+'" style="align-content:center">'+refs+
+    '<div class="pcol" style="justify-content:center"><div class="nextmod"><small>다음 모듈 · '+NEXT.title+'</small><strong>'+NEXT.line+'</strong></div></div></div>'+
+    '<p class="foot">학습 상태는 저장되지 않습니다.</p>';
+  vp.appendChild(s);
+})();
+
+/* ---------- 이동 · 진행선 ---------- */
+var slides=[].slice.call(vp.querySelectorAll(".slide")),cur=0,seen={};
+var stepFirst=[],stepCount=[0,0,0,0,0,0,0];
+slides.forEach(function(s,i){var st=+s.dataset.step;if(stepFirst[st]==null)stepFirst[st]=i;stepCount[st]++;});
+var rail=document.getElementById("rail"),stations=[];
+STEPS.forEach(function(n,i){
+  var b=document.createElement("button");b.type="button";b.className="station";
+  b.style.left="calc(14px + (100% - 28px) * "+(i/6)+")";
+  b.innerHTML='<span class="dot">'+(i+1)+'</span><span class="lb">'+n+'</span>';
+  b.setAttribute("aria-label",(i+1)+"단계 "+n+"(으)로 이동");
+  b.addEventListener("click",function(){show(stepFirst[i]);});
+  rail.appendChild(b);stations.push(b);
+});
+function show(i){
+  cur=Math.max(0,Math.min(slides.length-1,i));
+  slides.forEach(function(s,k){s.classList.toggle("on",k===cur);});
+  var st=+slides[cur].dataset.step;seen[st]=true;
+  stations.forEach(function(b,k){b.classList.toggle("cur",k===st);b.classList.toggle("done",k<st||(!!seen[k]&&k!==st));if(k===st)b.setAttribute("aria-current","step");else b.removeAttribute("aria-current");});
+  var within=(cur-stepFirst[st])/Math.max(1,stepCount[st]);
+  var frac=st===6&&cur===slides.length-1?1:(st+within)/6;
+  document.getElementById("fill").style.width=(Math.min(1,frac)*100)+"%";
+  document.getElementById("counter").innerHTML="<strong>"+STEPS[st]+"</strong> "+(cur-stepFirst[st]+1)+" / "+stepCount[st];
+  document.getElementById("prev").disabled=cur===0;
+  var nx=document.getElementById("next");nx.disabled=cur===slides.length-1;
+  nx.textContent=(cur<slides.length-1&&+slides[cur+1].dataset.step!==st)?STEPS[+slides[cur+1].dataset.step]+"(으)로":"다음";
+}
+function bindJumps(root){[].forEach.call(root.querySelectorAll("[data-jump]"),function(b){b.addEventListener("click",function(){var t=document.getElementById(b.dataset.jump);if(t)show(slides.indexOf(t));});});}
+bindJumps(document);
+document.getElementById("prev").onclick=function(){show(cur-1);};
+document.getElementById("next").onclick=function(){show(cur+1);};
+document.addEventListener("keydown",function(e){
+  if(e.target&&(e.target.type==="range"))return;
+  if(e.key==="ArrowRight"||e.key==="PageDown"){show(cur+1);e.preventDefault();}
+  else if(e.key==="ArrowLeft"||e.key==="PageUp"){show(cur-1);e.preventDefault();}
+});
+var tx=null,ty=null;
+vp.addEventListener("touchstart",function(e){var t=e.target;if(t.closest&&(t.closest("input")||t.closest(".dcard"))){tx=null;return;}tx=e.touches[0].clientX;ty=e.touches[0].clientY;},{passive:true});
+vp.addEventListener("touchend",function(e){if(tx==null)return;var dx=e.changedTouches[0].clientX-tx,dy=e.changedTouches[0].clientY-ty;if(Math.abs(dx)>60&&Math.abs(dx)>Math.abs(dy)*1.5)show(cur+(dx<0?1:-1));tx=null;},{passive:true});
+
+/* ---------- 실습 1 · 조작형 ---------- */
+(function(){if(!document.getElementById("p1-items")||!CASE)return;
+var p1v=CASE.values.slice(),p1s=CASE.values.indexOf(MAXV),p1m=document.getElementById("p1-items"),p1r=document.getElementById("p1-range");
+CASE.labels.forEach(function(m,i){var b=document.createElement("button");b.type="button";b.className="mbtn";b.textContent=m;b.onclick=function(){p1s=i;p1d();};p1m.appendChild(b);});
+function p1d(){
+  [].forEach.call(p1m.children,function(b,i){b.classList.toggle("on",i===p1s);b.setAttribute("aria-pressed",i===p1s);});
+  p1r.value=p1v[p1s];document.getElementById("p1-label").textContent=CASE.labels[p1s]+"번";document.getElementById("p1-val").textContent=f1(p1v[p1s]);
+  var s=r1(sum(p1v)),m=s/N;
+  document.getElementById("p1-sum").textContent=f1(s);document.getElementById("p1-mean").textContent=f1(m,2);
+  barChart(document.getElementById("p1-svg"),p1v,{mean:m,sel:p1s,ymax:9});
+  var msg=document.getElementById("p1-msg");
+  if(P1.target!=null&&Math.abs(m-P1.target)<0.005){msg.className="pmsg ok";msg.textContent="성공했습니다. "+f1(s)+" ÷ "+N+" = "+f1(m,2);}
+  else if(Math.abs(s-SUMV)<1e-9){msg.className="pmsg";msg.textContent="원래 값입니다. "+f1(SUMV)+" ÷ "+N+" = "+f1(AVG,2);}
+  else{msg.className="pmsg";msg.textContent="원래 평균 "+f1(AVG,2)+"보다 "+f1(Math.abs(m-AVG),2)+" "+(m>AVG?"늘었습니다.":"줄었습니다.");}
+}
+p1r.addEventListener("input",function(){p1v[p1s]=r1(+p1r.value);p1d();});
+document.getElementById("p1-reset").onclick=function(){p1v=CASE.values.slice();p1d();};
+p1d();
+
+})();
+/* ---------- 실습 2 · 분류형 ---------- */
+(function(){if(!document.getElementById("p2-pool"))return;
+var pool=document.getElementById("p2-pool"),binWrap=document.getElementById("p2-bins"),selC=null,done2=0;
+var bins=BINS.map(function(n){var b=document.createElement("div");b.className="bin";b.dataset.bin=n;b.innerHTML="<h4>"+n+"</h4>";binWrap.appendChild(b);return b;});
+function p2msg(t,c){var m=document.getElementById("p2-msg");m.textContent=t;m.className="pmsg "+(c||"");document.getElementById("p2-count").textContent=done2+" / "+CARDS.length;}
+function p2init(){
+  pool.innerHTML="";bins.forEach(function(b){[].slice.call(b.querySelectorAll(".dcard")).forEach(function(c){c.remove();});});done2=0;selC=null;
+  var o=CARDS.map(function(_,i){return i;});for(var i=o.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1)),t=o[i];o[i]=o[j];o[j]=t;}
+  o.forEach(function(i){var d=document.createElement("div");d.className="dcard";d.tabIndex=0;d.setAttribute("role","button");d.textContent=CARDS[i][0];d.dataset.ans=CARDS[i][1];pool.appendChild(d);attach(d);});
+  p2msg("카드를 하나 골라 보세요.","");
+}
+function drop(c,b){
+  if(!b||c.classList.contains("ok"))return;
+  c.classList.remove("sel");selC=null;
+  if(c.dataset.ans===b.dataset.bin){c.classList.add("ok");c.removeAttribute("tabindex");b.appendChild(c);done2++;p2msg(done2===CARDS.length?"카드를 모두 맞게 분류했습니다.":"정답입니다.","ok");}
+  else{c.classList.add("shake");setTimeout(function(){c.classList.remove("shake");},400);p2msg("「"+b.dataset.bin+"」이 아닙니다. "+HINT[c.dataset.ans],"ng");}
+}
+function pick(d){if(selC===d){d.classList.remove("sel");selC=null;return;}if(selC)selC.classList.remove("sel");selC=d;d.classList.add("sel");p2msg("이제 알맞은 칸을 누르세요.","");}
+function attach(d){
+  var sx=null,sy,mv=false,gh=null,ov=null,offX=0,offY=0;
+  function pos(e){var r=stage.getBoundingClientRect();return{x:(e.clientX-r.left)/S,y:(e.clientY-r.top)/S};}
+  d.addEventListener("pointerdown",function(e){if(d.classList.contains("ok"))return;sx=e.clientX;sy=e.clientY;mv=false;d.setPointerCapture(e.pointerId);var r=d.getBoundingClientRect();offX=(e.clientX-r.left)/S;offY=(e.clientY-r.top)/S;});
+  d.addEventListener("pointermove",function(e){
+    if(sx==null)return;
+    if(!mv&&Math.hypot(e.clientX-sx,e.clientY-sy)>6){mv=true;gh=d.cloneNode(true);gh.classList.add("ghostc");gh.classList.remove("sel");gh.style.width=d.offsetWidth+"px";stage.appendChild(gh);d.style.opacity=".35";}
+    if(mv){var p=pos(e);gh.style.left=(p.x-offX)+"px";gh.style.top=(p.y-offY)+"px";
+      var t=document.elementFromPoint(e.clientX,e.clientY),b=t&&t.closest?t.closest(".bin"):null;
+      if(ov&&ov!==b)ov.classList.remove("hover");ov=b;if(b)b.classList.add("hover");}
+  });
+  d.addEventListener("pointerup",function(){
+    if(sx==null)return;sx=null;
+    if(mv){gh.remove();gh=null;d.style.opacity="";if(ov)ov.classList.remove("hover");var b=ov;ov=null;drop(d,b);}else pick(d);
+  });
+  d.addEventListener("pointercancel",function(){if(gh){gh.remove();gh=null;}d.style.opacity="";sx=null;if(ov)ov.classList.remove("hover");ov=null;});
+  d.addEventListener("keydown",function(e){if(e.key==="Enter"||e.key===" "){e.preventDefault();pick(d);}});
+}
+bins.forEach(function(b){b.tabIndex=0;b.setAttribute("role","button");b.setAttribute("aria-label",b.dataset.bin+" 칸에 놓기");
+  b.addEventListener("click",function(e){if(selC&&!e.target.closest(".dcard"))drop(selC,b);});
+  b.addEventListener("keydown",function(e){if((e.key==="Enter"||e.key===" ")&&selC){e.preventDefault();drop(selC,b);}});});
+document.getElementById("p2-reset").onclick=p2init;
+p2init();
+
+})();
+/* ---------- 실습 3 · 추정형 ---------- */
+(function(){if(!document.getElementById("p3-range")||!PAIRS)return;
+var p3r=document.getElementById("p3-range"),p3done=false;
+document.getElementById("p3-x0").textContent=PAIRS.x0;
+p3r.min=PAIRS.ymin;p3r.max=PAIRS.ymax;p3r.step=0.1;p3r.value=r1((PAIRS.ymin+PAIRS.ymax)/2);
+function p3d(){var g=+p3r.value;document.getElementById("p3-val").textContent=f1(g);scatter(document.getElementById("p3-svg"),{x0:PAIRS.x0,guess:g,line:p3done,pred:p3done,actual:p3done});}
+p3r.addEventListener("input",function(){if(p3done){p3done=false;document.getElementById("p3-res").classList.remove("on");}p3d();});
+document.getElementById("p3-check").onclick=function(){
+  p3done=true;var g=+p3r.value,mine=Math.abs(g-PAIRS.actual),line=Math.abs(PRED-PAIRS.actual);
+  document.getElementById("p3-mine").textContent=f1(g);document.getElementById("p3-pred").textContent=f1(PRED,PAIRS.dp);document.getElementById("p3-act").textContent=f1(PAIRS.actual);
+  var m=document.getElementById("p3-msg"),good=mine<=line;m.className="pmsg "+(good?"ok":"ng");
+  m.textContent="내 오차 "+f1(mine,PAIRS.dp)+PAIRS.unit+", 직선 오차 "+f1(line,PAIRS.dp)+PAIRS.unit+". "+(good?"직선만큼 또는 더 가깝게 추정했습니다.":"직선을 이용하면 오차를 줄일 수 있습니다.");
+  document.getElementById("p3-res").classList.add("on");p3d();
+};
+p3d();
+
+})();
+show(0);
+})();
+</script>
+</body>
+</html>

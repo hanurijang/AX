@@ -1,0 +1,1115 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>통계학의 역할과 전체 모습</title>
+<!-- M02 통계학의 역할과 전체 모습 · 기준 템플릿 v1.3로 제작 (2026-10-24) -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<style>
+:root{
+  --navy:#1B2A4A; --navy2:#2C4170; --navy3:#5B6E97; --navy-soft:#E4E9F2;
+  --ink:#22262E; --gray:#6B7280; --gray2:#9AA0AA; --panel:#EEF0F3; --line:#D5D9E0;
+  --amber:#E0A100; --amber-ink:#6E4F00; --amber-soft:#FCF3D9;
+  --ok:#23704F; --ok-soft:#E2F1E9; --ng:#B42318; --ng-soft:#FBE6E3;
+  --letterbox:#C7CCD4;
+}
+*{box-sizing:border-box}
+html,body{margin:0;height:100%;overflow:hidden;background:var(--letterbox)}
+body{font-family:"Pretendard Variable","Pretendard","Apple SD Gothic Neo","Malgun Gothic","Noto Sans KR",system-ui,sans-serif;color:var(--ink);-webkit-text-size-adjust:100%;font-feature-settings:"tnum"}
+button{font:inherit;color:inherit}
+:focus-visible{outline:3px solid var(--amber);outline-offset:2px;border-radius:4px}
+
+/* ---------- 16:9 무대 ---------- */
+.stage{position:absolute;left:50%;top:50%;width:960px;height:540px;transform:translate(-50%,-50%) scale(var(--s,1));transform-origin:center;background:#fff;overflow:hidden;box-shadow:0 10px 40px rgba(27,42,74,.25)}
+
+/* ---------- 상단 바: 모듈명 + 7단계 진행선 ---------- */
+.topbar{position:absolute;left:0;right:0;top:0;height:60px;background:var(--navy);display:flex;align-items:center}
+.brand{flex:0 0 200px;padding-left:22px;color:#fff;font-size:14px;font-weight:800;letter-spacing:-.3px;line-height:1.2;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.brand small{display:block;font-size:11px;font-weight:500;color:#A9B6CF;letter-spacing:0;margin-top:2px;overflow:hidden;text-overflow:ellipsis}
+.rail{position:relative;flex:1;height:60px;margin-right:22px}
+.rail .track{position:absolute;left:14px;right:14px;top:21px;height:3px;background:#3A4D78;border-radius:2px}
+.rail .fill{position:absolute;left:0;top:0;bottom:0;background:var(--amber);border-radius:2px;transition:width .35s ease}
+.station{position:absolute;top:10px;width:72px;margin-left:-36px;background:none;border:0;padding:0;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:4px}
+.station .dot{width:24px;height:24px;border-radius:50%;display:grid;place-items:center;font-size:11.5px;font-weight:800;background:var(--navy);color:#8E9DBD;border:2px solid #4A5D88;transition:all .25s}
+.station .lb{font-size:11.5px;color:#8E9DBD;white-space:nowrap}
+.station.done .dot{background:#C9D3E6;border-color:#C9D3E6;color:var(--navy)}
+.station.done .lb{color:#C9D3E6}
+.station.cur .dot{background:var(--amber);border-color:#FFE08A;color:var(--navy);transform:scale(1.12)}
+.station.cur .lb{color:#fff;font-weight:700}
+
+/* ---------- 화면 ---------- */
+.viewport{position:absolute;left:0;right:0;top:60px;bottom:46px}
+.slide{position:absolute;inset:0;padding:16px 36px 10px;display:none;flex-direction:column;gap:12px}
+.slide.on{display:flex;animation:fade .22s ease}
+@keyframes fade{from{opacity:0}to{opacity:1}}
+@media (prefers-reduced-motion:reduce){.slide.on{animation:none}.rail .fill,.station .dot{transition:none}}
+.sh{flex:0 0 auto}
+.sec{font-size:12.5px;font-weight:700;color:var(--navy3);display:flex;gap:8px;align-items:center;min-height:18px}
+h2{margin:3px 0 0;font-size:24px;line-height:1.3;font-weight:800;color:var(--navy);letter-spacing:-.6px;display:flex;gap:10px;align-items:flex-start}
+h2 .q{flex:0 0 auto;margin-top:2px;width:28px;height:28px;border-radius:6px;background:var(--navy);color:#fff;font-size:15px;display:grid;place-items:center}
+h2.big{font-size:30px;line-height:1.32}
+.body{flex:1 1 auto;min-height:0;display:grid;gap:24px}
+.split{grid-template-columns:1.2fr 1fr}
+.split.even{grid-template-columns:1fr 1fr}
+.full{grid-template-columns:1fr}
+.fig{background:var(--panel);border-radius:12px;padding:12px;min-height:0;display:flex;align-items:center;justify-content:center}
+.fig svg{width:100%;height:100%;display:block}
+.figcol{min-height:0;display:flex;flex-direction:column;gap:10px}
+.figcol .fig{flex:1 1 auto}
+.side{min-height:0;display:flex;flex-direction:column;gap:12px;justify-content:center}
+
+/* 핵심 문장: 40자 안팎, 1~2개 */
+.key{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:9px}
+.key li{position:relative;padding-left:16px;font-size:18.5px;line-height:1.42;font-weight:700;letter-spacing:-.4px}
+.key li::before{content:"";position:absolute;left:0;top:.28em;width:4px;height:1.05em;border-radius:2px;background:var(--navy2)}
+.key b{color:var(--navy);background:linear-gradient(transparent 62%,var(--amber-soft) 62%)}
+/* 해설 문단: 2~4문장, 150~250자 */
+.exp{margin:0;font-size:15px;line-height:1.62;letter-spacing:-.2px;color:var(--ink)}
+.exp b{color:var(--navy)}
+/* 연결 문장: 다음 소단원으로 넘기는 질문 */
+.next{margin:0;border-top:1px dashed var(--line);padding-top:9px;font-size:14px;font-weight:700;color:var(--navy2);display:flex;gap:8px;align-items:baseline}
+.next span{flex:0 0 auto;font-size:11.5px;font-weight:800;color:var(--navy3);background:var(--navy-soft);border-radius:4px;padding:0 6px;line-height:20px}
+/* 각주: 기호의 뜻과 출처 번호만 */
+.foot{flex:0 0 auto;font-size:12px;line-height:1.5;color:var(--gray);margin:0}
+.foot b{color:var(--ink)}
+.cite{font-size:.72em;font-weight:700;color:var(--navy3);vertical-align:super;line-height:0;margin-left:1px}
+.tag-v{display:inline-block;font-size:11px;font-weight:700;border-radius:4px;padding:0 6px;line-height:18px;white-space:nowrap;vertical-align:1px;color:var(--gray);background:#F3F4F6;box-shadow:inset 0 0 0 1px var(--line)}
+
+/* 핵심 수학 개념 박스 */
+.math{flex:0 0 auto;border-left:3px solid var(--navy3);background:#F6F7F9;border-radius:0 8px 8px 0;padding:9px 13px;font-size:13.5px;line-height:1.5}
+.math .mt{font-size:12px;font-weight:800;color:var(--navy3);margin-bottom:2px}
+.math .f{font-family:"Cambria Math","Times New Roman",serif;font-size:18px;font-weight:700;color:var(--navy);margin:1px 0 4px}
+.math .r{display:grid;grid-template-columns:34px 1fr;gap:6px}
+.math .r span:first-child{font-size:11.5px;font-weight:700;color:var(--gray2);padding-top:1px}
+.math .w{margin-top:5px;padding-top:5px;border-top:1px dashed var(--line);color:var(--ng);font-weight:700;font-size:12.5px}
+
+/* ---------- 하단 바 ---------- */
+.bottombar{position:absolute;left:0;right:0;bottom:0;height:46px;border-top:1px solid var(--line);display:flex;align-items:center;padding:0 22px 0 36px;gap:12px;background:#fff}
+.counter{font-size:13px;color:var(--gray);font-weight:600}
+.counter strong{color:var(--navy)}
+.spacer{flex:1}
+.nav{border:1.5px solid var(--navy);background:#fff;color:var(--navy);border-radius:8px;height:32px;padding:0 16px;font-size:14px;font-weight:700;cursor:pointer}
+.nav.primary{background:var(--navy);color:#fff}
+.nav:disabled{opacity:.3;cursor:default}
+
+/* ---------- 홈으로 ---------- */
+.home{display:inline-flex;align-items:center;gap:6px;height:32px;padding:0 13px;border-radius:8px;border:1.5px solid var(--navy-soft);background:#fff;color:var(--navy2);font-size:13.5px;font-weight:700;line-height:1;text-decoration:none;white-space:nowrap}
+.home svg{width:14px;height:14px;flex:0 0 auto;display:block}
+.home:hover{background:var(--navy-soft);border-color:var(--navy3);color:var(--navy)}
+.home:focus-visible{outline:3px solid var(--amber);outline-offset:2px}
+@media (prefers-reduced-motion:reduce){.home{transition:none}}
+
+/* ① 학습개요 */
+.meta{display:grid;grid-template-columns:auto 1fr;gap:6px 14px;margin:0;font-size:14px}
+.meta dt{font-weight:700;color:var(--gray)}
+.meta dd{margin:0;font-weight:700;color:var(--navy)}
+.prevlink{background:var(--panel);border-radius:10px;padding:12px 14px;font-size:14.5px;line-height:1.55}
+.prevlink small{display:block;font-size:12px;font-weight:800;color:var(--navy3);margin-bottom:3px}
+
+/* ② 학습목표: 목표 → 문항 → 실습 연결 */
+.gmap{display:grid;grid-template-columns:44px 1fr 150px 150px;align-items:stretch;row-gap:12px;column-gap:0}
+.gmap .hd{font-size:12px;font-weight:700;color:var(--gray);padding:0 14px 2px}
+.gmap .gn{background:var(--navy);color:#fff;font-weight:800;font-size:18px;display:grid;place-items:center;border-radius:10px 0 0 10px}
+.gmap .gt{background:var(--panel);padding:14px 18px;font-size:17px;font-weight:700;line-height:1.42;letter-spacing:-.3px;display:flex;align-items:center}
+.gmap .gt b{color:var(--navy)}
+.gmap .ga,.gmap .gp{background:var(--panel);display:flex;align-items:center;padding:0 10px;border-left:2px solid #fff}
+.gmap .gp{border-radius:0 10px 10px 0}
+.jump{border:1.5px solid var(--navy3);background:#fff;border-radius:7px;padding:6px 10px;font-size:13px;font-weight:700;color:var(--navy);cursor:pointer;text-align:left;line-height:1.3;width:100%}
+.jump:hover{background:var(--navy-soft)}
+
+/* ④ 본문 정리 표 */
+.sumtbl{width:100%;border-collapse:separate;border-spacing:0;font-size:14.5px;line-height:1.5}
+.sumtbl th{background:var(--navy);color:#fff;font-weight:800;text-align:left;padding:10px 14px}
+.sumtbl th:first-child{border-radius:10px 0 0 0;width:150px}
+.sumtbl th:last-child{border-radius:0 10px 0 0}
+.sumtbl td{padding:11px 14px;border-bottom:1px solid var(--line);vertical-align:top}
+.sumtbl td:first-child{font-weight:800;color:var(--navy)}
+.sumtbl tr:nth-child(even) td{background:#F8F9FB}
+
+/* ⑤ 형성평가 */
+.qchips{display:flex;gap:6px}
+.qchips span{font-size:11.5px;font-weight:700;color:var(--navy2);background:var(--navy-soft);border-radius:4px;padding:0 7px;line-height:19px}
+h2.stem{font-size:21px;line-height:1.42;font-weight:800}
+.opts{display:grid;gap:9px;align-content:center}
+.opts.ox{grid-template-columns:1fr 1fr}
+.opt{border:1.5px solid var(--line);background:#fff;border-radius:10px;padding:11px 14px;text-align:left;font-size:16px;font-weight:600;cursor:pointer;display:flex;gap:10px;align-items:center}
+.opt .n{flex:0 0 26px;height:26px;border-radius:50%;background:var(--panel);display:grid;place-items:center;font-size:13px;font-weight:800;color:var(--navy)}
+.opts.ox .opt{justify-content:center;font-size:40px;font-weight:800;padding:22px;color:var(--navy)}
+.opt:hover:not(:disabled){border-color:var(--navy3);background:#F8F9FB}
+.opt:disabled{cursor:default}
+.opt.ok{border-color:var(--ok);background:var(--ok-soft);color:var(--ok)}
+.opt.ok .n{background:var(--ok);color:#fff}
+.opt.ng{border-color:var(--ng);background:var(--ng-soft);color:var(--ng)}
+.opt.ng .n{background:var(--ng);color:#fff}
+.fbp{background:var(--panel);border-radius:12px;padding:18px 20px;display:flex;flex-direction:column;gap:10px;font-size:14.5px;line-height:1.6}
+.fbp .empty{color:var(--gray);margin:auto 0}
+.fbp .verdict{font-size:19px;font-weight:800}
+.fbp.ok{background:var(--ok-soft)} .fbp.ok .verdict{color:var(--ok)}
+.fbp.ng{background:var(--ng-soft)} .fbp.ng .verdict{color:var(--ng)}
+.fbp .back{align-self:flex-start}
+.fbp .tally{margin-top:auto;font-size:12.5px;color:var(--gray);font-weight:600}
+
+/* ⑥ 실습 */
+.plabel{font-size:12px;font-weight:800;color:var(--navy3);margin-bottom:6px}
+.pcol{min-height:0;display:flex;flex-direction:column}
+.mbtns{display:flex;flex-wrap:nowrap;gap:3px;margin-bottom:8px}
+.mbtn{border:1px solid var(--line);background:#fff;border-radius:6px;padding:2px 6px;font-size:12px;cursor:pointer;min-width:26px}
+.mbtn.on{background:var(--navy);border-color:var(--navy);color:#fff}
+.ctrl{display:flex;align-items:center;gap:10px;font-size:14px;font-weight:600}
+input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
+.stats{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.stats.three{grid-template-columns:1fr 1fr 1fr}
+.stats div{background:var(--panel);border-radius:10px;padding:8px 12px}
+.stats small{display:block;font-size:11.5px;color:var(--gray);font-weight:600;line-height:1.35}
+.stats strong{font-size:22px;color:var(--navy);letter-spacing:-.4px}
+.pmsg{font-size:14.5px;font-weight:700;min-height:22px;line-height:1.45}
+.pmsg.ok{color:var(--ok)} .pmsg.ng{color:var(--ng)}
+.think{flex:0 0 auto;background:var(--amber-soft);border-radius:10px;padding:9px 14px;font-size:14.5px;font-weight:700;color:var(--amber-ink);display:flex;gap:10px;align-items:baseline}
+.think span{flex:0 0 auto;font-size:12px;font-weight:800}
+.howto{font-size:13.5px;color:var(--gray);line-height:1.5;margin:0}
+.btn{border:0;background:var(--navy);color:#fff;border-radius:8px;height:32px;padding:0 14px;font-size:13.5px;font-weight:700;cursor:pointer}
+.btn.ghost{background:#fff;color:var(--navy);box-shadow:inset 0 0 0 1.5px var(--navy)}
+.pool{flex:1;min-height:0;display:grid;grid-template-columns:1fr 1fr;align-content:start;gap:8px;padding:10px;border:1.5px dashed var(--line);border-radius:10px;background:#FAFBFC}
+.dcard{background:#fff;border:1.5px solid var(--navy3);border-radius:8px;padding:7px 10px;font-size:13.5px;font-weight:600;line-height:1.4;cursor:grab;user-select:none;-webkit-user-select:none;touch-action:none}
+.dcard.sel{box-shadow:0 0 0 3px var(--amber)}
+.dcard.ok{border-color:var(--ok);background:var(--ok-soft);color:var(--ok);cursor:default;font-size:12.5px;padding:5px 8px}
+.dcard.shake{animation:shake .35s;border-color:var(--ng);background:var(--ng-soft)}
+@keyframes shake{25%{transform:translateX(-5px)}75%{transform:translateX(5px)}}
+.ghostc{position:absolute;pointer-events:none;z-index:50;opacity:.92;box-shadow:0 8px 20px rgba(27,42,74,.25);cursor:grabbing}
+.bins{flex:1 0 auto;min-height:0;display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.bin .dcard{font-size:12px;padding:3px 7px;line-height:1.3}
+.p2row{display:flex;gap:10px;align-items:center}.p2row .pmsg{flex:1;margin:0}.p2row .btn{flex:0 0 auto}
+.bin{border:1.5px solid var(--line);border-radius:10px;padding:6px;display:flex;flex-direction:column;gap:6px;background:#fff;cursor:pointer;min-height:0}
+.bin h4{margin:0;background:var(--navy);color:#fff;border-radius:6px;text-align:center;font-size:14px;padding:4px}
+.bin.hover{border-color:var(--amber);background:var(--amber-soft)}
+.res{display:none;flex-direction:column;gap:8px}
+.res.on{display:flex}
+
+/* ⑦ 용어해설·참고자료 */
+.gl{display:grid;grid-template-columns:1fr 1fr;grid-template-rows:repeat(3,1fr);gap:10px 22px;min-height:0}
+.gi{border-top:2px solid var(--navy);padding:8px 0 0;display:flex;flex-direction:column;gap:3px;min-height:0}
+.gi .t{font-size:16.5px;font-weight:800;color:var(--navy);display:flex;gap:6px;align-items:baseline;flex-wrap:wrap}
+.gi .t em{font-style:normal;font-weight:500;font-size:12.5px;color:var(--gray)}
+.gi .t i{font-style:normal;font-size:12px;font-weight:800;color:var(--navy3);width:22px}
+.gi .d{font-size:14px;line-height:1.5}
+.gi .e{font-size:12.5px;line-height:1.45;color:var(--gray)}
+.gi .e strong{color:var(--navy3)}
+.refs{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:8px;font-size:13.5px;line-height:1.5}
+.refs li{display:grid;grid-template-columns:30px 1fr;gap:4px}
+.refs li span{font-weight:800;color:var(--navy3)}
+.refs a{color:var(--navy2);word-break:break-all}
+.nextmod{background:var(--navy);color:#fff;border-radius:12px;padding:18px 22px;display:flex;flex-direction:column;gap:6px}
+.nextmod small{font-size:12px;font-weight:700;color:#A9B6CF}
+.nextmod strong{font-size:19px;line-height:1.45;letter-spacing:-.3px}
+
+.rotate{position:fixed;left:0;right:0;bottom:max(14px,env(safe-area-inset-bottom));text-align:center;font-size:13px;color:#3A4560;display:none}
+@media (orientation:portrait) and (max-width:700px){.rotate{display:block}}
+</style>
+</head>
+<body>
+<div class="stage" id="stage">
+  <header class="topbar">
+    <!-- [교체] 모듈명 / 과정명·모듈 번호 (장·절 번호는 쓰지 않음) -->
+    <div class="brand" id="brand">통계학의 역할과 전체 모습<small>데이터와 기술통계 · M02</small></div>
+    <nav class="rail" id="rail" aria-label="학습 단계"><div class="track"><div class="fill" id="fill"></div></div></nav>
+  </header>
+
+  <main class="viewport" id="vp">
+    <!-- ① 학습개요 ─────────────────────────────── -->
+    <section class="slide" data-step="0">
+      <div class="sh"><div class="sec">학습개요</div>
+        <h2 class="big">데이터가 흩어져 있기에 통계학이 필요합니다</h2></div>
+      <div class="body split">
+        <div class="fig"><svg viewBox="0 0 440 260" role="img" aria-label="퍼짐이 있는 데이터를 확률로 다루고 기술통계와 추론통계로 나뉘는 흐름">
+          <defs><marker id="a0" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10z" fill="#5B6E97"/></marker></defs>
+          <rect x="10" y="98" width="104" height="64" rx="10" fill="#1B2A4A"/>
+          <text x="62" y="125" text-anchor="middle" font-size="13.5" font-weight="800" fill="#fff">퍼짐이 있는</text><text x="62" y="145" text-anchor="middle" font-size="13.5" font-weight="800" fill="#fff">데이터</text>
+          <line x1="116" y1="130" x2="140" y2="130" stroke="#5B6E97" stroke-width="2" marker-end="url(#a0)"/>
+          <rect x="144" y="98" width="92" height="64" rx="10" fill="#FCF3D9" stroke="#E0A100" stroke-width="2"/>
+          <text x="190" y="125" text-anchor="middle" font-size="13.5" font-weight="800" fill="#6E4F00">확률로</text><text x="190" y="145" text-anchor="middle" font-size="13.5" font-weight="800" fill="#6E4F00">다룸</text>
+          <path d="M238 130 C252 130 252 62 266 62" fill="none" stroke="#5B6E97" stroke-width="2" marker-end="url(#a0)"/>
+          <path d="M238 130 C252 130 252 178 266 178" fill="none" stroke="#5B6E97" stroke-width="2" marker-end="url(#a0)"/>
+          <rect x="270" y="34" width="160" height="56" rx="10" fill="#fff" stroke="#1B2A4A" stroke-width="1.5"/>
+          <text x="284" y="57" font-size="14" font-weight="800" fill="#1B2A4A">기술통계</text><text x="284" y="77" font-size="12" fill="#6B7280">모은 데이터를 정리·요약</text>
+          <rect x="270" y="112" width="160" height="136" rx="10" fill="#fff" stroke="#1B2A4A" stroke-width="1.5"/>
+          <text x="284" y="135" font-size="14" font-weight="800" fill="#1B2A4A">추론통계</text><text x="284" y="155" font-size="12" fill="#6B7280">데이터로 발생원을 추정</text>
+          <rect x="284" y="168" width="132" height="30" rx="8" fill="#E4E9F2"/><text x="350" y="188" text-anchor="middle" font-size="12.5" font-weight="700" fill="#1B2A4A">통계적 추론</text>
+          <rect x="284" y="206" width="132" height="30" rx="8" fill="#E4E9F2"/><text x="350" y="226" text-anchor="middle" font-size="12.5" font-weight="700" fill="#1B2A4A">가설검정</text>
+        </svg></div>
+        <div class="side">
+          <div class="prevlink"><small>지난 모듈에서는</small>데이터 분석의 목적이 요약·설명·예측 세 가지라는 것을 배웠습니다.<small style="margin-top:8px">이번 모듈에서는</small>데이터가 흩어져 있을 때 통계학이 어떻게 설명과 예측을 해내는지 살펴봅니다.</div>
+          <dl class="meta"><dt>학습 시간</dt><dd>약 35분</dd><dt>본문</dt><dd>소단원 4개</dd><dt>실습</dt><dd>조작형 · 분류형 · 추정형</dd></dl>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" data-step="0">
+      <div class="sh"><div class="sec">학습개요 · 이 모듈의 예시</div><h2>혈압 데이터와 주사위로 끝까지 배웁니다</h2></div>
+      <div class="body split">
+        <div class="fig"><svg viewBox="0 0 440 250" role="img" aria-label="신약과 위약의 혈압 데이터, 주사위 확률 모형">
+          <rect x="10" y="10" width="420" height="132" rx="10" fill="#fff"/>
+          <rect x="22" y="24" width="72" height="28" rx="6" fill="#1B2A4A"/><text x="58" y="43" text-anchor="middle" font-size="12.5" font-weight="800" fill="#fff">혈압</text>
+          <g font-size="12.5" fill="#22262E"><text x="110" y="43" font-weight="800" fill="#2C4170">신약</text><text x="150" y="43">125   145   105   140   110</text>
+          <text x="110" y="70" font-weight="800" fill="#6B7280">위약</text><text x="150" y="70">130   170   135   165   150</text></g>
+          <line x1="22" y1="86" x2="418" y2="86" stroke="#DDE1E7"/>
+          <text x="22" y="108" font-size="12" fill="#6B7280">퍼짐이 없다면</text><text x="110" y="108" font-size="12.5" font-weight="700" fill="#22262E">신약 모두 125, 위약 모두 150</text>
+          <text x="22" y="130" font-size="12" fill="#6B7280">평균</text><text x="110" y="130" font-size="12.5" font-weight="700" fill="#22262E">두 경우 모두 125와 150</text>
+          <rect x="10" y="152" width="420" height="88" rx="10" fill="#fff"/>
+          <rect x="22" y="166" width="72" height="28" rx="6" fill="#1B2A4A"/><text x="58" y="185" text-anchor="middle" font-size="12.5" font-weight="800" fill="#fff">주사위</text>
+          <g fill="#fff" stroke="#5B6E97" stroke-width="1.5"><rect x="110" y="164" width="30" height="30" rx="6"/><rect x="146" y="164" width="30" height="30" rx="6"/><rect x="182" y="164" width="30" height="30" rx="6"/><rect x="218" y="164" width="30" height="30" rx="6"/><rect x="254" y="164" width="30" height="30" rx="6"/><rect x="290" y="164" width="30" height="30" rx="6"/></g>
+          <g font-size="13" font-weight="800" fill="#1B2A4A" text-anchor="middle"><text x="125" y="184">1</text><text x="161" y="184">2</text><text x="197" y="184">3</text><text x="233" y="184">4</text><text x="269" y="184">5</text><text x="305" y="184">6</text></g>
+          <text x="336" y="184" font-size="12.5" font-weight="700" fill="#22262E">각 1/6</text>
+          <text x="110" y="222" font-size="12.5" font-weight="700" fill="#22262E">100번 던졌더니 1의 눈이 50번 나왔다면?</text>
+        </svg></div>
+        <div class="side">
+          <ul class="key"><li>두 예시를 <b>끝까지</b> 씁니다.</li></ul>
+          <p class="exp">혈압 데이터는 평균이 같은 두 세계, 곧 퍼짐이 없는 세계와 퍼짐이 있는 세계를 비교할 때 씁니다. 주사위는 확률 모형과 추론통계를 설명할 때 씁니다. 두 예시 모두 숫자가 정해져 있어 계산으로 직접 확인할 수 있습니다.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ② 학습목표 ─────────────────────────────── -->
+    <section class="slide" data-step="1">
+      <div class="sh"><div class="sec">학습목표</div><h2>이 모듈을 마치면 이렇게 할 수 있습니다</h2></div>
+      <div class="body full" style="align-content:center">
+        <div class="gmap">
+          <div></div><div class="hd">목표</div><div class="hd">확인하는 문항</div><div class="hd">연결 실습</div>
+          <div class="gn">1</div><div class="gt"><span>퍼짐이 있을 때와 없을 때 설명·예측이 어떻게 다른지 <b>구분한다</b>.</span></div>
+          <div class="ga"><button class="jump" data-jump="q1">문항 1·2</button></div><div class="gp"><button class="jump" data-jump="p1">실습 1 퍼짐 조절</button></div>
+          <div class="gn">2</div><div class="gt"><span>분석이 기술통계·통계적 추론·가설검정 중 무엇인지 <b>분류한다</b>.</span></div>
+          <div class="ga"><button class="jump" data-jump="q3">문항 3·4</button></div><div class="gp"><button class="jump" data-jump="p2">실습 2 분류</button></div>
+          <div class="gn">3</div><div class="gt"><span>확률 모형으로 기대 횟수를 <b>계산하고</b>, 가설이 데이터와 맞는지 판단한다.</span></div>
+          <div class="ga"><button class="jump" data-jump="q5">문항 5·6</button></div><div class="gp"><button class="jump" data-jump="p3">실습 3 추정</button></div>
+        </div>
+      </div>
+      <p class="foot">버튼을 누르면 해당 문항이나 실습 화면으로 바로 이동합니다.</p>
+    </section>
+
+    <!-- ③ 일상의 예시 ─────────────────────────────── -->
+    <section class="slide" data-step="2">
+      <div class="sh"><div class="sec">일상의 예시 1/5</div><h2>같은 커피를 마셔도 잠이 깨는 정도는 사람마다 다릅니다</h2></div>
+      <div class="body split">
+        <div class="fig"><svg viewBox="0 0 440 250" role="img" aria-label="같은 커피를 마신 세 사람의 각성 정도가 다름">
+          <g><path d="M48 60 h52 l-6 44 h-40z" fill="#fff" stroke="#5B6E97" stroke-width="2"/><path d="M100 70 a10 10 0 0 1 0 20" fill="none" stroke="#5B6E97" stroke-width="2"/><rect x="52" y="64" width="44" height="10" fill="#6B4B2A"/></g>
+          <g><path d="M188 60 h52 l-6 44 h-40z" fill="#fff" stroke="#5B6E97" stroke-width="2"/><path d="M240 70 a10 10 0 0 1 0 20" fill="none" stroke="#5B6E97" stroke-width="2"/><rect x="192" y="64" width="44" height="10" fill="#6B4B2A"/></g>
+          <g><path d="M328 60 h52 l-6 44 h-40z" fill="#fff" stroke="#5B6E97" stroke-width="2"/><path d="M380 70 a10 10 0 0 1 0 20" fill="none" stroke="#5B6E97" stroke-width="2"/><rect x="332" y="64" width="44" height="10" fill="#6B4B2A"/></g>
+          <text x="220" y="36" text-anchor="middle" font-size="13" font-weight="800" fill="#1B2A4A">같은 양의 커피</text>
+          <g font-size="12" fill="#6B7280" text-anchor="middle"><text x="74" y="134">A</text><text x="214" y="134">B</text><text x="354" y="134">C</text></g>
+          <rect x="54" y="146" width="40" height="80" rx="4" fill="#E4E9F2"/><rect x="54" y="160" width="40" height="66" rx="4" fill="#2C4170"/>
+          <rect x="194" y="146" width="40" height="80" rx="4" fill="#E4E9F2"/><rect x="194" y="196" width="40" height="30" rx="4" fill="#2C4170"/>
+          <rect x="334" y="146" width="40" height="80" rx="4" fill="#E4E9F2"/><rect x="334" y="178" width="40" height="48" rx="4" fill="#2C4170"/>
+          <text x="420" y="242" text-anchor="end" font-size="11.5" fill="#6B7280">막대 = 잠이 깬 정도</text>
+        </svg></div>
+        <div class="side">
+          <ul class="key"><li>같은 조건에서도 결과는 제각각입니다.</li></ul>
+          <p class="exp">같은 양의 커피를 마셔도 어떤 사람은 금세 잠이 깨고, 어떤 사람은 별 차이를 느끼지 못합니다. 사람마다 몸이 다르기 때문입니다. 이렇게 값이 제각각 흩어지는 성질이 퍼짐입니다.</p>
+          <p class="next"><span>본문에서</span>4-1 데이터의 퍼짐으로 이어집니다.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" data-step="2">
+      <div class="sh"><div class="sec">일상의 예시 2/5</div><h2>일기예보는 ‘비 올 확률 70%’라고 말합니다</h2></div>
+      <div class="body split">
+        <div class="fig"><svg viewBox="0 0 440 250" role="img" aria-label="비 올 확률 70퍼센트 예보">
+          <path d="M110 140 a40 40 0 0 1 36 -60 a54 54 0 0 1 100 6 a36 36 0 0 1 8 70 h-136 a30 30 0 0 1 -8 -16z" fill="#9AA0AA"/>
+          <g stroke="#5B6E97" stroke-width="4" stroke-linecap="round"><line x1="146" y1="178" x2="140" y2="196"/><line x1="182" y1="178" x2="176" y2="196"/><line x1="218" y1="178" x2="212" y2="196"/></g>
+          <rect x="282" y="74" width="132" height="96" rx="14" fill="#1B2A4A"/>
+          <text x="348" y="104" text-anchor="middle" font-size="13" fill="#C9D3E6">비 올 확률</text>
+          <text x="348" y="148" text-anchor="middle" font-size="36" font-weight="800" fill="#fff">70%</text>
+        </svg></div>
+        <div class="side">
+          <ul class="key"><li>확실하지 않은 일은 확률로 말합니다.</li></ul>
+          <p class="exp">내일 날씨는 여러 요인이 얽혀 있어 확실하게 맞히기 어렵습니다. 그래서 예보는 ‘온다, 안 온다’ 대신 확률로 말합니다. 통계학도 흩어진 데이터의 불확실함을 확률로 다룹니다.</p>
+          <p class="next"><span>본문에서</span>4-2 확률로 다루기로 이어집니다.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" data-step="2">
+      <div class="sh"><div class="sec">일상의 예시 3/5</div><h2>국 한 숟가락으로 냄비 전체의 맛을 짐작합니다</h2></div>
+      <div class="body split">
+        <div class="fig"><svg viewBox="0 0 440 250" role="img" aria-label="한 숟가락으로 냄비 전체의 맛을 짐작">
+          <defs><marker id="a1" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10z" fill="#5B6E97"/></marker></defs>
+          <path d="M40 110 h190 v70 a30 30 0 0 1 -30 30 h-130 a30 30 0 0 1 -30 -30z" fill="#2C4170"/>
+          <rect x="30" y="100" width="210" height="14" rx="7" fill="#1B2A4A"/><ellipse cx="135" cy="112" rx="92" ry="9" fill="#E0A100" fill-opacity=".55"/>
+          <path d="M290 130 q30 30 70 0" fill="#fff" stroke="#5B6E97" stroke-width="2.5"/><line x1="360" y1="128" x2="414" y2="96" stroke="#5B6E97" stroke-width="5" stroke-linecap="round"/>
+          <ellipse cx="325" cy="134" rx="26" ry="7" fill="#E0A100" fill-opacity=".7"/>
+          <path d="M296 160 C250 200 190 220 150 214" fill="none" stroke="#5B6E97" stroke-width="2" stroke-dasharray="5 4" marker-end="url(#a1)"/>
+          <text x="272" y="228" text-anchor="middle" font-size="12.5" font-weight="700" fill="#5B6E97">전체 맛 짐작</text>
+          <text x="135" y="86" text-anchor="middle" font-size="12.5" font-weight="700" fill="#1B2A4A">냄비 전체</text><text x="325" y="112" text-anchor="middle" font-size="12.5" font-weight="700" fill="#1B2A4A">한 숟가락</text>
+        </svg></div>
+        <div class="side">
+          <ul class="key"><li>일부를 보고 전체를 짐작합니다.</li></ul>
+          <p class="exp">냄비의 국을 다 마셔 보지 않아도 한 숟가락만 맛보면 전체 간을 짐작할 수 있습니다. 숟가락에 뜬 국을 살펴보는 일과, 그것으로 냄비 전체를 짐작하는 일은 서로 다른 일입니다.</p>
+          <p class="next"><span>본문에서</span>4-3 기술통계와 추론통계로 이어집니다.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" data-step="2">
+      <div class="sh"><div class="sec">일상의 예시 4/5</div><h2>동전이 10번 연속 앞면이면 동전을 의심합니다</h2></div>
+      <div class="body split">
+        <div class="fig"><svg viewBox="0 0 440 250" role="img" aria-label="동전 10개가 모두 앞면">
+          <g font-size="13" font-weight="800" fill="#6E4F00" text-anchor="middle">
+            <circle cx="60" cy="90" r="28" fill="#FCF3D9" stroke="#E0A100" stroke-width="3"/><text x="60" y="95">앞</text>
+            <circle cx="140" cy="90" r="28" fill="#FCF3D9" stroke="#E0A100" stroke-width="3"/><text x="140" y="95">앞</text>
+            <circle cx="220" cy="90" r="28" fill="#FCF3D9" stroke="#E0A100" stroke-width="3"/><text x="220" y="95">앞</text>
+            <circle cx="300" cy="90" r="28" fill="#FCF3D9" stroke="#E0A100" stroke-width="3"/><text x="300" y="95">앞</text>
+            <circle cx="380" cy="90" r="28" fill="#FCF3D9" stroke="#E0A100" stroke-width="3"/><text x="380" y="95">앞</text>
+            <circle cx="60" cy="160" r="28" fill="#FCF3D9" stroke="#E0A100" stroke-width="3"/><text x="60" y="165">앞</text>
+            <circle cx="140" cy="160" r="28" fill="#FCF3D9" stroke="#E0A100" stroke-width="3"/><text x="140" y="165">앞</text>
+            <circle cx="220" cy="160" r="28" fill="#FCF3D9" stroke="#E0A100" stroke-width="3"/><text x="220" y="165">앞</text>
+            <circle cx="300" cy="160" r="28" fill="#FCF3D9" stroke="#E0A100" stroke-width="3"/><text x="300" y="165">앞</text>
+            <circle cx="380" cy="160" r="28" fill="#FCF3D9" stroke="#E0A100" stroke-width="3"/><text x="380" y="165">앞</text>
+          </g>
+          <text x="220" y="224" text-anchor="middle" font-size="13" font-weight="800" fill="#B42318">정말 반반으로 나오는 동전일까?</text>
+        </svg></div>
+        <div class="side">
+          <ul class="key"><li>예상과 너무 다르면 가정을 의심합니다.</li></ul>
+          <p class="exp">보통 동전은 앞면과 뒷면이 반반씩 나온다고 생각합니다. 그런데 10번 연속 앞면이 나오면 ‘이 동전은 공정하다’는 생각 자체를 의심하게 됩니다. 데이터로 가정을 판단하는 이 일이 가설검정입니다.</p>
+          <p class="next"><span>본문에서</span>4-4 통계적 추론과 가설검정으로 이어집니다.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" data-step="2">
+      <div class="sh"><div class="sec">일상의 예시 5/5</div><h2>흩어진 숫자에서 믿을 만한 결론을 내리려면?</h2></div>
+      <div class="body split even">
+        <div class="fig"><svg viewBox="0 0 420 250" role="img" aria-label="네 장면이 통계학으로 이어지는 그림">
+          <defs><marker id="a2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10z" fill="#5B6E97"/></marker></defs>
+          <g font-size="13" font-weight="700" fill="#1B2A4A" text-anchor="middle">
+            <rect x="14" y="18" width="150" height="44" rx="10" fill="#fff" stroke="#5B6E97" stroke-width="1.5"/><text x="89" y="45">결과가 제각각</text>
+            <rect x="14" y="74" width="150" height="44" rx="10" fill="#fff" stroke="#5B6E97" stroke-width="1.5"/><text x="89" y="101">확률로 말하기</text>
+            <rect x="14" y="130" width="150" height="44" rx="10" fill="#fff" stroke="#5B6E97" stroke-width="1.5"/><text x="89" y="157">일부로 전체 짐작</text>
+            <rect x="14" y="186" width="150" height="44" rx="10" fill="#fff" stroke="#5B6E97" stroke-width="1.5"/><text x="89" y="213">가정 의심하기</text>
+          </g>
+          <g stroke="#5B6E97" stroke-width="2" fill="none"><path d="M166 40 C220 40 220 112 254 120" marker-end="url(#a2)"/><path d="M166 96 C210 96 220 118 254 122" marker-end="url(#a2)"/><path d="M166 152 C210 152 220 130 254 128" marker-end="url(#a2)"/><path d="M166 208 C220 208 220 138 254 130" marker-end="url(#a2)"/></g>
+          <rect x="258" y="84" width="150" height="82" rx="12" fill="#1B2A4A"/>
+          <text x="333" y="120" text-anchor="middle" font-size="16" font-weight="800" fill="#fff">통계학</text>
+          <text x="333" y="144" text-anchor="middle" font-size="11.5" fill="#C9D3E6">퍼짐을 확률로 다룸</text>
+        </svg></div>
+        <div class="side">
+          <p class="exp">네 장면은 모두 흩어짐 속에서 판단해야 하는 상황입니다. 통계학은 흩어짐을 확률로 나타내고, 일부 데이터로 전체를 짐작하거나 가정이 맞는지 판단하는 방법을 제공합니다.</p>
+          <p class="next"><span>다음 질문</span>데이터가 흩어져 있으면 무엇이 어려워질까?</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ④ 본문 ─────────────────────────────── -->
+    <section class="slide" data-step="3" id="s-4-1a">
+      <div class="sh"><div class="sec">4-1 데이터의 퍼짐</div><h2><span class="q">Q</span>같은 약을 먹어도 효과는 왜 다를까요?</h2></div>
+      <div class="body split even">
+        <div class="fig"><svg viewBox="0 0 420 270" role="img" aria-label="사람마다 다른 키와 약 효과">
+          <text x="20" y="30" font-size="13" font-weight="800" fill="#1B2A4A">키가 제각각</text>
+          <g fill="#5B6E97">
+            <circle cx="50" cy="66" r="9"/><rect x="40" y="78" width="20" height="62" rx="8"/>
+            <circle cx="100" cy="56" r="9"/><rect x="90" y="68" width="20" height="72" rx="8"/>
+            <circle cx="150" cy="74" r="9"/><rect x="140" y="86" width="20" height="54" rx="8"/>
+            <circle cx="200" cy="60" r="9"/><rect x="190" y="72" width="20" height="68" rx="8"/>
+            <circle cx="250" cy="80" r="9"/><rect x="240" y="92" width="20" height="48" rx="8"/>
+            <circle cx="300" cy="62" r="9"/><rect x="290" y="74" width="20" height="66" rx="8"/>
+            <circle cx="350" cy="70" r="9"/><rect x="340" y="82" width="20" height="58" rx="8"/>
+          </g>
+          <line x1="24" y1="141" x2="390" y2="141" stroke="#9AA0AA"/>
+          <text x="20" y="182" font-size="13" font-weight="800" fill="#1B2A4A">같은 약, 다른 효과</text>
+          <line x1="24" y1="236" x2="396" y2="236" stroke="#9AA0AA"/>
+          <g fill="#2C4170"><circle cx="70" cy="226" r="7"/><circle cx="118" cy="226" r="7"/><circle cx="200" cy="226" r="7"/><circle cx="236" cy="226" r="7"/><circle cx="300" cy="226" r="7"/><circle cx="352" cy="226" r="7"/><circle cx="160" cy="210" r="7"/></g>
+          <text x="24" y="256" font-size="11" fill="#6B7280">효과 작음</text><text x="396" y="256" text-anchor="end" font-size="11" fill="#6B7280">효과 큼</text>
+        </svg></div>
+        <div class="side">
+          <ul class="key"><li><b>퍼짐</b>(산포)은 값 하나하나의 차이입니다.</li><li>세상의 데이터는 퍼짐으로 가득합니다.</li></ul>
+          <p class="exp">사람은 유전적으로 다르고 자란 환경도 달라서 키와 몸무게가 제각각입니다. 같은 약도 어떤 사람에게는 효과가 있고 어떤 사람에게는 없습니다. 이처럼 퍼짐이 있는 데이터에 대해 설명하거나 예측하는 것, 그것이 통계학의 중요한 역할입니다. 한 사람 한 사람이 서로 다르다는 사실이 바로 데이터의 퍼짐입니다.</p>
+          <p class="next"><span>다음 질문</span>퍼짐이 없다면 무엇이 쉬워질까?</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" data-step="3" id="s-4-1b">
+      <div class="sh"><div class="sec">4-1 데이터의 퍼짐</div><h2><span class="q">Q</span>퍼짐이 없다면 신약의 효과는 어떻게 보일까요?</h2></div>
+      <div class="body split even">
+        <div class="figcol">
+          <div class="fig"><svg id="m2-worlds" viewBox="0 0 420 190" role="img" aria-label="퍼짐이 없는 세계와 있는 세계의 혈압 점그래프"></svg></div>
+          <div class="math">
+            <div class="mt">핵심 수학 개념 · 평균은 같아도 퍼짐은 다르다</div>
+            <div class="r"><span>신약</span><span>(125 + 145 + 105 + 140 + 110) ÷ 5 = 625 ÷ 5 = 125</span></div>
+            <div class="r"><span>위약</span><span>(130 + 170 + 135 + 165 + 150) ÷ 5 = 750 ÷ 5 = 150</span></div>
+            <div class="w">오해: 평균이 같으면 데이터도 같다 ✕</div>
+          </div>
+        </div>
+        <div class="side">
+          <ul class="key"><li>퍼짐이 없으면 효과 25가 바로 보입니다.</li><li>퍼짐이 있으면 효과인지 흐려집니다.</li></ul>
+          <p class="exp">위는 모든 환자가 신약을 먹으면 125, 위약을 먹으면 150인 가상의 세계입니다. 아래는 현실처럼 값이 흩어진 경우로, 평균은 똑같이 125와 150이지만 두 집단의 값이 겹칩니다. 새 환자의 혈압도 위에서는 125로 맞히지만, 아래에서는 110일 수도 140일 수도 있습니다.</p>
+          <p class="next"><span>다음 질문</span>퍼짐은 어떤 판단 실수를 부를까?</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" data-step="3" id="s-4-1c">
+      <div class="sh"><div class="sec">4-1 데이터의 퍼짐</div><h2><span class="q">Q</span>퍼짐은 어떤 판단 실수를 부를까요?</h2></div>
+      <div class="body split even">
+        <div class="fig"><svg viewBox="0 0 420 270" role="img" aria-label="퍼짐이 부르는 두 가지 판단 실수">
+          <rect x="120" y="14" width="180" height="44" rx="10" fill="#1B2A4A"/><text x="210" y="42" text-anchor="middle" font-size="14" font-weight="800" fill="#fff">퍼짐이 본모습을 가림</text>
+          <path d="M170 60 C170 80 106 80 106 98" fill="none" stroke="#5B6E97" stroke-width="2"/><path d="M250 60 C250 80 314 80 314 98" fill="none" stroke="#5B6E97" stroke-width="2"/>
+          <rect x="16" y="100" width="180" height="150" rx="12" fill="#fff" stroke="#B42318" stroke-width="1.5"/>
+          <text x="106" y="128" text-anchor="middle" font-size="13" font-weight="800" fill="#B42318">실수 ①</text>
+          <text x="106" y="160" text-anchor="middle" font-size="13" font-weight="700" fill="#22262E">효과가 없는데</text><text x="106" y="182" text-anchor="middle" font-size="13" font-weight="700" fill="#22262E">있다고 판단</text>
+          <rect x="78" y="208" width="44" height="20" rx="10" fill="#2C4170"/><path d="M130 206 l16 16 M146 206 l-16 16" stroke="#B42318" stroke-width="3" stroke-linecap="round"/>
+          <rect x="224" y="100" width="180" height="150" rx="12" fill="#fff" stroke="#B42318" stroke-width="1.5"/>
+          <text x="314" y="128" text-anchor="middle" font-size="13" font-weight="800" fill="#B42318">실수 ②</text>
+          <text x="314" y="160" text-anchor="middle" font-size="13" font-weight="700" fill="#22262E">효과가 있는데</text><text x="314" y="182" text-anchor="middle" font-size="13" font-weight="700" fill="#22262E">없다고 판단</text>
+          <rect x="286" y="208" width="44" height="20" rx="10" fill="#2C4170"/><path d="M338 216 l6 7 l12 -14" fill="none" stroke="#23704F" stroke-width="3" stroke-linecap="round"/>
+        </svg></div>
+        <div class="side">
+          <ul class="key"><li>퍼짐은 대상의 본모습을 가립니다.</li><li>통계학은 퍼짐을 <b>불확실성</b>으로 봅니다.</li></ul>
+          <p class="exp">퍼짐 때문에 실제로는 약의 효과가 없는데도 있다고 판단하거나, 거꾸로 효과가 있는데도 없다고 판단하는 실수가 생깁니다. 통계학은 이 퍼짐을 불확실성이라 평가하고, 그 위에서 대상의 설명과 예측이라는 목적을 이룹니다. 두 실수 모두 퍼짐이 대상의 성질과 관계의 본모습을 감추기 때문에 생깁니다.</p>
+          <p class="next"><span>다음 질문</span>불확실성은 무엇으로 나타낼까?</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" data-step="3" id="s-4-2a">
+      <div class="sh"><div class="sec">4-2 확률로 다루기</div><h2><span class="q">Q</span>불확실성은 무엇으로 다룰까요?</h2></div>
+      <div class="body split even">
+        <div class="fig"><svg viewBox="0 0 420 270" role="img" aria-label="퍼짐이 큰 현상은 확률로, 퍼짐이 작은 현상은 수리 모형으로">
+          <defs><marker id="a3" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10z" fill="#5B6E97"/></marker></defs>
+          <rect x="8" y="8" width="196" height="254" rx="12" fill="#fff"/>
+          <text x="106" y="34" text-anchor="middle" font-size="13" font-weight="800" fill="#1B2A4A">퍼짐이 큰 현상</text>
+          <text x="106" y="54" text-anchor="middle" font-size="11.5" fill="#6B7280">약의 효과, 키, 몸무게</text>
+          <g fill="#5B6E97"><circle cx="50" cy="96" r="5"/><circle cx="74" cy="80" r="5"/><circle cx="96" cy="104" r="5"/><circle cx="118" cy="84" r="5"/><circle cx="140" cy="100" r="5"/><circle cx="160" cy="78" r="5"/><circle cx="84" cy="116" r="5"/><circle cx="130" cy="118" r="5"/></g>
+          <line x1="106" y1="132" x2="106" y2="156" stroke="#5B6E97" stroke-width="2" marker-end="url(#a3)"/>
+          <rect x="40" y="160" width="132" height="34" rx="8" fill="#FCF3D9" stroke="#E0A100" stroke-width="2"/><text x="106" y="182" text-anchor="middle" font-size="13" font-weight="800" fill="#6E4F00">확률론</text>
+          <line x1="106" y1="196" x2="106" y2="216" stroke="#5B6E97" stroke-width="2" marker-end="url(#a3)"/>
+          <rect x="40" y="220" width="132" height="34" rx="8" fill="#1B2A4A"/><text x="106" y="242" text-anchor="middle" font-size="13" font-weight="800" fill="#fff">통계학</text>
+          <rect x="216" y="8" width="196" height="254" rx="12" fill="#fff"/>
+          <text x="314" y="34" text-anchor="middle" font-size="13" font-weight="800" fill="#1B2A4A">퍼짐이 아주 작은 현상</text>
+          <text x="314" y="54" text-anchor="middle" font-size="11.5" fill="#6B7280">던진 공의 궤도</text>
+          <path d="M240 124 Q314 40 388 124" fill="none" stroke="#2C4170" stroke-width="2.5" stroke-dasharray="5 4"/><circle cx="240" cy="124" r="7" fill="#E0A100"/>
+          <line x1="314" y1="132" x2="314" y2="156" stroke="#5B6E97" stroke-width="2" marker-end="url(#a3)"/>
+          <rect x="248" y="160" width="132" height="34" rx="8" fill="#E4E9F2"/><text x="314" y="182" text-anchor="middle" font-size="13" font-weight="800" fill="#1B2A4A">운동 방정식</text>
+          <line x1="314" y1="196" x2="314" y2="216" stroke="#5B6E97" stroke-width="2" marker-end="url(#a3)"/>
+          <rect x="248" y="220" width="132" height="34" rx="8" fill="#1B2A4A"/><text x="314" y="242" text-anchor="middle" font-size="13" font-weight="800" fill="#fff">수리 모형</text>
+        </svg></div>
+        <div class="side">
+          <ul class="key"><li>통계학의 근거는 <b>확률론</b>입니다.</li><li>퍼짐이 아주 작으면 <b>수리 모형</b>을 씁니다.</li></ul>
+          <p class="exp">통계학은 퍼짐과 불확실성을 확률로 나타내는 확률론을 바탕으로 이에 대처하는 방법을 제공합니다. 그래서 통계학을 배울 때는 확률 개념이 꼭 필요합니다. 반면 공의 궤도는 공기 저항을 무시하면 질량과 속도로 정해져 퍼짐이 거의 없으므로, 운동 방정식으로 정밀하게 예측합니다.</p>
+          <p class="next"><span>다음 질문</span>통계학에는 어떤 갈래가 있을까?</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" data-step="3" id="s-4-3a">
+      <div class="sh"><div class="sec">4-3 기술통계와 추론통계</div><h2><span class="q">Q</span>데이터를 정리하는 일과 추정하는 일은 어떻게 다를까요?</h2></div>
+      <div class="body split even">
+        <div class="fig"><svg viewBox="0 0 420 270" role="img" aria-label="기술통계와 추론통계 비교">
+          <defs><marker id="a4" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10z" fill="#5B6E97"/></marker><marker id="a5" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10z" fill="#E0A100"/></marker></defs>
+          <rect x="8" y="8" width="196" height="254" rx="12" fill="#fff"/>
+          <text x="24" y="34" font-size="13.5" font-weight="800" fill="#1B2A4A">기술통계</text>
+          <rect x="66" y="48" width="80" height="58" rx="6" fill="#fff" stroke="#5B6E97" stroke-width="2"/><text x="106" y="64" text-anchor="middle" font-size="11" fill="#6B7280">데이터</text>
+          <g stroke="#A9B8D4" stroke-width="3"><line x1="78" y1="76" x2="134" y2="76"/><line x1="78" y1="88" x2="128" y2="88"/><line x1="78" y1="100" x2="132" y2="100"/></g>
+          <line x1="106" y1="110" x2="106" y2="132" stroke="#5B6E97" stroke-width="2" marker-end="url(#a4)"/>
+          <g fill="#A9B8D4"><rect x="70" y="204" width="12" height="26"/><rect x="84" y="186" width="12" height="44"/><rect x="98" y="160" width="12" height="70"/><rect x="112" y="150" width="12" height="80"/><rect x="126" y="176" width="12" height="54"/><rect x="140" y="200" width="12" height="30"/></g>
+          <line x1="62" y1="230" x2="160" y2="230" stroke="#9AA0AA"/>
+          <text x="106" y="252" text-anchor="middle" font-size="12" font-weight="700" fill="#22262E">평균·분산 계산</text>
+          <rect x="216" y="8" width="196" height="254" rx="12" fill="#fff"/>
+          <text x="232" y="34" font-size="13.5" font-weight="800" fill="#1B2A4A">추론통계</text>
+          <circle cx="314" cy="104" r="56" fill="#E4E9F2" stroke="#2C4170" stroke-width="3"/>
+          <text x="314" y="100" text-anchor="middle" font-size="12.5" font-weight="800" fill="#1B2A4A">데이터의</text><text x="314" y="118" text-anchor="middle" font-size="12.5" font-weight="800" fill="#1B2A4A">발생원</text>
+          <text x="400" y="34" text-anchor="end" font-size="11" fill="#6B7280">알고 싶은 대상</text>
+          <rect x="274" y="190" width="80" height="52" rx="6" fill="#fff" stroke="#5B6E97" stroke-width="2"/><text x="314" y="221" text-anchor="middle" font-size="12" font-weight="700" fill="#1B2A4A">데이터</text>
+          <path d="M292 162 L292 186" stroke="#5B6E97" stroke-width="2" marker-end="url(#a4)"/>
+          <path d="M336 188 L336 164" stroke="#E0A100" stroke-width="2.5" marker-end="url(#a5)"/>
+          <text x="362" y="180" font-size="11.5" font-weight="800" fill="#6E4F00">추정</text>
+        </svg></div>
+        <div class="side">
+          <ul class="key"><li><b>기술통계</b>: 모은 데이터를 정리·요약</li><li><b>추론통계</b>: 데이터로 발생원을 추정</li></ul>
+          <p class="exp">기술통계는 확보한 데이터에만 집중해 평균이나 분산을 계산하고, 데이터 자체의 성질을 이해합니다. 추론통계는 그 데이터를 만든 발생원, 곧 알고 싶은 대상을 추정합니다. 대상을 이해하거나 미지의 데이터를 예측하려면 발생원을 알아야 하므로, 추론통계는 통계학에서 가장 중요한 자리를 차지합니다.</p>
+          <p class="next"><span>다음 질문</span>볼 수 없는 발생원을 어떻게 다룰까?</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" data-step="3" id="s-4-3b">
+      <div class="sh"><div class="sec">4-3 기술통계와 추론통계</div><h2><span class="q">Q</span>볼 수 없는 대상을 어떻게 수학으로 다룰까요?</h2></div>
+      <div class="body split even">
+        <div class="fig"><svg viewBox="0 0 420 270" role="img" aria-label="주사위와 확률 모형, 데이터의 생성과 추정">
+          <defs><marker id="a6" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10z" fill="#5B6E97"/></marker><marker id="a7" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10z" fill="#E0A100"/></marker></defs>
+          <text x="80" y="22" text-anchor="middle" font-size="12.5" font-weight="800" fill="#1B2A4A">알고 싶은 대상</text>
+          <circle cx="80" cy="84" r="56" fill="#fff" stroke="#2C4170" stroke-width="3"/>
+          <rect x="56" y="60" width="48" height="48" rx="9" fill="#fff" stroke="#1B2A4A" stroke-width="2.5"/>
+          <g fill="#1B2A4A"><circle cx="68" cy="72" r="4"/><circle cx="92" cy="96" r="4"/><circle cx="80" cy="84" r="4.5" fill="#B42318"/></g>
+          <line x1="140" y1="84" x2="246" y2="84" stroke="#5B6E97" stroke-width="8"/><path d="M244 72 l18 12 l-18 12z" fill="#5B6E97"/>
+          <text x="193" y="72" text-anchor="middle" font-size="12" font-weight="700" fill="#5B6E97">관찰</text>
+          <text x="330" y="22" text-anchor="middle" font-size="12.5" font-weight="800" fill="#1B2A4A">데이터</text>
+          <rect x="270" y="30" width="120" height="104" rx="8" fill="#fff" stroke="#5B6E97" stroke-width="2"/>
+          <g font-size="14" font-weight="700" fill="#22262E" text-anchor="middle"><text x="330" y="54">1, 5, 6</text><text x="330" y="74">2, 3, 1</text><text x="330" y="94">4, 3, 1</text><text x="330" y="114">5, 6, 2</text><text x="330" y="130" fill="#6B7280">⋯</text></g>
+          <path d="M304 182 L304 142" stroke="#5B6E97" stroke-width="2.5" marker-end="url(#a6)"/><text x="296" y="166" text-anchor="end" font-size="11.5" font-weight="700" fill="#5B6E97">생성</text>
+          <path d="M356 142 L356 182" stroke="#E0A100" stroke-width="2.5" marker-end="url(#a7)"/><text x="364" y="166" font-size="11.5" font-weight="800" fill="#6E4F00">추정</text>
+          <rect x="10" y="188" width="400" height="74" rx="12" fill="#FCF3D9" stroke="#E0A100" stroke-width="1.5"/>
+          <text x="26" y="230" font-size="13.5" font-weight="800" fill="#1B2A4A">확률 모형</text>
+          <g fill="#fff" stroke="#1B2A4A" stroke-width="1.5"><rect x="112" y="200" width="34" height="34" rx="6"/><rect x="160" y="200" width="34" height="34" rx="6"/><rect x="208" y="200" width="34" height="34" rx="6"/><rect x="256" y="200" width="34" height="34" rx="6"/><rect x="304" y="200" width="34" height="34" rx="6"/><rect x="352" y="200" width="34" height="34" rx="6"/></g>
+          <g font-size="13" font-weight="800" fill="#1B2A4A" text-anchor="middle"><text x="129" y="222">1</text><text x="177" y="222">2</text><text x="225" y="222">3</text><text x="273" y="222">4</text><text x="321" y="222">5</text><text x="369" y="222">6</text></g>
+          <g font-size="11.5" font-weight="700" fill="#6E4F00" text-anchor="middle"><text x="129" y="252">1/6</text><text x="177" y="252">1/6</text><text x="225" y="252">1/6</text><text x="273" y="252">1/6</text><text x="321" y="252">1/6</text><text x="369" y="252">1/6</text></g>
+        </svg></div>
+        <div class="side">
+          <ul class="key"><li><b>확률 모형</b>: 데이터를 만드는 확률 장치</li><li>주사위는 각 눈 1/6인 모형으로 나타냅니다.</li></ul>
+          <p class="exp">대상의 성질 자체는 직접 관찰할 수 없고 다루기도 어렵습니다. 그래서 데이터가 단순한 확률 장치에서 생겼다고 가정합니다. 주사위는 물리 법칙을 따르지만 손의 움직임이나 공기 흐름 같은 미세한 차이로 결과가 불확실해, 보통 각 눈이 1/6 확률로 나오는 확률 모형으로 나타냅니다.</p>
+          <p class="next"><span>다음 질문</span>확률 모형으로 무엇을 알아낼 수 있을까?</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" data-step="3" id="s-4-4a">
+      <div class="sh"><div class="sec">4-4 통계적 추론과 가설검정</div><h2><span class="q">Q</span>추론통계로 무엇을 할 수 있을까요?</h2></div>
+      <div class="body split even">
+        <div class="figcol">
+          <div class="fig"><svg viewBox="0 0 420 170" role="img" aria-label="통계적 추론과 가설검정 비교">
+            <rect x="6" y="6" width="200" height="158" rx="10" fill="#fff"/>
+            <text x="106" y="30" text-anchor="middle" font-size="13" font-weight="800" fill="#1B2A4A">통계적 추론</text>
+            <rect x="28" y="46" width="40" height="40" rx="10" fill="#fff" stroke="#1B2A4A" stroke-width="2.5" stroke-dasharray="3 2"/><text x="48" y="72" text-anchor="middle" font-size="12" font-weight="800" fill="#1B2A4A">?</text>
+            <text x="80" y="62" font-size="11.5" fill="#22262E">모서리가 닳은</text><text x="80" y="80" font-size="11.5" fill="#22262E">주사위</text>
+            <text x="106" y="118" text-anchor="middle" font-size="12" font-weight="700" fill="#22262E">던진 결과로</text>
+            <text x="106" y="140" text-anchor="middle" font-size="12" font-weight="800" fill="#6E4F00">각 눈의 확률을 추정</text>
+            <rect x="214" y="6" width="200" height="158" rx="10" fill="#fff"/>
+            <text x="314" y="30" text-anchor="middle" font-size="13" font-weight="800" fill="#1B2A4A">가설검정</text>
+            <text x="230" y="58" font-size="11.5" fill="#6B7280">가설</text><text x="270" y="58" font-size="12" font-weight="700" fill="#22262E">각 눈 1/6</text>
+            <text x="230" y="82" font-size="11.5" fill="#6B7280">데이터</text><text x="270" y="82" font-size="12" font-weight="700" fill="#22262E">100번 중 1이 50번</text>
+            <rect x="244" y="104" width="140" height="42" rx="8" fill="#FBE6E3"/>
+            <text x="314" y="130" text-anchor="middle" font-size="12.5" font-weight="800" fill="#B42318">가설이 잘못됨</text>
+          </svg></div>
+          <div class="math">
+            <div class="mt">핵심 수학 개념 · 기대 횟수</div>
+            <div class="f">기대 횟수 = 던진 횟수 × 확률</div>
+            <div class="r"><span>계산</span><span>100 × 1/6 = 16.7번 → 실제 50번은 그 약 3배</span></div>
+            <div class="r"><span>해석</span><span>가설이 옳다면 이렇게 치우친 데이터는 거의 나오지 않습니다.</span></div>
+          </div>
+        </div>
+        <div class="side">
+          <ul class="key"><li><b>통계적 추론</b>: 확률 모형의 성질을 추정</li><li><b>가설검정</b>: 가설이 데이터와 맞는지 판단</li></ul>
+          <p class="exp">닳은 주사위는 각 눈이 1/6로 나오지 않을 수 있어, 던진 결과로 각 눈의 확률을 추정합니다. ‘닳아도 1/6’이라는 가설을 세웠는데 100번 중 1이 50번 나왔다면 가설을 버립니다. 추론통계를 배울 때 가장 막히기 쉬운 곳이 이 두 방법이지만, 제대로 이해하면 이후는 수월합니다.</p>
+          <p class="next"><span>다음 질문</span>분석 방법은 왜 이렇게 다양할까?</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" data-step="3" id="s-4-4b">
+      <div class="sh"><div class="sec">4-4 통계적 추론과 가설검정</div><h2><span class="q">Q</span>통계분석 방법은 왜 이렇게 다양할까요?</h2></div>
+      <div class="body split even">
+        <div class="fig"><svg viewBox="0 0 420 270" role="img" aria-label="데이터 유형과 변수 개수에 따른 분류">
+          <rect x="6" y="6" width="408" height="118" rx="10" fill="#fff"/>
+          <text x="20" y="30" font-size="13" font-weight="800" fill="#1B2A4A">데이터 유형</text>
+          <text x="20" y="62" font-size="12.5" font-weight="700" fill="#22262E">범주형 변수</text>
+          <g font-size="12" font-weight="800" fill="#1B2A4A" text-anchor="middle"><rect x="120" y="46" width="36" height="24" rx="12" fill="#E4E9F2"/><text x="138" y="63">A</text><rect x="162" y="46" width="36" height="24" rx="12" fill="#E4E9F2"/><text x="180" y="63">B</text><rect x="204" y="46" width="36" height="24" rx="12" fill="#E4E9F2"/><text x="222" y="63">O</text><rect x="246" y="46" width="36" height="24" rx="12" fill="#E4E9F2"/><text x="264" y="63">AB</text></g>
+          <text x="294" y="63" font-size="11.5" fill="#6B7280">혈액형</text>
+          <text x="20" y="104" font-size="12.5" font-weight="700" fill="#22262E">양적 변수</text>
+          <line x1="120" y1="98" x2="282" y2="98" stroke="#2C4170" stroke-width="2"/><g fill="#2C4170"><circle cx="140" cy="98" r="4"/><circle cx="176" cy="98" r="4"/><circle cx="198" cy="98" r="4"/><circle cx="240" cy="98" r="4"/><circle cx="262" cy="98" r="4"/></g>
+          <text x="294" y="104" font-size="11.5" fill="#6B7280">키(수치)</text>
+          <rect x="6" y="134" width="408" height="130" rx="10" fill="#fff"/>
+          <text x="20" y="158" font-size="13" font-weight="800" fill="#1B2A4A">변수의 개수</text>
+          <g font-size="12" fill="#22262E">
+            <rect x="20" y="172" width="118" height="78" rx="8" fill="#F3F4F6"/><text x="79" y="196" text-anchor="middle" font-weight="800" fill="#1B2A4A">1변수</text><text x="79" y="222" text-anchor="middle">키</text>
+            <rect x="150" y="172" width="118" height="78" rx="8" fill="#F3F4F6"/><text x="209" y="196" text-anchor="middle" font-weight="800" fill="#1B2A4A">2변수</text><text x="209" y="218" text-anchor="middle">키와 몸무게</text><text x="209" y="238" text-anchor="middle">약과 혈압</text>
+            <rect x="280" y="172" width="122" height="78" rx="8" fill="#F3F4F6"/><text x="341" y="196" text-anchor="middle" font-weight="800" fill="#1B2A4A">3변수 이상</text><text x="341" y="218" text-anchor="middle">키 ← 유전,</text><text x="341" y="238" text-anchor="middle">식사량, 운동량</text>
+          </g>
+        </svg></div>
+        <div class="side">
+          <ul class="key"><li>유형·변수 개수·모형에 따라 방법이 다릅니다.</li><li>생각하는 방식은 모두 추론통계가 바탕입니다.</li></ul>
+          <p class="exp">데이터는 혈액형처럼 범주로 다루는 <b>범주형 변수</b>와 키처럼 수치로 다루는 <b>양적 변수</b>로 나뉩니다. <b>변수</b>는 특정 속성에 관한 데이터의 모음으로, 키만 있으면 1변수, 키와 몸무게가 있으면 2변수입니다. 2변수 이상이면 변수 사이의 관계에 주목하며, 분석 목적에 따라서도 방법이 달라집니다.</p>
+          <p class="next"><span>정리</span>배운 개념을 나란히 놓아 봅시다.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" data-step="3" id="s-4-sum">
+      <div class="sh"><div class="sec">4-5 정리</div><h2>통계학은 흩어진 데이터를 확률로 다뤄 설명하고 예측합니다</h2></div>
+      <div class="body full" style="align-content:center">
+        <table class="sumtbl">
+          <thead><tr><th>개념</th><th>무엇인가</th><th>이 모듈의 예시</th></tr></thead>
+          <tbody>
+            <tr><td>퍼짐</td><td>값 하나하나의 차이로, 대상의 본모습을 가려 불확실성을 만듭니다.</td><td>신약 125·145·105·140·110</td></tr>
+            <tr><td>확률론</td><td>퍼짐과 불확실성을 확률로 나타내는 수학으로, 통계학의 근거입니다.</td><td>주사위 각 눈 1/6</td></tr>
+            <tr><td>기술통계</td><td>모은 데이터를 정리하고 요약합니다.</td><td>두 집단의 평균 125와 150 계산</td></tr>
+            <tr><td>추론통계</td><td>데이터로 발생원을 추정합니다. 통계적 추론과 가설검정이 있습니다.</td><td>100번 중 1이 50번 → 1/6 가설을 버림</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="next"><span>형성평가로</span>이제 같은 예시로 문제를 풀어 봅니다.</p>
+    </section>
+
+    <!-- ⑤ 형성평가: 스크립트의 QUIZ 배열로 만듭니다 -->
+
+    <!-- ⑥ 실습 1 · 조작형 (모듈 전용) ─────────────── -->
+    <section class="slide" data-step="5" id="p1">
+      <div class="sh"><div class="sec">실습 1 · 조작형</div><h2>목표: 퍼짐이 커지면 효과를 가려내기가 어떻게 달라지는지 봅니다</h2></div>
+      <div class="body split">
+        <div class="pcol">
+          <div class="plabel">해보기 · 퍼짐 크기를 바꿔 보세요 (1.00배 = 학습한 혈압 데이터)</div>
+          <div class="fig" style="flex:1"><svg id="m2-p1-svg" viewBox="0 0 470 210" role="img" aria-label="퍼짐 크기에 따른 두 집단 혈압 점그래프"></svg></div>
+          <div class="ctrl" style="margin-top:8px">퍼짐 크기<input type="range" id="m2-s" min="0" max="1.5" step="0.05" value="1" aria-label="퍼짐 크기 배율"><strong id="m2-sv" style="min-width:56px;text-align:right">-</strong></div>
+        </div>
+        <div class="pcol" style="gap:10px;justify-content:center">
+          <div class="plabel" style="margin:0">결과 확인</div>
+          <div class="stats three"><div><small>신약 범위</small><strong id="m2-r1" style="font-size:17px">-</strong></div><div><small>위약 범위</small><strong id="m2-r2" style="font-size:17px">-</strong></div><div><small>평균 차이</small><strong>25</strong></div></div>
+          <p class="howto">도전: 두 집단의 값이 막 겹치기 시작하는 퍼짐 크기를 찾아보세요.</p>
+          <p class="pmsg" id="m2-msg"></p>
+          <div class="think"><span>생각해보기</span>평균 차이는 늘 25인데, 퍼짐이 커지면 판단이 어려워지는 까닭은 무엇일까요?</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ⑥ 실습 2 · 분류형 ─────────────────────── -->
+    <section class="slide" data-step="5" id="p2">
+      <div class="sh"><div class="sec">실습 2 · 분류형</div><h2>목표: 분석 카드를 기술통계·통계적 추론·가설검정으로 나눕니다</h2></div>
+      <div class="body split even">
+        <div class="pcol">
+          <div class="plabel">해보기 · 카드를 끌어다 칸에 놓으세요 (카드를 누른 뒤 칸을 눌러도 됩니다)</div>
+          <div class="pool" id="p2-pool"></div>
+        </div>
+        <div class="pcol" style="gap:8px">
+          <div class="plabel" style="margin:0">결과 확인 · <span id="p2-count">0 / 0</span></div>
+          <div class="bins" id="p2-bins"></div>
+          <div class="p2row"><p class="pmsg" id="p2-msg"></p><button class="btn ghost" id="p2-reset">다시 하기</button></div>
+          <div class="think"><span>생각해보기</span>통계적 추론과 가설검정은 둘 다 추론통계입니다. 무엇이 다를까요?</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ⑥ 실습 3 · 추정형 (모듈 전용) ─────────────── -->
+    <section class="slide" data-step="5" id="p3">
+      <div class="sh"><div class="sec">실습 3 · 추정형</div><h2>목표: 확률 모형의 기대 횟수와 실제 데이터를 비교합니다</h2></div>
+      <div class="body split">
+        <div class="fig"><svg id="m2-p3-svg" viewBox="0 0 400 250" role="img" aria-label="주사위 눈별 나온 횟수 막대그래프"></svg></div>
+        <div class="pcol" style="gap:9px;justify-content:center">
+          <div class="plabel" style="margin:0">해보기</div>
+          <p class="howto">각 눈이 1/6 확률로 나오는 주사위를 100번 던지면 1의 눈은 몇 번쯤 나올까요? 먼저 추정한 뒤 「확률 모형으로 확인」을 누르세요.</p>
+          <div class="ctrl">내 추정<input type="range" id="m2-g" min="0" max="60" step="1" value="30" aria-label="1의 눈 추정 횟수"><strong id="m2-gv" style="min-width:40px;text-align:right">-</strong></div>
+          <div style="display:flex;gap:8px"><button class="btn" id="m2-check">확률 모형으로 확인</button><button class="btn ghost" id="m2-sim">100번 던져 보기</button></div>
+          <div class="stats three"><div><small>내 추정</small><strong id="m2-mine">-</strong></div><div><small>기대 횟수</small><strong id="m2-exp">-</strong></div><div><small>모의실험 1의 눈</small><strong id="m2-simv">-</strong></div></div>
+          <p class="pmsg" id="m2-msg3"></p>
+          <div class="think"><span>생각해보기</span>1의 눈이 50번 나온 주사위라면 어떤 가설을 새로 세워야 할까요?</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ⑦ 용어해설·마무리: 스크립트의 GLOSSARY, REFS, NEXT로 만듭니다 -->
+  </main>
+
+  <footer class="bottombar">
+    <a class="home" href="../index.html" title="홈으로 (학습 모듈 목록)" aria-label="홈으로"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 10.5 12 3l9 7.5"/><path d="M5.5 9.5V21h13V9.5"/></svg><span>홈</span></a><span class="counter" id="counter"></span><span class="spacer"></span>
+    <button class="nav" id="prev" type="button">이전</button>
+    <button class="nav primary" id="next" type="button">다음</button>
+  </footer>
+</div>
+<p class="rotate">화면을 가로로 돌리면 더 크게 볼 수 있습니다.</p>
+
+<script>
+(function(){
+"use strict";
+
+/* =====================================================================
+   [교체] 모듈 설정 — 새 모듈은 이 블록과 HTML 화면 문장만 바꿉니다.
+   ===================================================================== */
+var MODULE={title:"통계학의 역할과 전체 모습",sub:"데이터와 기술통계 · M02"};
+var STEPS=["학습개요","학습목표","일상의 예시","본문","형성평가","실습","용어해설"];
+
+/* 일관 사례: 학습내용의 혈압 값. 신약 = 125 + d, 위약 = 150 + d (퍼짐 1.00배일 때) */
+var BP={drug:{base:125,dev:[0,20,-20,15,-15]}, placebo:{base:150,dev:[-20,20,-15,15,0]}};
+/* 이 모듈은 기본 실습 1·3을 쓰지 않으므로 CASE·PAIRS를 비워 둡니다 */
+var CASE=null, PAIRS=null, P1={target:null};
+
+var QUIZ=[
+ {goal:1,type:"상황 판단",stem:"신약 집단과 위약 집단의 혈압이 모두 들쭉날쭉해 두 집단의 값이 서로 겹칩니다. 평균은 각각 125와 150입니다. 가장 알맞은 판단은 무엇일까요?",
+  opts:["데이터만 눈으로 보고 효과인지 퍼짐인지 단정하기 어렵다","평균이 25 차이 나므로 신약 효과가 확실하다","값이 겹치므로 신약은 효과가 없다","퍼짐은 측정 실수이므로 버리고 평균만 본다"],ans:0,
+  exp:"퍼짐이 있으면 평균 차이가 정말 약의 효과인지, 그저 퍼짐이 나타난 것인지 불분명해집니다. 평균만 믿거나 겹친다는 이유만으로 결론 내리면 두 가지 판단 실수 중 하나를 저지를 수 있습니다.",back:"s-4-1b",backLabel:"4-1 두 세계 비교 다시 보기"},
+ {goal:1,type:"O/X 오개념",stem:"“퍼짐이 있어도 평균만 같으면, 새 환자의 혈압을 퍼짐이 없을 때처럼 정밀하게 예측할 수 있다.”",
+  opts:["O","X"],ans:1,ox:true,
+  exp:"퍼짐이 없으면 새 환자의 혈압을 125로 정밀하게 예측할 수 있습니다. 퍼짐이 있으면 평균이 같아도 110일 수도, 140일 수도 있어 예측이 어려워집니다.",back:"s-4-1b",backLabel:"4-1 두 세계 비교 다시 보기"},
+ {goal:2,type:"상황 판단",stem:"모은 키 데이터로 평균과 분산을 계산하고 히스토그램을 그렸습니다. 어떤 통계일까요?",
+  opts:["기술통계","통계적 추론","가설검정","수리 모형"],ans:0,
+  exp:"확보한 데이터만 정리하고 요약했으므로 기술통계입니다. 데이터를 만든 발생원을 추정하는 단계가 없으므로 추론통계(통계적 추론, 가설검정)가 아닙니다.",back:"s-4-3a",backLabel:"4-3 기술통계와 추론통계 다시 보기"},
+ {goal:2,type:"상황 판단",stem:"모서리가 닳은 주사위를 여러 번 던진 결과로, 이 주사위의 각 눈이 나올 확률을 추정했습니다. 어떤 방법일까요?",
+  opts:["기술통계","통계적 추론","가설검정","수리 모형"],ans:1,
+  exp:"데이터에서 확률 모형의 성질(각 눈의 확률)을 추정했으므로 통계적 추론입니다. 가설검정은 미리 세운 가설이 데이터와 맞는지 판단하는 방법입니다.",back:"s-4-4a",backLabel:"4-4 통계적 추론과 가설검정 다시 보기"},
+ {goal:3,type:"계산",stem:"각 눈이 1/6 확률로 나오는 주사위를 600번 던지면, 1의 눈은 평균적으로 몇 번 나온다고 기대할 수 있을까요?",
+  opts:["100번","50번","6번","600번"],ans:0,
+  exp:"기대 횟수 = 던진 횟수 × 확률 = 600 × 1/6 = 100번입니다. 6번은 눈의 개수를, 600번은 던진 횟수를 그대로 고른 것입니다.",back:"s-4-4a",backLabel:"4-4 수학 박스 다시 보기"},
+ {goal:3,type:"O/X 오개념",stem:"“‘각 눈이 1/6로 나온다’는 가설을 세운 주사위를 100번 던졌더니 1의 눈이 50번 나왔다. 이 가설은 데이터와 잘 들어맞는다.”",
+  opts:["O","X"],ans:1,ox:true,
+  exp:"가설이 옳다면 1의 눈은 100 × 1/6 ≈ 16.7번 안팎으로 나옵니다. 50번처럼 치우친 데이터가 나타날 일은 거의 없으므로, 이 가설은 잘못되었다고 판단합니다.",back:"s-4-4a",backLabel:"4-4 가설검정 다시 보기"}
+];
+
+var BINS=["기술통계","통계적 추론","가설검정"];
+var CARDS=[["모은 혈압 데이터의 평균을 계산했다","기술통계"],["키 데이터를 히스토그램으로 정리했다","기술통계"],
+           ["닳은 주사위를 던진 결과로 각 눈의 확률을 추정했다","통계적 추론"],["환자 일부의 혈압으로 환자 전체의 평균 혈압을 추정했다","통계적 추론"],
+           ["‘각 눈 1/6’ 가설이 100번 던진 결과와 맞는지 판단했다","가설검정"],["‘신약은 효과가 없다’는 가설을 데이터로 버릴지 판단했다","가설검정"]];
+var HINT={"기술통계":"기술통계는 모은 데이터 자체를 정리·요약합니다.","통계적 추론":"통계적 추론은 데이터로 확률 모형의 성질을 추정합니다.","가설검정":"가설검정은 세운 가설이 데이터와 맞는지 판단합니다."};
+
+var GLOSSARY=[
+ ["퍼짐(산포)","dispersion","데이터에 포함된 값 하나하나의 차이입니다.","신약 집단의 혈압 105~145"],
+ ["불확실성","uncertainty","퍼짐 때문에 결과를 확실히 알 수 없는 상태로, 통계학은 퍼짐을 이렇게 평가합니다.","새 환자의 혈압이 110일 수도 140일 수도 있음"],
+ ["확률론","probability theory","퍼짐이나 불확실성을 확률로 나타내는 수학으로, 통계학의 근거입니다.","주사위 각 눈이 나올 확률 1/6"],
+ ["수리 모형","mathematical model","운동 방정식처럼 수식으로 현상을 나타내 예측하는 모형입니다.","공의 궤도를 계산하는 운동 방정식"],
+ ["기술통계","descriptive statistics","수집한 데이터를 정리하고 요약하는 방법입니다.","두 집단 혈압의 평균 125와 150 계산"],
+ ["추론통계","inferential statistics","수집한 데이터로부터 데이터의 발생원을 추정하는 방법입니다.","던진 결과로 그 주사위의 성질 추정"],
+ ["확률 모형","probability model","데이터가 생성되었다고 가정하는 단순한 확률 장치입니다.","각 눈이 1/6로 나오는 주사위 모형"],
+ ["통계적 추론","statistical inference","데이터에서 가정한 확률 모형의 성질을 추정하는 방법입니다.","닳은 주사위의 각 눈 확률 추정"],
+ ["가설검정","statistical test","세운 가설과 얻은 데이터가 얼마나 들어맞는지 평가해 가설을 채택할지 판단하는 방법입니다.","100번 중 1이 50번 → ‘1/6’ 가설을 버림"],
+ ["범주형 변수","categorical variable","혈액형처럼 범주로 다루는 변수입니다.","A형, B형, O형, AB형"],
+ ["양적 변수(수치형 변수)","quantitative variable","키처럼 수치로 다루는 변수입니다.","키, 혈압"],
+ ["변수","variable","특정 속성에 관한 데이터의 모음입니다.","키만 있으면 1변수, 키와 몸무게면 2변수"]
+];
+var REFS=[];
+var NEXT={title:"M03 모집단과 표본",line:"데이터를 얻는다는 것은 무엇일까요? 다음 모듈에서는 알고 싶은 대상 전체와 실제로 얻은 데이터를 구분해 봅니다."};
+
+/* =====================================================================
+   아래부터는 공통 엔진입니다. 모듈마다 바꾸지 않습니다.
+   ===================================================================== */
+var NS="http://www.w3.org/2000/svg";
+var C={navy:"#1B2A4A",navy2:"#2C4170",navy3:"#5B6E97",soft:"#A9B8D4",grid:"#DDE1E7",gray:"#6B7280",gray2:"#9AA0AA",amber:"#E0A100",amberInk:"#6E4F00",ok:"#23704F"};
+function el(t,a,p,x){var e=document.createElementNS(NS,t);for(var k in a)e.setAttribute(k,a[k]);if(x!=null)e.textContent=x;if(p)p.appendChild(e);return e;}
+function clear(s){while(s.firstChild)s.removeChild(s.firstChild);}
+function f1(v,d){return v.toFixed(d==null?1:d);}
+function sum(a){return a.reduce(function(x,y){return x+y;},0);}
+function r1(v){return Math.round(v*10)/10;}
+var stage=document.getElementById("stage"),vp=document.getElementById("vp");
+
+/* 계산은 모두 데이터에서 직접 합니다(R0-7) */
+var N=CASE?CASE.values.length:0,SUMV=CASE?r1(sum(CASE.values)):0,AVG=N?SUMV/N:0,MAXV=CASE?Math.max.apply(null,CASE.values):0;
+var LR=!PAIRS?null:(function(){var n=PAIRS.xs.length,mx=sum(PAIRS.xs)/n,my=sum(PAIRS.ys)/n,sxy=0,sxx=0;
+  for(var i=0;i<n;i++){sxy+=(PAIRS.xs[i]-mx)*(PAIRS.ys[i]-my);sxx+=(PAIRS.xs[i]-mx)*(PAIRS.xs[i]-mx);}
+  var b=sxy/sxx;return{b:b,a:my-b*mx};})();
+var PRED=PAIRS?LR.a+LR.b*PAIRS.x0:0;
+
+document.title=MODULE.title;
+document.getElementById("brand").innerHTML=MODULE.title+"<small>"+MODULE.sub+"</small>";
+
+/* 16:9 고정 무대를 창 크기에 맞춤 */
+var S=1;
+function fit(){S=Math.min(window.innerWidth/960,window.innerHeight/540);stage.style.setProperty("--s",S);}
+window.addEventListener("resize",fit);fit();
+
+/* ---------- 그래프 ---------- */
+function barChart(svg,vals,o){
+  clear(svg);o=o||{};
+  var vb=svg.viewBox.baseVal,W=vb.width,H=vb.height,L=34,R=o.mean!=null?70:8,T=26,Bt=24,ym=o.ymax||Math.ceil(Math.max.apply(null,vals)+1),pw=W-L-R,ph=H-T-Bt,bw=pw/vals.length;
+  function y(v){return T+ph-(v/ym)*ph;}
+  for(var g=0;g<=ym;g++){el("line",{x1:L,x2:W-R,y1:y(g),y2:y(g),stroke:C.grid},svg);el("text",{x:L-6,y:y(g)+4,"text-anchor":"end","font-size":10.5,fill:C.gray2},svg,g);}
+  vals.forEach(function(v,i){
+    var sel=o.sel===i,hi=o.hi===i;
+    el("rect",{x:L+i*bw+bw*.16,y:y(v),width:bw*.68,height:Math.max(0,y(0)-y(v)),rx:2,fill:sel?C.amber:hi?C.navy2:C.soft},svg);
+    el("text",{x:L+i*bw+bw/2,y:H-Bt+16,"text-anchor":"middle","font-size":10.5,fill:C.gray},svg,CASE.labels[i]);
+  });
+  if(o.mean!=null){var m=o.mean;
+    el("line",{x1:L,x2:W-R+4,y1:y(m),y2:y(m),stroke:C.navy,"stroke-width":2,"stroke-dasharray":"6 4"},svg);
+    el("rect",{x:W-R+6,y:y(m)-10,width:R-8,height:20,rx:4,fill:C.navy},svg);
+    el("text",{x:W-R+6+(R-8)/2,y:y(m)+4,"text-anchor":"middle","font-size":11,"font-weight":700,fill:"#fff"},svg,"평균 "+f1(m,2));}
+  /* 값 라벨은 마지막에 흰 테두리로 그려 점선에 가리지 않게 함 */
+  vals.forEach(function(v,i){var sel=o.sel===i,hi=o.hi===i;
+    if(o.labels||sel)el("text",{x:L+i*bw+bw/2,y:y(v)-5,"text-anchor":"middle","font-size":10.5,"font-weight":sel||hi?800:500,fill:sel?C.amberInk:hi?C.navy:C.gray,stroke:"#EEF0F3","stroke-width":3,"paint-order":"stroke"},svg,f1(v));});
+}
+function scatter(svg,o){
+  clear(svg);o=o||{};
+  var vb=svg.viewBox.baseVal,W=vb.width,H=vb.height,L=34,R=14,T=30,Bt=40,x0=PAIRS.xmin,x1=PAIRS.xmax,y0=PAIRS.ymin,y1=PAIRS.ymax;
+  function X(v){return L+(v-x0)/(x1-x0)*(W-L-R);}
+  function Y(v){return T+(H-T-Bt)-(v-y0)/(y1-y0)*(H-T-Bt);}
+  for(var g=y0;g<=y1+1e-9;g+=PAIRS.ystep){el("line",{x1:L,x2:W-R,y1:Y(g),y2:Y(g),stroke:C.grid},svg);el("text",{x:L-6,y:Y(g)+4,"text-anchor":"end","font-size":10.5,fill:C.gray2},svg,g);}
+  for(var h=x0;h<=x1+1e-9;h+=PAIRS.xstep)el("text",{x:X(h),y:H-Bt+16,"text-anchor":"middle","font-size":10.5,fill:C.gray},svg,h);
+  el("text",{x:(L+W-R)/2,y:H-6,"text-anchor":"middle","font-size":10.5,fill:C.gray},svg,PAIRS.xlabel);
+  el("text",{x:4,y:14,"font-size":10.5,fill:C.gray},svg,PAIRS.ylabel);
+  if(o.line){var la=x0+(x1-x0)*.04,lb=x1-(x1-x0)*.04;el("line",{x1:X(la),y1:Y(LR.a+LR.b*la),x2:X(lb),y2:Y(LR.a+LR.b*lb),stroke:C.navy,"stroke-width":2},svg);}
+  PAIRS.xs.forEach(function(x,i){el("circle",{cx:X(x),cy:Y(PAIRS.ys[i]),r:4.5,fill:C.navy3,"fill-opacity":.85},svg);});
+  if(o.x0!=null){el("line",{x1:X(o.x0),y1:Y(0),x2:X(o.x0),y2:Y(y1),stroke:C.amber,"stroke-dasharray":"3 3"},svg);
+    el("text",{x:X(o.x0),y:T-4,"text-anchor":"middle","font-size":10.5,"font-weight":700,fill:C.amberInk},svg,PAIRS.x0label);}
+  if(o.pred){el("circle",{cx:X(PAIRS.x0),cy:Y(PRED),r:6,fill:C.navy},svg);
+    el("text",{x:X(PAIRS.x0)-10,y:Y(PRED)+4,"text-anchor":"end","font-size":11,"font-weight":800,fill:C.navy,stroke:"#EEF0F3","stroke-width":3,"paint-order":"stroke"},svg,"예측 "+f1(PRED,PAIRS.dp)+PAIRS.unit);}
+  if(o.guess!=null){el("circle",{cx:X(PAIRS.x0),cy:Y(o.guess),r:7,fill:C.amber,stroke:"#fff","stroke-width":2},svg);}
+  if(o.actual){var ay=Y(PAIRS.actual);el("rect",{x:X(PAIRS.x0)-6,y:ay-6,width:12,height:12,fill:C.ok,transform:"rotate(45 "+X(PAIRS.x0)+" "+ay+")"},svg);
+    el("text",{x:X(PAIRS.x0)-10,y:ay-6,"text-anchor":"end","font-size":11,"font-weight":800,fill:C.ok,stroke:"#EEF0F3","stroke-width":3,"paint-order":"stroke"},svg,"실제 "+f1(PAIRS.actual)+PAIRS.unit);}
+  return {X:X,Y:Y};
+}
+function flow(svg,names){
+  clear(svg);var n=names.length,w=118,gap=(440-40-n*w)/(n-1),y=96,h=64;
+  el("defs",{},svg).innerHTML='<marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10z" fill="'+C.navy3+'"/></marker>';
+  names.forEach(function(t,i){var x=20+i*(w+gap);
+    el("rect",{x:x,y:y,width:w,height:h,rx:10,fill:i===n-1?C.navy:"#fff",stroke:C.navy,"stroke-width":1.5},svg);
+    el("text",{x:x+w/2,y:y+h/2-6,"text-anchor":"middle","font-size":11,"font-weight":700,fill:i===n-1?"#C9D3E6":C.navy3},svg,"4-"+(i+1));
+    el("text",{x:x+w/2,y:y+h/2+13,"text-anchor":"middle","font-size":14,"font-weight":800,fill:i===n-1?"#fff":C.navy},svg,t);
+    if(i<n-1)el("line",{x1:x+w+4,y1:y+h/2,x2:x+w+gap-5,y2:y+h/2,stroke:C.navy3,"stroke-width":2,"marker-end":"url(#ar)"},svg);});
+  el("text",{x:220,y:200,"text-anchor":"middle","font-size":12,fill:C.gray},svg,"본문 소단원을 배우는 순서");
+}
+/* 화면에 해당 id가 있을 때만 그립니다(모듈마다 쓰지 않는 그림은 건너뜀) */
+function on(id,fn){var e=document.getElementById(id);if(e)fn(e);}
+on("fig-flow",function(s){flow(s,["소단원 1","소단원 2","정리"]);});
+on("fig-case",function(s){barChart(s,CASE.values,{labels:true});});
+on("fig-bar",function(s){barChart(s,CASE.values,{labels:true,mean:AVG});});
+on("fig-scatter",function(s){scatter(s,{line:true,x0:PAIRS.x0,pred:true});});
+on("fig-bridge",function(s){
+  el("defs",{},s).innerHTML='<marker id="ar2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10z" fill="'+C.navy3+'"/></marker>';
+  [["장면 1",40],["장면 2",130]].forEach(function(p){el("rect",{x:24,y:p[1],width:130,height:64,rx:10,fill:"#fff",stroke:C.navy3,"stroke-width":1.5},s);el("text",{x:89,y:p[1]+37,"text-anchor":"middle","font-size":14,"font-weight":700,fill:C.navy},s,p[0]);
+    el("line",{x1:158,y1:p[1]+32,x2:246,y2:120,stroke:C.navy3,"stroke-width":2,"marker-end":"url(#ar2)"},s);});
+  el("rect",{x:252,y:84,width:150,height:72,rx:12,fill:C.navy},s);
+  el("text",{x:327,y:116,"text-anchor":"middle","font-size":14,"font-weight":800,fill:"#fff"},s,"본문 첫 질문");
+  el("text",{x:327,y:136,"text-anchor":"middle","font-size":11.5,fill:"#C9D3E6"},s,"4-1로 이어짐");});
+on("case-n",function(e){e.textContent=N+"개";});
+on("case-sum",function(e){e.textContent=f1(SUMV);});
+on("case-max",function(e){e.textContent=f1(MAXV);});
+on("math-calc",function(e){e.textContent=f1(LR.b,2)+" × "+PAIRS.x0+" + "+f1(LR.a,2)+" = "+f1(PRED,2);});
+
+/* =====================================================================
+   [교체] 모듈 전용 그림: 모듈마다 필요한 그림 함수는 이 자리에 둡니다.
+   ===================================================================== */
+/* M02 전용 그림·실습 */
+function bpVals(g,s){return g.dev.map(function(d){return g.base+s*d;});}
+function dotRows(svg,s,opt){
+  clear(svg);opt=opt||{};
+  var vb=svg.viewBox.baseVal,W=vb.width,H=vb.height,L=60,R=16,lo=70,hi=210;
+  function X(v){return L+(v-lo)/(hi-lo)*(W-L-R);}
+  var rows=opt.rows||[{s:s}];
+  var rowH=(H-34)/rows.length;
+  rows.forEach(function(r,ri){
+    var y0=8+ri*rowH;
+    if(r.title)el("text",{x:8,y:y0+14,"font-size":12,"font-weight":800,fill:C.navy},svg,r.title);
+    [["신약",BP.drug,C.navy2],["위약",BP.placebo,C.soft]].forEach(function(gr,gi){
+      var y=y0+(r.title?30:16)+gi*((rowH-(r.title?34:20))/2);
+      el("text",{x:8,y:y+4,"font-size":12,"font-weight":700,fill:C.navy},svg,gr[0]);
+      el("line",{x1:L,x2:W-R,y1:y,y2:y,stroke:C.grid},svg);
+      var vals=bpVals(gr[1],r.s),cnt={};
+      vals.forEach(function(v){var k=Math.round(v*10)/10;cnt[k]=(cnt[k]||0)+1;});
+      Object.keys(cnt).forEach(function(k){var v=+k;
+        el("circle",{cx:X(v),cy:y,r:6,fill:gr[2],stroke:"#fff","stroke-width":1.5},svg);
+        if(cnt[k]>1)el("text",{x:X(v)+10,y:y-7,"font-size":10.5,"font-weight":800,fill:C.navy},svg,"×"+cnt[k]+"명");});
+      el("line",{x1:X(gr[1].base),x2:X(gr[1].base),y1:y-12,y2:y+12,stroke:gi?C.gray:C.navy,"stroke-width":2},svg);
+    });
+  });
+  var ay=H-14;
+  el("line",{x1:L,x2:W-R,y1:ay-10,y2:ay-10,stroke:C.gray2},svg);
+  for(var t=80;t<=200;t+=20)el("text",{x:X(t),y:ay+2,"text-anchor":"middle","font-size":10.5,fill:C.gray},svg,t);
+  el("text",{x:8,y:ay+2,"font-size":10.5,fill:C.gray},svg,"혈압");el("text",{x:W-R,y:12,"text-anchor":"end","font-size":10.5,fill:C.gray},svg,"세로 막대 = 평균");
+  return X;
+}
+/* 4-1 두 세계 비교 */
+on("m2-worlds",function(s){dotRows(s,1,{rows:[{title:"퍼짐이 없는 세계",s:0},{title:"퍼짐이 있는 세계",s:1}]});});
+
+/* 실습 1 · 퍼짐 조절(조작형) */
+(function(){
+  var r=document.getElementById("m2-s");if(!r)return;
+  function upd(){
+    var s=+r.value,lo1=125-20*s,hi1=125+20*s,lo2=150-20*s,hi2=150+20*s;
+    document.getElementById("m2-sv").textContent=s.toFixed(2)+"배";
+    document.getElementById("m2-r1").textContent=lo1===hi1?"125":Math.round(lo1)+"~"+Math.round(hi1);
+    document.getElementById("m2-r2").textContent=lo2===hi2?"150":Math.round(lo2)+"~"+Math.round(hi2);
+    dotRows(document.getElementById("m2-p1-svg"),s);
+    var m=document.getElementById("m2-msg"),overlap=hi1>=lo2;
+    if(s===0){m.className="pmsg";m.textContent="퍼짐이 없습니다. 신약 125, 위약 150으로 효과 25가 그대로 보입니다.";}
+    else if(!overlap){m.className="pmsg";m.textContent="아직 두 집단의 값이 겹치지 않아 효과를 가려내기 쉽습니다.";}
+    else if(s<0.675){m.className="pmsg ok";m.textContent="찾았습니다. 이 크기부터 신약 최댓값("+Math.round(hi1)+")이 위약 최솟값("+Math.round(lo2)+")에 닿아 두 집단이 겹칩니다.";}
+    else{m.className="pmsg ng";m.textContent="두 집단의 값이 겹칩니다. 평균 차이는 그대로 25이지만 효과인지 퍼짐인지 가리기 어렵습니다.";}
+  }
+  r.addEventListener("input",upd);upd();
+})();
+
+/* 실습 3 · 기대 횟수와 모의실험(추정형) */
+(function(){
+  var g=document.getElementById("m2-g");if(!g)return;
+  var svg=document.getElementById("m2-p3-svg"),EXP=100/6,checked=false,counts=null;
+  function draw(){
+    clear(svg);var W=400,H=250,L=36,R=12,T=24,B=36,ym=60;
+    function Y(v){return T+(H-T-B)*(1-v/ym);}
+    var bw=(W-L-R)/6;
+    for(var t=0;t<=ym;t+=10){el("line",{x1:L,x2:W-R,y1:Y(t),y2:Y(t),stroke:C.grid},svg);el("text",{x:L-6,y:Y(t)+4,"text-anchor":"end","font-size":10.5,fill:C.gray2},svg,t);}
+    for(var i=0;i<6;i++){var cx=L+bw*i+bw/2;
+      if(counts){el("rect",{x:cx-bw*.32,y:Y(counts[i]),width:bw*.64,height:Y(0)-Y(counts[i]),rx:3,fill:i===0?C.amber:C.soft},svg);
+        el("text",{x:cx,y:Y(counts[i])-5,"text-anchor":"middle","font-size":11,"font-weight":700,fill:i===0?C.amberInk:C.gray,stroke:"#EEF0F3","stroke-width":3,"paint-order":"stroke"},svg,counts[i]);}
+      el("text",{x:cx,y:H-B+16,"text-anchor":"middle","font-size":11.5,"font-weight":700,fill:C.navy},svg,(i+1)+"의 눈");}
+    el("line",{x1:L,x2:W-R,y1:Y(50),y2:Y(50),stroke:"#B42318","stroke-width":1.5,"stroke-dasharray":"5 4"},svg);
+    el("text",{x:W-R,y:Y(50)-5,"text-anchor":"end","font-size":11,"font-weight":700,fill:"#B42318",stroke:"#EEF0F3","stroke-width":3,"paint-order":"stroke"},svg,"50번: 가설을 의심한 데이터");
+    if(checked){el("line",{x1:L,x2:W-R,y1:Y(EXP),y2:Y(EXP),stroke:C.navy,"stroke-width":2,"stroke-dasharray":"6 4"},svg);
+      el("text",{x:W-R,y:Y(EXP)-5,"text-anchor":"end","font-size":11,"font-weight":800,fill:C.navy,stroke:"#EEF0F3","stroke-width":3,"paint-order":"stroke"},svg,"기대 횟수 16.7");}
+    el("circle",{cx:L+bw/2,cy:Y(+g.value),r:7,fill:C.amber,stroke:"#fff","stroke-width":2},svg);
+    el("text",{x:L+bw/2+12,y:Y(+g.value)+4,"font-size":11,"font-weight":800,fill:C.amberInk},svg,"내 추정");
+    el("text",{x:4,y:14,"font-size":10.5,fill:C.gray},svg,"나온 횟수(100번 중)");
+  }
+  function upd(){document.getElementById("m2-gv").textContent=g.value+"번";document.getElementById("m2-mine").textContent=g.value;draw();}
+  g.addEventListener("input",function(){document.getElementById("m2-mine").textContent=g.value;upd();});
+  document.getElementById("m2-check").onclick=function(){
+    checked=true;var gv=+g.value,d=Math.abs(gv-EXP);
+    document.getElementById("m2-mine").textContent=gv;document.getElementById("m2-exp").textContent="16.7";
+    var m=document.getElementById("m2-msg3");m.className="pmsg "+(d<=5?"ok":"ng");
+    m.textContent="기대 횟수는 100 × 1/6 ≈ 16.7번입니다. 내 추정과의 차이는 "+d.toFixed(1)+"번입니다. 「100번 던져 보기」로 실제로 얼마나 흩어지는지 확인해 보세요.";draw();};
+  document.getElementById("m2-sim").onclick=function(){
+    counts=[0,0,0,0,0,0];for(var k=0;k<100;k++)counts[Math.floor(Math.random()*6)]++;
+    document.getElementById("m2-simv").textContent=counts[0];
+    var m=document.getElementById("m2-msg3");m.className="pmsg";
+    m.textContent="이번에는 1의 눈이 "+counts[0]+"번 나왔습니다. 여러 번 눌러 보면 16.7번 근처에서 오르내릴 뿐, 50번 가까이 나오는 일은 거의 없습니다.";draw();};
+  upd();
+})();
+
+
+/* ---------- ⑤ 형성평가 ---------- */
+function fill(t){return !CASE?t:t.replace(/SUM/g,f1(SUMV)).replace(/AVG/g,f1(AVG,2)).replace(/MAXV/g,f1(MAXV));}
+var firstPractice=document.getElementById("p1"),answered=0,correct=0;
+QUIZ.forEach(function(q,i){
+  var s=document.createElement("section");s.className="slide";s.dataset.step="4";s.id="q"+(i+1);
+  s.innerHTML='<div class="sh"><div class="sec"><span>문항 '+(i+1)+' / '+QUIZ.length+'</span><span class="qchips"><span>학습목표 '+q.goal+'</span><span>'+q.type+'</span></span></div><h2 class="stem">'+fill(q.stem)+'</h2></div>'+
+    '<div class="body split even"><div class="opts'+(q.ox?' ox':'')+'"></div><div class="fbp" aria-live="polite"><p class="empty">보기를 고르면 정답과 해설이 여기에 나타납니다.</p></div></div>';
+  var ob=s.querySelector(".opts"),fb=s.querySelector(".fbp");
+  q.opts.forEach(function(t,k){
+    var b=document.createElement("button");b.type="button";b.className="opt";
+    b.innerHTML=q.ox?t:'<span class="n">'+(k+1)+'</span>'+fill(t);
+    b.addEventListener("click",function(){
+      var all=ob.querySelectorAll(".opt");[].forEach.call(all,function(x){x.disabled=true;});
+      all[q.ans].classList.add("ok");var ok=k===q.ans;if(!ok)b.classList.add("ng");
+      answered++;if(ok)correct++;
+      fb.className="fbp "+(ok?"ok":"ng");
+      fb.innerHTML='<div class="verdict">'+(ok?"정답입니다":"오답입니다. 정답은 "+(q.ox?q.opts[q.ans]:(q.ans+1)+"번")+"입니다")+'</div><div>'+fill(q.exp)+'</div>'+
+        '<button type="button" class="jump back" data-jump="'+q.back+'">'+q.backLabel+'</button><div class="tally">지금까지 '+answered+'문항 중 '+correct+'문항 정답</div>';
+      bindJumps(fb);
+    });
+    ob.appendChild(b);
+  });
+  vp.insertBefore(s,firstPractice);
+});
+
+/* ---------- ⑦ 용어해설 · 참고자료 · 다음 모듈 ---------- */
+for(var gi=0;gi<GLOSSARY.length;gi+=6){
+  var part=GLOSSARY.slice(gi,gi+6),pg=gi/6+1,np=Math.ceil(GLOSSARY.length/6);
+  var s=document.createElement("section");s.className="slide";s.dataset.step="6";
+  var h='<div class="sh"><div class="sec">용어해설 '+pg+'/'+np+'</div><h2>'+(pg===1?"본문에서 굵게 표시한 용어를 나온 순서대로 모았습니다":"용어해설 계속")+'</h2></div><div class="body full"><div class="gl">';
+  part.forEach(function(g,k){h+='<div class="gi"><div class="t"><i>'+(gi+k+1)+'</i>'+g[0]+'<em>'+g[1]+'</em>'+(g[4]?'<span class="cite">['+g[4]+']</span>':'')+'</div><div class="d">'+g[2]+'</div><div class="e"><strong>예시</strong> '+g[3]+'</div></div>';});
+  h+='</div></div>';s.innerHTML=h;vp.appendChild(s);
+}
+(function(){
+  var s=document.createElement("section");s.className="slide";s.dataset.step="6";s.id="end";
+  var refs=REFS.length?'<div class="pcol" style="gap:10px"><div class="plabel" style="margin:0">참고자료</div><ol class="refs">'+REFS.map(function(r){return '<li><span>['+r.n+']</span><div>'+r.title+', '+r.org+'. <a href="'+r.url+'" target="_blank" rel="noopener">'+r.url+'</a> ('+r.date+')</div></li>';}).join("")+'</ol></div>':'';
+  s.innerHTML='<div class="sh"><div class="sec">마무리</div><h2>'+(REFS.length?"참고자료와 다음 모듈":"다음 모듈")+'</h2></div>'+
+    '<div class="body '+(REFS.length?'split even':'full')+'" style="align-content:center">'+refs+
+    '<div class="pcol" style="justify-content:center"><div class="nextmod"><small>다음 모듈 · '+NEXT.title+'</small><strong>'+NEXT.line+'</strong></div></div></div>'+
+    '<p class="foot">학습 상태는 저장되지 않습니다.</p>';
+  vp.appendChild(s);
+})();
+
+/* ---------- 이동 · 진행선 ---------- */
+var slides=[].slice.call(vp.querySelectorAll(".slide")),cur=0,seen={};
+var stepFirst=[],stepCount=[0,0,0,0,0,0,0];
+slides.forEach(function(s,i){var st=+s.dataset.step;if(stepFirst[st]==null)stepFirst[st]=i;stepCount[st]++;});
+var rail=document.getElementById("rail"),stations=[];
+STEPS.forEach(function(n,i){
+  var b=document.createElement("button");b.type="button";b.className="station";
+  b.style.left="calc(14px + (100% - 28px) * "+(i/6)+")";
+  b.innerHTML='<span class="dot">'+(i+1)+'</span><span class="lb">'+n+'</span>';
+  b.setAttribute("aria-label",(i+1)+"단계 "+n+"(으)로 이동");
+  b.addEventListener("click",function(){show(stepFirst[i]);});
+  rail.appendChild(b);stations.push(b);
+});
+function show(i){
+  cur=Math.max(0,Math.min(slides.length-1,i));
+  slides.forEach(function(s,k){s.classList.toggle("on",k===cur);});
+  var st=+slides[cur].dataset.step;seen[st]=true;
+  stations.forEach(function(b,k){b.classList.toggle("cur",k===st);b.classList.toggle("done",k<st||(!!seen[k]&&k!==st));if(k===st)b.setAttribute("aria-current","step");else b.removeAttribute("aria-current");});
+  var within=(cur-stepFirst[st])/Math.max(1,stepCount[st]);
+  var frac=st===6&&cur===slides.length-1?1:(st+within)/6;
+  document.getElementById("fill").style.width=(Math.min(1,frac)*100)+"%";
+  document.getElementById("counter").innerHTML="<strong>"+STEPS[st]+"</strong> "+(cur-stepFirst[st]+1)+" / "+stepCount[st];
+  document.getElementById("prev").disabled=cur===0;
+  var nx=document.getElementById("next");nx.disabled=cur===slides.length-1;
+  nx.textContent=(cur<slides.length-1&&+slides[cur+1].dataset.step!==st)?STEPS[+slides[cur+1].dataset.step]+"(으)로":"다음";
+}
+function bindJumps(root){[].forEach.call(root.querySelectorAll("[data-jump]"),function(b){b.addEventListener("click",function(){var t=document.getElementById(b.dataset.jump);if(t)show(slides.indexOf(t));});});}
+bindJumps(document);
+document.getElementById("prev").onclick=function(){show(cur-1);};
+document.getElementById("next").onclick=function(){show(cur+1);};
+document.addEventListener("keydown",function(e){
+  if(e.target&&(e.target.type==="range"))return;
+  if(e.key==="ArrowRight"||e.key==="PageDown"){show(cur+1);e.preventDefault();}
+  else if(e.key==="ArrowLeft"||e.key==="PageUp"){show(cur-1);e.preventDefault();}
+});
+var tx=null,ty=null;
+vp.addEventListener("touchstart",function(e){var t=e.target;if(t.closest&&(t.closest("input")||t.closest(".dcard"))){tx=null;return;}tx=e.touches[0].clientX;ty=e.touches[0].clientY;},{passive:true});
+vp.addEventListener("touchend",function(e){if(tx==null)return;var dx=e.changedTouches[0].clientX-tx,dy=e.changedTouches[0].clientY-ty;if(Math.abs(dx)>60&&Math.abs(dx)>Math.abs(dy)*1.5)show(cur+(dx<0?1:-1));tx=null;},{passive:true});
+
+/* ---------- 실습 1 · 조작형 ---------- */
+(function(){if(!document.getElementById("p1-items")||!CASE)return;
+var p1v=CASE.values.slice(),p1s=CASE.values.indexOf(MAXV),p1m=document.getElementById("p1-items"),p1r=document.getElementById("p1-range");
+CASE.labels.forEach(function(m,i){var b=document.createElement("button");b.type="button";b.className="mbtn";b.textContent=m;b.onclick=function(){p1s=i;p1d();};p1m.appendChild(b);});
+function p1d(){
+  [].forEach.call(p1m.children,function(b,i){b.classList.toggle("on",i===p1s);b.setAttribute("aria-pressed",i===p1s);});
+  p1r.value=p1v[p1s];document.getElementById("p1-label").textContent=CASE.labels[p1s]+"번";document.getElementById("p1-val").textContent=f1(p1v[p1s]);
+  var s=r1(sum(p1v)),m=s/N;
+  document.getElementById("p1-sum").textContent=f1(s);document.getElementById("p1-mean").textContent=f1(m,2);
+  barChart(document.getElementById("p1-svg"),p1v,{mean:m,sel:p1s,ymax:9});
+  var msg=document.getElementById("p1-msg");
+  if(P1.target!=null&&Math.abs(m-P1.target)<0.005){msg.className="pmsg ok";msg.textContent="성공했습니다. "+f1(s)+" ÷ "+N+" = "+f1(m,2);}
+  else if(Math.abs(s-SUMV)<1e-9){msg.className="pmsg";msg.textContent="원래 값입니다. "+f1(SUMV)+" ÷ "+N+" = "+f1(AVG,2);}
+  else{msg.className="pmsg";msg.textContent="원래 평균 "+f1(AVG,2)+"보다 "+f1(Math.abs(m-AVG),2)+" "+(m>AVG?"늘었습니다.":"줄었습니다.");}
+}
+p1r.addEventListener("input",function(){p1v[p1s]=r1(+p1r.value);p1d();});
+document.getElementById("p1-reset").onclick=function(){p1v=CASE.values.slice();p1d();};
+p1d();
+
+})();
+/* ---------- 실습 2 · 분류형 ---------- */
+(function(){if(!document.getElementById("p2-pool"))return;
+var pool=document.getElementById("p2-pool"),binWrap=document.getElementById("p2-bins"),selC=null,done2=0;
+var bins=BINS.map(function(n){var b=document.createElement("div");b.className="bin";b.dataset.bin=n;b.innerHTML="<h4>"+n+"</h4>";binWrap.appendChild(b);return b;});
+function p2msg(t,c){var m=document.getElementById("p2-msg");m.textContent=t;m.className="pmsg "+(c||"");document.getElementById("p2-count").textContent=done2+" / "+CARDS.length;}
+function p2init(){
+  pool.innerHTML="";bins.forEach(function(b){[].slice.call(b.querySelectorAll(".dcard")).forEach(function(c){c.remove();});});done2=0;selC=null;
+  var o=CARDS.map(function(_,i){return i;});for(var i=o.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1)),t=o[i];o[i]=o[j];o[j]=t;}
+  o.forEach(function(i){var d=document.createElement("div");d.className="dcard";d.tabIndex=0;d.setAttribute("role","button");d.textContent=CARDS[i][0];d.dataset.ans=CARDS[i][1];pool.appendChild(d);attach(d);});
+  p2msg("카드를 하나 골라 보세요.","");
+}
+function drop(c,b){
+  if(!b||c.classList.contains("ok"))return;
+  c.classList.remove("sel");selC=null;
+  if(c.dataset.ans===b.dataset.bin){c.classList.add("ok");c.removeAttribute("tabindex");b.appendChild(c);done2++;p2msg(done2===CARDS.length?"카드를 모두 맞게 분류했습니다.":"정답입니다.","ok");}
+  else{c.classList.add("shake");setTimeout(function(){c.classList.remove("shake");},400);p2msg("「"+b.dataset.bin+"」이 아닙니다. "+HINT[c.dataset.ans],"ng");}
+}
+function pick(d){if(selC===d){d.classList.remove("sel");selC=null;return;}if(selC)selC.classList.remove("sel");selC=d;d.classList.add("sel");p2msg("이제 알맞은 칸을 누르세요.","");}
+function attach(d){
+  var sx=null,sy,mv=false,gh=null,ov=null,offX=0,offY=0;
+  function pos(e){var r=stage.getBoundingClientRect();return{x:(e.clientX-r.left)/S,y:(e.clientY-r.top)/S};}
+  d.addEventListener("pointerdown",function(e){if(d.classList.contains("ok"))return;sx=e.clientX;sy=e.clientY;mv=false;d.setPointerCapture(e.pointerId);var r=d.getBoundingClientRect();offX=(e.clientX-r.left)/S;offY=(e.clientY-r.top)/S;});
+  d.addEventListener("pointermove",function(e){
+    if(sx==null)return;
+    if(!mv&&Math.hypot(e.clientX-sx,e.clientY-sy)>6){mv=true;gh=d.cloneNode(true);gh.classList.add("ghostc");gh.classList.remove("sel");gh.style.width=d.offsetWidth+"px";stage.appendChild(gh);d.style.opacity=".35";}
+    if(mv){var p=pos(e);gh.style.left=(p.x-offX)+"px";gh.style.top=(p.y-offY)+"px";
+      var t=document.elementFromPoint(e.clientX,e.clientY),b=t&&t.closest?t.closest(".bin"):null;
+      if(ov&&ov!==b)ov.classList.remove("hover");ov=b;if(b)b.classList.add("hover");}
+  });
+  d.addEventListener("pointerup",function(){
+    if(sx==null)return;sx=null;
+    if(mv){gh.remove();gh=null;d.style.opacity="";if(ov)ov.classList.remove("hover");var b=ov;ov=null;drop(d,b);}else pick(d);
+  });
+  d.addEventListener("pointercancel",function(){if(gh){gh.remove();gh=null;}d.style.opacity="";sx=null;if(ov)ov.classList.remove("hover");ov=null;});
+  d.addEventListener("keydown",function(e){if(e.key==="Enter"||e.key===" "){e.preventDefault();pick(d);}});
+}
+bins.forEach(function(b){b.tabIndex=0;b.setAttribute("role","button");b.setAttribute("aria-label",b.dataset.bin+" 칸에 놓기");
+  b.addEventListener("click",function(e){if(selC&&!e.target.closest(".dcard"))drop(selC,b);});
+  b.addEventListener("keydown",function(e){if((e.key==="Enter"||e.key===" ")&&selC){e.preventDefault();drop(selC,b);}});});
+document.getElementById("p2-reset").onclick=p2init;
+p2init();
+
+})();
+/* ---------- 실습 3 · 추정형 ---------- */
+(function(){if(!document.getElementById("p3-range")||!PAIRS)return;
+var p3r=document.getElementById("p3-range"),p3done=false;
+document.getElementById("p3-x0").textContent=PAIRS.x0;
+p3r.min=PAIRS.ymin;p3r.max=PAIRS.ymax;p3r.step=0.1;p3r.value=r1((PAIRS.ymin+PAIRS.ymax)/2);
+function p3d(){var g=+p3r.value;document.getElementById("p3-val").textContent=f1(g);scatter(document.getElementById("p3-svg"),{x0:PAIRS.x0,guess:g,line:p3done,pred:p3done,actual:p3done});}
+p3r.addEventListener("input",function(){if(p3done){p3done=false;document.getElementById("p3-res").classList.remove("on");}p3d();});
+document.getElementById("p3-check").onclick=function(){
+  p3done=true;var g=+p3r.value,mine=Math.abs(g-PAIRS.actual),line=Math.abs(PRED-PAIRS.actual);
+  document.getElementById("p3-mine").textContent=f1(g);document.getElementById("p3-pred").textContent=f1(PRED,PAIRS.dp);document.getElementById("p3-act").textContent=f1(PAIRS.actual);
+  var m=document.getElementById("p3-msg"),good=mine<=line;m.className="pmsg "+(good?"ok":"ng");
+  m.textContent="내 오차 "+f1(mine,PAIRS.dp)+PAIRS.unit+", 직선 오차 "+f1(line,PAIRS.dp)+PAIRS.unit+". "+(good?"직선만큼 또는 더 가깝게 추정했습니다.":"직선을 이용하면 오차를 줄일 수 있습니다.");
+  document.getElementById("p3-res").classList.add("on");p3d();
+};
+p3d();
+
+})();
+show(0);
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,1124 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>세 집단 이상 비교</title>
+<!-- M15 세 집단 이상 비교 v1.0 · 기준 템플릿 v1.3로 제작 (2026-10-25) -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<style>
+:root{
+  --navy:#1B2A4A; --navy2:#2C4170; --navy3:#5B6E97; --navy-soft:#E4E9F2;
+  --ink:#22262E; --gray:#6B7280; --gray2:#9AA0AA; --panel:#EEF0F3; --line:#D5D9E0;
+  --amber:#E0A100; --amber-ink:#6E4F00; --amber-soft:#FCF3D9;
+  --ok:#23704F; --ok-soft:#E2F1E9; --ng:#B42318; --ng-soft:#FBE6E3;
+  --letterbox:#C7CCD4;
+}
+*{box-sizing:border-box}
+html,body{margin:0;height:100%;overflow:hidden;background:var(--letterbox)}
+body{font-family:"Pretendard Variable","Pretendard","Apple SD Gothic Neo","Malgun Gothic","Noto Sans KR",system-ui,sans-serif;color:var(--ink);-webkit-text-size-adjust:100%;font-feature-settings:"tnum"}
+button{font:inherit;color:inherit}
+:focus-visible{outline:3px solid var(--amber);outline-offset:2px;border-radius:4px}
+
+/* ---------- 16:9 무대 ---------- */
+.stage{position:absolute;left:50%;top:50%;width:960px;height:540px;transform:translate(-50%,-50%) scale(var(--s,1));transform-origin:center;background:#fff;overflow:hidden;box-shadow:0 10px 40px rgba(27,42,74,.25)}
+
+/* ---------- 상단 바: 모듈명 + 7단계 진행선 ---------- */
+.topbar{position:absolute;left:0;right:0;top:0;height:60px;background:var(--navy);display:flex;align-items:center}
+.brand{flex:0 0 200px;padding-left:22px;color:#fff;font-size:14px;font-weight:800;letter-spacing:-.3px;line-height:1.2;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.brand small{display:block;font-size:11px;font-weight:500;color:#A9B6CF;letter-spacing:0;margin-top:2px;overflow:hidden;text-overflow:ellipsis}
+.rail{position:relative;flex:1;height:60px;margin-right:22px}
+.rail .track{position:absolute;left:14px;right:14px;top:21px;height:3px;background:#3A4D78;border-radius:2px}
+.rail .fill{position:absolute;left:0;top:0;bottom:0;background:var(--amber);border-radius:2px;transition:width .35s ease}
+.station{position:absolute;top:10px;width:72px;margin-left:-36px;background:none;border:0;padding:0;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:4px}
+.station .dot{width:24px;height:24px;border-radius:50%;display:grid;place-items:center;font-size:11.5px;font-weight:800;background:var(--navy);color:#8E9DBD;border:2px solid #4A5D88;transition:all .25s}
+.station .lb{font-size:11.5px;color:#8E9DBD;white-space:nowrap}
+.station.done .dot{background:#C9D3E6;border-color:#C9D3E6;color:var(--navy)}
+.station.done .lb{color:#C9D3E6}
+.station.cur .dot{background:var(--amber);border-color:#FFE08A;color:var(--navy);transform:scale(1.12)}
+.station.cur .lb{color:#fff;font-weight:700}
+
+/* ---------- 화면 ---------- */
+.viewport{position:absolute;left:0;right:0;top:60px;bottom:46px}
+.slide{position:absolute;inset:0;padding:16px 36px 10px;display:none;flex-direction:column;gap:12px}
+.slide.on{display:flex;animation:fade .22s ease}
+@keyframes fade{from{opacity:0}to{opacity:1}}
+@media (prefers-reduced-motion:reduce){.slide.on{animation:none}.rail .fill,.station .dot{transition:none}}
+.sh{flex:0 0 auto}
+.sec{font-size:12.5px;font-weight:700;color:var(--navy3);display:flex;gap:8px;align-items:center;min-height:18px}
+h2{margin:3px 0 0;font-size:24px;line-height:1.3;font-weight:800;color:var(--navy);letter-spacing:-.6px;display:flex;gap:10px;align-items:flex-start}
+h2 .q{flex:0 0 auto;margin-top:2px;width:28px;height:28px;border-radius:6px;background:var(--navy);color:#fff;font-size:15px;display:grid;place-items:center}
+h2.big{font-size:30px;line-height:1.32}
+.body{flex:1 1 auto;min-height:0;display:grid;gap:24px}
+.split{grid-template-columns:1.2fr 1fr}
+.split.even{grid-template-columns:1fr 1fr}
+.full{grid-template-columns:1fr}
+.fig{background:var(--panel);border-radius:12px;padding:12px;min-height:0;display:flex;align-items:center;justify-content:center}
+.fig svg{width:100%;height:100%;display:block}
+.figcol{min-height:0;display:flex;flex-direction:column;gap:10px}
+.figcol .fig{flex:1 1 auto}
+.side{min-height:0;display:flex;flex-direction:column;gap:12px;justify-content:center}
+
+/* 핵심 문장: 40자 안팎, 1~2개 */
+.key{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:9px}
+.key li{position:relative;padding-left:16px;font-size:18.5px;line-height:1.42;font-weight:700;letter-spacing:-.4px}
+.key li::before{content:"";position:absolute;left:0;top:.28em;width:4px;height:1.05em;border-radius:2px;background:var(--navy2)}
+.key b{color:var(--navy);background:linear-gradient(transparent 62%,var(--amber-soft) 62%)}
+/* 해설 문단: 2~4문장, 150~250자 */
+.exp{margin:0;font-size:15px;line-height:1.62;letter-spacing:-.2px;color:var(--ink)}
+.exp b{color:var(--navy)}
+/* 연결 문장: 다음 소단원으로 넘기는 질문 */
+.next{margin:0;border-top:1px dashed var(--line);padding-top:9px;font-size:14px;font-weight:700;color:var(--navy2);display:flex;gap:8px;align-items:baseline}
+.next span{flex:0 0 auto;font-size:11.5px;font-weight:800;color:var(--navy3);background:var(--navy-soft);border-radius:4px;padding:0 6px;line-height:20px}
+/* 각주: 기호의 뜻과 출처 번호만 */
+.foot{flex:0 0 auto;font-size:12px;line-height:1.5;color:var(--gray);margin:0}
+.foot b{color:var(--ink)}
+.cite{font-size:.72em;font-weight:700;color:var(--navy3);vertical-align:super;line-height:0;margin-left:1px}
+.tag-v{display:inline-block;font-size:11px;font-weight:700;border-radius:4px;padding:0 6px;line-height:18px;white-space:nowrap;vertical-align:1px;color:var(--gray);background:#F3F4F6;box-shadow:inset 0 0 0 1px var(--line)}
+
+/* 핵심 수학 개념 박스 */
+.math{flex:0 0 auto;border-left:3px solid var(--navy3);background:#F6F7F9;border-radius:0 8px 8px 0;padding:9px 13px;font-size:13.5px;line-height:1.5}
+.math .mt{font-size:12px;font-weight:800;color:var(--navy3);margin-bottom:2px}
+.math .f{font-family:"Cambria Math","Times New Roman",serif;font-size:18px;font-weight:700;color:var(--navy);margin:1px 0 4px}
+.math .r{display:grid;grid-template-columns:34px 1fr;gap:6px}
+.math .r span:first-child{font-size:11.5px;font-weight:700;color:var(--gray2);padding-top:1px}
+.math .w{margin-top:5px;padding-top:5px;border-top:1px dashed var(--line);color:var(--ng);font-weight:700;font-size:12.5px}
+
+/* ---------- 하단 바 ---------- */
+.bottombar{position:absolute;left:0;right:0;bottom:0;height:46px;border-top:1px solid var(--line);display:flex;align-items:center;padding:0 22px 0 36px;gap:12px;background:#fff}
+.counter{font-size:13px;color:var(--gray);font-weight:600}
+.counter strong{color:var(--navy)}
+.spacer{flex:1}
+.nav{border:1.5px solid var(--navy);background:#fff;color:var(--navy);border-radius:8px;height:32px;padding:0 16px;font-size:14px;font-weight:700;cursor:pointer}
+.nav.primary{background:var(--navy);color:#fff}
+.nav:disabled{opacity:.3;cursor:default}
+
+/* ---------- 홈으로 ---------- */
+.home{display:inline-flex;align-items:center;gap:6px;height:32px;padding:0 13px;border-radius:8px;border:1.5px solid var(--navy-soft);background:#fff;color:var(--navy2);font-size:13.5px;font-weight:700;line-height:1;text-decoration:none;white-space:nowrap}
+.home svg{width:14px;height:14px;flex:0 0 auto;display:block}
+.home:hover{background:var(--navy-soft);border-color:var(--navy3);color:var(--navy)}
+.home:focus-visible{outline:3px solid var(--amber);outline-offset:2px}
+@media (prefers-reduced-motion:reduce){.home{transition:none}}
+
+/* ① 학습개요 */
+.meta{display:grid;grid-template-columns:auto 1fr;gap:6px 14px;margin:0;font-size:14px}
+.meta dt{font-weight:700;color:var(--gray)}
+.meta dd{margin:0;font-weight:700;color:var(--navy)}
+.prevlink{background:var(--panel);border-radius:10px;padding:12px 14px;font-size:14.5px;line-height:1.55}
+.prevlink small{display:block;font-size:12px;font-weight:800;color:var(--navy3);margin-bottom:3px}
+
+/* ② 학습목표: 목표 → 문항 → 실습 연결 */
+.gmap{display:grid;grid-template-columns:44px 1fr 150px 150px;align-items:stretch;row-gap:12px;column-gap:0}
+.gmap .hd{font-size:12px;font-weight:700;color:var(--gray);padding:0 14px 2px}
+.gmap .gn{background:var(--navy);color:#fff;font-weight:800;font-size:18px;display:grid;place-items:center;border-radius:10px 0 0 10px}
+.gmap .gt{background:var(--panel);padding:14px 18px;font-size:17px;font-weight:700;line-height:1.42;letter-spacing:-.3px;display:flex;align-items:center}
+.gmap .gt b{color:var(--navy)}
+.gmap .ga,.gmap .gp{background:var(--panel);display:flex;align-items:center;padding:0 10px;border-left:2px solid #fff}
+.gmap .gp{border-radius:0 10px 10px 0}
+.jump{border:1.5px solid var(--navy3);background:#fff;border-radius:7px;padding:6px 10px;font-size:13px;font-weight:700;color:var(--navy);cursor:pointer;text-align:left;line-height:1.3;width:100%}
+.jump:hover{background:var(--navy-soft)}
+
+/* ④ 본문 정리 표 */
+.sumtbl{width:100%;border-collapse:separate;border-spacing:0;font-size:14.5px;line-height:1.5}
+.sumtbl th{background:var(--navy);color:#fff;font-weight:800;text-align:left;padding:10px 14px}
+.sumtbl th:first-child{border-radius:10px 0 0 0;width:150px}
+.sumtbl th:last-child{border-radius:0 10px 0 0}
+.sumtbl td{padding:11px 14px;border-bottom:1px solid var(--line);vertical-align:top}
+.sumtbl td:first-child{font-weight:800;color:var(--navy)}
+.sumtbl tr:nth-child(even) td{background:#F8F9FB}
+
+/* ⑤ 형성평가 */
+.qchips{display:flex;gap:6px}
+.qchips span{font-size:11.5px;font-weight:700;color:var(--navy2);background:var(--navy-soft);border-radius:4px;padding:0 7px;line-height:19px}
+h2.stem{font-size:21px;line-height:1.42;font-weight:800}
+.opts{display:grid;gap:9px;align-content:center}
+.opts.ox{grid-template-columns:1fr 1fr}
+.opt{border:1.5px solid var(--line);background:#fff;border-radius:10px;padding:11px 14px;text-align:left;font-size:16px;font-weight:600;cursor:pointer;display:flex;gap:10px;align-items:center}
+.opt .n{flex:0 0 26px;height:26px;border-radius:50%;background:var(--panel);display:grid;place-items:center;font-size:13px;font-weight:800;color:var(--navy)}
+.opts.ox .opt{justify-content:center;font-size:40px;font-weight:800;padding:22px;color:var(--navy)}
+.opt:hover:not(:disabled){border-color:var(--navy3);background:#F8F9FB}
+.opt:disabled{cursor:default}
+.opt.ok{border-color:var(--ok);background:var(--ok-soft);color:var(--ok)}
+.opt.ok .n{background:var(--ok);color:#fff}
+.opt.ng{border-color:var(--ng);background:var(--ng-soft);color:var(--ng)}
+.opt.ng .n{background:var(--ng);color:#fff}
+.fbp{background:var(--panel);border-radius:12px;padding:18px 20px;display:flex;flex-direction:column;gap:10px;font-size:14.5px;line-height:1.6}
+.fbp .empty{color:var(--gray);margin:auto 0}
+.fbp .verdict{font-size:19px;font-weight:800}
+.fbp.ok{background:var(--ok-soft)} .fbp.ok .verdict{color:var(--ok)}
+.fbp.ng{background:var(--ng-soft)} .fbp.ng .verdict{color:var(--ng)}
+.fbp .back{align-self:flex-start}
+.fbp .tally{margin-top:auto;font-size:12.5px;color:var(--gray);font-weight:600}
+
+/* ⑥ 실습 */
+.plabel{font-size:12px;font-weight:800;color:var(--navy3);margin-bottom:6px}
+.pcol{min-height:0;display:flex;flex-direction:column}
+.mbtns{display:flex;flex-wrap:nowrap;gap:3px;margin-bottom:8px}
+.mbtn{border:1px solid var(--line);background:#fff;border-radius:6px;padding:2px 6px;font-size:12px;cursor:pointer;min-width:26px}
+.mbtn.on{background:var(--navy);border-color:var(--navy);color:#fff}
+.ctrl{display:flex;align-items:center;gap:10px;font-size:14px;font-weight:600}
+input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
+.stats{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.stats.three{grid-template-columns:1fr 1fr 1fr}
+.stats div{background:var(--panel);border-radius:10px;padding:8px 12px}
+.stats small{display:block;font-size:11.5px;color:var(--gray);font-weight:600;line-height:1.35}
+.stats strong{font-size:22px;color:var(--navy);letter-spacing:-.4px}
+.pmsg{font-size:14.5px;font-weight:700;min-height:22px;line-height:1.45}
+.pmsg.ok{color:var(--ok)} .pmsg.ng{color:var(--ng)}
+.think{flex:0 0 auto;background:var(--amber-soft);border-radius:10px;padding:9px 14px;font-size:14.5px;font-weight:700;color:var(--amber-ink);display:flex;gap:10px;align-items:baseline}
+.think span{flex:0 0 auto;font-size:12px;font-weight:800}
+.howto{font-size:13.5px;color:var(--gray);line-height:1.5;margin:0}
+.btn{border:0;background:var(--navy);color:#fff;border-radius:8px;height:32px;padding:0 14px;font-size:13.5px;font-weight:700;cursor:pointer}
+.btn.ghost{background:#fff;color:var(--navy);box-shadow:inset 0 0 0 1.5px var(--navy)}
+.pool{flex:1;min-height:0;display:grid;grid-template-columns:1fr 1fr;align-content:start;gap:8px;padding:10px;border:1.5px dashed var(--line);border-radius:10px;background:#FAFBFC}
+.dcard{background:#fff;border:1.5px solid var(--navy3);border-radius:8px;padding:7px 10px;font-size:13.5px;font-weight:600;line-height:1.4;cursor:grab;user-select:none;-webkit-user-select:none;touch-action:none}
+.dcard.sel{box-shadow:0 0 0 3px var(--amber)}
+.dcard.ok{border-color:var(--ok);background:var(--ok-soft);color:var(--ok);cursor:default;font-size:12.5px;padding:5px 8px}
+.dcard.shake{animation:shake .35s;border-color:var(--ng);background:var(--ng-soft)}
+@keyframes shake{25%{transform:translateX(-5px)}75%{transform:translateX(5px)}}
+.ghostc{position:absolute;pointer-events:none;z-index:50;opacity:.92;box-shadow:0 8px 20px rgba(27,42,74,.25);cursor:grabbing}
+.bins{flex:1 0 auto;min-height:0;display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.bin .dcard{font-size:12px;padding:3px 7px;line-height:1.3}
+.p2row{display:flex;gap:10px;align-items:center}.p2row .pmsg{flex:1;margin:0}.p2row .btn{flex:0 0 auto}
+.bin{border:1.5px solid var(--line);border-radius:10px;padding:6px;display:flex;flex-direction:column;gap:6px;background:#fff;cursor:pointer;min-height:0}
+.bin h4{margin:0;background:var(--navy);color:#fff;border-radius:6px;text-align:center;font-size:14px;padding:4px}
+.bin.hover{border-color:var(--amber);background:var(--amber-soft)}
+.res{display:none;flex-direction:column;gap:8px}
+.res.on{display:flex}
+
+/* ⑦ 용어해설·참고자료 */
+.gl{display:grid;grid-template-columns:1fr 1fr;grid-template-rows:repeat(3,1fr);gap:10px 22px;min-height:0}
+.gi{border-top:2px solid var(--navy);padding:8px 0 0;display:flex;flex-direction:column;gap:3px;min-height:0}
+.gi .t{font-size:16.5px;font-weight:800;color:var(--navy);display:flex;gap:6px;align-items:baseline;flex-wrap:wrap}
+.gi .t em{font-style:normal;font-weight:500;font-size:12.5px;color:var(--gray)}
+.gi .t i{font-style:normal;font-size:12px;font-weight:800;color:var(--navy3);width:22px}
+.gi .d{font-size:14px;line-height:1.5}
+.gi .e{font-size:12.5px;line-height:1.45;color:var(--gray)}
+.gi .e strong{color:var(--navy3)}
+.refs{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:8px;font-size:13.5px;line-height:1.5}
+.refs li{display:grid;grid-template-columns:30px 1fr;gap:4px}
+.refs li span{font-weight:800;color:var(--navy3)}
+.refs a{color:var(--navy2);word-break:break-all}
+.nextmod{background:var(--navy);color:#fff;border-radius:12px;padding:18px 22px;display:flex;flex-direction:column;gap:6px}
+.nextmod small{font-size:12px;font-weight:700;color:#A9B6CF}
+.nextmod strong{font-size:19px;line-height:1.45;letter-spacing:-.3px}
+
+.rotate{position:fixed;left:0;right:0;bottom:max(14px,env(safe-area-inset-bottom));text-align:center;font-size:13px;color:#3A4560;display:none}
+@media (orientation:portrait) and (max-width:700px){.rotate{display:block}}
+</style>
+</head>
+<body>
+<div class="stage" id="stage">
+  <header class="topbar">
+    <!-- [교체] 모듈명 / 과정명·모듈 번호 (장·절 번호는 쓰지 않음) -->
+    <div class="brand" id="brand">세 집단 이상 비교<small>추론통계와 가설검정 · M15</small></div>
+    <nav class="rail" id="rail" aria-label="학습 단계"><div class="track"><div class="fill" id="fill"></div></div></nav>
+  </header>
+
+  <main class="viewport" id="vp">
+    <!-- ① 학습개요 ─────────────────────────────── -->
+    <section class="slide" data-step="0">
+      <div class="sh"><div class="sec">학습개요</div>
+        <h2 class="big">세 집단 이상은 분산분석과 다중비교로, 검정 다중성을 피하며 비교합니다</h2></div>
+      <div class="body split">
+        <div class="fig"><svg id="m15-ov" viewBox="0 0 440 260" role="img" aria-label="세 집단 비교에서 분산분석, 검정 다중성, 다중비교, 비모수검정으로 이어지는 흐름"></svg></div>
+        <div class="side">
+          <div class="prevlink"><small>지난 모듈에서는</small>데이터 유형과 성질을 보고 일표본·이표본·대응 있는 t검정과 윌콕슨 순위합 검정 중 알맞은 것을 골랐습니다.<small style="margin-top:8px">이번 모듈에서는</small>비교할 집단이 3개 이상일 때 쓰는 분산분석과, 어느 쌍이 다른지 찾는 다중비교 검정을 배웁니다.</div>
+          <dl class="meta"><dt>학습 시간</dt><dd>약 40분</dd><dt>본문</dt><dd>소단원 5개</dd><dt>실습</dt><dd>조작형 · 분류형 · 추정형</dd></dl>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" data-step="0">
+      <div class="sh"><div class="sec">학습개요 · 이 모듈의 예시</div><h2>비료 A, B, C로 키운 식물의 줄기 길이를 비교합니다</h2></div>
+      <div class="body split">
+        <div class="fig"><svg id="m15-case" viewBox="0 0 440 250" role="img" aria-label="비료 A, B, C 각 6개의 줄기 길이 표와 평균"></svg></div>
+        <div class="side">
+          <ul class="key"><li>세 집단, 각 6개의 데이터를 끝까지 씁니다.</li></ul>
+          <p class="exp">세 종류의 비료 A, B, C로 각각 식물 6그루를 기른 뒤 줄기 길이(cm)를 쟀습니다. 평균은 A 32.5, B 34.2, C 38.9입니다. 이 차이가 우연인지, 비료 효과인지, 또 어느 비료끼리 다른지를 이 모듈 전체에서 이 데이터로 확인합니다.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ② 학습목표 ─────────────────────────────── -->
+    <section class="slide" data-step="1">
+      <div class="sh"><div class="sec">학습목표</div><h2>이 모듈을 마치면 이렇게 할 수 있습니다</h2></div>
+      <div class="body full" style="align-content:center">
+        <div class="gmap">
+          <div></div><div class="hd">목표</div><div class="hd">확인하는 문항</div><div class="hd">연결 실습</div>
+          <div class="gn">1</div><div class="gt"><span>분산분석의 가설과 F값으로 집단 간 차이를 <b>해석한다</b>.</span></div>
+          <div class="ga"><button class="jump" data-jump="q1">문항 1·2</button></div><div class="gp"><button class="jump" data-jump="p1">실습 1 조작</button></div>
+          <div class="gn">2</div><div class="gt"><span>검정 다중성을 계산하고 알맞은 다중비교 방법을 <b>구분한다</b>.</span></div>
+          <div class="ga"><button class="jump" data-jump="q3">문항 3·4</button></div><div class="gp"><button class="jump" data-jump="p3">실습 3 추정</button></div>
+          <div class="gn">3</div><div class="gt"><span>분석 순서와 비모수 대안의 필요성을 <b>판단한다</b>.</span></div>
+          <div class="ga"><button class="jump" data-jump="q5">문항 5·6</button></div><div class="gp"><button class="jump" data-jump="p2">실습 2 분류</button></div>
+        </div>
+      </div>
+      <p class="foot">버튼을 누르면 해당 문항이나 실습 화면으로 바로 이동합니다.</p>
+    </section>
+
+    <!-- ③ 일상의 예시 ─────────────────────────────── -->
+    <section class="slide" data-step="2">
+      <div class="sh"><div class="sec">일상의 예시 1/6</div><h2>세 빵집의 식빵 무게, 모두 같을까요?</h2></div>
+      <div class="body split">
+        <div class="fig"><svg viewBox="0 0 440 250" role="img" aria-label="세 빵집의 식빵이 모두 같은지, 적어도 한 곳은 다른지 묻는 그림">
+          <g font-size="12.5" font-weight="800" fill="#1B2A4A" text-anchor="middle">
+            <rect x="30" y="60" width="100" height="70" rx="22" fill="#F3C9A8"/><text x="80" y="160">빵집 A</text>
+            <rect x="170" y="56" width="100" height="74" rx="22" fill="#F3C9A8"/><text x="220" y="160">빵집 B</text>
+            <rect x="310" y="48" width="100" height="82" rx="22" fill="#F3C9A8"/><text x="360" y="160">빵집 C</text></g>
+          <rect x="40" y="186" width="360" height="44" rx="10" fill="#FCF3D9" stroke="#E0A100" stroke-width="2"/>
+          <text x="220" y="213" text-anchor="middle" font-size="12.5" font-weight="700" fill="#6E4F00">“모두 같다” 또는 “적어도 한 곳은 다르다”</text>
+        </svg></div>
+        <div class="side">
+          <ul class="key"><li>셋 이상이면 ‘모두 같은가’부터 묻습니다.</li></ul>
+          <p class="exp">세 빵집의 식빵을 비교할 때 가장 먼저 떠오르는 질문은 ‘세 곳의 식빵 무게가 모두 같은가’입니다. 모두 같지 않다면 적어도 한 곳은 다르다는 뜻이지만, 그것만으로는 어느 빵집이 다른지 아직 알 수 없습니다.</p>
+          <p class="next"><span>본문에서</span>4-1 분산분석의 가설로 이어집니다.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" data-step="2">
+      <div class="sh"><div class="sec">일상의 예시 2/6</div><h2>시끄러운 곳에서는 목소리가 커야 들립니다</h2></div>
+      <div class="body split">
+        <div class="fig"><svg viewBox="0 0 440 250" role="img" aria-label="주변 소음에 비해 목소리가 커야 말이 전달됨">
+          <rect x="20" y="30" width="190" height="180" rx="12" fill="#fff"/><rect x="230" y="30" width="190" height="180" rx="12" fill="#fff"/>
+          <text x="115" y="56" text-anchor="middle" font-size="13" font-weight="800" fill="#23704F">조용한 도서관</text><text x="325" y="56" text-anchor="middle" font-size="13" font-weight="800" fill="#B42318">시끄러운 공장</text>
+          <g fill="#9AA0AA"><rect x="50" y="150" width="8" height="10"/><rect x="62" y="146" width="8" height="14"/><rect x="74" y="152" width="8" height="8"/></g>
+          <g fill="#2B8CC4"><rect x="120" y="110" width="12" height="50"/><rect x="136" y="100" width="12" height="60"/></g>
+          <g fill="#9AA0AA"><rect x="250" y="110" width="8" height="50"/><rect x="262" y="96" width="8" height="64"/><rect x="274" y="104" width="8" height="56"/><rect x="286" y="90" width="8" height="70"/></g>
+          <g fill="#2B8CC4"><rect x="340" y="100" width="12" height="60"/><rect x="356" y="94" width="12" height="66"/></g>
+          <g font-size="11" fill="#6B7280" text-anchor="middle"><text x="66" y="180">소음</text><text x="134" y="180">목소리</text><text x="272" y="180">소음</text><text x="354" y="180">목소리</text></g>
+          <text x="220" y="236" text-anchor="middle" font-size="11.5" fill="#6B7280">같은 목소리도 소음에 비해 작으면 묻힘</text>
+        </svg></div>
+        <div class="side">
+          <ul class="key"><li>신호는 잡음과 견주어 판단합니다.</li></ul>
+          <p class="exp">도서관에서는 작은 목소리도 또렷이 들리지만, 시끄러운 공장에서는 같은 크기로 말해도 소음에 묻힙니다. 말이 전달되는지는 목소리의 크기 자체가 아니라 주변 소음과의 비율로 정해집니다. 집단 간 차이도 원래 있는 흩어짐과 견주어 판단합니다.</p>
+          <p class="next"><span>본문에서</span>4-2 분산분석의 원리로 이어집니다.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" data-step="2">
+      <div class="sh"><div class="sec">일상의 예시 3/6</div><h2>주사위를 여러 번 던지면 언젠가 6이 나옵니다</h2></div>
+      <div class="body split">
+        <div class="fig"><svg viewBox="0 0 440 250" role="img" aria-label="주사위를 1번, 3번, 10번 던질 때 6이 적어도 한 번 나올 확률">
+          <g font-size="12" font-weight="800" fill="#1B2A4A" text-anchor="middle"><text x="80" y="40">1번</text><text x="220" y="40">3번</text><text x="360" y="40">10번</text></g>
+          <rect x="60" y="180" width="40" height="28" fill="#2B8CC4"/><rect x="200" y="137" width="40" height="71" fill="#2B8CC4"/><rect x="340" y="69" width="40" height="139" fill="#B42318"/>
+          <g font-size="13" font-weight="800" text-anchor="middle"><text x="80" y="172" fill="#2B8CC4">17%</text><text x="220" y="129" fill="#2B8CC4">42%</text><text x="360" y="61" fill="#B42318">84%</text></g>
+          <line x1="30" y1="208" x2="410" y2="208" stroke="#9AA0AA" stroke-width="1.5"/>
+          <text x="220" y="234" text-anchor="middle" font-size="11.5" fill="#6B7280">6이 적어도 한 번 나올 확률 = 1 − (5/6)^던진 횟수</text>
+        </svg></div>
+        <div class="side">
+          <ul class="key"><li>여러 번 시도하면 드문 일도 잘 일어납니다.</li></ul>
+          <p class="exp">주사위 한 번에 6이 나올 확률은 약 17%지만, 10번 던지면 6이 적어도 한 번 나올 확률은 84%까지 올라갑니다. 한 번에는 드문 일이라도 여러 번 시도하면 일어나기 쉽습니다. 가설검정을 여러 번 반복할 때도 같은 일이 생깁니다.</p>
+          <p class="next"><span>본문에서</span>4-3 검정 다중성으로 이어집니다.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" data-step="2">
+      <div class="sh"><div class="sec">일상의 예시 4/6</div><h2>리그전은 모든 팀끼리, 도전전은 챔피언과만 겨룹니다</h2></div>
+      <div class="body split">
+        <div class="fig"><svg viewBox="0 0 440 250" role="img" aria-label="왼쪽은 모든 팀끼리 경기, 오른쪽은 챔피언과 도전자만 경기">
+          <rect x="20" y="30" width="190" height="190" rx="12" fill="#fff"/><rect x="230" y="30" width="190" height="190" rx="12" fill="#fff"/>
+          <text x="115" y="56" text-anchor="middle" font-size="13" font-weight="800" fill="#1B2A4A">리그전: 모든 쌍</text><text x="325" y="56" text-anchor="middle" font-size="13" font-weight="800" fill="#1B2A4A">도전전: 챔피언과만</text>
+          <g stroke="#2B8CC4" stroke-width="2.5"><line x1="115" y1="90" x2="65" y2="180"/><line x1="115" y1="90" x2="165" y2="180"/><line x1="65" y1="180" x2="165" y2="180"/></g>
+          <g fill="#1B2A4A"><circle cx="115" cy="90" r="16"/><circle cx="65" cy="180" r="16"/><circle cx="165" cy="180" r="16"/></g>
+          <g stroke="#E0A100" stroke-width="2.5"><line x1="325" y1="100" x2="265" y2="185"/><line x1="325" y1="100" x2="325" y2="185"/><line x1="325" y1="100" x2="385" y2="185"/></g>
+          <circle cx="325" cy="100" r="20" fill="#E0A100"/><text x="325" y="105" text-anchor="middle" font-size="12" font-weight="800" fill="#fff">챔피언</text>
+          <g fill="#5B6E97"><circle cx="265" cy="185" r="14"/><circle cx="325" cy="185" r="14"/><circle cx="385" cy="185" r="14"/></g>
+        </svg></div>
+        <div class="side">
+          <ul class="key"><li>목적에 따라 대진이 달라집니다.</li></ul>
+          <p class="exp">리그전에서는 모든 팀이 서로 한 번씩 경기를 해 순위를 정합니다. 반면 도전전에서는 도전자들이 챔피언과만 겨룹니다. 알고 싶은 것이 ‘모든 팀의 순서’인지 ‘챔피언을 이기는 팀’인지에 따라 치를 경기의 수와 방식이 달라집니다.</p>
+          <p class="next"><span>본문에서</span>4-4 다중비교 방법으로 이어집니다.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" data-step="2">
+      <div class="sh"><div class="sec">일상의 예시 5/6</div><h2>세 반의 달리기 기록을 등수로 비교합니다</h2></div>
+      <div class="body split">
+        <div class="fig"><svg viewBox="0 0 440 250" role="img" aria-label="세 반 학생의 등수를 모아 반별 등수 합을 비교">
+          <rect x="20" y="30" width="400" height="180" rx="12" fill="#fff"/>
+          <g font-size="12" font-weight="800" fill="#1B2A4A" text-anchor="middle"><text x="100" y="58">1반</text><text x="220" y="58">2반</text><text x="340" y="58">3반</text></g>
+          <g font-size="13" fill="#22262E" text-anchor="middle"><text x="100" y="92">1등</text><text x="100" y="118">3등</text><text x="100" y="144">4등</text>
+            <text x="220" y="92">2등</text><text x="220" y="118">6등</text><text x="220" y="144">7등</text>
+            <text x="340" y="92">5등</text><text x="340" y="118">8등</text><text x="340" y="144">9등</text></g>
+          <line x1="40" y1="160" x2="400" y2="160" stroke="#DDE1E7"/>
+          <g font-size="13" font-weight="800" fill="#2B8CC4" text-anchor="middle"><text x="100" y="188">합 8</text><text x="220" y="188">합 15</text><text x="340" y="188">합 22</text></g>
+          <text x="220" y="234" text-anchor="middle" font-size="11.5" fill="#6B7280">기록 대신 등수를 모아 세 반을 한꺼번에 비교</text>
+        </svg></div>
+        <div class="side">
+          <ul class="key"><li>세 집단도 등수로 비교할 수 있습니다.</li></ul>
+          <p class="exp">세 반 학생 9명의 달리기 등수를 매긴 뒤 반별로 등수를 더하면, 1반 8, 2반 15, 3반 22처럼 어느 반이 앞쪽에 몰려 있는지 알 수 있습니다. 기록에 유난히 늦은 학생이 있어도 등수로는 영향이 작아, 셋 이상의 집단에도 같은 방식을 쓸 수 있습니다.</p>
+          <p class="next"><span>본문에서</span>4-5 세 집단 이상의 비모수검정으로 이어집니다.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" data-step="2">
+      <div class="sh"><div class="sec">일상의 예시 6/6</div><h2>현장에서는? 세 라인의 품질을 어떻게 한꺼번에 비교할까요?</h2></div>
+      <div class="body split even">
+        <div class="fig"><svg viewBox="0 0 420 250" role="img" aria-label="다섯 장면이 세 집단 이상 비교로 이어지는 그림">
+          <defs><marker id="b2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10z" fill="#5B6E97"/></marker></defs>
+          <g font-size="12.5" font-weight="700" fill="#1B2A4A" text-anchor="middle">
+            <rect x="14" y="10" width="150" height="38" rx="10" fill="#fff" stroke="#5B6E97" stroke-width="1.5"/><text x="89" y="34">모두 같은가</text>
+            <rect x="14" y="58" width="150" height="38" rx="10" fill="#fff" stroke="#5B6E97" stroke-width="1.5"/><text x="89" y="82">신호 ÷ 잡음</text>
+            <rect x="14" y="106" width="150" height="38" rx="10" fill="#fff" stroke="#5B6E97" stroke-width="1.5"/><text x="89" y="130">여러 번 하면 잘 일어남</text>
+            <rect x="14" y="154" width="150" height="38" rx="10" fill="#fff" stroke="#5B6E97" stroke-width="1.5"/><text x="89" y="178">리그전 · 도전전</text>
+            <rect x="14" y="202" width="150" height="38" rx="10" fill="#fff" stroke="#5B6E97" stroke-width="1.5"/><text x="89" y="226">등수로 비교</text>
+          </g>
+          <g stroke="#5B6E97" stroke-width="2" fill="none"><path d="M166 29 C220 29 220 112 254 118" marker-end="url(#b2)"/><path d="M166 77 C210 77 220 116 254 121" marker-end="url(#b2)"/><path d="M166 125 L254 125" marker-end="url(#b2)"/><path d="M166 173 C210 173 220 132 254 129" marker-end="url(#b2)"/><path d="M166 221 C220 221 220 138 254 132" marker-end="url(#b2)"/></g>
+          <rect x="258" y="84" width="150" height="82" rx="12" fill="#1B2A4A"/>
+          <text x="333" y="116" text-anchor="middle" font-size="15" font-weight="800" fill="#fff">세 집단 이상</text><text x="333" y="136" text-anchor="middle" font-size="15" font-weight="800" fill="#fff">비교하기</text>
+          <text x="333" y="156" text-anchor="middle" font-size="11" fill="#C9D3E6">분산분석 · 다중비교</text>
+        </svg></div>
+        <div class="side">
+          <p class="exp">다섯 장면은 ‘모두 같은가’를 묻고, 차이를 흩어짐과 견주고, 반복하면 우연이 잘 일어난다는 점을 알고, 목적에 맞게 대진을 짜고, 필요하면 등수로 비교하는 순서로 이어집니다. 세 라인이나 여러 공정 조건의 품질을 비교할 때도 같은 순서로 분석합니다.</p>
+          <p class="next"><span>다음 질문</span>세 집단의 평균은 어떤 가설로 비교할까?</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ④ 본문 ─────────────────────────────── -->
+    <section class="slide" data-step="3" id="s-4-1a">
+      <div class="sh"><div class="sec">4-1 분산분석의 가설</div><h2><span class="q">Q</span>세 집단 이상의 평균값은 어떤 가설로 비교할까요?</h2></div>
+      <div class="body split even">
+        <div class="fig"><svg id="m15-hyp" viewBox="0 0 420 270" role="img" aria-label="귀무가설 모든 집단의 평균이 같다, 대립가설 적어도 한 쌍에는 차이가 있다, A·B·C 세 쌍"></svg></div>
+        <div class="side">
+          <ul class="key"><li><b>분산분석</b>: 3개 이상 집단의 평균값 비교</li><li>대립가설은 ‘적어도 한 쌍에는 차이가 있다’</li></ul>
+          <p class="exp">실험군과 대조군처럼 2개 집단만이 아니라 3개 이상의 조건을 비교할 때가 있습니다. 이때 3개 이상 집단의 평균값을 비교하는 방법이 분산분석(ANOVA)입니다. 비료 A, B, C의 모집단 평균을 μA, μB, μC라 하면, 귀무가설은 ‘모든 집단의 평균이 같다(μA = μB = μC)’, 대립가설은 ‘적어도 한 쌍에는 차이가 있다’입니다.</p>
+          <p class="next"><span>다음 질문</span>분산분석은 무엇을 견주어 판단할까?</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" data-step="3" id="s-4-2a">
+      <div class="sh"><div class="sec">4-2 분산분석의 원리</div><h2><span class="q">Q</span>데이터의 흩어짐은 어떻게 두 부분으로 나뉠까요?</h2></div>
+      <div class="body split even">
+        <div class="fig"><svg id="m15-split" viewBox="0 0 420 270" role="img" aria-label="18개 데이터와 집단 평균, 전체 평균. 집단 내 변동과 집단 간 변동"></svg></div>
+        <div class="side">
+          <ul class="key"><li><b>집단 내 변동</b>: 원래 있는 무작위 오차</li><li><b>집단 간 변동</b>: 집단 간 차이(효과)</li></ul>
+          <p class="exp">먼저 집단을 무시하고 모든 데이터로 전체 평균 x̄ = 35.2를 구합니다. C군의 데이터 xᵢ라면 전체 평균과의 차이를 xᵢ − x̄ = (xᵢ − x̄C) + (x̄C − x̄)처럼 집단 안에서의 차이(집단 내 변동)와 집단 평균과 전체 평균의 차이(집단 간 변동)로 분해할 수 있습니다. 집단 간 차이가 있다면 집단 간 변동이 집단 내 변동보다 크게 나타납니다.</p>
+          <p class="next"><span>다음 질문</span>두 변동을 어떻게 비교할까?</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" data-step="3" id="s-4-2b">
+      <div class="sh"><div class="sec">4-2 분산분석의 원리</div><h2><span class="q">Q</span>두 변동의 비율로 어떻게 판단할까요?</h2></div>
+      <div class="body split even">
+        <div class="figcol">
+          <div class="fig"><svg id="m15-f" viewBox="0 0 420 150" role="img" aria-label="자유도 2와 15의 F분포, 5% 지점 3.68, 관찰된 F 60.7은 훨씬 오른쪽"></svg></div>
+          <div class="math">
+            <div class="mt">핵심 수학 개념 · F값</div>
+            <div class="f">F = 평균적인 집단 간 변동 ÷ 평균적인 집단 내 변동</div>
+            <div class="r"><span>계산</span><span>(131.3 ÷ 2) ÷ (16.2 ÷ 15) = 65.7 ÷ 1.08 ≈ 60.7</span></div>
+            <div class="r"><span>해석</span><span>5% 지점 3.68보다 훨씬 커서 p &lt; 10⁻⁷입니다.</span></div>
+          </div>
+        </div>
+        <div class="side">
+          <ul class="key"><li>F = 집단 간 변동 ÷ 집단 내 변동</li><li>귀무가설이 옳으면 F는 <b>F분포</b>를 따릅니다.</li></ul>
+          <p class="exp">구체적으로 F값 = 평균적인 집단 간 변동 ÷ 평균적인 집단 내 변동을 검정통계량으로 씁니다. 이 값은 귀무가설이 옳다고 가정하면 F분포라는 분포를 따르며, 관찰한 F값 이상으로 극단적인 값이 나올 확률이 p값입니다. F값이 5% 지점보다 오른쪽에 있으면 유의수준 0.05에서 통계적으로 유의미한 집단 간 차이가 있다는 것입니다.</p>
+          <p class="next"><span>다음 질문</span>계산에 나온 2와 15는 무엇일까?</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" data-step="3" id="s-4-2c">
+      <div class="sh"><div class="sec">4-2 분산분석의 원리</div><h2><span class="q">Q</span>F값 계산에서 나눈 2와 15는 무엇일까요?</h2></div>
+      <div class="body split even">
+        <div class="fig"><svg id="m15-df" viewBox="0 0 420 270" role="img" aria-label="표본 10개의 평균이 정해지면 9개만 자유롭게 정할 수 있음. 비료 예시의 자유도 2와 15"></svg></div>
+        <div class="side">
+          <ul class="key"><li><b>자유도</b>: 자유롭게 움직일 수 있는 변수의 수</li><li>분포의 형태를 정할 때 씁니다.</li></ul>
+          <p class="exp">표본크기 n = 10이면 자유도는 10이지만, 표본평균을 계산한 뒤에는 9개 데이터가 정해지면 남은 1개의 값을 확정할 수 있어 자유도가 9가 됩니다. 자유도는 t분포와 F분포의 형태를 정할 때 쓰입니다. 비료 예시에서 집단 간은 3 − 1 = 2, 집단 내는 18 − 3 = 15이며, 논문에서는 d.f.로 값을 표시하기도 합니다.</p>
+          <p class="next"><span>다음 질문</span>어느 쌍이 다른지는 어떻게 알까?</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" data-step="3" id="s-4-3a">
+      <div class="sh"><div class="sec">4-3 검정 다중성</div><h2><span class="q">Q</span>t검정을 쌍마다 반복하면 왜 안 될까요?</h2></div>
+      <div class="body split even">
+        <div class="figcol">
+          <div class="fig"><svg id="m15-fwer" viewBox="0 0 420 150" role="img" aria-label="검정 횟수가 늘수록 적어도 한 번 귀무가설을 잘못 기각할 확률이 1에 가까워짐"></svg></div>
+          <div class="math">
+            <div class="mt">핵심 수학 개념 · 반복 검정의 제1종 오류</div>
+            <div class="f">1 − (1 − α)<sup>k</sup> &nbsp;(k: 검정 횟수)</div>
+            <div class="r"><span>계산</span><span>3쌍: 1 − (1 − 0.05)³ = 1 − 0.857 ≈ 0.143</span></div>
+            <div class="r"><span>해석</span><span>설정한 0.05를 훌쩍 넘습니다.</span></div>
+          </div>
+        </div>
+        <div class="side">
+          <ul class="key"><li>반복할수록 제1종 오류가 쉽게 일어납니다.</li><li>분산분석의 결론만으로 어느 쌍인지 모릅니다.</li></ul>
+          <p class="exp">비료 예시의 분산분석은 F = 60.7로 유의했지만, 대립가설 ‘적어도 한 쌍에는 차이가 있다’만으로는 어느 쌍인지 알 수 없습니다. 그렇다고 3쌍에 이표본 t검정을 유의수준 0.05로 반복하면, 적어도 한 쌍에서 제1종 오류가 일어날 확률이 0.143이 됩니다. 집단 수가 늘수록 쌍의 수(ₙC₂)도 늘어, 실은 차이가 없는데도 있다고 말하는 잘못이 쉽게 일어납니다.</p>
+          <p class="next"><span>다음 질문</span>반복 검정 문제는 어떻게 피할까?</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" data-step="3" id="s-4-3b">
+      <div class="sh"><div class="sec">4-3 검정 다중성</div><h2><span class="q">Q</span>검정을 반복하면서 전체 유의수준을 지키려면?</h2></div>
+      <div class="body split even">
+        <div class="figcol">
+          <div class="fig"><svg id="m15-bonf" viewBox="0 0 420 150" role="img" aria-label="세 쌍의 t검정 p값을 0.05 대신 0.0167 기준으로 판단. A와 B는 유의하지 않음"></svg></div>
+          <div class="math">
+            <div class="mt">핵심 수학 개념 · 본페로니 교정</div>
+            <div class="f">각 검정의 기준 = α ÷ k</div>
+            <div class="r"><span>계산</span><span>0.05 ÷ 3 ≈ 0.0167, A–B p = 0.022 &gt; 0.0167</span></div>
+            <div class="r"><span>해석</span><span>A–B는 차이가 있다고 말하지 못합니다.</span></div>
+          </div>
+        </div>
+        <div class="side">
+          <ul class="key"><li><b>다중비교 검정</b>: 반복한 만큼 기준을 엄격히</li><li><b>본페로니 교정</b>: 각 검정을 α/k로 판단</li></ul>
+          <p class="exp">검정 다중성을 피하려고 쓰는 방법이 다중비교 검정이며, 검정을 반복하는 만큼 유의수준을 엄격하게 바꿔 전체 유의수준 α = 0.05를 지킵니다. 가장 단순한 본페로니 교정은 검정 횟수를 k라 할 때 각 검정에서 p &lt; α/k이면 차이가 있다고 판단합니다. 간편하고 다양한 비교에 쓸 수 있지만 검정력이 낮아, 비료 예시의 A–B처럼 차이를 놓치기 쉽습니다.</p>
+          <p class="next"><span>다음 질문</span>검정력이 더 좋은 방법은 없을까?</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" data-step="3" id="s-4-4a">
+      <div class="sh"><div class="sec">4-4 다중비교 방법</div><h2><span class="q">Q</span>모든 쌍을 비교하면서 검정력도 지키려면?</h2></div>
+      <div class="body split even">
+        <div class="fig"><svg id="m15-tukey" viewBox="0 0 420 270" role="img" aria-label="비료 A, B, C 평균과 표준오차 막대그래프, 튜키 검정 결과 A–B 별 1개, A–C와 B–C 별 3개"></svg></div>
+        <div class="side">
+          <ul class="key"><li><b>튜키 검정</b>: 모든 쌍을 비교하는 방법</li><li>본페로니 교정보다 검정력이 좋습니다.</li></ul>
+          <p class="exp">본페로니 교정보다 검정력을 개선한 방법으로, 모든 쌍 사이를 비교할 때는 튜키 검정이 흔히 쓰입니다. 비료 데이터에 튜키 검정을 적용하면 A–B는 p = 0.034, A–C와 B–C는 p &lt; 0.001로, 본페로니 교정에서 놓쳤던 A–B까지 포함해 비료 A, B, C 모두에서 줄기 길이가 통계적으로 다르다는 결론을 얻습니다.</p>
+          <p class="next"><span>다음 질문</span>모든 쌍이 아니라 일부만 비교하고 싶다면?</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" data-step="3" id="s-4-4b">
+      <div class="sh"><div class="sec">4-4 다중비교 방법</div><h2><span class="q">Q</span>비교하고 싶은 쌍이 정해져 있다면 어떤 방법을 쓸까요?</h2></div>
+      <div class="body split even">
+        <div class="fig"><svg id="m15-three" viewBox="0 0 420 270" role="img" aria-label="튜키는 모든 쌍, 던넷은 대조군과 각 실험군, 윌리엄스는 처리량에 따른 단조 증가"></svg></div>
+        <div class="side">
+          <ul class="key"><li><b>던넷 검정</b>: 대조군과 각각 비교</li><li><b>윌리엄스 검정</b>: 단조 증가(감소)를 상정</li></ul>
+          <p class="exp">대조군과의 비교에만 관심이 있을 때는 던넷 검정을 이용하며, 모든 쌍을 비교하는 튜키 검정보다 검정력이 향상됩니다. 또 집단 간에 순위를 매길 수 있는 경우, 예를 들어 비료의 양이 늘어남에 따라 줄기 길이가 단조로 증가한다고 상정할 수 있다면 윌리엄스 검정을 쓰는 편이 검정력이 좋습니다. 비교 목적을 먼저 정하고 방법을 고릅니다.</p>
+          <p class="next"><span>다음 질문</span>분산분석을 꼭 먼저 해야 할까?</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" data-step="3" id="s-4-4c">
+      <div class="sh"><div class="sec">4-4 다중비교 방법</div><h2><span class="q">Q</span>다중비교 전에 언제나 분산분석이 필요할까요?</h2></div>
+      <div class="body split even">
+        <div class="fig"><svg id="m15-order" viewBox="0 0 420 270" role="img" aria-label="분산분석 후 다중비교를 습관처럼 하면 검정 다중성 문제, 다중비교만 단독으로 해도 됨"></svg></div>
+        <div class="side">
+          <ul class="key"><li>다중비교는 분산분석 없이 단독으로 해도 됩니다.</li><li>두 결과가 서로 다를 수도 있습니다.</li></ul>
+          <p class="exp">다중비교는 분산분석에서 p &lt; α일 때 하는 것이 일반적이지만 반드시 이 순서가 적절한 것은 아닙니다. 다중비교에는 F분포를 이용하는 것과 그렇지 않은 것이 있어, 후자는 분산분석에서 유의하지 않았는데 다중비교에서는 유의한 쌍이 있는 등 결과가 다를 수 있습니다. 소개한 본페로니, 튜키, 던넷, 윌리엄스 검정은 분산분석과 원리가 달라 단독으로 수행해도 문제없으며, 오히려 습관적인 2단계 실행은 검정 다중성을 부릅니다.</p>
+          <p class="next"><span>다음 질문</span>정규성이 없으면 어떻게 비교할까?</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" data-step="3" id="s-4-5a">
+      <div class="sh"><div class="sec">4-5 세 집단 이상의 비모수검정</div><h2><span class="q">Q</span>정규성이 없는 집단이 있으면 어떻게 비교할까요?</h2></div>
+      <div class="body split even">
+        <div class="fig"><svg id="m15-np" viewBox="0 0 420 270" role="img" aria-label="18개 데이터 순위와 집단별 순위합 25, 53, 93, 모수검정과 비모수검정의 대응표"></svg></div>
+        <div class="side">
+          <ul class="key"><li><b>크러스컬-월리스 검정</b>: 분산분석의 비모수판</li><li>쌍별 비교는 <b>스틸-드와스 검정</b>을 씁니다.</li></ul>
+          <p class="exp">분산분석은 모수검정이므로 t검정과 마찬가지로 각 집단의 데이터에 정규성이 있어야 합니다. 정규성이 없는 집단이 1개 이상이라면 분산분석 대신 비모수검정인 크러스컬-월리스 검정을 쓰는 것을 권합니다. 비료 데이터에 적용하면 순위합 25, 53, 93으로 p = 0.0011입니다. 튜키 검정에 상응하는 비모수 방법은 스틸-드와스 검정, 던넷 검정에 상응하는 것은 스틸 검정입니다.</p>
+          <p class="next"><span>정리</span>세 집단 이상 비교의 길을 한 장에 모아 봅시다.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" data-step="3" id="s-4-sum">
+      <div class="sh"><div class="sec">4-6 정리</div><h2>세 집단 이상은 목적과 데이터 성질에 맞춰 분석 방법을 고릅니다</h2></div>
+      <div class="body full" style="align-content:center">
+        <table class="sumtbl">
+          <thead><tr><th>개념</th><th>무엇인가</th><th>비료 예시</th></tr></thead>
+          <tbody>
+            <tr><td>분산분석</td><td>F = 집단 간 변동 ÷ 집단 내 변동. ‘적어도 한 쌍은 다름’을 판단합니다.</td><td>F = 60.7, p &lt; 10⁻⁷</td></tr>
+            <tr><td>검정 다중성</td><td>t검정을 반복하면 제1종 오류 확률이 1 − (1 − α)ᵏ로 커집니다.</td><td>3쌍 → 0.143</td></tr>
+            <tr><td>다중비교 검정</td><td>본페로니(α/k), 튜키(모든 쌍), 던넷(대조군과), 윌리엄스(단조 변화)</td><td>튜키: A–B *, A–C ***, B–C ***</td></tr>
+            <tr><td>비모수 대안</td><td>크러스컬-월리스, 스틸-드와스(튜키에 상응), 스틸(던넷에 상응)</td><td>순위합 25 / 53 / 93, p = 0.0011</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="next"><span>형성평가로</span>이제 같은 예시로 문제를 풀어 봅니다.</p>
+    </section>
+
+    <!-- ⑤ 형성평가: 스크립트의 QUIZ 배열로 만듭니다 -->
+
+    <!-- ⑥ 실습 1 · 조작형 (모듈 전용) ─────────────── -->
+    <section class="slide" data-step="5" id="p1">
+      <div class="sh"><div class="sec">실습 1 · 조작형</div><h2>목표: 집단 간 차이와 집단 내 흩어짐을 바꾸며 F값이 어떻게 변하는지 봅니다</h2></div>
+      <div class="body split">
+        <div class="pcol" style="gap:8px">
+          <div class="plabel" style="margin:0">해보기 · 비료 데이터의 두 가지 변동을 늘리거나 줄여 보세요</div>
+          <div class="ctrl">집단 간 차이<input type="range" id="m15-s" min="0" max="30" step="1" value="20" aria-label="집단 간 차이 배율"><strong id="m15-sv" style="min-width:56px;text-align:right">-</strong></div>
+          <div class="ctrl">집단 내 흩어짐<input type="range" id="m15-w" min="2" max="20" step="1" value="2" aria-label="집단 내 흩어짐 배율"><strong id="m15-wv" style="min-width:56px;text-align:right">-</strong></div>
+          <div class="fig" style="flex:1"><svg id="m15-p1-svg" viewBox="0 0 470 190" role="img" aria-label="세 집단의 데이터 점과 집단 평균, 전체 평균"></svg></div>
+        </div>
+        <div class="pcol" style="gap:10px;justify-content:center">
+          <div class="plabel" style="margin:0">결과 확인</div>
+          <div class="stats"><div><small>F값 (5% 지점 3.68)</small><strong id="m15-fv">-</strong></div><div><small>p값</small><strong id="m15-pv">-</strong></div></div>
+          <p class="howto">도전: 집단 간 차이는 그대로(× 1.0) 두고, 흩어짐만 키워 p ≥ 0.05가 되는 지점을 찾아보세요.</p>
+          <p class="pmsg" id="m15-msg"></p>
+          <div class="think"><span>생각해보기</span>평균의 차이가 같아도 결론이 달라지는 이유는 무엇인가요?</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ⑥ 실습 2 · 분류형 ─────────────────────── -->
+    <section class="slide" data-step="5" id="p2">
+      <div class="sh"><div class="sec">실습 2 · 분류형</div><h2>목표: 상황 카드를 알맞은 비교 방법에 따라 나눕니다</h2></div>
+      <div class="body split even">
+        <div class="pcol">
+          <div class="plabel">해보기 · 무엇을 비교하고 싶은지, 정규성이 있는지 보고 칸에 놓으세요(따로 적지 않으면 정규성이 있습니다)</div>
+          <div class="pool" id="p2-pool"></div>
+        </div>
+        <div class="pcol" style="gap:8px">
+          <div class="plabel" style="margin:0">결과 확인 · <span id="p2-count">0 / 0</span></div>
+          <div class="bins" id="p2-bins" style="grid-template-columns:repeat(2,1fr)"></div>
+          <div class="p2row"><p class="pmsg" id="p2-msg"></p><button class="btn ghost" id="p2-reset">다시 하기</button></div>
+          <div class="think"><span>생각해보기</span>던넷 검정의 검정력이 튜키 검정보다 높은 이유는?</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ⑥ 실습 3 · 추정형 (모듈 전용) ─────────────── -->
+    <section class="slide" data-step="5" id="p3">
+      <div class="sh"><div class="sec">실습 3 · 추정형</div><h2>목표: 모든 쌍을 t검정으로 비교할 때 제1종 오류 확률을 예측하고 확인합니다</h2></div>
+      <div class="body split">
+        <div class="pcol">
+          <div class="plabel">해보기 · 집단 수를 고르고, 모든 쌍을 유의수준 0.05로 반복 검정할 때 ‘적어도 한 번’ 잘못 기각할 확률을 예측하세요</div>
+          <div class="fig" style="flex:1"><svg id="m15-p3-svg" viewBox="0 0 470 210" role="img" aria-label="쌍의 수에 따른 제1종 오류 확률 곡선"></svg></div>
+        </div>
+        <div class="pcol" style="gap:9px;justify-content:center">
+          <div class="mbtns" id="m15-qg" style="gap:6px"></div>
+          <div class="ctrl">내 예측<input type="range" id="m15-g" min="0" max="100" step="1" value="20" aria-label="제1종 오류 확률 예측(%)"><strong id="m15-gv" style="min-width:56px;text-align:right">-</strong></div>
+          <button class="btn" id="m15-check" style="align-self:flex-start">계산해서 확인</button>
+          <div class="stats"><div><small>내 예측</small><strong id="m15-mine">-</strong></div><div><small>실제 확률</small><strong id="m15-act">?</strong></div></div>
+          <p class="pmsg" id="m15-msg3"></p>
+          <div class="think"><span>생각해보기</span>본페로니 교정을 쓰면 이 확률은 어떻게 되나요?</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ⑦ 용어해설·참고자료: 스크립트의 GLOSSARY, REFS, NEXT로 만듭니다 -->
+  </main>
+
+  <footer class="bottombar">
+    <a class="home" href="../index.html" title="홈으로 (학습 모듈 목록)" aria-label="홈으로"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 10.5 12 3l9 7.5"/><path d="M5.5 9.5V21h13V9.5"/></svg><span>홈</span></a><span class="counter" id="counter"></span><span class="spacer"></span>
+    <button class="nav" id="prev" type="button">이전</button>
+    <button class="nav primary" id="next" type="button">다음</button>
+  </footer>
+</div>
+<p class="rotate">화면을 가로로 돌리면 더 크게 볼 수 있습니다.</p>
+
+<script>
+(function(){
+"use strict";
+
+/* =====================================================================
+   [교체] 모듈 설정 — 새 모듈은 이 블록과 HTML 화면 문장만 바꿉니다.
+   ===================================================================== */
+var MODULE={title:"세 집단 이상 비교",sub:"추론통계와 가설검정 · M15"};
+var STEPS=["학습개요","학습목표","일상의 예시","본문","형성평가","실습","용어해설"];
+
+/* 일관 사례: 비료 A·B·C로 키운 식물의 줄기 길이(cm), 각 6개
+   평균 32.5 / 34.2 / 38.9, 전체 평균 35.2
+   SSB 131.34(자유도 2), SSW 16.24(자유도 15) → F = 65.67 / 1.08 ≈ 60.7, p = 6.5e-8, 5% 지점 3.68
+   튜키: A–B p 0.034, A–C p 6.4e-8, B–C p 3.2e-6
+   쌍별 이표본 t검정: A–B p 0.022, A–C p 1.2e-6, B–C p 7.9e-6 → 본페로니 기준 0.05/3 = 0.0167
+   크러스컬-월리스: 순위합 25 / 53 / 93, H 13.66, p 0.0011 */
+var FA=[32.5,34.2,32.4,33.3,31.0,31.5], FB=[35.1,32.9,34.4,34.7,33.0,34.9], FC=[40.1,39.6,38.0,38.1,37.9,39.5];
+var FCRIT=3.68;
+var CASE=null, PAIRS=null, P1={target:null};
+
+var QUIZ=[
+ {goal:1,type:"계산",stem:"비료 예시에서 평균적인 집단 간 변동은 65.7, 평균적인 집단 내 변동은 1.08입니다. F값은 약 얼마일까요?",
+  opts:["약 60.7","약 0.016","약 66.8","약 64.6"],ans:0,
+  exp:"F = 평균적인 집단 간 변동 ÷ 평균적인 집단 내 변동 = 65.7 ÷ 1.08 ≈ 60.7입니다. 0.016은 분자와 분모를 거꾸로 나눈 값입니다. F가 5% 지점 3.68보다 훨씬 크므로 집단 간 차이가 유의합니다.",back:"s-4-2b",backLabel:"4-2 F값 다시 보기"},
+ {goal:1,type:"O/X 오개념",stem:"“분산분석에서 p < 0.05가 나왔으므로, 비료 A, B, C의 모든 쌍 사이에 차이가 있다고 결론 내릴 수 있다.”",
+  opts:["O","X"],ans:1,ox:true,
+  exp:"분산분석의 대립가설은 ‘적어도 한 쌍에는 차이가 있다’입니다. p < 0.05로 대립가설을 채택해도 어느 쌍에 차이가 있는지까지는 알 수 없으므로, 이를 알려면 다중비교 검정을 해야 합니다.",back:"s-4-1a",backLabel:"4-1 분산분석의 가설 다시 보기"},
+ {goal:2,type:"계산",stem:"4개 집단의 모든 쌍(6쌍)을 각각 유의수준 0.05의 t검정으로 비교합니다. 귀무가설이 모두 옳을 때, 적어도 한 쌍에서 제1종 오류가 일어날 확률은 약 얼마일까요?",
+  opts:["약 0.26","약 0.05","약 0.20","약 0.30"],ans:0,
+  exp:"1 − (어느 쌍에서도 제1종 오류가 일어나지 않을 확률) = 1 − (1 − 0.05)⁶ = 1 − 0.95⁶ ≈ 0.26입니다. 0.30은 0.05를 6번 단순히 더한 값입니다. 쌍이 많을수록 전체 제1종 오류 확률이 커집니다.",back:"s-4-3a",backLabel:"4-3 검정 다중성 다시 보기"},
+ {goal:2,type:"상황 판단",stem:"기존 공정(대조군)과 새로 개발한 공정 3종을 비교합니다. 관심은 ‘새 공정 각각이 기존 공정과 다른가’뿐입니다. 가장 알맞은 다중비교 방법은 무엇일까요?",
+  opts:["던넷 검정","튜키 검정","t검정을 6번 반복","윌리엄스 검정"],ans:0,
+  exp:"대조군과의 비교에만 관심이 있을 때는 던넷 검정을 씁니다. 모든 쌍을 비교하는 튜키 검정보다 검정력이 높습니다. 윌리엄스 검정은 처리량이 늘수록 단조 증가(또는 감소)한다고 상정할 수 있을 때 씁니다.",back:"s-4-4b",backLabel:"4-4 던넷·윌리엄스 검정 다시 보기"},
+ {goal:3,type:"O/X 오개념",stem:"“튜키 검정은 반드시 분산분석에서 p < 0.05가 나온 다음에만 실행해야 한다.”",
+  opts:["O","X"],ans:1,ox:true,
+  exp:"본페로니, 튜키, 던넷, 윌리엄스 검정은 분산분석과 원리가 다르므로 분산분석 없이 단독으로 수행해도 문제없습니다. 오히려 분산분석 → 다중비교를 습관처럼 실행하면 검정을 반복하는 검정 다중성 문제가 생길 수 있습니다.",back:"s-4-4c",backLabel:"4-4 분석 순서 다시 보기"},
+ {goal:3,type:"상황 판단",stem:"세 라인의 수리 시간을 비교하려는데, 한 라인의 데이터가 한쪽으로 크게 치우쳐 정규성이 없습니다. 세 라인의 대푯값을 비교하는 데 알맞은 방법은 무엇일까요?",
+  opts:["크러스컬-월리스 검정","분산분석","이표본 t검정을 3번 반복","튜키 검정"],ans:0,
+  exp:"분산분석과 튜키 검정은 모수검정이라 각 집단에 정규성이 필요합니다. 정규성이 없는 집단이 1개 이상이면 비모수검정인 크러스컬-월리스 검정을 쓰고, 쌍별 비교가 필요하면 스틸-드와스 검정을 씁니다.",back:"s-4-5a",backLabel:"4-5 비모수검정 다시 보기"}
+];
+
+var BINS=["튜키 검정","던넷 검정","윌리엄스 검정","크러스컬-월리스 검정"];
+var CARDS=[["비료 A·B·C의 모든 쌍 비교","튜키 검정"],["세 라인 평균 두께, 모든 쌍 비교","튜키 검정"],
+           ["기존 공정 vs 신공정 3종 각각","던넷 검정"],["대조군 vs 신소재 2종 각각","던넷 검정"],
+           ["비료 양↑ → 줄기 단조 증가","윌리엄스 검정"],["농도↑ → 강도 단조 증가","윌리엄스 검정"],
+           ["정규성 없는 세 집단의 대푯값","크러스컬-월리스 검정"],["크게 치우친 4개 공정 수리 시간","크러스컬-월리스 검정"]];
+var HINT={"튜키 검정":"모든 쌍 사이를 비교합니다. 본페로니 교정보다 검정력이 좋습니다.","던넷 검정":"대조군 1개와 나머지 각각만 비교합니다.","윌리엄스 검정":"처리량에 따라 단조 증가(감소)한다고 상정할 수 있을 때 씁니다.","크러스컬-월리스 검정":"정규성이 없는 집단이 있을 때 쓰는 비모수 방법입니다."};
+
+var GLOSSARY=[
+ ["분산분석","ANOVA, analysis of variance","3개 이상 집단의 평균값을 비교하는 방법으로, 귀무가설은 ‘모든 집단의 평균이 같다’입니다.","비료 A, B, C의 줄기 길이 비교"],
+ ["집단 내 변동","within-group variation","각 데이터와 그 집단 평균의 차이로, 무작위 오차의 크기를 나타냅니다.","비료 C 안에서 37.9 ~ 40.1로 흩어짐"],
+ ["집단 간 변동","between-group variation","각 집단 평균과 전체 평균의 차이로, 집단 간 차이(효과)를 나타냅니다.","C군 평균 38.9와 전체 평균 35.2의 차이"],
+ ["F분포","F-distribution","귀무가설이 옳을 때 F값이 따르는 분포로, 분산분석에서 p값을 구할 때 씁니다.","자유도 (2, 15)에서 5% 지점 3.68"],
+ ["자유도","degree of freedom","자유롭게 움직일 수 있는 변수의 수로, t분포나 F분포의 형태를 정할 때 씁니다.","표본크기 10이면 평균 계산 후 자유도 9"],
+ ["다중비교 검정","multiple comparison test","검정을 반복하는 만큼 유의수준을 엄격하게 바꿔 전체 유의수준 α를 지키는 방법입니다.","비료 A, B, C 중 어느 쌍이 다른지 조사"],
+ ["본페로니 교정","Bonferroni correction","검정 횟수를 k라 할 때 각 검정을 α/k 기준으로 판단하는 가장 단순한 다중비교 방법입니다.","3쌍이면 0.05 ÷ 3 ≈ 0.0167"],
+ ["튜키 검정","Tukey's test","모든 쌍 사이를 비교하는 다중비교 방법으로, 본페로니 교정보다 검정력이 좋습니다.","A–B p = 0.034, A–C p < 0.001"],
+ ["던넷 검정","Dunnett's test","대조군 1개와 나머지 실험군을 각각 비교하는 다중비교 방법입니다.","기존 공정 vs 신공정 3종"],
+ ["윌리엄스 검정","Williams' test","처리량에 따라 단조 증가(또는 감소)한다고 상정할 수 있을 때 쓰는 다중비교 방법입니다.","비료 양 5, 10, 15에 따른 줄기 길이"],
+ ["크러스컬-월리스 검정","Kruskal-Wallis test","정규성이 없을 때 분산분석 대신 쓰는 3집단 이상의 비모수검정입니다.","순위합 25 / 53 / 93, p = 0.0011"],
+ ["스틸-드와스 검정","Steel-Dwass test","튜키 검정에 상응하는 비모수 다중비교 방법입니다. 던넷 검정에 상응하는 것은 스틸 검정입니다.","정규성 없는 세 공정의 쌍별 비교"]
+];
+var REFS=[];
+var NEXT={title:"M16 비율 비교",line:"지금까지는 양적 데이터의 평균을 비교했습니다. 다음 모듈에서는 앞면·뒷면이나 불량·양품처럼 범주형 데이터의 비율을 검정하는 방법을 배웁니다."};
+
+/* =====================================================================
+   아래부터는 공통 엔진입니다. 모듈마다 바꾸지 않습니다.
+   ===================================================================== */
+var NS="http://www.w3.org/2000/svg";
+var C={navy:"#1B2A4A",navy2:"#2C4170",navy3:"#5B6E97",soft:"#A9B8D4",grid:"#DDE1E7",gray:"#6B7280",gray2:"#9AA0AA",amber:"#E0A100",amberInk:"#6E4F00",ok:"#23704F"};
+function el(t,a,p,x){var e=document.createElementNS(NS,t);for(var k in a)e.setAttribute(k,a[k]);if(x!=null)e.textContent=x;if(p)p.appendChild(e);return e;}
+function clear(s){while(s.firstChild)s.removeChild(s.firstChild);}
+function f1(v,d){return v.toFixed(d==null?1:d);}
+function sum(a){return a.reduce(function(x,y){return x+y;},0);}
+function r1(v){return Math.round(v*10)/10;}
+var stage=document.getElementById("stage"),vp=document.getElementById("vp");
+
+/* 계산은 모두 데이터에서 직접 합니다(R0-7) */
+var N=CASE?CASE.values.length:0,SUMV=CASE?r1(sum(CASE.values)):0,AVG=N?SUMV/N:0,MAXV=CASE?Math.max.apply(null,CASE.values):0;
+var LR=!PAIRS?null:(function(){var n=PAIRS.xs.length,mx=sum(PAIRS.xs)/n,my=sum(PAIRS.ys)/n,sxy=0,sxx=0;
+  for(var i=0;i<n;i++){sxy+=(PAIRS.xs[i]-mx)*(PAIRS.ys[i]-my);sxx+=(PAIRS.xs[i]-mx)*(PAIRS.xs[i]-mx);}
+  var b=sxy/sxx;return{b:b,a:my-b*mx};})();
+var PRED=PAIRS?LR.a+LR.b*PAIRS.x0:0;
+
+document.title=MODULE.title;
+document.getElementById("brand").innerHTML=MODULE.title+"<small>"+MODULE.sub+"</small>";
+
+/* 16:9 고정 무대를 창 크기에 맞춤 */
+var S=1;
+function fit(){S=Math.min(window.innerWidth/960,window.innerHeight/540);stage.style.setProperty("--s",S);}
+window.addEventListener("resize",fit);fit();
+
+/* ---------- 그래프 ---------- */
+function barChart(svg,vals,o){
+  clear(svg);o=o||{};
+  var vb=svg.viewBox.baseVal,W=vb.width,H=vb.height,L=34,R=o.mean!=null?70:8,T=26,Bt=24,ym=o.ymax||Math.ceil(Math.max.apply(null,vals)+1),pw=W-L-R,ph=H-T-Bt,bw=pw/vals.length;
+  function y(v){return T+ph-(v/ym)*ph;}
+  for(var g=0;g<=ym;g++){el("line",{x1:L,x2:W-R,y1:y(g),y2:y(g),stroke:C.grid},svg);el("text",{x:L-6,y:y(g)+4,"text-anchor":"end","font-size":10.5,fill:C.gray2},svg,g);}
+  vals.forEach(function(v,i){
+    var sel=o.sel===i,hi=o.hi===i;
+    el("rect",{x:L+i*bw+bw*.16,y:y(v),width:bw*.68,height:Math.max(0,y(0)-y(v)),rx:2,fill:sel?C.amber:hi?C.navy2:C.soft},svg);
+    el("text",{x:L+i*bw+bw/2,y:H-Bt+16,"text-anchor":"middle","font-size":10.5,fill:C.gray},svg,CASE.labels[i]);
+  });
+  if(o.mean!=null){var m=o.mean;
+    el("line",{x1:L,x2:W-R+4,y1:y(m),y2:y(m),stroke:C.navy,"stroke-width":2,"stroke-dasharray":"6 4"},svg);
+    el("rect",{x:W-R+6,y:y(m)-10,width:R-8,height:20,rx:4,fill:C.navy},svg);
+    el("text",{x:W-R+6+(R-8)/2,y:y(m)+4,"text-anchor":"middle","font-size":11,"font-weight":700,fill:"#fff"},svg,"평균 "+f1(m,2));}
+  /* 값 라벨은 마지막에 흰 테두리로 그려 점선에 가리지 않게 함 */
+  vals.forEach(function(v,i){var sel=o.sel===i,hi=o.hi===i;
+    if(o.labels||sel)el("text",{x:L+i*bw+bw/2,y:y(v)-5,"text-anchor":"middle","font-size":10.5,"font-weight":sel||hi?800:500,fill:sel?C.amberInk:hi?C.navy:C.gray,stroke:"#EEF0F3","stroke-width":3,"paint-order":"stroke"},svg,f1(v));});
+}
+function scatter(svg,o){
+  clear(svg);o=o||{};
+  var vb=svg.viewBox.baseVal,W=vb.width,H=vb.height,L=34,R=14,T=30,Bt=40,x0=PAIRS.xmin,x1=PAIRS.xmax,y0=PAIRS.ymin,y1=PAIRS.ymax;
+  function X(v){return L+(v-x0)/(x1-x0)*(W-L-R);}
+  function Y(v){return T+(H-T-Bt)-(v-y0)/(y1-y0)*(H-T-Bt);}
+  for(var g=y0;g<=y1+1e-9;g+=PAIRS.ystep){el("line",{x1:L,x2:W-R,y1:Y(g),y2:Y(g),stroke:C.grid},svg);el("text",{x:L-6,y:Y(g)+4,"text-anchor":"end","font-size":10.5,fill:C.gray2},svg,g);}
+  for(var h=x0;h<=x1+1e-9;h+=PAIRS.xstep)el("text",{x:X(h),y:H-Bt+16,"text-anchor":"middle","font-size":10.5,fill:C.gray},svg,h);
+  el("text",{x:(L+W-R)/2,y:H-6,"text-anchor":"middle","font-size":10.5,fill:C.gray},svg,PAIRS.xlabel);
+  el("text",{x:4,y:14,"font-size":10.5,fill:C.gray},svg,PAIRS.ylabel);
+  if(o.line){var la=x0+(x1-x0)*.04,lb=x1-(x1-x0)*.04;el("line",{x1:X(la),y1:Y(LR.a+LR.b*la),x2:X(lb),y2:Y(LR.a+LR.b*lb),stroke:C.navy,"stroke-width":2},svg);}
+  PAIRS.xs.forEach(function(x,i){el("circle",{cx:X(x),cy:Y(PAIRS.ys[i]),r:4.5,fill:C.navy3,"fill-opacity":.85},svg);});
+  if(o.x0!=null){el("line",{x1:X(o.x0),y1:Y(0),x2:X(o.x0),y2:Y(y1),stroke:C.amber,"stroke-dasharray":"3 3"},svg);
+    el("text",{x:X(o.x0),y:T-4,"text-anchor":"middle","font-size":10.5,"font-weight":700,fill:C.amberInk},svg,PAIRS.x0label);}
+  if(o.pred){el("circle",{cx:X(PAIRS.x0),cy:Y(PRED),r:6,fill:C.navy},svg);
+    el("text",{x:X(PAIRS.x0)-10,y:Y(PRED)+4,"text-anchor":"end","font-size":11,"font-weight":800,fill:C.navy,stroke:"#EEF0F3","stroke-width":3,"paint-order":"stroke"},svg,"예측 "+f1(PRED,PAIRS.dp)+PAIRS.unit);}
+  if(o.guess!=null){el("circle",{cx:X(PAIRS.x0),cy:Y(o.guess),r:7,fill:C.amber,stroke:"#fff","stroke-width":2},svg);}
+  if(o.actual){var ay=Y(PAIRS.actual);el("rect",{x:X(PAIRS.x0)-6,y:ay-6,width:12,height:12,fill:C.ok,transform:"rotate(45 "+X(PAIRS.x0)+" "+ay+")"},svg);
+    el("text",{x:X(PAIRS.x0)-10,y:ay-6,"text-anchor":"end","font-size":11,"font-weight":800,fill:C.ok,stroke:"#EEF0F3","stroke-width":3,"paint-order":"stroke"},svg,"실제 "+f1(PAIRS.actual)+PAIRS.unit);}
+  return {X:X,Y:Y};
+}
+function flow(svg,names){
+  clear(svg);var n=names.length,w=118,gap=(440-40-n*w)/(n-1),y=96,h=64;
+  el("defs",{},svg).innerHTML='<marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10z" fill="'+C.navy3+'"/></marker>';
+  names.forEach(function(t,i){var x=20+i*(w+gap);
+    el("rect",{x:x,y:y,width:w,height:h,rx:10,fill:i===n-1?C.navy:"#fff",stroke:C.navy,"stroke-width":1.5},svg);
+    el("text",{x:x+w/2,y:y+h/2-6,"text-anchor":"middle","font-size":11,"font-weight":700,fill:i===n-1?"#C9D3E6":C.navy3},svg,"4-"+(i+1));
+    el("text",{x:x+w/2,y:y+h/2+13,"text-anchor":"middle","font-size":14,"font-weight":800,fill:i===n-1?"#fff":C.navy},svg,t);
+    if(i<n-1)el("line",{x1:x+w+4,y1:y+h/2,x2:x+w+gap-5,y2:y+h/2,stroke:C.navy3,"stroke-width":2,"marker-end":"url(#ar)"},svg);});
+  el("text",{x:220,y:200,"text-anchor":"middle","font-size":12,fill:C.gray},svg,"본문 소단원을 배우는 순서");
+}
+/* 화면에 해당 id가 있을 때만 그립니다(모듈마다 쓰지 않는 그림은 건너뜀) */
+function on(id,fn){var e=document.getElementById(id);if(e)fn(e);}
+on("fig-flow",function(s){flow(s,["소단원 1","소단원 2","정리"]);});
+on("fig-case",function(s){barChart(s,CASE.values,{labels:true});});
+on("fig-bar",function(s){barChart(s,CASE.values,{labels:true,mean:AVG});});
+on("fig-scatter",function(s){scatter(s,{line:true,x0:PAIRS.x0,pred:true});});
+on("fig-bridge",function(s){
+  el("defs",{},s).innerHTML='<marker id="ar2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10z" fill="'+C.navy3+'"/></marker>';
+  [["장면 1",40],["장면 2",130]].forEach(function(p){el("rect",{x:24,y:p[1],width:130,height:64,rx:10,fill:"#fff",stroke:C.navy3,"stroke-width":1.5},s);el("text",{x:89,y:p[1]+37,"text-anchor":"middle","font-size":14,"font-weight":700,fill:C.navy},s,p[0]);
+    el("line",{x1:158,y1:p[1]+32,x2:246,y2:120,stroke:C.navy3,"stroke-width":2,"marker-end":"url(#ar2)"},s);});
+  el("rect",{x:252,y:84,width:150,height:72,rx:12,fill:C.navy},s);
+  el("text",{x:327,y:116,"text-anchor":"middle","font-size":14,"font-weight":800,fill:"#fff"},s,"본문 첫 질문");
+  el("text",{x:327,y:136,"text-anchor":"middle","font-size":11.5,fill:"#C9D3E6"},s,"4-1로 이어짐");});
+on("case-n",function(e){e.textContent=N+"개";});
+on("case-sum",function(e){e.textContent=f1(SUMV);});
+on("case-max",function(e){e.textContent=f1(MAXV);});
+on("math-calc",function(e){e.textContent=f1(LR.b,2)+" × "+PAIRS.x0+" + "+f1(LR.a,2)+" = "+f1(PRED,2);});
+
+/* =====================================================================
+   [교체] 모듈 전용 그림: 모듈마다 필요한 그림 함수는 이 자리에 둡니다.
+   ===================================================================== */
+/* M15 전용 그림·실습 */
+function linG(a,b,c,d){return function(v){return c+(v-a)/(b-a)*(d-c);};}
+function tG(s,x,y,t,o){o=o||{};return el("text",{x:x,y:y,"text-anchor":o.a||"middle","font-size":o.fs||11,"font-weight":o.fw||600,fill:o.c||C.navy,stroke:o.halo?"#fff":"none","stroke-width":o.halo?3:0,"paint-order":"stroke"},s,t);}
+function bxG(s,x,y,w,h,fill,stroke){return el("rect",{x:x,y:y,width:w,height:h,rx:10,fill:fill||"#fff",stroke:stroke||"none","stroke-width":stroke?1.5:0},s);}
+function mkG(s,id,col){el("defs",{},s).innerHTML='<marker id="'+id+'" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10z" fill="'+col+'"/></marker>';}
+function meanG(a){return sum(a)/a.length;}
+function sdG(a){var m=meanG(a);return Math.sqrt(sum(a.map(function(v){return (v-m)*(v-m);}))/(a.length-1));}
+var GRP=[FA,FB,FC], GCOL=["#E0A100","#7FB04F","#3A9AD9"], GNM=["A","B","C"];
+var GM=meanG(FA.concat(FB,FC));
+/* F(2, 15)의 밀도와 위쪽 확률: 분자 자유도 2일 때의 닫힌 식 */
+function fpdfG(x){return Math.pow(1+2*x/15,-8.5);}
+function fsfG(F){return Math.pow(15/(15+2*F),7.5);}
+function brkG(s,x1,x2,y,lab,col){el("path",{d:"M"+x1+" "+(y+7)+" V"+y+" H"+x2+" V"+(y+7),fill:"none",stroke:col||C.navy,"stroke-width":1.5},s);if(lab)tG(s,(x1+x2)/2,y-3,lab,{fw:800,fs:lab.charAt(0)==="*"?14:10.5,c:lab.charAt(0)==="*"?"#B42318":(col||C.navy)});}
+function barG(s,x,w,m,e,Y,col){el("rect",{x:x,y:Y(m),width:w,height:Y(0)-Y(m),fill:col},s);if(e){var cx=x+w/2;el("line",{x1:cx,x2:cx,y1:Y(m+e),y2:Y(m-e),stroke:C.navy,"stroke-width":1.8},s);[m+e,m-e].forEach(function(v){el("line",{x1:cx-6,x2:cx+6,y1:Y(v),y2:Y(v),stroke:C.navy,"stroke-width":1.8},s);});}}
+
+on("m15-ov",function(s){
+  mkG(s,"oG",C.navy3);
+  bxG(s,10,20,120,62,"#fff",C.navy);tG(s,70,46,"세 집단 이상",{fw:800,fs:13.5});tG(s,70,66,"평균 비교",{fs:10.5,c:C.gray});
+  bxG(s,160,20,120,62,C.navy);tG(s,220,46,"분산분석",{fw:800,fs:13.5,c:"#fff"});tG(s,220,66,"F = 간 ÷ 내",{fs:10.5,c:"#C9D3E6"});
+  bxG(s,310,20,120,62,C.navy);tG(s,370,46,"다중비교",{fw:800,fs:13.5,c:"#fff"});tG(s,370,66,"어느 쌍이 다른가",{fs:10.5,c:"#C9D3E6"});
+  [[132,158],[282,308]].forEach(function(l){el("line",{x1:l[0],x2:l[1],y1:51,y2:51,stroke:C.navy3,"stroke-width":2,"marker-end":"url(#oG)"},s);});
+  bxG(s,10,112,200,62,"#FBE4E1");tG(s,110,138,"t검정 반복 ✕",{fw:800,fs:13,c:"#B42318"});tG(s,110,158,"검정 다중성 → 제1종 오류 증가",{fs:10.5,c:"#22262E"});
+  bxG(s,230,112,200,62,"#F3F5F9");tG(s,330,138,"튜키 · 던넷 · 윌리엄스",{fw:800,fs:12.5});tG(s,330,158,"목적에 맞게 고름",{fs:10.5,c:C.gray});
+  el("line",{x1:370,x2:370,y1:84,y2:110,stroke:C.navy3,"stroke-width":2,"marker-end":"url(#oG)"},s);
+  bxG(s,60,190,320,46,"#FCF3D9",C.amber);tG(s,220,218,"정규성 없음 → 크러스컬-월리스 검정(비모수)",{fw:800,fs:12,c:C.amberInk});
+});
+
+on("m15-case",function(s){
+  bxG(s,4,4,432,242);var cx=[60,170,280,390];
+  el("rect",{x:14,y:12,width:412,height:28,rx:6,fill:C.navy},s);tG(s,cx[0],31,"번호",{fw:800,fs:11.5,c:"#fff"});
+  GNM.forEach(function(n,j){el("rect",{x:cx[j+1]-48,y:44,width:96,height:150,rx:6,fill:GCOL[j],"fill-opacity":.13},s);tG(s,cx[j+1],31,"비료 "+n,{fw:800,fs:12,c:"#fff"});});
+  for(var i=0;i<6;i++){var y=64+i*23;tG(s,cx[0],y,i+1,{fs:11.5,c:C.gray});GRP.forEach(function(g,j){tG(s,cx[j+1],y,g[i].toFixed(1),{fs:12.5});});}
+  el("line",{x1:14,x2:426,y1:204,y2:204,stroke:C.gray2},s);tG(s,cx[0],226,"평균",{fw:800});GRP.forEach(function(g,j){tG(s,cx[j+1],226,meanG(g).toFixed(1),{fw:800,fs:13,c:j===2?"#1C6EA4":C.navy});});
+  tG(s,425,242,"단위: cm · 전체 평균 "+GM.toFixed(1),{a:"end",fs:9.5,c:C.gray});
+});
+
+on("m15-hyp",function(s){
+  mkG(s,"hG",C.navy3);
+  bxG(s,6,6,408,56,"#F3F5F9");tG(s,26,30,"귀무가설",{a:"start",fw:800,fs:12,c:C.gray});tG(s,26,50,"모든 집단의 평균이 같다",{a:"start",fs:11});tG(s,300,42,"μA = μB = μC",{fw:800,fs:17});
+  var P=[[210,98],[130,206],[290,206]];
+  [[0,1],[0,2],[1,2]].forEach(function(e){var a=P[e[0]],b=P[e[1]],dx=b[0]-a[0],dy=b[1]-a[1],L=Math.sqrt(dx*dx+dy*dy),ux=dx/L,uy=dy/L;
+    el("line",{x1:a[0]+ux*26,y1:a[1]+uy*26,x2:b[0]-ux*26,y2:b[1]-uy*26,stroke:"#2B8CC4","stroke-width":3,"marker-end":"url(#hG)","marker-start":"url(#hG)"},s);});
+  P.forEach(function(p,i){el("circle",{cx:p[0],cy:p[1],r:22,fill:GCOL[i]},s);tG(s,p[0],p[1]+6,GNM[i],{fw:800,fs:17,c:"#fff"});});
+  bxG(s,6,236,408,30,"#EEF4FB");tG(s,210,256,"대립가설: 적어도 한 쌍에는 차이가 있다 (3쌍 중 어느 것인지는 모름)",{fw:800,fs:11,c:"#1C6EA4"});
+  tG(s,40,150,"3쌍",{fw:800,fs:13,c:"#2B8CC4"});tG(s,40,168,"A–B · A–C · B–C",{fs:9.5,c:C.gray});
+});
+
+on("m15-split",function(s){
+  bxG(s,6,6,408,258);var X=linG(0,19,46,400),Y=linG(30.5,41,222,24);
+  [31,33,35,37,39,41].forEach(function(t){el("line",{x1:46,x2:400,y1:Y(t),y2:Y(t),stroke:C.grid},s);tG(s,40,Y(t)+4,t,{a:"end",fs:9.5,c:C.gray2,fw:500});});
+  el("line",{x1:46,x2:400,y1:Y(GM),y2:Y(GM),stroke:"#C2416E","stroke-width":2},s);tG(s,398,Y(GM)+15,"전체 평균 "+GM.toFixed(1),{a:"end",fw:800,fs:10.5,c:"#C2416E",halo:true});
+  GRP.forEach(function(g,j){var m=meanG(g),x0=X(j*6+.6),x1=X(j*6+6.4);el("line",{x1:x0,x2:x1,y1:Y(m),y2:Y(m),stroke:GCOL[j],"stroke-width":3,"stroke-dasharray":"6 3"},s);
+    g.forEach(function(v,i){el("circle",{cx:X(j*6+i+1),cy:Y(v),r:5,fill:GCOL[j],stroke:"#fff","stroke-width":1.2},s);});
+    tG(s,(x0+x1)/2,244,GNM[j]+"군 평균 "+m.toFixed(1),{fw:800,fs:10.5,c:j===1?"#4F7A2B":j===0?C.amberInk:"#1C6EA4"});el("line",{x1:x0+8,x2:x1-8,y1:230,y2:230,stroke:GCOL[j],"stroke-width":3,"stroke-dasharray":"6 3"},s);});
+  var xp=X(13),xe=xp-14;
+  el("line",{x1:xe,x2:xe,y1:Y(40.1)+3,y2:Y(meanG(FC))-3,stroke:"#1C6EA4","stroke-width":2.2},s);
+  el("line",{x1:xe,x2:xe,y1:Y(meanG(FC))+3,y2:Y(GM)-3,stroke:"#B42318","stroke-width":2.2},s);
+  tG(s,xe-6,Y(39.6),"집단 내 변동",{a:"end",fw:800,fs:10.5,c:"#1C6EA4",halo:true});tG(s,xe-6,Y(37.1),"집단 간 변동",{a:"end",fw:800,fs:10.5,c:"#B42318",halo:true});
+});
+
+on("m15-f",function(s){
+  var X=linG(0,6.2,30,330),Y=linG(0,1,118,16),p=[];for(var i=0;i<=120;i++){var x=6.2*i/120;p.push(X(x).toFixed(1)+" "+Y(fpdfG(x)).toFixed(1));}
+  var q=[X(FCRIT).toFixed(1)+" "+Y(0)];for(var j=0;j<=40;j++){var x2=FCRIT+(6.2-FCRIT)*j/40;q.push(X(x2).toFixed(1)+" "+Y(fpdfG(x2)).toFixed(1));}q.push(X(6.2)+" "+Y(0));
+  el("path",{d:"M"+q.join(" L")+"z",fill:"#C2416E","fill-opacity":.8},s);el("path",{d:"M"+p.join(" L"),fill:"none",stroke:C.navy,"stroke-width":2.2},s);
+  el("line",{x1:30,x2:340,y1:118,y2:118,stroke:C.gray2},s);[0,1,2,3,4,5,6].forEach(function(t){tG(s,X(t),132,t,{fs:9.5,c:C.gray,fw:500});});tG(s,30,144,"F",{a:"start",fs:10,c:C.gray});
+  el("line",{x1:X(FCRIT),x2:X(FCRIT),y1:40,y2:118,stroke:"#C2416E","stroke-dasharray":"4 3","stroke-width":1.5},s);tG(s,X(FCRIT)+4,52,"5% 지점 3.68",{a:"start",fw:800,fs:10.5,c:"#C2416E"});
+  tG(s,X(0.9),30,"F분포 (자유도 2, 15)",{a:"start",fw:800,fs:10.5});
+  bxG(s,344,52,72,58,"#FBE4E1");tG(s,380,74,"관찰값",{fw:800,fs:10.5,c:"#B42318"});tG(s,380,94,"F = 60.7",{fw:800,fs:12,c:"#B42318"});tG(s,380,128,"→ 훨씬 오른쪽",{fs:9.5,c:C.gray});
+});
+
+on("m15-df",function(s){
+  bxG(s,6,6,408,124,"#F3F5F9");tG(s,22,28,"표본 10개, 평균 = 5로 정해지면",{a:"start",fw:800,fs:12});
+  var v=[3,7,4,6,5,8,2,6,4];for(var i=0;i<10;i++){var x=22+i*39;el("rect",{x:x,y:42,width:33,height:36,rx:6,fill:i<9?"#fff":"#FCF3D9",stroke:i<9?C.navy3:C.amber,"stroke-width":1.5},s);tG(s,x+16.5,66,i<9?v[i]:"5",{fw:800,fs:14,c:i<9?C.navy:C.amberInk});}
+  tG(s,22,100,"앞의 9개는 자유롭게 정할 수 있지만, 마지막 1개는 50 − 45 = 5로 자동 결정",{a:"start",fs:10.5,c:"#22262E"});tG(s,22,118,"→ 자유도 9",{a:"start",fw:800,fs:11.5,c:C.amberInk});
+  bxG(s,6,140,408,124);tG(s,22,162,"비료 예시의 자유도",{a:"start",fw:800,fs:12});
+  var R=[["집단 간","집단 수 − 1","3 − 1 = 2"],["집단 내","데이터 수 − 집단 수","18 − 3 = 15"],["전체","데이터 수 − 1","18 − 1 = 17"]];
+  R.forEach(function(r,i){var y=190+i*26;if(i===0||i===2)el("rect",{x:16,y:y-17,width:388,height:24,fill:"#F8F9FB"},s);tG(s,40,y,r[0],{a:"start",fw:800,fs:11.5});tG(s,150,y,r[1],{a:"start",fs:11,c:C.gray});tG(s,396,y,r[2],{a:"end",fw:800,fs:12,c:i<2?"#1C6EA4":C.navy});});
+});
+
+on("m15-fwer",function(s){
+  var X=linG(0,50,46,400),Y=linG(0,1,118,14),p=[];for(var k=0;k<=50;k++)p.push(X(k).toFixed(1)+" "+Y(1-Math.pow(.95,k)).toFixed(1));
+  [0,.25,.5,.75,1].forEach(function(t){el("line",{x1:46,x2:400,y1:Y(t),y2:Y(t),stroke:C.grid},s);tG(s,40,Y(t)+4,t.toFixed(2),{a:"end",fs:9,c:C.gray2,fw:500});});
+  [0,10,20,30,40,50].forEach(function(t){tG(s,X(t),132,t,{fs:9.5,c:C.gray,fw:500});});tG(s,400,146,"검정 횟수 k",{a:"end",fs:10,c:C.gray});
+  el("path",{d:"M"+p.join(" L"),fill:"none",stroke:"#C2416E","stroke-width":2.5},s);
+  [[3,"3쌍 0.143"],[10,"10쌍 0.40"],[45,"45쌍 0.90"]].forEach(function(m,i){var y=1-Math.pow(.95,m[0]);el("circle",{cx:X(m[0]),cy:Y(y),r:5,fill:C.amber,stroke:"#fff","stroke-width":1.5},s);tG(s,X(m[0])+(i===2?-8:8),Y(y)+(i===2?18:14),m[1],{a:i===2?"end":"start",fw:800,fs:10.5,c:C.amberInk,halo:true});});
+  tG(s,60,24,"적어도 1번 귀무가설을 잘못 기각할 확률 (α = 0.05)",{a:"start",fw:800,fs:10.5,c:C.navy,halo:true});
+});
+
+on("m15-bonf",function(s){
+  bxG(s,6,6,408,138);var cx=[60,170,282,370];
+  el("rect",{x:16,y:14,width:388,height:26,rx:6,fill:C.navy},s);[["쌍",0],["t검정 p값",1],["기준 0.0167과 비교",2],["판정",3]].forEach(function(h){tG(s,cx[h[1]],32,h[0],{fw:800,fs:11,c:"#fff"});});
+  [["A–B","0.022","0.022 > 0.0167",false],["A–C","< 0.001","< 0.0167",true],["B–C","< 0.001","< 0.0167",true]].forEach(function(r,i){var y=66+i*28;if(i===0)el("rect",{x:16,y:y-18,width:388,height:26,rx:4,fill:"#FBE4E1"},s);
+    tG(s,cx[0],y,r[0],{fw:800,fs:12});tG(s,cx[1],y,r[1],{fs:12});tG(s,cx[2],y,r[2],{fs:11.5,c:C.gray});tG(s,cx[3],y,r[3]?"차이 있음":"말할 수 없음",{fw:800,fs:11.5,c:r[3]?C.ok:"#B42318"});});
+  tG(s,210,138,"각 쌍을 이표본 t검정으로 비교한 값",{fs:9.5,c:C.gray});
+});
+
+on("m15-tukey",function(s){
+  bxG(s,6,6,408,258);var Y=linG(0,46,226,30),X0=[90,180,270];
+  [0,10,20,30,40].forEach(function(t){el("line",{x1:50,x2:330,y1:Y(t),y2:Y(t),stroke:C.grid},s);tG(s,44,Y(t)+4,t,{a:"end",fs:9.5,c:C.gray2,fw:500});});tG(s,24,22,"줄기 길이(cm)",{a:"start",fs:9.5,c:C.gray});
+  GRP.forEach(function(g,j){barG(s,X0[j],56,meanG(g),sdG(g)/Math.sqrt(6),Y,GCOL[j]);tG(s,X0[j]+28,244,"비료 "+GNM[j],{fw:800});});
+  brkG(s,118,208,Y(37),"*");brkG(s,208,298,Y(41),"***");brkG(s,118,298,Y(44.5),"***");
+  bxG(s,340,60,68,74,"#FCF3D9");tG(s,374,80,"* p < 0.05",{fs:9.5,fw:700});tG(s,374,98,"** p < 0.01",{fs:9.5,fw:700});tG(s,374,116,"*** p < 0.001",{fs:9,fw:700});
+  tG(s,374,160,"평균 ± SE",{fs:9.5,c:C.gray});tG(s,374,176,"튜키 검정",{fs:9.5,c:C.gray});
+});
+
+on("m15-three",function(s){
+  function pane(x0,title,labs,hs,col,kind){bxG(s,x0,6,132,258);tG(s,x0+66,30,title,{fw:800,fs:12.5});var Y=linG(0,10,220,70),xs=[x0+18,x0+56,x0+94];
+    el("line",{x1:x0+10,x2:x0+122,y1:220,y2:220,stroke:C.gray2},s);
+    hs.forEach(function(h,i){el("rect",{x:xs[i],y:Y(h),width:24,height:Y(0)-Y(h),fill:col},s);tG(s,xs[i]+12,236,labs[i],{fs:9.5,fw:700});});
+    if(kind==="t"){brkG(s,xs[0]+12,xs[1]+12,Y(8),"",C.navy);brkG(s,xs[1]+12,xs[2]+12,Y(9),"",C.navy);brkG(s,xs[0]+12,xs[2]+12,Y(10.2),"",C.navy);tG(s,x0+66,254,"모든 쌍",{fs:10,c:C.gray});}
+    if(kind==="d"){brkG(s,xs[0]+12,xs[1]+12,Y(8),"",C.navy);brkG(s,xs[0]+12,xs[2]+12,Y(9.5),"",C.navy);tG(s,x0+66,254,"대조군과 각각",{fs:10,c:C.gray});}
+    if(kind==="w"){mkG(s,"wG","#C2416E");el("line",{x1:xs[0],x2:xs[2]+24,y1:Y(5.2),y2:Y(9.6),stroke:"#C2416E","stroke-width":2.5,"marker-end":"url(#wG)"},s);tG(s,x0+66,254,"양에 따라 단조 증가",{fs:10,c:C.gray});}}
+  pane(4,"튜키 검정",["A","B","C"],[3.5,5,6.5],"#F3D36B","t");
+  pane(144,"던넷 검정",["대조","실험1","실험2"],[3.5,5,6.5],"#9CC27F","d");
+  pane(284,"윌리엄스 검정",["5","10","15"],[3,4.5,6],"#6FB4E3","w");
+});
+
+on("m15-order",function(s){
+  mkG(s,"rG",C.navy3);
+  bxG(s,6,6,408,120,"#FBE4E1");tG(s,22,28,"습관적인 2단계",{a:"start",fw:800,fs:12,c:"#B42318"});
+  bxG(s,22,42,110,44,"#fff",C.navy);tG(s,77,69,"분산분석",{fw:800,fs:12});bxG(s,288,42,110,44,"#fff",C.navy);tG(s,343,69,"다중비교",{fw:800,fs:12});
+  el("line",{x1:134,x2:284,y1:64,y2:64,stroke:C.navy3,"stroke-width":2,"marker-end":"url(#rG)"},s);tG(s,210,58,"p < α이면",{fw:700,fs:10.5,c:C.gray});
+  tG(s,210,108,"검정을 반복 → 검정 다중성 · 결과가 서로 다를 수도",{fw:800,fs:11,c:"#B42318"});
+  bxG(s,6,136,408,128,"#E3F1EA");tG(s,22,158,"목적에 맞는 다중비교를 단독으로",{a:"start",fw:800,fs:12,c:C.ok});
+  bxG(s,150,172,120,44,"#fff",C.ok);tG(s,210,199,"다중비교만",{fw:800,fs:12,c:C.ok});
+  tG(s,210,238,"본페로니 · 튜키 · 던넷 · 윌리엄스는",{fs:10.5,c:"#22262E"});tG(s,210,254,"분산분석과 원리가 달라 단독 수행 가능",{fs:10.5,c:"#22262E"});
+});
+
+on("m15-np",function(s){
+  bxG(s,6,6,408,140,"#F3F5F9");tG(s,22,26,"18개를 합쳐 작은 값부터 순위 매기기",{a:"start",fw:800,fs:11.5});
+  var R=[[1,2,3,4,7,8],[5,6,9,10,11,12],[13,14,15,16,17,18]];
+  R.forEach(function(r,j){var y=50+j*32;tG(s,30,y+14,GNM[j],{fw:800,fs:13,c:GCOL[j]});r.forEach(function(v,i){var x=50+i*40;el("rect",{x:x,y:y,width:32,height:22,rx:5,fill:GCOL[j],"fill-opacity":.22},s);tG(s,x+16,y+15,v,{fw:700,fs:11});});
+    tG(s,404,y+15,"순위합 "+sum(r),{a:"end",fw:800,fs:12,c:j===2?"#1C6EA4":C.navy});});
+  bxG(s,6,154,408,110);var hx=[110,300];el("rect",{x:16,y:162,width:388,height:24,rx:6,fill:C.navy},s);tG(s,hx[0],179,"모수검정",{fw:800,fs:11.5,c:"#fff"});tG(s,hx[1],179,"비모수검정",{fw:800,fs:11.5,c:"#fff"});
+  [["분산분석","크러스컬-월리스 검정"],["튜키 검정","스틸-드와스 검정"],["던넷 검정","스틸 검정"]].forEach(function(r,i){var y=206+i*22;tG(s,hx[0],y,r[0],{fs:11.5});tG(s,205,y,"→",{fs:11,c:C.gray});tG(s,hx[1],y,r[1],{fw:800,fs:11.5,c:C.amberInk});});
+});
+
+/* 실습 1 · F값 조작(조작형) */
+(function(){
+  var sb=document.getElementById("m15-s");if(!sb)return;var wb=document.getElementById("m15-w"),svg=document.getElementById("m15-p1-svg");
+  function upd(){
+    var sv=+sb.value/20,wv=+wb.value/2,D=GRP.map(function(g){var m=meanG(g);return g.map(function(x){return GM+sv*(m-GM)+wv*(x-m);});});
+    var F=sv===0?0:60.675*sv*sv/(wv*wv),p=fsfG(F);
+    document.getElementById("m15-sv").textContent="× "+sv.toFixed(2).replace(/0$/,"");document.getElementById("m15-wv").textContent="× "+wv.toFixed(1);
+    document.getElementById("m15-fv").textContent=F.toFixed(2);document.getElementById("m15-pv").textContent=p<0.001?"< 0.001":p.toFixed(3);
+    clear(svg);var X=linG(0,19,40,400),Y=linG(15,55,176,10);
+    [15,25,35,45,55].forEach(function(t){el("line",{x1:40,x2:400,y1:Y(t),y2:Y(t),stroke:C.grid},svg);tG(svg,34,Y(t)+4,t,{a:"end",fs:9.5,c:C.gray2,fw:500});});
+    el("line",{x1:40,x2:400,y1:Y(GM),y2:Y(GM),stroke:"#C2416E","stroke-width":1.8},svg);
+    D.forEach(function(g,j){var m=meanG(g);el("line",{x1:X(j*6+.6),x2:X(j*6+6.4),y1:Y(m),y2:Y(m),stroke:GCOL[j],"stroke-width":3,"stroke-dasharray":"6 3"},svg);
+      g.forEach(function(v,i){var vv=Math.max(15,Math.min(55,v));el("circle",{cx:X(j*6+i+1),cy:Y(vv),r:4.5,fill:GCOL[j],stroke:"#fff","stroke-width":1},svg);});tG(svg,X(j*6+3.5),188,"비료 "+GNM[j],{fw:800,fs:10.5});});
+    tG(svg,408,Y(GM)+4,"전체 평균",{a:"start",fs:9.5,fw:800,c:"#C2416E"});
+    var msg=document.getElementById("m15-msg"),ok=Math.abs(sv-1)<1e-9&&p>=.05;msg.className="pmsg"+(ok?" ok":"");
+    var pt=p<0.001?"p < 0.001":"p = "+p.toFixed(3);
+    msg.textContent=ok?"찾았습니다. 집단 간 차이는 그대로지만 흩어짐을 × "+wv.toFixed(1)+"로 키우자 F = "+F.toFixed(2)+" (5% 지점 3.68 미만), "+pt+" → 유의하지 않습니다.":
+      "F = "+F.toFixed(2)+", "+pt+" → "+(F>=FCRIT?"5% 지점 3.68 이상이므로 유의합니다.":"5% 지점 3.68 미만이므로 유의하지 않습니다.")+" F는 집단 간 차이의 제곱에 비례하고 흩어짐의 제곱에 반비례합니다.";
+  }
+  sb.addEventListener("input",upd);wb.addEventListener("input",upd);upd();
+})();
+
+/* 실습 3 · 반복 검정의 제1종 오류 추정(추정형) */
+(function(){
+  var g=document.getElementById("m15-g");if(!g)return;var qb=document.getElementById("m15-qg"),svg=document.getElementById("m15-p3-svg"),ng=3,checked=false,NG=[3,4,5,6,10];
+  function pairs(n){return n*(n-1)/2;}function fw(n){return 1-Math.pow(.95,pairs(n));}
+  NG.forEach(function(v){var b=document.createElement("button");b.type="button";b.className="mbtn";b.textContent=v+"집단";b.style.padding="4px 9px";b.onclick=function(){ng=v;checked=false;reset();};qb.appendChild(b);});
+  function draw(){clear(svg);var X=linG(0,50,46,456),Y=linG(0,1,176,14);
+    [0,.2,.4,.6,.8,1].forEach(function(t){el("line",{x1:46,x2:456,y1:Y(t),y2:Y(t),stroke:C.grid},svg);tG(svg,40,Y(t)+4,(t*100).toFixed(0)+"%",{a:"end",fs:9.5,c:C.gray2,fw:500});});
+    [0,10,20,30,40,50].forEach(function(t){tG(svg,X(t),190,t,{fs:9.5,c:C.gray,fw:500});});tG(svg,456,206,"쌍의 수(검정 횟수)",{a:"end",fs:10,c:C.gray});
+    var k=pairs(ng);el("line",{x1:X(k),x2:X(k),y1:14,y2:176,stroke:C.navy3,"stroke-dasharray":"4 3"},svg);tG(svg,X(k)+(k>40?-4:4),186-14,ng+"집단 = "+k+"쌍",{a:k>40?"end":"start",fw:800,fs:10,c:C.navy3,halo:true});
+    el("line",{x1:46,x2:456,y1:Y(+g.value/100),y2:Y(+g.value/100),stroke:C.amber,"stroke-width":2.5},svg);tG(svg,452,Y(+g.value/100)-6,"내 예측 "+g.value+"%",{a:"end",fw:800,c:C.amberInk,halo:true});
+    if(checked){var p=[];for(var i=0;i<=50;i++)p.push(X(i).toFixed(1)+" "+Y(1-Math.pow(.95,i)).toFixed(1));el("path",{d:"M"+p.join(" L"),fill:"none",stroke:"#C2416E","stroke-width":2.5},svg);
+      el("circle",{cx:X(k),cy:Y(fw(ng)),r:6,fill:"#C2416E",stroke:"#fff","stroke-width":1.5},svg);}}
+  function reset(){[].forEach.call(qb.children,function(x,i){var on=NG[i]===ng;x.classList.toggle("on",on);x.setAttribute("aria-pressed",on);});
+    document.getElementById("m15-act").textContent="?";var m=document.getElementById("m15-msg3");m.className="pmsg";m.textContent=ng+"집단이면 비교할 쌍은 "+pairs(ng)+"개입니다. 확률을 예측한 뒤 「계산해서 확인」을 누르세요.";draw();}
+  function txt(){document.getElementById("m15-gv").textContent=g.value+"%";document.getElementById("m15-mine").textContent=g.value+"%";}
+  g.addEventListener("input",function(){txt();draw();});
+  document.getElementById("m15-check").onclick=function(){checked=true;var a=fw(ng),gv=+g.value/100,m=document.getElementById("m15-msg3"),ok=Math.abs(gv-a)<=.05;
+    document.getElementById("m15-act").textContent=(a*100).toFixed(1)+"%";m.className="pmsg "+(ok?"ok":"ng");
+    m.textContent=(ok?"가깝게 예측했습니다. ":"실제와 차이가 있습니다. ")+ng+"집단 "+pairs(ng)+"쌍이면 1 − 0.95의 "+pairs(ng)+"제곱 ≈ "+(a*100).toFixed(1)+"%입니다. 쌍이 늘수록 ‘가짜 차이’를 찾을 확률이 커집니다.";draw();};
+  txt();reset();
+})();
+
+
+/* ---------- ⑤ 형성평가 ---------- */
+function fill(t){return !CASE?t:t.replace(/SUM/g,f1(SUMV)).replace(/AVG/g,f1(AVG,2)).replace(/MAXV/g,f1(MAXV));}
+var firstPractice=document.getElementById("p1"),answered=0,correct=0;
+QUIZ.forEach(function(q,i){
+  var s=document.createElement("section");s.className="slide";s.dataset.step="4";s.id="q"+(i+1);
+  s.innerHTML='<div class="sh"><div class="sec"><span>문항 '+(i+1)+' / '+QUIZ.length+'</span><span class="qchips"><span>학습목표 '+q.goal+'</span><span>'+q.type+'</span></span></div><h2 class="stem">'+fill(q.stem)+'</h2></div>'+
+    '<div class="body split even"><div class="opts'+(q.ox?' ox':'')+'"></div><div class="fbp" aria-live="polite"><p class="empty">보기를 고르면 정답과 해설이 여기에 나타납니다.</p></div></div>';
+  var ob=s.querySelector(".opts"),fb=s.querySelector(".fbp");
+  q.opts.forEach(function(t,k){
+    var b=document.createElement("button");b.type="button";b.className="opt";
+    b.innerHTML=q.ox?t:'<span class="n">'+(k+1)+'</span>'+fill(t);
+    b.addEventListener("click",function(){
+      var all=ob.querySelectorAll(".opt");[].forEach.call(all,function(x){x.disabled=true;});
+      all[q.ans].classList.add("ok");var ok=k===q.ans;if(!ok)b.classList.add("ng");
+      answered++;if(ok)correct++;
+      fb.className="fbp "+(ok?"ok":"ng");
+      fb.innerHTML='<div class="verdict">'+(ok?"정답입니다":"오답입니다. 정답은 "+(q.ox?q.opts[q.ans]:(q.ans+1)+"번")+"입니다")+'</div><div>'+fill(q.exp)+'</div>'+
+        '<button type="button" class="jump back" data-jump="'+q.back+'">'+q.backLabel+'</button><div class="tally">지금까지 '+answered+'문항 중 '+correct+'문항 정답</div>';
+      bindJumps(fb);
+    });
+    ob.appendChild(b);
+  });
+  vp.insertBefore(s,firstPractice);
+});
+
+/* ---------- ⑦ 용어해설 · 참고자료 · 다음 모듈 ---------- */
+for(var gi=0;gi<GLOSSARY.length;gi+=6){
+  var part=GLOSSARY.slice(gi,gi+6),pg=gi/6+1,np=Math.ceil(GLOSSARY.length/6);
+  var s=document.createElement("section");s.className="slide";s.dataset.step="6";
+  var h='<div class="sh"><div class="sec">용어해설 '+pg+'/'+np+'</div><h2>'+(pg===1?"본문에서 굵게 표시한 용어를 나온 순서대로 모았습니다":"용어해설 계속")+'</h2></div><div class="body full"><div class="gl">';
+  part.forEach(function(g,k){h+='<div class="gi"><div class="t"><i>'+(gi+k+1)+'</i>'+g[0]+'<em>'+g[1]+'</em>'+(g[4]?'<span class="cite">['+g[4]+']</span>':'')+'</div><div class="d">'+g[2]+'</div><div class="e"><strong>예시</strong> '+g[3]+'</div></div>';});
+  h+='</div></div>';s.innerHTML=h;vp.appendChild(s);
+}
+(function(){
+  var s=document.createElement("section");s.className="slide";s.dataset.step="6";s.id="end";
+  var refs=REFS.length?'<div class="pcol" style="gap:10px"><div class="plabel" style="margin:0">참고자료</div><ol class="refs">'+REFS.map(function(r){return '<li><span>['+r.n+']</span><div>'+r.title+', '+r.org+'. <a href="'+r.url+'" target="_blank" rel="noopener">'+r.url+'</a> ('+r.date+')</div></li>';}).join("")+'</ol></div>':'';
+  s.innerHTML='<div class="sh"><div class="sec">마무리</div><h2>'+(REFS.length?"참고자료와 다음 모듈":"다음 모듈")+'</h2></div>'+
+    '<div class="body '+(REFS.length?'split even':'full')+'" style="align-content:center">'+refs+
+    '<div class="pcol" style="justify-content:center"><div class="nextmod"><small>다음 모듈 · '+NEXT.title+'</small><strong>'+NEXT.line+'</strong></div></div></div>'+
+    '<p class="foot">학습 상태는 저장되지 않습니다.</p>';
+  vp.appendChild(s);
+})();
+
+/* ---------- 이동 · 진행선 ---------- */
+var slides=[].slice.call(vp.querySelectorAll(".slide")),cur=0,seen={};
+var stepFirst=[],stepCount=[0,0,0,0,0,0,0];
+slides.forEach(function(s,i){var st=+s.dataset.step;if(stepFirst[st]==null)stepFirst[st]=i;stepCount[st]++;});
+var rail=document.getElementById("rail"),stations=[];
+STEPS.forEach(function(n,i){
+  var b=document.createElement("button");b.type="button";b.className="station";
+  b.style.left="calc(14px + (100% - 28px) * "+(i/6)+")";
+  b.innerHTML='<span class="dot">'+(i+1)+'</span><span class="lb">'+n+'</span>';
+  b.setAttribute("aria-label",(i+1)+"단계 "+n+"(으)로 이동");
+  b.addEventListener("click",function(){show(stepFirst[i]);});
+  rail.appendChild(b);stations.push(b);
+});
+function show(i){
+  cur=Math.max(0,Math.min(slides.length-1,i));
+  slides.forEach(function(s,k){s.classList.toggle("on",k===cur);});
+  var st=+slides[cur].dataset.step;seen[st]=true;
+  stations.forEach(function(b,k){b.classList.toggle("cur",k===st);b.classList.toggle("done",k<st||(!!seen[k]&&k!==st));if(k===st)b.setAttribute("aria-current","step");else b.removeAttribute("aria-current");});
+  var within=(cur-stepFirst[st])/Math.max(1,stepCount[st]);
+  var frac=st===6&&cur===slides.length-1?1:(st+within)/6;
+  document.getElementById("fill").style.width=(Math.min(1,frac)*100)+"%";
+  document.getElementById("counter").innerHTML="<strong>"+STEPS[st]+"</strong> "+(cur-stepFirst[st]+1)+" / "+stepCount[st];
+  document.getElementById("prev").disabled=cur===0;
+  var nx=document.getElementById("next");nx.disabled=cur===slides.length-1;
+  nx.textContent=(cur<slides.length-1&&+slides[cur+1].dataset.step!==st)?STEPS[+slides[cur+1].dataset.step]+"(으)로":"다음";
+}
+function bindJumps(root){[].forEach.call(root.querySelectorAll("[data-jump]"),function(b){b.addEventListener("click",function(){var t=document.getElementById(b.dataset.jump);if(t)show(slides.indexOf(t));});});}
+bindJumps(document);
+document.getElementById("prev").onclick=function(){show(cur-1);};
+document.getElementById("next").onclick=function(){show(cur+1);};
+document.addEventListener("keydown",function(e){
+  if(e.target&&(e.target.type==="range"))return;
+  if(e.key==="ArrowRight"||e.key==="PageDown"){show(cur+1);e.preventDefault();}
+  else if(e.key==="ArrowLeft"||e.key==="PageUp"){show(cur-1);e.preventDefault();}
+});
+var tx=null,ty=null;
+vp.addEventListener("touchstart",function(e){var t=e.target;if(t.closest&&(t.closest("input")||t.closest(".dcard"))){tx=null;return;}tx=e.touches[0].clientX;ty=e.touches[0].clientY;},{passive:true});
+vp.addEventListener("touchend",function(e){if(tx==null)return;var dx=e.changedTouches[0].clientX-tx,dy=e.changedTouches[0].clientY-ty;if(Math.abs(dx)>60&&Math.abs(dx)>Math.abs(dy)*1.5)show(cur+(dx<0?1:-1));tx=null;},{passive:true});
+
+/* ---------- 실습 1 · 조작형 ---------- */
+(function(){if(!document.getElementById("p1-items")||!CASE)return;
+var p1v=CASE.values.slice(),p1s=CASE.values.indexOf(MAXV),p1m=document.getElementById("p1-items"),p1r=document.getElementById("p1-range");
+CASE.labels.forEach(function(m,i){var b=document.createElement("button");b.type="button";b.className="mbtn";b.textContent=m;b.onclick=function(){p1s=i;p1d();};p1m.appendChild(b);});
+function p1d(){
+  [].forEach.call(p1m.children,function(b,i){b.classList.toggle("on",i===p1s);b.setAttribute("aria-pressed",i===p1s);});
+  p1r.value=p1v[p1s];document.getElementById("p1-label").textContent=CASE.labels[p1s]+"번";document.getElementById("p1-val").textContent=f1(p1v[p1s]);
+  var s=r1(sum(p1v)),m=s/N;
+  document.getElementById("p1-sum").textContent=f1(s);document.getElementById("p1-mean").textContent=f1(m,2);
+  barChart(document.getElementById("p1-svg"),p1v,{mean:m,sel:p1s,ymax:9});
+  var msg=document.getElementById("p1-msg");
+  if(P1.target!=null&&Math.abs(m-P1.target)<0.005){msg.className="pmsg ok";msg.textContent="성공했습니다. "+f1(s)+" ÷ "+N+" = "+f1(m,2);}
+  else if(Math.abs(s-SUMV)<1e-9){msg.className="pmsg";msg.textContent="원래 값입니다. "+f1(SUMV)+" ÷ "+N+" = "+f1(AVG,2);}
+  else{msg.className="pmsg";msg.textContent="원래 평균 "+f1(AVG,2)+"보다 "+f1(Math.abs(m-AVG),2)+" "+(m>AVG?"늘었습니다.":"줄었습니다.");}
+}
+p1r.addEventListener("input",function(){p1v[p1s]=r1(+p1r.value);p1d();});
+document.getElementById("p1-reset").onclick=function(){p1v=CASE.values.slice();p1d();};
+p1d();
+
+})();
+/* ---------- 실습 2 · 분류형 ---------- */
+(function(){if(!document.getElementById("p2-pool"))return;
+var pool=document.getElementById("p2-pool"),binWrap=document.getElementById("p2-bins"),selC=null,done2=0;
+var bins=BINS.map(function(n){var b=document.createElement("div");b.className="bin";b.dataset.bin=n;b.innerHTML="<h4>"+n+"</h4>";binWrap.appendChild(b);return b;});
+function p2msg(t,c){var m=document.getElementById("p2-msg");m.textContent=t;m.className="pmsg "+(c||"");document.getElementById("p2-count").textContent=done2+" / "+CARDS.length;}
+function p2init(){
+  pool.innerHTML="";bins.forEach(function(b){[].slice.call(b.querySelectorAll(".dcard")).forEach(function(c){c.remove();});});done2=0;selC=null;
+  var o=CARDS.map(function(_,i){return i;});for(var i=o.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1)),t=o[i];o[i]=o[j];o[j]=t;}
+  o.forEach(function(i){var d=document.createElement("div");d.className="dcard";d.tabIndex=0;d.setAttribute("role","button");d.textContent=CARDS[i][0];d.dataset.ans=CARDS[i][1];pool.appendChild(d);attach(d);});
+  p2msg("카드를 하나 골라 보세요.","");
+}
+function drop(c,b){
+  if(!b||c.classList.contains("ok"))return;
+  c.classList.remove("sel");selC=null;
+  if(c.dataset.ans===b.dataset.bin){c.classList.add("ok");c.removeAttribute("tabindex");b.appendChild(c);done2++;p2msg(done2===CARDS.length?"카드를 모두 맞게 분류했습니다.":"정답입니다.","ok");}
+  else{c.classList.add("shake");setTimeout(function(){c.classList.remove("shake");},400);p2msg("「"+b.dataset.bin+"」이 아닙니다. "+HINT[c.dataset.ans],"ng");}
+}
+function pick(d){if(selC===d){d.classList.remove("sel");selC=null;return;}if(selC)selC.classList.remove("sel");selC=d;d.classList.add("sel");p2msg("이제 알맞은 칸을 누르세요.","");}
+function attach(d){
+  var sx=null,sy,mv=false,gh=null,ov=null,offX=0,offY=0;
+  function pos(e){var r=stage.getBoundingClientRect();return{x:(e.clientX-r.left)/S,y:(e.clientY-r.top)/S};}
+  d.addEventListener("pointerdown",function(e){if(d.classList.contains("ok"))return;sx=e.clientX;sy=e.clientY;mv=false;d.setPointerCapture(e.pointerId);var r=d.getBoundingClientRect();offX=(e.clientX-r.left)/S;offY=(e.clientY-r.top)/S;});
+  d.addEventListener("pointermove",function(e){
+    if(sx==null)return;
+    if(!mv&&Math.hypot(e.clientX-sx,e.clientY-sy)>6){mv=true;gh=d.cloneNode(true);gh.classList.add("ghostc");gh.classList.remove("sel");gh.style.width=d.offsetWidth+"px";stage.appendChild(gh);d.style.opacity=".35";}
+    if(mv){var p=pos(e);gh.style.left=(p.x-offX)+"px";gh.style.top=(p.y-offY)+"px";
+      var t=document.elementFromPoint(e.clientX,e.clientY),b=t&&t.closest?t.closest(".bin"):null;
+      if(ov&&ov!==b)ov.classList.remove("hover");ov=b;if(b)b.classList.add("hover");}
+  });
+  d.addEventListener("pointerup",function(){
+    if(sx==null)return;sx=null;
+    if(mv){gh.remove();gh=null;d.style.opacity="";if(ov)ov.classList.remove("hover");var b=ov;ov=null;drop(d,b);}else pick(d);
+  });
+  d.addEventListener("pointercancel",function(){if(gh){gh.remove();gh=null;}d.style.opacity="";sx=null;if(ov)ov.classList.remove("hover");ov=null;});
+  d.addEventListener("keydown",function(e){if(e.key==="Enter"||e.key===" "){e.preventDefault();pick(d);}});
+}
+bins.forEach(function(b){b.tabIndex=0;b.setAttribute("role","button");b.setAttribute("aria-label",b.dataset.bin+" 칸에 놓기");
+  b.addEventListener("click",function(e){if(selC&&!e.target.closest(".dcard"))drop(selC,b);});
+  b.addEventListener("keydown",function(e){if((e.key==="Enter"||e.key===" ")&&selC){e.preventDefault();drop(selC,b);}});});
+document.getElementById("p2-reset").onclick=p2init;
+p2init();
+
+})();
+/* ---------- 실습 3 · 추정형 ---------- */
+(function(){if(!document.getElementById("p3-range")||!PAIRS)return;
+var p3r=document.getElementById("p3-range"),p3done=false;
+document.getElementById("p3-x0").textContent=PAIRS.x0;
+p3r.min=PAIRS.ymin;p3r.max=PAIRS.ymax;p3r.step=0.1;p3r.value=r1((PAIRS.ymin+PAIRS.ymax)/2);
+function p3d(){var g=+p3r.value;document.getElementById("p3-val").textContent=f1(g);scatter(document.getElementById("p3-svg"),{x0:PAIRS.x0,guess:g,line:p3done,pred:p3done,actual:p3done});}
+p3r.addEventListener("input",function(){if(p3done){p3done=false;document.getElementById("p3-res").classList.remove("on");}p3d();});
+document.getElementById("p3-check").onclick=function(){
+  p3done=true;var g=+p3r.value,mine=Math.abs(g-PAIRS.actual),line=Math.abs(PRED-PAIRS.actual);
+  document.getElementById("p3-mine").textContent=f1(g);document.getElementById("p3-pred").textContent=f1(PRED,PAIRS.dp);document.getElementById("p3-act").textContent=f1(PAIRS.actual);
+  var m=document.getElementById("p3-msg"),good=mine<=line;m.className="pmsg "+(good?"ok":"ng");
+  m.textContent="내 오차 "+f1(mine,PAIRS.dp)+PAIRS.unit+", 직선 오차 "+f1(line,PAIRS.dp)+PAIRS.unit+". "+(good?"직선만큼 또는 더 가깝게 추정했습니다.":"직선을 이용하면 오차를 줄일 수 있습니다.");
+  document.getElementById("p3-res").classList.add("on");p3d();
+};
+p3d();
+
+})();
+show(0);
+})();
+</script>
+</body>
+</html>

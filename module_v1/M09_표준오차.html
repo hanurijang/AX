@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>표준오차</title>
-<!-- M09 표준오차 v1.0 · 기준 템플릿 v1.3로 제작 (2026-10-25) -->
+<!-- M09 표준오차 · 기준 템플릿 v1.2로 제작 (2026-10-24) -->
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
 <style>
 :root{
@@ -93,6 +93,13 @@ h2.big{font-size:30px;line-height:1.32}
 .nav.primary{background:var(--navy);color:#fff}
 .nav:disabled{opacity:.3;cursor:default}
 
+/* ---------- 홈으로 ---------- */
+.home{display:inline-flex;align-items:center;gap:6px;height:32px;padding:0 13px;border-radius:8px;border:1.5px solid var(--navy-soft);background:#fff;color:var(--navy2);font-size:13.5px;font-weight:700;line-height:1;text-decoration:none;white-space:nowrap}
+.home svg{width:14px;height:14px;flex:0 0 auto;display:block}
+.home:hover{background:var(--navy-soft);border-color:var(--navy3);color:var(--navy)}
+.home:focus-visible{outline:3px solid var(--amber);outline-offset:2px}
+@media (prefers-reduced-motion:reduce){.home{transition:none}}
+
 /* ① 학습개요 */
 .meta{display:grid;grid-template-columns:auto 1fr;gap:6px 14px;margin:0;font-size:14px}
 .meta dt{font-weight:700;color:var(--gray)}
@@ -170,9 +177,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
 .dcard.shake{animation:shake .35s;border-color:var(--ng);background:var(--ng-soft)}
 @keyframes shake{25%{transform:translateX(-5px)}75%{transform:translateX(5px)}}
 .ghostc{position:absolute;pointer-events:none;z-index:50;opacity:.92;box-shadow:0 8px 20px rgba(27,42,74,.25);cursor:grabbing}
-.bins{flex:1 0 auto;min-height:0;display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
-.bin .dcard{font-size:12px;padding:3px 7px;line-height:1.3}
-.p2row{display:flex;gap:10px;align-items:center}.p2row .pmsg{flex:1;margin:0}.p2row .btn{flex:0 0 auto}
+.bins{flex:1;min-height:0;display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
 .bin{border:1.5px solid var(--line);border-radius:10px;padding:6px;display:flex;flex-direction:column;gap:6px;background:#fff;cursor:pointer;min-height:0}
 .bin h4{margin:0;background:var(--navy);color:#fff;border-radius:6px;text-align:center;font-size:14px;padding:4px}
 .bin.hover{border-color:var(--amber);background:var(--amber-soft)}
@@ -509,7 +514,8 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
         <div class="pcol" style="gap:8px">
           <div class="plabel" style="margin:0">결과 확인 · <span id="p2-count">0 / 0</span></div>
           <div class="bins" id="p2-bins" style="grid-template-columns:repeat(2,1fr)"></div>
-          <div class="p2row"><p class="pmsg" id="p2-msg"></p><button class="btn ghost" id="p2-reset">다시 하기</button></div>
+          <p class="pmsg" id="p2-msg"></p>
+          <div style="display:flex;gap:8px;align-items:center"><button class="btn ghost" id="p2-reset">다시 하기</button></div>
           <div class="think"><span>생각해보기</span>표본마다 변하는 값의 퍼짐 정도를 나타낸 것이 무엇이었나요?</div>
         </div>
       </div>
@@ -538,7 +544,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
   </main>
 
   <footer class="bottombar">
-    <span class="counter" id="counter"></span><span class="spacer"></span>
+    <a class="home" href="../index.html" title="홈으로 (학습 모듈 목록)" aria-label="홈으로"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 10.5 12 3l9 7.5"/><path d="M5.5 9.5V21h13V9.5"/></svg><span>홈</span></a><span class="counter" id="counter"></span><span class="spacer"></span>
     <button class="nav" id="prev" type="button">이전</button>
     <button class="nav primary" id="next" type="button">다음</button>
   </footer>

@@ -1,0 +1,1161 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>데이터 유형과 분포</title>
+<!-- M04 데이터 유형과 분포 v1.0 · 기준 템플릿 v1.3로 제작 (2026-10-25) -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<style>
+:root{
+  --navy:#1B2A4A; --navy2:#2C4170; --navy3:#5B6E97; --navy-soft:#E4E9F2;
+  --ink:#22262E; --gray:#6B7280; --gray2:#9AA0AA; --panel:#EEF0F3; --line:#D5D9E0;
+  --amber:#E0A100; --amber-ink:#6E4F00; --amber-soft:#FCF3D9;
+  --ok:#23704F; --ok-soft:#E2F1E9; --ng:#B42318; --ng-soft:#FBE6E3;
+  --letterbox:#C7CCD4;
+}
+*{box-sizing:border-box}
+html,body{margin:0;height:100%;overflow:hidden;background:var(--letterbox)}
+body{font-family:"Pretendard Variable","Pretendard","Apple SD Gothic Neo","Malgun Gothic","Noto Sans KR",system-ui,sans-serif;color:var(--ink);-webkit-text-size-adjust:100%;font-feature-settings:"tnum"}
+button{font:inherit;color:inherit}
+:focus-visible{outline:3px solid var(--amber);outline-offset:2px;border-radius:4px}
+
+/* ---------- 16:9 무대 ---------- */
+.stage{position:absolute;left:50%;top:50%;width:960px;height:540px;transform:translate(-50%,-50%) scale(var(--s,1));transform-origin:center;background:#fff;overflow:hidden;box-shadow:0 10px 40px rgba(27,42,74,.25)}
+
+/* ---------- 상단 바: 모듈명 + 7단계 진행선 ---------- */
+.topbar{position:absolute;left:0;right:0;top:0;height:60px;background:var(--navy);display:flex;align-items:center}
+.brand{flex:0 0 200px;padding-left:22px;color:#fff;font-size:14px;font-weight:800;letter-spacing:-.3px;line-height:1.2;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.brand small{display:block;font-size:11px;font-weight:500;color:#A9B6CF;letter-spacing:0;margin-top:2px;overflow:hidden;text-overflow:ellipsis}
+.rail{position:relative;flex:1;height:60px;margin-right:22px}
+.rail .track{position:absolute;left:14px;right:14px;top:21px;height:3px;background:#3A4D78;border-radius:2px}
+.rail .fill{position:absolute;left:0;top:0;bottom:0;background:var(--amber);border-radius:2px;transition:width .35s ease}
+.station{position:absolute;top:10px;width:72px;margin-left:-36px;background:none;border:0;padding:0;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:4px}
+.station .dot{width:24px;height:24px;border-radius:50%;display:grid;place-items:center;font-size:11.5px;font-weight:800;background:var(--navy);color:#8E9DBD;border:2px solid #4A5D88;transition:all .25s}
+.station .lb{font-size:11.5px;color:#8E9DBD;white-space:nowrap}
+.station.done .dot{background:#C9D3E6;border-color:#C9D3E6;color:var(--navy)}
+.station.done .lb{color:#C9D3E6}
+.station.cur .dot{background:var(--amber);border-color:#FFE08A;color:var(--navy);transform:scale(1.12)}
+.station.cur .lb{color:#fff;font-weight:700}
+
+/* ---------- 화면 ---------- */
+.viewport{position:absolute;left:0;right:0;top:60px;bottom:46px}
+.slide{position:absolute;inset:0;padding:16px 36px 10px;display:none;flex-direction:column;gap:12px}
+.slide.on{display:flex;animation:fade .22s ease}
+@keyframes fade{from{opacity:0}to{opacity:1}}
+@media (prefers-reduced-motion:reduce){.slide.on{animation:none}.rail .fill,.station .dot{transition:none}}
+.sh{flex:0 0 auto}
+.sec{font-size:12.5px;font-weight:700;color:var(--navy3);display:flex;gap:8px;align-items:center;min-height:18px}
+h2{margin:3px 0 0;font-size:24px;line-height:1.3;font-weight:800;color:var(--navy);letter-spacing:-.6px;display:flex;gap:10px;align-items:flex-start}
+h2 .q{flex:0 0 auto;margin-top:2px;width:28px;height:28px;border-radius:6px;background:var(--navy);color:#fff;font-size:15px;display:grid;place-items:center}
+h2.big{font-size:30px;line-height:1.32}
+.body{flex:1 1 auto;min-height:0;display:grid;gap:24px}
+.split{grid-template-columns:1.2fr 1fr}
+.split.even{grid-template-columns:1fr 1fr}
+.full{grid-template-columns:1fr}
+.fig{background:var(--panel);border-radius:12px;padding:12px;min-height:0;display:flex;align-items:center;justify-content:center}
+.fig svg{width:100%;height:100%;display:block}
+.figcol{min-height:0;display:flex;flex-direction:column;gap:10px}
+.figcol .fig{flex:1 1 auto}
+.side{min-height:0;display:flex;flex-direction:column;gap:12px;justify-content:center}
+
+/* 핵심 문장: 40자 안팎, 1~2개 */
+.key{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:9px}
+.key li{position:relative;padding-left:16px;font-size:18.5px;line-height:1.42;font-weight:700;letter-spacing:-.4px}
+.key li::before{content:"";position:absolute;left:0;top:.28em;width:4px;height:1.05em;border-radius:2px;background:var(--navy2)}
+.key b{color:var(--navy);background:linear-gradient(transparent 62%,var(--amber-soft) 62%)}
+/* 해설 문단: 2~4문장, 150~250자 */
+.exp{margin:0;font-size:15px;line-height:1.62;letter-spacing:-.2px;color:var(--ink)}
+.exp b{color:var(--navy)}
+/* 연결 문장: 다음 소단원으로 넘기는 질문 */
+.next{margin:0;border-top:1px dashed var(--line);padding-top:9px;font-size:14px;font-weight:700;color:var(--navy2);display:flex;gap:8px;align-items:baseline}
+.next span{flex:0 0 auto;font-size:11.5px;font-weight:800;color:var(--navy3);background:var(--navy-soft);border-radius:4px;padding:0 6px;line-height:20px}
+/* 각주: 기호의 뜻과 출처 번호만 */
+.foot{flex:0 0 auto;font-size:12px;line-height:1.5;color:var(--gray);margin:0}
+.foot b{color:var(--ink)}
+.cite{font-size:.72em;font-weight:700;color:var(--navy3);vertical-align:super;line-height:0;margin-left:1px}
+.tag-v{display:inline-block;font-size:11px;font-weight:700;border-radius:4px;padding:0 6px;line-height:18px;white-space:nowrap;vertical-align:1px;color:var(--gray);background:#F3F4F6;box-shadow:inset 0 0 0 1px var(--line)}
+
+/* 핵심 수학 개념 박스 */
+.math{flex:0 0 auto;border-left:3px solid var(--navy3);background:#F6F7F9;border-radius:0 8px 8px 0;padding:9px 13px;font-size:13.5px;line-height:1.5}
+.math .mt{font-size:12px;font-weight:800;color:var(--navy3);margin-bottom:2px}
+.math .f{font-family:"Cambria Math","Times New Roman",serif;font-size:18px;font-weight:700;color:var(--navy);margin:1px 0 4px}
+.math .r{display:grid;grid-template-columns:34px 1fr;gap:6px}
+.math .r span:first-child{font-size:11.5px;font-weight:700;color:var(--gray2);padding-top:1px}
+.math .w{margin-top:5px;padding-top:5px;border-top:1px dashed var(--line);color:var(--ng);font-weight:700;font-size:12.5px}
+
+/* ---------- 하단 바 ---------- */
+.bottombar{position:absolute;left:0;right:0;bottom:0;height:46px;border-top:1px solid var(--line);display:flex;align-items:center;padding:0 22px 0 36px;gap:12px;background:#fff}
+.counter{font-size:13px;color:var(--gray);font-weight:600}
+.counter strong{color:var(--navy)}
+.spacer{flex:1}
+.nav{border:1.5px solid var(--navy);background:#fff;color:var(--navy);border-radius:8px;height:32px;padding:0 16px;font-size:14px;font-weight:700;cursor:pointer}
+.nav.primary{background:var(--navy);color:#fff}
+.nav:disabled{opacity:.3;cursor:default}
+
+/* ---------- 홈으로 ---------- */
+.home{display:inline-flex;align-items:center;gap:6px;height:32px;padding:0 13px;border-radius:8px;border:1.5px solid var(--navy-soft);background:#fff;color:var(--navy2);font-size:13.5px;font-weight:700;line-height:1;text-decoration:none;white-space:nowrap}
+.home svg{width:14px;height:14px;flex:0 0 auto;display:block}
+.home:hover{background:var(--navy-soft);border-color:var(--navy3);color:var(--navy)}
+.home:focus-visible{outline:3px solid var(--amber);outline-offset:2px}
+@media (prefers-reduced-motion:reduce){.home{transition:none}}
+
+/* ① 학습개요 */
+.meta{display:grid;grid-template-columns:auto 1fr;gap:6px 14px;margin:0;font-size:14px}
+.meta dt{font-weight:700;color:var(--gray)}
+.meta dd{margin:0;font-weight:700;color:var(--navy)}
+.prevlink{background:var(--panel);border-radius:10px;padding:12px 14px;font-size:14.5px;line-height:1.55}
+.prevlink small{display:block;font-size:12px;font-weight:800;color:var(--navy3);margin-bottom:3px}
+
+/* ② 학습목표: 목표 → 문항 → 실습 연결 */
+.gmap{display:grid;grid-template-columns:44px 1fr 150px 150px;align-items:stretch;row-gap:12px;column-gap:0}
+.gmap .hd{font-size:12px;font-weight:700;color:var(--gray);padding:0 14px 2px}
+.gmap .gn{background:var(--navy);color:#fff;font-weight:800;font-size:18px;display:grid;place-items:center;border-radius:10px 0 0 10px}
+.gmap .gt{background:var(--panel);padding:14px 18px;font-size:17px;font-weight:700;line-height:1.42;letter-spacing:-.3px;display:flex;align-items:center}
+.gmap .gt b{color:var(--navy)}
+.gmap .ga,.gmap .gp{background:var(--panel);display:flex;align-items:center;padding:0 10px;border-left:2px solid #fff}
+.gmap .gp{border-radius:0 10px 10px 0}
+.jump{border:1.5px solid var(--navy3);background:#fff;border-radius:7px;padding:6px 10px;font-size:13px;font-weight:700;color:var(--navy);cursor:pointer;text-align:left;line-height:1.3;width:100%}
+.jump:hover{background:var(--navy-soft)}
+
+/* ④ 본문 정리 표 */
+.sumtbl{width:100%;border-collapse:separate;border-spacing:0;font-size:14.5px;line-height:1.5}
+.sumtbl th{background:var(--navy);color:#fff;font-weight:800;text-align:left;padding:10px 14px}
+.sumtbl th:first-child{border-radius:10px 0 0 0;width:150px}
+.sumtbl th:last-child{border-radius:0 10px 0 0}
+.sumtbl td{padding:11px 14px;border-bottom:1px solid var(--line);vertical-align:top}
+.sumtbl td:first-child{font-weight:800;color:var(--navy)}
+.sumtbl tr:nth-child(even) td{background:#F8F9FB}
+
+/* ⑤ 형성평가 */
+.qchips{display:flex;gap:6px}
+.qchips span{font-size:11.5px;font-weight:700;color:var(--navy2);background:var(--navy-soft);border-radius:4px;padding:0 7px;line-height:19px}
+h2.stem{font-size:21px;line-height:1.42;font-weight:800}
+.opts{display:grid;gap:9px;align-content:center}
+.opts.ox{grid-template-columns:1fr 1fr}
+.opt{border:1.5px solid var(--line);background:#fff;border-radius:10px;padding:11px 14px;text-align:left;font-size:16px;font-weight:600;cursor:pointer;display:flex;gap:10px;align-items:center}
+.opt .n{flex:0 0 26px;height:26px;border-radius:50%;background:var(--panel);display:grid;place-items:center;font-size:13px;font-weight:800;color:var(--navy)}
+.opts.ox .opt{justify-content:center;font-size:40px;font-weight:800;padding:22px;color:var(--navy)}
+.opt:hover:not(:disabled){border-color:var(--navy3);background:#F8F9FB}
+.opt:disabled{cursor:default}
+.opt.ok{border-color:var(--ok);background:var(--ok-soft);color:var(--ok)}
+.opt.ok .n{background:var(--ok);color:#fff}
+.opt.ng{border-color:var(--ng);background:var(--ng-soft);color:var(--ng)}
+.opt.ng .n{background:var(--ng);color:#fff}
+.fbp{background:var(--panel);border-radius:12px;padding:18px 20px;display:flex;flex-direction:column;gap:10px;font-size:14.5px;line-height:1.6}
+.fbp .empty{color:var(--gray);margin:auto 0}
+.fbp .verdict{font-size:19px;font-weight:800}
+.fbp.ok{background:var(--ok-soft)} .fbp.ok .verdict{color:var(--ok)}
+.fbp.ng{background:var(--ng-soft)} .fbp.ng .verdict{color:var(--ng)}
+.fbp .back{align-self:flex-start}
+.fbp .tally{margin-top:auto;font-size:12.5px;color:var(--gray);font-weight:600}
+
+/* ⑥ 실습 */
+.plabel{font-size:12px;font-weight:800;color:var(--navy3);margin-bottom:6px}
+.pcol{min-height:0;display:flex;flex-direction:column}
+.mbtns{display:flex;flex-wrap:nowrap;gap:3px;margin-bottom:8px}
+.mbtn{border:1px solid var(--line);background:#fff;border-radius:6px;padding:2px 6px;font-size:12px;cursor:pointer;min-width:26px}
+.mbtn.on{background:var(--navy);border-color:var(--navy);color:#fff}
+.ctrl{display:flex;align-items:center;gap:10px;font-size:14px;font-weight:600}
+input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
+.stats{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.stats.three{grid-template-columns:1fr 1fr 1fr}
+.stats div{background:var(--panel);border-radius:10px;padding:8px 12px}
+.stats small{display:block;font-size:11.5px;color:var(--gray);font-weight:600;line-height:1.35}
+.stats strong{font-size:22px;color:var(--navy);letter-spacing:-.4px}
+.pmsg{font-size:14.5px;font-weight:700;min-height:22px;line-height:1.45}
+.pmsg.ok{color:var(--ok)} .pmsg.ng{color:var(--ng)}
+.think{flex:0 0 auto;background:var(--amber-soft);border-radius:10px;padding:9px 14px;font-size:14.5px;font-weight:700;color:var(--amber-ink);display:flex;gap:10px;align-items:baseline}
+.think span{flex:0 0 auto;font-size:12px;font-weight:800}
+.howto{font-size:13.5px;color:var(--gray);line-height:1.5;margin:0}
+.btn{border:0;background:var(--navy);color:#fff;border-radius:8px;height:32px;padding:0 14px;font-size:13.5px;font-weight:700;cursor:pointer}
+.btn.ghost{background:#fff;color:var(--navy);box-shadow:inset 0 0 0 1.5px var(--navy)}
+.pool{flex:1;min-height:0;display:grid;grid-template-columns:1fr 1fr;align-content:start;gap:8px;padding:10px;border:1.5px dashed var(--line);border-radius:10px;background:#FAFBFC}
+.dcard{background:#fff;border:1.5px solid var(--navy3);border-radius:8px;padding:7px 10px;font-size:13.5px;font-weight:600;line-height:1.4;cursor:grab;user-select:none;-webkit-user-select:none;touch-action:none}
+.dcard.sel{box-shadow:0 0 0 3px var(--amber)}
+.dcard.ok{border-color:var(--ok);background:var(--ok-soft);color:var(--ok);cursor:default;font-size:12.5px;padding:5px 8px}
+.dcard.shake{animation:shake .35s;border-color:var(--ng);background:var(--ng-soft)}
+@keyframes shake{25%{transform:translateX(-5px)}75%{transform:translateX(5px)}}
+.ghostc{position:absolute;pointer-events:none;z-index:50;opacity:.92;box-shadow:0 8px 20px rgba(27,42,74,.25);cursor:grabbing}
+.bins{flex:1 0 auto;min-height:0;display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.bin .dcard{font-size:12px;padding:3px 7px;line-height:1.3}
+.p2row{display:flex;gap:10px;align-items:center}.p2row .pmsg{flex:1;margin:0}.p2row .btn{flex:0 0 auto}
+.bin{border:1.5px solid var(--line);border-radius:10px;padding:6px;display:flex;flex-direction:column;gap:6px;background:#fff;cursor:pointer;min-height:0}
+.bin h4{margin:0;background:var(--navy);color:#fff;border-radius:6px;text-align:center;font-size:14px;padding:4px}
+.bin.hover{border-color:var(--amber);background:var(--amber-soft)}
+.res{display:none;flex-direction:column;gap:8px}
+.res.on{display:flex}
+
+/* ⑦ 용어해설·참고자료 */
+.gl{display:grid;grid-template-columns:1fr 1fr;grid-template-rows:repeat(3,1fr);gap:10px 22px;min-height:0}
+.gi{border-top:2px solid var(--navy);padding:8px 0 0;display:flex;flex-direction:column;gap:3px;min-height:0}
+.gi .t{font-size:16.5px;font-weight:800;color:var(--navy);display:flex;gap:6px;align-items:baseline;flex-wrap:wrap}
+.gi .t em{font-style:normal;font-weight:500;font-size:12.5px;color:var(--gray)}
+.gi .t i{font-style:normal;font-size:12px;font-weight:800;color:var(--navy3);width:22px}
+.gi .d{font-size:14px;line-height:1.5}
+.gi .e{font-size:12.5px;line-height:1.45;color:var(--gray)}
+.gi .e strong{color:var(--navy3)}
+.refs{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:8px;font-size:13.5px;line-height:1.5}
+.refs li{display:grid;grid-template-columns:30px 1fr;gap:4px}
+.refs li span{font-weight:800;color:var(--navy3)}
+.refs a{color:var(--navy2);word-break:break-all}
+.nextmod{background:var(--navy);color:#fff;border-radius:12px;padding:18px 22px;display:flex;flex-direction:column;gap:6px}
+.nextmod small{font-size:12px;font-weight:700;color:#A9B6CF}
+.nextmod strong{font-size:19px;line-height:1.45;letter-spacing:-.3px}
+
+.rotate{position:fixed;left:0;right:0;bottom:max(14px,env(safe-area-inset-bottom));text-align:center;font-size:13px;color:#3A4560;display:none}
+@media (orientation:portrait) and (max-width:700px){.rotate{display:block}}
+</style>
+</head>
+<body>
+<div class="stage" id="stage">
+  <header class="topbar">
+    <!-- [교체] 모듈명 / 과정명·모듈 번호 (장·절 번호는 쓰지 않음) -->
+    <div class="brand" id="brand">데이터 유형과 분포<small>데이터와 기술통계 · M04</small></div>
+    <nav class="rail" id="rail" aria-label="학습 단계"><div class="track"><div class="fill" id="fill"></div></div></nav>
+  </header>
+
+  <main class="viewport" id="vp">
+    <!-- ① 학습개요 ─────────────────────────────── -->
+    <section class="slide" data-step="0">
+      <div class="sh"><div class="sec">학습개요</div>
+        <h2 class="big">변수의 유형을 구분하고, 분포를 히스토그램으로 그립니다</h2></div>
+      <div class="body split">
+        <div class="fig"><svg viewBox="0 0 440 260" role="img" aria-label="데이터 표에서 변수와 차원을 보고, 변수 유형을 구분한 뒤, 히스토그램으로 분포를 그리는 흐름">
+          <defs><marker id="b0" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10z" fill="#5B6E97"/></marker></defs>
+          <rect x="8" y="70" width="104" height="120" rx="10" fill="#fff" stroke="#5B6E97" stroke-width="1.5"/>
+          <rect x="8" y="70" width="104" height="26" rx="10" fill="#1B2A4A"/><text x="60" y="88" text-anchor="middle" font-size="12" font-weight="800" fill="#fff">데이터 표</text>
+          <g stroke="#DDE1E7"><line x1="44" y1="96" x2="44" y2="190"/><line x1="78" y1="96" x2="78" y2="190"/><line x1="8" y1="120" x2="112" y2="120"/><line x1="8" y1="144" x2="112" y2="144"/><line x1="8" y1="168" x2="112" y2="168"/></g>
+          <text x="60" y="210" text-anchor="middle" font-size="11.5" fill="#6B7280">열 하나 = 변수</text>
+          <line x1="116" y1="130" x2="140" y2="130" stroke="#5B6E97" stroke-width="2" marker-end="url(#b0)"/>
+          <rect x="144" y="40" width="130" height="50" rx="10" fill="#fff" stroke="#1B2A4A" stroke-width="1.5"/><text x="209" y="62" text-anchor="middle" font-size="13" font-weight="800" fill="#1B2A4A">변수 유형</text><text x="209" y="80" text-anchor="middle" font-size="11" fill="#6B7280">이산 · 연속 · 범주</text>
+          <rect x="144" y="170" width="130" height="50" rx="10" fill="#fff" stroke="#1B2A4A" stroke-width="1.5"/><text x="209" y="192" text-anchor="middle" font-size="13" font-weight="800" fill="#1B2A4A">변수의 개수</text><text x="209" y="210" text-anchor="middle" font-size="11" fill="#6B7280">= 차원</text>
+          <path d="M140 130 C140 66 140 66 144 66" fill="none" stroke="#5B6E97" stroke-width="1.5"/>
+          <path d="M140 130 C140 194 140 194 144 194" fill="none" stroke="#5B6E97" stroke-width="1.5"/>
+          <line x1="276" y1="66" x2="300" y2="110" stroke="#5B6E97" stroke-width="2" marker-end="url(#b0)"/>
+          <rect x="304" y="96" width="128" height="82" rx="10" fill="#FCF3D9" stroke="#E0A100" stroke-width="2"/>
+          <text x="368" y="116" text-anchor="middle" font-size="13" font-weight="800" fill="#6E4F00">히스토그램</text>
+          <g fill="#2C4170"><rect x="322" y="152" width="14" height="16"/><rect x="338" y="136" width="14" height="32"/><rect x="354" y="126" width="14" height="42"/><rect x="370" y="140" width="14" height="28"/><rect x="386" y="156" width="14" height="12"/></g>
+          <text x="368" y="200" text-anchor="middle" font-size="11.5" fill="#6B7280">구간폭에 따라 인상이 달라짐</text>
+        </svg></div>
+        <div class="side">
+          <div class="prevlink"><small>지난 모듈에서는</small>알고 싶은 대상 전체인 모집단과 그 일부인 표본을 구분하고, 표본으로 모집단을 추정하는 방법을 배웠습니다.<small style="margin-top:8px">이번 모듈에서는</small>표본으로 얻은 데이터가 어떤 변수로 이루어지고, 값이 어떻게 분포하는지 그림으로 살펴봅니다.</div>
+          <dl class="meta"><dt>학습 시간</dt><dd>약 40분</dd><dt>본문</dt><dd>소단원 4개</dd><dt>실습</dt><dd>조작형 · 분류형 · 추정형</dd></dl>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" data-step="0">
+      <div class="sh"><div class="sec">학습개요 · 이 모듈의 예시</div><h2>학생 100명의 키, 좋아하는 메뉴, 주사위로 배웁니다</h2></div>
+      <div class="body split">
+        <div class="fig"><svg viewBox="0 0 440 250" role="img" aria-label="학생 100명의 키, 좋아하는 메뉴, 주사위 60번 던지기">
+          <rect x="10" y="10" width="420" height="72" rx="10" fill="#fff"/>
+          <rect x="22" y="24" width="84" height="44" rx="8" fill="#1B2A4A"/><text x="64" y="51" text-anchor="middle" font-size="12.5" font-weight="800" fill="#fff">키</text>
+          <text x="122" y="42" font-size="12.5" font-weight="700" fill="#22262E">학생 100명의 키 (151.8 ~ 181.3cm)</text>
+          <text x="122" y="64" font-size="12" fill="#6B7280">소수점 아래까지 재는 값 · 가상 데이터</text>
+          <rect x="10" y="90" width="420" height="72" rx="10" fill="#fff"/>
+          <rect x="22" y="104" width="84" height="44" rx="8" fill="#1B2A4A"/><text x="64" y="131" text-anchor="middle" font-size="12.5" font-weight="800" fill="#fff">좋아하는 메뉴</text>
+          <text x="122" y="122" font-size="12.5" font-weight="700" fill="#22262E">같은 100명: 짜장면 · 짬뽕 · 우동 · 볶음밥</text>
+          <text x="122" y="144" font-size="12" fill="#6B7280">숫자가 아닌 범주 · 가상 데이터</text>
+          <rect x="10" y="170" width="420" height="72" rx="10" fill="#fff"/>
+          <rect x="22" y="184" width="84" height="44" rx="8" fill="#1B2A4A"/><text x="64" y="211" text-anchor="middle" font-size="12.5" font-weight="800" fill="#fff">주사위</text>
+          <text x="122" y="202" font-size="12.5" font-weight="700" fill="#22262E">주사위 60번 던지기: 나온 눈 1 ~ 6</text>
+          <text x="122" y="224" font-size="12" fill="#6B7280">띄엄띄엄 떨어진 값 · 가상 데이터</text>
+        </svg></div>
+        <div class="side">
+          <ul class="key"><li>세 예시를 끝까지 씁니다. <span class="tag-v">가상 데이터</span></li></ul>
+          <p class="exp">키는 소수점 아래까지 잴 수 있는 숫자, 주사위 눈은 1부터 6까지 띄엄띄엄 떨어진 숫자, 좋아하는 메뉴는 숫자가 아닌 범주입니다. 세 데이터는 유형이 서로 달라서, 변수 유형을 구분하고 유형마다 히스토그램을 어떻게 그리는지 비교할 때 씁니다.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ② 학습목표 ─────────────────────────────── -->
+    <section class="slide" data-step="1">
+      <div class="sh"><div class="sec">학습목표</div><h2>이 모듈을 마치면 이렇게 할 수 있습니다</h2></div>
+      <div class="body full" style="align-content:center">
+        <div class="gmap">
+          <div></div><div class="hd">목표</div><div class="hd">확인하는 문항</div><div class="hd">연결 실습</div>
+          <div class="gn">1</div><div class="gt"><span>변수의 개수로 차원을 판단하고, 변수를 이산형·연속형·질적 변수로 <b>구분한다</b>.</span></div>
+          <div class="ga"><button class="jump" data-jump="q1">문항 1·2</button></div><div class="gp"><button class="jump" data-jump="p2">실습 2 분류</button></div>
+          <div class="gn">2</div><div class="gt"><span>변수 유형에 맞게 히스토그램의 축을 정하고, 구간별 도수를 <b>계산한다</b>.</span></div>
+          <div class="ga"><button class="jump" data-jump="q3">문항 3·4</button></div><div class="gp"><button class="jump" data-jump="p3">실습 3 추정</button></div>
+          <div class="gn">3</div><div class="gt"><span>구간폭에 따라 달라지는 히스토그램을 비교해 알맞은 구간폭을 <b>판단한다</b>.</span></div>
+          <div class="ga"><button class="jump" data-jump="q5">문항 5·6</button></div><div class="gp"><button class="jump" data-jump="p1">실습 1 조작</button></div>
+        </div>
+      </div>
+      <p class="foot">버튼을 누르면 해당 문항이나 실습 화면으로 바로 이동합니다.</p>
+    </section>
+
+    <!-- ③ 일상의 예시 ─────────────────────────────── -->
+    <section class="slide" data-step="2">
+      <div class="sh"><div class="sec">일상의 예시 1/5</div><h2>가계부는 날짜·항목·금액을 한 줄에 함께 적습니다</h2></div>
+      <div class="body split">
+        <div class="fig"><svg viewBox="0 0 440 250" role="img" aria-label="날짜, 항목, 금액 세 칸으로 된 가계부">
+          <rect x="40" y="24" width="360" height="200" rx="10" fill="#fff" stroke="#5B6E97" stroke-width="1.5"/>
+          <rect x="40" y="24" width="360" height="36" rx="10" fill="#1B2A4A"/>
+          <g font-size="13" font-weight="800" fill="#fff" text-anchor="middle"><text x="100" y="47">날짜</text><text x="220" y="47">항목</text><text x="340" y="47">금액</text></g>
+          <g stroke="#DDE1E7"><line x1="160" y1="60" x2="160" y2="224"/><line x1="280" y1="60" x2="280" y2="224"/><line x1="40" y1="100" x2="400" y2="100"/><line x1="40" y1="140" x2="400" y2="140"/><line x1="40" y1="180" x2="400" y2="180"/></g>
+          <g font-size="12.5" fill="#22262E" text-anchor="middle">
+            <text x="100" y="85">3월 2일</text><text x="220" y="85">식비</text><text x="340" y="85">8,000원</text>
+            <text x="100" y="125">3월 2일</text><text x="220" y="125">교통</text><text x="340" y="125">1,500원</text>
+            <text x="100" y="165">3월 3일</text><text x="220" y="165">도서</text><text x="340" y="165">15,000원</text>
+          </g>
+          <rect x="282" y="62" width="116" height="160" rx="6" fill="none" stroke="#E0A100" stroke-width="2.5" stroke-dasharray="5 4"/>
+          <text x="340" y="244" text-anchor="middle" font-size="12" font-weight="700" fill="#6E4F00">같은 방식으로 적은 한 칸</text>
+        </svg></div>
+        <div class="side">
+          <ul class="key"><li>같은 성질의 값끼리 한 칸에 모읍니다.</li></ul>
+          <p class="exp">가계부의 ‘금액’ 칸에는 모두 같은 방식으로 적은 돈의 액수만 모입니다. 한 줄에는 날짜·항목·금액이 함께 적혀 있어서, 어느 날 어떤 항목에 얼마를 썼는지 서로 이어서 볼 수 있습니다.</p>
+          <p class="next"><span>본문에서</span>4-1 변수와 차원으로 이어집니다.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" data-step="2">
+      <div class="sh"><div class="sec">일상의 예시 2/5</div><h2>엘리베이터 인원, 체중계 숫자, 메뉴판은 성격이 다릅니다</h2></div>
+      <div class="body split">
+        <div class="fig"><svg viewBox="0 0 440 250" role="img" aria-label="엘리베이터 인원 표시, 체중계 표시, 메뉴판">
+          <rect x="14" y="40" width="126" height="160" rx="10" fill="#fff" stroke="#5B6E97" stroke-width="1.5"/>
+          <rect x="30" y="58" width="94" height="44" rx="6" fill="#1B2A4A"/><text x="77" y="88" text-anchor="middle" font-size="20" font-weight="800" fill="#FCF3D9">7명</text>
+          <g fill="#A9B8D4"><circle cx="46" cy="136" r="8"/><circle cx="66" cy="136" r="8"/><circle cx="86" cy="136" r="8"/><circle cx="106" cy="136" r="8"/><circle cx="56" cy="162" r="8"/><circle cx="76" cy="162" r="8"/><circle cx="96" cy="162" r="8"/></g>
+          <text x="77" y="222" text-anchor="middle" font-size="12" font-weight="700" fill="#1B2A4A">7.5명은 없음</text>
+          <rect x="157" y="40" width="126" height="160" rx="10" fill="#fff" stroke="#5B6E97" stroke-width="1.5"/>
+          <rect x="173" y="58" width="94" height="44" rx="6" fill="#1B2A4A"/><text x="220" y="88" text-anchor="middle" font-size="18" font-weight="800" fill="#FCF3D9">65.8kg</text>
+          <rect x="177" y="120" width="86" height="56" rx="12" fill="#E4E9F2" stroke="#2C4170" stroke-width="1.5"/>
+          <text x="220" y="222" text-anchor="middle" font-size="12" font-weight="700" fill="#1B2A4A">더 잘게 잴 수 있음</text>
+          <rect x="300" y="40" width="126" height="160" rx="10" fill="#fff" stroke="#5B6E97" stroke-width="1.5"/>
+          <text x="363" y="66" text-anchor="middle" font-size="13" font-weight="800" fill="#1B2A4A">메뉴판</text>
+          <g font-size="12.5" fill="#22262E"><text x="320" y="94">· 짜장면</text><text x="320" y="118">· 짬뽕</text><text x="320" y="142">· 우동</text><text x="320" y="166">· 볶음밥</text></g>
+          <text x="363" y="222" text-anchor="middle" font-size="12" font-weight="700" fill="#1B2A4A">평균 메뉴는 없음</text>
+        </svg></div>
+        <div class="side">
+          <ul class="key"><li>값마다 성격이 서로 다릅니다.</li></ul>
+          <p class="exp">엘리베이터 인원은 7명, 8명처럼 띄엄띄엄 셉니다. 체중계 숫자는 저울이 정밀할수록 65.8kg, 65.83kg처럼 더 잘게 나타납니다. 메뉴판의 짜장면과 짬뽕은 숫자가 아니어서 크기를 비교하거나 평균을 낼 수 없습니다.</p>
+          <p class="next"><span>본문에서</span>4-2 변수의 유형으로 이어집니다.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" data-step="2">
+      <div class="sh"><div class="sec">일상의 예시 3/5</div><h2>신발장을 사이즈별 칸으로 나누면 한눈에 보입니다</h2></div>
+      <div class="body split">
+        <div class="fig"><svg viewBox="0 0 440 250" role="img" aria-label="사이즈별 칸에 쌓인 신발 상자의 높이가 서로 다름">
+          <line x1="40" y1="206" x2="410" y2="206" stroke="#9AA0AA" stroke-width="2"/>
+          <g fill="#A9B8D4" stroke="#fff" stroke-width="2">
+            <rect x="56" y="182" width="56" height="24"/>
+            <rect x="126" y="134" width="56" height="24"/><rect x="126" y="158" width="56" height="24"/><rect x="126" y="182" width="56" height="24"/>
+            <rect x="196" y="86" width="56" height="24"/><rect x="196" y="110" width="56" height="24"/><rect x="196" y="134" width="56" height="24"/><rect x="196" y="158" width="56" height="24"/><rect x="196" y="182" width="56" height="24"/>
+            <rect x="266" y="158" width="56" height="24"/><rect x="266" y="182" width="56" height="24"/>
+            <rect x="336" y="182" width="56" height="24"/>
+          </g>
+          <rect x="196" y="86" width="56" height="120" fill="none" stroke="#E0A100" stroke-width="2.5"/>
+          <g font-size="12.5" font-weight="700" fill="#1B2A4A" text-anchor="middle"><text x="84" y="226">230</text><text x="154" y="226">240</text><text x="224" y="226">250</text><text x="294" y="226">260</text><text x="364" y="226">270</text></g>
+          <text x="224" y="74" text-anchor="middle" font-size="12" font-weight="800" fill="#6E4F00">가장 많은 사이즈</text>
+          <text x="410" y="244" text-anchor="end" font-size="11.5" fill="#6B7280">신발 사이즈(mm)</text>
+        </svg></div>
+        <div class="side">
+          <ul class="key"><li>값별로 개수를 쌓으면 많고 적음이 보입니다.</li></ul>
+          <p class="exp">신발 상자를 아무렇게나 쌓으면 어떤 사이즈가 많은지 알기 어렵습니다. 사이즈별 칸에 나눠 쌓으면 상자 더미의 높이만 보고도 250mm가 가장 많고 양 끝 사이즈는 적다는 것을 바로 알 수 있습니다.</p>
+          <p class="next"><span>본문에서</span>4-3 히스토그램으로 이어집니다.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" data-step="2">
+      <div class="sh"><div class="sec">일상의 예시 4/5</div><h2>시험 점수를 몇 점 단위로 묶느냐에 따라 달라 보입니다</h2></div>
+      <div class="body split">
+        <div class="fig"><svg viewBox="0 0 440 250" role="img" aria-label="점수를 1점, 10점, 50점 단위로 묶은 세 가지 막대그래프">
+          <g font-size="12" font-weight="800" fill="#1B2A4A" text-anchor="middle"><text x="76" y="30">1점 단위</text><text x="220" y="30">10점 단위</text><text x="364" y="30">50점 단위</text></g>
+          <g stroke="#9AA0AA" stroke-width="1.5"><line x1="10" y1="200" x2="142" y2="200"/><line x1="154" y1="200" x2="286" y2="200"/><line x1="298" y1="200" x2="430" y2="200"/></g>
+          <g fill="#5B6E97">
+            <rect x="16" y="188" width="3" height="12"/><rect x="28" y="176" width="3" height="24"/><rect x="40" y="188" width="3" height="12"/><rect x="58" y="176" width="3" height="24"/><rect x="66" y="188" width="3" height="12"/><rect x="78" y="164" width="3" height="36"/><rect x="88" y="188" width="3" height="12"/><rect x="98" y="176" width="3" height="24"/><rect x="112" y="188" width="3" height="12"/><rect x="126" y="188" width="3" height="12"/>
+          </g>
+          <g fill="#2C4170"><rect x="160" y="170" width="20" height="30"/><rect x="182" y="130" width="20" height="70"/><rect x="204" y="80" width="20" height="120"/><rect x="226" y="110" width="20" height="90"/><rect x="248" y="160" width="20" height="40"/></g>
+          <g fill="#A9B8D4"><rect x="306" y="150" width="56" height="50"/><rect x="366" y="60" width="56" height="140"/></g>
+          <g font-size="11.5" fill="#6B7280" text-anchor="middle"><text x="76" y="222">듬성듬성</text><text x="220" y="222">모양이 보임</text><text x="364" y="222">거의 정보 없음</text></g>
+        </svg></div>
+        <div class="side">
+          <ul class="key"><li>묶는 폭이 너무 좁거나 넓으면 읽기 어렵습니다.</li></ul>
+          <p class="exp">반 학생들의 점수를 1점 단위로 세면 칸마다 한두 명뿐이라 모양이 보이지 않습니다. 50점 단위로 묶으면 칸이 두 개뿐이라 알 수 있는 것이 거의 없습니다. 10점 단위처럼 알맞게 묶어야 어느 점수대가 많은지 보입니다.</p>
+          <p class="next"><span>본문에서</span>4-4 구간폭과 히스토그램의 한계로 이어집니다.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" data-step="2">
+      <div class="sh"><div class="sec">일상의 예시 5/5</div><h2>데이터의 생김새는 어떻게 알아볼 수 있을까요?</h2></div>
+      <div class="body split even">
+        <div class="fig"><svg viewBox="0 0 420 250" role="img" aria-label="네 장면이 데이터 유형과 분포로 이어지는 그림">
+          <defs><marker id="b2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10z" fill="#5B6E97"/></marker></defs>
+          <g font-size="13" font-weight="700" fill="#1B2A4A" text-anchor="middle">
+            <rect x="14" y="18" width="150" height="44" rx="10" fill="#fff" stroke="#5B6E97" stroke-width="1.5"/><text x="89" y="45">한 칸에 모으기</text>
+            <rect x="14" y="74" width="150" height="44" rx="10" fill="#fff" stroke="#5B6E97" stroke-width="1.5"/><text x="89" y="101">값의 성격 구분</text>
+            <rect x="14" y="130" width="150" height="44" rx="10" fill="#fff" stroke="#5B6E97" stroke-width="1.5"/><text x="89" y="157">칸별로 쌓기</text>
+            <rect x="14" y="186" width="150" height="44" rx="10" fill="#fff" stroke="#5B6E97" stroke-width="1.5"/><text x="89" y="213">묶는 폭 정하기</text>
+          </g>
+          <g stroke="#5B6E97" stroke-width="2" fill="none"><path d="M166 40 C220 40 220 112 254 120" marker-end="url(#b2)"/><path d="M166 96 C210 96 220 118 254 122" marker-end="url(#b2)"/><path d="M166 152 C210 152 220 130 254 128" marker-end="url(#b2)"/><path d="M166 208 C220 208 220 138 254 130" marker-end="url(#b2)"/></g>
+          <rect x="258" y="84" width="150" height="82" rx="12" fill="#1B2A4A"/>
+          <text x="333" y="120" text-anchor="middle" font-size="16" font-weight="800" fill="#fff">데이터 유형과 분포</text>
+          <text x="333" y="144" text-anchor="middle" font-size="11.5" fill="#C9D3E6">변수 → 유형 → 히스토그램</text>
+        </svg></div>
+        <div class="side">
+          <p class="exp">네 장면은 같은 성질의 값을 한 칸에 모으고, 값의 성격을 구분하고, 칸별로 개수를 쌓고, 묶는 폭을 정하는 순서로 이어집니다. 통계학은 이 과정을 변수, 변수의 유형, 히스토그램, 구간폭이라는 말로 정리합니다.</p>
+          <p class="next"><span>다음 질문</span>데이터 속 ‘변수’란 무엇일까?</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ④ 본문 ─────────────────────────────── -->
+    <section class="slide" data-step="3" id="s-4-1a">
+      <div class="sh"><div class="sec">4-1 변수와 차원</div><h2><span class="q">Q</span>데이터 속 ‘변수’란 무엇일까요?</h2></div>
+      <div class="body split even">
+        <div class="fig"><svg viewBox="0 0 420 270" role="img" aria-label="세 사람의 키, 몸무게, 성별 표와 1변수, 2변수, 3변수 범위">
+          <rect x="6" y="6" width="408" height="150" rx="12" fill="#fff"/>
+          <g font-size="12.5" font-weight="800" fill="#1B2A4A" text-anchor="middle"><text x="60" y="34">사람</text><text x="160" y="34">키(cm)</text><text x="260" y="34">몸무게(kg)</text><text x="360" y="34">성별</text></g>
+          <line x1="16" y1="44" x2="404" y2="44" stroke="#DDE1E7"/>
+          <g font-size="12.5" fill="#22262E" text-anchor="middle">
+            <text x="60" y="66">A</text><text x="160" y="66">165.1</text><text x="260" y="66">59.1</text><text x="360" y="66">남</text>
+            <text x="60" y="90">B</text><text x="160" y="90">171.3</text><text x="260" y="90">70.8</text><text x="360" y="90">남</text>
+            <text x="60" y="114">C</text><text x="160" y="114">155.5</text><text x="260" y="114">45.2</text><text x="360" y="114">여</text>
+          </g>
+          <rect x="116" y="48" width="88" height="74" rx="6" fill="none" stroke="#E0A100" stroke-width="2"/>
+          <g font-size="11.5" font-weight="700"><text x="160" y="140" text-anchor="middle" fill="#6E4F00">1변수</text></g>
+          <path d="M116 146 h188" stroke="#2C4170" stroke-width="2"/><text x="248" y="140" text-anchor="middle" font-size="11.5" font-weight="700" fill="#2C4170">2변수</text>
+          <path d="M116 152 h288" stroke="#5B6E97" stroke-width="2" stroke-dasharray="4 3"/><text x="378" y="140" text-anchor="middle" font-size="11.5" font-weight="700" fill="#5B6E97">3변수</text>
+          <rect x="6" y="166" width="408" height="98" rx="12" fill="#fff"/>
+          <text x="22" y="190" font-size="12.5" font-weight="800" fill="#B42318">따로 재면 관계를 볼 수 없음</text>
+          <g font-size="12" fill="#22262E"><text x="22" y="214">A는 키만, B는 몸무게만, C는 성별만 쟀다면</text><text x="22" y="238">→ 서로 이어지지 않는 1변수 데이터 3개</text></g>
+        </svg></div>
+        <div class="side">
+          <ul class="key"><li><b>변수</b>: 같은 방법으로 얻은 같은 성질의 값</li><li>한 사람의 변수는 함께 측정해야 합니다.</li></ul>
+          <p class="exp">모집단과 표본을 정하고 나면 실제 데이터를 얻습니다. 공통된 측정 방법으로 얻은 같은 성질의 값 모음을 변수라 합니다. 키만 있으면 1변수, 키와 몸무게면 2변수, 성별을 더하면 3변수 데이터입니다. 변수 사이의 관계를 보려면 한 사람에게서 여러 변수를 함께 재야 합니다.</p>
+          <p class="next"><span>다음 질문</span>변수의 개수는 무엇을 뜻할까?</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" data-step="3" id="s-4-1b">
+      <div class="sh"><div class="sec">4-1 변수와 차원</div><h2><span class="q">Q</span>변수의 개수는 무엇을 뜻할까요?</h2></div>
+      <div class="body split even">
+        <div class="fig"><svg id="m4-dim" viewBox="0 0 420 270" role="img" aria-label="1변수는 직선 위의 점, 2변수는 평면 위의 점"></svg></div>
+        <div class="side">
+          <ul class="key"><li>변수의 개수를 <b>차원</b>이라 합니다.</li><li>1변수는 직선, 2변수는 평면 위에 놓입니다.</li></ul>
+          <p class="exp">키만 있는 1변수 데이터는 직선 위의 점으로, 키와 몸무게를 함께 잰 2변수 데이터는 평면 위의 점으로 나타낼 수 있습니다. 변수가 3개면 3차원 공간의 점이 됩니다. 3차원까지는 그림으로 그릴 수 있지만 4차원 이상은 그리기 어렵습니다. 그래서 변수가 많은 <b>고차원 데이터</b>일수록 분석이 어려워집니다.</p>
+          <p class="next"><span>다음 질문</span>변수에는 어떤 종류가 있을까?</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" data-step="3" id="s-4-2a">
+      <div class="sh"><div class="sec">4-2 변수의 유형</div><h2><span class="q">Q</span>숫자로 된 변수는 모두 같을까요?</h2></div>
+      <div class="body split even">
+        <div class="fig"><svg viewBox="0 0 420 270" role="img" aria-label="이산형은 떨어진 점, 연속형은 끊김 없는 눈금">
+          <rect x="6" y="6" width="408" height="124" rx="12" fill="#fff"/>
+          <text x="22" y="30" font-size="13" font-weight="800" fill="#1B2A4A">이산형</text><text x="80" y="30" font-size="11.5" fill="#6B7280">값이 띄엄띄엄 떨어져 있음</text>
+          <line x1="40" y1="84" x2="380" y2="84" stroke="#9AA0AA" stroke-width="1.5"/>
+          <g fill="#2C4170"><circle cx="60" cy="84" r="8"/><circle cx="124" cy="84" r="8"/><circle cx="188" cy="84" r="8"/><circle cx="252" cy="84" r="8"/><circle cx="316" cy="84" r="8"/><circle cx="380" cy="84" r="8"/></g>
+          <g font-size="12" font-weight="700" fill="#1B2A4A" text-anchor="middle"><text x="60" y="112">1</text><text x="124" y="112">2</text><text x="188" y="112">3</text><text x="252" y="112">4</text><text x="316" y="112">5</text><text x="380" y="112">6</text></g>
+          <text x="156" y="66" text-anchor="middle" font-size="11" font-weight="700" fill="#B42318">2.5는 없음</text>
+          <rect x="6" y="140" width="408" height="124" rx="12" fill="#fff"/>
+          <text x="22" y="164" font-size="13" font-weight="800" fill="#1B2A4A">연속형</text><text x="80" y="164" font-size="11.5" fill="#6B7280">값이 끊김 없이 이어짐</text>
+          <rect x="40" y="196" width="340" height="26" rx="3" fill="#E4E9F2" stroke="#2C4170" stroke-width="1.5"/>
+          <g stroke="#2C4170"><line x1="60" y1="196" x2="60" y2="212"/><line x1="128" y1="196" x2="128" y2="212"/><line x1="196" y1="196" x2="196" y2="212"/><line x1="264" y1="196" x2="264" y2="212"/><line x1="332" y1="196" x2="332" y2="212"/></g>
+          <g font-size="11" fill="#6B7280" text-anchor="middle"><text x="60" y="240">172</text><text x="128" y="240">173</text><text x="196" y="240">174</text><text x="264" y="240">175</text><text x="332" y="240">176</text></g>
+          <path d="M155 186 l0 22" stroke="#E0A100" stroke-width="3"/><text x="155" y="182" text-anchor="middle" font-size="12" font-weight="800" fill="#6E4F00">173.4 → 173.42 → …</text>
+        </svg></div>
+        <div class="side">
+          <ul class="key"><li><b>양적 변수</b>: 숫자로 나타내며 평균을 낼 수 있음</li><li>이산형과 연속형으로 나뉩니다.</li></ul>
+          <p class="exp">주사위 눈, 횟수, 인원수처럼 값이 띄엄띄엄 떨어진 변수를 <b>이산형 양적 변수</b>라 합니다. 키 173.4cm나 몸무게 65.8kg처럼 값이 끊김 없이 이어지는 변수는 <b>연속형 양적 변수</b>입니다. 연속형은 정밀한 측정 방법을 쓰면 원리상 소수점 아래 몇 자리든 나타낼 수 있습니다. 이 차이는 나중에 배울 확률분포의 종류와 밀접하게 관계됩니다.</p>
+          <p class="next"><span>다음 질문</span>숫자가 아닌 변수는 어떻게 다룰까?</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" data-step="3" id="s-4-2b">
+      <div class="sh"><div class="sec">4-2 변수의 유형</div><h2><span class="q">Q</span>숫자가 아닌 변수는 어떻게 다룰까요?</h2></div>
+      <div class="body split even">
+        <div class="fig"><svg viewBox="0 0 420 270" role="img" aria-label="변수는 양적 변수와 질적 변수로, 양적 변수는 연속변수와 이산변수로 나뉨">
+          <defs><marker id="b5" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10z" fill="#5B6E97"/></marker></defs>
+          <rect x="8" y="112" width="64" height="40" rx="8" fill="#1B2A4A"/><text x="40" y="137" text-anchor="middle" font-size="13" font-weight="800" fill="#fff">변수</text>
+          <path d="M74 132 C92 132 92 66 110 66" fill="none" stroke="#5B6E97" stroke-width="2" marker-end="url(#b5)"/>
+          <path d="M74 132 C92 132 92 214 110 214" fill="none" stroke="#5B6E97" stroke-width="2" marker-end="url(#b5)"/>
+          <rect x="114" y="46" width="98" height="40" rx="8" fill="#fff" stroke="#1B2A4A" stroke-width="1.5"/><text x="163" y="71" text-anchor="middle" font-size="13" font-weight="800" fill="#1B2A4A">양적 변수</text>
+          <path d="M214 66 C228 66 228 30 240 30" fill="none" stroke="#5B6E97" stroke-width="2" marker-end="url(#b5)"/>
+          <path d="M214 66 C228 66 228 104 240 104" fill="none" stroke="#5B6E97" stroke-width="2" marker-end="url(#b5)"/>
+          <rect x="244" y="12" width="168" height="38" rx="8" fill="#E4E9F2"/><text x="256" y="30" font-size="12.5" font-weight="800" fill="#1B2A4A">연속변수</text><text x="256" y="44" font-size="11" fill="#6B7280">키 · 몸무게</text>
+          <rect x="244" y="86" width="168" height="38" rx="8" fill="#E4E9F2"/><text x="256" y="104" font-size="12.5" font-weight="800" fill="#1B2A4A">이산변수</text><text x="256" y="118" font-size="11" fill="#6B7280">주사위 눈 · 횟수 · 인원수</text>
+          <rect x="114" y="190" width="298" height="70" rx="8" fill="#FCF3D9" stroke="#E0A100" stroke-width="2"/>
+          <text x="126" y="210" font-size="12.5" font-weight="800" fill="#6E4F00">질적 변수 (범주형 변수)</text>
+          <text x="126" y="230" font-size="11" fill="#22262E">예/아니요 · 동전의 앞/뒤 · 맑음/흐림/눈/비 · 메뉴</text>
+          <text x="126" y="250" font-size="11" font-weight="700" fill="#B42318">짜장면 &gt; 짬뽕 ?  크기 비교·평균 불가</text>
+        </svg></div>
+        <div class="side">
+          <ul class="key"><li><b>질적 변수</b>: 숫자가 아닌 범주로 나타낸 변수</li><li>범주 사이에는 크고 작음이 없습니다.</li></ul>
+          <p class="exp">설문의 예/아니요, 동전의 앞/뒤, 맑음/흐림/눈/비 같은 날씨, 좋아하는 메뉴는 질적 변수, 곧 범주형 변수입니다. 짜장면이 짬뽕보다 크다고 비교할 수 없고, 숫자가 아니므로 평균값도 정의할 수 없습니다. 이처럼 변수의 유형에 따라 쓸 수 있는 분석 방법이 달라집니다.</p>
+          <p class="next"><span>다음 질문</span>데이터의 전체 경향은 어떻게 파악할까?</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" data-step="3" id="s-4-3a">
+      <div class="sh"><div class="sec">4-3 히스토그램</div><h2><span class="q">Q</span>값을 늘어놓기만 하면 경향이 보일까요?</h2></div>
+      <div class="body split even">
+        <div class="fig"><svg id="m4-raw" viewBox="0 0 420 270" role="img" aria-label="키 원자료 30개와 같은 데이터의 히스토그램"></svg></div>
+        <div class="side">
+          <ul class="key"><li>먼저 <b>데이터 분포</b>를 그림으로 봅니다.</li><li><b>히스토그램</b>은 값마다 <b>도수</b>를 그립니다.</li></ul>
+          <p class="exp">원자료는 값을 나열한 것일 뿐이어서 바라보기만 해서는 전체 경향을 알기 어렵습니다. 데이터가 어떻게 분포되어 있는지 그래프로 시각화해 대략적인 경향을 파악하는 것이 데이터 분석의 첫 단계입니다. 이때 어떤 값이 데이터에 몇 개 들어 있는지를 나타낸 도수분포도, 곧 히스토그램을 자주 씁니다.</p>
+          <p class="next"><span>다음 질문</span>변수 유형마다 히스토그램은 어떻게 다를까?</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" data-step="3" id="s-4-3b">
+      <div class="sh"><div class="sec">4-3 히스토그램</div><h2><span class="q">Q</span>변수 유형마다 히스토그램은 어떻게 다를까요?</h2></div>
+      <div class="body split even">
+        <div class="fig"><svg id="m4-three" viewBox="0 0 420 270" role="img" aria-label="주사위 눈, 키, 좋아하는 메뉴의 히스토그램"></svg></div>
+        <div class="side">
+          <ul class="key"><li>세로축은 언제나 개수(도수)입니다.</li><li>가로축은 변수 유형에 따라 다릅니다.</li></ul>
+          <p class="exp">이산형은 가로축에 값 그대로(주사위 눈 1~6)를 둡니다. 주사위 그래프를 보면 눈이 대체로 고르게 나왔지만 4가 비교적 많고 5가 적습니다. 연속형은 가로축에 범위를 둡니다. 범주형은 가로축에 범주를 두며, 범주에는 크고 작음이 없으므로 짜장면·짬뽕·우동·볶음밥의 순서를 바꿔도 문제없습니다.</p>
+          <p class="next"><span>다음 질문</span>연속형은 왜 범위로 셀까?</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" data-step="3" id="s-4-3c">
+      <div class="sh"><div class="sec">4-3 히스토그램</div><h2><span class="q">Q</span>연속형 변수는 왜 범위로 나눠 셀까요?</h2></div>
+      <div class="body split even">
+        <div class="figcol">
+          <div class="fig"><svg id="m4-h5" viewBox="0 0 420 168" role="img" aria-label="학생 100명의 키를 5cm 구간폭으로 나눈 히스토그램"></svg></div>
+          <div class="math">
+            <div class="mt">핵심 수학 개념 · 구간의 개수와 도수</div>
+            <div class="f">구간 개수 = (끝값 − 시작값) ÷ 구간폭</div>
+            <div class="r"><span>계산</span><span>(190 − 145) ÷ 5 = 9개, 막대 높이를 모두 더하면 100명</span></div>
+            <div class="r"><span>해석</span><span>165.0 이상 170.0 미만에 33명으로 가장 많습니다.</span></div>
+          </div>
+        </div>
+        <div class="side">
+          <ul class="key"><li>연속형은 똑같은 값이 거의 없습니다.</li><li>범위의 넓이를 <b>구간폭</b>이라 합니다.</li></ul>
+          <p class="exp">연속형 변수는 소수점 아래 자리가 끝없이 이어지므로 엄밀하게 같은 값은 없습니다. 그래서 범위를 정하고 그 안에 든 개수를 세어 막대 높이로 삼습니다. 구간폭을 5.0cm로 정하면 봉우리가 하나인 모양이고, 165.0~170.0이 가장 많으며 155cm 미만과 180cm 이상은 매우 적다는 것을 알 수 있습니다.</p>
+          <p class="next"><span>다음 질문</span>구간폭을 바꾸면 어떻게 될까?</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" data-step="3" id="s-4-4a">
+      <div class="sh"><div class="sec">4-4 구간폭과 히스토그램의 한계</div><h2><span class="q">Q</span>같은 데이터라도 구간폭을 바꾸면 어떻게 될까요?</h2></div>
+      <div class="body split even">
+        <div class="fig"><svg id="m4-widths" viewBox="0 0 420 270" role="img" aria-label="같은 키 데이터를 구간폭 0.05, 5, 15로 그린 히스토그램"></svg></div>
+        <div class="side">
+          <ul class="key"><li>같은 데이터도 구간폭에 따라 인상이 다릅니다.</li><li>너무 좁아도, 너무 넓어도 읽기 어렵습니다.</li></ul>
+          <p class="exp">구간폭이 0.05처럼 너무 좁으면 대부분의 구간이 0이고 드물게 1~3개인 막대가 빗살처럼 늘어서서 어디에 데이터가 많은지 불분명해집니다. 15처럼 너무 넓으면 막대가 세 개뿐이라 분포 정보가 대부분 사라집니다. 통계 소프트웨어는 보통 구간폭을 자동으로 정해 히스토그램을 그려 줍니다.</p>
+          <p class="next"><span>다음 질문</span>올바른 구간폭은 정해져 있을까?</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" data-step="3" id="s-4-4b">
+      <div class="sh"><div class="sec">4-4 구간폭과 히스토그램의 한계</div><h2><span class="q">Q</span>히스토그램만으로 데이터를 충분히 설명할 수 있을까요?</h2></div>
+      <div class="body split even">
+        <div class="figcol">
+          <div class="fig"><svg viewBox="0 0 420 150" role="img" aria-label="히스토그램과 수치 요약을 함께 써서 데이터를 바라봄">
+            <rect x="6" y="10" width="160" height="110" rx="10" fill="#fff"/>
+            <g fill="#A9B8D4"><rect x="30" y="78" width="18" height="22"/><rect x="50" y="56" width="18" height="44"/><rect x="70" y="40" width="18" height="60"/><rect x="90" y="60" width="18" height="40"/><rect x="110" y="84" width="18" height="16"/></g>
+            <text x="86" y="32" text-anchor="middle" font-size="12.5" font-weight="800" fill="#1B2A4A">히스토그램</text>
+            <text x="86" y="114" text-anchor="middle" font-size="11" fill="#6B7280">대략적인 모양 · 주관적</text>
+            <text x="210" y="72" text-anchor="middle" font-size="26" font-weight="800" fill="#E0A100">+</text>
+            <rect x="254" y="10" width="160" height="110" rx="10" fill="#fff"/>
+            <text x="334" y="32" text-anchor="middle" font-size="12.5" font-weight="800" fill="#1B2A4A">수치로 요약</text>
+            <g font-size="12" fill="#22262E"><text x="274" y="60">평균 등의 계산값</text><text x="274" y="84">정확하게 기술</text></g>
+            <text x="334" y="114" text-anchor="middle" font-size="11" fill="#6B7280">다음 모듈에서 배움</text>
+            <text x="210" y="142" text-anchor="middle" font-size="12" font-weight="800" fill="#1B2A4A">둘을 함께 써야 데이터가 보입니다</text>
+          </svg></div>
+          <div class="math">
+            <div class="mt">핵심 수학 개념 · 스터지스 공식<span class="cite">[1]</span></div>
+            <div class="f">구간 개수 k = 1 + log₂ n</div>
+            <div class="r"><span>기호</span><span>n = 데이터 개수, log₂ n = 2를 몇 번 곱해야 n이 되는지</span></div>
+            <div class="r"><span>계산</span><span>1 + log₂ 100 ≈ 7.6 → 8개, 구간폭 ≈ 29.5 ÷ 8 ≈ 3.7cm</span></div>
+            <div class="r"><span>주의</span><span>공식은 기준일 뿐, ‘올바른 구간폭’은 없습니다.</span></div>
+          </div>
+        </div>
+        <div class="side">
+          <ul class="key"><li><b>스터지스 공식</b>도 하나의 기준일 뿐입니다.</li><li>히스토그램과 수치 분석을 함께 씁니다.</li></ul>
+          <p class="exp">데이터 개수로 구간 개수를 정하는 스터지스 공식 등이 있지만 올바른 구간폭은 존재하지 않습니다. 히스토그램은 대략적인 데이터 구성을 파악하려는 것이지 결론을 내기 위한 것이 아닙니다. 그래프를 보는 사람의 주관이 들어가므로, 데이터를 수치로 다루는 통계분석과 함께 상호보완적으로 바라봐야 합니다.</p>
+          <p class="next"><span>정리</span>배운 개념을 나란히 놓아 봅시다.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" data-step="3" id="s-4-sum">
+      <div class="sh"><div class="sec">4-5 정리</div><h2>변수 유형을 구분하고, 알맞은 구간폭으로 분포를 그립니다</h2></div>
+      <div class="body full" style="align-content:center">
+        <table class="sumtbl">
+          <thead><tr><th>개념</th><th>무엇인가</th><th>이 모듈의 예시</th></tr></thead>
+          <tbody>
+            <tr><td>변수와 차원</td><td>같은 방법으로 얻은 같은 성질의 값. 변수의 개수가 차원입니다.</td><td>키·몸무게·성별 → 3변수(3차원)</td></tr>
+            <tr><td>변수의 유형</td><td>양적 변수(이산형·연속형)와 질적 변수(범주형)로 나뉩니다.</td><td>주사위 눈 / 키 / 좋아하는 메뉴</td></tr>
+            <tr><td>히스토그램</td><td>값이나 범위마다 개수(도수)를 막대로 나타낸 그래프입니다.</td><td>165.0~170.0cm에 33명</td></tr>
+            <tr><td>구간폭</td><td>연속형을 나누는 범위의 넓이. 정답은 없고 인상을 바꿉니다.</td><td>0.05는 빗살, 15는 막대 3개</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="next"><span>형성평가로</span>이제 같은 예시로 문제를 풀어 봅니다.</p>
+    </section>
+
+    <!-- ⑤ 형성평가: 스크립트의 QUIZ 배열로 만듭니다 -->
+
+    <!-- ⑥ 실습 1 · 조작형 (모듈 전용) ─────────────── -->
+    <section class="slide" data-step="5" id="p1">
+      <div class="sh"><div class="sec">실습 1 · 조작형</div><h2>목표: 구간폭을 바꿔 가며 분포가 가장 잘 보이는 폭을 찾습니다</h2></div>
+      <div class="body split">
+        <div class="pcol" style="gap:10px">
+          <div class="plabel" style="margin:0">해보기 · 막대를 움직여 구간폭을 바꿔 보세요 <span class="tag-v">가상 데이터</span></div>
+          <div class="ctrl">구간폭<input type="range" id="m4-w" min="0" max="5" step="1" value="0" aria-label="구간폭 단계"><strong id="m4-wv" style="min-width:64px;text-align:right">-</strong></div>
+          <div class="fig" style="flex:1"><svg id="m4-p1-svg" viewBox="0 0 470 230" role="img" aria-label="학생 100명의 키 히스토그램"></svg></div>
+        </div>
+        <div class="pcol" style="gap:10px;justify-content:center">
+          <div class="plabel" style="margin:0">결과 확인</div>
+          <div class="stats three"><div><small>구간 개수</small><strong id="m4-k">-</strong></div><div><small>빈 구간</small><strong id="m4-e">-</strong></div><div><small>가장 높은 막대</small><strong id="m4-top">-</strong></div></div>
+          <p class="howto">도전: 봉우리 하나와 165~170cm 근처의 중심이 가장 잘 드러나는 구간폭을 찾아보세요.</p>
+          <p class="pmsg" id="m4-msg"></p>
+          <div class="think"><span>생각해보기</span>같은 데이터인데 구간폭마다 결론이 달라 보인다면, 히스토그램만 보고 결론을 내려도 될까요?</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ⑥ 실습 2 · 분류형 ─────────────────────── -->
+    <section class="slide" data-step="5" id="p2">
+      <div class="sh"><div class="sec">실습 2 · 분류형</div><h2>목표: 변수 카드를 유형에 따라 나눕니다</h2></div>
+      <div class="body split even">
+        <div class="pcol">
+          <div class="plabel">해보기 · 카드를 끌어다 칸에 놓으세요 (카드를 누른 뒤 칸을 눌러도 됩니다)</div>
+          <div class="pool" id="p2-pool"></div>
+        </div>
+        <div class="pcol" style="gap:8px">
+          <div class="plabel" style="margin:0">결과 확인 · <span id="p2-count">0 / 0</span></div>
+          <div class="bins" id="p2-bins"></div>
+          <div class="p2row"><p class="pmsg" id="p2-msg"></p><button class="btn ghost" id="p2-reset">다시 하기</button></div>
+          <div class="think"><span>생각해보기</span>세 유형의 히스토그램은 가로축이 각각 어떻게 달라질까요?</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ⑥ 실습 3 · 추정형 (모듈 전용) ─────────────── -->
+    <section class="slide" data-step="5" id="p3">
+      <div class="sh"><div class="sec">실습 3 · 추정형</div><h2>목표: 원자료만 보고 구간의 도수를 예측한 뒤 히스토그램으로 확인합니다</h2></div>
+      <div class="body split">
+        <div class="pcol">
+          <div class="plabel">해보기 · 학생 30명의 키(cm)입니다. 165.0 이상 170.0 미만은 몇 명일까요? <span class="tag-v">가상 데이터</span></div>
+          <div class="fig" style="flex:1"><svg id="m4-p3-svg" viewBox="0 0 470 220" role="img" aria-label="학생 30명의 키 원자료와 히스토그램"></svg></div>
+        </div>
+        <div class="pcol" style="gap:9px;justify-content:center">
+          <div class="ctrl">내 예측<input type="range" id="m4-g" min="0" max="30" step="1" value="15" aria-label="165.0 이상 170.0 미만인 학생 수 예측"><strong id="m4-gv" style="min-width:56px;text-align:right">-</strong></div>
+          <button class="btn" id="m4-check" style="align-self:flex-start">히스토그램으로 확인</button>
+          <div class="stats"><div><small>내 예측</small><strong id="m4-mine">-</strong></div><div><small>실제 도수</small><strong id="m4-act">?</strong></div></div>
+          <p class="pmsg" id="m4-msg3"></p>
+          <div class="think"><span>생각해보기</span>숫자 목록과 히스토그램 중 어느 쪽에서 가장 많은 구간을 더 빨리 찾을 수 있었나요?</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ⑦ 용어해설·참고자료: 스크립트의 GLOSSARY, REFS, NEXT로 만듭니다 -->
+  </main>
+
+  <footer class="bottombar">
+    <a class="home" href="../index.html" title="홈으로 (학습 모듈 목록)" aria-label="홈으로"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 10.5 12 3l9 7.5"/><path d="M5.5 9.5V21h13V9.5"/></svg><span>홈</span></a><span class="counter" id="counter"></span><span class="spacer"></span>
+    <button class="nav" id="prev" type="button">이전</button>
+    <button class="nav primary" id="next" type="button">다음</button>
+  </footer>
+</div>
+<p class="rotate">화면을 가로로 돌리면 더 크게 볼 수 있습니다.</p>
+
+<script>
+(function(){
+"use strict";
+
+/* =====================================================================
+   [교체] 모듈 설정 — 새 모듈은 이 블록과 HTML 화면 문장만 바꿉니다.
+   ===================================================================== */
+var MODULE={title:"데이터 유형과 분포",sub:"데이터와 기술통계 · M04"};
+var STEPS=["학습개요","학습목표","일상의 예시","본문","형성평가","실습","용어해설"];
+
+/* 일관 사례(가상 데이터): 학생 100명의 키(cm). 평균 167.52, 범위 151.8~181.3 */
+var HEIGHTS=[167.8,170.4,164.6,169.7,173.2,170.1,177.2,162.0,167.9,163.1,162.6,166.4,168.9,170.1,170.7,181.3,172.8,157.6,168.8,163.6,
+ 164.3,175.6,166.1,155.4,169.4,165.7,160.2,161.8,163.6,167.4,164.9,167.9,178.9,162.5,162.5,166.0,174.3,163.1,176.4,159.4,
+ 161.1,167.2,162.1,163.7,170.3,172.0,168.2,165.8,175.8,170.0,166.0,175.0,161.9,168.5,171.6,167.4,163.9,169.7,164.1,163.8,
+ 161.2,175.6,164.1,174.7,169.9,165.9,171.6,169.2,168.3,159.0,167.9,173.0,170.5,173.7,176.7,170.0,179.7,158.1,166.0,151.8,
+ 172.6,168.1,178.0,165.2,154.9,175.4,159.2,159.6,166.4,171.4,164.3,168.7,155.8,178.2,167.1,168.2,171.1,168.5,168.7,161.7];
+/* 주사위 60번(가상 데이터): 1~6의 눈이 나온 횟수 */
+var DICE=[10,9,10,13,7,11];
+/* 같은 학생 100명이 좋아하는 메뉴(가상 데이터) */
+var MENU={labels:["짜장면","짬뽕","우동","볶음밥"],counts:[38,22,15,25]};
+var WIDTHS=[0.05,1,2,5,10,15];
+var CASE=null, PAIRS=null, P1={target:null};
+
+var QUIZ=[
+ {goal:1,type:"상황 판단",stem:"학생 30명에게서 키, 몸무게, 성별을 한 사람씩 함께 측정했습니다. 이 데이터는 몇 차원 데이터일까요?",
+  opts:["3차원(3변수)","30차원","2차원(성별은 숫자가 아니므로 제외)","1차원"],ans:0,
+  exp:"차원은 변수의 개수입니다. 키·몸무게·성별 세 변수를 함께 쟀으므로 3변수, 곧 3차원 데이터입니다. 사람 수 30은 데이터 개수이고, 성별 같은 질적 변수도 변수에 포함됩니다.",back:"s-4-1a",backLabel:"4-1 변수 다시 보기"},
+ {goal:1,type:"O/X 오개념",stem:"“주사위의 눈은 숫자로 나타내므로 연속형 양적 변수다.”",
+  opts:["O","X"],ans:1,ox:true,
+  exp:"주사위 눈은 1, 2, …, 6처럼 값이 띄엄띄엄 떨어져 있어 2.5 같은 값이 없습니다. 그래서 이산형 양적 변수입니다. 숫자라고 모두 연속형은 아닙니다.",back:"s-4-2a",backLabel:"4-2 이산형과 연속형 다시 보기"},
+ {goal:2,type:"계산",stem:"키 데이터를 145cm부터 190cm까지 구간폭 5cm로 나눠 히스토그램을 그립니다. 구간은 모두 몇 개일까요?",
+  opts:["9개","45개","10개","5개"],ans:0,
+  exp:"구간 개수 = (190 − 145) ÷ 5 = 9개입니다. 경계선 145, 150, …, 190을 세면 10개가 되지만 구간은 경계선 사이의 칸이므로 하나 적습니다. 5는 구간폭 자체입니다.",back:"s-4-3c",backLabel:"4-3 수학 박스 다시 보기"},
+ {goal:2,type:"O/X 오개념",stem:"“좋아하는 메뉴 히스토그램에서 가로축 순서를 짜장면·짬뽕·우동·볶음밥에서 볶음밥·짜장면·우동·짬뽕으로 바꾸면 분포가 달라진다.”",
+  opts:["O","X"],ans:1,ox:true,
+  exp:"범주형 변수의 범주에는 크고 작음이 없어서 가로축 순서에 특별한 뜻이 없습니다. 순서를 바꿔도 메뉴별 도수(38·22·15·25)는 그대로이므로 분포는 같습니다.",back:"s-4-3b",backLabel:"4-3 유형별 히스토그램 다시 보기"},
+ {goal:3,type:"상황 판단",stem:"키 데이터를 구간폭 0.05cm로 그렸더니 막대 대부분이 0이고, 1~3개짜리 막대가 빗살처럼 늘어섰습니다. 가장 알맞은 판단은 무엇일까요?",
+  opts:["구간폭이 너무 좁아 분포 모양을 읽기 어려우므로 폭을 넓혀 본다","가장 세밀하므로 이 그림으로 결론을 내린다","데이터가 잘못 측정되었으므로 버린다","구간폭을 더 좁혀 정보를 늘린다"],ans:0,
+  exp:"구간폭이 너무 좁으면 그림이 지나치게 세밀해져 어디에 데이터가 많은지 불분명해집니다. 세밀하다고 더 좋은 것이 아니며, 데이터의 문제도 아닙니다. 폭을 넓혀 대략적인 모양을 확인합니다.",back:"s-4-4a",backLabel:"4-4 구간폭 비교 다시 보기"},
+ {goal:3,type:"O/X 오개념",stem:"“스터지스 공식으로 구한 구간폭이 그 데이터의 유일한 ‘올바른 구간폭’이다.”",
+  opts:["O","X"],ans:1,ox:true,
+  exp:"스터지스 공식 등은 구간폭을 정하는 기준 중 하나일 뿐이고, 올바른 구간폭은 존재하지 않습니다. 히스토그램은 대략적인 구성을 파악하려는 것이므로 수치 분석과 함께 써야 합니다.",back:"s-4-4b",backLabel:"4-4 스터지스 공식 다시 보기"}
+];
+
+var BINS=["이산형 양적 변수","연속형 양적 변수","질적 변수(범주형)"];
+var CARDS=[["주사위를 던져 나온 눈","이산형 양적 변수"],["하루 방문 손님 수","이산형 양적 변수"],
+           ["키 173.4cm","연속형 양적 변수"],["몸무게 65.8kg","연속형 양적 변수"],
+           ["동전의 앞/뒤","질적 변수(범주형)"],["날씨(맑음·흐림·눈·비)","질적 변수(범주형)"]];
+var HINT={"이산형 양적 변수":"값이 띄엄띄엄 떨어진 숫자입니다(2.5번 같은 값은 없음).","연속형 양적 변수":"값이 끊김 없이 이어져 소수점 아래까지 잴 수 있습니다.","질적 변수(범주형)":"숫자가 아닌 범주로, 크고 작음이 없습니다."};
+
+var GLOSSARY=[
+ ["변수","variable","공통된 측정 방법으로 얻은 같은 성질의 데이터 값 모음입니다.","학생들의 키, 학생들의 몸무게"],
+ ["차원","dimension","데이터에 포함된 변수의 개수입니다.","키·몸무게를 함께 재면 2차원"],
+ ["고차원 데이터","high-dimensional data","변수가 많아 그림으로 나타내기 어렵고 분석도 어려운 데이터입니다.","4개 이상의 변수를 함께 잰 데이터"],
+ ["양적 변수(수치형 변수)","quantitative variable","숫자로 나타내며 크기 비교와 평균 계산이 가능한 변수입니다.","키, 주사위 눈"],
+ ["이산형 양적 변수(이산변수)","discrete variable","값이 띄엄띄엄 떨어져 있는 양적 변수입니다.","주사위 눈, 횟수, 인원수"],
+ ["연속형 양적 변수(연속변수)","continuous variable","값이 끊김 없이 이어져 소수점 아래까지 나타낼 수 있는 양적 변수입니다.","키 173.4cm, 몸무게 65.8kg"],
+ ["질적 변수(범주형 변수)","categorical variable","숫자가 아닌 범주로 나타내며 크고 작음이 없는 변수입니다.","좋아하는 메뉴, 동전의 앞/뒤"],
+ ["데이터 분포","distribution","데이터의 값들이 어디에 얼마나 퍼져 있는지를 나타낸 모습입니다.","키가 165~170cm에 많이 몰린 모습"],
+ ["히스토그램(도수분포도)","histogram","값이나 범위마다 데이터 개수를 막대 높이로 나타낸 그래프입니다.","학생 100명의 키를 5cm 단위로 그린 막대그래프"],
+ ["도수","frequency","어떤 값이나 범위에 포함된 데이터의 개수로, 빈도·횟수라고도 합니다.","165.0~170.0cm 구간의 33명"],
+ ["구간폭","bin width","연속형 변수의 히스토그램에서 값을 묶는 범위의 넓이입니다.","5.0cm 단위로 묶으면 구간폭 5.0"],
+ ["스터지스 공식","Sturges' rule","데이터 개수 n으로 구간 개수를 1 + log₂ n으로 정하는 기준입니다.","n = 100이면 약 8개 구간",1]
+];
+var REFS=[
+ {n:1,title:"The Choice of a Class Interval",org:"H. A. Sturges, Journal of the American Statistical Association 21(153), 65–66, 1926",url:"https://doi.org/10.1080/01621459.1926.10502161",date:"2026-10-24 확인"}
+];
+var NEXT={title:"M05 기술통계량",line:"히스토그램만으로는 데이터를 객관적으로 기술하기 어렵습니다. 다음 모듈에서는 데이터를 수치로 요약하는 기술통계량을 배웁니다."};
+
+/* =====================================================================
+   아래부터는 공통 엔진입니다. 모듈마다 바꾸지 않습니다.
+   ===================================================================== */
+var NS="http://www.w3.org/2000/svg";
+var C={navy:"#1B2A4A",navy2:"#2C4170",navy3:"#5B6E97",soft:"#A9B8D4",grid:"#DDE1E7",gray:"#6B7280",gray2:"#9AA0AA",amber:"#E0A100",amberInk:"#6E4F00",ok:"#23704F"};
+function el(t,a,p,x){var e=document.createElementNS(NS,t);for(var k in a)e.setAttribute(k,a[k]);if(x!=null)e.textContent=x;if(p)p.appendChild(e);return e;}
+function clear(s){while(s.firstChild)s.removeChild(s.firstChild);}
+function f1(v,d){return v.toFixed(d==null?1:d);}
+function sum(a){return a.reduce(function(x,y){return x+y;},0);}
+function r1(v){return Math.round(v*10)/10;}
+var stage=document.getElementById("stage"),vp=document.getElementById("vp");
+
+/* 계산은 모두 데이터에서 직접 합니다(R0-7) */
+var N=CASE?CASE.values.length:0,SUMV=CASE?r1(sum(CASE.values)):0,AVG=N?SUMV/N:0,MAXV=CASE?Math.max.apply(null,CASE.values):0;
+var LR=!PAIRS?null:(function(){var n=PAIRS.xs.length,mx=sum(PAIRS.xs)/n,my=sum(PAIRS.ys)/n,sxy=0,sxx=0;
+  for(var i=0;i<n;i++){sxy+=(PAIRS.xs[i]-mx)*(PAIRS.ys[i]-my);sxx+=(PAIRS.xs[i]-mx)*(PAIRS.xs[i]-mx);}
+  var b=sxy/sxx;return{b:b,a:my-b*mx};})();
+var PRED=PAIRS?LR.a+LR.b*PAIRS.x0:0;
+
+document.title=MODULE.title;
+document.getElementById("brand").innerHTML=MODULE.title+"<small>"+MODULE.sub+"</small>";
+
+/* 16:9 고정 무대를 창 크기에 맞춤 */
+var S=1;
+function fit(){S=Math.min(window.innerWidth/960,window.innerHeight/540);stage.style.setProperty("--s",S);}
+window.addEventListener("resize",fit);fit();
+
+/* ---------- 그래프 ---------- */
+function barChart(svg,vals,o){
+  clear(svg);o=o||{};
+  var vb=svg.viewBox.baseVal,W=vb.width,H=vb.height,L=34,R=o.mean!=null?70:8,T=26,Bt=24,ym=o.ymax||Math.ceil(Math.max.apply(null,vals)+1),pw=W-L-R,ph=H-T-Bt,bw=pw/vals.length;
+  function y(v){return T+ph-(v/ym)*ph;}
+  for(var g=0;g<=ym;g++){el("line",{x1:L,x2:W-R,y1:y(g),y2:y(g),stroke:C.grid},svg);el("text",{x:L-6,y:y(g)+4,"text-anchor":"end","font-size":10.5,fill:C.gray2},svg,g);}
+  vals.forEach(function(v,i){
+    var sel=o.sel===i,hi=o.hi===i;
+    el("rect",{x:L+i*bw+bw*.16,y:y(v),width:bw*.68,height:Math.max(0,y(0)-y(v)),rx:2,fill:sel?C.amber:hi?C.navy2:C.soft},svg);
+    el("text",{x:L+i*bw+bw/2,y:H-Bt+16,"text-anchor":"middle","font-size":10.5,fill:C.gray},svg,CASE.labels[i]);
+  });
+  if(o.mean!=null){var m=o.mean;
+    el("line",{x1:L,x2:W-R+4,y1:y(m),y2:y(m),stroke:C.navy,"stroke-width":2,"stroke-dasharray":"6 4"},svg);
+    el("rect",{x:W-R+6,y:y(m)-10,width:R-8,height:20,rx:4,fill:C.navy},svg);
+    el("text",{x:W-R+6+(R-8)/2,y:y(m)+4,"text-anchor":"middle","font-size":11,"font-weight":700,fill:"#fff"},svg,"평균 "+f1(m,2));}
+  /* 값 라벨은 마지막에 흰 테두리로 그려 점선에 가리지 않게 함 */
+  vals.forEach(function(v,i){var sel=o.sel===i,hi=o.hi===i;
+    if(o.labels||sel)el("text",{x:L+i*bw+bw/2,y:y(v)-5,"text-anchor":"middle","font-size":10.5,"font-weight":sel||hi?800:500,fill:sel?C.amberInk:hi?C.navy:C.gray,stroke:"#EEF0F3","stroke-width":3,"paint-order":"stroke"},svg,f1(v));});
+}
+function scatter(svg,o){
+  clear(svg);o=o||{};
+  var vb=svg.viewBox.baseVal,W=vb.width,H=vb.height,L=34,R=14,T=30,Bt=40,x0=PAIRS.xmin,x1=PAIRS.xmax,y0=PAIRS.ymin,y1=PAIRS.ymax;
+  function X(v){return L+(v-x0)/(x1-x0)*(W-L-R);}
+  function Y(v){return T+(H-T-Bt)-(v-y0)/(y1-y0)*(H-T-Bt);}
+  for(var g=y0;g<=y1+1e-9;g+=PAIRS.ystep){el("line",{x1:L,x2:W-R,y1:Y(g),y2:Y(g),stroke:C.grid},svg);el("text",{x:L-6,y:Y(g)+4,"text-anchor":"end","font-size":10.5,fill:C.gray2},svg,g);}
+  for(var h=x0;h<=x1+1e-9;h+=PAIRS.xstep)el("text",{x:X(h),y:H-Bt+16,"text-anchor":"middle","font-size":10.5,fill:C.gray},svg,h);
+  el("text",{x:(L+W-R)/2,y:H-6,"text-anchor":"middle","font-size":10.5,fill:C.gray},svg,PAIRS.xlabel);
+  el("text",{x:4,y:14,"font-size":10.5,fill:C.gray},svg,PAIRS.ylabel);
+  if(o.line){var la=x0+(x1-x0)*.04,lb=x1-(x1-x0)*.04;el("line",{x1:X(la),y1:Y(LR.a+LR.b*la),x2:X(lb),y2:Y(LR.a+LR.b*lb),stroke:C.navy,"stroke-width":2},svg);}
+  PAIRS.xs.forEach(function(x,i){el("circle",{cx:X(x),cy:Y(PAIRS.ys[i]),r:4.5,fill:C.navy3,"fill-opacity":.85},svg);});
+  if(o.x0!=null){el("line",{x1:X(o.x0),y1:Y(0),x2:X(o.x0),y2:Y(y1),stroke:C.amber,"stroke-dasharray":"3 3"},svg);
+    el("text",{x:X(o.x0),y:T-4,"text-anchor":"middle","font-size":10.5,"font-weight":700,fill:C.amberInk},svg,PAIRS.x0label);}
+  if(o.pred){el("circle",{cx:X(PAIRS.x0),cy:Y(PRED),r:6,fill:C.navy},svg);
+    el("text",{x:X(PAIRS.x0)-10,y:Y(PRED)+4,"text-anchor":"end","font-size":11,"font-weight":800,fill:C.navy,stroke:"#EEF0F3","stroke-width":3,"paint-order":"stroke"},svg,"예측 "+f1(PRED,PAIRS.dp)+PAIRS.unit);}
+  if(o.guess!=null){el("circle",{cx:X(PAIRS.x0),cy:Y(o.guess),r:7,fill:C.amber,stroke:"#fff","stroke-width":2},svg);}
+  if(o.actual){var ay=Y(PAIRS.actual);el("rect",{x:X(PAIRS.x0)-6,y:ay-6,width:12,height:12,fill:C.ok,transform:"rotate(45 "+X(PAIRS.x0)+" "+ay+")"},svg);
+    el("text",{x:X(PAIRS.x0)-10,y:ay-6,"text-anchor":"end","font-size":11,"font-weight":800,fill:C.ok,stroke:"#EEF0F3","stroke-width":3,"paint-order":"stroke"},svg,"실제 "+f1(PAIRS.actual)+PAIRS.unit);}
+  return {X:X,Y:Y};
+}
+function flow(svg,names){
+  clear(svg);var n=names.length,w=118,gap=(440-40-n*w)/(n-1),y=96,h=64;
+  el("defs",{},svg).innerHTML='<marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10z" fill="'+C.navy3+'"/></marker>';
+  names.forEach(function(t,i){var x=20+i*(w+gap);
+    el("rect",{x:x,y:y,width:w,height:h,rx:10,fill:i===n-1?C.navy:"#fff",stroke:C.navy,"stroke-width":1.5},svg);
+    el("text",{x:x+w/2,y:y+h/2-6,"text-anchor":"middle","font-size":11,"font-weight":700,fill:i===n-1?"#C9D3E6":C.navy3},svg,"4-"+(i+1));
+    el("text",{x:x+w/2,y:y+h/2+13,"text-anchor":"middle","font-size":14,"font-weight":800,fill:i===n-1?"#fff":C.navy},svg,t);
+    if(i<n-1)el("line",{x1:x+w+4,y1:y+h/2,x2:x+w+gap-5,y2:y+h/2,stroke:C.navy3,"stroke-width":2,"marker-end":"url(#ar)"},svg);});
+  el("text",{x:220,y:200,"text-anchor":"middle","font-size":12,fill:C.gray},svg,"본문 소단원을 배우는 순서");
+}
+/* 화면에 해당 id가 있을 때만 그립니다(모듈마다 쓰지 않는 그림은 건너뜀) */
+function on(id,fn){var e=document.getElementById(id);if(e)fn(e);}
+on("fig-flow",function(s){flow(s,["소단원 1","소단원 2","정리"]);});
+on("fig-case",function(s){barChart(s,CASE.values,{labels:true});});
+on("fig-bar",function(s){barChart(s,CASE.values,{labels:true,mean:AVG});});
+on("fig-scatter",function(s){scatter(s,{line:true,x0:PAIRS.x0,pred:true});});
+on("fig-bridge",function(s){
+  el("defs",{},s).innerHTML='<marker id="ar2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10z" fill="'+C.navy3+'"/></marker>';
+  [["장면 1",40],["장면 2",130]].forEach(function(p){el("rect",{x:24,y:p[1],width:130,height:64,rx:10,fill:"#fff",stroke:C.navy3,"stroke-width":1.5},s);el("text",{x:89,y:p[1]+37,"text-anchor":"middle","font-size":14,"font-weight":700,fill:C.navy},s,p[0]);
+    el("line",{x1:158,y1:p[1]+32,x2:246,y2:120,stroke:C.navy3,"stroke-width":2,"marker-end":"url(#ar2)"},s);});
+  el("rect",{x:252,y:84,width:150,height:72,rx:12,fill:C.navy},s);
+  el("text",{x:327,y:116,"text-anchor":"middle","font-size":14,"font-weight":800,fill:"#fff"},s,"본문 첫 질문");
+  el("text",{x:327,y:136,"text-anchor":"middle","font-size":11.5,fill:"#C9D3E6"},s,"4-1로 이어짐");});
+on("case-n",function(e){e.textContent=N+"개";});
+on("case-sum",function(e){e.textContent=f1(SUMV);});
+on("case-max",function(e){e.textContent=f1(MAXV);});
+on("math-calc",function(e){e.textContent=f1(LR.b,2)+" × "+PAIRS.x0+" + "+f1(LR.a,2)+" = "+f1(PRED,2);});
+
+/* =====================================================================
+   [교체] 모듈 전용 그림: 모듈마다 필요한 그림 함수는 이 자리에 둡니다.
+   ===================================================================== */
+/* M04 전용 그림·실습 */
+function binCounts(data,start,w,end){
+  var k=Math.round((end-start)/w),c=[];for(var i=0;i<k;i++)c.push(0);
+  data.forEach(function(v){var i=Math.floor((v-start)/w+1e-9);if(i>=0&&i<k)c[i]++;});return c;}
+function fmtW(w){return (w<1?w.toFixed(2):w)+"cm";}
+/* 사각형 영역 안에 막대그래프를 그림. o: x,y,w,h,counts,labels|edges,sel,ymax,vals,thin,color */
+function hist(svg,o){
+  var x=o.x,y=o.y,W=o.w,H=o.h,n=o.counts.length,L=o.yaxis?26:4,B=o.edges||o.labels?18:4,pw=W-L-4,ph=H-B-(o.vals?14:4);
+  var ym=o.ymax||Math.max.apply(null,o.counts);
+  function Y(v){return y+H-B-(v/ym)*ph;}
+  if(o.yaxis){var st=o.ystep||Math.ceil(ym/4);for(var g=0;g<=ym+1e-9;g+=st){el("line",{x1:x+L,x2:x+W-4,y1:Y(g),y2:Y(g),stroke:C.grid},svg);
+    el("text",{x:x+L-5,y:Y(g)+4,"text-anchor":"end","font-size":10,fill:C.gray2},svg,g);}}
+  var bw=pw/n,ox=x+L;
+  if(o.dom){var d0=o.dom[0],d1=o.dom[1];bw=pw*(o.bw/(d1-d0));ox=x+L+pw*((o.start-d0)/(d1-d0));}
+  o.counts.forEach(function(v,i){var bx=ox+i*bw,gap=o.dom?0:bw*.14,sel=o.sel===i;
+    if(v>0)el("rect",{x:bx+gap,y:Y(v),width:Math.max(o.thin?1:1.5,bw-2*gap-(o.dom&&bw>4?1:0)),height:Y(0)-Y(v),fill:sel?C.amber:(o.color||C.soft)},svg);
+    if(o.labels)el("text",{x:bx+bw/2,y:y+H-4,"text-anchor":"middle","font-size":o.lfs||10.5,fill:C.navy,"font-weight":700},svg,o.labels[i]);
+    if(o.vals&&v>0)el("text",{x:bx+bw/2,y:Y(v)-4,"text-anchor":"middle","font-size":10,"font-weight":sel?800:600,fill:sel?C.amberInk:C.gray,stroke:"#EEF0F3","stroke-width":3,"paint-order":"stroke"},svg,v);});
+  el("line",{x1:x+L,x2:x+W-4,y1:Y(0),y2:Y(0),stroke:C.gray2,"stroke-width":1.2},svg);
+  if(o.edges){var d0=o.dom?o.dom[0]:o.start,d1=o.dom?o.dom[1]:o.start+o.bw*n;
+    o.edges.forEach(function(e){var ex=x+L+pw*((e-d0)/(d1-d0));el("text",{x:ex,y:y+H-4,"text-anchor":"middle","font-size":10,fill:C.gray},svg,e);});}
+  return {Y:Y};
+}
+
+/* 4-1 차원: 1변수는 직선, 2변수는 평면 */
+on("m4-dim",function(s){
+  var P=[[165.1,59.1],[171.3,70.8],[155.5,45.2]],nm=["A","B","C"];
+  el("rect",{x:6,y:6,width:408,height:82,rx:12,fill:"#fff"},s);
+  el("text",{x:20,y:28,"font-size":12.5,"font-weight":800,fill:C.navy},s,"1변수(키만) → 1차원: 직선 위의 점");
+  function X1(v){return 40+(v-150)/25*350;}
+  el("line",{x1:40,x2:390,y1:60,y2:60,stroke:C.gray2,"stroke-width":1.5},s);
+  [150,155,160,165,170,175].forEach(function(t){el("text",{x:X1(t),y:80,"text-anchor":"middle","font-size":10,fill:C.gray},s,t);});
+  P.forEach(function(p,i){el("circle",{cx:X1(p[0]),cy:60,r:6,fill:C.navy2},s);
+    el("text",{x:X1(p[0]),y:48,"text-anchor":"middle","font-size":10.5,"font-weight":700,fill:C.navy},s,nm[i]+" "+p[0]);});
+  el("rect",{x:6,y:96,width:262,height:168,rx:12,fill:"#fff"},s);
+  el("text",{x:20,y:118,"font-size":12.5,"font-weight":800,fill:C.navy},s,"2변수(키·몸무게) → 2차원: 평면");
+  function X2(v){return 52+(v-150)/25*196;} function Y2(v){return 236-(v-40)/35*100;}
+  el("line",{x1:52,x2:252,y1:236,y2:236,stroke:C.gray2},s);el("line",{x1:52,x2:52,y1:132,y2:236,stroke:C.gray2},s);
+  [150,160,170].forEach(function(t){el("text",{x:X2(t),y:252,"text-anchor":"middle","font-size":10,fill:C.gray},s,t);});
+  [40,60].forEach(function(t){el("text",{x:46,y:Y2(t)+4,"text-anchor":"end","font-size":10,fill:C.gray},s,t);});
+  el("text",{x:252,y:260,"text-anchor":"end","font-size":10,fill:C.gray},s,"키(cm)");
+  el("text",{x:56,y:140,"font-size":10,fill:C.gray},s,"몸무게(kg)");
+  P.forEach(function(p,i){el("circle",{cx:X2(p[0]),cy:Y2(p[1]),r:6,fill:C.navy2},s);
+    el("text",{x:X2(p[0])+9,y:Y2(p[1])+4,"font-size":10.5,"font-weight":700,fill:C.navy,stroke:"#fff","stroke-width":3,"paint-order":"stroke"},s,nm[i]);});
+  el("rect",{x:276,y:96,width:138,height:168,rx:12,fill:"#fff"},s);
+  var g=el("g",{fill:"none",stroke:C.navy3,"stroke-width":1.5},s);
+  el("rect",{x:300,y:132,width:50,height:50},g);el("rect",{x:320,y:116,width:50,height:50},g);
+  [[300,132,320,116],[350,132,370,116],[300,182,320,166],[350,182,370,166]].forEach(function(l){el("line",{x1:l[0],y1:l[1],x2:l[2],y2:l[3]},g);});
+  el("text",{x:345,y:208,"text-anchor":"middle","font-size":11.5,"font-weight":800,fill:C.navy},s,"3차원까지 그림 가능");
+  el("text",{x:345,y:232,"text-anchor":"middle","font-size":11.5,"font-weight":800,fill:"#B42318"},s,"4차원 이상은");
+  el("text",{x:345,y:250,"text-anchor":"middle","font-size":11.5,"font-weight":800,fill:"#B42318"},s,"그리기 어려움");
+});
+
+/* 4-3 원자료 30개 vs 히스토그램 */
+on("m4-raw",function(s){
+  var d=HEIGHTS.slice(0,30);
+  el("rect",{x:6,y:6,width:200,height:258,rx:12,fill:"#fff"},s);
+  el("text",{x:106,y:28,"text-anchor":"middle","font-size":12.5,"font-weight":800,fill:C.navy},s,"원자료 30개 (cm)");
+  d.forEach(function(v,i){var c=i%5,r=Math.floor(i/5);el("text",{x:30+c*37,y:58+r*30,"text-anchor":"middle","font-size":11,fill:"#22262E"},s,v.toFixed(1));});
+  el("text",{x:106,y:252,"text-anchor":"middle","font-size":11.5,"font-weight":700,fill:"#B42318"},s,"어디에 많은지 보이나요?");
+  el("text",{x:213,y:140,"text-anchor":"middle","font-size":20,"font-weight":800,fill:C.amber},s,"→");
+  el("rect",{x:222,y:6,width:192,height:258,rx:12,fill:"#fff"},s);
+  el("text",{x:318,y:28,"text-anchor":"middle","font-size":12.5,"font-weight":800,fill:C.navy},s,"같은 30개의 히스토그램");
+  var c=binCounts(d,145,5,190);
+  hist(s,{x:228,y:40,w:182,h:200,counts:c,start:145,bw:5,edges:[150,160,170,180],sel:c.indexOf(Math.max.apply(null,c)),vals:true,yaxis:true,ystep:5,ymax:12,color:C.navy3});
+  el("text",{x:318,y:258,"text-anchor":"middle","font-size":11.5,"font-weight":700,fill:C.ok},s,"봉우리가 바로 보입니다");
+});
+
+/* 4-3 변수 유형별 히스토그램 */
+on("m4-three",function(s){
+  var cols=[{t:"이산형",c:"#2C4170",bg:"#E4E9F2",cap1:"가로축: 값",cap2:"주사위 60번"},{t:"연속형",c:"#6E4F00",bg:"#FCF3D9",cap1:"가로축: 범위",cap2:"키 100명"},{t:"범주형",c:"#23704F",bg:"#E3F1EA",cap1:"가로축: 범주",cap2:"순서는 의미 없음"}];
+  cols.forEach(function(k,i){var x=6+i*138;
+    el("rect",{x:x,y:6,width:132,height:258,rx:12,fill:"#fff"},s);
+    el("rect",{x:x+26,y:14,width:80,height:24,rx:12,fill:k.bg},s);
+    el("text",{x:x+66,y:31,"text-anchor":"middle","font-size":12.5,"font-weight":800,fill:k.c},s,k.t);
+    el("text",{x:x+66,y:232,"text-anchor":"middle","font-size":11.5,"font-weight":800,fill:C.navy},s,k.cap1);
+    el("text",{x:x+66,y:252,"text-anchor":"middle","font-size":11,fill:C.gray},s,k.cap2);});
+  hist(s,{x:10,y:48,w:124,h:160,counts:DICE,labels:["1","2","3","4","5","6"],vals:true,ymax:16,color:C.navy3});
+  hist(s,{x:148,y:48,w:124,h:160,counts:binCounts(HEIGHTS,145,5,190),start:145,bw:5,edges:[150,170],vals:false,ymax:36,color:C.amber});
+  hist(s,{x:286,y:48,w:124,h:160,counts:MENU.counts,labels:MENU.labels,lfs:9.5,vals:true,ymax:42,color:"#4E9A78"});
+});
+
+/* 4-3 구간폭 5 히스토그램 */
+on("m4-h5",function(s){
+  var c=binCounts(HEIGHTS,145,5,190);
+  hist(s,{x:4,y:4,w:400,h:160,counts:c,start:145,bw:5,edges:[145,150,155,160,165,170,175,180,185,190],sel:4,vals:true,yaxis:true,ystep:10,ymax:36,color:C.soft});
+  el("text",{x:410,y:16,"text-anchor":"end","font-size":10.5,fill:C.gray},s,"구간폭 5.0cm · 가상 데이터");
+});
+
+/* 4-4 구간폭 0.05 / 5 / 15 비교 */
+on("m4-widths",function(s){
+  [[0.05,"구간폭 = 0.05"],[5,"구간폭 = 5"],[15,"구간폭 = 15"]].forEach(function(k,i){var x=6+i*138,w=k[0];
+    el("rect",{x:x,y:6,width:132,height:258,rx:12,fill:"#fff"},s);
+    el("rect",{x:x+16,y:14,width:100,height:24,rx:12,fill:"#FCF3D9"},s);
+    el("text",{x:x+66,y:31,"text-anchor":"middle","font-size":12,"font-weight":800,fill:C.amberInk},s,k[1]);
+    var c=binCounts(HEIGHTS,145,w,190),m=Math.max.apply(null,c);
+    hist(s,{x:x+2,y:48,w:128,h:170,counts:c,start:145,bw:w,dom:[140,195],edges:[150,170,190],thin:w<1,yaxis:true,ystep:m>10?20:1,ymax:m>10?Math.ceil(m/20)*20:m,color:C.navy3});
+  });
+  el("text",{x:72,y:244,"text-anchor":"middle","font-size":11,"font-weight":700,fill:"#B42318"},s,"너무 세밀함");
+  el("text",{x:210,y:244,"text-anchor":"middle","font-size":11,"font-weight":700,fill:C.ok},s,"모양이 보임");
+  el("text",{x:348,y:244,"text-anchor":"middle","font-size":11,"font-weight":700,fill:"#B42318"},s,"정보가 사라짐");
+});
+
+/* 실습 1 · 구간폭 조절(조작형) */
+(function(){
+  var r=document.getElementById("m4-w");if(!r)return;
+  function upd(){
+    var w=WIDTHS[+r.value],k=Math.ceil(45/w-1e-9),end=145+k*w,c=binCounts(HEIGHTS,145,w,end),m=Math.max.apply(null,c),
+        empty=c.filter(function(v){return v===0;}).length,ti=c.indexOf(m),nTop=c.filter(function(v){return v===m;}).length;
+    document.getElementById("m4-wv").textContent=fmtW(w);
+    document.getElementById("m4-k").textContent=k+"개";
+    document.getElementById("m4-e").textContent=empty+"개";
+    var a=145+ti*w;
+    document.getElementById("m4-top").textContent=m+"명";
+    var s=document.getElementById("m4-p1-svg");clear(s);
+    var st=m<=4?1:m<=20?5:m<=40?10:20,ym=Math.ceil(m/st)*st;
+    hist(s,{x:4,y:22,w:462,h:204,counts:c,start:145,bw:w,dom:[140,195],edges:[140,150,160,170,180,190],sel:nTop>1?null:ti,thin:w<1,yaxis:true,ystep:st,ymax:ym,color:C.navy3});
+    el("text",{x:8,y:14,"font-size":10.5,fill:C.gray},s,"학생 수(명)");el("text",{x:466,y:14,"text-anchor":"end","font-size":10.5,fill:C.gray},s,"키(cm) · 구간폭 "+fmtW(w));
+    var msg=document.getElementById("m4-msg");
+    if(w===1){msg.className="pmsg ng";msg.textContent="아직 좁습니다. 구간 "+k+"개 중 "+empty+"개가 비어 있고, 막대가 들쭉날쭉해 모양을 읽기 어렵습니다.";}
+    else if(w<1){msg.className="pmsg ng";msg.textContent="너무 좁습니다. 구간 "+k+"개 중 "+empty+"개가 비어 있고, 가장 높은 막대도 "+m+"명뿐이라 어디에 데이터가 많은지 불분명합니다.";}
+    else if(w===2){msg.className="pmsg ok";msg.textContent="봉우리 모양이 보이기 시작합니다. 다만 막대가 들쭉날쭉해 조금 넓혀 볼 수도 있습니다.";}
+    else if(w===5){msg.className="pmsg ok";msg.textContent="봉우리 하나가 뚜렷합니다. "+a+".0~"+(a+w)+".0cm 구간이 "+m+"명으로 가장 많고, 양 끝은 매우 적습니다.";}
+    else if(w===10){msg.className="pmsg";msg.textContent="구간이 "+k+"개로 줄어 봉우리는 보이지만 세부 모양이 흐려집니다.";}
+    else{msg.className="pmsg ng";msg.textContent="너무 넓습니다. 막대가 "+k+"개뿐이라 분포 정보가 대부분 사라집니다.";}
+  }
+  r.addEventListener("input",upd);upd();
+})();
+
+/* 실습 3 · 원자료로 도수 예측(추정형) */
+(function(){
+  var g=document.getElementById("m4-g");if(!g)return;
+  var d=HEIGHTS.slice(0,30),ACT=d.filter(function(v){return v>=165&&v<170;}).length,checked=false,svg=document.getElementById("m4-p3-svg");
+  function draw(){
+    clear(svg);
+    el("rect",{x:2,y:2,width:226,height:216,rx:10,fill:"#fff"},svg);
+    d.forEach(function(v,i){var c=i%5,r=Math.floor(i/5),hit=checked&&v>=165&&v<170,cx=26+c*44,cy=30+r*32;
+      if(hit)el("rect",{x:cx-21,y:cy-15,width:42,height:22,rx:5,fill:"#FCF3D9",stroke:C.amber},svg);
+      el("text",{x:cx,y:cy,"text-anchor":"middle","font-size":11.5,"font-weight":hit?800:500,fill:hit?C.amberInk:"#22262E"},svg,v.toFixed(1));});
+    el("rect",{x:238,y:2,width:230,height:216,rx:10,fill:"#fff"},svg);
+    if(!checked){el("text",{x:353,y:104,"text-anchor":"middle","font-size":13,"font-weight":700,fill:C.gray},svg,"「히스토그램으로 확인」을");
+      el("text",{x:353,y:126,"text-anchor":"middle","font-size":13,"font-weight":700,fill:C.gray},svg,"누르면 여기에 그려집니다");return;}
+    var c=binCounts(d,145,5,190);
+    var h=hist(svg,{x:244,y:20,w:220,h:192,counts:c,start:145,bw:5,edges:[150,160,170,180],sel:4,vals:true,yaxis:true,ystep:5,ymax:15,color:C.soft});
+    el("line",{x1:270,x2:460,y1:h.Y(+g.value),y2:h.Y(+g.value),stroke:C.navy,"stroke-width":1.5,"stroke-dasharray":"5 4"},svg);
+    el("text",{x:460,y:h.Y(+g.value)-4,"text-anchor":"end","font-size":10.5,"font-weight":800,fill:C.navy,stroke:"#fff","stroke-width":3,"paint-order":"stroke"},svg,"내 예측 "+g.value+"명");
+    el("text",{x:248,y:14,"font-size":10.5,fill:C.gray},svg,"구간폭 5cm");
+  }
+  g.addEventListener("input",function(){document.getElementById("m4-gv").textContent=g.value+"명";document.getElementById("m4-mine").textContent=g.value+"명";draw();});
+  document.getElementById("m4-check").onclick=function(){
+    checked=true;var gv=+g.value,df=Math.abs(gv-ACT),m=document.getElementById("m4-msg3");
+    document.getElementById("m4-act").textContent=ACT+"명";
+    m.className="pmsg "+(df<=2?"ok":"ng");
+    m.textContent="165.0 이상 170.0 미만은 "+ACT+"명으로, 9개 구간 중 가장 많습니다. 내 예측과의 차이는 "+df+"명입니다. 표에서 해당 값을 노란색으로 표시했습니다.";draw();};
+  document.getElementById("m4-gv").textContent=g.value+"명";document.getElementById("m4-mine").textContent=g.value+"명";draw();
+})();
+
+
+/* ---------- ⑤ 형성평가 ---------- */
+function fill(t){return !CASE?t:t.replace(/SUM/g,f1(SUMV)).replace(/AVG/g,f1(AVG,2)).replace(/MAXV/g,f1(MAXV));}
+var firstPractice=document.getElementById("p1"),answered=0,correct=0;
+QUIZ.forEach(function(q,i){
+  var s=document.createElement("section");s.className="slide";s.dataset.step="4";s.id="q"+(i+1);
+  s.innerHTML='<div class="sh"><div class="sec"><span>문항 '+(i+1)+' / '+QUIZ.length+'</span><span class="qchips"><span>학습목표 '+q.goal+'</span><span>'+q.type+'</span></span></div><h2 class="stem">'+fill(q.stem)+'</h2></div>'+
+    '<div class="body split even"><div class="opts'+(q.ox?' ox':'')+'"></div><div class="fbp" aria-live="polite"><p class="empty">보기를 고르면 정답과 해설이 여기에 나타납니다.</p></div></div>';
+  var ob=s.querySelector(".opts"),fb=s.querySelector(".fbp");
+  q.opts.forEach(function(t,k){
+    var b=document.createElement("button");b.type="button";b.className="opt";
+    b.innerHTML=q.ox?t:'<span class="n">'+(k+1)+'</span>'+fill(t);
+    b.addEventListener("click",function(){
+      var all=ob.querySelectorAll(".opt");[].forEach.call(all,function(x){x.disabled=true;});
+      all[q.ans].classList.add("ok");var ok=k===q.ans;if(!ok)b.classList.add("ng");
+      answered++;if(ok)correct++;
+      fb.className="fbp "+(ok?"ok":"ng");
+      fb.innerHTML='<div class="verdict">'+(ok?"정답입니다":"오답입니다. 정답은 "+(q.ox?q.opts[q.ans]:(q.ans+1)+"번")+"입니다")+'</div><div>'+fill(q.exp)+'</div>'+
+        '<button type="button" class="jump back" data-jump="'+q.back+'">'+q.backLabel+'</button><div class="tally">지금까지 '+answered+'문항 중 '+correct+'문항 정답</div>';
+      bindJumps(fb);
+    });
+    ob.appendChild(b);
+  });
+  vp.insertBefore(s,firstPractice);
+});
+
+/* ---------- ⑦ 용어해설 · 참고자료 · 다음 모듈 ---------- */
+for(var gi=0;gi<GLOSSARY.length;gi+=6){
+  var part=GLOSSARY.slice(gi,gi+6),pg=gi/6+1,np=Math.ceil(GLOSSARY.length/6);
+  var s=document.createElement("section");s.className="slide";s.dataset.step="6";
+  var h='<div class="sh"><div class="sec">용어해설 '+pg+'/'+np+'</div><h2>'+(pg===1?"본문에서 굵게 표시한 용어를 나온 순서대로 모았습니다":"용어해설 계속")+'</h2></div><div class="body full"><div class="gl">';
+  part.forEach(function(g,k){h+='<div class="gi"><div class="t"><i>'+(gi+k+1)+'</i>'+g[0]+'<em>'+g[1]+'</em>'+(g[4]?'<span class="cite">['+g[4]+']</span>':'')+'</div><div class="d">'+g[2]+'</div><div class="e"><strong>예시</strong> '+g[3]+'</div></div>';});
+  h+='</div></div>';s.innerHTML=h;vp.appendChild(s);
+}
+(function(){
+  var s=document.createElement("section");s.className="slide";s.dataset.step="6";s.id="end";
+  var refs=REFS.length?'<div class="pcol" style="gap:10px"><div class="plabel" style="margin:0">참고자료</div><ol class="refs">'+REFS.map(function(r){return '<li><span>['+r.n+']</span><div>'+r.title+', '+r.org+'. <a href="'+r.url+'" target="_blank" rel="noopener">'+r.url+'</a> ('+r.date+')</div></li>';}).join("")+'</ol></div>':'';
+  s.innerHTML='<div class="sh"><div class="sec">마무리</div><h2>'+(REFS.length?"참고자료와 다음 모듈":"다음 모듈")+'</h2></div>'+
+    '<div class="body '+(REFS.length?'split even':'full')+'" style="align-content:center">'+refs+
+    '<div class="pcol" style="justify-content:center"><div class="nextmod"><small>다음 모듈 · '+NEXT.title+'</small><strong>'+NEXT.line+'</strong></div></div></div>'+
+    '<p class="foot">학습 상태는 저장되지 않습니다.</p>';
+  vp.appendChild(s);
+})();
+
+/* ---------- 이동 · 진행선 ---------- */
+var slides=[].slice.call(vp.querySelectorAll(".slide")),cur=0,seen={};
+var stepFirst=[],stepCount=[0,0,0,0,0,0,0];
+slides.forEach(function(s,i){var st=+s.dataset.step;if(stepFirst[st]==null)stepFirst[st]=i;stepCount[st]++;});
+var rail=document.getElementById("rail"),stations=[];
+STEPS.forEach(function(n,i){
+  var b=document.createElement("button");b.type="button";b.className="station";
+  b.style.left="calc(14px + (100% - 28px) * "+(i/6)+")";
+  b.innerHTML='<span class="dot">'+(i+1)+'</span><span class="lb">'+n+'</span>';
+  b.setAttribute("aria-label",(i+1)+"단계 "+n+"(으)로 이동");
+  b.addEventListener("click",function(){show(stepFirst[i]);});
+  rail.appendChild(b);stations.push(b);
+});
+function show(i){
+  cur=Math.max(0,Math.min(slides.length-1,i));
+  slides.forEach(function(s,k){s.classList.toggle("on",k===cur);});
+  var st=+slides[cur].dataset.step;seen[st]=true;
+  stations.forEach(function(b,k){b.classList.toggle("cur",k===st);b.classList.toggle("done",k<st||(!!seen[k]&&k!==st));if(k===st)b.setAttribute("aria-current","step");else b.removeAttribute("aria-current");});
+  var within=(cur-stepFirst[st])/Math.max(1,stepCount[st]);
+  var frac=st===6&&cur===slides.length-1?1:(st+within)/6;
+  document.getElementById("fill").style.width=(Math.min(1,frac)*100)+"%";
+  document.getElementById("counter").innerHTML="<strong>"+STEPS[st]+"</strong> "+(cur-stepFirst[st]+1)+" / "+stepCount[st];
+  document.getElementById("prev").disabled=cur===0;
+  var nx=document.getElementById("next");nx.disabled=cur===slides.length-1;
+  nx.textContent=(cur<slides.length-1&&+slides[cur+1].dataset.step!==st)?STEPS[+slides[cur+1].dataset.step]+"(으)로":"다음";
+}
+function bindJumps(root){[].forEach.call(root.querySelectorAll("[data-jump]"),function(b){b.addEventListener("click",function(){var t=document.getElementById(b.dataset.jump);if(t)show(slides.indexOf(t));});});}
+bindJumps(document);
+document.getElementById("prev").onclick=function(){show(cur-1);};
+document.getElementById("next").onclick=function(){show(cur+1);};
+document.addEventListener("keydown",function(e){
+  if(e.target&&(e.target.type==="range"))return;
+  if(e.key==="ArrowRight"||e.key==="PageDown"){show(cur+1);e.preventDefault();}
+  else if(e.key==="ArrowLeft"||e.key==="PageUp"){show(cur-1);e.preventDefault();}
+});
+var tx=null,ty=null;
+vp.addEventListener("touchstart",function(e){var t=e.target;if(t.closest&&(t.closest("input")||t.closest(".dcard"))){tx=null;return;}tx=e.touches[0].clientX;ty=e.touches[0].clientY;},{passive:true});
+vp.addEventListener("touchend",function(e){if(tx==null)return;var dx=e.changedTouches[0].clientX-tx,dy=e.changedTouches[0].clientY-ty;if(Math.abs(dx)>60&&Math.abs(dx)>Math.abs(dy)*1.5)show(cur+(dx<0?1:-1));tx=null;},{passive:true});
+
+/* ---------- 실습 1 · 조작형 ---------- */
+(function(){if(!document.getElementById("p1-items")||!CASE)return;
+var p1v=CASE.values.slice(),p1s=CASE.values.indexOf(MAXV),p1m=document.getElementById("p1-items"),p1r=document.getElementById("p1-range");
+CASE.labels.forEach(function(m,i){var b=document.createElement("button");b.type="button";b.className="mbtn";b.textContent=m;b.onclick=function(){p1s=i;p1d();};p1m.appendChild(b);});
+function p1d(){
+  [].forEach.call(p1m.children,function(b,i){b.classList.toggle("on",i===p1s);b.setAttribute("aria-pressed",i===p1s);});
+  p1r.value=p1v[p1s];document.getElementById("p1-label").textContent=CASE.labels[p1s]+"번";document.getElementById("p1-val").textContent=f1(p1v[p1s]);
+  var s=r1(sum(p1v)),m=s/N;
+  document.getElementById("p1-sum").textContent=f1(s);document.getElementById("p1-mean").textContent=f1(m,2);
+  barChart(document.getElementById("p1-svg"),p1v,{mean:m,sel:p1s,ymax:9});
+  var msg=document.getElementById("p1-msg");
+  if(P1.target!=null&&Math.abs(m-P1.target)<0.005){msg.className="pmsg ok";msg.textContent="성공했습니다. "+f1(s)+" ÷ "+N+" = "+f1(m,2);}
+  else if(Math.abs(s-SUMV)<1e-9){msg.className="pmsg";msg.textContent="원래 값입니다. "+f1(SUMV)+" ÷ "+N+" = "+f1(AVG,2);}
+  else{msg.className="pmsg";msg.textContent="원래 평균 "+f1(AVG,2)+"보다 "+f1(Math.abs(m-AVG),2)+" "+(m>AVG?"늘었습니다.":"줄었습니다.");}
+}
+p1r.addEventListener("input",function(){p1v[p1s]=r1(+p1r.value);p1d();});
+document.getElementById("p1-reset").onclick=function(){p1v=CASE.values.slice();p1d();};
+p1d();
+
+})();
+/* ---------- 실습 2 · 분류형 ---------- */
+(function(){if(!document.getElementById("p2-pool"))return;
+var pool=document.getElementById("p2-pool"),binWrap=document.getElementById("p2-bins"),selC=null,done2=0;
+var bins=BINS.map(function(n){var b=document.createElement("div");b.className="bin";b.dataset.bin=n;b.innerHTML="<h4>"+n+"</h4>";binWrap.appendChild(b);return b;});
+function p2msg(t,c){var m=document.getElementById("p2-msg");m.textContent=t;m.className="pmsg "+(c||"");document.getElementById("p2-count").textContent=done2+" / "+CARDS.length;}
+function p2init(){
+  pool.innerHTML="";bins.forEach(function(b){[].slice.call(b.querySelectorAll(".dcard")).forEach(function(c){c.remove();});});done2=0;selC=null;
+  var o=CARDS.map(function(_,i){return i;});for(var i=o.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1)),t=o[i];o[i]=o[j];o[j]=t;}
+  o.forEach(function(i){var d=document.createElement("div");d.className="dcard";d.tabIndex=0;d.setAttribute("role","button");d.textContent=CARDS[i][0];d.dataset.ans=CARDS[i][1];pool.appendChild(d);attach(d);});
+  p2msg("카드를 하나 골라 보세요.","");
+}
+function drop(c,b){
+  if(!b||c.classList.contains("ok"))return;
+  c.classList.remove("sel");selC=null;
+  if(c.dataset.ans===b.dataset.bin){c.classList.add("ok");c.removeAttribute("tabindex");b.appendChild(c);done2++;p2msg(done2===CARDS.length?"카드를 모두 맞게 분류했습니다.":"정답입니다.","ok");}
+  else{c.classList.add("shake");setTimeout(function(){c.classList.remove("shake");},400);p2msg("「"+b.dataset.bin+"」이 아닙니다. "+HINT[c.dataset.ans],"ng");}
+}
+function pick(d){if(selC===d){d.classList.remove("sel");selC=null;return;}if(selC)selC.classList.remove("sel");selC=d;d.classList.add("sel");p2msg("이제 알맞은 칸을 누르세요.","");}
+function attach(d){
+  var sx=null,sy,mv=false,gh=null,ov=null,offX=0,offY=0;
+  function pos(e){var r=stage.getBoundingClientRect();return{x:(e.clientX-r.left)/S,y:(e.clientY-r.top)/S};}
+  d.addEventListener("pointerdown",function(e){if(d.classList.contains("ok"))return;sx=e.clientX;sy=e.clientY;mv=false;d.setPointerCapture(e.pointerId);var r=d.getBoundingClientRect();offX=(e.clientX-r.left)/S;offY=(e.clientY-r.top)/S;});
+  d.addEventListener("pointermove",function(e){
+    if(sx==null)return;
+    if(!mv&&Math.hypot(e.clientX-sx,e.clientY-sy)>6){mv=true;gh=d.cloneNode(true);gh.classList.add("ghostc");gh.classList.remove("sel");gh.style.width=d.offsetWidth+"px";stage.appendChild(gh);d.style.opacity=".35";}
+    if(mv){var p=pos(e);gh.style.left=(p.x-offX)+"px";gh.style.top=(p.y-offY)+"px";
+      var t=document.elementFromPoint(e.clientX,e.clientY),b=t&&t.closest?t.closest(".bin"):null;
+      if(ov&&ov!==b)ov.classList.remove("hover");ov=b;if(b)b.classList.add("hover");}
+  });
+  d.addEventListener("pointerup",function(){
+    if(sx==null)return;sx=null;
+    if(mv){gh.remove();gh=null;d.style.opacity="";if(ov)ov.classList.remove("hover");var b=ov;ov=null;drop(d,b);}else pick(d);
+  });
+  d.addEventListener("pointercancel",function(){if(gh){gh.remove();gh=null;}d.style.opacity="";sx=null;if(ov)ov.classList.remove("hover");ov=null;});
+  d.addEventListener("keydown",function(e){if(e.key==="Enter"||e.key===" "){e.preventDefault();pick(d);}});
+}
+bins.forEach(function(b){b.tabIndex=0;b.setAttribute("role","button");b.setAttribute("aria-label",b.dataset.bin+" 칸에 놓기");
+  b.addEventListener("click",function(e){if(selC&&!e.target.closest(".dcard"))drop(selC,b);});
+  b.addEventListener("keydown",function(e){if((e.key==="Enter"||e.key===" ")&&selC){e.preventDefault();drop(selC,b);}});});
+document.getElementById("p2-reset").onclick=p2init;
+p2init();
+
+})();
+/* ---------- 실습 3 · 추정형 ---------- */
+(function(){if(!document.getElementById("p3-range")||!PAIRS)return;
+var p3r=document.getElementById("p3-range"),p3done=false;
+document.getElementById("p3-x0").textContent=PAIRS.x0;
+p3r.min=PAIRS.ymin;p3r.max=PAIRS.ymax;p3r.step=0.1;p3r.value=r1((PAIRS.ymin+PAIRS.ymax)/2);
+function p3d(){var g=+p3r.value;document.getElementById("p3-val").textContent=f1(g);scatter(document.getElementById("p3-svg"),{x0:PAIRS.x0,guess:g,line:p3done,pred:p3done,actual:p3done});}
+p3r.addEventListener("input",function(){if(p3done){p3done=false;document.getElementById("p3-res").classList.remove("on");}p3d();});
+document.getElementById("p3-check").onclick=function(){
+  p3done=true;var g=+p3r.value,mine=Math.abs(g-PAIRS.actual),line=Math.abs(PRED-PAIRS.actual);
+  document.getElementById("p3-mine").textContent=f1(g);document.getElementById("p3-pred").textContent=f1(PRED,PAIRS.dp);document.getElementById("p3-act").textContent=f1(PAIRS.actual);
+  var m=document.getElementById("p3-msg"),good=mine<=line;m.className="pmsg "+(good?"ok":"ng");
+  m.textContent="내 오차 "+f1(mine,PAIRS.dp)+PAIRS.unit+", 직선 오차 "+f1(line,PAIRS.dp)+PAIRS.unit+". "+(good?"직선만큼 또는 더 가깝게 추정했습니다.":"직선을 이용하면 오차를 줄일 수 있습니다.");
+  document.getElementById("p3-res").classList.add("on");p3d();
+};
+p3d();
+
+})();
+show(0);
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,1046 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>다중회귀</title>
+<!-- M19 다중회귀 v1.0 · 기준 템플릿 v1.3로 제작 (2026-10-26) -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<style>
+:root{
+  --navy:#1B2A4A; --navy2:#2C4170; --navy3:#5B6E97; --navy-soft:#E4E9F2;
+  --ink:#22262E; --gray:#6B7280; --gray2:#9AA0AA; --panel:#EEF0F3; --line:#D5D9E0;
+  --amber:#E0A100; --amber-ink:#6E4F00; --amber-soft:#FCF3D9;
+  --ok:#23704F; --ok-soft:#E2F1E9; --ng:#B42318; --ng-soft:#FBE6E3;
+  --letterbox:#C7CCD4;
+}
+*{box-sizing:border-box}
+html,body{margin:0;height:100%;overflow:hidden;background:var(--letterbox)}
+body{font-family:"Pretendard Variable","Pretendard","Apple SD Gothic Neo","Malgun Gothic","Noto Sans KR",system-ui,sans-serif;color:var(--ink);-webkit-text-size-adjust:100%;font-feature-settings:"tnum"}
+button{font:inherit;color:inherit}
+:focus-visible{outline:3px solid var(--amber);outline-offset:2px;border-radius:4px}
+
+/* ---------- 16:9 무대 ---------- */
+.stage{position:absolute;left:50%;top:50%;width:960px;height:540px;transform:translate(-50%,-50%) scale(var(--s,1));transform-origin:center;background:#fff;overflow:hidden;box-shadow:0 10px 40px rgba(27,42,74,.25)}
+
+/* ---------- 상단 바: 모듈명 + 7단계 진행선 ---------- */
+.topbar{position:absolute;left:0;right:0;top:0;height:60px;background:var(--navy);display:flex;align-items:center}
+.brand{flex:0 0 200px;padding-left:22px;color:#fff;font-size:14px;font-weight:800;letter-spacing:-.3px;line-height:1.2;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.brand small{display:block;font-size:11px;font-weight:500;color:#A9B6CF;letter-spacing:0;margin-top:2px;overflow:hidden;text-overflow:ellipsis}
+.rail{position:relative;flex:1;height:60px;margin-right:22px}
+.rail .track{position:absolute;left:14px;right:14px;top:21px;height:3px;background:#3A4D78;border-radius:2px}
+.rail .fill{position:absolute;left:0;top:0;bottom:0;background:var(--amber);border-radius:2px;transition:width .35s ease}
+.station{position:absolute;top:10px;width:72px;margin-left:-36px;background:none;border:0;padding:0;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:4px}
+.station .dot{width:24px;height:24px;border-radius:50%;display:grid;place-items:center;font-size:11.5px;font-weight:800;background:var(--navy);color:#8E9DBD;border:2px solid #4A5D88;transition:all .25s}
+.station .lb{font-size:11.5px;color:#8E9DBD;white-space:nowrap}
+.station.done .dot{background:#C9D3E6;border-color:#C9D3E6;color:var(--navy)}
+.station.done .lb{color:#C9D3E6}
+.station.cur .dot{background:var(--amber);border-color:#FFE08A;color:var(--navy);transform:scale(1.12)}
+.station.cur .lb{color:#fff;font-weight:700}
+
+/* ---------- 화면 ---------- */
+.viewport{position:absolute;left:0;right:0;top:60px;bottom:46px}
+.slide{position:absolute;inset:0;padding:16px 36px 10px;display:none;flex-direction:column;gap:12px}
+.slide.on{display:flex;animation:fade .22s ease}
+@keyframes fade{from{opacity:0}to{opacity:1}}
+@media (prefers-reduced-motion:reduce){.slide.on{animation:none}.rail .fill,.station .dot{transition:none}}
+.sh{flex:0 0 auto}
+.sec{font-size:12.5px;font-weight:700;color:var(--navy3);display:flex;gap:8px;align-items:center;min-height:18px}
+h2{margin:3px 0 0;font-size:24px;line-height:1.3;font-weight:800;color:var(--navy);letter-spacing:-.6px;display:flex;gap:10px;align-items:flex-start}
+h2 .q{flex:0 0 auto;margin-top:2px;width:28px;height:28px;border-radius:6px;background:var(--navy);color:#fff;font-size:15px;display:grid;place-items:center}
+h2.big{font-size:30px;line-height:1.32}
+.body{flex:1 1 auto;min-height:0;display:grid;gap:24px}
+.split{grid-template-columns:1.2fr 1fr}
+.split.even{grid-template-columns:1fr 1fr}
+.full{grid-template-columns:1fr}
+.fig{background:var(--panel);border-radius:12px;padding:12px;min-height:0;display:flex;align-items:center;justify-content:center}
+.fig svg{width:100%;height:100%;display:block}
+.figcol{min-height:0;display:flex;flex-direction:column;gap:10px}
+.figcol .fig{flex:1 1 auto}
+.side{min-height:0;display:flex;flex-direction:column;gap:12px;justify-content:center}
+
+/* 핵심 문장: 40자 안팎, 1~2개 */
+.key{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:9px}
+.key li{position:relative;padding-left:16px;font-size:18.5px;line-height:1.42;font-weight:700;letter-spacing:-.4px}
+.key li::before{content:"";position:absolute;left:0;top:.28em;width:4px;height:1.05em;border-radius:2px;background:var(--navy2)}
+.key b{color:var(--navy);background:linear-gradient(transparent 62%,var(--amber-soft) 62%)}
+/* 해설 문단: 2~4문장, 150~250자 */
+.exp{margin:0;font-size:15px;line-height:1.62;letter-spacing:-.2px;color:var(--ink)}
+.exp b{color:var(--navy)}
+/* 연결 문장: 다음 소단원으로 넘기는 질문 */
+.next{margin:0;border-top:1px dashed var(--line);padding-top:9px;font-size:14px;font-weight:700;color:var(--navy2);display:flex;gap:8px;align-items:baseline}
+.next span{flex:0 0 auto;font-size:11.5px;font-weight:800;color:var(--navy3);background:var(--navy-soft);border-radius:4px;padding:0 6px;line-height:20px}
+/* 각주: 기호의 뜻과 출처 번호만 */
+.foot{flex:0 0 auto;font-size:12px;line-height:1.5;color:var(--gray);margin:0}
+.foot b{color:var(--ink)}
+.cite{font-size:.72em;font-weight:700;color:var(--navy3);vertical-align:super;line-height:0;margin-left:1px}
+.tag-v{display:inline-block;font-size:11px;font-weight:700;border-radius:4px;padding:0 6px;line-height:18px;white-space:nowrap;vertical-align:1px;color:var(--gray);background:#F3F4F6;box-shadow:inset 0 0 0 1px var(--line)}
+
+/* 핵심 수학 개념 박스 */
+.math{flex:0 0 auto;border-left:3px solid var(--navy3);background:#F6F7F9;border-radius:0 8px 8px 0;padding:9px 13px;font-size:13.5px;line-height:1.5}
+.math .mt{font-size:12px;font-weight:800;color:var(--navy3);margin-bottom:2px}
+.math .f{font-family:"Cambria Math","Times New Roman",serif;font-size:18px;font-weight:700;color:var(--navy);margin:1px 0 4px}
+.math .r{display:grid;grid-template-columns:34px 1fr;gap:6px}
+.math .r span:first-child{font-size:11.5px;font-weight:700;color:var(--gray2);padding-top:1px}
+.math .w{margin-top:5px;padding-top:5px;border-top:1px dashed var(--line);color:var(--ng);font-weight:700;font-size:12.5px}
+
+/* ---------- 하단 바 ---------- */
+.bottombar{position:absolute;left:0;right:0;bottom:0;height:46px;border-top:1px solid var(--line);display:flex;align-items:center;padding:0 22px 0 36px;gap:12px;background:#fff}
+.counter{font-size:13px;color:var(--gray);font-weight:600}
+.counter strong{color:var(--navy)}
+.spacer{flex:1}
+.nav{border:1.5px solid var(--navy);background:#fff;color:var(--navy);border-radius:8px;height:32px;padding:0 16px;font-size:14px;font-weight:700;cursor:pointer}
+.nav.primary{background:var(--navy);color:#fff}
+.nav:disabled{opacity:.3;cursor:default}
+
+/* ---------- 홈으로 ---------- */
+.home{display:inline-flex;align-items:center;gap:6px;height:32px;padding:0 13px;border-radius:8px;border:1.5px solid var(--navy-soft);background:#fff;color:var(--navy2);font-size:13.5px;font-weight:700;line-height:1;text-decoration:none;white-space:nowrap}
+.home svg{width:14px;height:14px;flex:0 0 auto;display:block}
+.home:hover{background:var(--navy-soft);border-color:var(--navy3);color:var(--navy)}
+.home:focus-visible{outline:3px solid var(--amber);outline-offset:2px}
+@media (prefers-reduced-motion:reduce){.home{transition:none}}
+
+/* ① 학습개요 */
+.meta{display:grid;grid-template-columns:auto 1fr;gap:6px 14px;margin:0;font-size:14px}
+.meta dt{font-weight:700;color:var(--gray)}
+.meta dd{margin:0;font-weight:700;color:var(--navy)}
+.prevlink{background:var(--panel);border-radius:10px;padding:12px 14px;font-size:14.5px;line-height:1.55}
+.prevlink small{display:block;font-size:12px;font-weight:800;color:var(--navy3);margin-bottom:3px}
+
+/* ② 학습목표: 목표 → 문항 → 실습 연결 */
+.gmap{display:grid;grid-template-columns:44px 1fr 150px 150px;align-items:stretch;row-gap:12px;column-gap:0}
+.gmap .hd{font-size:12px;font-weight:700;color:var(--gray);padding:0 14px 2px}
+.gmap .gn{background:var(--navy);color:#fff;font-weight:800;font-size:18px;display:grid;place-items:center;border-radius:10px 0 0 10px}
+.gmap .gt{background:var(--panel);padding:14px 18px;font-size:17px;font-weight:700;line-height:1.42;letter-spacing:-.3px;display:flex;align-items:center}
+.gmap .gt b{color:var(--navy)}
+.gmap .ga,.gmap .gp{background:var(--panel);display:flex;align-items:center;padding:0 10px;border-left:2px solid #fff}
+.gmap .gp{border-radius:0 10px 10px 0}
+.jump{border:1.5px solid var(--navy3);background:#fff;border-radius:7px;padding:6px 10px;font-size:13px;font-weight:700;color:var(--navy);cursor:pointer;text-align:left;line-height:1.3;width:100%}
+.jump:hover{background:var(--navy-soft)}
+
+/* ④ 본문 정리 표 */
+.sumtbl{width:100%;border-collapse:separate;border-spacing:0;font-size:14.5px;line-height:1.5}
+.sumtbl th{background:var(--navy);color:#fff;font-weight:800;text-align:left;padding:10px 14px}
+.sumtbl th:first-child{border-radius:10px 0 0 0;width:150px}
+.sumtbl th:last-child{border-radius:0 10px 0 0}
+.sumtbl td{padding:11px 14px;border-bottom:1px solid var(--line);vertical-align:top}
+.sumtbl td:first-child{font-weight:800;color:var(--navy)}
+.sumtbl tr:nth-child(even) td{background:#F8F9FB}
+
+/* ⑤ 형성평가 */
+.qchips{display:flex;gap:6px}
+.qchips span{font-size:11.5px;font-weight:700;color:var(--navy2);background:var(--navy-soft);border-radius:4px;padding:0 7px;line-height:19px}
+h2.stem{font-size:21px;line-height:1.42;font-weight:800}
+.opts{display:grid;gap:9px;align-content:center}
+.opts.ox{grid-template-columns:1fr 1fr}
+.opt{border:1.5px solid var(--line);background:#fff;border-radius:10px;padding:11px 14px;text-align:left;font-size:16px;font-weight:600;cursor:pointer;display:flex;gap:10px;align-items:center}
+.opt .n{flex:0 0 26px;height:26px;border-radius:50%;background:var(--panel);display:grid;place-items:center;font-size:13px;font-weight:800;color:var(--navy)}
+.opts.ox .opt{justify-content:center;font-size:40px;font-weight:800;padding:22px;color:var(--navy)}
+.opt:hover:not(:disabled){border-color:var(--navy3);background:#F8F9FB}
+.opt:disabled{cursor:default}
+.opt.ok{border-color:var(--ok);background:var(--ok-soft);color:var(--ok)}
+.opt.ok .n{background:var(--ok);color:#fff}
+.opt.ng{border-color:var(--ng);background:var(--ng-soft);color:var(--ng)}
+.opt.ng .n{background:var(--ng);color:#fff}
+.fbp{background:var(--panel);border-radius:12px;padding:18px 20px;display:flex;flex-direction:column;gap:10px;font-size:14.5px;line-height:1.6}
+.fbp .empty{color:var(--gray);margin:auto 0}
+.fbp .verdict{font-size:19px;font-weight:800}
+.fbp.ok{background:var(--ok-soft)} .fbp.ok .verdict{color:var(--ok)}
+.fbp.ng{background:var(--ng-soft)} .fbp.ng .verdict{color:var(--ng)}
+.fbp .back{align-self:flex-start}
+.fbp .tally{margin-top:auto;font-size:12.5px;color:var(--gray);font-weight:600}
+
+/* ⑥ 실습 */
+.plabel{font-size:12px;font-weight:800;color:var(--navy3);margin-bottom:6px}
+.pcol{min-height:0;display:flex;flex-direction:column}
+.mbtns{display:flex;flex-wrap:nowrap;gap:3px;margin-bottom:8px}
+.mbtn{border:1px solid var(--line);background:#fff;border-radius:6px;padding:2px 6px;font-size:12px;cursor:pointer;min-width:26px}
+.mbtn.on{background:var(--navy);border-color:var(--navy);color:#fff}
+.ctrl{display:flex;align-items:center;gap:10px;font-size:14px;font-weight:600}
+input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
+.stats{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.stats.three{grid-template-columns:1fr 1fr 1fr}
+.stats div{background:var(--panel);border-radius:10px;padding:8px 12px}
+.stats small{display:block;font-size:11.5px;color:var(--gray);font-weight:600;line-height:1.35}
+.stats strong{font-size:22px;color:var(--navy);letter-spacing:-.4px}
+.pmsg{font-size:14.5px;font-weight:700;min-height:22px;line-height:1.45}
+.pmsg.ok{color:var(--ok)} .pmsg.ng{color:var(--ng)}
+.think{flex:0 0 auto;background:var(--amber-soft);border-radius:10px;padding:9px 14px;font-size:14.5px;font-weight:700;color:var(--amber-ink);display:flex;gap:10px;align-items:baseline}
+.think span{flex:0 0 auto;font-size:12px;font-weight:800}
+.howto{font-size:13.5px;color:var(--gray);line-height:1.5;margin:0}
+.btn{border:0;background:var(--navy);color:#fff;border-radius:8px;height:32px;padding:0 14px;font-size:13.5px;font-weight:700;cursor:pointer}
+.btn.ghost{background:#fff;color:var(--navy);box-shadow:inset 0 0 0 1.5px var(--navy)}
+.pool{flex:1;min-height:0;display:grid;grid-template-columns:1fr 1fr;align-content:start;gap:8px;padding:10px;border:1.5px dashed var(--line);border-radius:10px;background:#FAFBFC}
+.dcard{background:#fff;border:1.5px solid var(--navy3);border-radius:8px;padding:7px 10px;font-size:13.5px;font-weight:600;line-height:1.4;cursor:grab;user-select:none;-webkit-user-select:none;touch-action:none}
+.dcard.sel{box-shadow:0 0 0 3px var(--amber)}
+.dcard.ok{border-color:var(--ok);background:var(--ok-soft);color:var(--ok);cursor:default;font-size:12.5px;padding:5px 8px}
+.dcard.shake{animation:shake .35s;border-color:var(--ng);background:var(--ng-soft)}
+@keyframes shake{25%{transform:translateX(-5px)}75%{transform:translateX(5px)}}
+.ghostc{position:absolute;pointer-events:none;z-index:50;opacity:.92;box-shadow:0 8px 20px rgba(27,42,74,.25);cursor:grabbing}
+.bins{flex:1 0 auto;min-height:0;display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.bin .dcard{font-size:12px;padding:3px 7px;line-height:1.3}
+.p2row{display:flex;gap:10px;align-items:center}.p2row .pmsg{flex:1;margin:0}.p2row .btn{flex:0 0 auto}
+.bin{border:1.5px solid var(--line);border-radius:10px;padding:6px;display:flex;flex-direction:column;gap:6px;background:#fff;cursor:pointer;min-height:0}
+.bin h4{margin:0;background:var(--navy);color:#fff;border-radius:6px;text-align:center;font-size:14px;padding:4px}
+.bin.hover{border-color:var(--amber);background:var(--amber-soft)}
+.res{display:none;flex-direction:column;gap:8px}
+.res.on{display:flex}
+
+/* ⑦ 용어해설·참고자료 */
+.gl{display:grid;grid-template-columns:1fr 1fr;grid-template-rows:repeat(3,1fr);gap:10px 22px;min-height:0}
+.gi{border-top:2px solid var(--navy);padding:8px 0 0;display:flex;flex-direction:column;gap:3px;min-height:0}
+.gi .t{font-size:16.5px;font-weight:800;color:var(--navy);display:flex;gap:6px;align-items:baseline;flex-wrap:wrap}
+.gi .t em{font-style:normal;font-weight:500;font-size:12.5px;color:var(--gray)}
+.gi .t i{font-style:normal;font-size:12px;font-weight:800;color:var(--navy3);width:22px}
+.gi .d{font-size:14px;line-height:1.5}
+.gi .e{font-size:12.5px;line-height:1.45;color:var(--gray)}
+.gi .e strong{color:var(--navy3)}
+.refs{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:8px;font-size:13.5px;line-height:1.5}
+.refs li{display:grid;grid-template-columns:30px 1fr;gap:4px}
+.refs li span{font-weight:800;color:var(--navy3)}
+.refs a{color:var(--navy2);word-break:break-all}
+.nextmod{background:var(--navy);color:#fff;border-radius:12px;padding:18px 22px;display:flex;flex-direction:column;gap:6px}
+.nextmod small{font-size:12px;font-weight:700;color:#A9B6CF}
+.nextmod strong{font-size:19px;line-height:1.45;letter-spacing:-.3px}
+
+.rotate{position:fixed;left:0;right:0;bottom:max(14px,env(safe-area-inset-bottom));text-align:center;font-size:13px;color:#3A4560;display:none}
+@media (orientation:portrait) and (max-width:700px){.rotate{display:block}}
+</style>
+</head>
+<body>
+<div class="stage" id="stage">
+  <header class="topbar">
+    <!-- [교체] 모듈명 / 과정명·모듈 번호 (장·절 번호는 쓰지 않음) -->
+    <div class="brand" id="brand">다중회귀<small>상관·회귀·통계 모형 · M19</small></div>
+    <nav class="rail" id="rail" aria-label="학습 단계"><div class="track"><div class="fill" id="fill"></div></div></nav>
+  </header>
+
+  <main class="viewport" id="vp">
+    <!-- ① 학습개요 ─────────────────────────────── -->
+    <section class="slide" data-step="0">
+      <div class="sh"><div class="sec">학습개요</div>
+        <h2 class="big">설명변수를 늘리고 범주형도 넣어, 회귀로 더 많은 것을 설명합니다</h2></div>
+      <div class="body split">
+        <div class="fig"><svg id="m19-ov" viewBox="0 0 440 260" role="img" aria-label="단순선형회귀에서 다중회귀, 가변수, 공분산분석으로 확장하는 흐름"></svg></div>
+        <div class="side">
+          <div class="prevlink"><small>지난 모듈에서는</small>설명변수가 1개인 단순선형회귀 y = a + bx + ε를 최소제곱법으로 구하고 결정계수와 오차의 가정으로 평가했습니다.<small style="margin-top:8px">이번 모듈에서는</small>설명변수를 여러 개로 늘린 다중회귀, 범주형 설명변수를 넣는 가변수, 그리고 이를 결합한 공분산분석을 배웁니다.</div>
+          <dl class="meta"><dt>학습 시간</dt><dd>약 45분</dd><dt>본문</dt><dd>소단원 4개</dd><dt>실습</dt><dd>조작형 · 분류형 · 추정형</dd></dl>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" data-step="0">
+      <div class="sh"><div class="sec">학습개요 · 이 모듈의 예시</div><h2>성인 20명의 몸무게를 키, 허리둘레, 운동 여부로 설명합니다</h2></div>
+      <div class="body split">
+        <div class="fig"><svg id="m19-case" viewBox="0 0 440 250" role="img" aria-label="성인 20명 중 일부의 몸무게, 키, 허리둘레, 운동 여부 표"></svg></div>
+        <div class="side">
+          <ul class="key"><li>반응변수 1개, 설명변수 3개를 씁니다.</li></ul>
+          <p class="exp">성인 20명의 몸무게(kg)를 반응변수로, 키(cm)와 허리둘레(cm)라는 양적 변수와 평소 운동을 하는지라는 범주형 변수를 설명변수로 씁니다(예시값). 키가 클수록, 허리가 굵을수록 몸무게도 많이 나가는 경향이 예상되며, 운동 여부에 따른 차이도 함께 따져 봅니다.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ② 학습목표 ─────────────────────────────── -->
+    <section class="slide" data-step="1">
+      <div class="sh"><div class="sec">학습목표</div><h2>이 모듈을 마치면 이렇게 할 수 있습니다</h2></div>
+      <div class="body full" style="align-content:center">
+        <div class="gmap">
+          <div></div><div class="hd">목표</div><div class="hd">확인하는 문항</div><div class="hd">연결 실습</div>
+          <div class="gn">1</div><div class="gt"><span>다중회귀식으로 예측값을 구하고 편회귀계수를 <b>해석한다</b>.</span></div>
+          <div class="ga"><button class="jump" data-jump="q1">문항 1·2</button></div><div class="gp"><button class="jump" data-jump="p1">실습 1 조작</button></div>
+          <div class="gn">2</div><div class="gt"><span>표준화편회귀계수와 가변수의 쓰임을 <b>구분한다</b>.</span></div>
+          <div class="ga"><button class="jump" data-jump="q3">문항 3·4</button></div><div class="gp"><button class="jump" data-jump="p2">실습 2 분류</button></div>
+          <div class="gn">3</div><div class="gt"><span>공분산분석을 쓸 수 있는 조건을 <b>판단한다</b>.</span></div>
+          <div class="ga"><button class="jump" data-jump="q5">문항 5·6</button></div><div class="gp"><button class="jump" data-jump="p3">실습 3 추정</button></div>
+        </div>
+      </div>
+      <p class="foot">버튼을 누르면 해당 문항이나 실습 화면으로 바로 이동합니다.</p>
+    </section>
+
+    <!-- ③ 일상의 예시 ─────────────────────────────── -->
+    <section class="slide" data-step="2">
+      <div class="sh"><div class="sec">일상의 예시 1/5</div><h2>기본 레시피는 여러 방향으로 응용할 수 있습니다</h2></div>
+      <div class="body split">
+        <div class="fig"><svg viewBox="0 0 440 250" role="img" aria-label="기본 레시피에서 재료 늘리기, 재료 종류 바꾸기, 조리법 바꾸기로 응용">
+          <rect x="160" y="20" width="120" height="56" rx="12" fill="#1B2A4A"/><text x="220" y="54" text-anchor="middle" font-size="14" font-weight="800" fill="#fff">기본 레시피</text>
+          <g font-size="12.5" font-weight="800" fill="#1B2A4A" text-anchor="middle">
+            <rect x="20" y="140" width="120" height="56" rx="12" fill="#EEF4FB" stroke="#2B8CC4" stroke-width="2"/><text x="80" y="173">재료 늘리기</text>
+            <rect x="160" y="140" width="120" height="56" rx="12" fill="#EEF4FB" stroke="#2B8CC4" stroke-width="2"/><text x="220" y="173">재료 종류 바꾸기</text>
+            <rect x="300" y="140" width="120" height="56" rx="12" fill="#EEF4FB" stroke="#2B8CC4" stroke-width="2"/><text x="360" y="173">조리법 바꾸기</text></g>
+          <g stroke="#5B6E97" stroke-width="2.5" fill="none"><path d="M200 78 L90 136"/><path d="M220 78 L220 136"/><path d="M240 78 L350 136"/></g>
+          <text x="220" y="228" text-anchor="middle" font-size="11.5" fill="#6B7280">원리는 같고, 쓰임새가 넓어짐</text>
+        </svg></div>
+        <div class="side">
+          <ul class="key"><li>하나의 원리를 여러 방향으로 넓힙니다.</li></ul>
+          <p class="exp">기본 레시피를 익히면 재료를 더 넣거나, 고기 대신 두부처럼 재료 종류를 바꾸거나, 굽는 대신 찌는 식으로 조리법을 바꿔 여러 요리를 만들 수 있습니다. 기본 원리를 알기 때문에 응용도 쉬워집니다. 선형회귀도 같은 원리를 여러 방향으로 넓혀 다양한 데이터를 분석합니다.</p>
+          <p class="next"><span>본문에서</span>4-1 선형회귀의 확장으로 이어집니다.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" data-step="2">
+      <div class="sh"><div class="sec">일상의 예시 2/5</div><h2>집값은 넓이와 역까지의 거리를 함께 봅니다</h2></div>
+      <div class="body split">
+        <div class="fig"><svg viewBox="0 0 440 250" role="img" aria-label="같은 넓이의 집이라도 역에 가까우면 더 비쌈">
+          <g><rect x="60" y="80" width="100" height="80" fill="#F3C9A8"/><path d="M50 82 L110 40 L170 82z" fill="#B35A1F"/><rect x="280" y="80" width="100" height="80" fill="#F3C9A8"/><path d="M270 82 L330 40 L390 82z" fill="#B35A1F"/></g>
+          <g font-size="12" font-weight="800" fill="#1B2A4A" text-anchor="middle"><text x="110" y="185">같은 넓이</text><text x="330" y="185">같은 넓이</text><text x="110" y="205" fill="#23704F">역까지 3분</text><text x="330" y="205" fill="#B42318">역까지 25분</text></g>
+          <text x="220" y="236" text-anchor="middle" font-size="11.5" fill="#6B7280">넓이를 고정하고 나면 거리의 영향이 보임</text>
+        </svg></div>
+        <div class="side">
+          <ul class="key"><li>여러 요인을 함께 넣고, 하나씩 따집니다.</li></ul>
+          <p class="exp">집값은 넓이만으로 정해지지 않고 역까지의 거리, 층수 등 여러 요인이 함께 영향을 줍니다. 그래서 ‘넓이가 같다면 역에 가까울수록 얼마나 비싼가’처럼 다른 요인을 고정하고 한 요인의 영향을 따집니다. 넓은 집이 마침 역에서 멀다면, 넓이만 보면 거리의 영향이 섞여 잘못 판단할 수 있습니다.</p>
+          <p class="next"><span>본문에서</span>4-2 다중회귀와 편회귀계수로 이어집니다.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" data-step="2">
+      <div class="sh"><div class="sec">일상의 예시 3/5</div><h2>설문의 예/아니요는 체크(1)와 빈칸(0)으로 셉니다</h2></div>
+      <div class="body split">
+        <div class="fig"><svg viewBox="0 0 440 250" role="img" aria-label="예는 1, 아니요는 0으로 기록하는 설문지">
+          <rect x="90" y="30" width="260" height="170" rx="12" fill="#fff" stroke="#5B6E97" stroke-width="2"/>
+          <g font-size="13" font-weight="700" fill="#1B2A4A"><text x="110" y="70">평소 운동을 하나요?</text><text x="110" y="120">흡연을 하나요?</text><text x="110" y="170">아침을 먹나요?</text></g>
+          <g><rect x="290" y="54" width="22" height="22" rx="4" fill="#23704F"/><rect x="290" y="104" width="22" height="22" rx="4" fill="#fff" stroke="#9AA0AA" stroke-width="2"/><rect x="290" y="154" width="22" height="22" rx="4" fill="#23704F"/></g>
+          <g font-size="14" font-weight="800" fill="#fff" text-anchor="middle"><text x="301" y="71">✓</text><text x="301" y="171">✓</text></g>
+          <g font-size="14" font-weight="800" fill="#B42318"><text x="325" y="71">1</text><text x="325" y="121">0</text><text x="325" y="171">1</text></g>
+          <text x="220" y="228" text-anchor="middle" font-size="11.5" fill="#6B7280">범주를 숫자 0과 1로 바꿔 계산에 넣음</text>
+        </svg></div>
+        <div class="side">
+          <ul class="key"><li>범주는 0과 1로 바꿔 계산에 넣습니다.</li></ul>
+          <p class="exp">설문지의 예/아니요 문항은 집계할 때 예를 1, 아니요를 0으로 바꿔 셉니다. 이렇게 하면 ‘예’의 개수나 비율을 쉽게 계산할 수 있습니다. 다만 혈액형처럼 범주가 넷이면 A형 1, B형 2처럼 숫자를 매겨서는 안 됩니다. 범주에는 크기 순서가 없기 때문입니다.</p>
+          <p class="next"><span>본문에서</span>4-3 범주형 설명변수로 이어집니다.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" data-step="2">
+      <div class="sh"><div class="sec">일상의 예시 4/5</div><h2>골프 핸디캡처럼 출발선을 맞춰 비교합니다</h2></div>
+      <div class="body split">
+        <div class="fig"><svg viewBox="0 0 440 250" role="img" aria-label="실력 차이를 보정해 두 선수의 기록을 공정하게 비교">
+          <g font-size="12.5" font-weight="800" fill="#1B2A4A"><text x="40" y="70">초보</text><text x="40" y="140">숙련자</text></g>
+          <rect x="100" y="52" width="260" height="26" rx="6" fill="#F3C9A8"/><rect x="100" y="122" width="200" height="26" rx="6" fill="#BFD9B0"/>
+          <g font-size="11.5" font-weight="700" fill="#22262E" text-anchor="end"><text x="354" y="70">타수 100</text><text x="294" y="140">타수 80</text></g>
+          <path d="M300 160 L360 160" stroke="#B42318" stroke-width="2.5" stroke-dasharray="5 3"/><text x="330" y="180" text-anchor="middle" font-size="11" font-weight="800" fill="#B42318">핸디캡 보정</text>
+          <text x="220" y="222" text-anchor="middle" font-size="11.5" fill="#6B7280">원래 차이를 고려한 뒤 실력을 비교</text>
+        </svg></div>
+        <div class="side">
+          <ul class="key"><li>다른 요인을 고려한 뒤 집단 차이를 봅니다.</li></ul>
+          <p class="exp">골프에서는 실력 차이를 핸디캡으로 보정한 다음 그날의 성적을 겨룹니다. 원래 다른 출발점을 무시하고 타수만 비교하면 늘 숙련자가 이기기 때문입니다. 두 집단을 비교할 때도 결과에 영향을 주는 다른 양적 요인이 있다면, 그 영향을 고려한 뒤 차이를 보는 편이 더 공정하고 정밀합니다.</p>
+          <p class="next"><span>본문에서</span>4-4 공분산분석으로 이어집니다.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" data-step="2">
+      <div class="sh"><div class="sec">일상의 예시 5/5</div><h2>현장에서는? 강도는 온도, 시간, 라인을 함께 고려합니다</h2></div>
+      <div class="body split even">
+        <div class="fig"><svg viewBox="0 0 420 250" role="img" aria-label="네 장면이 다중회귀로 이어지는 그림">
+          <defs><marker id="b2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10z" fill="#5B6E97"/></marker></defs>
+          <g font-size="13" font-weight="700" fill="#1B2A4A" text-anchor="middle">
+            <rect x="14" y="18" width="150" height="44" rx="10" fill="#fff" stroke="#5B6E97" stroke-width="1.5"/><text x="89" y="45">원리를 넓히기</text>
+            <rect x="14" y="74" width="150" height="44" rx="10" fill="#fff" stroke="#5B6E97" stroke-width="1.5"/><text x="89" y="101">요인을 고정하고 보기</text>
+            <rect x="14" y="130" width="150" height="44" rx="10" fill="#fff" stroke="#5B6E97" stroke-width="1.5"/><text x="89" y="157">범주는 0과 1로</text>
+            <rect x="14" y="186" width="150" height="44" rx="10" fill="#fff" stroke="#5B6E97" stroke-width="1.5"/><text x="89" y="213">출발선 맞추기</text>
+          </g>
+          <g stroke="#5B6E97" stroke-width="2" fill="none"><path d="M166 40 C220 40 220 112 254 120" marker-end="url(#b2)"/><path d="M166 96 C210 96 220 118 254 122" marker-end="url(#b2)"/><path d="M166 152 C210 152 220 130 254 128" marker-end="url(#b2)"/><path d="M166 208 C220 208 220 138 254 130" marker-end="url(#b2)"/></g>
+          <rect x="258" y="84" width="150" height="82" rx="12" fill="#1B2A4A"/>
+          <text x="333" y="116" text-anchor="middle" font-size="15" font-weight="800" fill="#fff">다중회귀와</text><text x="333" y="136" text-anchor="middle" font-size="15" font-weight="800" fill="#fff">공분산분석</text>
+          <text x="333" y="156" text-anchor="middle" font-size="11" fill="#C9D3E6">편회귀계수 · 가변수</text>
+        </svg></div>
+        <div class="side">
+          <p class="exp">네 장면은 기본 원리를 넓히고, 다른 요인을 고정해 한 요인을 보고, 범주를 0과 1로 바꾸고, 출발선을 맞춰 비교하는 순서로 이어집니다. 강판 강도를 가열 온도와 유지 시간, 생산 라인(A/B)으로 함께 설명하려 할 때도 같은 순서로 회귀모형을 만듭니다.</p>
+          <p class="next"><span>다음 질문</span>선형회귀는 어떤 방향으로 넓힐 수 있을까?</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ④ 본문 ─────────────────────────────── -->
+    <section class="slide" data-step="3" id="s-4-1a">
+      <div class="sh"><div class="sec">4-1 선형회귀의 확장</div><h2><span class="q">Q</span>단순선형회귀는 어떤 방향으로 넓힐 수 있을까요?</h2></div>
+      <div class="body split even">
+        <div class="fig"><svg id="m19-ext" viewBox="0 0 420 270" role="img" aria-label="설명변수 늘리기와 유형 바꾸기, 반응변수의 오차 분포 바꾸기, 모형 형태 바꾸기의 세 방향"></svg></div>
+        <div class="side">
+          <ul class="key"><li>설명변수 · 반응변수 · 모형 형태의 3방향</li><li>반응변수를 넓히면 <b>일반화선형모형</b></li></ul>
+          <p class="exp">실제 데이터에서는 설명변수가 여러 개이거나, 반응변수가 양적 변수가 아니라 예/아니요 같은 범주형 변수일 때도 있어 y = a + bx + ε(ε는 정규분포를 따르는 오차)가 항상 적절하지는 않습니다. 그래서 설명변수의 개수를 늘리거나 유형을 바꾸기, 반응변수의 오차 분포를 이항분포나 푸아송 분포로 바꾸는 일반화선형모형, 상호작용이나 비선형처럼 회귀모형의 형태를 바꾸기의 3가지 방향으로 원리를 넓힙니다.</p>
+          <p class="next"><span>다음 질문</span>설명변수가 여러 개면 어떻게 쓸까?</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" data-step="3" id="s-4-2a">
+      <div class="sh"><div class="sec">4-2 다중회귀와 편회귀계수</div><h2><span class="q">Q</span>설명변수가 여러 개이면 회귀식은 어떻게 될까요?</h2></div>
+      <div class="body split even">
+        <div class="figcol">
+          <div class="fig"><svg id="m19-plane" viewBox="0 0 420 150" role="img" aria-label="키, 허리둘레, 몸무게 3차원 공간의 회귀평면"></svg></div>
+          <div class="math">
+            <div class="mt">핵심 수학 개념 · 다중선형회귀모형</div>
+            <div class="f">y = a + b₁x₁ + b₂x₂ + … + bₖxₖ + ε</div>
+            <div class="r"><span>기호</span><span>k: 설명변수 개수, b₁ … bₖ: 편회귀계수</span></div>
+            <div class="r"><span>계산</span><span>몸무게 = −66.8 + 0.538 × 키 + 0.535 × 허리</span></div>
+          </div>
+        </div>
+        <div class="side">
+          <ul class="key"><li><b>다중회귀</b>: 설명변수가 여러 개인 회귀</li><li>각 기울기는 <b>편회귀계수</b>입니다.</li></ul>
+          <p class="exp">설명변수가 여러 개인 회귀를 다중회귀라 하며, 가장 단순한 다중선형회귀모형은 a, b₁, …, bₖ 등 k + 1개의 파라미터를 가집니다. 키와 허리를 함께 고려하면 몸무게를 더 잘 설명할 수 있습니다. b₁은 x₂를 고정하고 x₁을 1 늘렸을 때 y의 증가량이며, 이를 편회귀계수라 합니다. 최소제곱법으로 구하며, 설명변수가 2개이면 회귀모형은 직선이 아닌 <b>회귀평면</b>이 됩니다.</p>
+          <p class="next"><span>다음 질문</span>다중회귀 결과는 어떻게 읽을까?</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" data-step="3" id="s-4-2b">
+      <div class="sh"><div class="sec">4-2 다중회귀와 편회귀계수</div><h2><span class="q">Q</span>다중회귀 결과표에서는 무엇을 봐야 할까요?</h2></div>
+      <div class="body split even">
+        <div class="fig"><svg id="m19-table" viewBox="0 0 420 270" role="img" aria-label="편회귀계수, 표준오차, p값, R², 조정 R², F통계량이 담긴 다중회귀 결과표"></svg></div>
+        <div class="side">
+          <ul class="key"><li>편회귀계수와 그 유의성을 봅니다.</li><li>F의 p값: 모형 전체의 설명력이 유의한가</li></ul>
+          <p class="exp">다중회귀 결과는 표로 제시하는 일이 많습니다. 먼저 추정된 편회귀계수와 그 유의성을 봅니다. 키 0.538, 허리 0.535 모두 p &lt; 0.001로 유의하며, 괄호 안 숫자는 추정값의 표준오차로 작을수록 정확합니다. 다음으로 데이터에 잘 들어맞는지를 나타내는 R² = 0.87과, 편회귀계수가 모두 0인 모형을 귀무가설로 한 F통계량의 p값을 봅니다. F = 54.5, p &lt; 0.001이므로 회귀모형의 설명력에 유의성이 있습니다.</p>
+          <p class="next"><span>다음 질문</span>두 계수의 크기를 비교해도 될까?</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" data-step="3" id="s-4-2c">
+      <div class="sh"><div class="sec">4-2 다중회귀와 편회귀계수</div><h2><span class="q">Q</span>편회귀계수끼리 크기를 비교해도 될까요?</h2></div>
+      <div class="body split even">
+        <div class="figcol">
+          <div class="fig"><svg id="m19-std" viewBox="0 0 420 150" role="img" aria-label="원래 편회귀계수와 설명변수를 표준화한 뒤의 표준화편회귀계수 비교"></svg></div>
+          <div class="math">
+            <div class="mt">핵심 수학 개념 · 표준화</div>
+            <div class="f">zᵢ = (xᵢ − x̄) ÷ s</div>
+            <div class="r"><span>계산</span><span>키 0.538 × 8.03 ≈ 4.32, 허리 0.535 × 5.68 ≈ 3.04</span></div>
+            <div class="r"><span>해석</span><span>1 표준편차당 키가 허리보다 기여가 큽니다.</span></div>
+          </div>
+        </div>
+        <div class="side">
+          <ul class="key"><li>편회귀계수는 단위와 퍼짐에 따라 달라집니다.</li><li><b>표준화편회귀계수</b>로 비교합니다.</li></ul>
+          <p class="exp">편회귀계수는 설명변수의 퍼짐 정도나 단위에 따라 크게 달라지므로 그대로 비교할 수 없습니다. 키를 cm 대신 m로 쓰면 계수는 0.538에서 53.8로 100배가 됩니다. 그래서 회귀분석 전에 각 설명변수를 평균 0, 표준편차 1로 변환한 뒤 구한 표준화편회귀계수를 씁니다. 각 설명변수가 1 표준편차 늘 때의 증가량이므로 비교할 수 있으며, R²나 p값은 원래 결과와 같습니다.</p>
+          <p class="next"><span>다음 질문</span>설명변수끼리 상관이 있으면?</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" data-step="3" id="s-4-2d">
+      <div class="sh"><div class="sec">4-2 다중회귀와 편회귀계수</div><h2><span class="q">Q</span>설명변수끼리 상관이 있으면 계수는 어떻게 해석할까요?</h2></div>
+      <div class="body split even">
+        <div class="fig"><svg id="m19-path" viewBox="0 0 420 270" role="img" aria-label="키와 허리의 상관 0.49, 단순회귀 기울기 0.724와 다중회귀 편회귀계수 0.538의 차이"></svg></div>
+        <div class="side">
+          <ul class="key"><li>편회귀계수는 다른 변수를 고정한 영향</li><li>단순회귀 기울기에는 다른 변수 영향이 섞임</li></ul>
+          <p class="exp">설명변수 사이에 상관이 있으면 x₁만 독립적으로 움직일 수는 없고, 상관이 있는 다른 변수도 함께 움직입니다. 이 데이터에서 키와 허리의 상관은 r = 0.49입니다. 키만 넣은 단순회귀의 기울기는 0.724로, 키가 직접 주는 영향에 허리를 통한 영향까지 섞여 있습니다. 허리를 함께 넣은 다중회귀의 0.538은 허리와의 상관을 제외한 키의 영향입니다. 상관이 1에 가까울 만큼 강하면 다중공선성을 의심해야 합니다.</p>
+          <p class="next"><span>다음 질문</span>범주형 변수는 어떻게 넣을까?</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" data-step="3" id="s-4-3a">
+      <div class="sh"><div class="sec">4-3 범주형 설명변수</div><h2><span class="q">Q</span>운동 여부 같은 범주형 변수는 어떻게 회귀에 넣을까요?</h2></div>
+      <div class="body split even">
+        <div class="fig"><svg id="m19-dummy" viewBox="0 0 420 270" role="img" aria-label="운동 안 함 0, 함 1의 가변수와 두 집단 평균, 기울기 b가 평균 차이"></svg></div>
+        <div class="side">
+          <ul class="key"><li><b>가변수</b>: 범주를 0 또는 1로 나타낸 변수</li><li>기울기 b = 두 범주의 평균 차이</li></ul>
+          <p class="exp">범주에는 대소 관계가 없으므로 회귀분석의 설명변수로 쓸 때는 0 또는 1과 같은 가변수를 씁니다. ‘운동 안 함’을 0, ‘운동 함’을 1로 하면, x = 0인 범주는 y = a + ε, x = 1인 범주는 y = a + b + ε가 되어 기울기 b가 두 범주의 차이를 나타냅니다. 이 데이터에서 b = −4.58kg, p = 0.14로 이표본 t검정의 결과와 일치합니다. 해석할 때는 어느 쪽이 0이고 1인지 꼭 확인합니다.</p>
+          <p class="next"><span>다음 질문</span>범주가 3개 이상이면?</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" data-step="3" id="s-4-3b">
+      <div class="sh"><div class="sec">4-3 범주형 설명변수</div><h2><span class="q">Q</span>혈액형처럼 범주가 4개이면 가변수는 몇 개일까요?</h2></div>
+      <div class="body split even">
+        <div class="fig"><svg id="m19-blood" viewBox="0 0 420 270" role="img" aria-label="혈액형 A, B, O, AB에 가변수 3개를 할당한 표와 A형 기준 차이 b1, b2, b3"></svg></div>
+        <div class="side">
+          <ul class="key"><li>가변수는 (범주 개수 − 1)개</li><li>모두 0인 범주가 기준이 됩니다.</li></ul>
+          <p class="exp">범주가 4개인 혈액형에 0, 1, 2, 3을 할당하면 선형 증가를 가정하게 되어 적용할 수 없습니다. 대신 0 또는 1인 가변수를 (범주 개수 − 1) = 3개 준비해 {0, 0, 0}을 A형, {1, 0, 0}을 B형처럼 할당합니다. 범주 개수가 아닌 (범주 개수 − 1)개로 하는 것은 다중공선성을 피하기 위해서입니다. 회귀계수 b₁, b₂, b₃는 각각 B형, O형, AB형이 기준인 A형과 얼마나 다른지를 나타내며, 결과는 분산분석과 일치합니다.</p>
+          <p class="next"><span>다음 질문</span>집단 비교에 양적 변수를 더하면?</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" data-step="3" id="s-4-4a">
+      <div class="sh"><div class="sec">4-4 공분산분석</div><h2><span class="q">Q</span>키를 고려하면 운동 효과가 더 잘 보일까요?</h2></div>
+      <div class="body split even">
+        <div class="fig"><svg id="m19-ancova" viewBox="0 0 420 270" role="img" aria-label="운동 여부별로 키와 몸무게의 평행한 회귀직선, 직선 간 차이 −3.60kg"></svg></div>
+        <div class="side">
+          <ul class="key"><li><b>공분산분석</b>: 분산분석 + 양적 변수</li><li>추가하는 양적 변수가 <b>공변량</b>입니다.</li></ul>
+          <p class="exp">분산분석에서는 집단이 설명변수, 양적 변수가 반응변수입니다. 여기에 반응변수에 영향을 주는 양적 변수 데이터가 함께 있을 때 쓰는 방법이 공분산분석이며, 추가한 양적 변수를 공변량이라 합니다. 운동 여부만 보면 차이는 −4.58kg, p = 0.14였지만, 키를 공변량으로 넣은 [몸무게] = a + b₁ × [운동] + b₂ × [키] + ε에서는 −3.60kg, p = 0.028로 유의했습니다. 키에 따른 흩어짐을 설명한 덕분에 검정력이 높아진 것입니다.</p>
+          <p class="next"><span>다음 질문</span>공분산분석은 언제나 쓸 수 있을까?</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" data-step="3" id="s-4-4b">
+      <div class="sh"><div class="sec">4-4 공분산분석</div><h2><span class="q">Q</span>공분산분석은 언제 쓸 수 있을까요?</h2></div>
+      <div class="body split even">
+        <div class="fig"><svg id="m19-cond" viewBox="0 0 420 270" role="img" aria-label="기울기가 평행하면 공분산분석 가능, 기울기가 다르면 불가, 기울기가 0이면 분산분석"></svg></div>
+        <div class="side">
+          <ul class="key"><li>조건 ① 집단 간 기울기가 다르지 않을 것</li><li>조건 ② 공변량의 기울기가 0이 아닐 것</li></ul>
+          <p class="exp">공분산분석에는 사용 조건이 있습니다. 첫째, 집단 간 회귀의 기울기가 서로 다르지 않아 회귀직선이 평행해야 합니다. 이는 상호작용이 없다는 뜻으로, 상호작용 검정이 유의하지 않으면 조건을 만족한다고 봅니다(이 데이터 p = 0.48). 둘째, 회귀계수가 0이 아니어야 합니다. 0일 때는 공변량 없이 일반적인 분산분석을 하며, 기울기 검정이 유의하면 만족한 것으로 봅니다(키 p &lt; 0.001). 그러면 회귀직선의 차이(절편의 차이)가 집단 사이의 차이가 됩니다.</p>
+          <p class="next"><span>정리</span>다중회귀의 확장을 정리해 봅시다.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" data-step="3" id="s-4-sum">
+      <div class="sh"><div class="sec">4-5 정리</div><h2>설명변수를 늘리고, 범주를 가변수로 넣고, 공변량으로 정밀도를 높입니다</h2></div>
+      <div class="body full" style="align-content:center">
+        <table class="sumtbl">
+          <thead><tr><th>방법</th><th>핵심</th><th>성인 20명 예시</th></tr></thead>
+          <tbody>
+            <tr><td>다중회귀</td><td>편회귀계수 = 다른 변수를 고정한 영향. F와 R²로 모형 전체를 봅니다.</td><td>−66.8 + 0.538 키 + 0.535 허리, R² = 0.87</td></tr>
+            <tr><td>표준화편회귀계수</td><td>설명변수를 표준화해 계수 크기를 비교합니다.</td><td>키 4.32 &gt; 허리 3.04</td></tr>
+            <tr><td>가변수</td><td>범주를 0/1로. 범주 k개면 가변수 k − 1개. t검정·분산분석과 일치합니다.</td><td>운동 −4.58kg, p = 0.14</td></tr>
+            <tr><td>공분산분석</td><td>공변량을 넣어 검정력을 높입니다. 기울기 평행, 기울기 ≠ 0이 조건입니다.</td><td>키 고려 운동 −3.60kg, p = 0.028</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="next"><span>형성평가로</span>이제 같은 예시로 문제를 풀어 봅니다.</p>
+    </section>
+
+    <!-- ⑤ 형성평가: 스크립트의 QUIZ 배열로 만듭니다 -->
+
+    <!-- ⑥ 실습 1 · 조작형 (모듈 전용) ─────────────── -->
+    <section class="slide" data-step="5" id="p1">
+      <div class="sh"><div class="sec">실습 1 · 조작형</div><h2>목표: 키와 허리를 바꾸며 다중회귀와 단순회귀의 예측을 비교합니다</h2></div>
+      <div class="body split">
+        <div class="pcol" style="gap:8px">
+          <div class="plabel" style="margin:0">해보기 · 새 사람의 키와 허리둘레를 정해 보세요</div>
+          <div class="ctrl">키<input type="range" id="m19-h" min="150" max="190" step="1" value="170" aria-label="키"><strong id="m19-hv" style="min-width:64px;text-align:right">-</strong></div>
+          <div class="ctrl">허리둘레<input type="range" id="m19-w" min="65" max="95" step="1" value="78" aria-label="허리둘레"><strong id="m19-wv" style="min-width:64px;text-align:right">-</strong></div>
+          <div class="fig" style="flex:1"><svg id="m19-p1-svg" viewBox="0 0 470 170" role="img" aria-label="키에 따른 몸무게 산점도와, 정한 허리둘레에서의 다중회귀 직선, 단순회귀 직선"></svg></div>
+        </div>
+        <div class="pcol" style="gap:10px;justify-content:center">
+          <div class="plabel" style="margin:0">결과 확인</div>
+          <div class="stats"><div><small>다중회귀 예측 (키 + 허리)</small><strong id="m19-pm">-</strong></div><div><small>단순회귀 예측 (키만)</small><strong id="m19-ps">-</strong></div></div>
+          <p class="howto">도전: 키는 그대로 두고 허리만 바꿔 보세요. 어느 예측이 변하나요?</p>
+          <p class="pmsg" id="m19-msg"></p>
+          <div class="think"><span>생각해보기</span>허리를 고정하고 키만 1cm 올리면 다중회귀 예측은 얼마나 늘어나나요?</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ⑥ 실습 2 · 분류형 ─────────────────────── -->
+    <section class="slide" data-step="5" id="p2">
+      <div class="sh"><div class="sec">실습 2 · 분류형</div><h2>목표: 계수에 관한 설명을 알맞은 계수 종류에 따라 나눕니다</h2></div>
+      <div class="body split even">
+        <div class="pcol">
+          <div class="plabel">해보기 · 각 설명이 어떤 계수에 관한 것인지 칸에 놓으세요</div>
+          <div class="pool" id="p2-pool"></div>
+        </div>
+        <div class="pcol" style="gap:8px">
+          <div class="plabel" style="margin:0">결과 확인 · <span id="p2-count">0 / 0</span></div>
+          <div class="bins" id="p2-bins"></div>
+          <div class="p2row"><p class="pmsg" id="p2-msg"></p><button class="btn ghost" id="p2-reset">다시 하기</button></div>
+          <div class="think"><span>생각해보기</span>가변수의 계수도 표준화해서 비교하는 것이 자연스러울까요?</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ⑥ 실습 3 · 추정형 (모듈 전용) ─────────────── -->
+    <section class="slide" data-step="5" id="p3">
+      <div class="sh"><div class="sec">실습 3 · 추정형</div><h2>목표: 키를 고려한 운동 효과를 예측하고 공분산분석 결과와 비교합니다</h2></div>
+      <div class="body split">
+        <div class="pcol">
+          <div class="plabel">해보기 · 운동 여부만 보면 차이는 −4.58kg입니다. 키를 고려하면 차이는 얼마가 될까요?</div>
+          <div class="fig" style="flex:1"><svg id="m19-p3-svg" viewBox="0 0 470 210" role="img" aria-label="운동 여부별 키와 몸무게 산점도와 두 회귀직선"></svg></div>
+        </div>
+        <div class="pcol" style="gap:9px;justify-content:center">
+          <div class="ctrl">내 예측<input type="range" id="m19-g" min="-10" max="2" step="0.2" value="-6" aria-label="운동 효과 예측"><strong id="m19-gv" style="min-width:64px;text-align:right">-</strong></div>
+          <button class="btn" id="m19-check" style="align-self:flex-start">계산해서 확인</button>
+          <div class="stats"><div><small>내 예측</small><strong id="m19-mine">-</strong></div><div><small>공분산분석 결과</small><strong id="m19-act">?</strong></div></div>
+          <p class="pmsg" id="m19-msg3"></p>
+          <div class="think"><span>생각해보기</span>차이의 크기는 비슷한데 p값이 0.14에서 0.028로 작아진 이유는 무엇일까요?</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ⑦ 용어해설·참고자료: 스크립트의 GLOSSARY, REFS, NEXT로 만듭니다 -->
+  </main>
+
+  <footer class="bottombar">
+    <a class="home" href="../index.html" title="홈으로 (학습 모듈 목록)" aria-label="홈으로"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 10.5 12 3l9 7.5"/><path d="M5.5 9.5V21h13V9.5"/></svg><span>홈</span></a><span class="counter" id="counter"></span><span class="spacer"></span>
+    <button class="nav" id="prev" type="button">이전</button>
+    <button class="nav primary" id="next" type="button">다음</button>
+  </footer>
+</div>
+<p class="rotate">화면을 가로로 돌리면 더 크게 볼 수 있습니다.</p>
+
+<script>
+(function(){
+"use strict";
+
+/* =====================================================================
+   [교체] 모듈 설정 — 새 모듈은 이 블록과 HTML 화면 문장만 바꿉니다.
+   ===================================================================== */
+var MODULE={title:"다중회귀",sub:"상관·회귀·통계 모형 · M19"};
+var STEPS=["학습개요","학습목표","일상의 예시","본문","형성평가","실습","용어해설"];
+
+/* 일관 사례: 성인 20명의 몸무게(kg)·키(cm)·허리둘레(cm)·운동 여부(0 안 함, 1 함), 예시값
+   다중회귀 몸무게 = −66.77 + 0.5377 키 + 0.5346 허리 (SE 0.0875, 0.1236 / p 1.1e-5, 4.6e-4), R² 0.865, 조정 0.849, F 54.5(2, 17), s 2.66
+   키·허리 상관 r 0.49, 표준화(x만) 계수 키 4.32, 허리 3.04 (절편 66.36 = 몸무게 평균), 키 SD 8.03, 허리 SD 5.68
+   키만 단순회귀: −56.39 + 0.724 키
+   가변수(운동)만: 68.65 − 4.58 운동, p 0.140 (= 이표본 t검정)
+   공분산분석: −51.12 − 3.602 운동 + 0.7035 키, 운동 p 0.028, 키 p 1.1e-6 / 교호작용 p 0.48 */
+var RF={a:-66.772,b1:0.5377,b2:0.5346}, RS1={a:-56.391,b:0.7240}, AN={a:-51.122,d:-3.602,b:0.7035};
+var CASE=null, PAIRS=null, P1={target:null};
+var HT=[170.7, 168.5, 166.3, 178.2, 167.2, 164.5, 154.3, 172.8, 166.4, 167.7, 187.1, 174.5, 179.7, 170.9, 179.1, 158.0, 165.3, 175.2, 166.4, 158.3], WS=[77.4, 69.5, 81.8, 74.9, 84.2, 78.9, 66.4, 83.6, 81.6, 74.1, 77.1, 84.9, 89.8, 80.2, 84.3, 73.5, 72.2, 78.9, 79.0, 77.5], EX=[0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1], WT=[68.4, 57.4, 66.4, 68.5, 68.7, 63.1, 56.7, 67.5, 68.0, 59.4, 79.0, 72.7, 81.1, 63.9, 73.3, 59.0, 59.2, 70.1, 65.7, 59.1];
+
+var QUIZ=[
+ {goal:1,type:"계산",stem:"다중회귀식 [몸무게] = −66.8 + 0.538 × [키] + 0.535 × [허리둘레]를 얻었습니다. 키 175cm, 허리둘레 80cm인 사람의 몸무게는 약 몇 kg으로 예측될까요?",
+  opts:["약 70kg","약 137kg","약 27kg","약 −24kg"],ans:0,
+  exp:"−66.8 + 0.538 × 175 + 0.535 × 80 = −66.8 + 94.2 + 42.8 ≈ 70kg입니다. 137은 절편을 빠뜨린 값, 27은 허리둘레 항을, −24는 키 항을 빠뜨린 값입니다. 다중회귀에서는 모든 설명변수의 항을 더합니다.",back:"s-4-2a",backLabel:"4-2 다중회귀 모형 다시 보기"},
+ {goal:1,type:"O/X 오개념",stem:"“다중회귀에서 키의 편회귀계수는 키만 넣은 단순회귀의 기울기와 항상 같다.”",
+  opts:["O","X"],ans:1,ox:true,
+  exp:"설명변수 사이에 상관이 있으면 다릅니다. 키만 넣은 단순회귀의 기울기 0.724에는 키와 상관이 있는 허리둘레를 통한 영향까지 섞여 있습니다. 허리둘레를 함께 넣은 다중회귀에서 키의 편회귀계수는 0.538로, 허리둘레를 고정했을 때 키의 영향입니다.",back:"s-4-2d",backLabel:"4-2 편회귀계수의 해석 다시 보기"},
+ {goal:2,type:"상황 판단",stem:"몸무게를 키(cm)와 하루 걸음 수(보)로 설명하는 다중회귀를 했습니다. 두 변수 중 어느 쪽 기여가 더 큰지 비교하려면 무엇을 봐야 할까요?",
+  opts:["설명변수를 평균 0, 표준편차 1로 바꿔 구한 표준화편회귀계수","원래 편회귀계수의 크기","절편의 크기","각 변수의 평균값"],ans:0,
+  exp:"편회귀계수는 설명변수의 퍼짐이나 단위(cm, 보)에 따라 크게 달라지므로 그대로 비교할 수 없습니다. 각 설명변수를 표준화한 뒤 구한 표준화편회귀계수는 ‘1 표준편차 늘 때의 증가량’이므로 서로 비교할 수 있습니다.",back:"s-4-2c",backLabel:"4-2 표준화편회귀계수 다시 보기"},
+ {goal:2,type:"상황 판단",stem:"혈액형(A, B, O, AB)을 설명변수로 회귀분석에 넣으려 합니다. 0 또는 1의 가변수를 몇 개 준비해야 할까요?",
+  opts:["3개","4개","1개(A=0, B=1, O=2, AB=3)","2개"],ans:0,
+  exp:"범주가 3개 이상이면 (범주 개수 − 1)개의 가변수를 씁니다. 혈액형은 범주 4개이므로 가변수 3개이며, 모두 0인 범주가 기준이 됩니다. 범주에는 대소 관계가 없으므로 0, 1, 2, 3처럼 하나의 변수에 숫자를 매기면 안 됩니다.",back:"s-4-3b",backLabel:"4-3 범주가 3개 이상일 때 다시 보기"},
+ {goal:3,type:"상황 판단",stem:"공분산분석을 하려고 회사 A, B별로 연령에 따른 연소득 직선을 그려 보니 기울기가 크게 달랐습니다(교호작용 p = 0.01). 가장 알맞은 판단은 무엇일까요?",
+  opts:["기울기가 평행하지 않으므로 이 데이터에 공분산분석을 그대로 쓰기 어렵다","p가 작으므로 공분산분석 결과가 더 정확해진다","공변량을 빼고 분산분석을 하면 항상 같은 결론이 나온다","기울기 차이는 공분산분석과 관계없다"],ans:0,
+  exp:"공분산분석은 집단 간 회귀직선의 기울기가 서로 다르지 않을 것(평행)을 조건으로 합니다. 교호작용이 유의하면 이 조건이 깨진 것이므로, 집단 간 차이를 하나의 값(절편의 차이)으로 요약할 수 없습니다. 또 하나의 조건은 공변량의 기울기가 0이 아닐 것입니다.",back:"s-4-4b",backLabel:"4-4 공분산분석의 조건 다시 보기"},
+ {goal:3,type:"O/X 오개념",stem:"“운동 여부(0/1) 가변수 하나만 둔 회귀 y = a + bx + ε에서 기울기 b의 p값은, 두 집단을 비교한 이표본 t검정의 p값과 같다.”",
+  opts:["O","X"],ans:0,ox:true,
+  exp:"가변수 x = 0인 범주는 y = a + ε, x = 1인 범주는 y = a + b + ε이므로 기울기 b는 두 집단 평균의 차이입니다. 그래서 b의 검정은 이표본 t검정과 같으며, 이 모듈의 예에서도 둘 다 p = 0.14입니다. t검정과 분산분석도 회귀라는 하나의 원리로 이해할 수 있습니다.",back:"s-4-3a",backLabel:"4-3 가변수 다시 보기"}
+];
+
+var BINS=["편회귀계수","표준화편회귀계수","가변수의 계수"];
+var CARDS=[["허리 고정, 키 1cm↑ → 0.54kg↑","편회귀계수"],["키 단위를 m로 바꾸면 100배","편회귀계수"],
+           ["키 1 표준편차↑ → 4.3kg↑","표준화편회귀계수"],["단위가 다른 변수끼리 비교 가능","표준화편회귀계수"],
+           ["운동 함(1)과 안 함(0)의 평균 차이","가변수의 계수"],["기준 A형과 B형의 차이","가변수의 계수"]];
+var HINT={"편회귀계수":"다른 설명변수를 고정한 채 그 변수가 1 늘 때의 y 증가량이며, 단위에 따라 값이 바뀝니다.","표준화편회귀계수":"설명변수를 평균 0, 표준편차 1로 바꿔 구한 계수로, 크기를 비교할 수 있습니다.","가변수의 계수":"0 또는 1로 나타낸 범주 사이의 차이를 나타냅니다."};
+
+var GLOSSARY=[
+ ["일반화선형모형","generalized linear model, GLM","반응변수의 오차 분포를 정규분포 대신 이항분포나 푸아송 분포 등으로 바꿀 수 있게 넓힌 선형모형입니다.","불량 여부(0/1)를 반응변수로 하는 모형"],
+ ["다중회귀","multiple regression","설명변수가 여러 개인 회귀로, y = a + b₁x₁ + … + bₖxₖ + ε로 나타냅니다.","몸무게 = a + b₁ × 키 + b₂ × 허리 + ε"],
+ ["편회귀계수","partial regression coefficient","다중회귀에서 다른 설명변수를 고정한 채 그 변수가 1 늘었을 때 y의 증가량입니다.","키 0.538kg/cm"],
+ ["회귀평면","regression plane","설명변수가 2개일 때 회귀모형이 만드는 x₁, x₂, y 3차원 공간 속의 평면입니다.","키·허리·몸무게 공간의 평면"],
+ ["표준화편회귀계수","standardized partial regression coefficient","설명변수를 평균 0, 표준편차 1로 변환한 뒤 구한 회귀계수로, 계수 크기를 서로 비교할 수 있습니다.","키 4.32, 허리 3.04"],
+ ["가변수","dummy variable","범주형 변수를 회귀에 넣으려고 0 또는 1의 값으로 나타낸 변수입니다.","운동 안 함 0, 함 1"],
+ ["공분산분석","ANCOVA, analysis of covariance","분산분석에 양적 변수(공변량)를 함께 넣어, 공변량의 영향을 고려한 뒤 집단 차이를 보는 방법입니다.","키를 고려한 운동 효과 −3.60kg"],
+ ["공변량","covariate","공분산분석에서 추가로 넣는 양적 변수로, 반응변수의 차이를 일부 설명합니다.","키"]
+];
+var REFS=[];
+var NEXT={title:"M20 회귀모형 다듬기",line:"설명변수가 너무 많거나 서로 강하게 상관하면 문제가 생깁니다. 다음 모듈에서는 고차원 데이터와 다중공선성, 상호작용, 이원배치 분산분석, 비선형회귀를 다룹니다."};
+
+/* =====================================================================
+   아래부터는 공통 엔진입니다. 모듈마다 바꾸지 않습니다.
+   ===================================================================== */
+var NS="http://www.w3.org/2000/svg";
+var C={navy:"#1B2A4A",navy2:"#2C4170",navy3:"#5B6E97",soft:"#A9B8D4",grid:"#DDE1E7",gray:"#6B7280",gray2:"#9AA0AA",amber:"#E0A100",amberInk:"#6E4F00",ok:"#23704F"};
+function el(t,a,p,x){var e=document.createElementNS(NS,t);for(var k in a)e.setAttribute(k,a[k]);if(x!=null)e.textContent=x;if(p)p.appendChild(e);return e;}
+function clear(s){while(s.firstChild)s.removeChild(s.firstChild);}
+function f1(v,d){return v.toFixed(d==null?1:d);}
+function sum(a){return a.reduce(function(x,y){return x+y;},0);}
+function r1(v){return Math.round(v*10)/10;}
+var stage=document.getElementById("stage"),vp=document.getElementById("vp");
+
+/* 계산은 모두 데이터에서 직접 합니다(R0-7) */
+var N=CASE?CASE.values.length:0,SUMV=CASE?r1(sum(CASE.values)):0,AVG=N?SUMV/N:0,MAXV=CASE?Math.max.apply(null,CASE.values):0;
+var LR=!PAIRS?null:(function(){var n=PAIRS.xs.length,mx=sum(PAIRS.xs)/n,my=sum(PAIRS.ys)/n,sxy=0,sxx=0;
+  for(var i=0;i<n;i++){sxy+=(PAIRS.xs[i]-mx)*(PAIRS.ys[i]-my);sxx+=(PAIRS.xs[i]-mx)*(PAIRS.xs[i]-mx);}
+  var b=sxy/sxx;return{b:b,a:my-b*mx};})();
+var PRED=PAIRS?LR.a+LR.b*PAIRS.x0:0;
+
+document.title=MODULE.title;
+document.getElementById("brand").innerHTML=MODULE.title+"<small>"+MODULE.sub+"</small>";
+
+/* 16:9 고정 무대를 창 크기에 맞춤 */
+var S=1;
+function fit(){S=Math.min(window.innerWidth/960,window.innerHeight/540);stage.style.setProperty("--s",S);}
+window.addEventListener("resize",fit);fit();
+
+/* ---------- 그래프 ---------- */
+function barChart(svg,vals,o){
+  clear(svg);o=o||{};
+  var vb=svg.viewBox.baseVal,W=vb.width,H=vb.height,L=34,R=o.mean!=null?70:8,T=26,Bt=24,ym=o.ymax||Math.ceil(Math.max.apply(null,vals)+1),pw=W-L-R,ph=H-T-Bt,bw=pw/vals.length;
+  function y(v){return T+ph-(v/ym)*ph;}
+  for(var g=0;g<=ym;g++){el("line",{x1:L,x2:W-R,y1:y(g),y2:y(g),stroke:C.grid},svg);el("text",{x:L-6,y:y(g)+4,"text-anchor":"end","font-size":10.5,fill:C.gray2},svg,g);}
+  vals.forEach(function(v,i){
+    var sel=o.sel===i,hi=o.hi===i;
+    el("rect",{x:L+i*bw+bw*.16,y:y(v),width:bw*.68,height:Math.max(0,y(0)-y(v)),rx:2,fill:sel?C.amber:hi?C.navy2:C.soft},svg);
+    el("text",{x:L+i*bw+bw/2,y:H-Bt+16,"text-anchor":"middle","font-size":10.5,fill:C.gray},svg,CASE.labels[i]);
+  });
+  if(o.mean!=null){var m=o.mean;
+    el("line",{x1:L,x2:W-R+4,y1:y(m),y2:y(m),stroke:C.navy,"stroke-width":2,"stroke-dasharray":"6 4"},svg);
+    el("rect",{x:W-R+6,y:y(m)-10,width:R-8,height:20,rx:4,fill:C.navy},svg);
+    el("text",{x:W-R+6+(R-8)/2,y:y(m)+4,"text-anchor":"middle","font-size":11,"font-weight":700,fill:"#fff"},svg,"평균 "+f1(m,2));}
+  /* 값 라벨은 마지막에 흰 테두리로 그려 점선에 가리지 않게 함 */
+  vals.forEach(function(v,i){var sel=o.sel===i,hi=o.hi===i;
+    if(o.labels||sel)el("text",{x:L+i*bw+bw/2,y:y(v)-5,"text-anchor":"middle","font-size":10.5,"font-weight":sel||hi?800:500,fill:sel?C.amberInk:hi?C.navy:C.gray,stroke:"#EEF0F3","stroke-width":3,"paint-order":"stroke"},svg,f1(v));});
+}
+function scatter(svg,o){
+  clear(svg);o=o||{};
+  var vb=svg.viewBox.baseVal,W=vb.width,H=vb.height,L=34,R=14,T=30,Bt=40,x0=PAIRS.xmin,x1=PAIRS.xmax,y0=PAIRS.ymin,y1=PAIRS.ymax;
+  function X(v){return L+(v-x0)/(x1-x0)*(W-L-R);}
+  function Y(v){return T+(H-T-Bt)-(v-y0)/(y1-y0)*(H-T-Bt);}
+  for(var g=y0;g<=y1+1e-9;g+=PAIRS.ystep){el("line",{x1:L,x2:W-R,y1:Y(g),y2:Y(g),stroke:C.grid},svg);el("text",{x:L-6,y:Y(g)+4,"text-anchor":"end","font-size":10.5,fill:C.gray2},svg,g);}
+  for(var h=x0;h<=x1+1e-9;h+=PAIRS.xstep)el("text",{x:X(h),y:H-Bt+16,"text-anchor":"middle","font-size":10.5,fill:C.gray},svg,h);
+  el("text",{x:(L+W-R)/2,y:H-6,"text-anchor":"middle","font-size":10.5,fill:C.gray},svg,PAIRS.xlabel);
+  el("text",{x:4,y:14,"font-size":10.5,fill:C.gray},svg,PAIRS.ylabel);
+  if(o.line){var la=x0+(x1-x0)*.04,lb=x1-(x1-x0)*.04;el("line",{x1:X(la),y1:Y(LR.a+LR.b*la),x2:X(lb),y2:Y(LR.a+LR.b*lb),stroke:C.navy,"stroke-width":2},svg);}
+  PAIRS.xs.forEach(function(x,i){el("circle",{cx:X(x),cy:Y(PAIRS.ys[i]),r:4.5,fill:C.navy3,"fill-opacity":.85},svg);});
+  if(o.x0!=null){el("line",{x1:X(o.x0),y1:Y(0),x2:X(o.x0),y2:Y(y1),stroke:C.amber,"stroke-dasharray":"3 3"},svg);
+    el("text",{x:X(o.x0),y:T-4,"text-anchor":"middle","font-size":10.5,"font-weight":700,fill:C.amberInk},svg,PAIRS.x0label);}
+  if(o.pred){el("circle",{cx:X(PAIRS.x0),cy:Y(PRED),r:6,fill:C.navy},svg);
+    el("text",{x:X(PAIRS.x0)-10,y:Y(PRED)+4,"text-anchor":"end","font-size":11,"font-weight":800,fill:C.navy,stroke:"#EEF0F3","stroke-width":3,"paint-order":"stroke"},svg,"예측 "+f1(PRED,PAIRS.dp)+PAIRS.unit);}
+  if(o.guess!=null){el("circle",{cx:X(PAIRS.x0),cy:Y(o.guess),r:7,fill:C.amber,stroke:"#fff","stroke-width":2},svg);}
+  if(o.actual){var ay=Y(PAIRS.actual);el("rect",{x:X(PAIRS.x0)-6,y:ay-6,width:12,height:12,fill:C.ok,transform:"rotate(45 "+X(PAIRS.x0)+" "+ay+")"},svg);
+    el("text",{x:X(PAIRS.x0)-10,y:ay-6,"text-anchor":"end","font-size":11,"font-weight":800,fill:C.ok,stroke:"#EEF0F3","stroke-width":3,"paint-order":"stroke"},svg,"실제 "+f1(PAIRS.actual)+PAIRS.unit);}
+  return {X:X,Y:Y};
+}
+function flow(svg,names){
+  clear(svg);var n=names.length,w=118,gap=(440-40-n*w)/(n-1),y=96,h=64;
+  el("defs",{},svg).innerHTML='<marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10z" fill="'+C.navy3+'"/></marker>';
+  names.forEach(function(t,i){var x=20+i*(w+gap);
+    el("rect",{x:x,y:y,width:w,height:h,rx:10,fill:i===n-1?C.navy:"#fff",stroke:C.navy,"stroke-width":1.5},svg);
+    el("text",{x:x+w/2,y:y+h/2-6,"text-anchor":"middle","font-size":11,"font-weight":700,fill:i===n-1?"#C9D3E6":C.navy3},svg,"4-"+(i+1));
+    el("text",{x:x+w/2,y:y+h/2+13,"text-anchor":"middle","font-size":14,"font-weight":800,fill:i===n-1?"#fff":C.navy},svg,t);
+    if(i<n-1)el("line",{x1:x+w+4,y1:y+h/2,x2:x+w+gap-5,y2:y+h/2,stroke:C.navy3,"stroke-width":2,"marker-end":"url(#ar)"},svg);});
+  el("text",{x:220,y:200,"text-anchor":"middle","font-size":12,fill:C.gray},svg,"본문 소단원을 배우는 순서");
+}
+/* 화면에 해당 id가 있을 때만 그립니다(모듈마다 쓰지 않는 그림은 건너뜀) */
+function on(id,fn){var e=document.getElementById(id);if(e)fn(e);}
+on("fig-flow",function(s){flow(s,["소단원 1","소단원 2","정리"]);});
+on("fig-case",function(s){barChart(s,CASE.values,{labels:true});});
+on("fig-bar",function(s){barChart(s,CASE.values,{labels:true,mean:AVG});});
+on("fig-scatter",function(s){scatter(s,{line:true,x0:PAIRS.x0,pred:true});});
+on("fig-bridge",function(s){
+  el("defs",{},s).innerHTML='<marker id="ar2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10z" fill="'+C.navy3+'"/></marker>';
+  [["장면 1",40],["장면 2",130]].forEach(function(p){el("rect",{x:24,y:p[1],width:130,height:64,rx:10,fill:"#fff",stroke:C.navy3,"stroke-width":1.5},s);el("text",{x:89,y:p[1]+37,"text-anchor":"middle","font-size":14,"font-weight":700,fill:C.navy},s,p[0]);
+    el("line",{x1:158,y1:p[1]+32,x2:246,y2:120,stroke:C.navy3,"stroke-width":2,"marker-end":"url(#ar2)"},s);});
+  el("rect",{x:252,y:84,width:150,height:72,rx:12,fill:C.navy},s);
+  el("text",{x:327,y:116,"text-anchor":"middle","font-size":14,"font-weight":800,fill:"#fff"},s,"본문 첫 질문");
+  el("text",{x:327,y:136,"text-anchor":"middle","font-size":11.5,fill:"#C9D3E6"},s,"4-1로 이어짐");});
+on("case-n",function(e){e.textContent=N+"개";});
+on("case-sum",function(e){e.textContent=f1(SUMV);});
+on("case-max",function(e){e.textContent=f1(MAXV);});
+on("math-calc",function(e){e.textContent=f1(LR.b,2)+" × "+PAIRS.x0+" + "+f1(LR.a,2)+" = "+f1(PRED,2);});
+
+/* =====================================================================
+   [교체] 모듈 전용 그림: 모듈마다 필요한 그림 함수는 이 자리에 둡니다.
+   ===================================================================== */
+/* M19 전용 그림·실습 */
+function linL(a,b,c,d){return function(v){return c+(v-a)/(b-a)*(d-c);};}
+function tL(s,x,y,t,o){o=o||{};return el("text",{x:x,y:y,"text-anchor":o.a||"middle","font-size":o.fs||11,"font-weight":o.fw||600,fill:o.c||C.navy,stroke:o.halo?"#fff":"none","stroke-width":o.halo?3:0,"paint-order":"stroke"},s,t);}
+function bxL(s,x,y,w,h,fill,stroke){return el("rect",{x:x,y:y,width:w,height:h,rx:10,fill:fill||"#fff",stroke:stroke||"none","stroke-width":stroke?1.5:0},s);}
+function mkL(s,id,col){el("defs",{},s).innerHTML='<marker id="'+id+'" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10z" fill="'+col+'"/></marker>';}
+function meanL(a){return sum(a)/a.length;}
+var GC=["#E0A100","#2B8CC4"], GN=["운동 안 함(0)","운동 함(1)"];
+function gridL(s,X,Y,x0,x1,y0,y1,xt,yt,xl,yl){xt.forEach(function(t){el("line",{x1:X(t),x2:X(t),y1:Y(y0),y2:Y(y1),stroke:C.grid},s);tL(s,X(t),Y(y0)+13,t,{fs:9.5,c:C.gray,fw:500});});
+  yt.forEach(function(t){el("line",{x1:X(x0),x2:X(x1),y1:Y(t),y2:Y(t),stroke:C.grid},s);tL(s,X(x0)-5,Y(t)+4,t,{a:"end",fs:9.5,c:C.gray2,fw:500});});
+  if(xl)tL(s,X(x1),Y(y0)+26,xl,{a:"end",fs:10,c:C.gray,fw:700});if(yl)tL(s,X(x0)-28,Y(y1)-8,yl,{a:"start",fs:10,c:C.gray,fw:700});}
+
+on("m19-ov",function(s){
+  mkL(s,"oL",C.navy3);
+  bxL(s,150,10,140,50,"#F3F5F9",C.navy3);tL(s,220,32,"단순선형회귀",{fw:800,fs:13});tL(s,220,50,"y = a + bx + ε",{fs:10.5,c:C.gray});
+  bxL(s,20,100,170,58,C.navy);tL(s,105,124,"다중회귀",{fw:800,fs:13.5,c:"#fff"});tL(s,105,144,"양적 설명변수 여러 개",{fs:10.5,c:"#C9D3E6"});
+  bxL(s,250,100,170,58,C.navy);tL(s,335,124,"가변수",{fw:800,fs:13.5,c:"#fff"});tL(s,335,144,"범주형 설명변수 0/1",{fs:10.5,c:"#C9D3E6"});
+  el("path",{d:"M190 62 C170 80 120 80 105 96",fill:"none",stroke:C.navy3,"stroke-width":2,"marker-end":"url(#oL)"},s);el("path",{d:"M250 62 C270 80 320 80 335 96",fill:"none",stroke:C.navy3,"stroke-width":2,"marker-end":"url(#oL)"},s);
+  bxL(s,110,194,220,58,"#FCF3D9",C.amber);tL(s,220,218,"공분산분석",{fw:800,fs:13.5,c:C.amberInk});tL(s,220,238,"가변수(집단) + 공변량(양적)",{fs:10.5,c:C.amberInk});
+  el("path",{d:"M105 160 C110 180 160 190 170 192",fill:"none",stroke:C.amber,"stroke-width":2,"marker-end":"url(#oL)"},s);el("path",{d:"M335 160 C330 180 280 190 270 192",fill:"none",stroke:C.amber,"stroke-width":2,"marker-end":"url(#oL)"},s);
+});
+
+on("m19-case",function(s){
+  bxL(s,4,4,432,242);var cx=[44,124,204,284,372];el("rect",{x:12,y:10,width:416,height:26,rx:6,fill:C.navy},s);
+  ["번호","몸무게 y (kg)","키 x₁ (cm)","허리 x₂ (cm)","운동"].forEach(function(h,i){tL(s,cx[i],28,h,{fw:800,fs:10.5,c:"#fff"});});
+  el("rect",{x:86,y:38,width:76,height:182,fill:"#FBE4F0","fill-opacity":.6},s);
+  for(var i=0;i<8;i++){var y=56+i*20;tL(s,cx[0],y,i+1,{fs:11,c:C.gray});tL(s,cx[1],y,WT[i].toFixed(1),{fw:800,fs:11.5});tL(s,cx[2],y,HT[i].toFixed(1),{fs:11.5});tL(s,cx[3],y,WS[i].toFixed(1),{fs:11.5});
+    tL(s,cx[4],y,EX[i]?"함 (1)":"안 함 (0)",{fs:10.5,c:EX[i]?"#1C6EA4":C.amberInk,fw:700});}
+  tL(s,220,222,"⋮  (모두 20명)",{fs:11,c:C.gray});tL(s,124,240,"반응변수",{fs:10,fw:800,c:"#C2416E"});tL(s,284,240,"설명변수 3개 (양적 2 · 범주형 1)",{fs:10,fw:800,c:C.navy3});
+});
+
+on("m19-ext",function(s){
+  mkL(s,"eL",C.navy3);
+  bxL(s,120,8,180,50,"#FBE4F0");tL(s,210,30,"단순선형회귀",{fw:800,fs:12});tL(s,210,48,"y = a + bx + ε",{fw:800,fs:13,c:"#C2416E"});
+  var B=[[6,"설명변수","개수 늘리기","유형 바꾸기(범주형)","#23704F","#E3F1EA"],[144,"반응변수","오차 분포 바꾸기","이항 · 푸아송 → GLM","#C2416E","#FBE4F0"],[282,"모형 형태","상호작용 · 비선형","일반화선형혼합모형","#B35A1F","#FDF4EC"]];
+  B.forEach(function(b){bxL(s,b[0],100,132,124,b[5],b[4]);tL(s,b[0]+66,124,b[1],{fw:800,fs:13,c:b[4]});tL(s,b[0]+66,156,b[2],{fs:10,fw:700});tL(s,b[0]+66,180,b[3],{fs:10,fw:700});
+    el("path",{d:"M210 60 C210 80 "+(b[0]+66)+" 76 "+(b[0]+66)+" 96",fill:"none",stroke:C.navy3,"stroke-width":2,"marker-end":"url(#eL)"},s);});
+  tL(s,210,252,"다양한 데이터에 적용 가능한 원리로 확장",{fw:800,fs:11.5,c:C.navy});
+});
+
+on("m19-plane",function(s){
+  function P(h,w,y){return [70+(h-150)*5.2+(w-65)*3.6, 132-(y-50)*3.0-(w-65)*2.0];}
+  function f(h,w){return RF.a+RF.b1*h+RF.b2*w;}
+  var c=[[150,65],[190,65],[190,92],[150,92]].map(function(q){return P(q[0],q[1],f(q[0],q[1]));});
+  el("polygon",{points:c.map(function(p){return p[0].toFixed(1)+","+p[1].toFixed(1);}).join(" "),fill:"#BFD9B0","fill-opacity":.55,stroke:"#23704F","stroke-width":1.5},s);
+  var o=P(150,65,50),ax=P(192,65,50),aw=P(150,95,50),ay=P(150,65,95);
+  [[ax,"키"],[aw,"허리"],[ay,"몸무게"]].forEach(function(a){el("line",{x1:o[0],y1:o[1],x2:a[0][0],y2:a[0][1],stroke:C.gray,"stroke-width":1.5},s);tL(s,a[0][0]+(a[1]==="몸무게"?0:6),a[0][1]+(a[1]==="몸무게"?-4:4),a[1],{a:a[1]==="몸무게"?"middle":"start",fw:800,fs:10.5,c:C.gray});});
+  for(var i=0;i<HT.length;i++){var p=P(HT[i],WS[i],WT[i]),q=P(HT[i],WS[i],f(HT[i],WS[i]));el("line",{x1:p[0],y1:p[1],x2:q[0],y2:q[1],stroke:"#9AA0AA","stroke-width":1},s);el("circle",{cx:p[0],cy:p[1],r:3.2,fill:C.navy},s);}
+  bxL(s,300,96,114,50,"#fff",C.grid);tL(s,357,116,"회귀평면",{fw:800,fs:11.5,c:C.ok});tL(s,357,134,"직선 대신 평면",{fs:9.5,c:C.gray});
+});
+
+on("m19-table",function(s){
+  bxL(s,6,6,408,258);var x0=30,x1=190;el("line",{x1:20,x2:400,y1:30,y2:30,stroke:C.navy,"stroke-width":1.5},s);tL(s,x1+40,24,"몸무게",{fw:800,fs:12});
+  var R=[["키","0.538**","(0.088)","편회귀계수 b₁"],["허리둘레","0.535**","(0.124)","편회귀계수 b₂"],["절편","−66.77**","(13.15)","절편 a"]];
+  R.forEach(function(r,i){var y=54+i*40;tL(s,x0,y,r[0],{a:"start",fw:800,fs:12});tL(s,x1+40,y,r[1],{fw:800,fs:12.5});tL(s,x1+40,y+16,r[2],{fs:10.5,c:C.gray});tL(s,396,y+6,r[3],{a:"end",fs:10,c:"#C2416E",fw:700});});
+  el("line",{x1:20,x2:400,y1:166,y2:166,stroke:C.navy},s);
+  [["표본크기","20"],["R²","0.865"],["조정 R²","0.849"],["잔차 표준오차","2.664 (자유도 17)"],["F통계량","54.53** (자유도 2, 17)"]].forEach(function(r,i){var y=182+i*15;tL(s,x0,y,r[0],{a:"start",fs:10.5});tL(s,x1+40,y,r[1],{fs:10.5,fw:700});});
+  tL(s,396,254,"* p < 0.05, ** p < 0.01 · 괄호: 표준오차",{a:"end",fs:9.5,c:C.gray});
+});
+
+on("m19-std",function(s){
+  function grp(x0,title,v1,v2,mx,fmt,col){bxL(s,x0,6,200,138,"#fff",C.grid);tL(s,x0+100,24,title,{fw:800,fs:11});var Y=linL(0,mx,124,40);
+    [[v1,"키",0],[v2,"허리",1]].forEach(function(b){var x=x0+50+b[2]*70;el("rect",{x:x,y:Y(b[0]),width:40,height:124-Y(b[0]),fill:col[b[2]]},s);tL(s,x+20,Y(b[0])-5,fmt(b[0]),{fw:800,fs:11});tL(s,x+20,137,b[1],{fw:700,fs:10});});}
+  grp(6,"원래 편회귀계수 (kg/cm)",RF.b1,RF.b2,0.7,function(v){return v.toFixed(3);},["#9AA0AA","#C9D3E6"]);
+  grp(214,"표준화편회귀계수 (kg/표준편차)",4.32,3.04,5.4,function(v){return v.toFixed(2);},["#2B8CC4","#8CC0E6"]);
+  tL(s,106,38,"(키를 m로 쓰면 53.8)",{fs:9.5,c:"#B42318",fw:700});
+});
+
+on("m19-path",function(s){
+  mkL(s,"pL",C.navy);
+  bxL(s,20,40,110,50,"#EEF4FB","#2B8CC4");tL(s,75,70,"키",{fw:800,fs:14,c:"#1C6EA4"});bxL(s,20,170,110,50,"#FCF3D9",C.amber);tL(s,75,200,"허리둘레",{fw:800,fs:14,c:C.amberInk});
+  bxL(s,280,105,120,50,"#FBE4F0","#C2416E");tL(s,340,135,"몸무게",{fw:800,fs:14,c:"#C2416E"});
+  el("line",{x1:132,y1:68,x2:276,y2:122,stroke:C.navy,"stroke-width":2.5,"marker-end":"url(#pL)"},s);el("line",{x1:132,y1:192,x2:276,y2:140,stroke:C.navy,"stroke-width":2.5,"marker-end":"url(#pL)"},s);
+  tL(s,206,84,"b₁ = 0.538",{fw:800,fs:12,halo:true});tL(s,206,186,"b₂ = 0.535",{fw:800,fs:12,halo:true});
+  el("path",{d:"M60 94 C45 120 45 140 60 166",fill:"none",stroke:"#9AA0AA","stroke-width":2,"stroke-dasharray":"5 3"},s);tL(s,30,134,"r = 0.49",{fw:800,fs:11,c:C.gray,halo:true});
+  bxL(s,150,226,264,38,"#F3F5F9");tL(s,282,250,"키만 넣은 단순회귀 기울기 = 0.724",{fw:800,fs:11.5,c:"#B42318"});
+  tL(s,282,20,"다중회귀: 다른 변수를 고정한 영향",{fw:800,fs:11.5});
+});
+
+on("m19-dummy",function(s){
+  bxL(s,6,6,408,258);var Y=linL(54,84,226,40),xs=[130,290];
+  [55,60,65,70,75,80].forEach(function(t){el("line",{x1:50,x2:400,y1:Y(t),y2:Y(t),stroke:C.grid},s);tL(s,44,Y(t)+4,t,{a:"end",fs:9.5,c:C.gray2,fw:500});});tL(s,22,24,"몸무게(kg)",{a:"start",fs:10,c:C.gray,fw:700});
+  var m=[0,1].map(function(g){var v=WT.filter(function(_,i){return EX[i]===g;});v.forEach(function(w,k){el("circle",{cx:xs[g]-22+(k%5)*11,cy:Y(w),r:4.5,fill:GC[g],"fill-opacity":.85},s);});return meanL(v);});
+  m.forEach(function(v,g){el("line",{x1:xs[g]-36,x2:xs[g]+36,y1:Y(v),y2:Y(v),stroke:C.navy,"stroke-width":2.5},s);tL(s,xs[g]+40,Y(v)+4,v.toFixed(2),{a:"start",fw:800,fs:11});tL(s,xs[g],246,GN[g],{fw:800,fs:11,c:GC[g]===GC[0]?C.amberInk:"#1C6EA4"});});
+  el("line",{x1:xs[0],y1:Y(m[0]),x2:xs[1],y2:Y(m[1]),stroke:"#C2416E","stroke-width":2,"stroke-dasharray":"5 3"},s);
+  tL(s,210,Y(84)+14,"기울기 b = "+(m[1]-m[0]).toFixed(2)+"kg (p = 0.14)",{fw:800,fs:12,c:"#C2416E",halo:true});
+});
+
+on("m19-blood",function(s){
+  bxL(s,6,6,220,258);var cx=[50,104,154,204];el("rect",{x:14,y:14,width:204,height:26,rx:6,fill:C.navy},s);["혈액형","x₁","x₂","x₃"].forEach(function(h,i){tL(s,cx[i],32,h,{fw:800,fs:11,c:"#fff"});});
+  [["A",[0,0,0]],["B",[1,0,0]],["O",[0,1,0]],["AB",[0,0,1]]].forEach(function(r,j){var y=66+j*40;if(j===0)el("rect",{x:14,y:y-20,width:204,height:30,rx:4,fill:"#FCF3D9"},s);tL(s,cx[0],y,r[0]+"형",{fw:800,fs:12.5});r[1].forEach(function(v,i){tL(s,cx[i+1],y,v,{fw:800,fs:13,c:v?"#C2416E":C.gray});});});
+  tL(s,116,236,"A형(모두 0)이 기준",{fw:800,fs:11,c:C.amberInk});tL(s,116,254,"가변수 = 범주 4 − 1 = 3개",{fs:10.5,c:C.gray});
+  bxL(s,234,6,180,258);var Y=linL(0,10,214,50),H=[5,3.4,6.2,7],L=["A","B","O","AB"];
+  el("line",{x1:246,x2:404,y1:Y(5),y2:Y(5),stroke:C.amber,"stroke-width":1.5,"stroke-dasharray":"4 3"},s);
+  H.forEach(function(h,i){var x=250+i*38;el("rect",{x:x,y:Y(h),width:26,height:214-Y(h),fill:i?"#8CC0E6":"#F3D36B"},s);tL(s,x+13,230,L[i],{fw:800,fs:11});
+    if(i){el("line",{x1:x+13,x2:x+13,y1:Y(5),y2:Y(h),stroke:"#C2416E","stroke-width":2},s);tL(s,x+13,Math.min(Y(5),Y(h))-6,"b"+["","₁","₂","₃"][i],{fw:800,fs:11,c:"#C2416E",halo:true});}});
+  tL(s,324,30,"A형과의 차이 (모양 예시)",{fw:800,fs:10.5});tL(s,324,250,"y = a + b₁x₁ + b₂x₂ + b₃x₃ + ε",{fs:9.5,fw:700});
+});
+
+function ancovaPlot(s,X,Y,show){
+  [0,1].forEach(function(g){for(var i=0;i<HT.length;i++)if(EX[i]===g)el("circle",{cx:X(HT[i]),cy:Y(WT[i]),r:4.5,fill:GC[g],"fill-opacity":.9},s);});
+  if(show){[0,1].forEach(function(g){el("line",{x1:X(152),y1:Y(AN.a+AN.d*g+AN.b*152),x2:X(189),y2:Y(AN.a+AN.d*g+AN.b*189),stroke:GC[g],"stroke-width":2.5},s);});
+    var xm=182,y0=AN.a+AN.b*xm,y1=y0+AN.d;el("line",{x1:X(xm),x2:X(xm),y1:Y(y0),y2:Y(y1),stroke:"#C2416E","stroke-width":2.5},s);tL(s,X(xm)+6,Y((y0+y1)/2)+4,"−3.60kg",{a:"start",fw:800,fs:11,c:"#C2416E",halo:true});}}
+on("m19-ancova",function(s){
+  bxL(s,6,6,408,258);var X=linL(150,190,56,396),Y=linL(52,84,214,30);gridL(s,X,Y,150,190,52,84,[150,160,170,180,190],[55,60,65,70,75,80],"키 (공변량)","몸무게");
+  ancovaPlot(s,X,Y,true);
+  [0,1].forEach(function(g){el("circle",{cx:72,cy:46+g*18,r:5,fill:GC[g]},s);tL(s,82,50+g*18,GN[g],{a:"start",fw:700,fs:10.5});});
+  tL(s,396,44,"키를 고려한 운동 효과 p = 0.028",{a:"end",fw:800,fs:11,c:"#C2416E",halo:true});
+});
+
+on("m19-cond",function(s){
+  var T=[["평행 → 사용 가능",C.ok,[[.8,0],[.8,-1.6]]],["기울기 다름 → ✕","#B42318",[[1.2,0],[.2,-1.6]]],["기울기 0 → 분산분석",C.navy3,[[0,1.2],[0,-1.2]]]];
+  T.forEach(function(t,i){var x0=4+i*140,X=linL(-2,2,x0+16,x0+120),Y=linL(-4,4,226,56),rnd=0;bxL(s,x0,6,132,258);tL(s,x0+66,30,t[0],{fw:800,fs:10.5,c:t[1]});
+    el("rect",{x:x0+10,y:48,width:112,height:184,fill:"#fff",stroke:C.grid},s);
+    t[2].forEach(function(l,g){el("line",{x1:X(-1.8),y1:Y(l[1]+l[0]*-1.8),x2:X(1.8),y2:Y(l[1]+l[0]*1.8),stroke:GC[g],"stroke-width":2.5},s);
+      for(var k=0;k<7;k++){var x=-1.6+3.2*k/6,e=((k*37+g*11)%7-3)*0.12;el("circle",{cx:X(x),cy:Y(l[1]+l[0]*x+e),r:3,fill:GC[g]},s);}});
+    tL(s,x0+66,250,["상호작용 없음","상호작용 있음","공변량 불필요"][i],{fs:10,c:C.gray,fw:700});});
+});
+
+/* 실습 1 · 다중회귀와 단순회귀 예측(조작형) */
+(function(){
+  var hs=document.getElementById("m19-h");if(!hs)return;var ws=document.getElementById("m19-w"),svg=document.getElementById("m19-p1-svg");
+  function upd(){
+    var h=+hs.value,w=+ws.value,pm=RF.a+RF.b1*h+RF.b2*w,ps=RS1.a+RS1.b*h;
+    document.getElementById("m19-hv").textContent=h+"cm";document.getElementById("m19-wv").textContent=w+"cm";
+    document.getElementById("m19-pm").textContent=pm.toFixed(1)+"kg";document.getElementById("m19-ps").textContent=ps.toFixed(1)+"kg";
+    clear(svg);var X=linL(150,190,46,330),Y=linL(45,90,150,8);
+    [50,60,70,80,90].forEach(function(t){el("line",{x1:46,x2:330,y1:Y(t),y2:Y(t),stroke:C.grid},svg);tL(svg,40,Y(t)+4,t,{a:"end",fs:9.5,c:C.gray2,fw:500});});
+    [150,160,170,180,190].forEach(function(t){tL(svg,X(t),163,t,{fs:9.5,c:C.gray,fw:500});});
+    for(var i=0;i<HT.length;i++)el("circle",{cx:X(HT[i]),cy:Y(WT[i]),r:3.8,fill:"#9AA0AA"},svg);
+    el("line",{x1:X(150),y1:Y(RS1.a+RS1.b*150),x2:X(190),y2:Y(RS1.a+RS1.b*190),stroke:C.amber,"stroke-width":2.5,"stroke-dasharray":"6 3"},svg);
+    el("line",{x1:X(150),y1:Y(RF.a+RF.b1*150+RF.b2*w),x2:X(190),y2:Y(RF.a+RF.b1*190+RF.b2*w),stroke:"#2B8CC4","stroke-width":2.5},svg);
+    el("line",{x1:X(h),x2:X(h),y1:8,y2:150,stroke:C.navy3,"stroke-dasharray":"3 3"},svg);
+    el("circle",{cx:X(h),cy:Y(pm),r:6,fill:"#2B8CC4",stroke:"#fff","stroke-width":1.5},svg);el("circle",{cx:X(h),cy:Y(ps),r:6,fill:C.amber,stroke:"#fff","stroke-width":1.5},svg);
+    bxL(svg,340,14,124,74,"#F3F5F9");el("line",{x1:348,x2:368,y1:34,y2:34,stroke:"#2B8CC4","stroke-width":2.5},svg);tL(svg,372,38,"다중회귀",{a:"start",fw:800,fs:10});tL(svg,372,52,"(허리 "+w+"cm 고정)",{a:"start",fs:9,c:C.gray});
+    el("line",{x1:348,x2:368,y1:70,y2:70,stroke:C.amber,"stroke-width":2.5,"stroke-dasharray":"6 3"},svg);tL(svg,372,74,"단순회귀(키만)",{a:"start",fw:800,fs:10});
+    var m=document.getElementById("m19-msg");m.className="pmsg";
+    m.textContent="키 "+h+"cm, 허리 "+w+"cm: 다중회귀 "+pm.toFixed(1)+"kg, 단순회귀 "+ps.toFixed(1)+"kg. 다중회귀는 허리 1cm당 0.535kg씩 바뀌지만, 단순회귀는 허리를 보지 않습니다. 파란 직선의 기울기(0.538)가 주황 점선(0.724)보다 완만합니다.";
+  }
+  hs.addEventListener("input",upd);ws.addEventListener("input",upd);upd();
+})();
+
+/* 실습 3 · 공분산분석의 운동 효과 추정(추정형) */
+(function(){
+  var g=document.getElementById("m19-g");if(!g)return;var svg=document.getElementById("m19-p3-svg"),checked=false;
+  function draw(){clear(svg);var X=linL(150,190,46,456),Y=linL(52,84,176,12);
+    [55,60,65,70,75,80].forEach(function(t){el("line",{x1:46,x2:456,y1:Y(t),y2:Y(t),stroke:C.grid},svg);tL(svg,40,Y(t)+4,t,{a:"end",fs:9.5,c:C.gray2,fw:500});});
+    [150,160,170,180,190].forEach(function(t){tL(svg,X(t),190,t,{fs:9.5,c:C.gray,fw:500});});tL(svg,456,204,"키(cm)",{a:"end",fs:10,c:C.gray});
+    ancovaPlot(svg,X,Y,checked);[0,1].forEach(function(gg){el("circle",{cx:60,cy:24+gg*16,r:5,fill:GC[gg]},svg);tL(svg,70,28+gg*16,GN[gg],{a:"start",fw:700,fs:10});});}
+  function txt(){var v=(+g.value).toFixed(1).replace("-","−");document.getElementById("m19-gv").textContent=v+"kg";document.getElementById("m19-mine").textContent=v+"kg";}
+  g.addEventListener("input",function(){txt();if(checked){checked=false;document.getElementById("m19-act").textContent="?";draw();}});
+  document.getElementById("m19-check").onclick=function(){checked=true;var gv=+g.value,ok=Math.abs(gv-AN.d)<=1,m=document.getElementById("m19-msg3");
+    document.getElementById("m19-act").textContent="−3.60kg";m.className="pmsg "+(ok?"ok":"ng");
+    m.textContent=(ok?"가깝게 예측했습니다. ":"차이가 있습니다. ")+"키를 고려한 운동 효과는 −3.60kg(p = 0.028)으로 단순 비교(−4.58kg)와 크기는 비슷하지만, 키에 따른 흩어짐이 설명되어 p값이 0.14에서 0.028로 작아졌습니다.";draw();};
+  txt();draw();var m0=document.getElementById("m19-msg3");m0.className="pmsg";m0.textContent="두 집단의 점들을 키에 따라 견주어 보고, 같은 키일 때의 몸무게 차이를 예측해 보세요.";
+})();
+
+
+/* ---------- ⑤ 형성평가 ---------- */
+function fill(t){return !CASE?t:t.replace(/SUM/g,f1(SUMV)).replace(/AVG/g,f1(AVG,2)).replace(/MAXV/g,f1(MAXV));}
+var firstPractice=document.getElementById("p1"),answered=0,correct=0;
+QUIZ.forEach(function(q,i){
+  var s=document.createElement("section");s.className="slide";s.dataset.step="4";s.id="q"+(i+1);
+  s.innerHTML='<div class="sh"><div class="sec"><span>문항 '+(i+1)+' / '+QUIZ.length+'</span><span class="qchips"><span>학습목표 '+q.goal+'</span><span>'+q.type+'</span></span></div><h2 class="stem">'+fill(q.stem)+'</h2></div>'+
+    '<div class="body split even"><div class="opts'+(q.ox?' ox':'')+'"></div><div class="fbp" aria-live="polite"><p class="empty">보기를 고르면 정답과 해설이 여기에 나타납니다.</p></div></div>';
+  var ob=s.querySelector(".opts"),fb=s.querySelector(".fbp");
+  q.opts.forEach(function(t,k){
+    var b=document.createElement("button");b.type="button";b.className="opt";
+    b.innerHTML=q.ox?t:'<span class="n">'+(k+1)+'</span>'+fill(t);
+    b.addEventListener("click",function(){
+      var all=ob.querySelectorAll(".opt");[].forEach.call(all,function(x){x.disabled=true;});
+      all[q.ans].classList.add("ok");var ok=k===q.ans;if(!ok)b.classList.add("ng");
+      answered++;if(ok)correct++;
+      fb.className="fbp "+(ok?"ok":"ng");
+      fb.innerHTML='<div class="verdict">'+(ok?"정답입니다":"오답입니다. 정답은 "+(q.ox?q.opts[q.ans]:(q.ans+1)+"번")+"입니다")+'</div><div>'+fill(q.exp)+'</div>'+
+        '<button type="button" class="jump back" data-jump="'+q.back+'">'+q.backLabel+'</button><div class="tally">지금까지 '+answered+'문항 중 '+correct+'문항 정답</div>';
+      bindJumps(fb);
+    });
+    ob.appendChild(b);
+  });
+  vp.insertBefore(s,firstPractice);
+});
+
+/* ---------- ⑦ 용어해설 · 참고자료 · 다음 모듈 ---------- */
+for(var gi=0;gi<GLOSSARY.length;gi+=6){
+  var part=GLOSSARY.slice(gi,gi+6),pg=gi/6+1,np=Math.ceil(GLOSSARY.length/6);
+  var s=document.createElement("section");s.className="slide";s.dataset.step="6";
+  var h='<div class="sh"><div class="sec">용어해설 '+pg+'/'+np+'</div><h2>'+(pg===1?"본문에서 굵게 표시한 용어를 나온 순서대로 모았습니다":"용어해설 계속")+'</h2></div><div class="body full"><div class="gl">';
+  part.forEach(function(g,k){h+='<div class="gi"><div class="t"><i>'+(gi+k+1)+'</i>'+g[0]+'<em>'+g[1]+'</em>'+(g[4]?'<span class="cite">['+g[4]+']</span>':'')+'</div><div class="d">'+g[2]+'</div><div class="e"><strong>예시</strong> '+g[3]+'</div></div>';});
+  h+='</div></div>';s.innerHTML=h;vp.appendChild(s);
+}
+(function(){
+  var s=document.createElement("section");s.className="slide";s.dataset.step="6";s.id="end";
+  var refs=REFS.length?'<div class="pcol" style="gap:10px"><div class="plabel" style="margin:0">참고자료</div><ol class="refs">'+REFS.map(function(r){return '<li><span>['+r.n+']</span><div>'+r.title+', '+r.org+'. <a href="'+r.url+'" target="_blank" rel="noopener">'+r.url+'</a> ('+r.date+')</div></li>';}).join("")+'</ol></div>':'';
+  s.innerHTML='<div class="sh"><div class="sec">마무리</div><h2>'+(REFS.length?"참고자료와 다음 모듈":"다음 모듈")+'</h2></div>'+
+    '<div class="body '+(REFS.length?'split even':'full')+'" style="align-content:center">'+refs+
+    '<div class="pcol" style="justify-content:center"><div class="nextmod"><small>다음 모듈 · '+NEXT.title+'</small><strong>'+NEXT.line+'</strong></div></div></div>'+
+    '<p class="foot">학습 상태는 저장되지 않습니다.</p>';
+  vp.appendChild(s);
+})();
+
+/* ---------- 이동 · 진행선 ---------- */
+var slides=[].slice.call(vp.querySelectorAll(".slide")),cur=0,seen={};
+var stepFirst=[],stepCount=[0,0,0,0,0,0,0];
+slides.forEach(function(s,i){var st=+s.dataset.step;if(stepFirst[st]==null)stepFirst[st]=i;stepCount[st]++;});
+var rail=document.getElementById("rail"),stations=[];
+STEPS.forEach(function(n,i){
+  var b=document.createElement("button");b.type="button";b.className="station";
+  b.style.left="calc(14px + (100% - 28px) * "+(i/6)+")";
+  b.innerHTML='<span class="dot">'+(i+1)+'</span><span class="lb">'+n+'</span>';
+  b.setAttribute("aria-label",(i+1)+"단계 "+n+"(으)로 이동");
+  b.addEventListener("click",function(){show(stepFirst[i]);});
+  rail.appendChild(b);stations.push(b);
+});
+function show(i){
+  cur=Math.max(0,Math.min(slides.length-1,i));
+  slides.forEach(function(s,k){s.classList.toggle("on",k===cur);});
+  var st=+slides[cur].dataset.step;seen[st]=true;
+  stations.forEach(function(b,k){b.classList.toggle("cur",k===st);b.classList.toggle("done",k<st||(!!seen[k]&&k!==st));if(k===st)b.setAttribute("aria-current","step");else b.removeAttribute("aria-current");});
+  var within=(cur-stepFirst[st])/Math.max(1,stepCount[st]);
+  var frac=st===6&&cur===slides.length-1?1:(st+within)/6;
+  document.getElementById("fill").style.width=(Math.min(1,frac)*100)+"%";
+  document.getElementById("counter").innerHTML="<strong>"+STEPS[st]+"</strong> "+(cur-stepFirst[st]+1)+" / "+stepCount[st];
+  document.getElementById("prev").disabled=cur===0;
+  var nx=document.getElementById("next");nx.disabled=cur===slides.length-1;
+  nx.textContent=(cur<slides.length-1&&+slides[cur+1].dataset.step!==st)?STEPS[+slides[cur+1].dataset.step]+"(으)로":"다음";
+}
+function bindJumps(root){[].forEach.call(root.querySelectorAll("[data-jump]"),function(b){b.addEventListener("click",function(){var t=document.getElementById(b.dataset.jump);if(t)show(slides.indexOf(t));});});}
+bindJumps(document);
+document.getElementById("prev").onclick=function(){show(cur-1);};
+document.getElementById("next").onclick=function(){show(cur+1);};
+document.addEventListener("keydown",function(e){
+  if(e.target&&(e.target.type==="range"))return;
+  if(e.key==="ArrowRight"||e.key==="PageDown"){show(cur+1);e.preventDefault();}
+  else if(e.key==="ArrowLeft"||e.key==="PageUp"){show(cur-1);e.preventDefault();}
+});
+var tx=null,ty=null;
+vp.addEventListener("touchstart",function(e){var t=e.target;if(t.closest&&(t.closest("input")||t.closest(".dcard"))){tx=null;return;}tx=e.touches[0].clientX;ty=e.touches[0].clientY;},{passive:true});
+vp.addEventListener("touchend",function(e){if(tx==null)return;var dx=e.changedTouches[0].clientX-tx,dy=e.changedTouches[0].clientY-ty;if(Math.abs(dx)>60&&Math.abs(dx)>Math.abs(dy)*1.5)show(cur+(dx<0?1:-1));tx=null;},{passive:true});
+
+/* ---------- 실습 1 · 조작형 ---------- */
+(function(){if(!document.getElementById("p1-items")||!CASE)return;
+var p1v=CASE.values.slice(),p1s=CASE.values.indexOf(MAXV),p1m=document.getElementById("p1-items"),p1r=document.getElementById("p1-range");
+CASE.labels.forEach(function(m,i){var b=document.createElement("button");b.type="button";b.className="mbtn";b.textContent=m;b.onclick=function(){p1s=i;p1d();};p1m.appendChild(b);});
+function p1d(){
+  [].forEach.call(p1m.children,function(b,i){b.classList.toggle("on",i===p1s);b.setAttribute("aria-pressed",i===p1s);});
+  p1r.value=p1v[p1s];document.getElementById("p1-label").textContent=CASE.labels[p1s]+"번";document.getElementById("p1-val").textContent=f1(p1v[p1s]);
+  var s=r1(sum(p1v)),m=s/N;
+  document.getElementById("p1-sum").textContent=f1(s);document.getElementById("p1-mean").textContent=f1(m,2);
+  barChart(document.getElementById("p1-svg"),p1v,{mean:m,sel:p1s,ymax:9});
+  var msg=document.getElementById("p1-msg");
+  if(P1.target!=null&&Math.abs(m-P1.target)<0.005){msg.className="pmsg ok";msg.textContent="성공했습니다. "+f1(s)+" ÷ "+N+" = "+f1(m,2);}
+  else if(Math.abs(s-SUMV)<1e-9){msg.className="pmsg";msg.textContent="원래 값입니다. "+f1(SUMV)+" ÷ "+N+" = "+f1(AVG,2);}
+  else{msg.className="pmsg";msg.textContent="원래 평균 "+f1(AVG,2)+"보다 "+f1(Math.abs(m-AVG),2)+" "+(m>AVG?"늘었습니다.":"줄었습니다.");}
+}
+p1r.addEventListener("input",function(){p1v[p1s]=r1(+p1r.value);p1d();});
+document.getElementById("p1-reset").onclick=function(){p1v=CASE.values.slice();p1d();};
+p1d();
+
+})();
+/* ---------- 실습 2 · 분류형 ---------- */
+(function(){if(!document.getElementById("p2-pool"))return;
+var pool=document.getElementById("p2-pool"),binWrap=document.getElementById("p2-bins"),selC=null,done2=0;
+var bins=BINS.map(function(n){var b=document.createElement("div");b.className="bin";b.dataset.bin=n;b.innerHTML="<h4>"+n+"</h4>";binWrap.appendChild(b);return b;});
+function p2msg(t,c){var m=document.getElementById("p2-msg");m.textContent=t;m.className="pmsg "+(c||"");document.getElementById("p2-count").textContent=done2+" / "+CARDS.length;}
+function p2init(){
+  pool.innerHTML="";bins.forEach(function(b){[].slice.call(b.querySelectorAll(".dcard")).forEach(function(c){c.remove();});});done2=0;selC=null;
+  var o=CARDS.map(function(_,i){return i;});for(var i=o.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1)),t=o[i];o[i]=o[j];o[j]=t;}
+  o.forEach(function(i){var d=document.createElement("div");d.className="dcard";d.tabIndex=0;d.setAttribute("role","button");d.textContent=CARDS[i][0];d.dataset.ans=CARDS[i][1];pool.appendChild(d);attach(d);});
+  p2msg("카드를 하나 골라 보세요.","");
+}
+function drop(c,b){
+  if(!b||c.classList.contains("ok"))return;
+  c.classList.remove("sel");selC=null;
+  if(c.dataset.ans===b.dataset.bin){c.classList.add("ok");c.removeAttribute("tabindex");b.appendChild(c);done2++;p2msg(done2===CARDS.length?"카드를 모두 맞게 분류했습니다.":"정답입니다.","ok");}
+  else{c.classList.add("shake");setTimeout(function(){c.classList.remove("shake");},400);p2msg("「"+b.dataset.bin+"」이 아닙니다. "+HINT[c.dataset.ans],"ng");}
+}
+function pick(d){if(selC===d){d.classList.remove("sel");selC=null;return;}if(selC)selC.classList.remove("sel");selC=d;d.classList.add("sel");p2msg("이제 알맞은 칸을 누르세요.","");}
+function attach(d){
+  var sx=null,sy,mv=false,gh=null,ov=null,offX=0,offY=0;
+  function pos(e){var r=stage.getBoundingClientRect();return{x:(e.clientX-r.left)/S,y:(e.clientY-r.top)/S};}
+  d.addEventListener("pointerdown",function(e){if(d.classList.contains("ok"))return;sx=e.clientX;sy=e.clientY;mv=false;d.setPointerCapture(e.pointerId);var r=d.getBoundingClientRect();offX=(e.clientX-r.left)/S;offY=(e.clientY-r.top)/S;});
+  d.addEventListener("pointermove",function(e){
+    if(sx==null)return;
+    if(!mv&&Math.hypot(e.clientX-sx,e.clientY-sy)>6){mv=true;gh=d.cloneNode(true);gh.classList.add("ghostc");gh.classList.remove("sel");gh.style.width=d.offsetWidth+"px";stage.appendChild(gh);d.style.opacity=".35";}
+    if(mv){var p=pos(e);gh.style.left=(p.x-offX)+"px";gh.style.top=(p.y-offY)+"px";
+      var t=document.elementFromPoint(e.clientX,e.clientY),b=t&&t.closest?t.closest(".bin"):null;
+      if(ov&&ov!==b)ov.classList.remove("hover");ov=b;if(b)b.classList.add("hover");}
+  });
+  d.addEventListener("pointerup",function(){
+    if(sx==null)return;sx=null;
+    if(mv){gh.remove();gh=null;d.style.opacity="";if(ov)ov.classList.remove("hover");var b=ov;ov=null;drop(d,b);}else pick(d);
+  });
+  d.addEventListener("pointercancel",function(){if(gh){gh.remove();gh=null;}d.style.opacity="";sx=null;if(ov)ov.classList.remove("hover");ov=null;});
+  d.addEventListener("keydown",function(e){if(e.key==="Enter"||e.key===" "){e.preventDefault();pick(d);}});
+}
+bins.forEach(function(b){b.tabIndex=0;b.setAttribute("role","button");b.setAttribute("aria-label",b.dataset.bin+" 칸에 놓기");
+  b.addEventListener("click",function(e){if(selC&&!e.target.closest(".dcard"))drop(selC,b);});
+  b.addEventListener("keydown",function(e){if((e.key==="Enter"||e.key===" ")&&selC){e.preventDefault();drop(selC,b);}});});
+document.getElementById("p2-reset").onclick=p2init;
+p2init();
+
+})();
+/* ---------- 실습 3 · 추정형 ---------- */
+(function(){if(!document.getElementById("p3-range")||!PAIRS)return;
+var p3r=document.getElementById("p3-range"),p3done=false;
+document.getElementById("p3-x0").textContent=PAIRS.x0;
+p3r.min=PAIRS.ymin;p3r.max=PAIRS.ymax;p3r.step=0.1;p3r.value=r1((PAIRS.ymin+PAIRS.ymax)/2);
+function p3d(){var g=+p3r.value;document.getElementById("p3-val").textContent=f1(g);scatter(document.getElementById("p3-svg"),{x0:PAIRS.x0,guess:g,line:p3done,pred:p3done,actual:p3done});}
+p3r.addEventListener("input",function(){if(p3done){p3done=false;document.getElementById("p3-res").classList.remove("on");}p3d();});
+document.getElementById("p3-check").onclick=function(){
+  p3done=true;var g=+p3r.value,mine=Math.abs(g-PAIRS.actual),line=Math.abs(PRED-PAIRS.actual);
+  document.getElementById("p3-mine").textContent=f1(g);document.getElementById("p3-pred").textContent=f1(PRED,PAIRS.dp);document.getElementById("p3-act").textContent=f1(PAIRS.actual);
+  var m=document.getElementById("p3-msg"),good=mine<=line;m.className="pmsg "+(good?"ok":"ng");
+  m.textContent="내 오차 "+f1(mine,PAIRS.dp)+PAIRS.unit+", 직선 오차 "+f1(line,PAIRS.dp)+PAIRS.unit+". "+(good?"직선만큼 또는 더 가깝게 추정했습니다.":"직선을 이용하면 오차를 줄일 수 있습니다.");
+  document.getElementById("p3-res").classList.add("on");p3d();
+};
+p3d();
+
+})();
+show(0);
+})();
+</script>
+</body>
+</html>

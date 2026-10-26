@@ -1,0 +1,1080 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>추론통계의 직관</title>
+<!-- M08 추론통계의 직관 · 기준 템플릿 v1.3로 제작 (2026-10-24) -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<style>
+:root{
+  --navy:#1B2A4A; --navy2:#2C4170; --navy3:#5B6E97; --navy-soft:#E4E9F2;
+  --ink:#22262E; --gray:#6B7280; --gray2:#9AA0AA; --panel:#EEF0F3; --line:#D5D9E0;
+  --amber:#E0A100; --amber-ink:#6E4F00; --amber-soft:#FCF3D9;
+  --ok:#23704F; --ok-soft:#E2F1E9; --ng:#B42318; --ng-soft:#FBE6E3;
+  --letterbox:#C7CCD4;
+}
+*{box-sizing:border-box}
+html,body{margin:0;height:100%;overflow:hidden;background:var(--letterbox)}
+body{font-family:"Pretendard Variable","Pretendard","Apple SD Gothic Neo","Malgun Gothic","Noto Sans KR",system-ui,sans-serif;color:var(--ink);-webkit-text-size-adjust:100%;font-feature-settings:"tnum"}
+button{font:inherit;color:inherit}
+:focus-visible{outline:3px solid var(--amber);outline-offset:2px;border-radius:4px}
+
+/* ---------- 16:9 무대 ---------- */
+.stage{position:absolute;left:50%;top:50%;width:960px;height:540px;transform:translate(-50%,-50%) scale(var(--s,1));transform-origin:center;background:#fff;overflow:hidden;box-shadow:0 10px 40px rgba(27,42,74,.25)}
+
+/* ---------- 상단 바: 모듈명 + 7단계 진행선 ---------- */
+.topbar{position:absolute;left:0;right:0;top:0;height:60px;background:var(--navy);display:flex;align-items:center}
+.brand{flex:0 0 200px;padding-left:22px;color:#fff;font-size:14px;font-weight:800;letter-spacing:-.3px;line-height:1.2;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.brand small{display:block;font-size:11px;font-weight:500;color:#A9B6CF;letter-spacing:0;margin-top:2px;overflow:hidden;text-overflow:ellipsis}
+.rail{position:relative;flex:1;height:60px;margin-right:22px}
+.rail .track{position:absolute;left:14px;right:14px;top:21px;height:3px;background:#3A4D78;border-radius:2px}
+.rail .fill{position:absolute;left:0;top:0;bottom:0;background:var(--amber);border-radius:2px;transition:width .35s ease}
+.station{position:absolute;top:10px;width:72px;margin-left:-36px;background:none;border:0;padding:0;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:4px}
+.station .dot{width:24px;height:24px;border-radius:50%;display:grid;place-items:center;font-size:11.5px;font-weight:800;background:var(--navy);color:#8E9DBD;border:2px solid #4A5D88;transition:all .25s}
+.station .lb{font-size:11.5px;color:#8E9DBD;white-space:nowrap}
+.station.done .dot{background:#C9D3E6;border-color:#C9D3E6;color:var(--navy)}
+.station.done .lb{color:#C9D3E6}
+.station.cur .dot{background:var(--amber);border-color:#FFE08A;color:var(--navy);transform:scale(1.12)}
+.station.cur .lb{color:#fff;font-weight:700}
+
+/* ---------- 화면 ---------- */
+.viewport{position:absolute;left:0;right:0;top:60px;bottom:46px}
+.slide{position:absolute;inset:0;padding:16px 36px 10px;display:none;flex-direction:column;gap:12px}
+.slide.on{display:flex;animation:fade .22s ease}
+@keyframes fade{from{opacity:0}to{opacity:1}}
+@media (prefers-reduced-motion:reduce){.slide.on{animation:none}.rail .fill,.station .dot{transition:none}}
+.sh{flex:0 0 auto}
+.sec{font-size:12.5px;font-weight:700;color:var(--navy3);display:flex;gap:8px;align-items:center;min-height:18px}
+h2{margin:3px 0 0;font-size:24px;line-height:1.3;font-weight:800;color:var(--navy);letter-spacing:-.6px;display:flex;gap:10px;align-items:flex-start}
+h2 .q{flex:0 0 auto;margin-top:2px;width:28px;height:28px;border-radius:6px;background:var(--navy);color:#fff;font-size:15px;display:grid;place-items:center}
+h2.big{font-size:30px;line-height:1.32}
+.body{flex:1 1 auto;min-height:0;display:grid;gap:24px}
+.split{grid-template-columns:1.2fr 1fr}
+.split.even{grid-template-columns:1fr 1fr}
+.full{grid-template-columns:1fr}
+.fig{background:var(--panel);border-radius:12px;padding:12px;min-height:0;display:flex;align-items:center;justify-content:center}
+.fig svg{width:100%;height:100%;display:block}
+.figcol{min-height:0;display:flex;flex-direction:column;gap:10px}
+.figcol .fig{flex:1 1 auto}
+.side{min-height:0;display:flex;flex-direction:column;gap:12px;justify-content:center}
+
+/* 핵심 문장: 40자 안팎, 1~2개 */
+.key{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:9px}
+.key li{position:relative;padding-left:16px;font-size:18.5px;line-height:1.42;font-weight:700;letter-spacing:-.4px}
+.key li::before{content:"";position:absolute;left:0;top:.28em;width:4px;height:1.05em;border-radius:2px;background:var(--navy2)}
+.key b{color:var(--navy);background:linear-gradient(transparent 62%,var(--amber-soft) 62%)}
+/* 해설 문단: 2~4문장, 150~250자 */
+.exp{margin:0;font-size:15px;line-height:1.62;letter-spacing:-.2px;color:var(--ink)}
+.exp b{color:var(--navy)}
+/* 연결 문장: 다음 소단원으로 넘기는 질문 */
+.next{margin:0;border-top:1px dashed var(--line);padding-top:9px;font-size:14px;font-weight:700;color:var(--navy2);display:flex;gap:8px;align-items:baseline}
+.next span{flex:0 0 auto;font-size:11.5px;font-weight:800;color:var(--navy3);background:var(--navy-soft);border-radius:4px;padding:0 6px;line-height:20px}
+/* 각주: 기호의 뜻과 출처 번호만 */
+.foot{flex:0 0 auto;font-size:12px;line-height:1.5;color:var(--gray);margin:0}
+.foot b{color:var(--ink)}
+.cite{font-size:.72em;font-weight:700;color:var(--navy3);vertical-align:super;line-height:0;margin-left:1px}
+.tag-v{display:inline-block;font-size:11px;font-weight:700;border-radius:4px;padding:0 6px;line-height:18px;white-space:nowrap;vertical-align:1px;color:var(--gray);background:#F3F4F6;box-shadow:inset 0 0 0 1px var(--line)}
+
+/* 핵심 수학 개념 박스 */
+.math{flex:0 0 auto;border-left:3px solid var(--navy3);background:#F6F7F9;border-radius:0 8px 8px 0;padding:9px 13px;font-size:13.5px;line-height:1.5}
+.math .mt{font-size:12px;font-weight:800;color:var(--navy3);margin-bottom:2px}
+.math .f{font-family:"Cambria Math","Times New Roman",serif;font-size:18px;font-weight:700;color:var(--navy);margin:1px 0 4px}
+.math .r{display:grid;grid-template-columns:34px 1fr;gap:6px}
+.math .r span:first-child{font-size:11.5px;font-weight:700;color:var(--gray2);padding-top:1px}
+.math .w{margin-top:5px;padding-top:5px;border-top:1px dashed var(--line);color:var(--ng);font-weight:700;font-size:12.5px}
+
+/* ---------- 하단 바 ---------- */
+.bottombar{position:absolute;left:0;right:0;bottom:0;height:46px;border-top:1px solid var(--line);display:flex;align-items:center;padding:0 22px 0 36px;gap:12px;background:#fff}
+.counter{font-size:13px;color:var(--gray);font-weight:600}
+.counter strong{color:var(--navy)}
+.spacer{flex:1}
+.nav{border:1.5px solid var(--navy);background:#fff;color:var(--navy);border-radius:8px;height:32px;padding:0 16px;font-size:14px;font-weight:700;cursor:pointer}
+.nav.primary{background:var(--navy);color:#fff}
+.nav:disabled{opacity:.3;cursor:default}
+
+/* ---------- 홈으로 ---------- */
+.home{display:inline-flex;align-items:center;gap:6px;height:32px;padding:0 13px;border-radius:8px;border:1.5px solid var(--navy-soft);background:#fff;color:var(--navy2);font-size:13.5px;font-weight:700;line-height:1;text-decoration:none;white-space:nowrap}
+.home svg{width:14px;height:14px;flex:0 0 auto;display:block}
+.home:hover{background:var(--navy-soft);border-color:var(--navy3);color:var(--navy)}
+.home:focus-visible{outline:3px solid var(--amber);outline-offset:2px}
+@media (prefers-reduced-motion:reduce){.home{transition:none}}
+
+/* ① 학습개요 */
+.meta{display:grid;grid-template-columns:auto 1fr;gap:6px 14px;margin:0;font-size:14px}
+.meta dt{font-weight:700;color:var(--gray)}
+.meta dd{margin:0;font-weight:700;color:var(--navy)}
+.prevlink{background:var(--panel);border-radius:10px;padding:12px 14px;font-size:14.5px;line-height:1.55}
+.prevlink small{display:block;font-size:12px;font-weight:800;color:var(--navy3);margin-bottom:3px}
+
+/* ② 학습목표: 목표 → 문항 → 실습 연결 */
+.gmap{display:grid;grid-template-columns:44px 1fr 150px 150px;align-items:stretch;row-gap:12px;column-gap:0}
+.gmap .hd{font-size:12px;font-weight:700;color:var(--gray);padding:0 14px 2px}
+.gmap .gn{background:var(--navy);color:#fff;font-weight:800;font-size:18px;display:grid;place-items:center;border-radius:10px 0 0 10px}
+.gmap .gt{background:var(--panel);padding:14px 18px;font-size:17px;font-weight:700;line-height:1.42;letter-spacing:-.3px;display:flex;align-items:center}
+.gmap .gt b{color:var(--navy)}
+.gmap .ga,.gmap .gp{background:var(--panel);display:flex;align-items:center;padding:0 10px;border-left:2px solid #fff}
+.gmap .gp{border-radius:0 10px 10px 0}
+.jump{border:1.5px solid var(--navy3);background:#fff;border-radius:7px;padding:6px 10px;font-size:13px;font-weight:700;color:var(--navy);cursor:pointer;text-align:left;line-height:1.3;width:100%}
+.jump:hover{background:var(--navy-soft)}
+
+/* ④ 본문 정리 표 */
+.sumtbl{width:100%;border-collapse:separate;border-spacing:0;font-size:14.5px;line-height:1.5}
+.sumtbl th{background:var(--navy);color:#fff;font-weight:800;text-align:left;padding:10px 14px}
+.sumtbl th:first-child{border-radius:10px 0 0 0;width:150px}
+.sumtbl th:last-child{border-radius:0 10px 0 0}
+.sumtbl td{padding:11px 14px;border-bottom:1px solid var(--line);vertical-align:top}
+.sumtbl td:first-child{font-weight:800;color:var(--navy)}
+.sumtbl tr:nth-child(even) td{background:#F8F9FB}
+
+/* ⑤ 형성평가 */
+.qchips{display:flex;gap:6px}
+.qchips span{font-size:11.5px;font-weight:700;color:var(--navy2);background:var(--navy-soft);border-radius:4px;padding:0 7px;line-height:19px}
+h2.stem{font-size:21px;line-height:1.42;font-weight:800}
+.opts{display:grid;gap:9px;align-content:center}
+.opts.ox{grid-template-columns:1fr 1fr}
+.opt{border:1.5px solid var(--line);background:#fff;border-radius:10px;padding:11px 14px;text-align:left;font-size:16px;font-weight:600;cursor:pointer;display:flex;gap:10px;align-items:center}
+.opt .n{flex:0 0 26px;height:26px;border-radius:50%;background:var(--panel);display:grid;place-items:center;font-size:13px;font-weight:800;color:var(--navy)}
+.opts.ox .opt{justify-content:center;font-size:40px;font-weight:800;padding:22px;color:var(--navy)}
+.opt:hover:not(:disabled){border-color:var(--navy3);background:#F8F9FB}
+.opt:disabled{cursor:default}
+.opt.ok{border-color:var(--ok);background:var(--ok-soft);color:var(--ok)}
+.opt.ok .n{background:var(--ok);color:#fff}
+.opt.ng{border-color:var(--ng);background:var(--ng-soft);color:var(--ng)}
+.opt.ng .n{background:var(--ng);color:#fff}
+.fbp{background:var(--panel);border-radius:12px;padding:18px 20px;display:flex;flex-direction:column;gap:10px;font-size:14.5px;line-height:1.6}
+.fbp .empty{color:var(--gray);margin:auto 0}
+.fbp .verdict{font-size:19px;font-weight:800}
+.fbp.ok{background:var(--ok-soft)} .fbp.ok .verdict{color:var(--ok)}
+.fbp.ng{background:var(--ng-soft)} .fbp.ng .verdict{color:var(--ng)}
+.fbp .back{align-self:flex-start}
+.fbp .tally{margin-top:auto;font-size:12.5px;color:var(--gray);font-weight:600}
+
+/* ⑥ 실습 */
+.plabel{font-size:12px;font-weight:800;color:var(--navy3);margin-bottom:6px}
+.pcol{min-height:0;display:flex;flex-direction:column}
+.mbtns{display:flex;flex-wrap:nowrap;gap:3px;margin-bottom:8px}
+.mbtn{border:1px solid var(--line);background:#fff;border-radius:6px;padding:2px 6px;font-size:12px;cursor:pointer;min-width:26px}
+.mbtn.on{background:var(--navy);border-color:var(--navy);color:#fff}
+.ctrl{display:flex;align-items:center;gap:10px;font-size:14px;font-weight:600}
+input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
+.stats{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.stats.three{grid-template-columns:1fr 1fr 1fr}
+.stats div{background:var(--panel);border-radius:10px;padding:8px 12px}
+.stats small{display:block;font-size:11.5px;color:var(--gray);font-weight:600;line-height:1.35}
+.stats strong{font-size:22px;color:var(--navy);letter-spacing:-.4px}
+.pmsg{font-size:14.5px;font-weight:700;min-height:22px;line-height:1.45}
+.pmsg.ok{color:var(--ok)} .pmsg.ng{color:var(--ng)}
+.think{flex:0 0 auto;background:var(--amber-soft);border-radius:10px;padding:9px 14px;font-size:14.5px;font-weight:700;color:var(--amber-ink);display:flex;gap:10px;align-items:baseline}
+.think span{flex:0 0 auto;font-size:12px;font-weight:800}
+.howto{font-size:13.5px;color:var(--gray);line-height:1.5;margin:0}
+.btn{border:0;background:var(--navy);color:#fff;border-radius:8px;height:32px;padding:0 14px;font-size:13.5px;font-weight:700;cursor:pointer}
+.btn.ghost{background:#fff;color:var(--navy);box-shadow:inset 0 0 0 1.5px var(--navy)}
+.pool{flex:1;min-height:0;display:grid;grid-template-columns:1fr 1fr;align-content:start;gap:8px;padding:10px;border:1.5px dashed var(--line);border-radius:10px;background:#FAFBFC}
+.dcard{background:#fff;border:1.5px solid var(--navy3);border-radius:8px;padding:7px 10px;font-size:13.5px;font-weight:600;line-height:1.4;cursor:grab;user-select:none;-webkit-user-select:none;touch-action:none}
+.dcard.sel{box-shadow:0 0 0 3px var(--amber)}
+.dcard.ok{border-color:var(--ok);background:var(--ok-soft);color:var(--ok);cursor:default;font-size:12.5px;padding:5px 8px}
+.dcard.shake{animation:shake .35s;border-color:var(--ng);background:var(--ng-soft)}
+@keyframes shake{25%{transform:translateX(-5px)}75%{transform:translateX(5px)}}
+.ghostc{position:absolute;pointer-events:none;z-index:50;opacity:.92;box-shadow:0 8px 20px rgba(27,42,74,.25);cursor:grabbing}
+.bins{flex:1 0 auto;min-height:0;display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.bin .dcard{font-size:12px;padding:3px 7px;line-height:1.3}
+.p2row{display:flex;gap:10px;align-items:center}.p2row .pmsg{flex:1;margin:0}.p2row .btn{flex:0 0 auto}
+.bin{border:1.5px solid var(--line);border-radius:10px;padding:6px;display:flex;flex-direction:column;gap:6px;background:#fff;cursor:pointer;min-height:0}
+.bin h4{margin:0;background:var(--navy);color:#fff;border-radius:6px;text-align:center;font-size:14px;padding:4px}
+.bin.hover{border-color:var(--amber);background:var(--amber-soft)}
+.res{display:none;flex-direction:column;gap:8px}
+.res.on{display:flex}
+
+/* ⑦ 용어해설·참고자료 */
+.gl{display:grid;grid-template-columns:1fr 1fr;grid-template-rows:repeat(3,1fr);gap:10px 22px;min-height:0}
+.gi{border-top:2px solid var(--navy);padding:8px 0 0;display:flex;flex-direction:column;gap:3px;min-height:0}
+.gi .t{font-size:16.5px;font-weight:800;color:var(--navy);display:flex;gap:6px;align-items:baseline;flex-wrap:wrap}
+.gi .t em{font-style:normal;font-weight:500;font-size:12.5px;color:var(--gray)}
+.gi .t i{font-style:normal;font-size:12px;font-weight:800;color:var(--navy3);width:22px}
+.gi .d{font-size:14px;line-height:1.5}
+.gi .e{font-size:12.5px;line-height:1.45;color:var(--gray)}
+.gi .e strong{color:var(--navy3)}
+.refs{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:8px;font-size:13.5px;line-height:1.5}
+.refs li{display:grid;grid-template-columns:30px 1fr;gap:4px}
+.refs li span{font-weight:800;color:var(--navy3)}
+.refs a{color:var(--navy2);word-break:break-all}
+.nextmod{background:var(--navy);color:#fff;border-radius:12px;padding:18px 22px;display:flex;flex-direction:column;gap:6px}
+.nextmod small{font-size:12px;font-weight:700;color:#A9B6CF}
+.nextmod strong{font-size:19px;line-height:1.45;letter-spacing:-.3px}
+
+.rotate{position:fixed;left:0;right:0;bottom:max(14px,env(safe-area-inset-bottom));text-align:center;font-size:13px;color:#3A4560;display:none}
+@media (orientation:portrait) and (max-width:700px){.rotate{display:block}}
+</style>
+</head>
+<body>
+<div class="stage" id="stage">
+  <header class="topbar">
+    <!-- [교체] 모듈명 / 과정명·모듈 번호 (장·절 번호는 쓰지 않음) -->
+    <div class="brand" id="brand">추론통계의 직관<small>추론통계와 가설검정 · M08</small></div>
+    <nav class="rail" id="rail" aria-label="학습 단계"><div class="track"><div class="fill" id="fill"></div></div></nav>
+  </header>
+
+  <main class="viewport" id="vp">
+    <!-- ① 학습개요 ─────────────────────────────── -->
+    <section class="slide" data-step="0">
+      <div class="sh"><div class="sec">학습개요</div>
+        <h2 class="big">표본은 모집단분포에서 무작위로 나온 실현값입니다</h2></div>
+      <div class="body split">
+        <div class="fig"><svg id="m8-ov" viewBox="0 0 440 260" role="img" aria-label="현실의 모집단과 표본을 수학의 확률분포와 실현값으로 바꿔 보고, 무작위추출로 데이터를 얻는 흐름"></svg></div>
+        <div class="side">
+          <div class="prevlink"><small>지난 모듈에서는</small>정규분포가 평균과 표준편차 두 파라미터로 정해지고, 표준화로 분포 속 위치를 비교할 수 있음을 배웠습니다.<small style="margin-top:8px">이번 모듈에서는</small>추론통계에서 데이터를 얻는다는 것이 무엇인지, 표본을 어떻게 얻어야 모집단을 올바르게 추정할 수 있는지 직관적으로 이해합니다.</div>
+          <dl class="meta"><dt>학습 시간</dt><dd>약 40분</dd><dt>본문</dt><dd>소단원 4개</dd><dt>실습</dt><dd>조작형 · 분류형 · 추정형</dd></dl>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" data-step="0">
+      <div class="sh"><div class="sec">학습개요 · 이 모듈의 예시</div><h2>성인 남성 10명의 키와 된장국 맛보기로 배웁니다</h2></div>
+      <div class="body split">
+        <div class="fig"><svg id="m8-case" viewBox="0 0 440 250" role="img" aria-label="성인 남성 10명의 키 179, 176, 166, 167, 170, 164, 170, 154, 169, 164와 된장국 냄비"></svg></div>
+        <div class="side">
+          <ul class="key"><li>10명의 키를 끝까지 씁니다.</li></ul>
+          <p class="exp">성인 남성의 평균 키를 알고 싶어 10명을 뽑아 키를 쟀습니다. 이 10명은 표본이고 알고 싶은 것은 성인 남성 전체입니다. 실습에서는 평균 167.6cm, 표준편차 7.0cm인 정규분포를 따르는 가상의 모집단 1,000명을 함께 씁니다. 된장국 맛보기는 추론통계를 직감적으로 이해하는 비유로 씁니다.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ② 학습목표 ─────────────────────────────── -->
+    <section class="slide" data-step="1">
+      <div class="sh"><div class="sec">학습목표</div><h2>이 모듈을 마치면 이렇게 할 수 있습니다</h2></div>
+      <div class="body full" style="align-content:center">
+        <div class="gmap">
+          <div></div><div class="hd">목표</div><div class="hd">확인하는 문항</div><div class="hd">연결 실습</div>
+          <div class="gn">1</div><div class="gt"><span>모집단·모수·표본의 관계를 확률분포와 실현값으로 <b>설명한다</b>.</span></div>
+          <div class="ga"><button class="jump" data-jump="q1">문항 1·2</button></div><div class="gp"><button class="jump" data-jump="p3">실습 3 추정</button></div>
+          <div class="gn">2</div><div class="gt"><span>무작위추출과 편향된 추출을 <b>구분한다</b>.</span></div>
+          <div class="ga"><button class="jump" data-jump="q3">문항 3·4</button></div><div class="gp"><button class="jump" data-jump="p2">실습 2 분류</button></div>
+          <div class="gn">3</div><div class="gt"><span>추출 방법과 표본크기가 추정에 주는 영향과 일반화 범위를 <b>판단한다</b>.</span></div>
+          <div class="ga"><button class="jump" data-jump="q5">문항 5·6</button></div><div class="gp"><button class="jump" data-jump="p1">실습 1 조작</button></div>
+        </div>
+      </div>
+      <p class="foot">버튼을 누르면 해당 문항이나 실습 화면으로 바로 이동합니다.</p>
+    </section>
+
+    <!-- ③ 일상의 예시 ─────────────────────────────── -->
+    <section class="slide" data-step="2">
+      <div class="sh"><div class="sec">일상의 예시 1/5</div><h2>귤 한 상자를 사면 몇 개만 집어 보고 고릅니다</h2></div>
+      <div class="body split">
+        <div class="fig"><svg id="m8-orange" viewBox="0 0 440 250" role="img" aria-label="귤 상자 전체와 손에 집은 귤 몇 개"></svg></div>
+        <div class="side">
+          <ul class="key"><li>상자 전체가 있고, 손에는 일부만 있습니다.</li></ul>
+          <p class="exp">상자 안 귤의 크기는 제각각이어서, 상자 전체를 놓고 보면 크기별 개수가 어떤 모양을 이룹니다. 우리가 손에 집어 보는 귤 몇 개는 그 모양에서 일부를 꺼낸 것입니다. 알고 싶은 것은 손에 든 몇 개가 아니라 상자 전체입니다.</p>
+          <p class="next"><span>본문에서</span>4-1 모집단분포와 모수로 이어집니다.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" data-step="2">
+      <div class="sh"><div class="sec">일상의 예시 2/5</div><h2>제비뽑기 통의 비율이 뽑힐 가능성을 정합니다</h2></div>
+      <div class="body split">
+        <div class="fig"><svg viewBox="0 0 440 250" role="img" aria-label="당첨 2장, 꽝 8장이 든 통에서 한 장씩 뽑음">
+          <path d="M60 70 h140 l-14 150 h-112z" fill="#FCF3D9" stroke="#E0A100" stroke-width="2"/>
+          <g fill="#E0A100"><rect x="86" y="120" width="26" height="16" rx="3" transform="rotate(-12 99 128)"/><rect x="140" y="160" width="26" height="16" rx="3" transform="rotate(10 153 168)"/></g>
+          <g fill="#fff" stroke="#9AA0AA"><rect x="104" y="96" width="26" height="16" rx="3"/><rect x="150" y="110" width="26" height="16" rx="3" transform="rotate(14 163 118)"/><rect x="80" y="160" width="26" height="16" rx="3"/><rect x="112" y="140" width="26" height="16" rx="3" transform="rotate(-8 125 148)"/><rect x="100" y="186" width="26" height="16" rx="3"/><rect x="140" y="190" width="26" height="16" rx="3" transform="rotate(-14 153 198)"/><rect x="160" y="140" width="26" height="16" rx="3"/><rect x="74" y="130" width="26" height="16" rx="3" transform="rotate(16 87 138)"/></g>
+          <text x="130" y="244" text-anchor="middle" font-size="12" font-weight="700" fill="#1B2A4A">당첨 2 · 꽝 8</text>
+          <path d="M214 100 C250 80 270 80 300 96" fill="none" stroke="#5B6E97" stroke-width="2" stroke-dasharray="5 4"/><path d="M300 96 l-10 -2 l4 9z" fill="#5B6E97"/>
+          <rect x="300" y="90" width="110" height="80" rx="10" fill="#fff" stroke="#1B2A4A" stroke-width="1.5"/>
+          <text x="355" y="118" text-anchor="middle" font-size="12.5" font-weight="800" fill="#1B2A4A">뽑힐 확률</text>
+          <text x="355" y="142" text-anchor="middle" font-size="12" fill="#22262E">당첨 2/10</text><text x="355" y="160" text-anchor="middle" font-size="12" fill="#22262E">꽝 8/10</text>
+        </svg></div>
+        <div class="side">
+          <ul class="key"><li>통 안의 비율이 곧 확률이 됩니다.</li></ul>
+          <p class="exp">당첨 2장과 꽝 8장이 든 통에서 잘 섞어 한 장을 뽑으면 당첨될 확률은 2/10입니다. 통 안 전체의 구성 비율이 확률이 되고, 실제로 뽑힌 한 장은 그 확률에 따라 나온 결과입니다. 통 전체와 뽑힌 몇 장의 관계는 모집단과 표본의 관계와 닮았습니다.</p>
+          <p class="next"><span>본문에서</span>4-2 확률분포와 실현값으로 이어집니다.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" data-step="2">
+      <div class="sh"><div class="sec">일상의 예시 3/5</div><h2>제비는 잘 섞은 뒤에 뽑아야 공평합니다</h2></div>
+      <div class="body split">
+        <div class="fig"><svg viewBox="0 0 440 250" role="img" aria-label="섞지 않은 통에서 위쪽만 뽑는 경우와 잘 섞은 뒤 뽑는 경우">
+          <rect x="20" y="30" width="190" height="190" rx="12" fill="#fff"/><rect x="230" y="30" width="190" height="190" rx="12" fill="#fff"/>
+          <text x="115" y="54" text-anchor="middle" font-size="13" font-weight="800" fill="#B42318">위쪽만 집기</text><text x="325" y="54" text-anchor="middle" font-size="13" font-weight="800" fill="#23704F">잘 섞어 뽑기</text>
+          <rect x="60" y="70" width="110" height="130" rx="8" fill="#F3F5F9" stroke="#9AA0AA"/>
+          <g fill="#E0A100"><rect x="70" y="80" width="90" height="14" rx="3"/><rect x="70" y="98" width="90" height="14" rx="3"/></g>
+          <g fill="#fff" stroke="#9AA0AA"><rect x="70" y="116" width="90" height="14" rx="3"/><rect x="70" y="134" width="90" height="14" rx="3"/><rect x="70" y="152" width="90" height="14" rx="3"/><rect x="70" y="170" width="90" height="14" rx="3"/></g>
+          <path d="M150 70 l20 -16" stroke="#B42318" stroke-width="3"/>
+          <rect x="270" y="70" width="110" height="130" rx="8" fill="#F3F5F9" stroke="#9AA0AA"/>
+          <g fill="#fff" stroke="#9AA0AA"><rect x="280" y="80" width="90" height="14" rx="3"/><rect x="280" y="116" width="90" height="14" rx="3"/><rect x="280" y="134" width="90" height="14" rx="3"/><rect x="280" y="170" width="90" height="14" rx="3"/></g>
+          <g fill="#E0A100"><rect x="280" y="98" width="90" height="14" rx="3"/><rect x="280" y="152" width="90" height="14" rx="3"/></g>
+          <path d="M392 110 a16 16 0 1 1 -4 -18" fill="none" stroke="#23704F" stroke-width="2.5"/>
+          <text x="115" y="214" text-anchor="middle" font-size="11.5" fill="#6B7280">한쪽으로 몰린 것만 뽑힘</text><text x="325" y="214" text-anchor="middle" font-size="11.5" fill="#6B7280">어느 제비든 같은 기회</text>
+        </svg></div>
+        <div class="side">
+          <ul class="key"><li>뽑는 방법이 치우치면 결과도 치우칩니다.</li></ul>
+          <p class="exp">당첨 제비가 위쪽에 몰려 있는 통에서 위쪽만 집으면 당첨이 실제보다 훨씬 자주 나옵니다. 잘 섞은 뒤 아무것이나 하나씩 뽑아야 어느 제비든 같은 기회로 뽑힙니다. 뽑는 방법이 공평해야 뽑힌 것으로 통 전체를 제대로 짐작할 수 있습니다.</p>
+          <p class="next"><span>본문에서</span>4-3 무작위추출과 편향으로 이어집니다.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" data-step="2">
+      <div class="sh"><div class="sec">일상의 예시 4/5</div><h2>마트 시식 한 조각으로 상품 전체 맛을 판단합니다</h2></div>
+      <div class="body split">
+        <div class="fig"><svg viewBox="0 0 440 250" role="img" aria-label="시식용 한 조각과 진열된 상품 전체">
+          <rect x="200" y="50" width="220" height="150" rx="10" fill="#fff" stroke="#5B6E97" stroke-width="1.5"/>
+          <g fill="#F3D9A4" stroke="#B9862E"><rect x="214" y="66" width="56" height="36" rx="6"/><rect x="282" y="66" width="56" height="36" rx="6"/><rect x="350" y="66" width="56" height="36" rx="6"/><rect x="214" y="112" width="56" height="36" rx="6"/><rect x="282" y="112" width="56" height="36" rx="6"/><rect x="350" y="112" width="56" height="36" rx="6"/><rect x="214" y="156" width="56" height="36" rx="6"/><rect x="282" y="156" width="56" height="36" rx="6"/><rect x="350" y="156" width="56" height="36" rx="6"/></g>
+          <text x="310" y="226" text-anchor="middle" font-size="12" font-weight="700" fill="#1B2A4A">진열된 상품 전체</text>
+          <ellipse cx="96" cy="140" rx="64" ry="18" fill="#E4E9F2"/><rect x="80" y="112" width="30" height="20" rx="4" fill="#F3D9A4" stroke="#B9862E"/><line x1="96" y1="96" x2="96" y2="114" stroke="#6B7280" stroke-width="2"/>
+          <text x="96" y="186" text-anchor="middle" font-size="12" font-weight="700" fill="#1B2A4A">시식 한 조각</text>
+          <path d="M162 130 h28" stroke="#E0A100" stroke-width="2.5"/><path d="M190 130 l-8 -5 v10z" fill="#E0A100"/>
+        </svg></div>
+        <div class="side">
+          <ul class="key"><li>전부 먹지 않고 일부로 전체를 짐작합니다.</li></ul>
+          <p class="exp">마트에서 진열된 상품을 모두 먹어 보고 살 수는 없습니다. 작은 시식 한 조각만 맛보고도 상품 전체의 맛을 꽤 정확히 짐작합니다. 일부만 조사해 전체를 짐작하는 일은 우리가 일상에서 무의식적으로 하는 추론입니다.</p>
+          <p class="next"><span>본문에서</span>4-4 된장국으로 보는 추론통계로 이어집니다.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" data-step="2">
+      <div class="sh"><div class="sec">일상의 예시 5/5</div><h2>일부로 전체를 제대로 짐작하려면 무엇이 필요할까요?</h2></div>
+      <div class="body split even">
+        <div class="fig"><svg viewBox="0 0 420 250" role="img" aria-label="네 장면이 추론통계의 직관으로 이어지는 그림">
+          <defs><marker id="b2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10z" fill="#5B6E97"/></marker></defs>
+          <g font-size="13" font-weight="700" fill="#1B2A4A" text-anchor="middle">
+            <rect x="14" y="18" width="150" height="44" rx="10" fill="#fff" stroke="#5B6E97" stroke-width="1.5"/><text x="89" y="45">전체의 모양</text>
+            <rect x="14" y="74" width="150" height="44" rx="10" fill="#fff" stroke="#5B6E97" stroke-width="1.5"/><text x="89" y="101">비율 = 확률</text>
+            <rect x="14" y="130" width="150" height="44" rx="10" fill="#fff" stroke="#5B6E97" stroke-width="1.5"/><text x="89" y="157">잘 섞어 뽑기</text>
+            <rect x="14" y="186" width="150" height="44" rx="10" fill="#fff" stroke="#5B6E97" stroke-width="1.5"/><text x="89" y="213">일부로 짐작</text>
+          </g>
+          <g stroke="#5B6E97" stroke-width="2" fill="none"><path d="M166 40 C220 40 220 112 254 120" marker-end="url(#b2)"/><path d="M166 96 C210 96 220 118 254 122" marker-end="url(#b2)"/><path d="M166 152 C210 152 220 130 254 128" marker-end="url(#b2)"/><path d="M166 208 C220 208 220 138 254 130" marker-end="url(#b2)"/></g>
+          <rect x="258" y="84" width="150" height="82" rx="12" fill="#1B2A4A"/>
+          <text x="333" y="120" text-anchor="middle" font-size="16" font-weight="800" fill="#fff">추론통계의 직관</text>
+          <text x="333" y="144" text-anchor="middle" font-size="11.5" fill="#C9D3E6">표본으로 모집단 추정</text>
+        </svg></div>
+        <div class="side">
+          <p class="exp">네 장면은 전체가 이루는 모양을 떠올리고, 전체의 비율을 확률로 보고, 잘 섞어 공평하게 뽑고, 그 일부로 전체를 짐작하는 순서로 이어집니다. 통계학은 이를 모집단분포, 확률분포와 실현값, 무작위추출, 추론이라는 말로 정리합니다.</p>
+          <p class="next"><span>다음 질문</span>데이터를 얻는다는 것은 무엇일까?</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ④ 본문 ─────────────────────────────── -->
+    <section class="slide" data-step="3" id="s-4-1a">
+      <div class="sh"><div class="sec">4-1 모집단분포와 모수</div><h2><span class="q">Q</span>데이터를 얻는다는 것은 무엇일까요?</h2></div>
+      <div class="body split even">
+        <div class="fig"><svg id="m8-popdist" viewBox="0 0 420 270" role="img" aria-label="성인 남성 전체 키의 모집단분포에서 10명의 표본을 추출"></svg></div>
+        <div class="side">
+          <ul class="key"><li><b>모집단분포</b>: 모집단 전체 값으로 이룬 분포</li><li>표본은 이 분포에서 일부를 추출한 것입니다.</li></ul>
+          <p class="exp">전수조사는 모든 요소를 조사해 기술통계로 끝나지만, 표본조사는 추론통계로 모집단을 추정해야 합니다. 모집단에서 일부를 표본으로 추출한다는 것은 모집단의 전체 값으로 구성된 분포에서 일부를 꺼내는 것입니다. 한국 성인 남성 전원의 키로 엄청난 개수의 히스토그램을 그렸다고 상상해 보세요. 그것이 모집단분포입니다.</p>
+          <p class="next"><span>다음 질문</span>모집단분포를 특징 짓는 값은 무엇이라 부를까?</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" data-step="3" id="s-4-1b">
+      <div class="sh"><div class="sec">4-1 모집단분포와 모수</div><h2><span class="q">Q</span>모집단분포를 특징 짓는 값은 무엇이라 부를까요?</h2></div>
+      <div class="body split even">
+        <div class="fig"><svg id="m8-param" viewBox="0 0 420 270" role="img" aria-label="모평균과 모분산은 모수, 표본평균은 표본에서 계산한 값"></svg></div>
+        <div class="side">
+          <ul class="key"><li><b>모수</b>: 모집단분포를 특징 짓는 양</li><li>일상어 ‘모수’(요소 개수)와 혼동하지 않습니다.</li></ul>
+          <p class="exp">모집단분포가 양적 변수의 분포라면 평균이나 분산을 정의할 수 있으며, 이를 각각 <b>모평균</b>, <b>모분산</b>이라 합니다. 이렇게 모집단분포를 특징 짓는 양을 모수 또는 파라미터라 부릅니다. 통계학에서는 모수를 아는 것이 목표이지만 모집단을 모두 조사하기 어려우므로 표본으로 모수를 추정합니다.</p>
+          <p class="next"><span>다음 질문</span>표본과 모집단을 수학으로는 어떻게 다룰까?</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" data-step="3" id="s-4-2a">
+      <div class="sh"><div class="sec">4-2 확률분포와 실현값</div><h2><span class="q">Q</span>표본과 모집단을 수학으로는 어떻게 다룰까요?</h2></div>
+      <div class="body split even">
+        <div class="fig"><svg id="m8-map" viewBox="0 0 420 270" role="img" aria-label="모집단은 확률분포, 표본은 확률분포를 따르는 실현값으로 대응"></svg></div>
+        <div class="side">
+          <ul class="key"><li>모집단 = 확률분포, 표본 = 실현값</li><li>추론은 실현값으로 확률분포를 추정하는 일</li></ul>
+          <p class="exp">모집단 히스토그램의 세로축을 전체 요소 수로 나누면 비율이 되고, 이를 확률로 볼 수 있습니다. 모집단에서 무작위·독립으로 하나씩 추출하는 것은 그 확률분포에서 실현값이 발생하는 일에 해당합니다. 그래서 ‘얻은 표본으로 모집단을 추정한다’는 목표는 ‘얻은 실현값으로 이 값을 발생시킨 확률분포를 추정한다’로 바꿔 말할 수 있으며, 이것이 추론통계의 가장 중요한 사고방식입니다.</p>
+          <p class="next"><span>다음 질문</span>들쭉날쭉한 실제 모집단분포는 어떻게 다룰까?</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" data-step="3" id="s-4-2b">
+      <div class="sh"><div class="sec">4-2 확률분포와 실현값</div><h2><span class="q">Q</span>들쭉날쭉한 실제 모집단분포는 어떻게 다룰까요?</h2></div>
+      <div class="body split even">
+        <div class="fig"><svg id="m8-model" viewBox="0 0 420 270" role="img" aria-label="현실 세계의 들쭉날쭉한 모집단분포를 수학 세계의 정규분포로 모형화"></svg></div>
+        <div class="side">
+          <ul class="key"><li><b>모형화</b>: 수학적 확률분포로 근사하기</li><li>모형을 통해 현실을 보는 것임을 명심합니다.</li></ul>
+          <p class="exp">현실의 모집단분포는 약간 비뚤거나 들쭉날쭉합니다. 성인 남성 키의 분포는 정규분포와 매우 비슷하지만 엄밀한 의미에서 정규분포는 아닙니다. 그래서 수학적으로 다룰 수 있는 확률분포에 근사해 작업하며, 이를 모형화라 합니다. 정규분포로 근사하면 평균과 표준편차 2가지 파라미터만으로 분포를 기술할 수 있고, 뒤에 나올 t분포도 모집단이 정규분포라는 가정에 이용합니다.</p>
+          <p class="next"><span>다음 질문</span>표본은 어떻게 뽑아야 할까?</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" data-step="3" id="s-4-3a">
+      <div class="sh"><div class="sec">4-3 무작위추출과 편향</div><h2><span class="q">Q</span>표본은 어떻게 뽑아야 할까요?</h2></div>
+      <div class="body split even">
+        <div class="fig"><svg id="m8-rand" viewBox="0 0 420 270" role="img" aria-label="단순무작위추출법과 층화추출법"></svg></div>
+        <div class="side">
+          <ul class="key"><li><b>무작위추출</b>: 요소를 하나씩 무작위로 선택</li><li>값을 골라 버리거나 몰아서 뽑지 않습니다.</li></ul>
+          <p class="exp">실현값은 확률분포에서 무작위로 발생한 값이어야 하므로, 작은 값이라고 버리거나 큰 값만 채택해서는 안 됩니다. 키를 재다가 주위에 배구 선수가 여럿 있다고 한꺼번에 재는 것처럼 독립적이지 않은 방식도 적절하지 않습니다. 모든 요소의 목록에서 난수로 뽑는 <b>단순무작위추출법</b>이 가장 이상적이지만, 실제로는 몇 개의 층으로 나눠 각 층에서 무작위로 뽑는 <b>층화추출법</b>도 자주 씁니다.</p>
+          <p class="next"><span>다음 질문</span>표본이 치우치면 어떻게 될까?</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" data-step="3" id="s-4-3b">
+      <div class="sh"><div class="sec">4-3 무작위추출과 편향</div><h2><span class="q">Q</span>표본이 치우치면 어떻게 될까요?</h2></div>
+      <div class="body split even">
+        <div class="fig"><svg id="m8-poll" viewBox="0 0 420 270" role="img" aria-label="전화 조사 800명 지지율 28퍼센트와 인터넷 조사 10만 명 80퍼센트 이상 비교"></svg></div>
+        <div class="side">
+          <ul class="key"><li><b>편향</b>된 표본으로는 올바른 추정이 어렵습니다.</li><li>표본이 커도 편향은 사라지지 않습니다.</li></ul>
+          <p class="exp">한국인 전체의 소득을 알고 싶은데 서울 거주자만 조사하면, 서울 거주자는 다른 지역보다 소득이 높은 경향이 있어 모집단을 반영하지 못합니다. 2018년 일본의 한 여론조사에서 전화로 약 800명을 조사한 정권 지지율은 28%였지만, 인터넷으로 10만 명을 조사했더니 80%를 넘었다는 기사가 있었습니다. 연령층 등의 편향이 심한 인터넷 조사는 10만 명이라도 모집단을 올바르게 반영하지 못합니다.</p>
+          <p class="next"><span>다음 질문</span>얻은 결과는 어디까지 일반화할 수 있을까?</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" data-step="3" id="s-4-3c">
+      <div class="sh"><div class="sec">4-3 무작위추출과 편향</div><h2><span class="q">Q</span>얻은 결과는 어디까지 일반화할 수 있을까요?</h2></div>
+      <div class="body split even">
+        <div class="fig"><svg id="m8-gen" viewBox="0 0 420 270" role="img" aria-label="한국인 표본의 백신 효과와 한 대학 학생 설문의 일반화 범위"></svg></div>
+        <div class="side">
+          <ul class="key"><li>일반화의 범위는 분야의 지식에 따라 다릅니다.</li><li>결론의 한계와 제약을 함께 논의합니다.</li></ul>
+          <p class="exp">모집단을 너무 넓게 잡으면 무작위추출이 안 될 때가 있습니다. 백신 효과의 대상은 모든 인종이지만 한국인만 표본으로 삼았다면 모집단을 다시 고려해야 하고, ‘인종별로 효과에 차이가 없다’는 정보가 있다면 다른 인종에도 유효하다고 기대할 수 있습니다. 자기 대학 학생만 설문했다면 학력과 관련된 결론은 대학생 전체로 넓히기 어렵지만, 건강 상태 같은 성질은 일반화할 수 있을지도 모릅니다.</p>
+          <p class="next"><span>다음 질문</span>추론통계를 직감적으로 이해할 수 있을까?</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" data-step="3" id="s-4-4a">
+      <div class="sh"><div class="sec">4-4 된장국으로 보는 추론통계</div><h2><span class="q">Q</span>된장국 맛보기는 추론통계와 어떻게 닮았을까요?</h2></div>
+      <div class="body split even">
+        <div class="fig"><svg id="m8-soup" viewBox="0 0 420 270" role="img" aria-label="냄비 안 된장국은 모집단, 국자로 뜬 국은 표본, 맛보기는 추정"></svg></div>
+        <div class="side">
+          <ul class="key"><li>냄비 전체 = 모집단, 국자로 뜬 국 = 표본</li><li>알고 싶은 것은 표본이 아닌 모집단입니다.</li></ul>
+          <p class="exp">요리 중에 된장국 맛을 볼 때 냄비 안 된장국 전체가 모집단이고, 국자로 작은 접시에 덜어 낸 소량이 표본이며, 그 맛을 보는 것이 추정입니다. 목적은 냄비 안 된장국의 맛을 아는 것이므로 국자로 뜬 국만 평가하고 냄비 전체를 판단하지 않으면 의미가 없습니다. 또 냄비 안 된장국을 다 먹어서 맛을 확인할 수는 없으니, 전수조사가 어렵다는 점도 같습니다.</p>
+          <p class="next"><span>다음 질문</span>얼마나, 어떻게 떠야 할까?</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" data-step="3" id="s-4-4b">
+      <div class="sh"><div class="sec">4-4 된장국으로 보는 추론통계</div><h2><span class="q">Q</span>국은 얼마나, 어떻게 떠야 할까요?</h2></div>
+      <div class="body split even">
+        <div class="fig"><svg id="m8-ladle" viewBox="0 0 420 270" role="img" aria-label="한 방울, 국자 하나, 한 그릇의 양 비교와 섞지 않고 위쪽만 뜬 경우"></svg></div>
+        <div class="side">
+          <ul class="key"><li>작은 표본으로도 모집단을 추론할 수 있습니다.</li><li>뜨기 전에 잘 섞듯, 무작위로 추출합니다.</li></ul>
+          <p class="exp">한 방울 정도라면 냄비 전체의 맛을 제대로 반영하지 못하지만, 한 그릇까지 먹지 않아도 국자로 뜬 양만으로 충분히 정확하게 알 수 있습니다. 반면 된장국을 그냥 두면 된장이 가라앉아 위쪽은 맛이 옅어지는데, 위쪽만 떠서 싱겁다고 판단하면 표본이 한쪽으로 치우친 것입니다. 편향된 추출로 얻은 표본은 얼마나 잘못된 결론으로 이어지는지 보여 줍니다.</p>
+          <p class="next"><span>정리</span>배운 개념을 나란히 놓아 봅시다.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" data-step="3" id="s-4-sum">
+      <div class="sh"><div class="sec">4-5 정리</div><h2>무작위로 뽑은 실현값으로 모집단분포를 추정합니다</h2></div>
+      <div class="body full" style="align-content:center">
+        <table class="sumtbl">
+          <thead><tr><th>개념</th><th>무엇인가</th><th>이 모듈의 예시</th></tr></thead>
+          <tbody>
+            <tr><td>모집단분포와 모수</td><td>모집단 전체 값의 분포와, 이를 특징 짓는 모평균·모분산 등의 양입니다.</td><td>성인 남성 전원의 키 분포</td></tr>
+            <tr><td>확률분포와 실현값</td><td>모집단 = 확률분포, 표본 = 실현값. 현실 분포는 수학적 분포로 모형화합니다.</td><td>10명의 키, 표본평균 167.9cm</td></tr>
+            <tr><td>무작위추출과 편향</td><td>요소를 하나씩 무작위로 뽑아야 합니다. 커도 편향된 표본은 쓸 수 없습니다.</td><td>전화 800명 28% vs 인터넷 10만 명 80%</td></tr>
+            <tr><td>추론의 직관</td><td>모집단이 목적이고, 작은 표본도 충분하며, 잘 섞어 무작위로 뜹니다.</td><td>된장국 맛보기</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="next"><span>형성평가로</span>이제 같은 예시로 문제를 풀어 봅니다.</p>
+    </section>
+
+    <!-- ⑤ 형성평가: 스크립트의 QUIZ 배열로 만듭니다 -->
+
+    <!-- ⑥ 실습 1 · 조작형 (모듈 전용) ─────────────── -->
+    <section class="slide" data-step="5" id="p1">
+      <div class="sh"><div class="sec">실습 1 · 조작형</div><h2>목표: 추출 방법과 표본크기를 바꿔 표본평균이 어떻게 달라지는지 봅니다</h2></div>
+      <div class="body split">
+        <div class="pcol" style="gap:8px">
+          <div class="plabel" style="margin:0">해보기 · 방법과 표본크기를 고른 뒤 「뽑기」를 누르세요 <span class="tag-v">가상 데이터</span></div>
+          <div class="mbtns" id="m8-meth" style="gap:6px"></div>
+          <div class="ctrl">표본크기 n<input type="range" id="m8-n" min="2" max="100" step="1" value="10" aria-label="표본크기"><strong id="m8-nv" style="min-width:48px;text-align:right">-</strong><button class="btn" id="m8-draw" style="padding:5px 12px">뽑기</button></div>
+          <div class="fig" style="flex:1"><svg id="m8-p1-svg" viewBox="0 0 470 190" role="img" aria-label="모집단 1,000명과 뽑힌 표본, 표본평균"></svg></div>
+        </div>
+        <div class="pcol" style="gap:10px;justify-content:center">
+          <div class="plabel" style="margin:0">결과 확인</div>
+          <div class="stats three"><div><small>모평균</small><strong>167.6</strong></div><div><small>표본평균</small><strong id="m8-sm">-</strong></div><div><small>차이</small><strong id="m8-df">-</strong></div></div>
+          <p class="howto">도전: 무작위추출과 ‘동호회에서만’ 추출을 각각 여러 번 뽑아, 표본크기를 키우면 차이가 어떻게 되는지 비교해 보세요.</p>
+          <p class="pmsg" id="m8-msg"></p>
+          <div class="think"><span>생각해보기</span>편향된 방법으로 표본크기를 100명까지 늘리면 차이가 0에 가까워지나요?</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ⑥ 실습 2 · 분류형 ─────────────────────── -->
+    <section class="slide" data-step="5" id="p2">
+      <div class="sh"><div class="sec">실습 2 · 분류형</div><h2>목표: 표본을 얻는 방법을 무작위추출과 편향된 추출로 나눕니다</h2></div>
+      <div class="body split even">
+        <div class="pcol">
+          <div class="plabel">해보기 · 카드를 끌어다 칸에 놓으세요 (카드를 누른 뒤 칸을 눌러도 됩니다)</div>
+          <div class="pool" id="p2-pool"></div>
+        </div>
+        <div class="pcol" style="gap:8px">
+          <div class="plabel" style="margin:0">결과 확인 · <span id="p2-count">0 / 0</span></div>
+          <div class="bins" id="p2-bins" style="grid-template-columns:repeat(2,1fr)"></div>
+          <div class="p2row"><p class="pmsg" id="p2-msg"></p><button class="btn ghost" id="p2-reset">다시 하기</button></div>
+          <div class="think"><span>생각해보기</span>편향된 방법으로 얻은 표본은 모집단을 어떻게 다시 정하면 쓸 수 있을까요?</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ⑥ 실습 3 · 추정형 (모듈 전용) ─────────────── -->
+    <section class="slide" data-step="5" id="p3">
+      <div class="sh"><div class="sec">실습 3 · 추정형</div><h2>목표: 10명의 키로 모집단 평균을 추정하고 가정한 값과 비교합니다</h2></div>
+      <div class="body split">
+        <div class="pcol">
+          <div class="plabel">해보기 · 아래 10명의 키를 보고 성인 남성 전체의 평균 키를 추정하세요</div>
+          <div class="fig" style="flex:1"><svg id="m8-p3-svg" viewBox="0 0 470 220" role="img" aria-label="10명의 키 점그림과 표본평균, 모평균"></svg></div>
+        </div>
+        <div class="pcol" style="gap:9px;justify-content:center">
+          <div class="ctrl">내 추정<input type="range" id="m8-g" min="155" max="180" step="0.1" value="170" aria-label="모집단 평균 키 추정(cm)"><strong id="m8-gv" style="min-width:64px;text-align:right">-</strong></div>
+          <div style="display:flex;gap:8px"><button class="btn" id="m8-check">모평균 확인</button><button class="btn ghost" id="m8-again">10명 다시 뽑기</button></div>
+          <div class="stats three"><div><small>표본평균</small><strong id="m8-xbar">-</strong></div><div><small>내 추정</small><strong id="m8-mine">-</strong></div><div><small>모평균 <span class="tag-v">가정</span></small><strong id="m8-mu">?</strong></div></div>
+          <p class="pmsg" id="m8-msg3"></p>
+          <div class="think"><span>생각해보기</span>10명을 다시 뽑을 때마다 표본평균이 조금씩 달라집니다. 그 차이는 얼마나 클까요?</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ⑦ 용어해설·참고자료: 스크립트의 GLOSSARY, REFS, NEXT로 만듭니다 -->
+  </main>
+
+  <footer class="bottombar">
+    <a class="home" href="../index.html" title="홈으로 (학습 모듈 목록)" aria-label="홈으로"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 10.5 12 3l9 7.5"/><path d="M5.5 9.5V21h13V9.5"/></svg><span>홈</span></a><span class="counter" id="counter"></span><span class="spacer"></span>
+    <button class="nav" id="prev" type="button">이전</button>
+    <button class="nav primary" id="next" type="button">다음</button>
+  </footer>
+</div>
+<p class="rotate">화면을 가로로 돌리면 더 크게 볼 수 있습니다.</p>
+
+<script>
+(function(){
+"use strict";
+
+/* =====================================================================
+   [교체] 모듈 설정 — 새 모듈은 이 블록과 HTML 화면 문장만 바꿉니다.
+   ===================================================================== */
+var MODULE={title:"추론통계의 직관",sub:"추론통계와 가설검정 · M08"};
+var STEPS=["학습개요","학습목표","일상의 예시","본문","형성평가","실습","용어해설"];
+
+/* 일관 사례: 학습내용의 성인 남성 10명 표본(합 1,679, 표본평균 167.9) */
+var SAMPLE10=[179,176,166,167,170,164,170,154,169,164];
+/* 실습용 가상 모집단: 성인 남성 1,000명, N(167.6, 7.0²)에서 생성 후 평균을 167.6으로 맞춤 */
+var POP={size:1000,mean:167.6,sd:7.0,seed:808};
+var CASE=null, PAIRS=null, P1={target:null};
+
+var QUIZ=[
+ {goal:1,type:"계산",stem:"성인 남성 10명의 키(179, 176, 166, 167, 170, 164, 170, 154, 169, 164cm)를 모두 더하면 1,679cm입니다. 모평균을 추정하는 데 쓸 표본평균은 얼마일까요?",
+  opts:["167.9cm","168.0cm","1,679cm","16.79cm"],ans:0,
+  exp:"표본평균 = 1,679 ÷ 10 = 167.9cm입니다. 168.0cm는 가운데 두 값(167, 169)의 평균인 중앙값이고, 1,679cm는 합계입니다. 표본평균은 모집단분포의 평균(모평균)을 추정하는 데 씁니다.",back:"s-4-1b",backLabel:"4-1 모수와 표본 다시 보기"},
+ {goal:1,type:"O/X 오개념",stem:"“통계학에서 말하는 ‘모수’는 모집단에 포함된 요소의 개수를 뜻한다.”",
+  opts:["O","X"],ans:1,ox:true,
+  exp:"통계학의 모수(파라미터)는 모평균, 모분산처럼 모집단분포를 특징 짓는 양입니다. 일상에서 모집단의 요소 개수를 ‘모수’라 부르기도 하므로 혼동하지 않도록 주의합니다.",back:"s-4-1b",backLabel:"4-1 모수 다시 보기"},
+ {goal:2,type:"상황 판단",stem:"한국인 전체의 소득을 알고 싶어 서울 거주자만 무작위로 조사했습니다. 이 표본에 대한 판단으로 가장 알맞은 것은 무엇일까요?",
+  opts:["서울 거주자로 치우쳐 한국인 소득이라는 모집단을 반영하지 못한다","서울 안에서는 무작위로 뽑았으므로 한국인 전체를 대표한다","표본을 더 늘리면 편향이 저절로 사라진다","소득은 지역과 관계없으므로 문제없다"],ans:0,
+  exp:"서울 거주자는 다른 지역 거주자보다 소득이 높은 경향이 있어, 서울 거주자만으로 얻은 표본은 한국인 소득이라는 모집단을 반영하지 못합니다. 서울 안에서 무작위로 뽑았더라도 모집단 전체에서 무작위로 뽑은 것은 아닙니다.",back:"s-4-3b",backLabel:"4-3 편향된 추출 다시 보기"},
+ {goal:2,type:"O/X 오개념",stem:"“인터넷으로 10만 명을 조사했으니, 전화로 800명을 조사한 것보다 언제나 모집단을 더 정확히 반영한다.”",
+  opts:["O","X"],ans:1,ox:true,
+  exp:"표본이 커도 편향은 사라지지 않습니다. 연령층 등의 편향이 심한 인터넷 조사는 10만 명이라는 대규모 데이터라도 모집단의 성질을 올바르게 반영하지 못합니다.",back:"s-4-3b",backLabel:"4-3 여론조사 예 다시 보기"},
+ {goal:3,type:"상황 판단",stem:"한 대학의 학생만 설문해 학력과 관련된 결론을 얻었습니다. 이 결론을 다루는 방법으로 가장 알맞은 것은 무엇일까요?",
+  opts:["대학마다 학력 수준이 다를 수 있으므로, 대학생 전체로 일반화하는 데 한계가 있음을 논의한다","표본이 대학생이므로 대학생 전체의 결론으로 그대로 쓴다","무작위로 뽑지 않았으니 어떤 결론도 얻을 수 없다","표본크기만 늘리면 대학생 전체로 일반화할 수 있다"],ans:0,
+  exp:"각 대학은 학력 수준이 다른 집단일 수 있어, 한 대학의 결과를 대학생 전체로 넓히기는 어렵습니다. 선행 연구를 참고해 결론을 얼마나 일반화할 수 있는지, 그 한계와 제약을 충분히 논의해야 합니다.",back:"s-4-3c",backLabel:"4-3 일반화 다시 보기"},
+ {goal:3,type:"O/X 오개념",stem:"“된장국 맛을 제대로 알려면 적어도 한 그릇은 먹어 봐야 한다. 즉, 표본이 작으면 모집단을 추론할 수 없다.”",
+  opts:["O","X"],ans:1,ox:true,
+  exp:"한 방울은 너무 적지만, 국자로 뜬 정도의 작은 양만으로도 냄비 안 된장국의 맛을 충분히 정확하게 알 수 있습니다. 잘 섞어 무작위로 뽑는다면 작은 크기의 표본으로도 모집단을 추론할 수 있습니다.",back:"s-4-4b",backLabel:"4-4 국자의 양 다시 보기"}
+];
+
+var BINS=["무작위추출","편향된 추출"];
+var CARDS=[["전체 명부에서 난수로 고른 100명","무작위추출"],["지역별 층으로 나눠 각 층에서 무작위로 고른 사람","무작위추출"],["잘 저은 뒤 국자로 뜬 된장국","무작위추출"],
+           ["한국인 소득을 알려고 서울 거주자만 조사","편향된 추출"],["정권 지지율을 인터넷 응답자 10만 명으로 조사","편향된 추출"],["섞지 않고 위쪽만 뜬 된장국","편향된 추출"]];
+var HINT={"무작위추출":"모집단의 요소가 고르게 뽑힐 기회를 갖습니다.","편향된 추출":"특정한 쪽으로 치우친 요소만 뽑힙니다."};
+
+var GLOSSARY=[
+ ["모집단분포","population distribution","모집단에 포함된 전체 값으로 구성된 분포입니다.","한국 성인 남성 전원의 키 분포"],
+ ["모수(파라미터)","parameter","모평균, 모분산처럼 모집단분포를 특징 짓는 양입니다. 요소 개수를 뜻하는 일상어와 구분합니다.","성인 남성 키의 모평균"],
+ ["모평균","population mean","모집단분포의 평균입니다.","실습에서 가정한 167.6cm"],
+ ["모분산","population variance","모집단분포의 분산입니다.","실습에서 가정한 7.0² = 49"],
+ ["모형화","modeling","현실의 모집단분포를 수학적으로 다룰 수 있는 확률분포로 근사하는 일입니다.","성인 남성 키를 정규분포로 근사"],
+ ["무작위추출","random sampling","모집단에 포함된 요소를 하나씩 무작위로 선택해 표본을 얻는 방식입니다.","잘 저은 뒤 국자로 뜬 된장국"],
+ ["단순무작위추출법","simple random sampling","모든 요소의 목록을 만들고 난수로 표본을 정하는 방법입니다.","전체 명부에서 난수로 고른 100명"],
+ ["층화추출법","stratified sampling","모집단을 몇 개의 층으로 나눈 뒤 각 층에서 필요한 수만큼 무작위로 뽑는 방법입니다.","지역별 층에서 각각 무작위로 고르기"],
+ ["편향","bias","표본이 모집단의 한쪽으로 치우쳐 모집단을 올바르게 반영하지 못하는 상태입니다.","서울 거주자만으로 한국인 소득 조사"]
+];
+var REFS=[];
+var NEXT={title:"M09 표준오차",line:"표본평균은 뽑을 때마다 조금씩 달라집니다. 다음 모듈에서는 표본평균과 모평균 사이의 오차를 나타내는 표준오차를 배웁니다."};
+
+/* =====================================================================
+   아래부터는 공통 엔진입니다. 모듈마다 바꾸지 않습니다.
+   ===================================================================== */
+var NS="http://www.w3.org/2000/svg";
+var C={navy:"#1B2A4A",navy2:"#2C4170",navy3:"#5B6E97",soft:"#A9B8D4",grid:"#DDE1E7",gray:"#6B7280",gray2:"#9AA0AA",amber:"#E0A100",amberInk:"#6E4F00",ok:"#23704F"};
+function el(t,a,p,x){var e=document.createElementNS(NS,t);for(var k in a)e.setAttribute(k,a[k]);if(x!=null)e.textContent=x;if(p)p.appendChild(e);return e;}
+function clear(s){while(s.firstChild)s.removeChild(s.firstChild);}
+function f1(v,d){return v.toFixed(d==null?1:d);}
+function sum(a){return a.reduce(function(x,y){return x+y;},0);}
+function r1(v){return Math.round(v*10)/10;}
+var stage=document.getElementById("stage"),vp=document.getElementById("vp");
+
+/* 계산은 모두 데이터에서 직접 합니다(R0-7) */
+var N=CASE?CASE.values.length:0,SUMV=CASE?r1(sum(CASE.values)):0,AVG=N?SUMV/N:0,MAXV=CASE?Math.max.apply(null,CASE.values):0;
+var LR=!PAIRS?null:(function(){var n=PAIRS.xs.length,mx=sum(PAIRS.xs)/n,my=sum(PAIRS.ys)/n,sxy=0,sxx=0;
+  for(var i=0;i<n;i++){sxy+=(PAIRS.xs[i]-mx)*(PAIRS.ys[i]-my);sxx+=(PAIRS.xs[i]-mx)*(PAIRS.xs[i]-mx);}
+  var b=sxy/sxx;return{b:b,a:my-b*mx};})();
+var PRED=PAIRS?LR.a+LR.b*PAIRS.x0:0;
+
+document.title=MODULE.title;
+document.getElementById("brand").innerHTML=MODULE.title+"<small>"+MODULE.sub+"</small>";
+
+/* 16:9 고정 무대를 창 크기에 맞춤 */
+var S=1;
+function fit(){S=Math.min(window.innerWidth/960,window.innerHeight/540);stage.style.setProperty("--s",S);}
+window.addEventListener("resize",fit);fit();
+
+/* ---------- 그래프 ---------- */
+function barChart(svg,vals,o){
+  clear(svg);o=o||{};
+  var vb=svg.viewBox.baseVal,W=vb.width,H=vb.height,L=34,R=o.mean!=null?70:8,T=26,Bt=24,ym=o.ymax||Math.ceil(Math.max.apply(null,vals)+1),pw=W-L-R,ph=H-T-Bt,bw=pw/vals.length;
+  function y(v){return T+ph-(v/ym)*ph;}
+  for(var g=0;g<=ym;g++){el("line",{x1:L,x2:W-R,y1:y(g),y2:y(g),stroke:C.grid},svg);el("text",{x:L-6,y:y(g)+4,"text-anchor":"end","font-size":10.5,fill:C.gray2},svg,g);}
+  vals.forEach(function(v,i){
+    var sel=o.sel===i,hi=o.hi===i;
+    el("rect",{x:L+i*bw+bw*.16,y:y(v),width:bw*.68,height:Math.max(0,y(0)-y(v)),rx:2,fill:sel?C.amber:hi?C.navy2:C.soft},svg);
+    el("text",{x:L+i*bw+bw/2,y:H-Bt+16,"text-anchor":"middle","font-size":10.5,fill:C.gray},svg,CASE.labels[i]);
+  });
+  if(o.mean!=null){var m=o.mean;
+    el("line",{x1:L,x2:W-R+4,y1:y(m),y2:y(m),stroke:C.navy,"stroke-width":2,"stroke-dasharray":"6 4"},svg);
+    el("rect",{x:W-R+6,y:y(m)-10,width:R-8,height:20,rx:4,fill:C.navy},svg);
+    el("text",{x:W-R+6+(R-8)/2,y:y(m)+4,"text-anchor":"middle","font-size":11,"font-weight":700,fill:"#fff"},svg,"평균 "+f1(m,2));}
+  /* 값 라벨은 마지막에 흰 테두리로 그려 점선에 가리지 않게 함 */
+  vals.forEach(function(v,i){var sel=o.sel===i,hi=o.hi===i;
+    if(o.labels||sel)el("text",{x:L+i*bw+bw/2,y:y(v)-5,"text-anchor":"middle","font-size":10.5,"font-weight":sel||hi?800:500,fill:sel?C.amberInk:hi?C.navy:C.gray,stroke:"#EEF0F3","stroke-width":3,"paint-order":"stroke"},svg,f1(v));});
+}
+function scatter(svg,o){
+  clear(svg);o=o||{};
+  var vb=svg.viewBox.baseVal,W=vb.width,H=vb.height,L=34,R=14,T=30,Bt=40,x0=PAIRS.xmin,x1=PAIRS.xmax,y0=PAIRS.ymin,y1=PAIRS.ymax;
+  function X(v){return L+(v-x0)/(x1-x0)*(W-L-R);}
+  function Y(v){return T+(H-T-Bt)-(v-y0)/(y1-y0)*(H-T-Bt);}
+  for(var g=y0;g<=y1+1e-9;g+=PAIRS.ystep){el("line",{x1:L,x2:W-R,y1:Y(g),y2:Y(g),stroke:C.grid},svg);el("text",{x:L-6,y:Y(g)+4,"text-anchor":"end","font-size":10.5,fill:C.gray2},svg,g);}
+  for(var h=x0;h<=x1+1e-9;h+=PAIRS.xstep)el("text",{x:X(h),y:H-Bt+16,"text-anchor":"middle","font-size":10.5,fill:C.gray},svg,h);
+  el("text",{x:(L+W-R)/2,y:H-6,"text-anchor":"middle","font-size":10.5,fill:C.gray},svg,PAIRS.xlabel);
+  el("text",{x:4,y:14,"font-size":10.5,fill:C.gray},svg,PAIRS.ylabel);
+  if(o.line){var la=x0+(x1-x0)*.04,lb=x1-(x1-x0)*.04;el("line",{x1:X(la),y1:Y(LR.a+LR.b*la),x2:X(lb),y2:Y(LR.a+LR.b*lb),stroke:C.navy,"stroke-width":2},svg);}
+  PAIRS.xs.forEach(function(x,i){el("circle",{cx:X(x),cy:Y(PAIRS.ys[i]),r:4.5,fill:C.navy3,"fill-opacity":.85},svg);});
+  if(o.x0!=null){el("line",{x1:X(o.x0),y1:Y(0),x2:X(o.x0),y2:Y(y1),stroke:C.amber,"stroke-dasharray":"3 3"},svg);
+    el("text",{x:X(o.x0),y:T-4,"text-anchor":"middle","font-size":10.5,"font-weight":700,fill:C.amberInk},svg,PAIRS.x0label);}
+  if(o.pred){el("circle",{cx:X(PAIRS.x0),cy:Y(PRED),r:6,fill:C.navy},svg);
+    el("text",{x:X(PAIRS.x0)-10,y:Y(PRED)+4,"text-anchor":"end","font-size":11,"font-weight":800,fill:C.navy,stroke:"#EEF0F3","stroke-width":3,"paint-order":"stroke"},svg,"예측 "+f1(PRED,PAIRS.dp)+PAIRS.unit);}
+  if(o.guess!=null){el("circle",{cx:X(PAIRS.x0),cy:Y(o.guess),r:7,fill:C.amber,stroke:"#fff","stroke-width":2},svg);}
+  if(o.actual){var ay=Y(PAIRS.actual);el("rect",{x:X(PAIRS.x0)-6,y:ay-6,width:12,height:12,fill:C.ok,transform:"rotate(45 "+X(PAIRS.x0)+" "+ay+")"},svg);
+    el("text",{x:X(PAIRS.x0)-10,y:ay-6,"text-anchor":"end","font-size":11,"font-weight":800,fill:C.ok,stroke:"#EEF0F3","stroke-width":3,"paint-order":"stroke"},svg,"실제 "+f1(PAIRS.actual)+PAIRS.unit);}
+  return {X:X,Y:Y};
+}
+function flow(svg,names){
+  clear(svg);var n=names.length,w=118,gap=(440-40-n*w)/(n-1),y=96,h=64;
+  el("defs",{},svg).innerHTML='<marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10z" fill="'+C.navy3+'"/></marker>';
+  names.forEach(function(t,i){var x=20+i*(w+gap);
+    el("rect",{x:x,y:y,width:w,height:h,rx:10,fill:i===n-1?C.navy:"#fff",stroke:C.navy,"stroke-width":1.5},svg);
+    el("text",{x:x+w/2,y:y+h/2-6,"text-anchor":"middle","font-size":11,"font-weight":700,fill:i===n-1?"#C9D3E6":C.navy3},svg,"4-"+(i+1));
+    el("text",{x:x+w/2,y:y+h/2+13,"text-anchor":"middle","font-size":14,"font-weight":800,fill:i===n-1?"#fff":C.navy},svg,t);
+    if(i<n-1)el("line",{x1:x+w+4,y1:y+h/2,x2:x+w+gap-5,y2:y+h/2,stroke:C.navy3,"stroke-width":2,"marker-end":"url(#ar)"},svg);});
+  el("text",{x:220,y:200,"text-anchor":"middle","font-size":12,fill:C.gray},svg,"본문 소단원을 배우는 순서");
+}
+/* 화면에 해당 id가 있을 때만 그립니다(모듈마다 쓰지 않는 그림은 건너뜀) */
+function on(id,fn){var e=document.getElementById(id);if(e)fn(e);}
+on("fig-flow",function(s){flow(s,["소단원 1","소단원 2","정리"]);});
+on("fig-case",function(s){barChart(s,CASE.values,{labels:true});});
+on("fig-bar",function(s){barChart(s,CASE.values,{labels:true,mean:AVG});});
+on("fig-scatter",function(s){scatter(s,{line:true,x0:PAIRS.x0,pred:true});});
+on("fig-bridge",function(s){
+  el("defs",{},s).innerHTML='<marker id="ar2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10z" fill="'+C.navy3+'"/></marker>';
+  [["장면 1",40],["장면 2",130]].forEach(function(p){el("rect",{x:24,y:p[1],width:130,height:64,rx:10,fill:"#fff",stroke:C.navy3,"stroke-width":1.5},s);el("text",{x:89,y:p[1]+37,"text-anchor":"middle","font-size":14,"font-weight":700,fill:C.navy},s,p[0]);
+    el("line",{x1:158,y1:p[1]+32,x2:246,y2:120,stroke:C.navy3,"stroke-width":2,"marker-end":"url(#ar2)"},s);});
+  el("rect",{x:252,y:84,width:150,height:72,rx:12,fill:C.navy},s);
+  el("text",{x:327,y:116,"text-anchor":"middle","font-size":14,"font-weight":800,fill:"#fff"},s,"본문 첫 질문");
+  el("text",{x:327,y:136,"text-anchor":"middle","font-size":11.5,fill:"#C9D3E6"},s,"4-1로 이어짐");});
+on("case-n",function(e){e.textContent=N+"개";});
+on("case-sum",function(e){e.textContent=f1(SUMV);});
+on("case-max",function(e){e.textContent=f1(MAXV);});
+on("math-calc",function(e){e.textContent=f1(LR.b,2)+" × "+PAIRS.x0+" + "+f1(LR.a,2)+" = "+f1(PRED,2);});
+
+/* =====================================================================
+   [교체] 모듈 전용 그림: 모듈마다 필요한 그림 함수는 이 자리에 둡니다.
+   ===================================================================== */
+/* M08 전용 그림·실습 */
+function lin(a,b,c,d){return function(v){return c+(v-a)/(b-a)*(d-c);};}
+function t8(s,x,y,t,o){o=o||{};return el("text",{x:x,y:y,"text-anchor":o.a||"middle","font-size":o.fs||11,"font-weight":o.fw||600,fill:o.c||C.navy,stroke:o.halo?"#fff":"none","stroke-width":o.halo?3:0,"paint-order":"stroke"},s,t);}
+function box8(s,x,y,w,h,fill,stroke){return el("rect",{x:x,y:y,width:w,height:h,rx:10,fill:fill||"#fff",stroke:stroke||"none","stroke-width":stroke?1.5:0},s);}
+function npdf8(x,m,sd){return Math.exp(-Math.pow(x-m,2)/(2*sd*sd))/(sd*Math.sqrt(2*Math.PI));}
+function bell8(s,x0,x1,yb,h,col,w){var p=[];for(var i=0;i<=60;i++){var t=i/60,z=(t-.5)*7;p.push((x0+t*(x1-x0)).toFixed(1)+" "+(yb-Math.exp(-z*z/2)*h).toFixed(1));}
+  el("path",{d:"M"+p.join(" L"),fill:"none",stroke:col||C.navy,"stroke-width":w||2},s);}
+function mark8(s,id,col){el("defs",{},s).innerHTML='<marker id="'+id+'" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10z" fill="'+col+'"/></marker>';}
+function arrow8(s,x1,y1,x2,y2,id,col,w,dash){el("line",{x1:x1,y1:y1,x2:x2,y2:y2,stroke:col,"stroke-width":w||2,"stroke-dasharray":dash||"none","marker-end":"url(#"+id+")"},s);}
+/* 가상 모집단 1,000명 */
+var POPV=(function(){var seed=POP.seed;function rnd(){seed=(seed*16807)%2147483647;return (seed-1)/2147483646;}
+  function g(){var u=rnd()||1e-9,v=rnd();return Math.sqrt(-2*Math.log(u))*Math.cos(2*Math.PI*v);}
+  var p=[];for(var i=0;i<POP.size;i++)p.push(POP.mean+POP.sd*g());var adj=POP.mean-sum(p)/p.length;
+  return p.map(function(v){return Math.round((v+adj)*10)/10;});})();
+function hist8(s,vals,lo,hi,bw,X,yb,h,col){var n=Math.round((hi-lo)/bw),c=[];for(var i=0;i<n;i++)c.push(0);
+  vals.forEach(function(v){var k=Math.floor((v-lo)/bw);if(k>=0&&k<n)c[k]++;});var m=Math.max.apply(null,c);
+  c.forEach(function(v,i){if(v)el("rect",{x:X(lo+i*bw)+.5,y:yb-v/m*h,width:X(lo+bw)-X(lo)-1,height:v/m*h,fill:col||C.soft},s);});}
+
+on("m8-ov",function(s){
+  mark8(s,"o8",C.navy3);
+  box8(s,8,10,424,112,"#fff");box8(s,8,134,424,118,"#EEF1F7");
+  t8(s,22,30,"현실 세계",{a:"start",fw:800,fs:12});t8(s,22,154,"수학 세계",{a:"start",fw:800,fs:12,c:C.navy3});
+  el("circle",{cx:110,cy:72,r:38,fill:"#E4E9F2",stroke:C.navy2,"stroke-width":2},s);t8(s,110,77,"모집단",{fw:800,fs:13});
+  arrow8(s,152,72,262,72,"o8",C.amber,3);t8(s,207,62,"무작위추출",{fw:800,c:C.amberInk});
+  box8(s,270,40,140,64,"#fff",C.navy);t8(s,340,64,"표본",{fw:800,fs:13});t8(s,340,86,"179, 176, 166 …",{fs:11,c:C.gray});
+  bell8(s,50,170,236,62,C.navy,2.5);t8(s,110,250,"확률분포",{fw:800,fs:12});
+  arrow8(s,180,206,262,206,"o8",C.amber,3);t8(s,221,196,"발생",{fw:800,c:C.amberInk});
+  box8(s,270,174,140,64,"#fff",C.navy3);t8(s,340,198,"실현값",{fw:800,fs:13,c:C.navy3});t8(s,340,220,"확률적으로 나온 값",{fs:11,c:C.gray});
+  t8(s,110,124,"=",{fw:800,fs:20,c:C.amberInk});t8(s,340,124,"=",{fw:800,fs:20,c:C.amberInk});
+});
+
+on("m8-case",function(s){
+  box8(s,10,10,250,230,"#fff");t8(s,135,36,"성인 남성 10명의 키 (cm)",{fw:800,fs:12.5});
+  SAMPLE10.forEach(function(v,i){var c=i%5,r=Math.floor(i/5),x=34+c*46,y=60+r*44;el("rect",{x:x-18,y:y,width:40,height:30,rx:6,fill:"#E4E9F2"},s);t8(s,x+2,y+20,v,{fw:800,fs:13});});
+  t8(s,135,180,"합 1,679 · 평균 167.9",{fw:800,c:C.amberInk,fs:12.5});t8(s,135,206,"알고 싶은 것: 성인 남성 전체",{fs:11,c:C.gray});
+  box8(s,270,10,160,230,"#fff");t8(s,350,36,"된장국 맛보기",{fw:800,fs:12.5});
+  el("rect",{x:300,y:100,width:100,height:80,rx:10,fill:"#C9D3E6",stroke:C.navy2,"stroke-width":2},s);el("rect",{x:292,y:92,width:116,height:12,rx:5,fill:C.navy2},s);
+  el("path",{d:"M388 70 Q400 100 372 120",fill:"none",stroke:C.gray,"stroke-width":3},s);el("ellipse",{cx:370,cy:122,rx:12,ry:6,fill:"#B9862E"},s);
+  t8(s,350,206,"냄비 = 모집단",{fs:11,c:C.gray});t8(s,350,224,"국자 = 표본",{fs:11,c:C.gray});
+});
+
+on("m8-orange",function(s){
+  el("rect",{x:30,y:60,width:240,height:150,rx:8,fill:"#E8D3B0",stroke:"#9C7A44","stroke-width":2},s);
+  var seed=7;function r(){seed=(seed*16807)%2147483647;return seed/2147483647;}
+  for(var i=0;i<26;i++){var x=50+(i%7)*32+r()*8,y=86+Math.floor(i/7)*34+r()*6,rr=10+r()*7;el("circle",{cx:x,cy:y,r:rr,fill:"#F39C2C",stroke:"#C46F0D","stroke-width":1},s);}
+  t8(s,150,230,"상자 전체 (크기 제각각)",{fw:700,fs:12});
+  el("path",{d:"M290 130 h40",stroke:C.navy3,"stroke-width":2},s);el("path",{d:"M330 130 l-8 -5 v10z",fill:C.navy3},s);
+  [[360,110,14],[392,118,11],[372,146,16]].forEach(function(o){el("circle",{cx:o[0],cy:o[1],r:o[2],fill:"#F39C2C",stroke:"#C46F0D"},s);});
+  t8(s,378,190,"손에 집은 몇 개",{fw:700,fs:12});
+});
+
+on("m8-popdist",function(s){
+  box8(s,6,6,250,258,"#fff");t8(s,131,30,"모집단분포 (전원의 키)",{fw:800,fs:12});
+  var X=lin(145,190,20,244);hist8(s,POPV,145,190,1.5,X,226,170,"#E0C34A");
+  el("line",{x1:20,x2:244,y1:226,y2:226,stroke:C.gray2},s);[150,160,170,180].forEach(function(t){t8(s,X(t),242,t,{fs:10,c:C.gray,fw:500});});
+  t8(s,244,258,"키(cm) · 모양 예시",{a:"end",fs:9.5,c:C.gray,fw:500});
+  mark8(s,"p8",C.amber);arrow8(s,200,90,282,90,"p8",C.amber,3);t8(s,240,80,"추출",{fw:800,c:C.amberInk});
+  box8(s,286,40,128,160,"#FCF3D9","#E0A100");t8(s,350,62,"표본 10명",{fw:800,c:C.amberInk,fs:12});
+  SAMPLE10.forEach(function(v,i){t8(s,318+(i%2)*64,88+Math.floor(i/2)*22,v,{fs:12,fw:700,c:"#22262E"});});
+});
+
+on("m8-param",function(s){
+  box8(s,6,6,408,140,"#fff");t8(s,22,28,"모집단분포를 특징 짓는 양 = 모수",{a:"start",fw:800,fs:12.5});
+  var X=lin(140,196,40,260),Y=function(v){return 130-v/npdf8(167.6,167.6,7)*84;};var p=[];for(var x=142;x<=194;x+=.5)p.push(X(x).toFixed(1)+" "+Y(npdf8(x,167.6,7)).toFixed(1));
+  el("path",{d:"M"+p.join(" L"),fill:"none",stroke:C.navy,"stroke-width":2.2},s);el("line",{x1:40,x2:260,y1:130,y2:130,stroke:C.gray2},s);
+  el("line",{x1:X(167.6),x2:X(167.6),y1:46,y2:130,stroke:"#B42318","stroke-dasharray":"4 3"},s);
+  var yh=Y(npdf8(174.6,167.6,7));el("line",{x1:X(167.6),x2:X(174.6),y1:yh,y2:yh,stroke:C.amber,"stroke-width":2.5},s);
+  box8(s,276,46,126,34,"#E4E9F2");t8(s,339,68,"모평균 μ",{fw:800});box8(s,276,90,126,34,"#E4E9F2");t8(s,339,112,"모분산 σ²",{fw:800});
+  box8(s,6,156,250,108,"#fff");t8(s,22,178,"표본에서 모수를 추정",{a:"start",fw:800,fs:12.5});
+  t8(s,131,212,"표본평균 x̄ = 167.9",{fw:800,fs:14,c:C.amberInk});t8(s,131,240,"→ 모평균 μ를 추정",{fs:11.5,c:C.gray});
+  box8(s,264,156,150,108,"#FBE4E1");t8(s,339,180,"혼동 주의",{fw:800,c:"#B42318",fs:12});
+  t8(s,339,206,"일상어 ‘모수’",{fs:11,c:"#22262E"});t8(s,339,224,"= 요소 개수",{fs:11,c:"#22262E"});t8(s,339,248,"통계학의 모수와 다름",{fs:11,fw:800,c:"#B42318"});
+});
+
+on("m8-map",function(s){
+  var H=[["",""],["현실 세계","수학 세계"]];
+  box8(s,6,6,408,258,"#fff");
+  t8(s,120,30,"현실 세계",{fw:800,fs:12.5});t8(s,320,30,"수학 세계",{fw:800,fs:12.5,c:C.navy3});
+  [[56,"모집단","성인 남성 전원의 키","확률분포","N(167.6, 7.0²)"],[150,"표본","179, 176, 166 …","실현값","확률분포에서 발생한 값"]].forEach(function(r){
+    box8(s,22,r[0],196,76,"#E4E9F2");t8(s,120,r[0]+30,r[1],{fw:800,fs:14});t8(s,120,r[0]+54,r[2],{fs:11,c:C.gray});
+    box8(s,222+0,r[0],0,0);box8(s,232,r[0],166,76,"#FCF3D9","#E0A100");t8(s,315,r[0]+30,r[3],{fw:800,fs:14,c:C.amberInk});t8(s,315,r[0]+54,r[4],{fs:11,c:C.gray});
+    t8(s,225,r[0]+44,"=",{fw:800,fs:18,c:C.amberInk});});
+  t8(s,210,250,"‘모집단 = 확률분포’, ‘표본 = 확률분포를 따르는 실현값’",{fs:11,fw:800});
+});
+
+on("m8-model",function(s){
+  box8(s,6,6,190,200,"#fff");box8(s,224,6,190,200,"#EEF1F7");
+  t8(s,101,28,"현실 세계",{fw:800});t8(s,319,28,"수학 세계",{fw:800,c:C.navy3});
+  var X=lin(145,190,16,186);hist8(s,POPV.slice(0,220),145,190,2.5,X,180,120,C.soft);el("line",{x1:16,x2:186,y1:180,y2:180,stroke:C.gray2},s);
+  t8(s,101,198,"약간 들쭉날쭉",{fs:11,c:C.gray});
+  bell8(s,236,402,180,120,C.navy,2.5);t8(s,375,80,"μ, σ",{fw:800,fs:15});el("line",{x1:236,x2:402,y1:180,y2:180,stroke:C.gray2},s);
+  t8(s,319,198,"정규분포 (모형)",{fs:11,c:C.gray});
+  mark8(s,"m8a",C.amber);arrow8(s,170,100,256,100,"m8a",C.amber,4);t8(s,210,92,"모형화",{fw:800,c:C.amberInk,halo:true});
+  box8(s,6,216,408,48,"#fff");t8(s,210,236,"수학적 확률분포로 근사하면 파라미터 2개로 기술할 수 있습니다",{fs:11.5,fw:700});
+  t8(s,210,254,"단, 모형을 통해 현실을 보는 것임을 명심합니다",{fs:11,c:C.gray});
+});
+
+on("m8-rand",function(s){
+  box8(s,6,6,408,124,"#fff");t8(s,22,28,"단순무작위추출법: 전체 목록 + 난수",{a:"start",fw:800,fs:12});
+  var pick=[3,11,17,26,34,38];for(var i=0;i<40;i++){var c=i%20,r=Math.floor(i/20),hit=pick.indexOf(i)>=0;
+    el("rect",{x:22+c*19,y:46+r*30,width:16,height:24,rx:3,fill:hit?C.amber:"#E4E9F2"},s);t8(s,30+c*19,62+r*30,i+1,{fs:7.5,c:hit?"#fff":C.gray,fw:700});}
+  t8(s,22,122,"모든 요소의 목록에서 난수로 뽑기 → 이상적이지만 노력과 비용이 듦",{a:"start",fs:10.5,c:C.gray});
+  box8(s,6,140,408,124,"#fff");t8(s,22,162,"층화추출법: 층으로 나눈 뒤 각 층에서 무작위",{a:"start",fw:800,fs:12});
+  ["층 A","층 B","층 C"].forEach(function(n,k){var x=22+k*132;box8(s,x,174,120,76,"#F3F5F9","#9AA0AA");t8(s,x+60,192,n,{fw:800});
+    for(var j=0;j<10;j++){var hit=(j*7+k*3)%10<3;el("circle",{cx:x+16+(j%5)*22,cy:212+Math.floor(j/5)*20,r:7,fill:hit?C.amber:C.soft},s);}});
+});
+
+on("m8-poll",function(s){
+  box8(s,6,6,408,258,"#fff");t8(s,22,28,"정권 지지율 조사 (2018년, 일본의 기사)",{a:"start",fw:800,fs:12});
+  var Y=lin(0,100,214,50);el("line",{x1:60,x2:380,y1:214,y2:214,stroke:C.gray2},s);
+  [0,50,100].forEach(function(t){el("line",{x1:60,x2:380,y1:Y(t),y2:Y(t),stroke:C.grid},s);t8(s,52,Y(t)+4,t+"%",{a:"end",fs:10,c:C.gray2,fw:500});});
+  el("rect",{x:110,y:Y(28),width:70,height:Y(0)-Y(28),fill:C.navy2},s);t8(s,145,Y(28)-6,"28%",{fw:800,fs:13});
+  el("rect",{x:260,y:Y(80),width:70,height:Y(0)-Y(80),fill:"#B42318"},s);t8(s,295,Y(80)-6,"80% 넘음",{fw:800,fs:13,c:"#B42318"});
+  t8(s,145,232,"전화 약 800명",{fw:700});t8(s,295,232,"인터넷 10만 명",{fw:700});
+  t8(s,210,254,"인터넷 응답자는 연령층 등이 치우침 → 커도 편향",{fs:11,fw:800,c:"#B42318"});
+});
+
+on("m8-gen",function(s){
+  mark8(s,"g8",C.navy3);
+  box8(s,6,6,408,124,"#fff");t8(s,22,28,"백신의 효과",{a:"start",fw:800,fs:12});
+  box8(s,22,44,110,60,"#FCF3D9","#E0A100");t8(s,77,70,"표본",{fw:800,c:C.amberInk});t8(s,77,90,"한국인만",{fs:11,c:C.gray});
+  arrow8(s,136,74,268,74,"g8",C.navy3,2,"5 4");t8(s,202,64,"인종별 차이 없다는",{fs:10,c:C.gray});t8(s,202,94,"정보가 있다면",{fs:10,c:C.gray});
+  box8(s,274,44,124,60,"#E4E9F2");t8(s,336,70,"모든 인종",{fw:800});t8(s,336,90,"유효할 것으로 기대",{fs:11,c:C.gray});
+  box8(s,6,140,408,124,"#fff");t8(s,22,162,"자기 대학 학생만 설문",{a:"start",fw:800,fs:12});
+  box8(s,22,178,110,70,"#FCF3D9","#E0A100");t8(s,77,208,"우리 대학",{fw:800,c:C.amberInk});t8(s,77,228,"학생",{fs:11,c:C.gray});
+  arrow8(s,136,198,268,198,"g8","#B42318",2);t8(s,202,190,"학력 관련 결론",{fs:10.5,fw:800,c:"#B42318"});
+  arrow8(s,136,232,268,232,"g8",C.ok,2,"5 4");t8(s,202,224,"건강 상태라면",{fs:10.5,fw:800,c:C.ok});
+  box8(s,274,178,124,70,"#E4E9F2");t8(s,336,208,"대학생 전체",{fw:800});t8(s,336,228,"일반화 범위 논의",{fs:11,c:C.gray});
+});
+
+on("m8-soup",function(s){
+  box8(s,6,6,408,258,"#fff");
+  el("rect",{x:60,y:140,width:130,height:96,rx:12,fill:"#C9D3E6",stroke:C.navy2,"stroke-width":2.5},s);el("rect",{x:50,y:130,width:150,height:14,rx:6,fill:C.navy2},s);
+  el("path",{d:"M70 150 h110 v76 h-110z",fill:"#C9A15A","fill-opacity":.6},s);
+  t8(s,125,254,"냄비 안 된장국 = 모집단",{fw:800});
+  el("path",{d:"M170 120 Q190 80 240 92",fill:"none",stroke:C.gray,"stroke-width":3},s);el("ellipse",{cx:246,cy:96,rx:16,ry:8,fill:"#C9A15A",stroke:C.gray},s);
+  el("ellipse",{cx:300,cy:130,rx:40,ry:10,fill:"#F3F5F9",stroke:C.gray2,"stroke-width":1.5},s);el("ellipse",{cx:300,cy:127,rx:22,ry:5,fill:"#C9A15A"},s);
+  t8(s,300,160,"접시에 덜어 낸 국 = 표본",{fw:800,c:C.amberInk});
+  el("circle",{cx:360,cy:66,r:20,fill:"#F3D9A4",stroke:"#B9862E"},s);el("path",{d:"M352 72 q8 6 16 0",fill:"none",stroke:"#8A5A2B","stroke-width":2},s);
+  t8(s,360,108,"맛보기 = 추정",{fw:800,c:C.navy3});
+  t8(s,300,210,"목적은 냄비 전체의 맛",{fs:11.5,fw:700});t8(s,300,230,"다 먹어 볼 수는 없음",{fs:11.5,c:C.gray});
+});
+
+on("m8-ladle",function(s){
+  box8(s,6,6,408,118,"#fff");t8(s,22,28,"얼마나 뜰까?",{a:"start",fw:800,fs:12});
+  [[80,"한 방울","너무 적음","#B42318",4],[210,"국자 하나","충분","#23704F",14],[340,"한 그릇","필요 없음",C.gray,28]].forEach(function(o){
+    el("ellipse",{cx:o[0],cy:72,rx:o[4]*1.6+6,ry:o[4]*.6+3,fill:"#C9A15A"},s);t8(s,o[0],104,o[1],{fw:800});t8(s,o[0],118,o[2],{fs:10.5,fw:800,c:o[3]});});
+  box8(s,6,134,408,130,"#fff");t8(s,22,156,"어떻게 뜰까?",{a:"start",fw:800,fs:12});
+  var g=el("defs",{},s);g.innerHTML='<linearGradient id="sg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#EBDCB8"/><stop offset="1" stop-color="#8A5A2B"/></linearGradient>';
+  el("rect",{x:60,y:172,width:120,height:80,rx:10,fill:"url(#sg)",stroke:C.navy2,"stroke-width":2},s);
+  t8(s,120,190,"옅음",{fs:10,c:C.navy});t8(s,120,244,"된장 가라앉음",{fs:10,c:"#fff"});
+  el("ellipse",{cx:200,cy:182,rx:14,ry:6,fill:"#EBDCB8",stroke:C.gray},s);t8(s,240,186,"위쪽만 떠서 ‘싱겁다’ → 편향",{a:"start",fs:11.5,fw:800,c:"#B42318"});
+  t8(s,240,224,"먼저 잘 섞기 → 무작위추출",{a:"start",fs:11.5,fw:800,c:C.ok});
+});
+
+/* 실습 1 · 추출 방법과 표본크기(조작형) */
+(function(){
+  var nb=document.getElementById("m8-n");if(!nb)return;
+  var mb=document.getElementById("m8-meth"),meth=0,M=["무작위추출","동호회에서만 (키 175cm 이상)"],sample=null,svg=document.getElementById("m8-p1-svg"),BIG=POPV.filter(function(v){return v>=175;});
+  M.forEach(function(t,i){var b=document.createElement("button");b.type="button";b.className="mbtn";b.textContent=t;b.style.padding="4px 9px";b.onclick=function(){meth=i;mark();};mb.appendChild(b);});
+  function mark(){[].forEach.call(mb.children,function(b,i){b.classList.toggle("on",i===meth);b.setAttribute("aria-pressed",i===meth);});}
+  function draw(){
+    clear(svg);var X=lin(145,192,20,456);hist8(svg,POPV,145,192,1,X,120,90,"#E4E9F2");el("line",{x1:20,x2:456,y1:120,y2:120,stroke:C.gray2},svg);
+    [150,160,170,180,190].forEach(function(t){t8(svg,X(t),134,t,{fs:10,c:C.gray,fw:500});});
+    el("line",{x1:X(167.6),x2:X(167.6),y1:20,y2:120,stroke:C.ok,"stroke-width":2,"stroke-dasharray":"5 4"},svg);t8(svg,X(167.6)-4,16,"모평균 167.6",{a:"end",fw:800,c:C.ok,halo:true});
+    t8(svg,24,16,"모집단 1,000명",{a:"start",fs:10.5,c:C.gray});
+    if(!sample){t8(svg,238,168,"「뽑기」를 누르면 뽑힌 사람이 아래에 찍힙니다",{fs:12,c:C.gray});return;}
+    sample.forEach(function(v){el("circle",{cx:X(v),cy:158,r:3.5,fill:meth?"#B42318":C.navy2,"fill-opacity":.75},svg);});
+    var m=sum(sample)/sample.length;el("line",{x1:X(m),x2:X(m),y1:140,y2:178,stroke:C.amber,"stroke-width":3},svg);t8(svg,X(m)+5,186,"표본평균 "+m.toFixed(1),{a:"start",fw:800,c:C.amberInk,halo:true});
+  }
+  function upd(){document.getElementById("m8-nv").textContent=nb.value+"명";}
+  nb.addEventListener("input",upd);
+  document.getElementById("m8-draw").onclick=function(){
+    var src=meth?BIG:POPV,n=Math.min(+nb.value,src.length),used={},idx=[];while(idx.length<n){var k=Math.floor(Math.random()*src.length);if(!used[k]){used[k]=1;idx.push(k);}}
+    sample=idx.map(function(k){return src[k];});var m=sum(sample)/n,d=m-167.6;
+    document.getElementById("m8-sm").textContent=m.toFixed(1);document.getElementById("m8-df").textContent=(d>0?"+":d<0?"−":"")+Math.abs(d).toFixed(1);
+    var msg=document.getElementById("m8-msg");
+    if(meth){msg.className="pmsg ng";msg.textContent="동호회에서만 "+n+"명을 뽑았습니다. 표본평균이 모평균보다 "+d.toFixed(1)+"cm 큽니다. 표본을 늘려도 이 치우침은 사라지지 않습니다.";}
+    else{msg.className="pmsg ok";msg.textContent="무작위로 "+n+"명을 뽑았습니다. 모평균과의 차이는 "+Math.abs(d).toFixed(1)+"cm입니다. 여러 번 뽑아 보고, 표본크기를 바꿔 차이의 크기를 비교해 보세요.";}
+    draw();};
+  mark();upd();draw();
+})();
+
+/* 실습 3 · 10명으로 모평균 추정(추정형) */
+(function(){
+  var g=document.getElementById("m8-g");if(!g)return;
+  var cur=SAMPLE10.slice(),revealed=false,first=true,svg=document.getElementById("m8-p3-svg");
+  function draw(){
+    clear(svg);var X=lin(150,185,24,450);el("line",{x1:24,x2:450,y1:150,y2:150,stroke:C.gray2},svg);
+    for(var t=150;t<=185;t+=5)t8(svg,X(t),166,t,{fs:10,c:C.gray,fw:500});t8(svg,450,182,"키(cm)",{a:"end",fs:10,c:C.gray,fw:500});
+    var st={};cur.forEach(function(v){var k=Math.round(v);st[k]=(st[k]||0)+1;el("circle",{cx:X(v),cy:142-(st[k]-1)*12,r:5.5,fill:C.navy2,stroke:"#fff"},svg);});
+    var m=sum(cur)/cur.length;el("line",{x1:X(m),x2:X(m),y1:60,y2:150,stroke:C.navy,"stroke-width":2,"stroke-dasharray":"5 4"},svg);t8(svg,X(m)+4,58,"표본평균 "+m.toFixed(1),{a:"start",fw:800,halo:true});
+    el("path",{d:"M"+X(+g.value)+" 190 l-7 12 h14z",fill:C.amber},svg);t8(svg,X(+g.value),216,"내 추정 "+(+g.value).toFixed(1),{fw:800,c:C.amberInk});
+    if(revealed){el("line",{x1:X(167.6),x2:X(167.6),y1:30,y2:150,stroke:C.ok,"stroke-width":2.5},svg);t8(svg,X(167.6)-4,28,"모평균 167.6",{a:"end",fw:800,c:C.ok,halo:true});}
+    t8(svg,24,20,first?"학습내용의 10명":"가상 모집단에서 다시 뽑은 10명",{a:"start",fs:10.5,c:C.gray});
+  }
+  function stat(){var m=sum(cur)/cur.length;document.getElementById("m8-xbar").textContent=m.toFixed(1);document.getElementById("m8-gv").textContent=(+g.value).toFixed(1)+"cm";document.getElementById("m8-mine").textContent=(+g.value).toFixed(1);}
+  g.addEventListener("input",function(){stat();draw();});
+  document.getElementById("m8-check").onclick=function(){revealed=true;var m=sum(cur)/cur.length,d=Math.abs(+g.value-167.6),msg=document.getElementById("m8-msg3");
+    document.getElementById("m8-mu").textContent="167.6";msg.className="pmsg "+(d<=2?"ok":"ng");
+    msg.textContent="가정한 모평균은 167.6cm입니다. 내 추정과의 차이는 "+d.toFixed(1)+"cm, 표본평균("+m.toFixed(1)+")과의 차이는 "+Math.abs(m-167.6).toFixed(1)+"cm입니다.";draw();};
+  document.getElementById("m8-again").onclick=function(){var used={},idx=[];while(idx.length<10){var k=Math.floor(Math.random()*POPV.length);if(!used[k]){used[k]=1;idx.push(k);}}
+    cur=idx.map(function(k){return POPV[k];});first=false;revealed=false;document.getElementById("m8-mu").textContent="?";
+    var msg=document.getElementById("m8-msg3");msg.className="pmsg";msg.textContent="같은 모집단에서 10명을 다시 뽑았습니다. 표본평균이 "+(sum(cur)/10).toFixed(1)+"cm로 바뀌었습니다. 다시 추정해 보세요.";stat();draw();};
+  stat();draw();
+})();
+
+
+/* ---------- ⑤ 형성평가 ---------- */
+function fill(t){return !CASE?t:t.replace(/SUM/g,f1(SUMV)).replace(/AVG/g,f1(AVG,2)).replace(/MAXV/g,f1(MAXV));}
+var firstPractice=document.getElementById("p1"),answered=0,correct=0;
+QUIZ.forEach(function(q,i){
+  var s=document.createElement("section");s.className="slide";s.dataset.step="4";s.id="q"+(i+1);
+  s.innerHTML='<div class="sh"><div class="sec"><span>문항 '+(i+1)+' / '+QUIZ.length+'</span><span class="qchips"><span>학습목표 '+q.goal+'</span><span>'+q.type+'</span></span></div><h2 class="stem">'+fill(q.stem)+'</h2></div>'+
+    '<div class="body split even"><div class="opts'+(q.ox?' ox':'')+'"></div><div class="fbp" aria-live="polite"><p class="empty">보기를 고르면 정답과 해설이 여기에 나타납니다.</p></div></div>';
+  var ob=s.querySelector(".opts"),fb=s.querySelector(".fbp");
+  q.opts.forEach(function(t,k){
+    var b=document.createElement("button");b.type="button";b.className="opt";
+    b.innerHTML=q.ox?t:'<span class="n">'+(k+1)+'</span>'+fill(t);
+    b.addEventListener("click",function(){
+      var all=ob.querySelectorAll(".opt");[].forEach.call(all,function(x){x.disabled=true;});
+      all[q.ans].classList.add("ok");var ok=k===q.ans;if(!ok)b.classList.add("ng");
+      answered++;if(ok)correct++;
+      fb.className="fbp "+(ok?"ok":"ng");
+      fb.innerHTML='<div class="verdict">'+(ok?"정답입니다":"오답입니다. 정답은 "+(q.ox?q.opts[q.ans]:(q.ans+1)+"번")+"입니다")+'</div><div>'+fill(q.exp)+'</div>'+
+        '<button type="button" class="jump back" data-jump="'+q.back+'">'+q.backLabel+'</button><div class="tally">지금까지 '+answered+'문항 중 '+correct+'문항 정답</div>';
+      bindJumps(fb);
+    });
+    ob.appendChild(b);
+  });
+  vp.insertBefore(s,firstPractice);
+});
+
+/* ---------- ⑦ 용어해설 · 참고자료 · 다음 모듈 ---------- */
+for(var gi=0;gi<GLOSSARY.length;gi+=6){
+  var part=GLOSSARY.slice(gi,gi+6),pg=gi/6+1,np=Math.ceil(GLOSSARY.length/6);
+  var s=document.createElement("section");s.className="slide";s.dataset.step="6";
+  var h='<div class="sh"><div class="sec">용어해설 '+pg+'/'+np+'</div><h2>'+(pg===1?"본문에서 굵게 표시한 용어를 나온 순서대로 모았습니다":"용어해설 계속")+'</h2></div><div class="body full"><div class="gl">';
+  part.forEach(function(g,k){h+='<div class="gi"><div class="t"><i>'+(gi+k+1)+'</i>'+g[0]+'<em>'+g[1]+'</em>'+(g[4]?'<span class="cite">['+g[4]+']</span>':'')+'</div><div class="d">'+g[2]+'</div><div class="e"><strong>예시</strong> '+g[3]+'</div></div>';});
+  h+='</div></div>';s.innerHTML=h;vp.appendChild(s);
+}
+(function(){
+  var s=document.createElement("section");s.className="slide";s.dataset.step="6";s.id="end";
+  var refs=REFS.length?'<div class="pcol" style="gap:10px"><div class="plabel" style="margin:0">참고자료</div><ol class="refs">'+REFS.map(function(r){return '<li><span>['+r.n+']</span><div>'+r.title+', '+r.org+'. <a href="'+r.url+'" target="_blank" rel="noopener">'+r.url+'</a> ('+r.date+')</div></li>';}).join("")+'</ol></div>':'';
+  s.innerHTML='<div class="sh"><div class="sec">마무리</div><h2>'+(REFS.length?"참고자료와 다음 모듈":"다음 모듈")+'</h2></div>'+
+    '<div class="body '+(REFS.length?'split even':'full')+'" style="align-content:center">'+refs+
+    '<div class="pcol" style="justify-content:center"><div class="nextmod"><small>다음 모듈 · '+NEXT.title+'</small><strong>'+NEXT.line+'</strong></div></div></div>'+
+    '<p class="foot">학습 상태는 저장되지 않습니다.</p>';
+  vp.appendChild(s);
+})();
+
+/* ---------- 이동 · 진행선 ---------- */
+var slides=[].slice.call(vp.querySelectorAll(".slide")),cur=0,seen={};
+var stepFirst=[],stepCount=[0,0,0,0,0,0,0];
+slides.forEach(function(s,i){var st=+s.dataset.step;if(stepFirst[st]==null)stepFirst[st]=i;stepCount[st]++;});
+var rail=document.getElementById("rail"),stations=[];
+STEPS.forEach(function(n,i){
+  var b=document.createElement("button");b.type="button";b.className="station";
+  b.style.left="calc(14px + (100% - 28px) * "+(i/6)+")";
+  b.innerHTML='<span class="dot">'+(i+1)+'</span><span class="lb">'+n+'</span>';
+  b.setAttribute("aria-label",(i+1)+"단계 "+n+"(으)로 이동");
+  b.addEventListener("click",function(){show(stepFirst[i]);});
+  rail.appendChild(b);stations.push(b);
+});
+function show(i){
+  cur=Math.max(0,Math.min(slides.length-1,i));
+  slides.forEach(function(s,k){s.classList.toggle("on",k===cur);});
+  var st=+slides[cur].dataset.step;seen[st]=true;
+  stations.forEach(function(b,k){b.classList.toggle("cur",k===st);b.classList.toggle("done",k<st||(!!seen[k]&&k!==st));if(k===st)b.setAttribute("aria-current","step");else b.removeAttribute("aria-current");});
+  var within=(cur-stepFirst[st])/Math.max(1,stepCount[st]);
+  var frac=st===6&&cur===slides.length-1?1:(st+within)/6;
+  document.getElementById("fill").style.width=(Math.min(1,frac)*100)+"%";
+  document.getElementById("counter").innerHTML="<strong>"+STEPS[st]+"</strong> "+(cur-stepFirst[st]+1)+" / "+stepCount[st];
+  document.getElementById("prev").disabled=cur===0;
+  var nx=document.getElementById("next");nx.disabled=cur===slides.length-1;
+  nx.textContent=(cur<slides.length-1&&+slides[cur+1].dataset.step!==st)?STEPS[+slides[cur+1].dataset.step]+"(으)로":"다음";
+}
+function bindJumps(root){[].forEach.call(root.querySelectorAll("[data-jump]"),function(b){b.addEventListener("click",function(){var t=document.getElementById(b.dataset.jump);if(t)show(slides.indexOf(t));});});}
+bindJumps(document);
+document.getElementById("prev").onclick=function(){show(cur-1);};
+document.getElementById("next").onclick=function(){show(cur+1);};
+document.addEventListener("keydown",function(e){
+  if(e.target&&(e.target.type==="range"))return;
+  if(e.key==="ArrowRight"||e.key==="PageDown"){show(cur+1);e.preventDefault();}
+  else if(e.key==="ArrowLeft"||e.key==="PageUp"){show(cur-1);e.preventDefault();}
+});
+var tx=null,ty=null;
+vp.addEventListener("touchstart",function(e){var t=e.target;if(t.closest&&(t.closest("input")||t.closest(".dcard"))){tx=null;return;}tx=e.touches[0].clientX;ty=e.touches[0].clientY;},{passive:true});
+vp.addEventListener("touchend",function(e){if(tx==null)return;var dx=e.changedTouches[0].clientX-tx,dy=e.changedTouches[0].clientY-ty;if(Math.abs(dx)>60&&Math.abs(dx)>Math.abs(dy)*1.5)show(cur+(dx<0?1:-1));tx=null;},{passive:true});
+
+/* ---------- 실습 1 · 조작형 ---------- */
+(function(){if(!document.getElementById("p1-items")||!CASE)return;
+var p1v=CASE.values.slice(),p1s=CASE.values.indexOf(MAXV),p1m=document.getElementById("p1-items"),p1r=document.getElementById("p1-range");
+CASE.labels.forEach(function(m,i){var b=document.createElement("button");b.type="button";b.className="mbtn";b.textContent=m;b.onclick=function(){p1s=i;p1d();};p1m.appendChild(b);});
+function p1d(){
+  [].forEach.call(p1m.children,function(b,i){b.classList.toggle("on",i===p1s);b.setAttribute("aria-pressed",i===p1s);});
+  p1r.value=p1v[p1s];document.getElementById("p1-label").textContent=CASE.labels[p1s]+"번";document.getElementById("p1-val").textContent=f1(p1v[p1s]);
+  var s=r1(sum(p1v)),m=s/N;
+  document.getElementById("p1-sum").textContent=f1(s);document.getElementById("p1-mean").textContent=f1(m,2);
+  barChart(document.getElementById("p1-svg"),p1v,{mean:m,sel:p1s,ymax:9});
+  var msg=document.getElementById("p1-msg");
+  if(P1.target!=null&&Math.abs(m-P1.target)<0.005){msg.className="pmsg ok";msg.textContent="성공했습니다. "+f1(s)+" ÷ "+N+" = "+f1(m,2);}
+  else if(Math.abs(s-SUMV)<1e-9){msg.className="pmsg";msg.textContent="원래 값입니다. "+f1(SUMV)+" ÷ "+N+" = "+f1(AVG,2);}
+  else{msg.className="pmsg";msg.textContent="원래 평균 "+f1(AVG,2)+"보다 "+f1(Math.abs(m-AVG),2)+" "+(m>AVG?"늘었습니다.":"줄었습니다.");}
+}
+p1r.addEventListener("input",function(){p1v[p1s]=r1(+p1r.value);p1d();});
+document.getElementById("p1-reset").onclick=function(){p1v=CASE.values.slice();p1d();};
+p1d();
+
+})();
+/* ---------- 실습 2 · 분류형 ---------- */
+(function(){if(!document.getElementById("p2-pool"))return;
+var pool=document.getElementById("p2-pool"),binWrap=document.getElementById("p2-bins"),selC=null,done2=0;
+var bins=BINS.map(function(n){var b=document.createElement("div");b.className="bin";b.dataset.bin=n;b.innerHTML="<h4>"+n+"</h4>";binWrap.appendChild(b);return b;});
+function p2msg(t,c){var m=document.getElementById("p2-msg");m.textContent=t;m.className="pmsg "+(c||"");document.getElementById("p2-count").textContent=done2+" / "+CARDS.length;}
+function p2init(){
+  pool.innerHTML="";bins.forEach(function(b){[].slice.call(b.querySelectorAll(".dcard")).forEach(function(c){c.remove();});});done2=0;selC=null;
+  var o=CARDS.map(function(_,i){return i;});for(var i=o.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1)),t=o[i];o[i]=o[j];o[j]=t;}
+  o.forEach(function(i){var d=document.createElement("div");d.className="dcard";d.tabIndex=0;d.setAttribute("role","button");d.textContent=CARDS[i][0];d.dataset.ans=CARDS[i][1];pool.appendChild(d);attach(d);});
+  p2msg("카드를 하나 골라 보세요.","");
+}
+function drop(c,b){
+  if(!b||c.classList.contains("ok"))return;
+  c.classList.remove("sel");selC=null;
+  if(c.dataset.ans===b.dataset.bin){c.classList.add("ok");c.removeAttribute("tabindex");b.appendChild(c);done2++;p2msg(done2===CARDS.length?"카드를 모두 맞게 분류했습니다.":"정답입니다.","ok");}
+  else{c.classList.add("shake");setTimeout(function(){c.classList.remove("shake");},400);p2msg("「"+b.dataset.bin+"」이 아닙니다. "+HINT[c.dataset.ans],"ng");}
+}
+function pick(d){if(selC===d){d.classList.remove("sel");selC=null;return;}if(selC)selC.classList.remove("sel");selC=d;d.classList.add("sel");p2msg("이제 알맞은 칸을 누르세요.","");}
+function attach(d){
+  var sx=null,sy,mv=false,gh=null,ov=null,offX=0,offY=0;
+  function pos(e){var r=stage.getBoundingClientRect();return{x:(e.clientX-r.left)/S,y:(e.clientY-r.top)/S};}
+  d.addEventListener("pointerdown",function(e){if(d.classList.contains("ok"))return;sx=e.clientX;sy=e.clientY;mv=false;d.setPointerCapture(e.pointerId);var r=d.getBoundingClientRect();offX=(e.clientX-r.left)/S;offY=(e.clientY-r.top)/S;});
+  d.addEventListener("pointermove",function(e){
+    if(sx==null)return;
+    if(!mv&&Math.hypot(e.clientX-sx,e.clientY-sy)>6){mv=true;gh=d.cloneNode(true);gh.classList.add("ghostc");gh.classList.remove("sel");gh.style.width=d.offsetWidth+"px";stage.appendChild(gh);d.style.opacity=".35";}
+    if(mv){var p=pos(e);gh.style.left=(p.x-offX)+"px";gh.style.top=(p.y-offY)+"px";
+      var t=document.elementFromPoint(e.clientX,e.clientY),b=t&&t.closest?t.closest(".bin"):null;
+      if(ov&&ov!==b)ov.classList.remove("hover");ov=b;if(b)b.classList.add("hover");}
+  });
+  d.addEventListener("pointerup",function(){
+    if(sx==null)return;sx=null;
+    if(mv){gh.remove();gh=null;d.style.opacity="";if(ov)ov.classList.remove("hover");var b=ov;ov=null;drop(d,b);}else pick(d);
+  });
+  d.addEventListener("pointercancel",function(){if(gh){gh.remove();gh=null;}d.style.opacity="";sx=null;if(ov)ov.classList.remove("hover");ov=null;});
+  d.addEventListener("keydown",function(e){if(e.key==="Enter"||e.key===" "){e.preventDefault();pick(d);}});
+}
+bins.forEach(function(b){b.tabIndex=0;b.setAttribute("role","button");b.setAttribute("aria-label",b.dataset.bin+" 칸에 놓기");
+  b.addEventListener("click",function(e){if(selC&&!e.target.closest(".dcard"))drop(selC,b);});
+  b.addEventListener("keydown",function(e){if((e.key==="Enter"||e.key===" ")&&selC){e.preventDefault();drop(selC,b);}});});
+document.getElementById("p2-reset").onclick=p2init;
+p2init();
+
+})();
+/* ---------- 실습 3 · 추정형 ---------- */
+(function(){if(!document.getElementById("p3-range")||!PAIRS)return;
+var p3r=document.getElementById("p3-range"),p3done=false;
+document.getElementById("p3-x0").textContent=PAIRS.x0;
+p3r.min=PAIRS.ymin;p3r.max=PAIRS.ymax;p3r.step=0.1;p3r.value=r1((PAIRS.ymin+PAIRS.ymax)/2);
+function p3d(){var g=+p3r.value;document.getElementById("p3-val").textContent=f1(g);scatter(document.getElementById("p3-svg"),{x0:PAIRS.x0,guess:g,line:p3done,pred:p3done,actual:p3done});}
+p3r.addEventListener("input",function(){if(p3done){p3done=false;document.getElementById("p3-res").classList.remove("on");}p3d();});
+document.getElementById("p3-check").onclick=function(){
+  p3done=true;var g=+p3r.value,mine=Math.abs(g-PAIRS.actual),line=Math.abs(PRED-PAIRS.actual);
+  document.getElementById("p3-mine").textContent=f1(g);document.getElementById("p3-pred").textContent=f1(PRED,PAIRS.dp);document.getElementById("p3-act").textContent=f1(PAIRS.actual);
+  var m=document.getElementById("p3-msg"),good=mine<=line;m.className="pmsg "+(good?"ok":"ng");
+  m.textContent="내 오차 "+f1(mine,PAIRS.dp)+PAIRS.unit+", 직선 오차 "+f1(line,PAIRS.dp)+PAIRS.unit+". "+(good?"직선만큼 또는 더 가깝게 추정했습니다.":"직선을 이용하면 오차를 줄일 수 있습니다.");
+  document.getElementById("p3-res").classList.add("on");p3d();
+};
+p3d();
+
+})();
+show(0);
+})();
+</script>
+</body>
+</html>

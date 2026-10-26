@@ -1,0 +1,1165 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>산점도와 상관</title>
+<!-- M17 산점도와 상관 v1.0 · 기준 템플릿 v1.3로 제작 (2026-10-26) -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<style>
+:root{
+  --navy:#1B2A4A; --navy2:#2C4170; --navy3:#5B6E97; --navy-soft:#E4E9F2;
+  --ink:#22262E; --gray:#6B7280; --gray2:#9AA0AA; --panel:#EEF0F3; --line:#D5D9E0;
+  --amber:#E0A100; --amber-ink:#6E4F00; --amber-soft:#FCF3D9;
+  --ok:#23704F; --ok-soft:#E2F1E9; --ng:#B42318; --ng-soft:#FBE6E3;
+  --letterbox:#C7CCD4;
+}
+*{box-sizing:border-box}
+html,body{margin:0;height:100%;overflow:hidden;background:var(--letterbox)}
+body{font-family:"Pretendard Variable","Pretendard","Apple SD Gothic Neo","Malgun Gothic","Noto Sans KR",system-ui,sans-serif;color:var(--ink);-webkit-text-size-adjust:100%;font-feature-settings:"tnum"}
+button{font:inherit;color:inherit}
+:focus-visible{outline:3px solid var(--amber);outline-offset:2px;border-radius:4px}
+
+/* ---------- 16:9 무대 ---------- */
+.stage{position:absolute;left:50%;top:50%;width:960px;height:540px;transform:translate(-50%,-50%) scale(var(--s,1));transform-origin:center;background:#fff;overflow:hidden;box-shadow:0 10px 40px rgba(27,42,74,.25)}
+
+/* ---------- 상단 바: 모듈명 + 7단계 진행선 ---------- */
+.topbar{position:absolute;left:0;right:0;top:0;height:60px;background:var(--navy);display:flex;align-items:center}
+.brand{flex:0 0 200px;padding-left:22px;color:#fff;font-size:14px;font-weight:800;letter-spacing:-.3px;line-height:1.2;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.brand small{display:block;font-size:11px;font-weight:500;color:#A9B6CF;letter-spacing:0;margin-top:2px;overflow:hidden;text-overflow:ellipsis}
+.rail{position:relative;flex:1;height:60px;margin-right:22px}
+.rail .track{position:absolute;left:14px;right:14px;top:21px;height:3px;background:#3A4D78;border-radius:2px}
+.rail .fill{position:absolute;left:0;top:0;bottom:0;background:var(--amber);border-radius:2px;transition:width .35s ease}
+.station{position:absolute;top:10px;width:72px;margin-left:-36px;background:none;border:0;padding:0;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:4px}
+.station .dot{width:24px;height:24px;border-radius:50%;display:grid;place-items:center;font-size:11.5px;font-weight:800;background:var(--navy);color:#8E9DBD;border:2px solid #4A5D88;transition:all .25s}
+.station .lb{font-size:11.5px;color:#8E9DBD;white-space:nowrap}
+.station.done .dot{background:#C9D3E6;border-color:#C9D3E6;color:var(--navy)}
+.station.done .lb{color:#C9D3E6}
+.station.cur .dot{background:var(--amber);border-color:#FFE08A;color:var(--navy);transform:scale(1.12)}
+.station.cur .lb{color:#fff;font-weight:700}
+
+/* ---------- 화면 ---------- */
+.viewport{position:absolute;left:0;right:0;top:60px;bottom:46px}
+.slide{position:absolute;inset:0;padding:16px 36px 10px;display:none;flex-direction:column;gap:12px}
+.slide.on{display:flex;animation:fade .22s ease}
+@keyframes fade{from{opacity:0}to{opacity:1}}
+@media (prefers-reduced-motion:reduce){.slide.on{animation:none}.rail .fill,.station .dot{transition:none}}
+.sh{flex:0 0 auto}
+.sec{font-size:12.5px;font-weight:700;color:var(--navy3);display:flex;gap:8px;align-items:center;min-height:18px}
+h2{margin:3px 0 0;font-size:24px;line-height:1.3;font-weight:800;color:var(--navy);letter-spacing:-.6px;display:flex;gap:10px;align-items:flex-start}
+h2 .q{flex:0 0 auto;margin-top:2px;width:28px;height:28px;border-radius:6px;background:var(--navy);color:#fff;font-size:15px;display:grid;place-items:center}
+h2.big{font-size:30px;line-height:1.32}
+.body{flex:1 1 auto;min-height:0;display:grid;gap:24px}
+.split{grid-template-columns:1.2fr 1fr}
+.split.even{grid-template-columns:1fr 1fr}
+.full{grid-template-columns:1fr}
+.fig{background:var(--panel);border-radius:12px;padding:12px;min-height:0;display:flex;align-items:center;justify-content:center}
+.fig svg{width:100%;height:100%;display:block}
+.figcol{min-height:0;display:flex;flex-direction:column;gap:10px}
+.figcol .fig{flex:1 1 auto}
+.side{min-height:0;display:flex;flex-direction:column;gap:12px;justify-content:center}
+
+/* 핵심 문장: 40자 안팎, 1~2개 */
+.key{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:9px}
+.key li{position:relative;padding-left:16px;font-size:18.5px;line-height:1.42;font-weight:700;letter-spacing:-.4px}
+.key li::before{content:"";position:absolute;left:0;top:.28em;width:4px;height:1.05em;border-radius:2px;background:var(--navy2)}
+.key b{color:var(--navy);background:linear-gradient(transparent 62%,var(--amber-soft) 62%)}
+/* 해설 문단: 2~4문장, 150~250자 */
+.exp{margin:0;font-size:15px;line-height:1.62;letter-spacing:-.2px;color:var(--ink)}
+.exp b{color:var(--navy)}
+/* 연결 문장: 다음 소단원으로 넘기는 질문 */
+.next{margin:0;border-top:1px dashed var(--line);padding-top:9px;font-size:14px;font-weight:700;color:var(--navy2);display:flex;gap:8px;align-items:baseline}
+.next span{flex:0 0 auto;font-size:11.5px;font-weight:800;color:var(--navy3);background:var(--navy-soft);border-radius:4px;padding:0 6px;line-height:20px}
+/* 각주: 기호의 뜻과 출처 번호만 */
+.foot{flex:0 0 auto;font-size:12px;line-height:1.5;color:var(--gray);margin:0}
+.foot b{color:var(--ink)}
+.cite{font-size:.72em;font-weight:700;color:var(--navy3);vertical-align:super;line-height:0;margin-left:1px}
+.tag-v{display:inline-block;font-size:11px;font-weight:700;border-radius:4px;padding:0 6px;line-height:18px;white-space:nowrap;vertical-align:1px;color:var(--gray);background:#F3F4F6;box-shadow:inset 0 0 0 1px var(--line)}
+
+/* 핵심 수학 개념 박스 */
+.math{flex:0 0 auto;border-left:3px solid var(--navy3);background:#F6F7F9;border-radius:0 8px 8px 0;padding:9px 13px;font-size:13.5px;line-height:1.5}
+.math .mt{font-size:12px;font-weight:800;color:var(--navy3);margin-bottom:2px}
+.math .f{font-family:"Cambria Math","Times New Roman",serif;font-size:18px;font-weight:700;color:var(--navy);margin:1px 0 4px}
+.math .r{display:grid;grid-template-columns:34px 1fr;gap:6px}
+.math .r span:first-child{font-size:11.5px;font-weight:700;color:var(--gray2);padding-top:1px}
+.math .w{margin-top:5px;padding-top:5px;border-top:1px dashed var(--line);color:var(--ng);font-weight:700;font-size:12.5px}
+
+/* ---------- 하단 바 ---------- */
+.bottombar{position:absolute;left:0;right:0;bottom:0;height:46px;border-top:1px solid var(--line);display:flex;align-items:center;padding:0 22px 0 36px;gap:12px;background:#fff}
+.counter{font-size:13px;color:var(--gray);font-weight:600}
+.counter strong{color:var(--navy)}
+.spacer{flex:1}
+.nav{border:1.5px solid var(--navy);background:#fff;color:var(--navy);border-radius:8px;height:32px;padding:0 16px;font-size:14px;font-weight:700;cursor:pointer}
+.nav.primary{background:var(--navy);color:#fff}
+.nav:disabled{opacity:.3;cursor:default}
+
+/* ---------- 홈으로 ---------- */
+.home{display:inline-flex;align-items:center;gap:6px;height:32px;padding:0 13px;border-radius:8px;border:1.5px solid var(--navy-soft);background:#fff;color:var(--navy2);font-size:13.5px;font-weight:700;line-height:1;text-decoration:none;white-space:nowrap}
+.home svg{width:14px;height:14px;flex:0 0 auto;display:block}
+.home:hover{background:var(--navy-soft);border-color:var(--navy3);color:var(--navy)}
+.home:focus-visible{outline:3px solid var(--amber);outline-offset:2px}
+@media (prefers-reduced-motion:reduce){.home{transition:none}}
+
+/* ① 학습개요 */
+.meta{display:grid;grid-template-columns:auto 1fr;gap:6px 14px;margin:0;font-size:14px}
+.meta dt{font-weight:700;color:var(--gray)}
+.meta dd{margin:0;font-weight:700;color:var(--navy)}
+.prevlink{background:var(--panel);border-radius:10px;padding:12px 14px;font-size:14.5px;line-height:1.55}
+.prevlink small{display:block;font-size:12px;font-weight:800;color:var(--navy3);margin-bottom:3px}
+
+/* ② 학습목표: 목표 → 문항 → 실습 연결 */
+.gmap{display:grid;grid-template-columns:44px 1fr 150px 150px;align-items:stretch;row-gap:12px;column-gap:0}
+.gmap .hd{font-size:12px;font-weight:700;color:var(--gray);padding:0 14px 2px}
+.gmap .gn{background:var(--navy);color:#fff;font-weight:800;font-size:18px;display:grid;place-items:center;border-radius:10px 0 0 10px}
+.gmap .gt{background:var(--panel);padding:14px 18px;font-size:17px;font-weight:700;line-height:1.42;letter-spacing:-.3px;display:flex;align-items:center}
+.gmap .gt b{color:var(--navy)}
+.gmap .ga,.gmap .gp{background:var(--panel);display:flex;align-items:center;padding:0 10px;border-left:2px solid #fff}
+.gmap .gp{border-radius:0 10px 10px 0}
+.jump{border:1.5px solid var(--navy3);background:#fff;border-radius:7px;padding:6px 10px;font-size:13px;font-weight:700;color:var(--navy);cursor:pointer;text-align:left;line-height:1.3;width:100%}
+.jump:hover{background:var(--navy-soft)}
+
+/* ④ 본문 정리 표 */
+.sumtbl{width:100%;border-collapse:separate;border-spacing:0;font-size:14.5px;line-height:1.5}
+.sumtbl th{background:var(--navy);color:#fff;font-weight:800;text-align:left;padding:10px 14px}
+.sumtbl th:first-child{border-radius:10px 0 0 0;width:150px}
+.sumtbl th:last-child{border-radius:0 10px 0 0}
+.sumtbl td{padding:11px 14px;border-bottom:1px solid var(--line);vertical-align:top}
+.sumtbl td:first-child{font-weight:800;color:var(--navy)}
+.sumtbl tr:nth-child(even) td{background:#F8F9FB}
+
+/* ⑤ 형성평가 */
+.qchips{display:flex;gap:6px}
+.qchips span{font-size:11.5px;font-weight:700;color:var(--navy2);background:var(--navy-soft);border-radius:4px;padding:0 7px;line-height:19px}
+h2.stem{font-size:21px;line-height:1.42;font-weight:800}
+.opts{display:grid;gap:9px;align-content:center}
+.opts.ox{grid-template-columns:1fr 1fr}
+.opt{border:1.5px solid var(--line);background:#fff;border-radius:10px;padding:11px 14px;text-align:left;font-size:16px;font-weight:600;cursor:pointer;display:flex;gap:10px;align-items:center}
+.opt .n{flex:0 0 26px;height:26px;border-radius:50%;background:var(--panel);display:grid;place-items:center;font-size:13px;font-weight:800;color:var(--navy)}
+.opts.ox .opt{justify-content:center;font-size:40px;font-weight:800;padding:22px;color:var(--navy)}
+.opt:hover:not(:disabled){border-color:var(--navy3);background:#F8F9FB}
+.opt:disabled{cursor:default}
+.opt.ok{border-color:var(--ok);background:var(--ok-soft);color:var(--ok)}
+.opt.ok .n{background:var(--ok);color:#fff}
+.opt.ng{border-color:var(--ng);background:var(--ng-soft);color:var(--ng)}
+.opt.ng .n{background:var(--ng);color:#fff}
+.fbp{background:var(--panel);border-radius:12px;padding:18px 20px;display:flex;flex-direction:column;gap:10px;font-size:14.5px;line-height:1.6}
+.fbp .empty{color:var(--gray);margin:auto 0}
+.fbp .verdict{font-size:19px;font-weight:800}
+.fbp.ok{background:var(--ok-soft)} .fbp.ok .verdict{color:var(--ok)}
+.fbp.ng{background:var(--ng-soft)} .fbp.ng .verdict{color:var(--ng)}
+.fbp .back{align-self:flex-start}
+.fbp .tally{margin-top:auto;font-size:12.5px;color:var(--gray);font-weight:600}
+
+/* ⑥ 실습 */
+.plabel{font-size:12px;font-weight:800;color:var(--navy3);margin-bottom:6px}
+.pcol{min-height:0;display:flex;flex-direction:column}
+.mbtns{display:flex;flex-wrap:nowrap;gap:3px;margin-bottom:8px}
+.mbtn{border:1px solid var(--line);background:#fff;border-radius:6px;padding:2px 6px;font-size:12px;cursor:pointer;min-width:26px}
+.mbtn.on{background:var(--navy);border-color:var(--navy);color:#fff}
+.ctrl{display:flex;align-items:center;gap:10px;font-size:14px;font-weight:600}
+input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
+.stats{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.stats.three{grid-template-columns:1fr 1fr 1fr}
+.stats div{background:var(--panel);border-radius:10px;padding:8px 12px}
+.stats small{display:block;font-size:11.5px;color:var(--gray);font-weight:600;line-height:1.35}
+.stats strong{font-size:22px;color:var(--navy);letter-spacing:-.4px}
+.pmsg{font-size:14.5px;font-weight:700;min-height:22px;line-height:1.45}
+.pmsg.ok{color:var(--ok)} .pmsg.ng{color:var(--ng)}
+.think{flex:0 0 auto;background:var(--amber-soft);border-radius:10px;padding:9px 14px;font-size:14.5px;font-weight:700;color:var(--amber-ink);display:flex;gap:10px;align-items:baseline}
+.think span{flex:0 0 auto;font-size:12px;font-weight:800}
+.howto{font-size:13.5px;color:var(--gray);line-height:1.5;margin:0}
+.btn{border:0;background:var(--navy);color:#fff;border-radius:8px;height:32px;padding:0 14px;font-size:13.5px;font-weight:700;cursor:pointer}
+.btn.ghost{background:#fff;color:var(--navy);box-shadow:inset 0 0 0 1.5px var(--navy)}
+.pool{flex:1;min-height:0;display:grid;grid-template-columns:1fr 1fr;align-content:start;gap:8px;padding:10px;border:1.5px dashed var(--line);border-radius:10px;background:#FAFBFC}
+.dcard{background:#fff;border:1.5px solid var(--navy3);border-radius:8px;padding:7px 10px;font-size:13.5px;font-weight:600;line-height:1.4;cursor:grab;user-select:none;-webkit-user-select:none;touch-action:none}
+.dcard.sel{box-shadow:0 0 0 3px var(--amber)}
+.dcard.ok{border-color:var(--ok);background:var(--ok-soft);color:var(--ok);cursor:default;font-size:12.5px;padding:5px 8px}
+.dcard.shake{animation:shake .35s;border-color:var(--ng);background:var(--ng-soft)}
+@keyframes shake{25%{transform:translateX(-5px)}75%{transform:translateX(5px)}}
+.ghostc{position:absolute;pointer-events:none;z-index:50;opacity:.92;box-shadow:0 8px 20px rgba(27,42,74,.25);cursor:grabbing}
+.bins{flex:1 0 auto;min-height:0;display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.bin .dcard{font-size:12px;padding:3px 7px;line-height:1.3}
+.p2row{display:flex;gap:10px;align-items:center}.p2row .pmsg{flex:1;margin:0}.p2row .btn{flex:0 0 auto}
+.bin{border:1.5px solid var(--line);border-radius:10px;padding:6px;display:flex;flex-direction:column;gap:6px;background:#fff;cursor:pointer;min-height:0}
+.bin h4{margin:0;background:var(--navy);color:#fff;border-radius:6px;text-align:center;font-size:14px;padding:4px}
+.bin.hover{border-color:var(--amber);background:var(--amber-soft)}
+.res{display:none;flex-direction:column;gap:8px}
+.res.on{display:flex}
+
+/* ⑦ 용어해설·참고자료 */
+.gl{display:grid;grid-template-columns:1fr 1fr;grid-template-rows:repeat(3,1fr);gap:10px 22px;min-height:0}
+.gi{border-top:2px solid var(--navy);padding:8px 0 0;display:flex;flex-direction:column;gap:3px;min-height:0}
+.gi .t{font-size:16.5px;font-weight:800;color:var(--navy);display:flex;gap:6px;align-items:baseline;flex-wrap:wrap}
+.gi .t em{font-style:normal;font-weight:500;font-size:12.5px;color:var(--gray)}
+.gi .t i{font-style:normal;font-size:12px;font-weight:800;color:var(--navy3);width:22px}
+.gi .d{font-size:14px;line-height:1.5}
+.gi .e{font-size:12.5px;line-height:1.45;color:var(--gray)}
+.gi .e strong{color:var(--navy3)}
+.refs{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:8px;font-size:13.5px;line-height:1.5}
+.refs li{display:grid;grid-template-columns:30px 1fr;gap:4px}
+.refs li span{font-weight:800;color:var(--navy3)}
+.refs a{color:var(--navy2);word-break:break-all}
+.nextmod{background:var(--navy);color:#fff;border-radius:12px;padding:18px 22px;display:flex;flex-direction:column;gap:6px}
+.nextmod small{font-size:12px;font-weight:700;color:#A9B6CF}
+.nextmod strong{font-size:19px;line-height:1.45;letter-spacing:-.3px}
+
+.rotate{position:fixed;left:0;right:0;bottom:max(14px,env(safe-area-inset-bottom));text-align:center;font-size:13px;color:#3A4560;display:none}
+@media (orientation:portrait) and (max-width:700px){.rotate{display:block}}
+</style>
+</head>
+<body>
+<div class="stage" id="stage">
+  <header class="topbar">
+    <!-- [교체] 모듈명 / 과정명·모듈 번호 (장·절 번호는 쓰지 않음) -->
+    <div class="brand" id="brand">산점도와 상관<small>상관·회귀·통계 모형 · M17</small></div>
+    <nav class="rail" id="rail" aria-label="학습 단계"><div class="track"><div class="fill" id="fill"></div></div></nav>
+  </header>
+
+  <main class="viewport" id="vp">
+    <!-- ① 학습개요 ─────────────────────────────── -->
+    <section class="slide" data-step="0">
+      <div class="sh"><div class="sec">학습개요</div>
+        <h2 class="big">두 양적 변수의 관계는 산점도로 보고, 상관계수로 강도를 잽니다</h2></div>
+      <div class="body split">
+        <div class="fig"><svg id="m17-ov" viewBox="0 0 440 260" role="img" aria-label="산점도로 관계를 보고, 피어슨 상관계수와 순위상관계수로 강도를 재고, 가설검정으로 확인하는 흐름"></svg></div>
+        <div class="side">
+          <div class="prevlink"><small>지난 모듈까지는</small>집단의 평균이나 범주형 데이터의 비율을 가설검정으로 비교했습니다.<small style="margin-top:8px">이번 모듈에서는</small>수학 점수와 과학 점수처럼 두 양적 변수 사이의 관계를 산점도로 보고, 상관계수로 그 강도를 수치화하는 방법을 배웁니다.</div>
+          <dl class="meta"><dt>학습 시간</dt><dd>약 45분</dd><dt>본문</dt><dd>소단원 4개</dd><dt>실습</dt><dd>조작형 · 분류형 · 추정형</dd></dl>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" data-step="0">
+      <div class="sh"><div class="sec">학습개요 · 이 모듈의 예시</div><h2>학생 10명의 수학·과학 점수로 관계를 살펴봅니다</h2></div>
+      <div class="body split">
+        <div class="fig"><svg id="m17-case" viewBox="0 0 440 250" role="img" aria-label="학생 A부터 J까지 10명의 수학 점수와 과학 점수 표"></svg></div>
+        <div class="side">
+          <ul class="key"><li>한 학생에게서 두 점수를 쌍으로 얻었습니다.</li></ul>
+          <p class="exp">학생 10명이 수학과 과학 시험을 모두 치렀고, 표의 각 행은 한 학생의 두 점수입니다(예시값). 중요한 것은 같은 대상에게서 두 변수를 쌍으로 얻었다는 점이며, 학생 A는 수학만, 학생 B는 과학만 치른 데이터로는 관계를 볼 수 없습니다. 이 10쌍을 모듈 끝까지 씁니다.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ② 학습목표 ─────────────────────────────── -->
+    <section class="slide" data-step="1">
+      <div class="sh"><div class="sec">학습목표</div><h2>이 모듈을 마치면 이렇게 할 수 있습니다</h2></div>
+      <div class="body full" style="align-content:center">
+        <div class="gmap">
+          <div></div><div class="hd">목표</div><div class="hd">확인하는 문항</div><div class="hd">연결 실습</div>
+          <div class="gn">1</div><div class="gt"><span>산점도에서 관계의 방향을 읽고 상관과 인과를 <b>구분한다</b>.</span></div>
+          <div class="ga"><button class="jump" data-jump="q1">문항 1·2</button></div><div class="gp"><button class="jump" data-jump="p3">실습 3 추정</button></div>
+          <div class="gn">2</div><div class="gt"><span>피어슨 상관계수를 <b>계산하고</b> 그 한계를 설명한다.</span></div>
+          <div class="ga"><button class="jump" data-jump="q3">문항 3·4</button></div><div class="gp"><button class="jump" data-jump="p1">실습 1 조작</button></div>
+          <div class="gn">3</div><div class="gt"><span>데이터에 맞는 상관계수와 검정 결과의 의미를 <b>판단한다</b>.</span></div>
+          <div class="ga"><button class="jump" data-jump="q5">문항 5·6</button></div><div class="gp"><button class="jump" data-jump="p2">실습 2 분류</button></div>
+        </div>
+      </div>
+      <p class="foot">버튼을 누르면 해당 문항이나 실습 화면으로 바로 이동합니다.</p>
+    </section>
+
+    <!-- ③ 일상의 예시 ─────────────────────────────── -->
+    <section class="slide" data-step="2">
+      <div class="sh"><div class="sec">일상의 예시 1/5</div><h2>키가 큰 사람은 신발도 큰 편입니다</h2></div>
+      <div class="body split">
+        <div class="fig"><svg viewBox="0 0 440 250" role="img" aria-label="키가 클수록 신발 크기도 커지는 경향을 점으로 나타냄">
+          <line x1="60" y1="200" x2="400" y2="200" stroke="#9AA0AA" stroke-width="1.5"/><line x1="60" y1="30" x2="60" y2="200" stroke="#9AA0AA" stroke-width="1.5"/>
+          <g fill="#2B8CC4"><circle cx="90" cy="178" r="6"/><circle cx="120" cy="160" r="6"/><circle cx="140" cy="170" r="6"/><circle cx="170" cy="140" r="6"/><circle cx="200" cy="130" r="6"/><circle cx="220" cy="142" r="6"/><circle cx="250" cy="110" r="6"/><circle cx="280" cy="96" r="6"/><circle cx="300" cy="104" r="6"/><circle cx="330" cy="78" r="6"/><circle cx="360" cy="62" r="6"/></g>
+          <g font-size="12" font-weight="700" fill="#6B7280"><text x="400" y="222" text-anchor="end">키 →</text><text x="66" y="40">신발 크기</text></g>
+          <text x="230" y="244" text-anchor="middle" font-size="11.5" fill="#6B7280">한 사람 = 점 하나</text>
+        </svg></div>
+        <div class="side">
+          <ul class="key"><li>두 값을 점으로 찍으면 경향이 보입니다.</li></ul>
+          <p class="exp">친구들의 키와 신발 크기를 한 사람당 점 하나로 찍어 보면, 키가 클수록 신발도 큰 경향이 눈에 들어옵니다. 물론 키가 같아도 발 크기가 다른 사람이 있어 점들이 한 줄로 서지는 않습니다. 두 값을 짝지어 그리면 이런 대략의 관계를 한눈에 볼 수 있습니다.</p>
+          <p class="next"><span>본문에서</span>4-1 산점도와 상관으로 이어집니다.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" data-step="2">
+      <div class="sh"><div class="sec">일상의 예시 2/5</div><h2>‘꽤 덥다’보다 ‘31℃’가 더 정확합니다</h2></div>
+      <div class="body split">
+        <div class="fig"><svg viewBox="0 0 440 250" role="img" aria-label="느낌 대신 온도계 숫자로 정도를 나타냄">
+          <rect x="60" y="60" width="140" height="110" rx="14" fill="#F3F5F9"/><text x="130" y="110" text-anchor="middle" font-size="16" font-weight="800" fill="#6B7280">“꽤 덥다”</text><text x="130" y="138" text-anchor="middle" font-size="11.5" fill="#9AA0AA">사람마다 다르게 느낌</text>
+          <rect x="300" y="40" width="22" height="130" rx="11" fill="#fff" stroke="#1B2A4A" stroke-width="2.5"/><rect x="305" y="80" width="12" height="88" rx="6" fill="#B42318"/><circle cx="311" cy="180" r="18" fill="#B42318"/>
+          <text x="345" y="90" font-size="22" font-weight="800" fill="#B42318">31℃</text>
+          <path d="M210 115 L280 115" stroke="#5B6E97" stroke-width="2.5"/><path d="M272 108 L282 115 L272 122" fill="none" stroke="#5B6E97" stroke-width="2.5"/>
+          <text x="220" y="228" text-anchor="middle" font-size="11.5" fill="#6B7280">정도를 숫자로 나타내면 비교와 공유가 쉬움</text>
+        </svg></div>
+        <div class="side">
+          <ul class="key"><li>정도를 숫자로 나타내면 비교가 쉽습니다.</li></ul>
+          <p class="exp">‘꽤 덥다’는 사람마다 느끼는 정도가 달라 비교하기 어렵지만, 온도계로 31℃라고 하면 누구나 같은 뜻으로 받아들이고 어제와도 비교할 수 있습니다. 두 변수의 관계도 ‘관계가 좀 있다’ 대신 하나의 수로 강도를 나타내면 훨씬 쓸모가 많아집니다.</p>
+          <p class="next"><span>본문에서</span>4-2 피어슨 상관계수로 이어집니다.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" data-step="2">
+      <div class="sh"><div class="sec">일상의 예시 3/5</div><h2>농구 선수 한 명이 오면 반 평균 키가 흔들립니다</h2></div>
+      <div class="body split">
+        <div class="fig"><svg viewBox="0 0 440 250" role="img" aria-label="키 큰 학생이 오면 평균은 크게 바뀌지만 키 순서는 맨 뒤에 한 명이 추가될 뿐">
+          <g fill="#5B6E97"><rect x="60" y="120" width="26" height="80" rx="6"/><rect x="100" y="110" width="26" height="90" rx="6"/><rect x="140" y="115" width="26" height="85" rx="6"/><rect x="180" y="105" width="26" height="95" rx="6"/><rect x="220" y="112" width="26" height="88" rx="6"/></g>
+          <rect x="300" y="30" width="30" height="170" rx="6" fill="#B42318"/>
+          <line x1="40" y1="200" x2="400" y2="200" stroke="#9AA0AA" stroke-width="1.5"/>
+          <g font-size="11.5" font-weight="800" fill="#1B2A4A" text-anchor="middle"><text x="153" y="222">반 학생들</text><text x="315" y="222" fill="#B42318">새 학생</text></g>
+          <text x="220" y="244" text-anchor="middle" font-size="11.5" fill="#6B7280">평균은 크게 바뀌지만, 순서로는 ‘1등이 하나 더’일 뿐</text>
+        </svg></div>
+        <div class="side">
+          <ul class="key"><li>극단적인 값 하나가 평균을 흔듭니다.</li></ul>
+          <p class="exp">반에 키가 아주 큰 농구 선수 한 명이 전학 오면 반 평균 키는 눈에 띄게 올라갑니다. 하지만 키 순서로 줄을 세우면 그 학생은 그저 맨 끝에 한 명 더 선 것뿐입니다. 값 대신 순위를 쓰면 극단적인 값 하나가 결과를 크게 바꾸지 못합니다.</p>
+          <p class="next"><span>본문에서</span>4-3 비모수 상관계수로 이어집니다.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" data-step="2">
+      <div class="sh"><div class="sec">일상의 예시 4/5</div><h2>행운의 셔츠를 입은 날 세 번 모두 이겼습니다</h2></div>
+      <div class="body split">
+        <div class="fig"><svg viewBox="0 0 440 250" role="img" aria-label="셔츠를 입은 날 3경기 모두 승리, 표본이 적으면 우연한 일치가 생김">
+          <g font-size="12" font-weight="800" fill="#1B2A4A" text-anchor="middle"><text x="110" y="50">1경기</text><text x="220" y="50">2경기</text><text x="330" y="50">3경기</text></g>
+          <g fill="#E0A100"><path d="M90 70 h40 l12 16 -10 8 v46 h-44 v-46 l-10 -8z"/><path d="M200 70 h40 l12 16 -10 8 v46 h-44 v-46 l-10 -8z"/><path d="M310 70 h40 l12 16 -10 8 v46 h-44 v-46 l-10 -8z"/></g>
+          <g font-size="15" font-weight="800" fill="#23704F" text-anchor="middle"><text x="110" y="172">승</text><text x="220" y="172">승</text><text x="330" y="172">승</text></g>
+          <text x="220" y="218" text-anchor="middle" font-size="11.5" fill="#6B7280">세 번뿐인 일치는 우연으로도 충분히 일어남</text>
+        </svg></div>
+        <div class="side">
+          <ul class="key"><li>적은 데이터에서는 우연한 일치가 잦습니다.</li></ul>
+          <p class="exp">특정 셔츠를 입은 날 응원하는 팀이 세 번 모두 이기면 ‘행운의 셔츠’라고 믿고 싶어집니다. 하지만 경기가 세 번뿐이면 우연히 이런 일치가 생길 가능성이 꽤 큽니다. 관찰한 관계가 우연 이상인지는 데이터의 수를 생각해 따져 봐야 합니다.</p>
+          <p class="next"><span>본문에서</span>4-4 상관계수와 가설로 이어집니다.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" data-step="2">
+      <div class="sh"><div class="sec">일상의 예시 5/5</div><h2>현장에서는? 설비 온도와 불량률은 얼마나 관계가 있을까요?</h2></div>
+      <div class="body split even">
+        <div class="fig"><svg viewBox="0 0 420 250" role="img" aria-label="네 장면이 산점도와 상관으로 이어지는 그림">
+          <defs><marker id="b2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10z" fill="#5B6E97"/></marker></defs>
+          <g font-size="13" font-weight="700" fill="#1B2A4A" text-anchor="middle">
+            <rect x="14" y="18" width="150" height="44" rx="10" fill="#fff" stroke="#5B6E97" stroke-width="1.5"/><text x="89" y="45">점으로 찍어 보기</text>
+            <rect x="14" y="74" width="150" height="44" rx="10" fill="#fff" stroke="#5B6E97" stroke-width="1.5"/><text x="89" y="101">정도를 숫자로</text>
+            <rect x="14" y="130" width="150" height="44" rx="10" fill="#fff" stroke="#5B6E97" stroke-width="1.5"/><text x="89" y="157">값 대신 순위</text>
+            <rect x="14" y="186" width="150" height="44" rx="10" fill="#fff" stroke="#5B6E97" stroke-width="1.5"/><text x="89" y="213">우연인지 확인</text>
+          </g>
+          <g stroke="#5B6E97" stroke-width="2" fill="none"><path d="M166 40 C220 40 220 112 254 120" marker-end="url(#b2)"/><path d="M166 96 C210 96 220 118 254 122" marker-end="url(#b2)"/><path d="M166 152 C210 152 220 130 254 128" marker-end="url(#b2)"/><path d="M166 208 C220 208 220 138 254 130" marker-end="url(#b2)"/></g>
+          <rect x="258" y="84" width="150" height="82" rx="12" fill="#1B2A4A"/>
+          <text x="333" y="116" text-anchor="middle" font-size="15" font-weight="800" fill="#fff">산점도와</text><text x="333" y="136" text-anchor="middle" font-size="15" font-weight="800" fill="#fff">상관계수</text>
+          <text x="333" y="156" text-anchor="middle" font-size="11" fill="#C9D3E6">r · ρ · τ · 검정</text>
+        </svg></div>
+        <div class="side">
+          <p class="exp">네 장면은 두 값을 점으로 찍어 경향을 보고, 그 정도를 숫자로 나타내고, 극단적인 값에는 순위를 쓰고, 우연인지 확인하는 순서로 이어집니다. 설비 온도와 불량률, 가동 시간과 마모량처럼 현장의 두 측정값 사이 관계를 볼 때도 같은 순서를 따릅니다.</p>
+          <p class="next"><span>다음 질문</span>두 양적 변수는 어떻게 그림으로 나타낼까?</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ④ 본문 ─────────────────────────────── -->
+    <section class="slide" data-step="3" id="s-4-1a">
+      <div class="sh"><div class="sec">4-1 산점도와 상관</div><h2><span class="q">Q</span>두 양적 변수의 관계는 어떻게 그림으로 나타낼까요?</h2></div>
+      <div class="body split even">
+        <div class="fig"><svg id="m17-scatter" viewBox="0 0 420 270" role="img" aria-label="학생 10명의 수학 점수를 x축, 과학 점수를 y축으로 한 산점도"></svg></div>
+        <div class="side">
+          <ul class="key"><li><b>산점도</b>: 두 변수를 x축, y축 값으로 찍은 그래프</li><li>점 하나 = 대상 하나(학생 1명)</li></ul>
+          <p class="exp">2개의 양적 변수로 이루어진 데이터를 얻었다면, 1개 변수를 x축 값으로, 다른 1개 변수를 y축 값으로 하여 각 값을 2차원 평면 위 점으로 나타낼 수 있습니다. 학생 A는 수학 85점, 과학 80점이므로 (85, 80) 위치에 점이 찍힙니다. 이렇게 그린 산점도를 보면 수학 점수가 높은 학생은 과학 점수도 높은 경향이 있다는 것을 대략적으로 파악할 수 있습니다.</p>
+          <p class="next"><span>다음 질문</span>산점도에는 어떤 관계가 나타날까?</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" data-step="3" id="s-4-1b">
+      <div class="sh"><div class="sec">4-1 산점도와 상관</div><h2><span class="q">Q</span>산점도에는 어떤 관계들이 나타날까요?</h2></div>
+      <div class="body split even">
+        <div class="fig"><svg id="m17-three" viewBox="0 0 420 270" role="img" aria-label="증가 관계, 관계 없음, 감소 관계 세 가지 산점도"></svg></div>
+        <div class="side">
+          <ul class="key"><li><b>상관</b>: 두 변수 사이의 관계성</li><li>상관이 있어도 인과관계라고는 할 수 없습니다.</li></ul>
+          <p class="exp">한쪽이 큰 값이면 다른 쪽도 큰 증가 관계, 한쪽이 커지면 다른 쪽은 작아지는 감소 관계, 그리고 한쪽 값과 상관없이 다른 쪽에 경향이 보이지 않는 관계가 있습니다. 이러한 2개 변수 사이의 관계성을 상관이라 하며, x축과 y축을 맞바꾸어도 달라지지 않습니다. 주의할 점은 상관이 있다고 해서 원인과 결과를 뜻하는 인과관계가 있는지까지는 알 수 없다는 것입니다.</p>
+          <p class="next"><span>다음 질문</span>관계를 식으로 나타낼 수도 있을까?</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" data-step="3" id="s-4-1c">
+      <div class="sh"><div class="sec">4-1 산점도와 상관</div><h2><span class="q">Q</span>관계를 식으로 나타내면 무엇을 할 수 있을까요?</h2></div>
+      <div class="body split even">
+        <div class="fig"><svg id="m17-reg" viewBox="0 0 420 270" role="img" aria-label="광고비와 판매 개수의 산점도와 회귀직선 y = 0.001x, 광고비 500만 원이면 판매 5,000개 예측"></svg></div>
+        <div class="side">
+          <ul class="key"><li><b>회귀</b>: y = f(x)로 관계를 공식화</li><li>x는 <b>설명변수</b>, y는 <b>반응변수</b></li></ul>
+          <p class="exp">2개 양적 변수의 관계를 분석하는 또 하나의 방법이 회귀입니다. x를 광고 비용, y를 판매 개수라 하고 [판매 개수] = 0.001 × [광고 비용]이라는 식을 얻었다면, 광고비를 1,000원 늘릴 때 판매가 1개 늘어난다고 이해하고, 광고비 500만 원이면 5,000개 팔리리라 예측할 수 있습니다. 상관과 달리 회귀에는 ‘x에서 y’라는 방향성이 있습니다. 회귀는 다음 모듈에서 자세히 다룹니다.</p>
+          <p class="next"><span>다음 질문</span>관계의 강도는 어떻게 수치로 나타낼까?</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" data-step="3" id="s-4-2a">
+      <div class="sh"><div class="sec">4-2 피어슨 상관계수</div><h2><span class="q">Q</span>두 변수 관계의 강도는 어떻게 수치로 나타낼까요?</h2></div>
+      <div class="body split even">
+        <div class="figcol">
+          <div class="fig"><svg id="m17-quad" viewBox="0 0 420 150" role="img" aria-label="평균선으로 나눈 네 구역에서 오른쪽 위와 왼쪽 아래는 양수, 나머지는 음수"></svg></div>
+          <div class="math">
+            <div class="mt">핵심 수학 개념 · 피어슨 상관계수</div>
+            <div class="f">r = 공분산 ÷ (x의 표준편차 × y의 표준편차)</div>
+            <div class="r"><span>기호</span><span>공분산 = (xᵢ − x̄)(yᵢ − ȳ)의 평균, x̄·ȳ: 평균</span></div>
+            <div class="r"><span>계산</span><span>136.35 ÷ (13.68 × 10.75) ≈ 0.93 (−1 ≤ r ≤ 1)</span></div>
+          </div>
+        </div>
+        <div class="side">
+          <ul class="key"><li><b>피어슨 상관계수</b> r: 선형관계의 강도</li><li>분자는 <b>공분산</b>, 분모는 두 표준편차</li></ul>
+          <p class="exp">2개 양적 변수의 관계가 얼마나 직선에 가까운지 평가하는 값이 피어슨 상관계수 r입니다. 분자의 공분산에서 (xᵢ − x̄)(yᵢ − ȳ)는 xᵢ와 yᵢ가 함께 평균보다 크거나 작으면 양수, 한쪽만 크면 음수가 되므로, 모두 더하면 x와 y가 어떻게 연동되어 있는지 알 수 있습니다. 분모의 두 표준편차는 r을 −1에서 +1 범위에 머무르게 합니다.</p>
+          <p class="next"><span>다음 질문</span>r의 부호와 크기는 무엇을 뜻할까?</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" data-step="3" id="s-4-2b">
+      <div class="sh"><div class="sec">4-2 피어슨 상관계수</div><h2><span class="q">Q</span>r의 부호와 크기는 각각 무엇을 뜻할까요?</h2></div>
+      <div class="body split even">
+        <div class="fig"><svg id="m17-grid" viewBox="0 0 420 270" role="img" aria-label="r이 1, 0.8, 0.5, 0.3, 0, −0.3, −0.5, −0.8, −1인 산점도 9개"></svg></div>
+        <div class="side">
+          <ul class="key"><li>부호: <b>양의 상관</b>(+) · <b>음의 상관</b>(−)</li><li>|r|이 1에 가까울수록 직선에 가깝습니다.</li></ul>
+          <p class="exp">부호가 양일 때는 x가 커질수록 y도 커지는 양의 상관, 음일 때는 x가 커질수록 y가 작아지는 음의 상관입니다. |r|이 1에 가까울수록 관계는 직선에 가까워지고 |r| = 1이면 완전한 직선이며, 0에 가까워지면 관계가 불분명해져 r = 0에서 무상관이 됩니다. 대략 0.7 &lt; |r| ≤ 1은 강한 상관, 0.4 &lt; |r| ≤ 0.7은 중간 정도, 0.2 &lt; |r| ≤ 0.4는 약한 상관, 0 ≤ |r| ≤ 0.2는 거의 상관없음으로 해석하지만, 분야에 따라 다른 대략적인 기준입니다.</p>
+          <p class="next"><span>다음 질문</span>r이 0이면 정말 관계가 없을까?</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" data-step="3" id="s-4-2c">
+      <div class="sh"><div class="sec">4-2 피어슨 상관계수</div><h2><span class="q">Q</span>r이 0에 가까우면 정말 아무 관계도 없을까요?</h2></div>
+      <div class="body split even">
+        <div class="fig"><svg id="m17-nonlin" viewBox="0 0 420 270" role="img" aria-label="2차 함수 모양 데이터의 r은 거의 0, 기울기가 다른 두 직선 데이터의 r은 같음"></svg></div>
+        <div class="side">
+          <ul class="key"><li>r은 ‘선형’ 관계의 강도만 잽니다.</li><li>r은 기울기의 크기와는 관계가 없습니다.</li></ul>
+          <p class="exp">첫 번째 주의점은 피어슨 상관계수가 2개 양적 변수의 ‘선형’ 관계성 강도를 정량화한다는 것입니다. 2차 함수처럼 뚜렷한 관계가 있어도 r을 계산하면 거의 0이 되어, 이런 비선형관계는 r로 적절하게 정량화할 수 없습니다. 두 번째 주의점은 직선의 기울기 크기는 r과 관계가 없다는 것입니다. 기울기가 달라도 직선 주위로 퍼진 정도가 같으면 상관계수는 같으며, r은 기울기의 부호에만 반응합니다.</p>
+          <p class="next"><span>다음 질문</span>r이 같으면 데이터도 비슷할까?</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" data-step="3" id="s-4-2d">
+      <div class="sh"><div class="sec">4-2 피어슨 상관계수</div><h2><span class="q">Q</span>상관계수가 같으면 데이터 모양도 비슷할까요?</h2></div>
+      <div class="body split even">
+        <div class="fig"><svg id="m17-ans" viewBox="0 0 420 270" role="img" aria-label="상관계수가 모두 약 0.82인데 모양이 전혀 다른 네 데이터"></svg></div>
+        <div class="side">
+          <ul class="key"><li>같은 r이라도 모양은 전혀 다를 수 있습니다.</li><li>r을 구하기 전에 산점도부터 그립니다.</li></ul>
+          <p class="exp">앤스컴이 만든 네 데이터는 x와 y의 평균과 분산, 상관계수가 거의 같아 모두 r ≈ 0.82이지만<span class="cite">[1]</span>, 산점도를 그리면 직선형, 곡선형, 이상값 하나가 끼어든 직선, 한 점이 관계를 만들어 낸 모양처럼 전혀 다릅니다. 상관계수만 계산하고 데이터가 전형적인 상관 산점도라고 짐작하는 것은 위험합니다. 그래서 상관계수를 계산하기 전에 산점도로 분포를 미리 확인해야 합니다.</p>
+          <p class="next"><span>다음 질문</span>이상값이 있으면 r은 어떻게 될까?</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" data-step="3" id="s-4-3a">
+      <div class="sh"><div class="sec">4-3 비모수 상관계수</div><h2><span class="q">Q</span>이상값이 하나 끼어들면 r은 어떻게 될까요?</h2></div>
+      <div class="body split even">
+        <div class="fig"><svg id="m17-outlier" viewBox="0 0 420 270" role="img" aria-label="무상관 데이터에 이상값 하나를 더하면 r은 0.001에서 0.83, ρ는 0.012에서 0.082"></svg></div>
+        <div class="side">
+          <ul class="key"><li>피어슨 r은 이상값 하나로 크게 바뀝니다.</li><li>순위로 계산하는 <b>스피어만 순위상관계수</b> ρ</li></ul>
+          <p class="exp">피어슨 상관계수는 평균이나 분산에 기반한 모수적 방법이어서, 데이터가 치우쳐 있거나 쌍봉형이거나 이상값이 있을 때는 적절하지 않습니다. 무상관 데이터(r = 0.001)에 멀리 떨어진 이상값 하나만 더해도 r = 0.83이라는 큰 값이 나옵니다. 이때 값 대신 x, y 각각의 순위로 바꾼 뒤 같은 식으로 계산하는 스피어만 ρ는 0.012에서 0.082로 거의 영향을 받지 않습니다. 실전에서는 정규성을 먼저 확인하고, 없으면 비모수 상관계수를 씁니다.</p>
+          <p class="next"><span>다음 질문</span>순위상관계수는 어떻게 계산할까?</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" data-step="3" id="s-4-3b">
+      <div class="sh"><div class="sec">4-3 비모수 상관계수</div><h2><span class="q">Q</span>순위상관계수는 어떻게 계산할까요?</h2></div>
+      <div class="body split even">
+        <div class="figcol">
+          <div class="fig"><svg id="m17-rank" viewBox="0 0 420 150" role="img" aria-label="학생 10명의 수학·과학 점수를 각각 순위로 바꾼 표와 순위 산점도"></svg></div>
+          <div class="math">
+            <div class="mt">핵심 수학 개념 · 스피어만 ρ</div>
+            <div class="f">ρ = (순위로 바꾼 x, y의) 피어슨 r</div>
+            <div class="r"><span>계산</span><span>수학·과학 점수 → ρ = 0.91, τ = 0.81 (r = 0.93)</span></div>
+            <div class="r"><span>해석</span><span>이상값이 없으면 r과 비슷한 값이 나옵니다.</span></div>
+          </div>
+        </div>
+        <div class="side">
+          <ul class="key"><li>순위로 바꾼 뒤 피어슨 식을 적용합니다.</li><li><b>켄달 순위상관계수</b> τ도 있습니다.</li></ul>
+          <p class="exp">스피어만 ρ는 양적 데이터의 값 자체가 아니라 x축, y축 각각에서 크기 순으로 매긴 1위, 2위 … 의 순위로 변환한 다음 피어슨 식으로 계산하며, −1부터 +1까지의 값입니다. 같은 값이 있으면 평균 순위를 씁니다. 비슷한 값으로 켄달 순위상관계수 τ가 있으며, 사용 대상은 거의 비슷하나 표본크기 n이 10 미만으로 매우 작을 때는 켄달 τ 쪽이 유의성 검정의 관점에서 더 좋다고 합니다.</p>
+          <p class="next"><span>다음 질문</span>상관을 계산하면 안 되는 경우는?</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" data-step="3" id="s-4-3c">
+      <div class="sh"><div class="sec">4-3 비모수 상관계수</div><h2><span class="q">Q</span>처음부터 엮여 있는 두 변수의 상관은 믿을 수 있을까요?</h2></div>
+      <div class="body split even">
+        <div class="fig"><svg id="m17-ratio" viewBox="0 0 420 270" role="img" aria-label="X와 Y는 무상관인데 X와 Y/X는 음의 상관이 나타남"></svg></div>
+        <div class="side">
+          <ul class="key"><li>한 변수가 다른 변수를 포함하면 가짜 상관</li><li>r이든 ρ든 마찬가지입니다.</li></ul>
+          <p class="exp">2개 변수가 처음부터 종속 관계일 때는 주의가 필요합니다. 수학 점수 X와 합계 점수 X + Y를 두 축에 두면, 수학과 과학 점수가 무상관이라도 y축에 X가 포함되어 상관이 나타나 버립니다. 나눗셈은 더 눈치채기 어렵습니다. 무상관인 X와 Y(r = 0.001)에서 X축에 X, Y축에 Y/X를 두면 반비례 형태가 되어 r = −0.68이 나옵니다. 인구밀도나 인구당 감염자 수 같은 비율 값을 쓸 때는 개별 변수인지 미리 확인합니다.</p>
+          <p class="next"><span>다음 질문</span>표본의 r은 모집단의 상관을 말해 줄까?</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" data-step="3" id="s-4-4a">
+      <div class="sh"><div class="sec">4-4 상관계수와 가설</div><h2><span class="q">Q</span>무상관인 모집단에서도 큰 r이 나올 수 있을까요?</h2></div>
+      <div class="body split even">
+        <div class="figcol">
+          <div class="fig"><svg id="m17-null" viewBox="0 0 420 150" role="img" aria-label="무상관 모집단에서 표본크기 20인 표본의 r 분포, 양 끝 2.5% 경계 ±0.44"></svg></div>
+          <div class="math">
+            <div class="mt">핵심 수학 개념 · 상관계수의 검정</div>
+            <div class="f">t = r√(n − 2) ÷ √(1 − r²) &nbsp;(자유도 n − 2)</div>
+            <div class="r"><span>계산</span><span>0.927 × √8 ÷ √(1 − 0.927²) ≈ 7.0 → p = 0.0001</span></div>
+            <div class="r"><span>해석</span><span>학생 10명에서 r = 0.93은 우연으로 보기 어렵습니다.</span></div>
+          </div>
+        </div>
+        <div class="side">
+          <ul class="key"><li>귀무가설: 모상관계수 r<sub>p</sub> = 0</li><li>p &lt; 0.05여야 상관이 있다고 주장합니다.</li></ul>
+          <p class="exp">표본평균의 배경에 모집단을 상정했듯, 표본의 r 배경에는 모상관계수 r<sub>p</sub>를 갖는 모집단이 있습니다. r<sub>p</sub> = 0인 무상관 모집단에서 표본크기 20을 반복해 추출하면 r은 0을 중심으로 퍼지며, 드물게 0.47이나 −0.48처럼 멀리 떨어진 값도 나옵니다. 그래서 귀무가설 r<sub>p</sub> = 0을 t분포로 검정해 p &lt; 0.05일 때 비로소 상관이 있다고 주장합니다. 학생 10명의 예는 p = 0.0001이고 95% 신뢰구간은 0.71~0.98입니다.</p>
+          <p class="next"><span>다음 질문</span>표본이 아주 크면 어떻게 될까?</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" data-step="3" id="s-4-4b">
+      <div class="sh"><div class="sec">4-4 상관계수와 가설</div><h2><span class="q">Q</span>표본이 아주 크면 아주 약한 상관도 유의할까요?</h2></div>
+      <div class="body split even">
+        <div class="fig"><svg id="m17-bign" viewBox="0 0 420 270" role="img" aria-label="r = 0.03일 때 표본크기가 커질수록 p값이 작아져 n이 1만 근처에서 0.01 아래로 내려감"></svg></div>
+        <div class="side">
+          <ul class="key"><li>n이 크면 아주 약한 상관도 p &lt; 0.05</li><li>p만 보지 말고 r의 크기를 해석합니다.</li></ul>
+          <p class="exp">표본크기 n이 무척 클 때는 모집단이 귀무가설에서 아주 조금만 어긋나도 p값이 작아져 통계적으로 유의하다고 판단됩니다. 예를 들어 n = 10,000이라면 r = 0.03이라도 p &lt; 0.01이 됩니다. 유의하게 r = 0이 아니라고 주장할 수는 있으나, 상관계수 자체는 무척 작으므로 관계는 아주 약합니다. p &lt; 0.05라고 곧바로 상관이 있다고 판단하지 말고 r값의 크기를 함께 해석합니다. 반대로 모집단의 모든 데이터를 얻었다면 계산한 r을 그대로 해석해도 됩니다.</p>
+          <p class="next"><span>다음 질문</span>곡선 관계는 무엇으로 잴까?</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" data-step="3" id="s-4-4c">
+      <div class="sh"><div class="sec">4-4 상관계수와 가설</div><h2><span class="q">Q</span>곡선 같은 비선형 관계는 무엇으로 잴 수 있을까요?</h2></div>
+      <div class="body split even">
+        <div class="fig"><svg id="m17-info" viewBox="0 0 420 270" role="img" aria-label="X를 알면 Y를 얼마나 알 수 있는가의 관점: 직선, 곡선, 무관계"></svg></div>
+        <div class="side">
+          <ul class="key"><li>‘X를 알면 Y를 얼마나 알 수 있나’로 봅니다.</li><li>정보량 기반 지표가 제안되어 있습니다.</li></ul>
+          <p class="exp">피어슨 r은 선형관계를, 스피어만 ρ는 순위로 변환한 값의 선형관계를 파악하므로 곡선이나 고리 모양 같은 비선형 관계는 다룰 수 없습니다. 최근에는 정보량에 기반한 지표가 제안되어 있으며<span class="cite">[2]</span>, 이는 ‘Y가 X에 관해, 또는 X가 Y에 관해 어느 정도의 정보를 포함하는지’의 관점에서 관계 강도를 정량화합니다. r = 1이면 X를 알 때 Y를 완전히 알 수 있듯, 정보를 기반으로 보면 비선형관계까지 포함한 일반적인 관계를 다룰 수 있습니다.</p>
+          <p class="next"><span>정리</span>상관을 다루는 순서를 정리해 봅시다.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" data-step="3" id="s-4-sum">
+      <div class="sh"><div class="sec">4-5 정리</div><h2>산점도로 먼저 보고, 데이터에 맞는 상관계수로 재고, r과 p를 함께 해석합니다</h2></div>
+      <div class="body full" style="align-content:center">
+        <table class="sumtbl">
+          <thead><tr><th>개념</th><th>핵심</th><th>학생 10명 예시</th></tr></thead>
+          <tbody>
+            <tr><td>산점도 · 상관</td><td>증가·감소·관계 없음을 봅니다. 상관 ≠ 인과입니다.</td><td>수학이 높으면 과학도 높은 경향</td></tr>
+            <tr><td>피어슨 r</td><td>공분산 ÷ 두 표준편차. 선형관계만 재고 기울기와는 무관합니다.</td><td>r = 0.93 (강한 양의 상관)</td></tr>
+            <tr><td>스피어만 ρ · 켄달 τ</td><td>순위로 계산해 이상값에 강합니다. 종속 변수끼리는 쓰지 않습니다.</td><td>ρ = 0.91, τ = 0.81</td></tr>
+            <tr><td>상관의 검정</td><td>귀무가설 r<sub>p</sub> = 0. n이 크면 약한 상관도 유의하니 r의 크기를 봅니다.</td><td>p = 0.0001, 95% CI 0.71~0.98</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="next"><span>형성평가로</span>이제 같은 예시로 문제를 풀어 봅니다.</p>
+    </section>
+
+    <!-- ⑤ 형성평가: 스크립트의 QUIZ 배열로 만듭니다 -->
+
+    <!-- ⑥ 실습 1 · 조작형 (모듈 전용) ─────────────── -->
+    <section class="slide" data-step="5" id="p1">
+      <div class="sh"><div class="sec">실습 1 · 조작형</div><h2>목표: r을 바꾸며 산점도를 보고, 이상값 하나가 r과 ρ에 주는 영향을 비교합니다</h2></div>
+      <div class="body split">
+        <div class="pcol" style="gap:8px">
+          <div class="plabel" style="margin:0">해보기 · 상관계수를 정하고, 이상값을 넣었다 빼 보세요</div>
+          <div class="ctrl">상관계수 r<input type="range" id="m17-r" min="-100" max="100" step="5" value="0" aria-label="상관계수"><strong id="m17-rv" style="min-width:56px;text-align:right">-</strong></div>
+          <div class="mbtns" id="m17-ob" style="gap:6px"></div>
+          <div class="fig" style="flex:1"><svg id="m17-p1-svg" viewBox="0 0 470 190" role="img" aria-label="정한 상관계수의 산점도 40점과 이상값"></svg></div>
+        </div>
+        <div class="pcol" style="gap:10px;justify-content:center">
+          <div class="plabel" style="margin:0">결과 확인</div>
+          <div class="stats"><div><small>피어슨 r</small><strong id="m17-pr">-</strong></div><div><small>스피어만 ρ</small><strong id="m17-sr">-</strong></div></div>
+          <p class="howto">도전: r = 0에서 이상값을 넣으면 r과 ρ가 각각 얼마나 바뀌는지 확인하세요.</p>
+          <p class="pmsg" id="m17-msg"></p>
+          <div class="think"><span>생각해보기</span>r이 −1이나 +1일 때 산점도는 어떤 모양인가요?</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ⑥ 실습 2 · 분류형 ─────────────────────── -->
+    <section class="slide" data-step="5" id="p2">
+      <div class="sh"><div class="sec">실습 2 · 분류형</div><h2>목표: 상황 카드를 알맞은 상관 지표에 따라 나눕니다</h2></div>
+      <div class="body split even">
+        <div class="pcol">
+          <div class="plabel">해보기 · 분포 모양, 이상값, 변수끼리의 관계를 보고 칸에 놓으세요</div>
+          <div class="pool" id="p2-pool"></div>
+        </div>
+        <div class="pcol" style="gap:8px">
+          <div class="plabel" style="margin:0">결과 확인 · <span id="p2-count">0 / 0</span></div>
+          <div class="bins" id="p2-bins"></div>
+          <div class="p2row"><p class="pmsg" id="p2-msg"></p><button class="btn ghost" id="p2-reset">다시 하기</button></div>
+          <div class="think"><span>생각해보기</span>U자 모양 관계에서 스피어만 ρ를 쓰면 해결될까요?</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ⑥ 실습 3 · 추정형 (모듈 전용) ─────────────── -->
+    <section class="slide" data-step="5" id="p3">
+      <div class="sh"><div class="sec">실습 3 · 추정형</div><h2>목표: 산점도를 보고 상관계수를 짐작한 뒤 실제값과 비교합니다</h2></div>
+      <div class="body split">
+        <div class="pcol">
+          <div class="plabel">해보기 · 산점도의 상관계수 r은 얼마일까요?</div>
+          <div class="fig" style="flex:1"><svg id="m17-p3-svg" viewBox="0 0 470 210" role="img" aria-label="상관계수를 맞혀 볼 산점도"></svg></div>
+        </div>
+        <div class="pcol" style="gap:9px;justify-content:center">
+          <div class="mbtns" id="m17-qs" style="gap:6px"></div>
+          <div class="ctrl">내 예측 r<input type="range" id="m17-g" min="-100" max="100" step="5" value="0" aria-label="상관계수 예측"><strong id="m17-gv" style="min-width:56px;text-align:right">-</strong></div>
+          <button class="btn" id="m17-check" style="align-self:flex-start">계산해서 확인</button>
+          <div class="stats"><div><small>내 예측</small><strong id="m17-mine">-</strong></div><div><small>실제 r</small><strong id="m17-act">?</strong></div></div>
+          <p class="pmsg" id="m17-msg3"></p>
+          <div class="think"><span>생각해보기</span>점이 많이 흩어져 보여도 r이 꽤 큰 경우가 있었나요?</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ⑦ 용어해설·참고자료: 스크립트의 GLOSSARY, REFS, NEXT로 만듭니다 -->
+  </main>
+
+  <footer class="bottombar">
+    <a class="home" href="../index.html" title="홈으로 (학습 모듈 목록)" aria-label="홈으로"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 10.5 12 3l9 7.5"/><path d="M5.5 9.5V21h13V9.5"/></svg><span>홈</span></a><span class="counter" id="counter"></span><span class="spacer"></span>
+    <button class="nav" id="prev" type="button">이전</button>
+    <button class="nav primary" id="next" type="button">다음</button>
+  </footer>
+</div>
+<p class="rotate">화면을 가로로 돌리면 더 크게 볼 수 있습니다.</p>
+
+<script>
+(function(){
+"use strict";
+
+/* =====================================================================
+   [교체] 모듈 설정 — 새 모듈은 이 블록과 HTML 화면 문장만 바꿉니다.
+   ===================================================================== */
+var MODULE={title:"산점도와 상관",sub:"상관·회귀·통계 모형 · M17"};
+var STEPS=["학습개요","학습목표","일상의 예시","본문","형성평가","실습","용어해설"];
+
+/* 일관 사례: 학생 10명의 수학·과학 점수(예시값)
+   평균 67.7 / 65.5, 공분산(n으로 나눔) 136.35, 표준편차(n) 13.68 / 10.75
+   피어슨 r 0.927(95% CI 0.71~0.98, p 0.0001), 스피어만 ρ 0.912, 켄달 τ 0.809
+   n = 10의 5% 기각 경계 |r| > 0.632, n = 20은 |r| > 0.444 */
+var STU=["A","B","C","D","E","F","G","H","I","J"];
+var MATH=[85,56,73,52,70,62,90,45,78,66], SCI=[80,58,65,49,65,70,84,52,72,60];
+var CASE=null, PAIRS=null, P1={target:null};
+
+var QUIZ=[
+ {goal:1,type:"상황 판단",stem:"여름철 아이스크림 판매량과 물놀이 사고 건수 사이에 r = 0.8의 강한 양의 상관이 있었습니다. 가장 알맞은 해석은 무엇일까요?",
+  opts:["두 변수가 함께 늘어나는 경향이 있을 뿐, 한쪽이 다른 쪽의 원인인지는 알 수 없다","아이스크림을 많이 팔면 물놀이 사고가 늘어난다","물놀이 사고를 줄이려면 아이스크림 판매를 막아야 한다","r이 1이 아니므로 두 변수는 관계가 없다"],ans:0,
+  exp:"상관이 있다고 해서 원인과 결과를 뜻하는 인과관계가 있는지까지는 알 수 없습니다. 예를 들어 더운 날씨처럼 두 변수에 함께 영향을 주는 다른 요인이 있을 수 있습니다. 상관은 x와 y를 맞바꾸어도 달라지지 않는 대칭적인 관계입니다.",back:"s-4-1b",backLabel:"4-1 상관 다시 보기"},
+ {goal:1,type:"O/X 오개념",stem:"“피어슨 상관계수가 r ≈ 0이면, x와 y 사이에는 아무런 관계도 없다.”",
+  opts:["O","X"],ans:1,ox:true,
+  exp:"피어슨 상관계수는 직선적인(선형) 관계의 강도만 잽니다. 2차 함수처럼 뚜렷한 곡선 관계가 있어도 r은 거의 0이 될 수 있으므로, 상관계수를 계산하기 전에 반드시 산점도를 그려 확인합니다.",back:"s-4-2c",backLabel:"4-2 선형관계만 잰다는 점 다시 보기"},
+ {goal:2,type:"계산",stem:"학생 10명의 수학·과학 점수에서 공분산은 136.35, 수학의 표준편차는 13.68, 과학의 표준편차는 10.75입니다. 피어슨 상관계수 r은 약 얼마일까요?",
+  opts:["약 0.93","약 136","약 9.97","약 1.27"],ans:0,
+  exp:"r = 공분산 ÷ (x의 표준편차 × y의 표준편차) = 136.35 ÷ (13.68 × 10.75) ≈ 0.93입니다. 9.97은 한쪽 표준편차로만 나눈 값, 1.27은 두 표준편차의 비입니다. r은 늘 −1에서 +1 사이입니다.",back:"s-4-2a",backLabel:"4-2 피어슨 상관계수 다시 보기"},
+ {goal:2,type:"O/X 오개념",stem:"“두 데이터 모두 직선 위에 퍼져 있다면, 직선의 기울기가 더 가파른 쪽의 상관계수가 더 크다.”",
+  opts:["O","X"],ans:1,ox:true,
+  exp:"상관계수 r은 기울기의 부호에는 반응하지만 기울기의 크기에는 영향을 받지 않습니다. 직선 주위로 데이터가 퍼진 정도가 같다면 기울기가 달라도 r은 같습니다. 기울기는 다음 모듈의 회귀에서 다룹니다.",back:"s-4-2c",backLabel:"4-2 기울기와 상관계수 다시 보기"},
+ {goal:3,type:"상황 판단",stem:"설비 30대의 가동 시간과 고장 횟수로 상관을 보려는데, 한 설비만 다른 설비보다 10배 넘게 큰 값을 가집니다(이상값). 가장 알맞은 방법은 무엇일까요?",
+  opts:["산점도를 확인하고 스피어만 순위상관계수 ρ를 함께 본다","피어슨 r만 계산해 그대로 보고한다","이상값 때문에 r이 커졌으니 강한 상관이라고 결론 내린다","표본크기를 늘리면 이상값은 문제되지 않는다"],ans:0,
+  exp:"피어슨 r은 평균과 분산에 기반한 모수적 방법이라 이상값 하나로도 크게 달라집니다. 값 대신 순위로 계산하는 스피어만 ρ는 이상값의 영향을 덜 받습니다. 이 모듈의 예에서 이상값 하나로 r은 0.001에서 0.83이 되었지만 ρ는 0.08에 머물렀습니다.",back:"s-4-3a",backLabel:"4-3 이상값과 스피어만 ρ 다시 보기"},
+ {goal:3,type:"상황 판단",stem:"표본 10,000개에서 r = 0.03이 나왔고, 무상관 검정의 p값은 0.01보다 작았습니다. 가장 알맞은 해석은 무엇일까요?",
+  opts:["통계적으로 유의하지만, 두 변수의 관계 자체는 아주 약하다","p가 작으므로 두 변수는 강하게 상관한다","r이 작으므로 p값은 계산이 잘못되었다","표본이 크므로 결과를 믿을 수 없다"],ans:0,
+  exp:"표본크기가 매우 크면 모집단이 귀무가설(무상관)에서 아주 조금만 어긋나도 p < 0.05가 됩니다. 유의하다는 것은 ‘r이 0이 아니다’라는 뜻일 뿐, r = 0.03은 관계가 아주 약하다는 것을 알려 줍니다. r과 p를 함께 보고 해석합니다.",back:"s-4-4b",backLabel:"4-4 표본크기와 가설검정 다시 보기"}
+];
+
+var BINS=["피어슨 r","스피어만 ρ","상관계수로 판단 금지"];
+var CARDS=[["두 변수 모두 정규분포, 직선 경향","피어슨 r"],["정규성 있는 수학·과학 점수","피어슨 r"],
+           ["이상값이 섞인 두 변수","스피어만 ρ"],["한쪽 변수가 크게 치우친 분포","스피어만 ρ"],
+           ["U자 모양의 곡선 관계","상관계수로 판단 금지"],["X와 Y/X처럼 한쪽이 다른 쪽을 포함","상관계수로 판단 금지"]];
+var HINT={"피어슨 r":"정규분포를 가정할 수 있고 직선적인 관계일 때 씁니다.","스피어만 ρ":"정규성이 없거나 이상값이 있을 때 순위로 계산합니다.","상관계수로 판단 금지":"비선형이거나 처음부터 종속 관계인 변수는 상관계수가 관계를 제대로 나타내지 못합니다."};
+
+var GLOSSARY=[
+ ["산점도","scatter plot","2개 양적 변수의 값을 각각 x축, y축으로 하여 점으로 찍은 그래프입니다.","학생 A(수학 85, 과학 80)를 한 점으로 표시"],
+ ["상관","correlation","2개 확률변수 또는 데이터 사이의 관계성으로, 원인과 결과(인과)까지 뜻하지는 않습니다.","수학 점수가 높으면 과학 점수도 높은 경향"],
+ ["회귀","regression","y = f(x)라는 함수로 변수 사이의 관계를 공식화하는 것입니다.","판매 개수 = 0.001 × 광고비"],
+ ["설명변수","explanatory variable","회귀식 y = f(x)에서 x에 해당하며, 독립변수라고도 합니다.","광고비"],
+ ["반응변수","response variable","회귀식 y = f(x)에서 y에 해당하며, 종속변수라고도 합니다.","상품 판매 개수"],
+ ["피어슨 상관계수","Pearson's correlation coefficient r","2개 양적 변수의 선형관계가 얼마나 직선에 가까운지를 −1 ~ +1로 나타낸 값입니다.","수학·과학 점수 r = 0.93"],
+ ["공분산","covariance","(xᵢ − x̄)(yᵢ − ȳ)의 평균으로, x와 y가 함께 움직이는 정도를 나타냅니다.","수학·과학 점수 136.35"],
+ ["양의 상관","positive correlation","x가 커질수록 y도 커지는 관계로, r의 부호가 양입니다.","공부 시간과 시험 점수"],
+ ["음의 상관","negative correlation","x가 커질수록 y는 작아지는 관계로, r의 부호가 음입니다.","설비 사용 연수와 남은 수명"],
+ ["스피어만 순위상관계수","Spearman's rank correlation coefficient ρ","값을 x, y 각각의 순위로 바꾼 뒤 피어슨 식으로 계산한 비모수 상관계수입니다.","수학·과학 점수 ρ = 0.91"],
+ ["켄달 순위상관계수","Kendall rank correlation coefficient τ","순위를 이용한 비모수 상관계수로, 표본크기가 매우 작을 때(10 미만) 검정에 더 좋습니다.","수학·과학 점수 τ = 0.81"]
+];
+var REFS=[
+ {n:1,title:"Graphs in Statistical Analysis (Anscombe's quartet)",org:"F. J. Anscombe, The American Statistician 27(1), 17–21, 1973 · 데이터 출처: Duke University 강의 자료",url:"https://www2.stat.duke.edu/courses/Fall03/sta290/Lectures/Anscombe.html",date:"2026-10-26 확인"},
+ {n:2,title:"Detecting Novel Associations in Large Data Sets",org:"D. N. Reshef 외, Science 334(6062), 1518–1524, 2011",url:"https://doi.org/10.1126/science.1205438",date:"2026-10-26 확인"}
+];
+var NEXT={title:"M18 단순선형회귀",line:"상관은 관계의 강도를 하나의 수로 나타냈습니다. 다음 모듈에서는 y = a + bx라는 식으로 관계를 공식화하고 예측하는 단순선형회귀를 배웁니다."};
+
+/* =====================================================================
+   아래부터는 공통 엔진입니다. 모듈마다 바꾸지 않습니다.
+   ===================================================================== */
+var NS="http://www.w3.org/2000/svg";
+var C={navy:"#1B2A4A",navy2:"#2C4170",navy3:"#5B6E97",soft:"#A9B8D4",grid:"#DDE1E7",gray:"#6B7280",gray2:"#9AA0AA",amber:"#E0A100",amberInk:"#6E4F00",ok:"#23704F"};
+function el(t,a,p,x){var e=document.createElementNS(NS,t);for(var k in a)e.setAttribute(k,a[k]);if(x!=null)e.textContent=x;if(p)p.appendChild(e);return e;}
+function clear(s){while(s.firstChild)s.removeChild(s.firstChild);}
+function f1(v,d){return v.toFixed(d==null?1:d);}
+function sum(a){return a.reduce(function(x,y){return x+y;},0);}
+function r1(v){return Math.round(v*10)/10;}
+var stage=document.getElementById("stage"),vp=document.getElementById("vp");
+
+/* 계산은 모두 데이터에서 직접 합니다(R0-7) */
+var N=CASE?CASE.values.length:0,SUMV=CASE?r1(sum(CASE.values)):0,AVG=N?SUMV/N:0,MAXV=CASE?Math.max.apply(null,CASE.values):0;
+var LR=!PAIRS?null:(function(){var n=PAIRS.xs.length,mx=sum(PAIRS.xs)/n,my=sum(PAIRS.ys)/n,sxy=0,sxx=0;
+  for(var i=0;i<n;i++){sxy+=(PAIRS.xs[i]-mx)*(PAIRS.ys[i]-my);sxx+=(PAIRS.xs[i]-mx)*(PAIRS.xs[i]-mx);}
+  var b=sxy/sxx;return{b:b,a:my-b*mx};})();
+var PRED=PAIRS?LR.a+LR.b*PAIRS.x0:0;
+
+document.title=MODULE.title;
+document.getElementById("brand").innerHTML=MODULE.title+"<small>"+MODULE.sub+"</small>";
+
+/* 16:9 고정 무대를 창 크기에 맞춤 */
+var S=1;
+function fit(){S=Math.min(window.innerWidth/960,window.innerHeight/540);stage.style.setProperty("--s",S);}
+window.addEventListener("resize",fit);fit();
+
+/* ---------- 그래프 ---------- */
+function barChart(svg,vals,o){
+  clear(svg);o=o||{};
+  var vb=svg.viewBox.baseVal,W=vb.width,H=vb.height,L=34,R=o.mean!=null?70:8,T=26,Bt=24,ym=o.ymax||Math.ceil(Math.max.apply(null,vals)+1),pw=W-L-R,ph=H-T-Bt,bw=pw/vals.length;
+  function y(v){return T+ph-(v/ym)*ph;}
+  for(var g=0;g<=ym;g++){el("line",{x1:L,x2:W-R,y1:y(g),y2:y(g),stroke:C.grid},svg);el("text",{x:L-6,y:y(g)+4,"text-anchor":"end","font-size":10.5,fill:C.gray2},svg,g);}
+  vals.forEach(function(v,i){
+    var sel=o.sel===i,hi=o.hi===i;
+    el("rect",{x:L+i*bw+bw*.16,y:y(v),width:bw*.68,height:Math.max(0,y(0)-y(v)),rx:2,fill:sel?C.amber:hi?C.navy2:C.soft},svg);
+    el("text",{x:L+i*bw+bw/2,y:H-Bt+16,"text-anchor":"middle","font-size":10.5,fill:C.gray},svg,CASE.labels[i]);
+  });
+  if(o.mean!=null){var m=o.mean;
+    el("line",{x1:L,x2:W-R+4,y1:y(m),y2:y(m),stroke:C.navy,"stroke-width":2,"stroke-dasharray":"6 4"},svg);
+    el("rect",{x:W-R+6,y:y(m)-10,width:R-8,height:20,rx:4,fill:C.navy},svg);
+    el("text",{x:W-R+6+(R-8)/2,y:y(m)+4,"text-anchor":"middle","font-size":11,"font-weight":700,fill:"#fff"},svg,"평균 "+f1(m,2));}
+  /* 값 라벨은 마지막에 흰 테두리로 그려 점선에 가리지 않게 함 */
+  vals.forEach(function(v,i){var sel=o.sel===i,hi=o.hi===i;
+    if(o.labels||sel)el("text",{x:L+i*bw+bw/2,y:y(v)-5,"text-anchor":"middle","font-size":10.5,"font-weight":sel||hi?800:500,fill:sel?C.amberInk:hi?C.navy:C.gray,stroke:"#EEF0F3","stroke-width":3,"paint-order":"stroke"},svg,f1(v));});
+}
+function scatter(svg,o){
+  clear(svg);o=o||{};
+  var vb=svg.viewBox.baseVal,W=vb.width,H=vb.height,L=34,R=14,T=30,Bt=40,x0=PAIRS.xmin,x1=PAIRS.xmax,y0=PAIRS.ymin,y1=PAIRS.ymax;
+  function X(v){return L+(v-x0)/(x1-x0)*(W-L-R);}
+  function Y(v){return T+(H-T-Bt)-(v-y0)/(y1-y0)*(H-T-Bt);}
+  for(var g=y0;g<=y1+1e-9;g+=PAIRS.ystep){el("line",{x1:L,x2:W-R,y1:Y(g),y2:Y(g),stroke:C.grid},svg);el("text",{x:L-6,y:Y(g)+4,"text-anchor":"end","font-size":10.5,fill:C.gray2},svg,g);}
+  for(var h=x0;h<=x1+1e-9;h+=PAIRS.xstep)el("text",{x:X(h),y:H-Bt+16,"text-anchor":"middle","font-size":10.5,fill:C.gray},svg,h);
+  el("text",{x:(L+W-R)/2,y:H-6,"text-anchor":"middle","font-size":10.5,fill:C.gray},svg,PAIRS.xlabel);
+  el("text",{x:4,y:14,"font-size":10.5,fill:C.gray},svg,PAIRS.ylabel);
+  if(o.line){var la=x0+(x1-x0)*.04,lb=x1-(x1-x0)*.04;el("line",{x1:X(la),y1:Y(LR.a+LR.b*la),x2:X(lb),y2:Y(LR.a+LR.b*lb),stroke:C.navy,"stroke-width":2},svg);}
+  PAIRS.xs.forEach(function(x,i){el("circle",{cx:X(x),cy:Y(PAIRS.ys[i]),r:4.5,fill:C.navy3,"fill-opacity":.85},svg);});
+  if(o.x0!=null){el("line",{x1:X(o.x0),y1:Y(0),x2:X(o.x0),y2:Y(y1),stroke:C.amber,"stroke-dasharray":"3 3"},svg);
+    el("text",{x:X(o.x0),y:T-4,"text-anchor":"middle","font-size":10.5,"font-weight":700,fill:C.amberInk},svg,PAIRS.x0label);}
+  if(o.pred){el("circle",{cx:X(PAIRS.x0),cy:Y(PRED),r:6,fill:C.navy},svg);
+    el("text",{x:X(PAIRS.x0)-10,y:Y(PRED)+4,"text-anchor":"end","font-size":11,"font-weight":800,fill:C.navy,stroke:"#EEF0F3","stroke-width":3,"paint-order":"stroke"},svg,"예측 "+f1(PRED,PAIRS.dp)+PAIRS.unit);}
+  if(o.guess!=null){el("circle",{cx:X(PAIRS.x0),cy:Y(o.guess),r:7,fill:C.amber,stroke:"#fff","stroke-width":2},svg);}
+  if(o.actual){var ay=Y(PAIRS.actual);el("rect",{x:X(PAIRS.x0)-6,y:ay-6,width:12,height:12,fill:C.ok,transform:"rotate(45 "+X(PAIRS.x0)+" "+ay+")"},svg);
+    el("text",{x:X(PAIRS.x0)-10,y:ay-6,"text-anchor":"end","font-size":11,"font-weight":800,fill:C.ok,stroke:"#EEF0F3","stroke-width":3,"paint-order":"stroke"},svg,"실제 "+f1(PAIRS.actual)+PAIRS.unit);}
+  return {X:X,Y:Y};
+}
+function flow(svg,names){
+  clear(svg);var n=names.length,w=118,gap=(440-40-n*w)/(n-1),y=96,h=64;
+  el("defs",{},svg).innerHTML='<marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10z" fill="'+C.navy3+'"/></marker>';
+  names.forEach(function(t,i){var x=20+i*(w+gap);
+    el("rect",{x:x,y:y,width:w,height:h,rx:10,fill:i===n-1?C.navy:"#fff",stroke:C.navy,"stroke-width":1.5},svg);
+    el("text",{x:x+w/2,y:y+h/2-6,"text-anchor":"middle","font-size":11,"font-weight":700,fill:i===n-1?"#C9D3E6":C.navy3},svg,"4-"+(i+1));
+    el("text",{x:x+w/2,y:y+h/2+13,"text-anchor":"middle","font-size":14,"font-weight":800,fill:i===n-1?"#fff":C.navy},svg,t);
+    if(i<n-1)el("line",{x1:x+w+4,y1:y+h/2,x2:x+w+gap-5,y2:y+h/2,stroke:C.navy3,"stroke-width":2,"marker-end":"url(#ar)"},svg);});
+  el("text",{x:220,y:200,"text-anchor":"middle","font-size":12,fill:C.gray},svg,"본문 소단원을 배우는 순서");
+}
+/* 화면에 해당 id가 있을 때만 그립니다(모듈마다 쓰지 않는 그림은 건너뜀) */
+function on(id,fn){var e=document.getElementById(id);if(e)fn(e);}
+on("fig-flow",function(s){flow(s,["소단원 1","소단원 2","정리"]);});
+on("fig-case",function(s){barChart(s,CASE.values,{labels:true});});
+on("fig-bar",function(s){barChart(s,CASE.values,{labels:true,mean:AVG});});
+on("fig-scatter",function(s){scatter(s,{line:true,x0:PAIRS.x0,pred:true});});
+on("fig-bridge",function(s){
+  el("defs",{},s).innerHTML='<marker id="ar2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10z" fill="'+C.navy3+'"/></marker>';
+  [["장면 1",40],["장면 2",130]].forEach(function(p){el("rect",{x:24,y:p[1],width:130,height:64,rx:10,fill:"#fff",stroke:C.navy3,"stroke-width":1.5},s);el("text",{x:89,y:p[1]+37,"text-anchor":"middle","font-size":14,"font-weight":700,fill:C.navy},s,p[0]);
+    el("line",{x1:158,y1:p[1]+32,x2:246,y2:120,stroke:C.navy3,"stroke-width":2,"marker-end":"url(#ar2)"},s);});
+  el("rect",{x:252,y:84,width:150,height:72,rx:12,fill:C.navy},s);
+  el("text",{x:327,y:116,"text-anchor":"middle","font-size":14,"font-weight":800,fill:"#fff"},s,"본문 첫 질문");
+  el("text",{x:327,y:136,"text-anchor":"middle","font-size":11.5,fill:"#C9D3E6"},s,"4-1로 이어짐");});
+on("case-n",function(e){e.textContent=N+"개";});
+on("case-sum",function(e){e.textContent=f1(SUMV);});
+on("case-max",function(e){e.textContent=f1(MAXV);});
+on("math-calc",function(e){e.textContent=f1(LR.b,2)+" × "+PAIRS.x0+" + "+f1(LR.a,2)+" = "+f1(PRED,2);});
+
+/* =====================================================================
+   [교체] 모듈 전용 그림: 모듈마다 필요한 그림 함수는 이 자리에 둡니다.
+   ===================================================================== */
+var OCX=[50.0, 52.4, 47.8, 42.9, 46.4, 42.1, 50.5, 60.7, 46.1, 45.0, 53.9, 52.9, 50.8, 42.6, 49.8, 55.6, 39.2, 46.3, 34.8, 39.7, 35.3, 48.1, 39.9, 52.2, 51.3, 48.5, 29.9, 45.7, 49.6, 50.9, 37.8, 46.2, 42.2, 43.5, 58.5, 43.5, 49.7, 57.1, 45.3, 49.1], OCY=[51.1, 51.1, 38.8, 49.7, 61.7, 35.0, 57.9, 52.9, 43.8, 67.2, 57.6, 39.9, 50.9, 54.1, 48.4, 57.2, 47.8, 55.5, 60.5, 42.4, 49.6, 45.7, 49.6, 39.9, 45.2, 48.1, 54.9, 59.7, 38.2, 43.2, 53.9, 31.7, 44.7, 48.2, 62.8, 55.2, 47.2, 48.0, 47.1, 63.6];
+var RX=[45.7, 47.0, 53.5, 48.8, 48.0, 38.9, 49.9, 45.6, 61.7, 56.5, 49.8, 56.7, 46.6, 60.5, 49.9, 55.8, 37.1, 53.5, 33.1, 29.6, 47.0, 41.0, 51.6, 72.4, 41.7, 43.8, 52.1, 54.9, 48.2, 47.9, 57.0, 55.2, 39.7, 49.2, 50.4, 39.5, 52.6, 41.4, 59.7, 51.9, 50.9, 44.1, 48.8, 30.0, 38.7, 53.6, 28.7, 58.5, 32.5, 57.6, 41.5, 57.8, 51.3, 34.6, 62.5, 64.4, 49.3, 47.3, 48.4, 40.2], RY=[64.1, 44.1, 49.7, 40.9, 43.0, 35.6, 65.8, 48.9, 61.6, 50.3, 42.1, 46.1, 43.9, 50.0, 45.9, 46.5, 34.5, 40.5, 71.6, 43.5, 37.9, 55.1, 67.5, 31.5, 48.4, 43.2, 29.0, 59.1, 50.3, 51.5, 40.9, 55.7, 44.5, 48.8, 37.0, 36.3, 66.6, 44.8, 53.5, 50.0, 45.1, 44.7, 58.2, 48.0, 49.3, 50.6, 66.0, 58.3, 56.2, 43.2, 34.2, 61.6, 62.2, 49.7, 56.4, 59.2, 60.6, 61.9, 45.1, 69.5];
+/* M17 전용 그림·실습 */
+function linJ(a,b,c,d){return function(v){return c+(v-a)/(b-a)*(d-c);};}
+function tJ(s,x,y,t,o){o=o||{};return el("text",{x:x,y:y,"text-anchor":o.a||"middle","font-size":o.fs||11,"font-weight":o.fw||600,fill:o.c||C.navy,stroke:o.halo?"#fff":"none","stroke-width":o.halo?3:0,"paint-order":"stroke"},s,t);}
+function bxJ(s,x,y,w,h,fill,stroke){return el("rect",{x:x,y:y,width:w,height:h,rx:10,fill:fill||"#fff",stroke:stroke||"none","stroke-width":stroke?1.5:0},s);}
+function mkJ(s,id,col){el("defs",{},s).innerHTML='<marker id="'+id+'" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10z" fill="'+col+'"/></marker>';}
+function meanJ(a){return sum(a)/a.length;}
+function pearJ(x,y){var mx=meanJ(x),my=meanJ(y),sxy=0,sxx=0,syy=0;for(var i=0;i<x.length;i++){var a=x[i]-mx,b=y[i]-my;sxy+=a*b;sxx+=a*a;syy+=b*b;}return sxy/Math.sqrt(sxx*syy);}
+function rankJ(a){var idx=a.map(function(v,i){return i;}).sort(function(p,q){return a[p]-a[q];}),r=new Array(a.length),i=0;
+  while(i<idx.length){var j=i;while(j+1<idx.length&&a[idx[j+1]]===a[idx[i]])j++;var avg=(i+j)/2+1;for(var k=i;k<=j;k++)r[idx[k]]=avg;i=j+1;}return r;}
+function spearJ(x,y){return pearJ(rankJ(x),rankJ(y));}
+function rngJ(seed){var t=seed>>>0;return function(){t+=0x6D2B79F5;var r=Math.imul(t^(t>>>15),1|t);r^=r+Math.imul(r^(r>>>7),61|r);return ((r^(r>>>14))>>>0)/4294967296;};}
+function normsJ(rnd,n){var o=[];while(o.length<n){var u=rnd()||1e-9,v=rnd();o.push(Math.sqrt(-2*Math.log(u))*Math.cos(2*Math.PI*v));}return o;}
+function stdzJ(a){var m=meanJ(a),s=Math.sqrt(meanJ(a.map(function(v){return (v-m)*(v-m);})));return a.map(function(v){return (v-m)/s;});}
+/* 표본 상관계수가 정확히 r이 되는 점 n개 */
+function cloudJ(n,r,seed){var rnd=rngJ(seed),x=stdzJ(normsJ(rnd,n)),z=normsJ(rnd,n),b=meanJ(x.map(function(v,i){return v*z[i];})),e=stdzJ(z.map(function(v,i){return v-b*x[i];}));
+  var c=Math.sqrt(Math.max(0,1-r*r));return {x:x,y:x.map(function(v,i){return r*v+c*e[i];})};}
+function dotsJ(s,X,Y,xs,ys,col,rad){for(var i=0;i<xs.length;i++)el("circle",{cx:X(xs[i]),cy:Y(ys[i]),r:rad||2.6,fill:col||"#2B8CC4","fill-opacity":.85},s);}
+function frameJ(s,x0,y0,w,h){el("rect",{x:x0,y:y0,width:w,height:h,fill:"#fff",stroke:C.grid},s);}
+function fmtJ(v){if(Math.abs(v)<0.005)return "0.00";return (v<0?"−":"")+Math.abs(v).toFixed(2);}
+/* t분포 양측 p값 */
+function lgJ(x){var g=[676.5203681218851,-1259.1392167224028,771.32342877765313,-176.61502916214059,12.507343278686905,-0.13857109526572012,9.9843695780195716e-6,1.5056327351493116e-7];
+  if(x<0.5)return Math.log(Math.PI/Math.sin(Math.PI*x))-lgJ(1-x);x-=1;var a=0.99999999999980993,t=x+7.5;for(var i=0;i<8;i++)a+=g[i]/(x+i+1);return 0.5*Math.log(2*Math.PI)+(x+0.5)*Math.log(t)-t+Math.log(a);}
+function bcfJ(a,b,x){var qab=a+b,qap=a+1,qam=a-1,c=1,d=1-qab*x/qap;if(Math.abs(d)<1e-30)d=1e-30;d=1/d;var h=d;
+  for(var m=1;m<=300;m++){var m2=2*m,aa=m*(b-m)*x/((qam+m2)*(a+m2));d=1+aa*d;if(Math.abs(d)<1e-30)d=1e-30;c=1+aa/c;if(Math.abs(c)<1e-30)c=1e-30;d=1/d;h*=d*c;
+    aa=-(a+m)*(qab+m)*x/((a+m2)*(qap+m2));d=1+aa*d;if(Math.abs(d)<1e-30)d=1e-30;c=1+aa/c;if(Math.abs(c)<1e-30)c=1e-30;d=1/d;var del=d*c;h*=del;if(Math.abs(del-1)<3e-12)break;}return h;}
+function ibJ(x,a,b){if(x<=0)return 0;if(x>=1)return 1;var bt=Math.exp(lgJ(a+b)-lgJ(a)-lgJ(b)+a*Math.log(x)+b*Math.log(1-x));return x<(a+1)/(a+b+2)?bt*bcfJ(a,b,x)/a:1-bt*bcfJ(b,a,1-x)/b;}
+function ptJ(t,df){return ibJ(df/(df+t*t),df/2,0.5);}
+
+on("m17-ov",function(s){
+  mkJ(s,"oJ",C.navy3);
+  bxJ(s,10,20,120,70,"#fff",C.navy);tJ(s,70,50,"산점도",{fw:800,fs:14});tJ(s,70,72,"먼저 그려 보기",{fs:10.5,c:C.gray});
+  var c=cloudJ(18,.75,11),X=linJ(-2.2,2.2,24,116),Y=linJ(-2.4,2.4,86,26);
+  bxJ(s,160,20,120,70,C.navy);tJ(s,220,50,"피어슨 r",{fw:800,fs:14,c:"#fff"});tJ(s,220,72,"선형관계의 강도",{fs:10.5,c:"#C9D3E6"});
+  bxJ(s,310,20,120,70,"#FCF3D9",C.amber);tJ(s,370,50,"순위상관 ρ · τ",{fw:800,fs:13.5,c:C.amberInk});tJ(s,370,72,"이상값 · 비정규",{fs:10.5,c:C.amberInk});
+  [[132,158],[282,308]].forEach(function(l){el("line",{x1:l[0],x2:l[1],y1:55,y2:55,stroke:C.navy3,"stroke-width":2,"marker-end":"url(#oJ)"},s);});
+  bxJ(s,90,130,260,62,"#EEF4FB","#2B8CC4");tJ(s,220,156,"가설검정: 모상관 = 0인가?",{fw:800,fs:13,c:"#1C6EA4"});tJ(s,220,178,"r의 크기와 p값을 함께 해석",{fs:10.5,c:"#22262E"});
+  el("line",{x1:220,x2:220,y1:94,y2:126,stroke:C.navy3,"stroke-width":2,"marker-end":"url(#oJ)"},s);
+  bxJ(s,90,206,260,40,"#F3F5F9");tJ(s,220,231,"상관 ≠ 인과 · 비선형 관계는 따로 확인",{fw:700,fs:11.5,c:C.gray});
+});
+
+on("m17-case",function(s){
+  bxJ(s,4,6,432,238);var x0=70,cw=36;
+  el("rect",{x:14,y:24,width:412,height:28,rx:6,fill:C.navy},s);tJ(s,42,43,"학생",{fw:800,fs:11.5,c:"#fff"});
+  STU.forEach(function(n,i){tJ(s,x0+cw*i+cw/2,43,n,{fw:800,fs:12,c:"#fff"});});
+  el("rect",{x:14,y:60,width:412,height:30,fill:"#FDF4EC"},s);el("rect",{x:14,y:94,width:412,height:30,fill:"#EEF6EA"},s);
+  STU.forEach(function(n,i){tJ(s,x0+cw*i+cw/2,80,MATH[i],{fw:700,fs:13});tJ(s,x0+cw*i+cw/2,114,SCI[i],{fw:700,fs:13});});
+  tJ(s,42,80,"수학",{fw:800,fs:11.5,c:C.amberInk});tJ(s,42,114,"과학",{fw:800,fs:11.5,c:C.ok});
+  el("rect",{x:x0+2,y:56,width:cw-4,height:72,rx:6,fill:"none",stroke:"#B42318","stroke-width":2},s);tJ(s,x0+cw/2,146,"↑ 한 쌍",{fw:800,fs:10.5,c:"#B42318"});
+  tJ(s,220,182,"평균: 수학 "+meanJ(MATH).toFixed(1)+"점 · 과학 "+meanJ(SCI).toFixed(1)+"점",{fw:800,fs:12});
+  tJ(s,220,206,"각 열 = 학생 1명에게서 얻은 두 점수",{fs:11,c:C.gray});tJ(s,220,228,"(점수는 예시값)",{fs:10,c:C.gray2});
+});
+
+on("m17-scatter",function(s){
+  bxJ(s,6,6,408,258);var X=linJ(40,95,60,400),Y=linJ(40,90,220,26);
+  [40,50,60,70,80,90].forEach(function(t){el("line",{x1:X(t),x2:X(t),y1:26,y2:220,stroke:C.grid},s);tJ(s,X(t),236,t,{fs:9.5,c:C.gray,fw:500});});
+  [40,50,60,70,80,90].forEach(function(t){el("line",{x1:60,x2:400,y1:Y(t),y2:Y(t),stroke:C.grid},s);tJ(s,54,Y(t)+4,t,{a:"end",fs:9.5,c:C.gray2,fw:500});});
+  tJ(s,400,254,"수학 점수",{a:"end",fs:10.5,c:C.gray,fw:700});tJ(s,22,20,"과학 점수",{a:"start",fs:10.5,c:C.gray,fw:700});
+  STU.forEach(function(n,i){var a=i===0;el("circle",{cx:X(MATH[i]),cy:Y(SCI[i]),r:a?7:5.5,fill:a?"#B42318":"#2B8CC4"},s);tJ(s,X(MATH[i])+8,Y(SCI[i])-6,n,{a:"start",fw:800,fs:10.5,c:a?"#B42318":C.navy,halo:true});});
+  tJ(s,X(85)-10,Y(80)-16,"학생 A (85, 80)",{a:"end",fw:800,fs:11,c:"#B42318",halo:true});
+});
+
+on("m17-three",function(s){
+  [[.8,"증가 관계","#2B8CC4"],[0,"관계 없음","#C2416E"],[-.8,"감소 관계","#23704F"]].forEach(function(p,i){var x0=4+i*140,c=cloudJ(60,p[0],21+i),X=linJ(-3,3,x0+12,x0+124),Y=linJ(-3,3,224,60);
+    bxJ(s,x0,6,132,258);tJ(s,x0+66,30,p[1],{fw:800,fs:12.5,c:p[2]});frameJ(s,x0+10,58,116,168);dotsJ(s,X,Y,c.x,c.y,p[2],2.6);
+    tJ(s,x0+66,248,"x ↑ → y "+(p[0]>0?"↑":p[0]<0?"↓":"경향 없음"),{fs:10.5,c:C.gray,fw:700});});
+});
+
+on("m17-reg",function(s){
+  bxJ(s,6,6,408,258);var X=linJ(0,1000,60,390),Y=linJ(0,10000,220,30);
+  [0,250,500,750,1000].forEach(function(t){el("line",{x1:X(t),x2:X(t),y1:30,y2:220,stroke:C.grid},s);tJ(s,X(t),236,t,{fs:9.5,c:C.gray,fw:500});});
+  [0,2500,5000,7500,10000].forEach(function(t){el("line",{x1:60,x2:390,y1:Y(t),y2:Y(t),stroke:C.grid},s);tJ(s,54,Y(t)+4,t.toLocaleString(),{a:"end",fs:9,c:C.gray2,fw:500});});
+  tJ(s,390,254,"광고 비용(만 원)",{a:"end",fs:10.5,c:C.gray,fw:700});tJ(s,16,22,"판매 개수",{a:"start",fs:10.5,c:C.gray,fw:700});
+  var P=[[80,1100],[150,1200],[230,2900],[300,2600],[380,3400],[450,5100],[520,4700],[600,6600],[700,6400],[820,8600],[900,8800]];
+  P.forEach(function(p){el("circle",{cx:X(p[0]),cy:Y(p[1]),r:5,fill:"#5B6E97"},s);});
+  el("line",{x1:X(0),y1:Y(0),x2:X(1000),y2:Y(10000),stroke:"#C2416E","stroke-width":2.5},s);
+  el("path",{d:"M"+X(500)+" "+Y(0)+" V"+Y(5000)+" H"+X(0),fill:"none",stroke:"#2B8CC4","stroke-width":2,"stroke-dasharray":"5 3"},s);
+  bxJ(s,236,40,166,56,"#FCF3D9");tJ(s,319,62,"판매 개수 = 0.001 × 광고비(원)",{fw:800,fs:10.5,c:C.amberInk});tJ(s,319,84,"500만 원 → 약 5,000개 예측",{fw:800,fs:10.5,c:"#1C6EA4"});
+  tJ(s,X(80),Y(5000)-6,"반응변수 y",{a:"start",fw:800,fs:10,c:"#1C6EA4",halo:true});tJ(s,X(510),Y(400),"설명변수 x",{a:"start",fw:800,fs:10,c:"#1C6EA4",halo:true});
+});
+
+on("m17-quad",function(s){
+  var X=linJ(40,95,40,300),Y=linJ(44,88,138,10),mx=meanJ(MATH),my=meanJ(SCI);
+  el("rect",{x:X(mx),y:10,width:300-X(mx),height:Y(my)-10,fill:"#E3F1EA"},s);el("rect",{x:40,y:Y(my),width:X(mx)-40,height:138-Y(my),fill:"#E3F1EA"},s);
+  el("rect",{x:40,y:10,width:X(mx)-40,height:Y(my)-10,fill:"#FBE4E1"},s);el("rect",{x:X(mx),y:Y(my),width:300-X(mx),height:138-Y(my),fill:"#FBE4E1"},s);
+  el("line",{x1:X(mx),x2:X(mx),y1:10,y2:138,stroke:C.navy,"stroke-dasharray":"4 3"},s);el("line",{x1:40,x2:300,y1:Y(my),y2:Y(my),stroke:C.navy,"stroke-dasharray":"4 3"},s);
+  STU.forEach(function(n,i){el("circle",{cx:X(MATH[i]),cy:Y(SCI[i]),r:4.5,fill:"#2B8CC4"},s);});
+  tJ(s,282,26,"+",{fw:800,fs:18,c:C.ok});tJ(s,56,132,"+",{fw:800,fs:18,c:C.ok});tJ(s,56,26,"−",{fw:800,fs:18,c:"#B42318"});tJ(s,282,132,"−",{fw:800,fs:18,c:"#B42318"});
+  tJ(s,X(mx)+4,148,"x̄ = "+mx.toFixed(1),{a:"start",fs:9.5,fw:700});tJ(s,300,Y(my)-4,"ȳ = "+my.toFixed(1),{a:"end",fs:9.5,fw:700});
+  bxJ(s,312,14,104,122,"#F3F5F9");tJ(s,364,36,"(xᵢ − x̄)(yᵢ − ȳ)",{fw:800,fs:9.5});tJ(s,364,62,"초록 칸: 양수",{fw:700,fs:10,c:C.ok});tJ(s,364,82,"빨강 칸: 음수",{fw:700,fs:10,c:"#B42318"});
+  tJ(s,364,108,"모두 더해 평균",{fs:10,c:C.gray});tJ(s,364,124,"→ 공분산",{fw:800,fs:10.5});
+});
+
+on("m17-grid",function(s){
+  [1,.8,.5,.3,0,-.3,-.5,-.8,-1].forEach(function(r,i){var cx=6+(i%3)*138,cy=6+Math.floor(i/3)*88,c=cloudJ(80,r,40+i),X=linJ(-3,3,cx+8,cx+126),Y=linJ(-3,3,cy+82,cy+20);
+    frameJ(s,cx,cy,132,84);dotsJ(s,X,Y,c.x,c.y,r>0?"#2B8CC4":r<0?"#23704F":"#C2416E",1.7);
+    el("rect",{x:cx+4,y:cy+4,width:50,height:15,rx:4,fill:"#FBE4F0"},s);tJ(s,cx+29,cy+15,"r = "+fmtJ(r).replace(".00",""),{fw:800,fs:9.5});});
+});
+
+on("m17-nonlin",function(s){
+  bxJ(s,6,6,200,258);tJ(s,106,28,"곡선 관계",{fw:800,fs:12});var rnd=rngJ(5),nx=[],ny=[];
+  for(var i=0;i<=60;i++){var x=-3+6*i/60;nx.push(x);ny.push(-x*x+(rnd()-.5)*1.6);}
+  var r0=pearJ(nx,ny),X=linJ(-3.2,3.2,20,192),Y=linJ(-10,1.5,226,44);frameJ(s,16,40,180,190);dotsJ(s,X,Y,nx,ny,"#C2416E",2.6);
+  tJ(s,106,250,"r = "+fmtJ(r0)+" (거의 0)",{fw:800,fs:11.5,c:"#B42318"});
+  bxJ(s,214,6,200,258);tJ(s,314,28,"기울기만 다른 두 데이터",{fw:800,fs:12});var c=cloudJ(50,.9,9),X2=linJ(-3,3,226,402),Y2=linJ(-9,9,226,44);frameJ(s,222,40,184,190);
+  var ya=c.y.map(function(v){return v*.8;}),yb=c.y.map(function(v){return v*2.8;});dotsJ(s,X2,Y2,c.x,ya,"#2B8CC4",2.3);dotsJ(s,X2,Y2,c.x,yb,"#E0A100",2.3);
+  tJ(s,404,58,"가파름",{a:"end",fw:800,fs:10,c:C.amberInk,halo:true});tJ(s,404,112,"완만함",{a:"end",fw:800,fs:10,c:"#1C6EA4",halo:true});
+  tJ(s,314,250,"r = "+fmtJ(pearJ(c.x,ya))+" · r = "+fmtJ(pearJ(c.x,yb))+" (같음)",{fw:800,fs:11,c:C.ok});
+});
+
+var ANS=[[[10,8,13,9,11,14,6,4,12,7,5],[8.04,6.95,7.58,8.81,8.33,9.96,7.24,4.26,10.84,4.82,5.68]],[[10,8,13,9,11,14,6,4,12,7,5],[9.14,8.14,8.74,8.77,9.26,8.10,6.13,3.10,9.13,7.26,4.74]],
+         [[10,8,13,9,11,14,6,4,12,7,5],[7.46,6.77,12.74,7.11,7.81,8.84,6.08,5.39,8.15,6.42,5.73]],[[8,8,8,8,8,8,8,19,8,8,8],[6.58,5.76,7.71,8.84,8.47,7.04,5.25,12.50,5.56,7.91,6.89]]];
+on("m17-ans",function(s){
+  ANS.forEach(function(d,i){var cx=6+(i%2)*206,cy=6+Math.floor(i/2)*132,X=linJ(2,20,cx+14,cx+194),Y=linJ(2,14,cy+124,cy+22);frameJ(s,cx,cy,202,128);
+    el("line",{x1:X(2),y1:Y(3+0.5*2),x2:X(20),y2:Y(3+0.5*20),stroke:"#C9D3E6","stroke-width":1.5},s);
+    dotsJ(s,X,Y,d[0],d[1],["#2B8CC4","#C2416E","#E0A100","#23704F"][i],3.6);
+    tJ(s,cx+8,cy+17,["Ⅰ","Ⅱ","Ⅲ","Ⅳ"][i]+"  r = "+pearJ(d[0],d[1]).toFixed(2),{a:"start",fw:800,fs:11});});
+});
+
+on("m17-outlier",function(s){
+  var r1=pearJ(OCX,OCY),s1=spearJ(OCX,OCY),x2=OCX.concat([150]),y2=OCY.concat([150]),r2=pearJ(x2,y2),s2=spearJ(x2,y2);
+  bxJ(s,6,6,200,258);tJ(s,106,28,"무상관 데이터 40개",{fw:800,fs:12});var X=linJ(25,75,24,190),Y=linJ(25,75,206,46);frameJ(s,16,40,182,172);dotsJ(s,X,Y,OCX,OCY,"#E0A100",2.6);
+  tJ(s,106,234,"r = "+r1.toFixed(3),{fw:800,fs:12});tJ(s,106,252,"ρ = "+s1.toFixed(3),{fw:800,fs:12,c:"#1C6EA4"});
+  bxJ(s,214,6,200,258);tJ(s,314,28,"이상값 (150, 150) 1개 추가",{fw:800,fs:12,c:"#B42318"});var X2=linJ(20,160,232,398),Y2=linJ(20,160,206,46);frameJ(s,222,40,184,172);
+  dotsJ(s,X2,Y2,OCX,OCY,"#E0A100",2.2);el("circle",{cx:X2(150),cy:Y2(150),r:6,fill:"#B42318"},s);tJ(s,X2(150)-8,Y2(150)+4,"이상값",{a:"end",fw:800,fs:10,c:"#B42318"});
+  el("line",{x1:X2(50),y1:Y2(50),x2:X2(150),y2:Y2(150),stroke:"#B42318","stroke-dasharray":"4 3"},s);
+  tJ(s,314,234,"r = "+r2.toFixed(2)+" (크게 바뀜)",{fw:800,fs:12,c:"#B42318"});tJ(s,314,252,"ρ = "+s2.toFixed(3)+" (거의 그대로)",{fw:800,fs:12,c:"#1C6EA4"});
+});
+
+on("m17-rank",function(s){
+  var rm=rankJ(MATH),rs=rankJ(SCI),x0=78,cw=33.5;
+  el("rect",{x:6,y:6,width:408,height:24,rx:6,fill:C.navy},s);tJ(s,40,23,"학생",{fw:800,fs:11,c:"#fff"});
+  var rows=[["수학",MATH,"#FDF4EC",C.amberInk],["→ 순위",rm,"#FDF4EC",C.amberInk],["과학",SCI,"#EEF6EA",C.ok],["→ 순위",rs,"#EEF6EA",C.ok]];
+  rows.forEach(function(r,j){var y=34+j*26;el("rect",{x:6,y:y,width:408,height:24,fill:r[2]},s);tJ(s,40,y+16,r[0],{fw:800,fs:10.5,c:r[3]});
+    r[1].forEach(function(v,i){tJ(s,x0+cw*i+cw/2,y+16,v,{fw:j%2?800:500,fs:j%2?12:10.5,c:j%2?r[3]:C.gray});});});
+  STU.forEach(function(n,i){tJ(s,x0+cw*i+cw/2,23,n,{fw:800,fs:11,c:"#fff"});});
+  tJ(s,210,146,"작은 값부터 1위 · 같은 값(과학 65점 2명)은 평균 순위 5.5",{fs:10,c:C.gray});
+});
+
+on("m17-ratio",function(s){
+  var r1=pearJ(RX,RY),q=RY.map(function(v,i){return v/RX[i];}),r2=pearJ(RX,q);
+  bxJ(s,6,6,200,258);tJ(s,106,28,"X와 Y",{fw:800,fs:12.5});var X=linJ(25,76,26,190),Y=linJ(20,80,206,46);frameJ(s,16,40,182,172);dotsJ(s,X,Y,RX,RY,"#2B8CC4",2.6);
+  tJ(s,106,236,"r = "+r1.toFixed(3)+" (무상관)",{fw:800,fs:12});
+  bxJ(s,214,6,200,258);tJ(s,314,28,"X와 Y/X",{fw:800,fs:12.5,c:"#B42318"});var qmin=Math.min.apply(null,q),qmax=Math.max.apply(null,q),Y2=linJ(qmin-.1,qmax+.1,206,46);frameJ(s,222,40,184,172);dotsJ(s,linJ(25,76,232,398),Y2,RX,q,"#C2416E",2.6);
+  tJ(s,314,236,"r = "+fmtJ(r2)+" (가짜 음의 상관)",{fw:800,fs:12,c:"#B42318"});tJ(s,210,256,"Y/X에 X가 들어 있어 반비례 모양이 생김",{fs:10,c:C.gray});
+});
+
+on("m17-null",function(s){
+  var n=20,X=linJ(-1,1,30,400),pts=[],mx=0,rc=0.4438;
+  function f(r){return Math.pow(1-r*r,(n-4)/2);}for(var i=0;i<=200;i++){var r=-1+2*i/200;mx=Math.max(mx,f(r));}
+  var Y=linJ(0,mx*1.15,118,14);for(var j=0;j<=200;j++){var r2=-1+2*j/200;pts.push(X(r2).toFixed(1)+" "+Y(f(r2)).toFixed(1));}
+  [[-1,-rc],[rc,1]].forEach(function(seg){var q=[X(seg[0])+" "+Y(0)];for(var k=0;k<=40;k++){var r3=seg[0]+(seg[1]-seg[0])*k/40;q.push(X(r3).toFixed(1)+" "+Y(f(r3)).toFixed(1));}q.push(X(seg[1])+" "+Y(0));el("path",{d:"M"+q.join(" L")+"z",fill:"#C2416E","fill-opacity":.8},s);});
+  el("path",{d:"M"+pts.join(" L"),fill:"none",stroke:C.navy,"stroke-width":2.2},s);el("line",{x1:30,x2:400,y1:118,y2:118,stroke:C.gray2},s);
+  [-1,-.5,0,.5,1].forEach(function(t){tJ(s,X(t),132,t,{fs:9.5,c:C.gray,fw:500});});
+  [-rc,rc].forEach(function(v){el("line",{x1:X(v),x2:X(v),y1:40,y2:118,stroke:"#C2416E","stroke-dasharray":"4 3"},s);});
+  tJ(s,X(rc)+4,48,"+0.44",{a:"start",fw:800,fs:10,c:"#C2416E"});tJ(s,X(-rc)-4,48,"−0.44",{a:"end",fw:800,fs:10,c:"#C2416E"});
+  tJ(s,X(0),20,"무상관 모집단, n = 20인 표본의 r 분포",{fw:800,fs:10.5});tJ(s,X(.78),100,"양 끝 합 5%",{fw:800,fs:10,c:"#C2416E"});tJ(s,400,146,"표본의 상관계수 r",{a:"end",fs:10,c:C.gray});
+});
+
+on("m17-bign",function(s){
+  bxJ(s,6,6,408,258);var X=linJ(1,5,60,396),Y=linJ(0,1,214,34),p=[];
+  for(var i=0;i<=120;i++){var lg=1+4*i/120,n=Math.pow(10,lg),t=.03*Math.sqrt(n-2)/Math.sqrt(1-.0009);p.push(X(lg).toFixed(1)+" "+Y(ptJ(t,n-2)).toFixed(1));}
+  [0,.25,.5,.75,1].forEach(function(t){el("line",{x1:60,x2:396,y1:Y(t),y2:Y(t),stroke:C.grid},s);tJ(s,54,Y(t)+4,t,{a:"end",fs:9.5,c:C.gray2,fw:500});});
+  [[1,"10"],[2,"100"],[3,"1,000"],[4,"10,000"],[5,"100,000"]].forEach(function(t){tJ(s,X(t[0]),230,t[1],{fs:9.5,c:C.gray,fw:500});});
+  tJ(s,396,248,"표본크기 n (눈금 10배씩)",{a:"end",fs:10,c:C.gray});tJ(s,24,26,"p값 (r = 0.03일 때)",{a:"start",fw:800,fs:11});
+  el("line",{x1:60,x2:396,y1:Y(.05),y2:Y(.05),stroke:"#C2416E","stroke-dasharray":"5 3","stroke-width":1.5},s);tJ(s,66,Y(.05)-5,"p = 0.05",{a:"start",fw:800,fs:10,c:"#C2416E"});
+  el("path",{d:"M"+p.join(" L"),fill:"none",stroke:"#2B8CC4","stroke-width":2.5},s);
+  var p4=ptJ(.03*Math.sqrt(9998)/Math.sqrt(1-.0009),9998);el("circle",{cx:X(4),cy:Y(p4),r:6,fill:C.amber,stroke:"#fff","stroke-width":1.5},s);
+  tJ(s,X(4)+4,Y(p4)-40,"n = 10,000 → p = "+p4.toFixed(3),{a:"middle",fw:800,fs:10.5,c:C.amberInk,halo:true});el("line",{x1:X(4),x2:X(4),y1:Y(p4)-34,y2:Y(p4)-8,stroke:C.amber,"stroke-width":1.5},s);
+});
+
+on("m17-info",function(s){
+  var rnd=rngJ(3);
+  function pane(x0,title,xs,ys,col,lab1,lab2){bxJ(s,x0,6,132,258);tJ(s,x0+66,28,title,{fw:800,fs:11.5});var X=linJ(-1.15,1.15,x0+12,x0+120),Y=linJ(-1.15,1.15,186,62);frameJ(s,x0+8,52,116,144);dotsJ(s,X,Y,xs,ys,col,2.3);
+    tJ(s,x0+66,218,"r = "+fmtJ(pearJ(xs,ys)),{fw:800,fs:11.5});tJ(s,x0+66,238,lab1,{fw:800,fs:10,c:col});tJ(s,x0+66,254,lab2,{fs:9.5,c:C.gray});}
+  var a=[],b=[],c=[],d=[],e=[],f=[];for(var i=0;i<60;i++){var x=-1+2*i/59;a.push(x);b.push(x*0.95+(rnd()-.5)*.1);}
+  for(var j=0;j<70;j++){var th=2*Math.PI*j/70;c.push(Math.cos(th));d.push(Math.sin(th)+(rnd()-.5)*.06);}
+  for(var k=0;k<60;k++){e.push(rnd()*2-1);f.push(rnd()*2-1);}
+  pane(4,"직선",a,b,"#2B8CC4","X로 Y를 거의 앎","정보 많음");pane(144,"고리 모양",c,d,"#C2416E","X로 Y를 두 값까지 앎","r로는 안 보임");pane(284,"무관계",e,f,"#9AA0AA","X로 Y를 알 수 없음","정보 거의 없음");
+});
+
+/* 실습 1 · r 조작과 이상값(조작형) */
+(function(){
+  var rs=document.getElementById("m17-r");if(!rs)return;var ob=document.getElementById("m17-ob"),svg=document.getElementById("m17-p1-svg"),out=false;
+  [["이상값 없음",false],["이상값 넣기",true]].forEach(function(o){var b=document.createElement("button");b.type="button";b.className="mbtn";b.textContent=o[0];b.style.padding="3px 10px";b.onclick=function(){out=o[1];upd();};ob.appendChild(b);});
+  function upd(){
+    [].forEach.call(ob.children,function(x,i){var on=(i===1)===out;x.classList.toggle("on",on);x.setAttribute("aria-pressed",on);});
+    var r=+rs.value/100,c=cloudJ(40,r,77),xs=c.x.slice(),ys=c.y.slice();if(out){xs.push(7);ys.push(7);}
+    var pr=pearJ(xs,ys),sr=spearJ(xs,ys);
+    document.getElementById("m17-rv").textContent=fmtJ(r);document.getElementById("m17-pr").textContent=fmtJ(pr);document.getElementById("m17-sr").textContent=fmtJ(sr);
+    clear(svg);var X=linJ(-3.2,7.8,40,460),Y=linJ(-3.2,7.8,178,8);el("rect",{x:40,y:8,width:420,height:170,fill:"#fff",stroke:C.grid},svg);
+    el("line",{x1:X(0),x2:X(0),y1:8,y2:178,stroke:C.grid},svg);el("line",{x1:40,x2:460,y1:Y(0),y2:Y(0),stroke:C.grid},svg);
+    dotsJ(svg,X,Y,c.x,c.y,"#2B8CC4",3.2);if(out){el("circle",{cx:X(7),cy:Y(7),r:6,fill:"#B42318"},svg);tJ(svg,X(7)-9,Y(7)+4,"이상값",{a:"end",fw:800,fs:10,c:"#B42318"});}
+    var band=Math.abs(pr)>.7?"강한":Math.abs(pr)>.4?"중간 정도":Math.abs(pr)>.2?"약한":"거의 없는";
+    var m=document.getElementById("m17-msg");m.className="pmsg"+(out&&Math.abs(pr-sr)>.3?" ok":"");
+    m.textContent=(out?"이상값 1개를 넣자 r = "+fmtJ(pr)+", ρ = "+fmtJ(sr)+"입니다. "+(Math.abs(pr-r)>.3?"r은 이상값 하나로 크게 바뀌었지만 ρ는 덜 바뀝니다.":"원래 상관이 강하면 이상값의 영향이 상대적으로 작습니다."):"40개 점: r = "+fmtJ(pr)+" → "+(band==="거의 없는"?"상관이 거의 없음":band+" "+(pr>0?"양의":"음의")+" 상관")+". |r|이 1에 가까울수록 점이 직선에 모입니다.");
+  }
+  rs.addEventListener("input",upd);upd();
+})();
+
+/* 실습 3 · 상관계수 맞히기(추정형) */
+(function(){
+  var g=document.getElementById("m17-g");if(!g)return;var qb=document.getElementById("m17-qs"),svg=document.getElementById("m17-p3-svg"),R=[.62,-.35,.9,.05,-.78,.45],cur=0,checked=false;
+  R.forEach(function(v,i){var b=document.createElement("button");b.type="button";b.className="mbtn";b.textContent=(i+1)+"번";b.style.padding="3px 8px";b.onclick=function(){cur=i;checked=false;reset();};qb.appendChild(b);});
+  function draw(){clear(svg);var c=cloudJ(50,R[cur],300+cur),X=linJ(-3,3,120,350),Y=linJ(-3,3,200,10);el("rect",{x:120,y:10,width:230,height:190,fill:"#fff",stroke:C.grid},svg);dotsJ(svg,X,Y,c.x,c.y,"#2B8CC4",3.2);
+    if(checked){var b=R[cur];el("line",{x1:X(-3),y1:Y(-3*b),x2:X(3),y2:Y(3*b),stroke:"#C2416E","stroke-width":2,"stroke-dasharray":"5 3"},svg);}}
+  function reset(){[].forEach.call(qb.children,function(x,i){var on=i===cur;x.classList.toggle("on",on);x.setAttribute("aria-pressed",on);});
+    document.getElementById("m17-act").textContent="?";var m=document.getElementById("m17-msg3");m.className="pmsg";m.textContent="점이 직선에 얼마나 모였는지, 오른쪽 위로 향하는지 아래로 향하는지 보고 r을 예측하세요.";draw();}
+  function txt(){var v=fmtJ(+g.value/100);document.getElementById("m17-gv").textContent=v;document.getElementById("m17-mine").textContent=v;}
+  g.addEventListener("input",txt);
+  document.getElementById("m17-check").onclick=function(){checked=true;var a=R[cur],gv=+g.value/100,ok=Math.abs(gv-a)<=.15,m=document.getElementById("m17-msg3");
+    document.getElementById("m17-act").textContent=fmtJ(a);m.className="pmsg "+(ok?"ok":"ng");
+    m.textContent=(ok?"가깝게 짐작했습니다. ":"차이가 있습니다. ")+"실제 r = "+fmtJ(a)+", 내 예측과의 차이는 "+Math.abs(gv-a).toFixed(2)+"입니다. 다른 산점도도 맞혀 보세요.";draw();};
+  txt();reset();
+})();
+
+
+/* ---------- ⑤ 형성평가 ---------- */
+function fill(t){return !CASE?t:t.replace(/SUM/g,f1(SUMV)).replace(/AVG/g,f1(AVG,2)).replace(/MAXV/g,f1(MAXV));}
+var firstPractice=document.getElementById("p1"),answered=0,correct=0;
+QUIZ.forEach(function(q,i){
+  var s=document.createElement("section");s.className="slide";s.dataset.step="4";s.id="q"+(i+1);
+  s.innerHTML='<div class="sh"><div class="sec"><span>문항 '+(i+1)+' / '+QUIZ.length+'</span><span class="qchips"><span>학습목표 '+q.goal+'</span><span>'+q.type+'</span></span></div><h2 class="stem">'+fill(q.stem)+'</h2></div>'+
+    '<div class="body split even"><div class="opts'+(q.ox?' ox':'')+'"></div><div class="fbp" aria-live="polite"><p class="empty">보기를 고르면 정답과 해설이 여기에 나타납니다.</p></div></div>';
+  var ob=s.querySelector(".opts"),fb=s.querySelector(".fbp");
+  q.opts.forEach(function(t,k){
+    var b=document.createElement("button");b.type="button";b.className="opt";
+    b.innerHTML=q.ox?t:'<span class="n">'+(k+1)+'</span>'+fill(t);
+    b.addEventListener("click",function(){
+      var all=ob.querySelectorAll(".opt");[].forEach.call(all,function(x){x.disabled=true;});
+      all[q.ans].classList.add("ok");var ok=k===q.ans;if(!ok)b.classList.add("ng");
+      answered++;if(ok)correct++;
+      fb.className="fbp "+(ok?"ok":"ng");
+      fb.innerHTML='<div class="verdict">'+(ok?"정답입니다":"오답입니다. 정답은 "+(q.ox?q.opts[q.ans]:(q.ans+1)+"번")+"입니다")+'</div><div>'+fill(q.exp)+'</div>'+
+        '<button type="button" class="jump back" data-jump="'+q.back+'">'+q.backLabel+'</button><div class="tally">지금까지 '+answered+'문항 중 '+correct+'문항 정답</div>';
+      bindJumps(fb);
+    });
+    ob.appendChild(b);
+  });
+  vp.insertBefore(s,firstPractice);
+});
+
+/* ---------- ⑦ 용어해설 · 참고자료 · 다음 모듈 ---------- */
+for(var gi=0;gi<GLOSSARY.length;gi+=6){
+  var part=GLOSSARY.slice(gi,gi+6),pg=gi/6+1,np=Math.ceil(GLOSSARY.length/6);
+  var s=document.createElement("section");s.className="slide";s.dataset.step="6";
+  var h='<div class="sh"><div class="sec">용어해설 '+pg+'/'+np+'</div><h2>'+(pg===1?"본문에서 굵게 표시한 용어를 나온 순서대로 모았습니다":"용어해설 계속")+'</h2></div><div class="body full"><div class="gl">';
+  part.forEach(function(g,k){h+='<div class="gi"><div class="t"><i>'+(gi+k+1)+'</i>'+g[0]+'<em>'+g[1]+'</em>'+(g[4]?'<span class="cite">['+g[4]+']</span>':'')+'</div><div class="d">'+g[2]+'</div><div class="e"><strong>예시</strong> '+g[3]+'</div></div>';});
+  h+='</div></div>';s.innerHTML=h;vp.appendChild(s);
+}
+(function(){
+  var s=document.createElement("section");s.className="slide";s.dataset.step="6";s.id="end";
+  var refs=REFS.length?'<div class="pcol" style="gap:10px"><div class="plabel" style="margin:0">참고자료</div><ol class="refs">'+REFS.map(function(r){return '<li><span>['+r.n+']</span><div>'+r.title+', '+r.org+'. <a href="'+r.url+'" target="_blank" rel="noopener">'+r.url+'</a> ('+r.date+')</div></li>';}).join("")+'</ol></div>':'';
+  s.innerHTML='<div class="sh"><div class="sec">마무리</div><h2>'+(REFS.length?"참고자료와 다음 모듈":"다음 모듈")+'</h2></div>'+
+    '<div class="body '+(REFS.length?'split even':'full')+'" style="align-content:center">'+refs+
+    '<div class="pcol" style="justify-content:center"><div class="nextmod"><small>다음 모듈 · '+NEXT.title+'</small><strong>'+NEXT.line+'</strong></div></div></div>'+
+    '<p class="foot">학습 상태는 저장되지 않습니다.</p>';
+  vp.appendChild(s);
+})();
+
+/* ---------- 이동 · 진행선 ---------- */
+var slides=[].slice.call(vp.querySelectorAll(".slide")),cur=0,seen={};
+var stepFirst=[],stepCount=[0,0,0,0,0,0,0];
+slides.forEach(function(s,i){var st=+s.dataset.step;if(stepFirst[st]==null)stepFirst[st]=i;stepCount[st]++;});
+var rail=document.getElementById("rail"),stations=[];
+STEPS.forEach(function(n,i){
+  var b=document.createElement("button");b.type="button";b.className="station";
+  b.style.left="calc(14px + (100% - 28px) * "+(i/6)+")";
+  b.innerHTML='<span class="dot">'+(i+1)+'</span><span class="lb">'+n+'</span>';
+  b.setAttribute("aria-label",(i+1)+"단계 "+n+"(으)로 이동");
+  b.addEventListener("click",function(){show(stepFirst[i]);});
+  rail.appendChild(b);stations.push(b);
+});
+function show(i){
+  cur=Math.max(0,Math.min(slides.length-1,i));
+  slides.forEach(function(s,k){s.classList.toggle("on",k===cur);});
+  var st=+slides[cur].dataset.step;seen[st]=true;
+  stations.forEach(function(b,k){b.classList.toggle("cur",k===st);b.classList.toggle("done",k<st||(!!seen[k]&&k!==st));if(k===st)b.setAttribute("aria-current","step");else b.removeAttribute("aria-current");});
+  var within=(cur-stepFirst[st])/Math.max(1,stepCount[st]);
+  var frac=st===6&&cur===slides.length-1?1:(st+within)/6;
+  document.getElementById("fill").style.width=(Math.min(1,frac)*100)+"%";
+  document.getElementById("counter").innerHTML="<strong>"+STEPS[st]+"</strong> "+(cur-stepFirst[st]+1)+" / "+stepCount[st];
+  document.getElementById("prev").disabled=cur===0;
+  var nx=document.getElementById("next");nx.disabled=cur===slides.length-1;
+  nx.textContent=(cur<slides.length-1&&+slides[cur+1].dataset.step!==st)?STEPS[+slides[cur+1].dataset.step]+"(으)로":"다음";
+}
+function bindJumps(root){[].forEach.call(root.querySelectorAll("[data-jump]"),function(b){b.addEventListener("click",function(){var t=document.getElementById(b.dataset.jump);if(t)show(slides.indexOf(t));});});}
+bindJumps(document);
+document.getElementById("prev").onclick=function(){show(cur-1);};
+document.getElementById("next").onclick=function(){show(cur+1);};
+document.addEventListener("keydown",function(e){
+  if(e.target&&(e.target.type==="range"))return;
+  if(e.key==="ArrowRight"||e.key==="PageDown"){show(cur+1);e.preventDefault();}
+  else if(e.key==="ArrowLeft"||e.key==="PageUp"){show(cur-1);e.preventDefault();}
+});
+var tx=null,ty=null;
+vp.addEventListener("touchstart",function(e){var t=e.target;if(t.closest&&(t.closest("input")||t.closest(".dcard"))){tx=null;return;}tx=e.touches[0].clientX;ty=e.touches[0].clientY;},{passive:true});
+vp.addEventListener("touchend",function(e){if(tx==null)return;var dx=e.changedTouches[0].clientX-tx,dy=e.changedTouches[0].clientY-ty;if(Math.abs(dx)>60&&Math.abs(dx)>Math.abs(dy)*1.5)show(cur+(dx<0?1:-1));tx=null;},{passive:true});
+
+/* ---------- 실습 1 · 조작형 ---------- */
+(function(){if(!document.getElementById("p1-items")||!CASE)return;
+var p1v=CASE.values.slice(),p1s=CASE.values.indexOf(MAXV),p1m=document.getElementById("p1-items"),p1r=document.getElementById("p1-range");
+CASE.labels.forEach(function(m,i){var b=document.createElement("button");b.type="button";b.className="mbtn";b.textContent=m;b.onclick=function(){p1s=i;p1d();};p1m.appendChild(b);});
+function p1d(){
+  [].forEach.call(p1m.children,function(b,i){b.classList.toggle("on",i===p1s);b.setAttribute("aria-pressed",i===p1s);});
+  p1r.value=p1v[p1s];document.getElementById("p1-label").textContent=CASE.labels[p1s]+"번";document.getElementById("p1-val").textContent=f1(p1v[p1s]);
+  var s=r1(sum(p1v)),m=s/N;
+  document.getElementById("p1-sum").textContent=f1(s);document.getElementById("p1-mean").textContent=f1(m,2);
+  barChart(document.getElementById("p1-svg"),p1v,{mean:m,sel:p1s,ymax:9});
+  var msg=document.getElementById("p1-msg");
+  if(P1.target!=null&&Math.abs(m-P1.target)<0.005){msg.className="pmsg ok";msg.textContent="성공했습니다. "+f1(s)+" ÷ "+N+" = "+f1(m,2);}
+  else if(Math.abs(s-SUMV)<1e-9){msg.className="pmsg";msg.textContent="원래 값입니다. "+f1(SUMV)+" ÷ "+N+" = "+f1(AVG,2);}
+  else{msg.className="pmsg";msg.textContent="원래 평균 "+f1(AVG,2)+"보다 "+f1(Math.abs(m-AVG),2)+" "+(m>AVG?"늘었습니다.":"줄었습니다.");}
+}
+p1r.addEventListener("input",function(){p1v[p1s]=r1(+p1r.value);p1d();});
+document.getElementById("p1-reset").onclick=function(){p1v=CASE.values.slice();p1d();};
+p1d();
+
+})();
+/* ---------- 실습 2 · 분류형 ---------- */
+(function(){if(!document.getElementById("p2-pool"))return;
+var pool=document.getElementById("p2-pool"),binWrap=document.getElementById("p2-bins"),selC=null,done2=0;
+var bins=BINS.map(function(n){var b=document.createElement("div");b.className="bin";b.dataset.bin=n;b.innerHTML="<h4>"+n+"</h4>";binWrap.appendChild(b);return b;});
+function p2msg(t,c){var m=document.getElementById("p2-msg");m.textContent=t;m.className="pmsg "+(c||"");document.getElementById("p2-count").textContent=done2+" / "+CARDS.length;}
+function p2init(){
+  pool.innerHTML="";bins.forEach(function(b){[].slice.call(b.querySelectorAll(".dcard")).forEach(function(c){c.remove();});});done2=0;selC=null;
+  var o=CARDS.map(function(_,i){return i;});for(var i=o.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1)),t=o[i];o[i]=o[j];o[j]=t;}
+  o.forEach(function(i){var d=document.createElement("div");d.className="dcard";d.tabIndex=0;d.setAttribute("role","button");d.textContent=CARDS[i][0];d.dataset.ans=CARDS[i][1];pool.appendChild(d);attach(d);});
+  p2msg("카드를 하나 골라 보세요.","");
+}
+function drop(c,b){
+  if(!b||c.classList.contains("ok"))return;
+  c.classList.remove("sel");selC=null;
+  if(c.dataset.ans===b.dataset.bin){c.classList.add("ok");c.removeAttribute("tabindex");b.appendChild(c);done2++;p2msg(done2===CARDS.length?"카드를 모두 맞게 분류했습니다.":"정답입니다.","ok");}
+  else{c.classList.add("shake");setTimeout(function(){c.classList.remove("shake");},400);p2msg("「"+b.dataset.bin+"」이 아닙니다. "+HINT[c.dataset.ans],"ng");}
+}
+function pick(d){if(selC===d){d.classList.remove("sel");selC=null;return;}if(selC)selC.classList.remove("sel");selC=d;d.classList.add("sel");p2msg("이제 알맞은 칸을 누르세요.","");}
+function attach(d){
+  var sx=null,sy,mv=false,gh=null,ov=null,offX=0,offY=0;
+  function pos(e){var r=stage.getBoundingClientRect();return{x:(e.clientX-r.left)/S,y:(e.clientY-r.top)/S};}
+  d.addEventListener("pointerdown",function(e){if(d.classList.contains("ok"))return;sx=e.clientX;sy=e.clientY;mv=false;d.setPointerCapture(e.pointerId);var r=d.getBoundingClientRect();offX=(e.clientX-r.left)/S;offY=(e.clientY-r.top)/S;});
+  d.addEventListener("pointermove",function(e){
+    if(sx==null)return;
+    if(!mv&&Math.hypot(e.clientX-sx,e.clientY-sy)>6){mv=true;gh=d.cloneNode(true);gh.classList.add("ghostc");gh.classList.remove("sel");gh.style.width=d.offsetWidth+"px";stage.appendChild(gh);d.style.opacity=".35";}
+    if(mv){var p=pos(e);gh.style.left=(p.x-offX)+"px";gh.style.top=(p.y-offY)+"px";
+      var t=document.elementFromPoint(e.clientX,e.clientY),b=t&&t.closest?t.closest(".bin"):null;
+      if(ov&&ov!==b)ov.classList.remove("hover");ov=b;if(b)b.classList.add("hover");}
+  });
+  d.addEventListener("pointerup",function(){
+    if(sx==null)return;sx=null;
+    if(mv){gh.remove();gh=null;d.style.opacity="";if(ov)ov.classList.remove("hover");var b=ov;ov=null;drop(d,b);}else pick(d);
+  });
+  d.addEventListener("pointercancel",function(){if(gh){gh.remove();gh=null;}d.style.opacity="";sx=null;if(ov)ov.classList.remove("hover");ov=null;});
+  d.addEventListener("keydown",function(e){if(e.key==="Enter"||e.key===" "){e.preventDefault();pick(d);}});
+}
+bins.forEach(function(b){b.tabIndex=0;b.setAttribute("role","button");b.setAttribute("aria-label",b.dataset.bin+" 칸에 놓기");
+  b.addEventListener("click",function(e){if(selC&&!e.target.closest(".dcard"))drop(selC,b);});
+  b.addEventListener("keydown",function(e){if((e.key==="Enter"||e.key===" ")&&selC){e.preventDefault();drop(selC,b);}});});
+document.getElementById("p2-reset").onclick=p2init;
+p2init();
+
+})();
+/* ---------- 실습 3 · 추정형 ---------- */
+(function(){if(!document.getElementById("p3-range")||!PAIRS)return;
+var p3r=document.getElementById("p3-range"),p3done=false;
+document.getElementById("p3-x0").textContent=PAIRS.x0;
+p3r.min=PAIRS.ymin;p3r.max=PAIRS.ymax;p3r.step=0.1;p3r.value=r1((PAIRS.ymin+PAIRS.ymax)/2);
+function p3d(){var g=+p3r.value;document.getElementById("p3-val").textContent=f1(g);scatter(document.getElementById("p3-svg"),{x0:PAIRS.x0,guess:g,line:p3done,pred:p3done,actual:p3done});}
+p3r.addEventListener("input",function(){if(p3done){p3done=false;document.getElementById("p3-res").classList.remove("on");}p3d();});
+document.getElementById("p3-check").onclick=function(){
+  p3done=true;var g=+p3r.value,mine=Math.abs(g-PAIRS.actual),line=Math.abs(PRED-PAIRS.actual);
+  document.getElementById("p3-mine").textContent=f1(g);document.getElementById("p3-pred").textContent=f1(PRED,PAIRS.dp);document.getElementById("p3-act").textContent=f1(PAIRS.actual);
+  var m=document.getElementById("p3-msg"),good=mine<=line;m.className="pmsg "+(good?"ok":"ng");
+  m.textContent="내 오차 "+f1(mine,PAIRS.dp)+PAIRS.unit+", 직선 오차 "+f1(line,PAIRS.dp)+PAIRS.unit+". "+(good?"직선만큼 또는 더 가깝게 추정했습니다.":"직선을 이용하면 오차를 줄일 수 있습니다.");
+  document.getElementById("p3-res").classList.add("on");p3d();
+};
+p3d();
+
+})();
+show(0);
+})();
+</script>
+</body>
+</html>
