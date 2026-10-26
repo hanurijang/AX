@@ -3,55 +3,105 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>AX — Framework</title>
+<title>인공지능 기본교육</title>
 <style>
-  :root { color-scheme: light dark; }
+  :root { color-scheme: light dark; --navy:#1B2A4A; --navy2:#2C4170; --amber:#E0A100; --line:#e2e5e9; }
   * { box-sizing: border-box; }
   body {
-    margin: 0; padding: 32px 20px 64px;
-    font: 15px/1.6 -apple-system, "Segoe UI", "Noto Sans KR", sans-serif;
+    margin: 0; padding: 48px 20px 72px;
+    font: 15px/1.6 -apple-system, "Segoe UI", "Noto Sans KR", "Apple SD Gothic Neo", sans-serif;
     background: #f6f7f9; color: #1c1e21;
+  }
+  .wrap { max-width: 980px; margin: 0 auto; }
+  header { margin: 0 0 28px; }
+  h1 { font-size: 24px; margin: 0 0 6px; letter-spacing: -.03em; color: var(--navy); }
+  p.sub { margin: 0; opacity: .66; font-size: 13px; }
+
+  .courses { display: grid; gap: 16px; grid-template-columns: 1fr; }
+  a.course {
+    display: grid; gap: 4px 18px;
+    grid-template-columns: 52px 1fr auto;
+    align-items: center;
+    padding: 22px 22px 20px;
+    text-decoration: none; color: inherit;
+    border: 1px solid var(--line); border-radius: 14px; background: #fff;
+    box-shadow: 0 1px 2px rgba(0,0,0,.04);
+    transition: transform .15s ease, box-shadow .15s ease, border-color .15s ease;
+  }
+  a.course:hover, a.course:focus-visible {
+    transform: translateY(-2px); border-color: #c9d3e6;
+    box-shadow: 0 8px 22px rgba(27,42,74,.13);
+  }
+  a.course:focus-visible { outline: 3px solid var(--amber); outline-offset: 2px; }
+  .cno {
+    grid-row: span 2; display: grid; place-items: center;
+    width: 52px; height: 52px; border-radius: 12px;
+    background: var(--navy); color: #fff;
+    font-size: 13px; font-weight: 800; letter-spacing: .4px;
+    font-variant-numeric: tabular-nums;
+  }
+  .cttl { display: block; font-size: 17px; font-weight: 800; letter-spacing: -.4px; line-height: 1.35; }
+  .cmeta { display: block; font-size: 12.5px; opacity: .62; margin-top: 2px; }
+  .cgo {
+    grid-row: span 2; align-self: center;
+    font-size: 13px; font-weight: 700; color: var(--navy2);
+    border: 1.5px solid #d5deee; border-radius: 8px; padding: 7px 13px;
+    white-space: nowrap; background: #f8fafc;
+  }
+  a.course:hover .cgo { background: var(--navy); border-color: var(--navy); color: #fff; }
+
+  @media (max-width: 620px) {
+    body { padding-top: 32px; }
+    a.course { grid-template-columns: 44px 1fr; padding: 18px 16px; }
+    .cno { width: 44px; height: 44px; font-size: 12px; }
+    .cgo { grid-column: 2; grid-row: auto; justify-self: start; margin-top: 8px; }
   }
   @media (prefers-color-scheme: dark) {
     body { background: #16181c; color: #e6e8eb; }
-    figure { background: #1f2227; border-color: #2c3036; }
+    h1 { color: #cdd8ee; }
+    a.course { background: #1f2227; border-color: #2c3036; }
+    a.course:hover, a.course:focus-visible { border-color: #3a4d78; box-shadow: 0 8px 22px rgba(0,0,0,.5); }
+    .cno { background: #2C4170; }
+    .cgo { background: #23272e; border-color: #3a4d78; color: #a9b6cf; }
+    a.course:hover .cgo { background: #2C4170; border-color: #2C4170; color: #fff; }
   }
-  header { max-width: 1500px; margin: 0 auto 28px; }
-  h1 { font-size: 22px; margin: 0 0 6px; letter-spacing: -.02em; }
-  p.sub { margin: 0; opacity: .65; font-size: 13px; }
-  main { max-width: 1500px; margin: 0 auto; display: grid; gap: 28px; }
-  figure {
-    margin: 0; padding: 16px; border: 1px solid #e2e5e9;
-    border-radius: 12px; background: #fff;
-    box-shadow: 0 1px 2px rgba(0,0,0,.04);
-  }
-  figcaption {
-    font-size: 13px; font-weight: 600; margin-bottom: 12px;
-    display: flex; justify-content: space-between; gap: 12px; align-items: baseline;
-  }
-  figcaption a { font-weight: 400; opacity: .6; text-decoration: none; }
-  figcaption a:hover { opacity: 1; text-decoration: underline; }
-  img { display: block; width: 100%; height: auto; border-radius: 6px; }
 </style>
 </head>
 <body>
-<header>
-  <h1>AX — Framework</h1>
-  <p class="sub">GitHub Pages · <a href="https://github.com/hanurijang/AX">hanurijang/AX</a> · <a href="modules.html">학습 모듈 M01–M22</a></p>
-</header>
-<main>
-  <figure>
-    <figcaption><span>Framework_R1</span><a href="Framework_R1.png">PNG 열기</a></figcaption>
-    <img src="Framework_R1.png" alt="AX Framework R1" loading="lazy">
-  </figure>
-  <figure>
-    <figcaption><span>Table_R1</span><a href="Table_R1.png">PNG 열기</a></figcaption>
-    <img src="Table_R1.png" alt="AX Table R1" loading="lazy">
-  </figure>
-  <figure>
-    <figcaption><span>framework</span><a href="framework.png">PNG 열기</a></figcaption>
-    <img src="framework.png" alt="framework" loading="lazy">
-  </figure>
-</main>
+<div class="wrap">
+  <header>
+    <h1>인공지능 기본교육</h1>
+    <p class="sub">3개 과정 · 22개 모듈 · 과정을 선택하면 모듈 목록이 열립니다.</p>
+  </header>
+
+  <main class="courses">
+    <a class="course" href="courses/course1.html">
+      <span class="cno">01</span>
+      <span>
+        <span class="cttl">데이터와 기술통계</span>
+        <span class="cmeta">7개 모듈 · M01–M07 · 데이터 분석의 목적부터 정규분포와 표준화까지</span>
+      </span>
+      <span class="cgo">들어가기 →</span>
+    </a>
+
+    <a class="course" href="courses/course2.html">
+      <span class="cno">02</span>
+      <span>
+        <span class="cttl">추론통계와 가설검정</span>
+        <span class="cmeta">9개 모듈 · M08–M16 · 추론통계의 직관부터 비율 비교까지</span>
+      </span>
+      <span class="cgo">들어가기 →</span>
+    </a>
+
+    <a class="course" href="courses/course3.html">
+      <span class="cno">03</span>
+      <span>
+        <span class="cttl">상관·회귀·통계 모형</span>
+        <span class="cmeta">6개 모듈 · M17–M22 · 산점도와 상관부터 푸아송 회귀까지</span>
+      </span>
+      <span class="cgo">들어가기 →</span>
+    </a>
+  </main>
+</div>
 </body>
 </html>
