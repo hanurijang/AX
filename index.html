@@ -26,17 +26,63 @@
     display: inline-flex; align-items: center; gap: 7px;
     padding: 9px 16px; border-radius: 999px;
     border: 1.5px solid #d5deee; background: #fff; color: var(--navy2);
-    font-size: 13px; font-weight: 700; text-decoration: none;
-    white-space: nowrap; line-height: 1.3;
+    font-family: inherit; font-size: 13px; font-weight: 700; text-decoration: none;
+    white-space: nowrap; line-height: 1.3; cursor: pointer;
     box-shadow: 0 1px 2px rgba(0,0,0,.04);
     transition: background .15s ease, border-color .15s ease, color .15s ease, box-shadow .15s ease;
   }
+  .feedback .ar { font-size: 9px; opacity: .8; transition: transform .2s ease; }
+  .feedback[aria-expanded="true"] { background: var(--navy); border-color: var(--navy); color: #fff; }
+  .feedback[aria-expanded="true"] .ar { transform: rotate(180deg); }
   .feedback:hover, .feedback:focus-visible {
     background: var(--navy); border-color: var(--navy); color: #fff;
     box-shadow: 0 6px 16px rgba(27,42,74,.22);
   }
   .feedback:focus-visible { outline: 3px solid var(--amber); outline-offset: 2px; }
   .feedback .ic { font-size: 14px; line-height: 1; }
+
+  /* 의견 입력 패널 */
+  .fb[hidden] { display: none; }
+  .fb {
+    margin: -10px 0 22px; padding: 18px 18px 16px;
+    background: #fff; border: 1.5px solid var(--line); border-radius: 14px;
+    box-shadow: 0 10px 28px rgba(20,30,55,.08);
+  }
+  .fb .fbr { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 12px; }
+  .fb label { display: block; font-size: 12px; font-weight: 700; color: var(--navy2); }
+  .fb .opt { font-weight: 400; opacity: .55; }
+  .fb select, .fb textarea, .fb input {
+    display: block; width: 100%; margin-top: 5px; padding: 9px 11px;
+    font: inherit; font-size: 13.5px; color: inherit;
+    background: #fbfcfd; border: 1.5px solid var(--line); border-radius: 9px;
+    transition: border-color .15s ease, box-shadow .15s ease, background .15s ease;
+  }
+  .fb textarea { min-height: 92px; resize: vertical; line-height: 1.55; }
+  .fb select:focus, .fb textarea:focus, .fb input:focus {
+    outline: none; background: #fff; border-color: var(--navy2);
+    box-shadow: 0 0 0 3px rgba(44,65,112,.13);
+  }
+  .fb .row { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; margin-top: 10px; }
+  .fb .cnt {
+    margin-left: auto; font-size: 11.5px; opacity: .5;
+    font-variant-numeric: tabular-nums;
+  }
+  .fb .send, .fb .cancel {
+    font: inherit; font-size: 13px; font-weight: 700; cursor: pointer;
+    padding: 9px 18px; border-radius: 999px; border: 1.5px solid transparent;
+    transition: background .15s ease, color .15s ease, border-color .15s ease, opacity .15s ease;
+  }
+  .fb .send { background: var(--navy); color: #fff; }
+  .fb .send:hover:not(:disabled) { background: var(--navy2); }
+  .fb .send:disabled { opacity: .55; cursor: default; }
+  .fb .cancel { background: #fff; color: var(--navy2); border-color: #d5deee; }
+  .fb .cancel:hover { border-color: var(--navy2); }
+  .fb .send:focus-visible, .fb .cancel:focus-visible { outline: 3px solid var(--amber); outline-offset: 2px; }
+  .fb .st { font-size: 12.5px; font-weight: 600; }
+  .fb .st.ok { color: #1c7a4f; }
+  .fb .st.err { color: #c02b2b; }
+  .fb .hp { position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden; }
+  .fb .note { margin: 10px 0 0; font-size: 11.5px; opacity: .5; }
 
   /* 카드 배치: 2열 그리드, 행 높이는 가장 긴 카드(02)에 맞춰 균등 */
   .courses {
@@ -95,6 +141,8 @@
     .mods { font-size: 12px; }
     .mods .m { grid-template-columns: 30px 1fr; gap: 6px; }
     .feedback { font-size: 12.5px; padding: 8px 14px; }
+    .fb { padding: 14px; margin: -6px 0 18px; }
+    .fb .fbr { grid-template-columns: 1fr; gap: 10px; }
   }
   @media (prefers-color-scheme: dark) {
     body { background: #16181c; color: #e6e8eb; }
@@ -106,6 +154,12 @@
     .mods .mno { color: #9fb0d0; }
     .feedback { background: #23272e; border-color: #3a4d78; color: #a9b6cf; }
     .feedback:hover, .feedback:focus-visible { background: #2C4170; border-color: #2C4170; color: #fff; }
+    .fb { background: #1f2227; border-color: #2c3036; box-shadow: 0 10px 28px rgba(0,0,0,.45); }
+    .fb select, .fb textarea, .fb input { background: #171a1e; border-color: #333840; }
+    .fb select:focus, .fb textarea:focus, .fb input:focus { background: #12161a; border-color: #5b7099; }
+    .fb .cancel { background: #23272e; border-color: #3a4250; color: #a9b6cf; }
+    .fb .st.ok { color: #5fd39b; }
+    .fb .st.err { color: #ff8f8f; }
   }
 </style>
 </head>
@@ -116,12 +170,38 @@
       <h1>인공지능 기본교육</h1>
       <p class="sub">3개 과정 · 22개 모듈 · 과정을 선택하면 모듈 목록이 열립니다.</p>
     </div>
-    <a class="feedback" href="https://docs.google.com/forms/d/e/1FAIpQLSecbQJY8_LfYNeL-xYTIir53bwHimeZrUeDhQL4UXZesrpyTQ/viewform"
-       target="_blank" rel="noopener noreferrer"
-       aria-label="의견 보내기 (새 창에서 열림)">
-      <span class="ic" aria-hidden="true">✍</span>의견 보내기
-    </a>
+    <button type="button" class="feedback" id="fb-btn" aria-expanded="false" aria-controls="fb-panel">
+      <span class="ic" aria-hidden="true">✍</span>의견 보내기<span class="ar" aria-hidden="true">▼</span>
+    </button>
   </header>
+
+  <section class="fb" id="fb-panel" hidden aria-label="의견 보내기">
+    <form novalidate>
+      <div class="fbr">
+        <label>과정
+          <select name="course"><option value="">선택 안 함</option></select>
+        </label>
+        <label>모듈 <span class="opt">(선택)</span>
+          <select name="module"><option value="">선택 안 함</option></select>
+        </label>
+      </div>
+      <label>의견 <span class="opt">(필수)</span>
+        <textarea name="message" maxlength="1000" rows="4"
+          placeholder="오류·오탈자, 보충이 필요한 설명, 추가했으면 하는 내용을 적어 주세요."></textarea>
+      </label>
+      <label style="margin-top:10px">회신받을 이메일 <span class="opt">(선택 · 비우면 익명 접수)</span>
+        <input type="email" name="contact" autocomplete="email" inputmode="email">
+      </label>
+      <p class="hp"><label>이 칸은 비워 두세요 <input name="_honey" tabindex="-1" autocomplete="off"></label></p>
+      <div class="row">
+        <button type="submit" class="send">보내기</button>
+        <button type="button" class="cancel">닫기</button>
+        <span class="st" role="status" aria-live="polite"></span>
+        <span class="cnt">0 / 1000</span>
+      </div>
+      <p class="note">보내기만 하면 접수되며, 전송 화면으로 넘어가지 않습니다.</p>
+    </form>
+  </section>
 
   <main class="courses">
     <a class="course" href="courses/course1.html">
@@ -177,5 +257,102 @@
     </a>
   </main>
 </div>
+<script>
+(function () {
+  /* ── 전송 대상 설정 ───────────────────────────────────────────────
+     ENDPOINT 에 폼메일 중계 주소를 넣으면 사용자에게 아무 화면도 보이지 않고
+     지정한 메일로 전송됩니다. 예: 'https://formsubmit.co/ajax/hong@example.com'
+     (첫 전송 때 수신 주소로 '활성화' 메일 1회 → 링크 클릭 후부터 실제 수신)
+     비워 두면 예전처럼 Google Forms이 새 창으로 열립니다.            */
+  var ENDPOINT = '';
+  var LEGACY_FORM = 'https://docs.google.com/forms/d/e/1FAIpQLSecbQJY8_LfYNeL-xYTIir53bwHimeZrUeDhQL4UXZesrpyTQ/viewform';
+  /* ──────────────────────────────────────────────────────────── */
+
+  var btn = document.getElementById('fb-btn');
+  var panel = document.getElementById('fb-panel');
+  var form = panel.querySelector('form');
+  var msg = form.elements.message;
+  var cnt = panel.querySelector('.cnt');
+  var st = panel.querySelector('.st');
+  var sendBtn = form.querySelector('.send');
+
+  /* 과정·모듈 목록은 홈 카드에서 그대로 가져옵니다 */
+  var courseSel = form.elements.course, modSel = form.elements.module;
+  Array.prototype.forEach.call(document.querySelectorAll('a.course'), function (card, i) {
+    var title = card.querySelector('.cttl').textContent.trim();
+    var o = document.createElement('option');
+    o.value = title; o.textContent = (i + 1) + '. ' + title;
+    courseSel.appendChild(o);
+    var g = document.createElement('optgroup'); g.label = title;
+    Array.prototype.forEach.call(card.querySelectorAll('.mods .m'), function (m) {
+      var no = m.querySelector('.mno').textContent.trim();
+      var nm = m.lastElementChild.textContent.trim();
+      var mo = document.createElement('option');
+      mo.value = no; mo.textContent = no + ' · ' + nm;
+      g.appendChild(mo);
+    });
+    modSel.appendChild(g);
+  });
+
+  function setOpen(open) {
+    panel.hidden = !open;
+    btn.setAttribute('aria-expanded', open ? 'true' : 'false');
+    if (open) { msg.focus({ preventScroll: true }); panel.scrollIntoView({ block: 'nearest', behavior: 'smooth' }); }
+  }
+  btn.addEventListener('click', function () { setOpen(panel.hidden); });
+  panel.querySelector('.cancel').addEventListener('click', function () { setOpen(false); btn.focus(); });
+  document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && !panel.hidden) { setOpen(false); btn.focus(); } });
+
+  msg.addEventListener('input', function () { cnt.textContent = msg.value.length + ' / 1000'; });
+
+  function say(kind, text) { st.className = 'st' + (kind ? ' ' + kind : ''); st.textContent = text; }
+
+  if (!ENDPOINT) panel.querySelector('.note').textContent =
+    '전송 설정 전이라 지금은 Google Forms가 새 탭에서 열립니다.';
+
+  form.addEventListener('submit', function (e) {
+    e.preventDefault();
+    if (form.elements._honey.value) return;                       // 봇
+    var text = msg.value.trim();
+    if (text.length < 2) { say('err', '의견을 2자 이상 입력해 주세요.'); msg.focus(); return; }
+
+    var mod = modSel.value, course = courseSel.value;
+    var payload = {
+      message: text,
+      course: course || '선택 안 함',
+      module: mod || '선택 안 함',
+      contact: (form.elements.contact.value || '').trim() || '익명',
+      page: location.href,
+      ua: navigator.userAgent,
+      _subject: '[인공지능 기본교육] ' + (course || '') + (mod ? ' ' + mod : '') + ' 의견',
+      _template: 'table'
+    };
+
+    if (!ENDPOINT) {                                              // 설정 전 임시 동작
+      window.open(LEGACY_FORM, '_blank', 'noopener');
+      say('', '의견 창을 새 탭으로 열었습니다.');
+      return;
+    }
+
+    sendBtn.disabled = true;
+    say('', '보내는 중…');
+    fetch(ENDPOINT, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+      body: JSON.stringify(payload)
+    }).then(function (res) {
+      return res.text().then(function (t) {
+        var ok = res.ok && !/["']?(success|ok)["']?\s*:\s*["']?(false|\bno\b)/i.test(t);
+        if (!ok) throw new Error('relay ' + res.status);
+      });
+    }).then(function () {
+      form.reset(); cnt.textContent = '0 / 1000';
+      say('ok', '의견이 접수되었습니다. 감사합니다.');
+    }).catch(function () {
+      say('err', '전송하지 못했습니다. 잠시 후 다시 시도해 주세요.');
+    }).then(function () { sendBtn.disabled = false; });
+  });
+})();
+</script>
 </body>
 </html>
