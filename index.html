@@ -43,9 +43,13 @@
   .cttl { display: block; font-size: 17px; font-weight: 800; letter-spacing: -.4px; line-height: 1.35; }
   .cmeta { display: block; font-size: 12.5px; opacity: .62; margin-top: 2px; }
   .mods {
-    display: block; margin-top: 8px; padding-top: 8px;
+    display: block; margin-top: 10px; padding-top: 9px;
     border-top: 1px dashed #e6e9ee;
-    font-size: 12.5px; line-height: 1.75; opacity: .74;
+    font-size: 12.5px; opacity: .76;
+  }
+  .mods .m {
+    display: grid; grid-template-columns: 34px 1fr; gap: 8px;
+    align-items: baseline; line-height: 1.55; padding: 1.5px 0;
   }
   .mods .mno { font-variant-numeric: tabular-nums; color: var(--navy2); font-weight: 700; }
   .cgo {
@@ -61,7 +65,8 @@
     a.course { grid-template-columns: 44px 1fr; padding: 18px 16px; }
     .cno { width: 44px; height: 44px; font-size: 12px; }
     .cgo { grid-column: 2; grid-row: auto; justify-self: start; margin-top: 8px; }
-    .mods { font-size: 12px; line-height: 1.7; }
+    .mods { font-size: 12px; }
+    .mods .m { grid-template-columns: 30px 1fr; gap: 6px; }
   }
   @media (prefers-color-scheme: dark) {
     body { background: #16181c; color: #e6e8eb; }
@@ -89,7 +94,15 @@
       <span>
         <span class="cttl">데이터와 기술통계</span>
         <span class="cmeta">7개 모듈 · M01–M07</span>
-        <span class="mods"><span class="mno">M01</span> 데이터 분석의 목적 · <span class="mno">M02</span> 통계학의 역할과 전체 모습 · <span class="mno">M03</span> 모집단과 표본 · <span class="mno">M04</span> 데이터 유형과 분포 · <span class="mno">M05</span> 기술통계량 · <span class="mno">M06</span> 확률과 확률분포 · <span class="mno">M07</span> 정규분포와 표준화</span>
+        <span class="mods">
+          <span class="m"><span class="mno">M01</span><span>데이터 분석의 목적</span></span>
+          <span class="m"><span class="mno">M02</span><span>통계학의 역할과 전체 모습</span></span>
+          <span class="m"><span class="mno">M03</span><span>모집단과 표본</span></span>
+          <span class="m"><span class="mno">M04</span><span>데이터 유형과 분포</span></span>
+          <span class="m"><span class="mno">M05</span><span>기술통계량</span></span>
+          <span class="m"><span class="mno">M06</span><span>확률과 확률분포</span></span>
+          <span class="m"><span class="mno">M07</span><span>정규분포와 표준화</span></span>
+        </span>
       </span>
       <span class="cgo">들어가기 →</span>
     </a>
@@ -99,7 +112,17 @@
       <span>
         <span class="cttl">추론통계와 가설검정</span>
         <span class="cmeta">9개 모듈 · M08–M16</span>
-        <span class="mods"><span class="mno">M08</span> 추론통계의 직관 · <span class="mno">M09</span> 표준오차 · <span class="mno">M10</span> 신뢰구간 · <span class="mno">M11</span> 가설검정의 원리와 p값 · <span class="mno">M12</span> 가설검정 해 보기 · <span class="mno">M13</span> 검정 결과 읽기와 두 가지 오류 · <span class="mno">M14</span> 두 집단 평균 비교 · <span class="mno">M15</span> 세 집단 이상 비교 · <span class="mno">M16</span> 비율 비교</span>
+        <span class="mods">
+          <span class="m"><span class="mno">M08</span><span>추론통계의 직관</span></span>
+          <span class="m"><span class="mno">M09</span><span>표준오차</span></span>
+          <span class="m"><span class="mno">M10</span><span>신뢰구간</span></span>
+          <span class="m"><span class="mno">M11</span><span>가설검정의 원리와 p값</span></span>
+          <span class="m"><span class="mno">M12</span><span>가설검정 해 보기</span></span>
+          <span class="m"><span class="mno">M13</span><span>검정 결과 읽기와 두 가지 오류</span></span>
+          <span class="m"><span class="mno">M14</span><span>두 집단 평균 비교</span></span>
+          <span class="m"><span class="mno">M15</span><span>세 집단 이상 비교</span></span>
+          <span class="m"><span class="mno">M16</span><span>비율 비교</span></span>
+        </span>
       </span>
       <span class="cgo">들어가기 →</span>
     </a>
@@ -109,7 +132,14 @@
       <span>
         <span class="cttl">상관·회귀·통계 모형</span>
         <span class="cmeta">6개 모듈 · M17–M22</span>
-        <span class="mods"><span class="mno">M17</span> 산점도와 상관 · <span class="mno">M18</span> 단순선형회귀 · <span class="mno">M19</span> 다중회귀 · <span class="mno">M20</span> 회귀모형 다듬기 · <span class="mno">M21</span> 일반화선형모형과 로지스틱 회귀 · <span class="mno">M22</span> 푸아송 회귀와 다양한 일반화선형모형</span>
+        <span class="mods">
+          <span class="m"><span class="mno">M17</span><span>산점도와 상관</span></span>
+          <span class="m"><span class="mno">M18</span><span>단순선형회귀</span></span>
+          <span class="m"><span class="mno">M19</span><span>다중회귀</span></span>
+          <span class="m"><span class="mno">M20</span><span>회귀모형 다듬기</span></span>
+          <span class="m"><span class="mno">M21</span><span>일반화선형모형과 로지스틱 회귀</span></span>
+          <span class="m"><span class="mno">M22</span><span>푸아송 회귀와 다양한 일반화선형모형</span></span>
+        </span>
       </span>
       <span class="cgo">들어가기 →</span>
     </a>
