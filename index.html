@@ -13,9 +13,30 @@
     background: #f6f7f9; color: #1c1e21;
   }
   .wrap { max-width: 980px; margin: 0 auto; }
-  header { margin: 0 0 28px; }
+  header {
+    margin: 0 0 28px;
+    display: flex; align-items: flex-end; justify-content: space-between;
+    gap: 14px 20px; flex-wrap: wrap;
+  }
   h1 { font-size: 24px; margin: 0 0 6px; letter-spacing: -.03em; color: var(--navy); }
   p.sub { margin: 0; opacity: .66; font-size: 13px; }
+
+  /* 의견 보내기 버튼 */
+  .feedback {
+    display: inline-flex; align-items: center; gap: 7px;
+    padding: 9px 16px; border-radius: 999px;
+    border: 1.5px solid #d5deee; background: #fff; color: var(--navy2);
+    font-size: 13px; font-weight: 700; text-decoration: none;
+    white-space: nowrap; line-height: 1.3;
+    box-shadow: 0 1px 2px rgba(0,0,0,.04);
+    transition: background .15s ease, border-color .15s ease, color .15s ease, box-shadow .15s ease;
+  }
+  .feedback:hover, .feedback:focus-visible {
+    background: var(--navy); border-color: var(--navy); color: #fff;
+    box-shadow: 0 6px 16px rgba(27,42,74,.22);
+  }
+  .feedback:focus-visible { outline: 3px solid var(--amber); outline-offset: 2px; }
+  .feedback .ic { font-size: 14px; line-height: 1; }
 
   /* 카드 배치: 2열 그리드, 행 높이는 가장 긴 카드(02)에 맞춰 균등 */
   .courses {
@@ -73,6 +94,7 @@
     .cttl { font-size: 16px; }
     .mods { font-size: 12px; }
     .mods .m { grid-template-columns: 30px 1fr; gap: 6px; }
+    .feedback { font-size: 12.5px; padding: 8px 14px; }
   }
   @media (prefers-color-scheme: dark) {
     body { background: #16181c; color: #e6e8eb; }
@@ -82,14 +104,23 @@
     .cno { background: #2C4170; }
     .mods { border-top-color: #333840; }
     .mods .mno { color: #9fb0d0; }
+    .feedback { background: #23272e; border-color: #3a4d78; color: #a9b6cf; }
+    .feedback:hover, .feedback:focus-visible { background: #2C4170; border-color: #2C4170; color: #fff; }
   }
 </style>
 </head>
 <body>
 <div class="wrap">
   <header>
-    <h1>인공지능 기본교육</h1>
-    <p class="sub">3개 과정 · 22개 모듈 · 과정을 선택하면 모듈 목록이 열립니다.</p>
+    <div class="titles">
+      <h1>인공지능 기본교육</h1>
+      <p class="sub">3개 과정 · 22개 모듈 · 과정을 선택하면 모듈 목록이 열립니다.</p>
+    </div>
+    <a class="feedback" href="https://docs.google.com/forms/d/e/1FAIpQLSecbQJY8_LfYNeL-xYTIir53bwHimeZrUeDhQL4UXZesrpyTQ/viewform"
+       target="_blank" rel="noopener noreferrer"
+       aria-label="의견 보내기 (새 창에서 열림)">
+      <span class="ic" aria-hidden="true">✍</span>의견 보내기
+    </a>
   </header>
 
   <main class="courses">
