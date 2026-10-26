@@ -260,11 +260,10 @@
 <script>
 (function () {
   /* ── 전송 대상 설정 ───────────────────────────────────────────────
-     ENDPOINT 에 폼메일 중계 주소를 넣으면 사용자에게 아무 화면도 보이지 않고
-     지정한 메일로 전송됩니다. 예: 'https://formsubmit.co/ajax/hong@example.com'
-     (첫 전송 때 수신 주소로 '활성화' 메일 1회 → 링크 클릭 후부터 실제 수신)
+     FormSubmit 중계로 지정한 메일함에 전달됩니다. 주소에 이메일 대신
+     무작위 문자열(해시)을 쓰면 주소 노출 없이 같은 곳으로 도착합니다.
      비워 두면 예전처럼 Google Forms이 새 창으로 열립니다.            */
-  var ENDPOINT = 'https://formsubmit.co/ajax/jjang70.dev@gmail.com';
+  var ENDPOINT = 'https://formsubmit.co/ajax/79b92ae2a3da8777fbe7574b72cd538e';
   var LEGACY_FORM = 'https://docs.google.com/forms/d/e/1FAIpQLSecbQJY8_LfYNeL-xYTIir53bwHimeZrUeDhQL4UXZesrpyTQ/viewform';
   /* ──────────────────────────────────────────────────────────── */
 
