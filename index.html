@@ -17,13 +17,21 @@
   h1 { font-size: 24px; margin: 0 0 6px; letter-spacing: -.03em; color: var(--navy); }
   p.sub { margin: 0; opacity: .66; font-size: 13px; }
 
-  .courses { display: grid; gap: 16px; grid-template-columns: 1fr; }
-  /* 2열 구조: [번호 사각형] [과정명·모듈 목록] */
+  /* 카드 배치: 2열 그리드, 행 높이는 가장 긴 카드(02)에 맞춰 균등 */
+  .courses {
+    display: grid; gap: 16px;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-auto-rows: 1fr;
+    align-items: stretch;
+  }
+  /* 카드 내부 2열 구조: [번호 사각형] [과정명·모듈 목록] */
   a.course {
-    display: grid; gap: 0 18px;
-    grid-template-columns: 48px 1fr;
+    display: grid; gap: 0 16px;
+    grid-template-columns: 44px 1fr;
+    align-content: start;
     align-items: start;
-    padding: 22px 24px 20px;
+    height: 100%;
+    padding: 20px 20px 18px;
     text-decoration: none; color: inherit;
     border: 1px solid var(--line); border-radius: 14px; background: #fff;
     box-shadow: 0 1px 2px rgba(0,0,0,.04);
@@ -36,7 +44,7 @@
   a.course:focus-visible { outline: 3px solid var(--amber); outline-offset: 2px; }
   .cno {
     display: grid; place-items: center;
-    width: 48px; height: 48px; margin-top: -2px; border-radius: 11px;
+    width: 44px; height: 44px; margin-top: -1px; border-radius: 10px;
     background: var(--navy); color: #fff;
     font-size: 13px; font-weight: 800; letter-spacing: .4px;
     font-variant-numeric: tabular-nums;
@@ -53,6 +61,10 @@
     align-items: baseline; line-height: 1.55; padding: 1.5px 0;
   }
   .mods .mno { font-variant-numeric: tabular-nums; color: var(--navy2); font-weight: 700; }
+
+  @media (max-width: 760px) {
+    .courses { grid-template-columns: 1fr; grid-auto-rows: auto; }
+  }
 
   @media (max-width: 620px) {
     body { padding-top: 32px; }
