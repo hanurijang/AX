@@ -3,127 +3,119 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>AX — 학습 모듈 v1</title>
+<title>AX — 학습 과정</title>
 <style>
-  :root { color-scheme: light dark; --navy:#1B2A4A; --navy2:#2C4170; --amber:#E0A100; }
+  :root { color-scheme: light dark; --navy:#1B2A4A; --navy2:#2C4170; --amber:#E0A100; --line:#e2e5e9; }
   * { box-sizing: border-box; }
   body {
-    margin: 0; padding: 40px 20px 72px;
+    margin: 0; padding: 28px 20px 72px;
     font: 15px/1.6 -apple-system, "Segoe UI", "Noto Sans KR", "Apple SD Gothic Neo", sans-serif;
     background: #f6f7f9; color: #1c1e21;
   }
-  header { max-width: 1100px; margin: 0 auto 28px; }
+  .wrap { max-width: 980px; margin: 0 auto; }
+  .crumbs { font-size: 12.5px; opacity: .62; margin: 0 0 22px; display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+  .crumbs a { color: inherit; text-decoration: none; }
+  .crumbs a:hover { text-decoration: underline; }
+  .crumbs .sep { opacity: .45; }
+  .crumbs .cur { opacity: 1; font-weight: 700; }
+  header { margin: 0 0 28px; }
   h1 { font-size: 22px; margin: 0 0 6px; letter-spacing: -.02em; color: var(--navy); }
-  p.sub { margin: 0; opacity: .65; font-size: 13px; }
-  p.sub a { color: inherit; }
-  main { max-width: 1100px; margin: 0 auto; }
-  h2.sec {
-    font-size: 13.5px; text-transform: none; letter-spacing: -.2px;
-    color: var(--navy2); margin: 32px 0 12px; padding-bottom: 6px;
-    border-bottom: 1px solid #e2e5e9;
-    display: flex; justify-content: space-between; gap: 12px; align-items: baseline;
-  }
-  h2.sec:first-of-type { margin-top: 0; }
-  h2.sec span { font-size: 12px; font-weight: 500; opacity: .6; }
-  .grid {
-    display: grid; gap: 14px;
-    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-  }
-  a.card {
-    display: block; text-decoration: none; color: inherit;
-    padding: 16px 16px 14px; border: 1px solid #e2e5e9; border-radius: 12px;
-    background: #fff; box-shadow: 0 1px 2px rgba(0,0,0,.04);
+  p.sub { margin: 0; opacity: .66; font-size: 13px; }
+
+  .courses { display: grid; gap: 16px; grid-template-columns: 1fr; }
+  a.course {
+    display: grid; gap: 4px 18px;
+    grid-template-columns: 52px 1fr auto;
+    align-items: center;
+    padding: 22px 22px 20px;
+    text-decoration: none; color: inherit;
+    border: 1px solid var(--line); border-radius: 14px; background: #fff;
+    box-shadow: 0 1px 2px rgba(0,0,0,.04);
     transition: transform .15s ease, box-shadow .15s ease, border-color .15s ease;
   }
-  a.card:hover, a.card:focus-visible {
+  a.course:hover, a.course:focus-visible {
     transform: translateY(-2px); border-color: #c9d3e6;
-    box-shadow: 0 6px 18px rgba(27,42,74,.12);
+    box-shadow: 0 8px 22px rgba(27,42,74,.13);
   }
-  a.card:focus-visible { outline: 3px solid var(--amber); outline-offset: 2px; }
-  .top { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
-  .no {
-    display: inline-grid; place-items: center;
-    min-width: 34px; height: 22px; padding: 0 7px; border-radius: 6px;
+  a.course:focus-visible { outline: 3px solid var(--amber); outline-offset: 2px; }
+  .cno {
+    grid-row: span 2; display: grid; place-items: center;
+    width: 52px; height: 52px; border-radius: 12px;
     background: var(--navy); color: #fff;
-    font-size: 12px; font-weight: 800; letter-spacing: .3px;
+    font-size: 13px; font-weight: 800; letter-spacing: .4px;
     font-variant-numeric: tabular-nums;
   }
-  .ver {
-    font-size: 11px; font-weight: 700; color: #6E4F00; background: #FCF3D9;
-    border: 1px solid #EBD79A; border-radius: 999px; padding: 1px 8px;
-    font-variant-numeric: tabular-nums;
+  .cttl { display: block; font-size: 17px; font-weight: 800; letter-spacing: -.4px; line-height: 1.35; }
+  .cmeta { display: block; font-size: 12.5px; opacity: .62; margin-top: 2px; }
+  .cgo {
+    grid-row: span 2; align-self: center;
+    font-size: 13px; font-weight: 700; color: var(--navy2);
+    border: 1.5px solid #d5deee; border-radius: 8px; padding: 7px 13px;
+    white-space: nowrap; background: #f8fafc;
   }
-  .ttl { display: block; margin-top: 10px; font-size: 15px; font-weight: 700; line-height: 1.42; letter-spacing: -.3px; }
-  .go { display: block; margin-top: 8px; font-size: 12.5px; color: var(--navy2); opacity: .7; }
-  a.card:hover .go { opacity: 1; text-decoration: underline; }
-  footer { max-width: 1100px; margin: 36px auto 0; font-size: 12.5px; opacity: .6; }
+  a.course:hover .cgo { background: var(--navy); border-color: var(--navy); color: #fff; }
+
+  footer { margin: 34px 0 0; font-size: 12.5px; opacity: .6; display: flex; gap: 14px; flex-wrap: wrap; }
   footer a { color: inherit; }
+
+  @media (max-width: 620px) {
+    a.course { grid-template-columns: 44px 1fr; padding: 18px 16px; }
+    .cno { width: 44px; height: 44px; font-size: 12px; }
+    .cgo { grid-column: 2; grid-row: auto; justify-self: start; margin-top: 8px; }
+  }
   @media (prefers-color-scheme: dark) {
     body { background: #16181c; color: #e6e8eb; }
     h1 { color: #cdd8ee; }
-    h2.sec { color: #a9b6cf; border-color: #2c3036; }
-    a.card { background: #1f2227; border-color: #2c3036; }
-    a.card:hover, a.card:focus-visible { border-color: #3a4d78; box-shadow: 0 6px 18px rgba(0,0,0,.45); }
-    .no { background: #2C4170; }
-    .ver { color: #FBD97A; background: #3A3220; border-color: #5A4C25; }
-    .go { color: #a9b6cf; }
+    a.course { background: #1f2227; border-color: #2c3036; }
+    a.course:hover, a.course:focus-visible { border-color: #3a4d78; box-shadow: 0 8px 22px rgba(0,0,0,.5); }
+    .cno { background: #2C4170; }
+    .cgo { background: #23272e; border-color: #3a4d78; color: #a9b6cf; }
+    a.course:hover .cgo { background: #2C4170; border-color: #2C4170; color: #fff; }
   }
 </style>
 </head>
 <body>
-<header>
-  <h1>AX — 학습 모듈 v1</h1>
-  <p class="sub">22개 모듈 · 데이터 분석의 목적부터 푸아송 회귀까지 · <a href="index.html">프레임워크 보기</a></p>
-</header>
+<div class="wrap">
+  <p class="crumbs"><a href="index.html">홈</a><span class="sep">/</span><span class="cur">학습 과정</span></p>
 
-<main>
-  <h2 class="sec">데이터와 기술통계 <span>M01–M07</span></h2>
-  <nav class="grid" aria-label="데이터와 기술통계 모듈">
-    <a class="card" href="module_v1/M01_데이터분석의목적_v1.0.html"><span class="top"><span class="no">M01</span><span class="ver">v1.0</span></span><span class="ttl">데이터 분석의 목적</span><span class="go">열기 →</span></a>
-    <a class="card" href="module_v1/M02_통계학의역할과전체모습_v1.0.html"><span class="top"><span class="no">M02</span><span class="ver">v1.0</span></span><span class="ttl">통계학의 역할과 전체 모습</span><span class="go">열기 →</span></a>
-    <a class="card" href="module_v1/M03_모집단과표본_v1.0.html"><span class="top"><span class="no">M03</span><span class="ver">v1.0</span></span><span class="ttl">모집단과 표본</span><span class="go">열기 →</span></a>
-    <a class="card" href="module_v1/M04_데이터유형과분포_v1.0.html"><span class="top"><span class="no">M04</span><span class="ver">v1.0</span></span><span class="ttl">데이터 유형과 분포</span><span class="go">열기 →</span></a>
-    <a class="card" href="module_v1/M05_기술통계량_v1.0.html"><span class="top"><span class="no">M05</span><span class="ver">v1.0</span></span><span class="ttl">기술통계량</span><span class="go">열기 →</span></a>
-    <a class="card" href="module_v1/M06_확률과확률분포_v1.0.html"><span class="top"><span class="no">M06</span><span class="ver">v1.0</span></span><span class="ttl">확률과 확률분포</span><span class="go">열기 →</span></a>
-    <a class="card" href="module_v1/M07_정규분포와표준화_v1.0.html"><span class="top"><span class="no">M07</span><span class="ver">v1.0</span></span><span class="ttl">정규분포와 표준화</span><span class="go">열기 →</span></a>
-  </nav>
+  <header>
+    <h1>학습 과정</h1>
+    <p class="sub">3개 과정 · 22개 모듈 · 과정을 선택하면 모듈 목록이 열립니다.</p>
+  </header>
 
-  <h2 class="sec">추론통계와 가설검정 <span>M08–M16</span></h2>
-  <nav class="grid" aria-label="추론통계와 가설검정 모듈">
-    <a class="card" href="module_v1/M08_추론통계의직관_v1.0.html"><span class="top"><span class="no">M08</span><span class="ver">v1.0</span></span><span class="ttl">추론통계의 직관</span><span class="go">열기 →</span></a>
-    <a class="card" href="module_v1/M09_표준오차_v1.0.html"><span class="top"><span class="no">M09</span><span class="ver">v1.0</span></span><span class="ttl">표준오차</span><span class="go">열기 →</span></a>
-    <a class="card" href="module_v1/M10_신뢰구간_v1.0.html"><span class="top"><span class="no">M10</span><span class="ver">v1.0</span></span><span class="ttl">신뢰구간</span><span class="go">열기 →</span></a>
-    <a class="card" href="module_v1/M11_가설검정의원리와p값_v1.1.html"><span class="top"><span class="no">M11</span><span class="ver">v1.1</span></span><span class="ttl">가설검정의 원리와 p값</span><span class="go">열기 →</span></a>
-    <a class="card" href="module_v1/M12_가설검정해보기_v1.0.html"><span class="top"><span class="no">M12</span><span class="ver">v1.0</span></span><span class="ttl">가설검정 해 보기</span><span class="go">열기 →</span></a>
-    <a class="card" href="module_v1/M13_검정결과읽기와두가지오류_v1.0.html"><span class="top"><span class="no">M13</span><span class="ver">v1.0</span></span><span class="ttl">검정 결과 읽기와 두 가지 오류</span><span class="go">열기 →</span></a>
-    <a class="card" href="module_v1/M14_두집단평균비교_v1.0.html"><span class="top"><span class="no">M14</span><span class="ver">v1.0</span></span><span class="ttl">두 집단 평균 비교</span><span class="go">열기 →</span></a>
-    <a class="card" href="module_v1/M15_세집단이상비교_v1.0.html"><span class="top"><span class="no">M15</span><span class="ver">v1.0</span></span><span class="ttl">세 집단 이상 비교</span><span class="go">열기 →</span></a>
-    <a class="card" href="module_v1/M16_비율비교_v1.0.html"><span class="top"><span class="no">M16</span><span class="ver">v1.0</span></span><span class="ttl">비율 비교</span><span class="go">열기 →</span></a>
-  </nav>
+  <main class="courses">
+    <a class="course" href="courses/course1.html">
+      <span class="cno">01</span>
+      <span>
+        <span class="cttl">데이터와 기술통계</span>
+        <span class="cmeta">7개 모듈 · M01–M07 · 데이터 분석의 목적부터 정규분포와 표준화까지</span>
+      </span>
+      <span class="cgo">들어가기 →</span>
+    </a>
 
-  <h2 class="sec">상관·회귀·통계 모형 <span>M17–M22</span></h2>
-  <nav class="grid" aria-label="상관 회귀 통계 모형 모듈">
-    <a class="card" href="module_v1/M17_산점도와상관_v1.0.html"><span class="top"><span class="no">M17</span><span class="ver">v1.0</span></span><span class="ttl">산점도와 상관</span><span class="go">열기 →</span></a>
-    <a class="card" href="module_v1/M18_단순선형회귀_v1.0.html"><span class="top"><span class="no">M18</span><span class="ver">v1.0</span></span><span class="ttl">단순선형회귀</span><span class="go">열기 →</span></a>
-    <a class="card" href="module_v1/M19_다중회귀_v1.0.html"><span class="top"><span class="no">M19</span><span class="ver">v1.0</span></span><span class="ttl">다중회귀</span><span class="go">열기 →</span></a>
-    <a class="card" href="module_v1/M20_회귀모형다듬기_v1.0.html"><span class="top"><span class="no">M20</span><span class="ver">v1.0</span></span><span class="ttl">회귀모형 다듬기</span><span class="go">열기 →</span></a>
-    <a class="card" href="module_v1/M21_일반화선형모형과로지스틱회귀_v1.0.html"><span class="top"><span class="no">M21</span><span class="ver">v1.0</span></span><span class="ttl">일반화선형모형과 로지스틱 회귀</span><span class="go">열기 →</span></a>
-    <a class="card" href="module_v1/M22_푸아송회귀와다양한일반화선형모형_v1.0.html"><span class="top"><span class="no">M22</span><span class="ver">v1.0</span></span><span class="ttl">푸아송 회귀와 다양한 일반화선형모형</span><span class="go">열기 →</span></a>
-  </nav>
-</main>
+    <a class="course" href="courses/course2.html">
+      <span class="cno">02</span>
+      <span>
+        <span class="cttl">추론통계와 가설검정</span>
+        <span class="cmeta">9개 모듈 · M08–M16 · 추론통계의 직관부터 비율 비교까지</span>
+      </span>
+      <span class="cgo">들어가기 →</span>
+    </a>
 
-<footer>module_v1 · M01–M22 (23개 파일) · 각 모듈 페이지 하단의 <strong>홈</strong> 버튼으로 돌아올 수 있습니다.</footer>
+    <a class="course" href="courses/course3.html">
+      <span class="cno">03</span>
+      <span>
+        <span class="cttl">상관·회귀·통계 모형</span>
+        <span class="cmeta">6개 모듈 · M17–M22 · 산점도와 상관부터 푸아송 회귀까지</span>
+      </span>
+      <span class="cgo">들어가기 →</span>
+    </a>
+  </main>
 
-<script>
-  // ←/→ 키로 모듈 간 이동 (모듈 페이지 내부 슬라이드 조작은 해당 페이지에서 처리)
-  const links = [...document.querySelectorAll('a.card')].map(a => a.getAttribute('href'));
-  document.addEventListener('keydown', e => {
-    if (e.key !== 'ArrowRight' && e.key !== 'ArrowLeft') return;
-    const i = links.findIndex(h => location.pathname.endsWith(h.split('/').pop()));
-    if (i < 0) return;
-    const next = links[i + (e.key === 'ArrowRight' ? 1 : -1)];
-    if (next) location.href = next;
-  });
-</script>
+  <footer>
+    <a href="index.html">← 프레임워크 홈</a>
+    <span>module_v1 · 2026</span>
+  </footer>
+</div>
 </body>
 </html>
