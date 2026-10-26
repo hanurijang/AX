@@ -264,7 +264,7 @@
      지정한 메일로 전송됩니다. 예: 'https://formsubmit.co/ajax/hong@example.com'
      (첫 전송 때 수신 주소로 '활성화' 메일 1회 → 링크 클릭 후부터 실제 수신)
      비워 두면 예전처럼 Google Forms이 새 창으로 열립니다.            */
-  var ENDPOINT = '';
+  var ENDPOINT = 'https://formsubmit.co/ajax/jjang70.dev@gmail.com';
   var LEGACY_FORM = 'https://docs.google.com/forms/d/e/1FAIpQLSecbQJY8_LfYNeL-xYTIir53bwHimeZrUeDhQL4UXZesrpyTQ/viewform';
   /* ──────────────────────────────────────────────────────────── */
 
@@ -342,14 +342,23 @@
       body: JSON.stringify(payload)
     }).then(function (res) {
       return res.text().then(function (t) {
-        var ok = res.ok && !/["']?(success|ok)["']?\s*:\s*["']?(false|\bno\b)/i.test(t);
-        if (!ok) throw new Error('relay ' + res.status);
+        var d = null;
+        try { d = JSON.parse(t); } catch (err) { d = null; }
+        var good = res.ok && (!d || String(d.success || d.ok) === 'true' || (!('success' in d) && !('ok' in d)));
+        if (!good) {
+          var why = (d && d.message) || '';
+          var e = new Error('relay'); e.activation = /activation/i.test(why); throw e;
+        }
       });
     }).then(function () {
       form.reset(); cnt.textContent = '0 / 1000';
       say('ok', '의견이 접수되었습니다. 감사합니다.');
-    }).catch(function () {
-      say('err', '전송하지 못했습니다. 잠시 후 다시 시도해 주세요.');
+    }).catch(function (err) {
+      if (err && err.activation) {                                 // 수신함 활성화 전
+        say('err', '수신 설정 확인 중입니다. 의견은 전달되었으니 잠시 후 다시 시도해 주세요.');
+      } else {
+        say('err', '전송하지 못했습니다. 잠시 후 다시 시도해 주세요.');
+      }
     }).then(function () { sendBtn.disabled = false; });
   });
 })();
