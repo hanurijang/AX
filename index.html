@@ -58,6 +58,7 @@
     transition: border-color .15s ease, box-shadow .15s ease, background .15s ease;
   }
   .fb textarea { min-height: 92px; resize: vertical; line-height: 1.55; }
+  .fb select:disabled { opacity: .5; cursor: not-allowed; }
   .fb select:focus, .fb textarea:focus, .fb input:focus {
     outline: none; background: #fff; border-color: var(--navy2);
     box-shadow: 0 0 0 3px rgba(44,65,112,.13);
@@ -181,8 +182,8 @@
         <label>과정
           <select name="course"><option value="">선택 안 함</option></select>
         </label>
-        <label>모듈 <span class="opt">(선택)</span>
-          <select name="module"><option value="">선택 안 함</option></select>
+        <label>모듈 <span class="opt">(선택 · 과정 선택 후)</span>
+          <select name="module" disabled><option value="">과정을 먼저 선택하세요</option></select>
         </label>
       </div>
       <label>의견 <span class="opt">(필수)</span>
@@ -275,28 +276,50 @@
   var st = panel.querySelector('.st');
   var sendBtn = form.querySelector('.send');
 
-  /* 과정·모듈 목록은 홈 카드에서 그대로 가져옵니다 */
+  /* 과정·모듈 목록은 홈 카드에서 그대로 가져와서
+     과정을 고르면 그 과정의 모듈만 드롭다운에 나타납니다 */
   var courseSel = form.elements.course, modSel = form.elements.module;
-  Array.prototype.forEach.call(document.querySelectorAll('a.course'), function (card, i) {
-    var title = card.querySelector('.cttl').textContent.trim();
-    var o = document.createElement('option');
-    o.value = title; o.textContent = (i + 1) + '. ' + title;
-    courseSel.appendChild(o);
-    var g = document.createElement('optgroup'); g.label = title;
-    Array.prototype.forEach.call(card.querySelectorAll('.mods .m'), function (m) {
-      var no = m.querySelector('.mno').textContent.trim();
-      var nm = m.lastElementChild.textContent.trim();
-      var mo = document.createElement('option');
-      mo.value = no; mo.textContent = no + ' · ' + nm;
-      g.appendChild(mo);
+  var MODULE_HINT = '과정을 먼저 선택하세요';
+
+  function fillSelect(sel, placeholder, items) {
+    sel.innerHTML = '';
+    var head = document.createElement('option');
+    head.value = ''; head.textContent = placeholder;
+    sel.appendChild(head);
+    (items || []).forEach(function (it) {
+      var o = document.createElement('option');
+      o.value = it.value; o.textContent = it.text;
+      sel.appendChild(o);
     });
-    modSel.appendChild(g);
+  }
+
+  var courses = Array.prototype.map.call(document.querySelectorAll('a.course'), function (card, i) {
+    var title = card.querySelector('.cttl').textContent.trim();
+    var mods = Array.prototype.map.call(card.querySelectorAll('.mods .m'), function (m) {
+      var no = m.querySelector('.mno').textContent.trim();
+      return { value: no, text: no + ' · ' + m.lastElementChild.textContent.trim() };
+    });
+    return { value: title, text: (i + 1) + '. ' + title, mods: mods };
   });
+
+  fillSelect(courseSel, '선택 안 함', courses);
+
+  /* 과정에 맞춰 모듈 드롭다운을 다시 구성 (과정 없으면 잠금) */
+  function syncModules() {
+    var picked = courses.filter(function (c) { return c.value === courseSel.value; })[0];
+    fillSelect(modSel, picked ? '선택 안 함' : MODULE_HINT, picked ? picked.mods : []);
+    modSel.disabled = !picked;
+  }
+  courseSel.addEventListener('change', syncModules);
+  syncModules();
 
   function setOpen(open) {
     panel.hidden = !open;
     btn.setAttribute('aria-expanded', open ? 'true' : 'false');
-    if (open) { msg.focus({ preventScroll: true }); panel.scrollIntoView({ block: 'nearest', behavior: 'smooth' }); }
+    if (open) {
+      (courseSel.value ? msg : courseSel).focus({ preventScroll: true });
+      panel.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+    }
   }
   btn.addEventListener('click', function () { setOpen(panel.hidden); });
   panel.querySelector('.cancel').addEventListener('click', function () { setOpen(false); btn.focus(); });
@@ -350,7 +373,7 @@
         }
       });
     }).then(function () {
-      form.reset(); cnt.textContent = '0 / 1000';
+      form.reset(); syncModules(); cnt.textContent = '0 / 1000';
       say('ok', '의견이 접수되었습니다. 감사합니다.');
     }).catch(function (err) {
       if (err && err.activation) {                                 // 수신함 활성화 전
