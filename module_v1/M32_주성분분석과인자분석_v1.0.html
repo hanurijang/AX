@@ -1,0 +1,981 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>주성분분석과 인자분석</title>
+<!-- M32 주성분분석과 인자분석 v1.0 · 기준 템플릿 v1.3로 제작 (2026-10-27) -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<style>
+:root{
+  --navy:#1B2A4A; --navy2:#2C4170; --navy3:#5B6E97; --navy-soft:#E4E9F2;
+  --ink:#22262E; --gray:#6B7280; --gray2:#9AA0AA; --panel:#EEF0F3; --line:#D5D9E0;
+  --amber:#E0A100; --amber-ink:#6E4F00; --amber-soft:#FCF3D9;
+  --ok:#23704F; --ok-soft:#E2F1E9; --ng:#B42318; --ng-soft:#FBE6E3;
+  --letterbox:#C7CCD4;
+}
+*{box-sizing:border-box}
+html,body{margin:0;height:100%;overflow:hidden;background:var(--letterbox)}
+body{font-family:"Pretendard Variable","Pretendard","Apple SD Gothic Neo","Malgun Gothic","Noto Sans KR",system-ui,sans-serif;color:var(--ink);-webkit-text-size-adjust:100%;font-feature-settings:"tnum"}
+button{font:inherit;color:inherit}
+:focus-visible{outline:3px solid var(--amber);outline-offset:2px;border-radius:4px}
+
+/* ---------- 16:9 무대 ---------- */
+.stage{position:absolute;left:50%;top:50%;width:960px;height:540px;transform:translate(-50%,-50%) scale(var(--s,1));transform-origin:center;background:#fff;overflow:hidden;box-shadow:0 10px 40px rgba(27,42,74,.25)}
+
+/* ---------- 상단 바: 모듈명 + 7단계 진행선 ---------- */
+.topbar{position:absolute;left:0;right:0;top:0;height:60px;background:var(--navy);display:flex;align-items:center}
+.brand{flex:0 0 200px;padding-left:22px;color:#fff;font-size:14px;font-weight:800;letter-spacing:-.3px;line-height:1.2;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.brand small{display:block;font-size:11px;font-weight:500;color:#A9B6CF;letter-spacing:0;margin-top:2px;overflow:hidden;text-overflow:ellipsis}
+.rail{position:relative;flex:1;height:60px;margin-right:22px}
+.rail .track{position:absolute;left:14px;right:14px;top:21px;height:3px;background:#3A4D78;border-radius:2px}
+.rail .fill{position:absolute;left:0;top:0;bottom:0;background:var(--amber);border-radius:2px;transition:width .35s ease}
+.station{position:absolute;top:10px;width:72px;margin-left:-36px;background:none;border:0;padding:0;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:4px}
+.station .dot{width:24px;height:24px;border-radius:50%;display:grid;place-items:center;font-size:11.5px;font-weight:800;background:var(--navy);color:#8E9DBD;border:2px solid #4A5D88;transition:all .25s}
+.station .lb{font-size:11.5px;color:#8E9DBD;white-space:nowrap}
+.station.done .dot{background:#C9D3E6;border-color:#C9D3E6;color:var(--navy)}
+.station.done .lb{color:#C9D3E6}
+.station.cur .dot{background:var(--amber);border-color:#FFE08A;color:var(--navy);transform:scale(1.12)}
+.station.cur .lb{color:#fff;font-weight:700}
+
+/* ---------- 화면 ---------- */
+.viewport{position:absolute;left:0;right:0;top:60px;bottom:46px}
+.slide{position:absolute;inset:0;padding:16px 36px 10px;display:none;flex-direction:column;gap:12px}
+.slide.on{display:flex;animation:fade .22s ease}
+@keyframes fade{from{opacity:0}to{opacity:1}}
+@media (prefers-reduced-motion:reduce){.slide.on{animation:none}.rail .fill,.station .dot{transition:none}}
+.sh{flex:0 0 auto}
+.sec{font-size:12.5px;font-weight:700;color:var(--navy3);display:flex;gap:8px;align-items:center;min-height:18px}
+h2{margin:3px 0 0;font-size:24px;line-height:1.3;font-weight:800;color:var(--navy);letter-spacing:-.6px;display:flex;gap:10px;align-items:flex-start}
+h2 .q{flex:0 0 auto;margin-top:2px;width:28px;height:28px;border-radius:6px;background:var(--navy);color:#fff;font-size:15px;display:grid;place-items:center}
+h2.big{font-size:30px;line-height:1.32}
+.body{flex:1 1 auto;min-height:0;display:grid;gap:24px}
+.split{grid-template-columns:1.2fr 1fr}
+.split.even{grid-template-columns:1fr 1fr}
+.full{grid-template-columns:1fr}
+.fig{background:var(--panel);border-radius:12px;padding:12px;min-height:0;display:flex;align-items:center;justify-content:center}
+.fig svg{width:100%;height:100%;display:block}
+.figcol{min-height:0;display:flex;flex-direction:column;gap:10px}
+.figcol .fig{flex:1 1 auto}
+.side{min-height:0;display:flex;flex-direction:column;gap:12px;justify-content:center}
+
+/* 핵심 문장: 40자 안팎, 1~2개 */
+.key{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:9px}
+.key li{position:relative;padding-left:16px;font-size:18.5px;line-height:1.42;font-weight:700;letter-spacing:-.4px}
+.key li::before{content:"";position:absolute;left:0;top:.28em;width:4px;height:1.05em;border-radius:2px;background:var(--navy2)}
+.key b{color:var(--navy);background:linear-gradient(transparent 62%,var(--amber-soft) 62%)}
+/* 해설 문단: 2~4문장, 150~250자 */
+.exp{margin:0;font-size:15px;line-height:1.62;letter-spacing:-.2px;color:var(--ink)}
+.exp b{color:var(--navy)}
+/* 연결 문장: 다음 소단원으로 넘기는 질문 */
+.next{margin:0;border-top:1px dashed var(--line);padding-top:9px;font-size:14px;font-weight:700;color:var(--navy2);display:flex;gap:8px;align-items:baseline}
+.next span{flex:0 0 auto;font-size:11.5px;font-weight:800;color:var(--navy3);background:var(--navy-soft);border-radius:4px;padding:0 6px;line-height:20px}
+/* 각주: 기호의 뜻과 출처 번호만 */
+.foot{flex:0 0 auto;font-size:12px;line-height:1.5;color:var(--gray);margin:0}
+.foot b{color:var(--ink)}
+.cite{font-size:.72em;font-weight:700;color:var(--navy3);vertical-align:super;line-height:0;margin-left:1px}
+.tag-v{display:inline-block;font-size:11px;font-weight:700;border-radius:4px;padding:0 6px;line-height:18px;white-space:nowrap;vertical-align:1px;color:var(--gray);background:#F3F4F6;box-shadow:inset 0 0 0 1px var(--line)}
+
+/* 핵심 수학 개념 박스 */
+.math{flex:0 0 auto;border-left:3px solid var(--navy3);background:#F6F7F9;border-radius:0 8px 8px 0;padding:9px 13px;font-size:13.5px;line-height:1.5}
+.math .mt{font-size:12px;font-weight:800;color:var(--navy3);margin-bottom:2px}
+.math .f{font-family:"Cambria Math","Times New Roman",serif;font-size:18px;font-weight:700;color:var(--navy);margin:1px 0 4px}
+.math .r{display:grid;grid-template-columns:34px 1fr;gap:6px}
+.math .r span:first-child{font-size:11.5px;font-weight:700;color:var(--gray2);padding-top:1px}
+.math .w{margin-top:5px;padding-top:5px;border-top:1px dashed var(--line);color:var(--ng);font-weight:700;font-size:12.5px}
+
+/* ---------- 하단 바 ---------- */
+.bottombar{position:absolute;left:0;right:0;bottom:0;height:46px;border-top:1px solid var(--line);display:flex;align-items:center;padding:0 22px 0 36px;gap:12px;background:#fff}
+.counter{font-size:13px;color:var(--gray);font-weight:600}
+.counter strong{color:var(--navy)}
+.spacer{flex:1}
+.nav{border:1.5px solid var(--navy);background:#fff;color:var(--navy);border-radius:8px;height:32px;padding:0 16px;font-size:14px;font-weight:700;cursor:pointer}
+.nav.primary{background:var(--navy);color:#fff}
+.nav:disabled{opacity:.3;cursor:default}
+
+/* ---------- 홈으로 ---------- */
+.home{display:inline-flex;align-items:center;gap:6px;height:32px;padding:0 13px;border-radius:8px;border:1.5px solid var(--navy-soft);background:#fff;color:var(--navy2);font-size:13.5px;font-weight:700;line-height:1;text-decoration:none;white-space:nowrap}
+.home svg{width:14px;height:14px;flex:0 0 auto;display:block}
+.home:hover{background:var(--navy-soft);border-color:var(--navy3);color:var(--navy)}
+.home:focus-visible{outline:3px solid var(--amber);outline-offset:2px}
+@media (prefers-reduced-motion:reduce){.home{transition:none}}
+
+/* ① 학습개요 */
+.meta{display:grid;grid-template-columns:auto 1fr;gap:6px 14px;margin:0;font-size:14px}
+.meta dt{font-weight:700;color:var(--gray)}
+.meta dd{margin:0;font-weight:700;color:var(--navy)}
+.prevlink{background:var(--panel);border-radius:10px;padding:12px 14px;font-size:14.5px;line-height:1.55}
+.prevlink small{display:block;font-size:12px;font-weight:800;color:var(--navy3);margin-bottom:3px}
+
+/* ② 학습목표: 목표 → 문항 → 실습 연결 */
+.gmap{display:grid;grid-template-columns:44px 1fr 150px 150px;align-items:stretch;row-gap:12px;column-gap:0}
+.gmap .hd{font-size:12px;font-weight:700;color:var(--gray);padding:0 14px 2px}
+.gmap .gn{background:var(--navy);color:#fff;font-weight:800;font-size:18px;display:grid;place-items:center;border-radius:10px 0 0 10px}
+.gmap .gt{background:var(--panel);padding:14px 18px;font-size:17px;font-weight:700;line-height:1.42;letter-spacing:-.3px;display:flex;align-items:center}
+.gmap .gt b{color:var(--navy)}
+.gmap .ga,.gmap .gp{background:var(--panel);display:flex;align-items:center;padding:0 10px;border-left:2px solid #fff}
+.gmap .gp{border-radius:0 10px 10px 0}
+.jump{border:1.5px solid var(--navy3);background:#fff;border-radius:7px;padding:6px 10px;font-size:13px;font-weight:700;color:var(--navy);cursor:pointer;text-align:left;line-height:1.3;width:100%}
+.jump:hover{background:var(--navy-soft)}
+
+/* ④ 본문 정리 표 */
+.sumtbl{width:100%;border-collapse:separate;border-spacing:0;font-size:14.5px;line-height:1.5}
+.sumtbl th{background:var(--navy);color:#fff;font-weight:800;text-align:left;padding:10px 14px}
+.sumtbl th:first-child{border-radius:10px 0 0 0;width:150px}
+.sumtbl th:last-child{border-radius:0 10px 0 0}
+.sumtbl td{padding:11px 14px;border-bottom:1px solid var(--line);vertical-align:top}
+.sumtbl td:first-child{font-weight:800;color:var(--navy)}
+.sumtbl tr:nth-child(even) td{background:#F8F9FB}
+
+/* ⑤ 형성평가 */
+.qchips{display:flex;gap:6px}
+.qchips span{font-size:11.5px;font-weight:700;color:var(--navy2);background:var(--navy-soft);border-radius:4px;padding:0 7px;line-height:19px}
+h2.stem{font-size:21px;line-height:1.42;font-weight:800}
+.opts{display:grid;gap:9px;align-content:center}
+.opts.ox{grid-template-columns:1fr 1fr}
+.opt{border:1.5px solid var(--line);background:#fff;border-radius:10px;padding:11px 14px;text-align:left;font-size:16px;font-weight:600;cursor:pointer;display:flex;gap:10px;align-items:center}
+.opt .n{flex:0 0 26px;height:26px;border-radius:50%;background:var(--panel);display:grid;place-items:center;font-size:13px;font-weight:800;color:var(--navy)}
+.opts.ox .opt{justify-content:center;font-size:40px;font-weight:800;padding:22px;color:var(--navy)}
+.opt:hover:not(:disabled){border-color:var(--navy3);background:#F8F9FB}
+.opt:disabled{cursor:default}
+.opt.ok{border-color:var(--ok);background:var(--ok-soft);color:var(--ok)}
+.opt.ok .n{background:var(--ok);color:#fff}
+.opt.ng{border-color:var(--ng);background:var(--ng-soft);color:var(--ng)}
+.opt.ng .n{background:var(--ng);color:#fff}
+.fbp{background:var(--panel);border-radius:12px;padding:18px 20px;display:flex;flex-direction:column;gap:10px;font-size:14.5px;line-height:1.6}
+.fbp .empty{color:var(--gray);margin:auto 0}
+.fbp .verdict{font-size:19px;font-weight:800}
+.fbp.ok{background:var(--ok-soft)} .fbp.ok .verdict{color:var(--ok)}
+.fbp.ng{background:var(--ng-soft)} .fbp.ng .verdict{color:var(--ng)}
+.fbp .back{align-self:flex-start}
+.fbp .tally{margin-top:auto;font-size:12.5px;color:var(--gray);font-weight:600}
+
+/* ⑥ 실습 */
+.plabel{font-size:12px;font-weight:800;color:var(--navy3);margin-bottom:6px}
+.pcol{min-height:0;display:flex;flex-direction:column}
+.mbtns{display:flex;flex-wrap:nowrap;gap:3px;margin-bottom:8px}
+.mbtn{border:1px solid var(--line);background:#fff;border-radius:6px;padding:2px 6px;font-size:12px;cursor:pointer;min-width:26px}
+.mbtn.on{background:var(--navy);border-color:var(--navy);color:#fff}
+.ctrl{display:flex;align-items:center;gap:10px;font-size:14px;font-weight:600}
+input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
+.stats{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.stats.three{grid-template-columns:1fr 1fr 1fr}
+.stats div{background:var(--panel);border-radius:10px;padding:8px 12px}
+.stats small{display:block;font-size:11.5px;color:var(--gray);font-weight:600;line-height:1.35}
+.stats strong{font-size:22px;color:var(--navy);letter-spacing:-.4px}
+.pmsg{font-size:14.5px;font-weight:700;min-height:22px;line-height:1.45}
+.pmsg.ok{color:var(--ok)} .pmsg.ng{color:var(--ng)}
+.think{flex:0 0 auto;background:var(--amber-soft);border-radius:10px;padding:9px 14px;font-size:14.5px;font-weight:700;color:var(--amber-ink);display:flex;gap:10px;align-items:baseline}
+.think span{flex:0 0 auto;font-size:12px;font-weight:800}
+.howto{font-size:13.5px;color:var(--gray);line-height:1.5;margin:0}
+.btn{border:0;background:var(--navy);color:#fff;border-radius:8px;height:32px;padding:0 14px;font-size:13.5px;font-weight:700;cursor:pointer}
+.btn.ghost{background:#fff;color:var(--navy);box-shadow:inset 0 0 0 1.5px var(--navy)}
+.pool{flex:1;min-height:0;display:grid;grid-template-columns:1fr 1fr;align-content:start;gap:8px;padding:10px;border:1.5px dashed var(--line);border-radius:10px;background:#FAFBFC}
+.dcard{background:#fff;border:1.5px solid var(--navy3);border-radius:8px;padding:7px 10px;font-size:13.5px;font-weight:600;line-height:1.4;cursor:grab;user-select:none;-webkit-user-select:none;touch-action:none}
+.dcard.sel{box-shadow:0 0 0 3px var(--amber)}
+.dcard.ok{border-color:var(--ok);background:var(--ok-soft);color:var(--ok);cursor:default;font-size:12.5px;padding:5px 8px}
+.dcard.shake{animation:shake .35s;border-color:var(--ng);background:var(--ng-soft)}
+@keyframes shake{25%{transform:translateX(-5px)}75%{transform:translateX(5px)}}
+.ghostc{position:absolute;pointer-events:none;z-index:50;opacity:.92;box-shadow:0 8px 20px rgba(27,42,74,.25);cursor:grabbing}
+.bins{flex:1 0 auto;min-height:0;display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.bin .dcard{font-size:12px;padding:3px 7px;line-height:1.3}
+.p2row{display:flex;gap:10px;align-items:center}.p2row .pmsg{flex:1;margin:0}.p2row .btn{flex:0 0 auto}
+.bin{border:1.5px solid var(--line);border-radius:10px;padding:6px;display:flex;flex-direction:column;gap:6px;background:#fff;cursor:pointer;min-height:0}
+.bin h4{margin:0;background:var(--navy);color:#fff;border-radius:6px;text-align:center;font-size:14px;padding:4px}
+.bin.hover{border-color:var(--amber);background:var(--amber-soft)}
+.res{display:none;flex-direction:column;gap:8px}
+.res.on{display:flex}
+
+/* ⑦ 용어해설·참고자료 */
+.gl{display:grid;grid-template-columns:1fr 1fr;grid-template-rows:repeat(3,1fr);gap:10px 22px;min-height:0}
+.gi{border-top:2px solid var(--navy);padding:8px 0 0;display:flex;flex-direction:column;gap:3px;min-height:0}
+.gi .t{font-size:16.5px;font-weight:800;color:var(--navy);display:flex;gap:6px;align-items:baseline;flex-wrap:wrap}
+.gi .t em{font-style:normal;font-weight:500;font-size:12.5px;color:var(--gray)}
+.gi .t i{font-style:normal;font-size:12px;font-weight:800;color:var(--navy3);width:22px}
+.gi .d{font-size:14px;line-height:1.5}
+.gi .e{font-size:12.5px;line-height:1.45;color:var(--gray)}
+.gi .e strong{color:var(--navy3)}
+.refs{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:8px;font-size:13.5px;line-height:1.5}
+.refs li{display:grid;grid-template-columns:30px 1fr;gap:4px}
+.refs li span{font-weight:800;color:var(--navy3)}
+.refs a{color:var(--navy2);word-break:break-all}
+.nextmod{background:var(--navy);color:#fff;border-radius:12px;padding:18px 22px;display:flex;flex-direction:column;gap:6px}
+.nextmod small{font-size:12px;font-weight:700;color:#A9B6CF}
+.nextmod strong{font-size:19px;line-height:1.45;letter-spacing:-.3px}
+
+.rotate{position:fixed;left:0;right:0;bottom:max(14px,env(safe-area-inset-bottom));text-align:center;font-size:13px;color:#3A4560;display:none}
+@media (orientation:portrait) and (max-width:700px){.rotate{display:block}}
+</style>
+</head>
+<body>
+<div class="stage" id="stage">
+  <header class="topbar">
+    <!-- [교체] 모듈명 / 과정명·모듈 번호 (장·절 번호는 쓰지 않음) -->
+    <div class="brand" id="brand">주성분분석과 인자분석<small>베이즈·기계학습·수리 모형 · M32</small></div>
+    <nav class="rail" id="rail" aria-label="학습 단계"><div class="track"><div class="fill" id="fill"></div></div></nav>
+  </header>
+
+  <main class="viewport" id="vp">
+    <!-- ① 학습개요 ─────────────────────────────── -->
+    <section class="slide" data-step="0">
+      <div class="sh"><div class="sec">학습개요</div>
+        <h2 class="big">상관이 있는 많은 변수를 소수의 축으로 요약합니다</h2></div>
+      <div class="body split">
+        <div class="fig"><svg id="m32-ov" viewBox="0 0 440 260" role="img" aria-label="검사 5항목을 주성분분석으로 강도·인성 2개 축으로 요약하고, 인자분석은 잠재 인자가 변수를 만든다고 가정하는 흐름"></svg></div>
+        <div class="side">
+          <div class="prevlink"><small>지난 모듈에서는</small>MCMC 방법으로 사후분포를 구하고, 이표본 비교·푸아송 회귀·계층적 베이지안 모형에 베이즈 통계를 적용했습니다.<small style="margin-top:8px">이번 모듈에서는</small>변수가 많은 다변량 데이터에서 변수의 수를 줄이는 차원 축소와, 그 대표 방법인 주성분분석과 인자분석을 배웁니다.</div>
+          <dl class="meta"><dt>학습 시간</dt><dd>약 35분</dd><dt>본문</dt><dd>소단원 3개</dd><dt>실습</dt><dd>조작형 · 분류형 · 추정형</dd></dl>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" data-step="0">
+      <div class="sh"><div class="sec">학습개요 · 이 모듈의 예시</div><h2>강판 시편 50개의 검사 5항목을 두 개의 축으로 요약합니다</h2></div>
+      <div class="body split">
+        <div class="fig"><svg id="m32-case" viewBox="0 0 440 250" role="img" aria-label="검사 5항목 사이의 상관행렬 히트맵, 강도 3항목끼리와 인성 2항목끼리 상관이 강함"></svg></div>
+        <div class="side">
+          <ul class="key"><li>다섯 항목이지만 실은 두 묶음으로 움직입니다.</li></ul>
+          <p class="exp">냉연 강판 시편 50개마다 인장강도, 항복강도, 경도, 연신율, 충격흡수에너지 5항목을 검사했습니다(예시값). 상관을 보면 인장강도·항복강도·경도 세 항목끼리, 연신율·충격에너지 두 항목끼리 강하게 함께 움직이고, 두 묶음 사이는 거의 무상관입니다. 다섯 개의 숫자를 다 보지 않고도 시편의 특징을 파악할 방법을 찾아봅니다.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ② 학습목표 ─────────────────────────────── -->
+    <section class="slide" data-step="1">
+      <div class="sh"><div class="sec">학습목표</div><h2>이 모듈을 마치면 이렇게 할 수 있습니다</h2></div>
+      <div class="body full" style="align-content:center">
+        <div class="gmap">
+          <div></div><div class="hd">목표</div><div class="hd">확인하는 문항</div><div class="hd">연결 실습</div>
+          <div class="gn">1</div><div class="gt"><span>차원 축소가 필요한 상황을 <b>판단한다</b>.</span></div>
+          <div class="ga"><button class="jump" data-jump="q1">문항 1·2</button></div><div class="gp"><button class="jump" data-jump="p2">실습 2 분류</button></div>
+          <div class="gn">2</div><div class="gt"><span>기여율과 누적기여율을 <b>계산한다</b>.</span></div>
+          <div class="ga"><button class="jump" data-jump="q3">문항 3·4</button></div><div class="gp"><button class="jump" data-jump="p1">실습 1 조작</button></div>
+          <div class="gn">3</div><div class="gt"><span>주성분점수와 인자분석 결과를 <b>해석한다</b>.</span></div>
+          <div class="ga"><button class="jump" data-jump="q5">문항 5·6</button></div><div class="gp"><button class="jump" data-jump="p3">실습 3 추정</button></div>
+        </div>
+      </div>
+      <p class="foot">버튼을 누르면 해당 문항이나 실습 화면으로 바로 이동합니다.</p>
+    </section>
+
+    <!-- ③ 일상의 예시 ─────────────────────────────── -->
+    <section class="slide" data-step="2">
+      <div class="sh"><div class="sec">일상의 예시 1/4</div><h2>맛을 수십 가지로 따지지 않고 “맛있다” 한마디로 정리합니다</h2></div>
+      <div class="body split">
+        <div class="fig"><svg viewBox="0 0 440 250" role="img" aria-label="단맛, 짠맛, 매운맛, 온도, 식감 등 여러 변수를 맛있다·맛없다 하나로 요약">
+          <g font-size="11.5" font-weight="700" fill="#1B2A4A" text-anchor="middle">
+            <rect x="20" y="20" width="90" height="30" rx="8" fill="#F3F5F9"/><text x="65" y="40">단맛</text>
+            <rect x="20" y="60" width="90" height="30" rx="8" fill="#F3F5F9"/><text x="65" y="80">짠맛</text>
+            <rect x="20" y="100" width="90" height="30" rx="8" fill="#F3F5F9"/><text x="65" y="120">매운맛</text>
+            <rect x="20" y="140" width="90" height="30" rx="8" fill="#F3F5F9"/><text x="65" y="160">온도</text>
+            <rect x="20" y="180" width="90" height="30" rx="8" fill="#F3F5F9"/><text x="65" y="200">식감</text>
+          </g>
+          <g stroke="#5B6E97" stroke-width="2" fill="none"><path d="M112 35 C200 35 220 115 270 115"/><path d="M112 75 C200 75 220 115 270 115"/><path d="M112 115 L270 115"/><path d="M112 155 C200 155 220 115 270 115"/><path d="M112 195 C200 195 220 115 270 115"/></g>
+          <rect x="274" y="80" width="146" height="70" rx="14" fill="#1B2A4A"/><text x="347" y="112" text-anchor="middle" font-size="15" font-weight="800" fill="#fff">“맛있다”</text><text x="347" y="134" text-anchor="middle" font-size="11" fill="#C9D3E6">한 단어로 요약</text>
+        </svg></div>
+        <div class="side">
+          <ul class="key"><li>많은 정보를 적은 수의 말로 요약합니다.</li></ul>
+          <p class="exp">식사를 할 때 우리는 단맛, 짠맛, 매운맛부터 요리 온도와 식감까지 다양한 변수를 느끼지만, 결국 ‘맛있다’ 또는 ‘맛없다’처럼 적은 수의 말로 정리해 판단합니다. 사람을 소개할 때도 수많은 특징 대신 ‘성실하다’ 같은 몇 마디로 요약합니다. 이처럼 우리는 일상생활에서도 많은 정보를 적은 수의 변수로 합성해 판단하는 습성이 있습니다.</p>
+          <p class="next"><span>본문에서</span>4-1 변수의 차원으로 이어집니다.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" data-step="2">
+      <div class="sh"><div class="sec">일상의 예시 2/4</div><h2>단체 사진은 사람들이 가장 넓게 보이는 방향에서 찍습니다</h2></div>
+      <div class="body split">
+        <div class="fig"><svg viewBox="0 0 440 250" role="img" aria-label="일렬로 선 사람들을 옆에서 찍으면 겹치고, 정면에서 찍으면 모두 보임">
+          <g fill="#2B8CC4"><circle cx="120" cy="80" r="10"/><circle cx="160" cy="100" r="10"/><circle cx="200" cy="120" r="10"/><circle cx="240" cy="140" r="10"/><circle cx="280" cy="160" r="10"/><circle cx="320" cy="180" r="10"/></g>
+          <path d="M100 70 L340 190" stroke="#E0A100" stroke-width="2" stroke-dasharray="6 4"/>
+          <rect x="350" y="40" width="70" height="40" rx="8" fill="#23704F"/><text x="385" y="65" text-anchor="middle" font-size="11" font-weight="800" fill="#fff">정면 ○</text>
+          <rect x="350" y="190" width="70" height="40" rx="8" fill="#B42318"/><text x="385" y="215" text-anchor="middle" font-size="11" font-weight="800" fill="#fff">옆 ✕</text>
+          <text x="60" y="228" font-size="12" font-weight="700" fill="#1B2A4A">사람들이 가장 넓게 퍼져 보이는 방향 = 정보가 많은 방향</text>
+        </svg></div>
+        <div class="side">
+          <ul class="key"><li>가장 넓게 퍼져 보이는 방향에 정보가 많습니다.</li></ul>
+          <p class="exp">비스듬히 줄지어 선 사람들을 줄의 끝에서 찍으면 앞사람에게 가려 몇 명만 보이지만, 줄이 길게 펼쳐지는 방향에서 찍으면 모두가 구분되어 보입니다. 같은 장면이라도 사람들이 가장 넓게 퍼져 보이는 방향을 고르면 사진 한 장에 정보를 가장 많이 담을 수 있습니다. 데이터에도 퍼짐이 가장 큰 방향을 찾는 방법이 있습니다.</p>
+          <p class="next"><span>본문에서</span>4-2 주성분분석으로 이어집니다.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" data-step="2">
+      <div class="sh"><div class="sec">일상의 예시 3/4</div><h2>국어·영어 점수 뒤에는 ‘언어 능력’이라는 보이지 않는 힘이 있습니다</h2></div>
+      <div class="body split">
+        <div class="fig"><svg viewBox="0 0 440 250" role="img" aria-label="보이지 않는 언어 능력이 국어, 영어, 논술 점수를 함께 만들어 냄">
+          <defs><marker id="d3" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10z" fill="#C2416E"/></marker></defs>
+          <ellipse cx="100" cy="125" rx="70" ry="40" fill="#FBE4F0" stroke="#C2416E" stroke-width="2" stroke-dasharray="6 4"/><text x="100" y="122" text-anchor="middle" font-size="12.5" font-weight="800" fill="#C2416E">언어 능력</text><text x="100" y="140" text-anchor="middle" font-size="10" fill="#6B7280">(보이지 않음)</text>
+          <g font-size="12" font-weight="800" text-anchor="middle" fill="#1B2A4A"><rect x="280" y="40" width="110" height="36" rx="8" fill="#EEF4FB" stroke="#2B8CC4"/><text x="335" y="63">국어 점수</text><rect x="280" y="107" width="110" height="36" rx="8" fill="#EEF4FB" stroke="#2B8CC4"/><text x="335" y="130">영어 점수</text><rect x="280" y="174" width="110" height="36" rx="8" fill="#EEF4FB" stroke="#2B8CC4"/><text x="335" y="197">논술 점수</text></g>
+          <g stroke="#C2416E" stroke-width="2.2"><line x1="168" y1="110" x2="276" y2="60" marker-end="url(#d3)"/><line x1="170" y1="125" x2="276" y2="125" marker-end="url(#d3)"/><line x1="168" y1="140" x2="276" y2="190" marker-end="url(#d3)"/></g>
+          <text x="220" y="236" text-anchor="middle" font-size="11.5" font-weight="700" fill="#1B2A4A">보이는 점수는 보이지 않는 원인의 결과</text>
+        </svg></div>
+        <div class="side">
+          <ul class="key"><li>보이는 값 뒤에 공통된 원인을 가정합니다.</li></ul>
+          <p class="exp">국어, 영어, 논술 점수가 함께 높은 학생이 많다면, 그 뒤에는 직접 잴 수는 없지만 세 점수를 함께 끌어올리는 ‘언어 능력’ 같은 힘이 있다고 생각할 수 있습니다. 눈에 보이는 여러 점수를 보이지 않는 소수의 원인이 만들어 낸 결과로 보는 관점입니다. 단, 그런 힘이 정말 있는지는 데이터만으로 증명할 수 없고 배경지식이 필요합니다.</p>
+          <p class="next"><span>본문에서</span>4-3 인자분석으로 이어집니다.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" data-step="2">
+      <div class="sh"><div class="sec">일상의 예시 4/4</div><h2>현장에서는? 검사 항목이 늘수록 품질을 한눈에 보기 어려워집니다</h2></div>
+      <div class="body split even">
+        <div class="fig"><svg viewBox="0 0 420 250" role="img" aria-label="세 장면이 주성분분석과 인자분석으로 이어지는 그림">
+          <defs><marker id="b2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10z" fill="#5B6E97"/></marker></defs>
+          <g font-size="13" font-weight="700" fill="#1B2A4A" text-anchor="middle">
+            <rect x="14" y="36" width="150" height="48" rx="10" fill="#fff" stroke="#5B6E97" stroke-width="1.5"/><text x="89" y="65">한마디로 요약</text>
+            <rect x="14" y="101" width="150" height="48" rx="10" fill="#fff" stroke="#5B6E97" stroke-width="1.5"/><text x="89" y="130">가장 넓은 방향</text>
+            <rect x="14" y="166" width="150" height="48" rx="10" fill="#fff" stroke="#5B6E97" stroke-width="1.5"/><text x="89" y="195">보이지 않는 원인</text>
+          </g>
+          <g stroke="#5B6E97" stroke-width="2" fill="none"><path d="M166 60 C220 60 220 112 254 120" marker-end="url(#b2)"/><path d="M166 125 L254 125" marker-end="url(#b2)"/><path d="M166 190 C220 190 220 138 254 130" marker-end="url(#b2)"/></g>
+          <rect x="258" y="84" width="150" height="82" rx="12" fill="#1B2A4A"/>
+          <text x="333" y="116" text-anchor="middle" font-size="15" font-weight="800" fill="#fff">주성분분석과</text><text x="333" y="136" text-anchor="middle" font-size="15" font-weight="800" fill="#fff">인자분석</text>
+          <text x="333" y="156" text-anchor="middle" font-size="11" fill="#C9D3E6">차원 축소</text>
+        </svg></div>
+        <div class="side">
+          <p class="exp">세 장면은 많은 정보를 적은 말로 요약하는 습성, 정보가 가장 많이 보이는 방향을 고르는 방법, 보이는 값 뒤에 공통된 원인을 가정하는 관점으로 이어집니다. 강판 검사 항목이 수십 개로 늘어나면 시편 품질을 한눈에 보기 어려운데, 이때 몇 개의 축으로 요약하면 이상한 시편을 빨리 찾고 분석도 안정적으로 할 수 있습니다.</p>
+          <p class="next"><span>다음 질문</span>변수가 많으면 무엇이 문제일까?</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ④ 본문 ─────────────────────────────── -->
+    <section class="slide" data-step="3" id="s-4-1a">
+      <div class="sh"><div class="sec">4-1 변수의 차원</div><h2><span class="q">Q</span>변수가 많으면 정보도 그만큼 많을까요?</h2></div>
+      <div class="body split even">
+        <div class="fig"><svg id="m32-dim" viewBox="0 0 420 270" role="img" aria-label="두께 mm와 μm는 완전 상관이라 하나로 충분, 인장강도와 항복강도는 강한 상관이라 강도 하나로 요약 가능"></svg></div>
+        <div class="side">
+          <ul class="key"><li><b>차원</b>: 데이터 변수의 개수</li><li>상관이 있는 변수는 <b>차원 축소</b>로 요약</li></ul>
+          <p class="exp">데이터 변수의 개수를 차원이라 부릅니다. 시편마다 검사 5항목을 기록했다면 5차원 데이터이며, 검사 항목을 추가하는 만큼 차원이 늘어납니다. ‘차원이 높다’고 하면 정보가 많으니 좋을 것처럼 생각되지만, 실은 ‘쓸데없이 많기만’ 한 상황이 종종 생깁니다. 극단적인 예로 시편 두께를 mm와 μm 단위로 따로 기록하면, 두 변수는 같은 특징을 나타낸 완전한 상관(r = 1)이어서 어느 한쪽만 있으면 충분합니다. 인장강도와 항복강도처럼 강한 양의 상관(r = 0.88)을 나타낼 때에도 ‘강도’라는 1개 변수로 요약할 수 있습니다. 이처럼 데이터의 특징을 유지하면서 변수의 수를 줄이는 것을 차원 축소라 합니다.</p>
+          <p class="next"><span>다음 질문</span>왜 변수를 줄여야 할까?</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" data-step="3" id="s-4-1b">
+      <div class="sh"><div class="sec">4-1 변수의 차원</div><h2><span class="q">Q</span>변수가 많으면 분석에서 어떤 문제가 생길까요?</h2></div>
+      <div class="body split even">
+        <div class="fig"><svg id="m32-why" viewBox="0 0 420 270" role="img" aria-label="변수의 수를 줄이는 세 가지 이유: 고차원 해석의 어려움, 다중공선성, 차원의 저주"></svg></div>
+        <div class="side">
+          <ul class="key"><li><b>다중공선성</b>: 상관 강한 설명변수 → 불안정</li><li><b>차원의 저주</b>: 변수에 비해 표본 부족</li></ul>
+          <p class="exp">변수의 수를 줄이는 것은 단순히 쓸데없는 데이터가 많기 때문만은 아닙니다. 첫 번째로 고차원 데이터는 해석이 어렵습니다. 차원을 축소해 2개의 합성 변수로 변환하면 2차원 평면에 시편을 플롯해 시각화하므로 해석이 쉬워집니다. 또 다중회귀분석에서는 설명변수끼리 강한 상관이 있는 다중공선성이 있으면 회귀계수 추정이 불안정해지며, 변수의 수가 많을수록 그런 쌍이 늘어납니다. 상관이 있는 변수가 없어지도록 차원을 축소한 뒤 다중회귀분석을 하는 것이 좋습니다. 그 밖에 변수가 많아 파라미터 수가 늘면서 표본크기가 충분하지 않으면 회귀계수를 올바르게 추정할 수 없는 차원의 저주가 있습니다.</p>
+          <p class="next"><span>다음 질문</span>가장 기본적인 차원 축소 방법은?</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" data-step="3" id="s-4-2a">
+      <div class="sh"><div class="sec">4-2 주성분분석</div><h2><span class="q">Q</span>새로운 축은 어느 방향으로 잡아야 할까요?</h2></div>
+      <div class="body split even">
+        <div class="fig"><svg id="m32-axis" viewBox="0 0 420 270" role="img" aria-label="표준화한 인장강도와 경도의 산점도에 데이터 퍼짐이 가장 큰 방향 PC1과 수직인 PC2를 그림, 분산이 PC1에 몰림"></svg></div>
+        <div class="side">
+          <ul class="key"><li><b>주성분분석</b>: 퍼짐이 가장 큰 방향으로 새 축</li><li><b>제1주성분</b>(PC1)에 정보를 압축합니다.</li></ul>
+          <p class="exp">차원 축소에 사용하는 가장 기본적인 방법이 주성분분석(PCA)입니다<span class="cite">[1]</span>. 상관이 있는 변수끼리는 하나로 정리될 수 있다는 아이디어에 기반을 두며, 새로운 축을 설정해 그 축 위의 값으로 데이터를 새롭게 바라봅니다. 인장강도와 경도처럼 강한 상관이 있을 때, 새로운 축은 데이터 퍼짐이 가장 커지는 방향으로 설정하며 이를 PC1(제1주성분)이라 합니다. 그리고 PC1과 수직이고 퍼짐이 가장 커지는 방향으로 두 번째 축 PC2를 설정합니다. 각 값의 위치 정보는 평균으로부터의 거리, 즉 퍼짐으로 나타나므로 PC1 방향의 퍼짐이 크다는 것은 PC1에 많은 정보가 있다는 뜻입니다. 원래 각 축에 있던 정보를 PC1으로 압축해 넣는 느낌입니다.</p>
+          <p class="next"><span>다음 질문</span>몇 개의 축이면 충분할까?</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" data-step="3" id="s-4-2b">
+      <div class="sh"><div class="sec">4-2 주성분분석</div><h2><span class="q">Q</span>주성분 몇 개로 정보를 얼마나 담을 수 있을까요?</h2></div>
+      <div class="body split even">
+        <div class="figcol">
+          <div class="fig"><svg id="m32-cont" viewBox="0 0 420 150" role="img" aria-label="검사 5항목 주성분분석의 기여율 막대와 누적기여율 선, PC2까지 88.3%"></svg></div>
+          <div class="math">
+            <div class="mt">핵심 수학 개념 · 주성분과 기여율</div>
+            <div class="f">Z<sub>1</sub> = a<sub>1</sub>x<sub>1</sub> + a<sub>2</sub>x<sub>2</sub> + … + a<sub>M</sub>x<sub>M</sub></div>
+            <div class="r"><span>기호</span><span>a: 고유벡터, M: 변수 수, 기여율 = 고윳값 ÷ 총합</span></div>
+            <div class="r"><span>계산</span><span>(2.66 + 1.76) ÷ 5 ≈ 0.883 → PC2까지 88.3%</span></div>
+          </div>
+        </div>
+        <div class="side">
+          <ul class="key"><li><b>기여율</b>: 각 주성분이 가진 정보의 비율</li><li><b>누적기여율</b>: 제k주성분까지의 합</li></ul>
+          <p class="exp">주성분 Z<sub>1</sub>은 원래 변수에 계수를 곱해 더한 값이며, Z<sub>1</sub>의 분산이 최대가 되도록 계수를 구합니다. PC2 이후는 그때까지 얻은 주성분과 직교하도록 설정하므로 새로운 축의 변수와는 무상관이 됩니다. 구체적으로는 원래 데이터의 상관행렬(변수 단위나 척도가 다를 때)의 고윳값과 고유 벡터를 구하며, 계수는 고유 벡터, 각 고윳값을 고윳값 총합으로 나눈 것은 기여율에 대응합니다. 변수의 수를 M이라 하면 제M주성분까지 만들 수 있고, ‘제1부터 제k주성분까지 전체 정보의 몇 %가 포함되는지’를 누적기여율이라 합니다. 검사 5항목에서는 PC1 53.1%, PC2 35.2%로 제2주성분까지 88.3%를 가지므로 2개로 줄여도 충분하다고 볼 수 있습니다.</p>
+          <p class="next"><span>다음 질문</span>각 주성분은 무엇을 뜻할까?</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" data-step="3" id="s-4-2c">
+      <div class="sh"><div class="sec">4-2 주성분분석</div><h2><span class="q">Q</span>PC1과 PC2는 각각 어떤 축일까요?</h2></div>
+      <div class="body split even">
+        <div class="fig"><svg id="m32-load" viewBox="0 0 420 270" role="img" aria-label="주성분부하량 표와 시편 50개의 주성분점수 산점도, PC1은 강도, PC2는 인성"></svg></div>
+        <div class="side">
+          <ul class="key"><li><b>주성분부하량</b>: 주성분과 원래 변수의 상관</li><li><b>주성분점수</b>: 시편을 새 축으로 나타낸 값</li></ul>
+          <p class="exp">각 주성분의 값과 원래 각 변수의 상관계수를 주성분부하량(인자부하량)이라 합니다. PC1은 인장강도(0.95), 항복강도(0.93), 경도(0.92)와 강한 양의 상관을 나타내므로 ‘강도 성분’, PC2는 연신율(0.92)과 충격에너지(0.93)와 상관이 강하므로 ‘인성 성분’이라 해석할 수 있습니다. 원래 데이터를 새로운 변수로 나타낸 것을 주성분점수라 하며, 시편 49는 PC1이 크고 PC2가 작아 강도는 높지만 인성은 낮고, 시편 40은 둘 다 커서 양쪽 모두 우수한 시편임을 알 수 있습니다. 변수끼리 무상관이면 차원 축소가 잘 진행되지 않습니다<span class="cite">[2]</span>.</p>
+          <p class="next"><span>다음 질문</span>변수 뒤의 원인을 가정한다면?</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" data-step="3" id="s-4-3a">
+      <div class="sh"><div class="sec">4-3 인자분석</div><h2><span class="q">Q</span>검사 항목 뒤에 보이지 않는 원인이 있다면?</h2></div>
+      <div class="body split even">
+        <div class="fig"><svg id="m32-fa" viewBox="0 0 420 270" role="img" aria-label="공통인자 강도와 인성이 다섯 검사 항목을 만들고, 각 항목에 독립인자가 작용하는 인자분석 구조"></svg></div>
+        <div class="side">
+          <ul class="key"><li><b>인자분석</b>: 소수의 <b>공통인자</b>가 원인</li><li>각 변수에는 <b>독립인자</b>(오차)가 작용</li></ul>
+          <p class="exp">원래 각 변수에는 소수의 공통인자가 있으며, 이것이 원인이 되어 데이터의 각 변수가 구성된다는 아이디어에 기반한 방법이 인자분석입니다. 공통인자와 독립인자는 모두 관측 불가능한 잠재적인 인자이며, 특히 독립인자는 각 변수에 독립적으로 작용하는 인자로 보통 오차로 취급됩니다. 인자분석이라면 ‘소재의 강도’와 ‘소재의 인성’이라는 잠재 인자와 각 항목의 독립 요인이 어떻게 합쳐져 측정값이 되는지 조사합니다. 인자분석에서는 미리 공통인자 개수를 설정하며, 도메인 지식으로 인과구조를 가정할 수 있을 때 사용합니다. 분석 자체는 상관관계에 기반하므로 데이터에서 인과관계를 발견할 수는 없습니다.</p>
+          <p class="next"><span>정리</span>주성분분석과 인자분석을 정리해 봅시다.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" data-step="3" id="s-4-sum">
+      <div class="sh"><div class="sec">4-4 정리</div><h2>상관 구조를 이용해 많은 변수를 소수의 축과 인자로 설명합니다</h2></div>
+      <div class="body full" style="align-content:center">
+        <table class="sumtbl">
+          <thead><tr><th>개념</th><th>핵심</th><th>이 모듈의 예</th></tr></thead>
+          <tbody>
+            <tr><td>차원 축소</td><td>특징을 유지하며 변수 수를 줄임 · 해석·다중공선성·차원의 저주 대응</td><td>검사 5항목 → 2개 축</td></tr>
+            <tr><td>주성분분석</td><td>퍼짐이 가장 큰 방향으로 새 축, 기여율·누적기여율로 개수 판단</td><td>PC1 53.1%, PC2까지 88.3%</td></tr>
+            <tr><td>부하량 · 점수</td><td>주성분과 변수의 상관으로 축을 해석, 점수로 각 시편 표현</td><td>PC1 강도, PC2 인성 · 시편 49 (3.26, −1.31)</td></tr>
+            <tr><td>인자분석</td><td>잠재 공통인자 + 독립인자가 변수를 구성, 인과는 도메인 지식으로 가정</td><td>소재의 강도·인성</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="next"><span>형성평가로</span>이제 같은 예시로 문제를 풀어 봅니다.</p>
+    </section>
+
+    <!-- ⑤ 형성평가: 스크립트의 QUIZ 배열로 만듭니다 -->
+
+    <!-- ⑥ 실습 1 · 조작형 (모듈 전용) ─────────────── -->
+    <section class="slide" data-step="5" id="p1">
+      <div class="sh"><div class="sec">실습 1 · 조작형</div><h2>목표: 두 변수의 상관이 PC1의 기여율을 어떻게 바꾸는지 확인합니다</h2></div>
+      <div class="body split">
+        <div class="pcol" style="gap:8px">
+          <div class="plabel" style="margin:0">해보기 · 표준화한 두 검사 항목의 상관계수 r을 바꿔 보세요</div>
+          <div class="ctrl">상관계수 r<input type="range" id="m32-r" min="-1" max="1" step="0.05" value="0.8" aria-label="상관계수"><strong id="m32-rv" style="min-width:48px;text-align:right">-</strong></div>
+          <div class="fig" style="flex:1"><svg id="m32-p1-svg" viewBox="0 0 470 190" role="img" aria-label="산점도와 PC1, PC2 축, 기여율 막대"></svg></div>
+        </div>
+        <div class="pcol" style="gap:10px;justify-content:center">
+          <div class="plabel" style="margin:0">결과 확인</div>
+          <div class="stats three"><div><small>PC1 기여율</small><strong id="m32-c1">-</strong></div><div><small>PC2 기여율</small><strong id="m32-c2">-</strong></div><div><small>1개로 요약</small><strong id="m32-j" style="font-size:15px">-</strong></div></div>
+          <p class="howto">도전: PC1 하나로 정보의 90% 이상을 담으려면 |r|이 얼마 이상이어야 하는지 찾아보세요.</p>
+          <p class="pmsg" id="m32-msg"></p>
+          <div class="think"><span>생각해보기</span>r = 0이면 왜 차원 축소가 잘 안 될까요?</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ⑥ 실습 2 · 분류형 ─────────────────────── -->
+    <section class="slide" data-step="5" id="p2">
+      <div class="sh"><div class="sec">실습 2 · 분류형</div><h2>목표: 설명 카드를 차원 축소의 이유·주성분분석·인자분석으로 나눕니다</h2></div>
+      <div class="body split even">
+        <div class="pcol">
+          <div class="plabel">해보기 · 문제 상황인지, 새 축을 만드는 요약인지, 잠재 원인을 가정하는지 보고 칸에 놓으세요</div>
+          <div class="pool" id="p2-pool"></div>
+        </div>
+        <div class="pcol" style="gap:8px">
+          <div class="plabel" style="margin:0">결과 확인 · <span id="p2-count">0 / 0</span></div>
+          <div class="bins" id="p2-bins"></div>
+          <div class="p2row"><p class="pmsg" id="p2-msg"></p><button class="btn ghost" id="p2-reset">다시 하기</button></div>
+          <div class="think"><span>생각해보기</span>우리 공정 데이터에서 함께 움직이는 변수 묶음은 무엇일까요?</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ⑥ 실습 3 · 추정형 (모듈 전용) ─────────────── -->
+    <section class="slide" data-step="5" id="p3">
+      <div class="sh"><div class="sec">실습 3 · 추정형</div><h2>목표: 시편의 검사값을 보고 PC1(강도) 점수를 예측합니다</h2></div>
+      <div class="body split">
+        <div class="pcol">
+          <div class="plabel">해보기 · 시편을 고르고, 표준화한 검사값과 PC1 계수를 보며 PC1 점수를 예측하세요</div>
+          <div class="fig" style="flex:1"><svg id="m32-p3-svg" viewBox="0 0 470 200" role="img" aria-label="시편의 표준화 검사값 막대와 PC1 계수"></svg></div>
+        </div>
+        <div class="pcol" style="gap:9px;justify-content:center">
+          <div class="mbtns" id="m32-qs" style="gap:5px"></div>
+          <div class="ctrl">PC1 점수 예측<input type="range" id="m32-g" min="-4" max="4" step="0.1" value="0" aria-label="PC1 점수 예측"><strong id="m32-gv" style="min-width:48px;text-align:right">-</strong></div>
+          <button class="btn" id="m32-check" style="align-self:flex-start">점수 계산</button>
+          <div class="stats three"><div><small>내 예측</small><strong id="m32-mine">-</strong></div><div><small>실제 PC1</small><strong id="m32-act">?</strong></div><div><small>실제 PC2</small><strong id="m32-act2">?</strong></div></div>
+          <p class="pmsg" id="m32-msg3"></p>
+          <div class="think"><span>생각해보기</span>연신율이 PC1 점수에 거의 영향을 주지 않는 이유는?</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ⑦ 용어해설·참고자료: 스크립트의 GLOSSARY, REFS, NEXT로 만듭니다 -->
+  </main>
+
+  <footer class="bottombar">
+    <a class="home" href="../index.html" title="홈으로 (학습 과정)" aria-label="홈으로"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 10.5 12 3l9 7.5"/><path d="M5.5 9.5V21h13V9.5"/></svg><span>홈</span></a><span class="counter" id="counter"></span><span class="spacer"></span>
+    <button class="nav" id="prev" type="button">이전</button>
+    <button class="nav primary" id="next" type="button">다음</button>
+  </footer>
+</div>
+<p class="rotate">화면을 가로로 돌리면 더 크게 볼 수 있습니다.</p>
+
+<script>
+(function(){
+"use strict";
+
+/* =====================================================================
+   [교체] 모듈 설정 — 새 모듈은 이 블록과 HTML 화면 문장만 바꿉니다.
+   ===================================================================== */
+var MODULE={title:"주성분분석과 인자분석",sub:"베이즈·기계학습·수리 모형 · M32"};
+var STEPS=["학습개요","학습목표","일상의 예시","본문","형성평가","실습","용어해설"];
+
+/* 예시 데이터(이 모듈에서 정한 값)
+   냉연 강판 시편 50개 × 품질검사 5항목: 인장강도(MPa), 항복강도(MPa), 경도(HV), 연신율(%), 충격흡수에너지(J)
+   평균 562.5, 420.2, 171.0, 24.5, 61.2 / 표준편차 17.0, 16.4, 7.3, 3.2, 10.6
+   상관: 인장–항복 0.88, 인장–경도 0.80, 항복–경도 0.78, 연신율–충격 0.76, 강도계–인성계 −0.11~0.04
+   상관행렬 주성분분석: 기여율 0.531, 0.352, 0.054, 0.041, 0.022 / 누적 0.531, 0.883, 0.937, 0.978, 1.000 (고유값 2.66, 1.76, 0.27, 0.20, 0.11)
+   주성분부하량 PC1: 0.95, 0.93, 0.92, −0.16, −0.10 / PC2: 0.09, 0.16, 0.00, 0.92, 0.93
+   계수(고유벡터) PC1: 0.583, 0.574, 0.564, −0.096, −0.063 / PC2: 0.065, 0.124, 0.004, 0.697, 0.704
+   주성분점수: 시편 49 (3.26, −1.31), 시편 40 (2.50, 2.17), 시편 10 (−2.98, −0.99)
+   두 변수일 때 PC1 기여율 = (1 + |r|) ÷ 2 */
+var CASE=null, PAIRS=null, P1={target:null};
+var DX=[[566.6,430.2,170.1,24.6,67.3],[546.4,410.2,171.9,18.9,51.1],[567.3,431.2,174.2,25.1,63.6],[556.7,433.7,173.2,27.8,71.3],[555.0,415.4,167.0,19.9,47.8],[561.1,415.7,173.4,25.2,58.8],[576.3,443.9,180.4,27.5,64.4],[586.2,447.3,180.7,23.6,72.4],[548.5,409.7,166.9,22.5,50.7],[533.3,383.8,160.9,22.6,58.6],[545.9,409.8,162.6,23.4,55.8],[548.0,420.9,170.4,20.3,38.4],[522.9,383.2,150.9,30.1,82.7],[555.1,416.2,163.0,25.8,59.9],[545.7,400.8,164.6,26.7,65.2],[545.1,396.4,168.8,22.1,56.2],[550.0,406.1,167.9,29.2,71.6],[559.5,413.6,172.5,29.1,69.2],[553.1,417.8,176.8,26.5,64.4],[589.8,423.1,176.0,18.1,43.9],[552.5,413.3,163.0,26.1,64.2],[582.1,444.6,174.5,25.8,73.2],[549.8,428.7,161.9,28.6,67.6],[570.2,424.5,170.6,22.1,69.2],[577.8,422.5,173.2,30.5,74.1],[571.0,426.8,170.6,20.8,43.7],[540.2,395.5,169.6,25.5,47.9],[534.8,393.2,159.5,23.8,62.4],[561.7,410.0,170.0,24.6,68.5],[567.6,424.3,180.4,29.9,72.0],[543.2,403.7,166.8,24.6,65.0],[562.1,410.4,169.4,22.3,65.4],[551.2,413.3,165.0,23.6,56.6],[574.8,422.1,173.5,20.1,46.8],[584.1,429.1,169.1,19.8,44.3],[567.0,427.2,169.4,25.0,72.4],[552.1,407.6,164.3,26.1,50.9],[559.8,412.1,164.8,27.7,74.8],[564.6,420.4,178.2,23.7,49.2],[593.5,445.0,181.0,27.5,79.5],[545.9,404.0,163.4,19.8,58.1],[589.2,446.2,177.6,28.9,76.6],[582.3,437.5,184.3,22.0,61.7],[575.0,425.2,174.7,21.6,57.1],[567.8,420.5,167.6,26.0,66.9],[554.4,420.0,166.0,28.0,67.5],[589.3,432.4,182.6,24.7,63.8],[592.8,453.1,180.0,24.3,47.8],[583.7,448.6,188.7,21.2,47.9],[571.7,437.3,179.7,23.0,51.3]];
+var DS=[[0.38,0.51],[-0.6,-2.04],[0.76,0.39],[0.28,1.47],[-0.51,-1.97],[-0.03,-0.05],[1.92,1.1],[2.47,0.84],[-1.04,-1.28],[-2.98,-0.99],[-1.51,-0.75],[-0.26,-2.49],[-4.5,2.2],[-1.04,0.13],[-1.84,0.53],[-1.49,-1.11],[-1.36,1.56],[-0.4,1.47],[-0.04,0.59],[1.72,-2.43],[-1.27,0.45],[1.68,1.33],[-1.0,1.33],[0.41,0.06],[0.52,2.24],[0.71,-1.89],[-1.69,-0.94],[-2.76,-0.4],[-0.51,0.42],[0.82,1.95],[-1.59,0.07],[-0.44,-0.29],[-1.04,-0.61],[0.9,-1.86],[1.15,-2.01],[0.19,0.91],[-1.3,-0.48],[-1.03,1.52],[0.73,-0.96],[2.5,2.17],[-1.56,-1.43],[2.11,2.28],[2.38,-0.31],[1.0,-0.83],[-0.15,0.72],[-0.81,1.14],[2.22,0.41],[2.97,-0.57],[3.26,-1.31],[1.69,-0.82]];
+var CONT=[0.531, 0.352, 0.054, 0.041, 0.022], LOAD=[[0.95, 0.09], [0.93, 0.16], [0.92, 0.0], [-0.16, 0.92], [-0.1, 0.93]], WT=[[0.583, 0.065], [0.574, 0.124], [0.564, 0.004], [-0.096, 0.697], [-0.063, 0.704]], CORR=[[1.0,0.88,0.8,-0.1,0.01],[0.88,1.0,0.78,0.01,0.04],[0.8,0.78,1.0,-0.11,-0.1],[-0.1,0.01,-0.11,1.0,0.76],[0.01,0.04,-0.1,0.76,1.0]];
+var VN=["인장강도","항복강도","경도","연신율","충격에너지"], VU=["MPa","MPa","HV","%","J"], VM=[562.5,420.2,171.0,24.5,61.2], VS=[17.0,16.4,7.3,3.2,10.6];
+
+var QUIZ=[
+ {goal:1,type:"O/X 오개념",stem:"“검사 항목(변수)을 많이 늘릴수록 정보가 많아지므로 통계분석에는 항상 유리하다.”",
+  opts:["O","X"],ans:1,ox:true,
+  exp:"‘차원이 높다’고 하면 정보가 많으니 좋을 것처럼 생각되지만, 실은 ‘쓸데없이 많기만’ 한 상황이 자주 생깁니다. 변수가 많으면 고차원 데이터 해석이 어렵고, 설명변수끼리 상관이 강한 다중공선성, 표본크기에 비해 파라미터가 많아지는 차원의 저주 같은 문제가 일어나기 쉽습니다.",back:"s-4-1b",backLabel:"4-1 변수의 수를 줄이는 이유 다시 보기"},
+ {goal:1,type:"상황 판단",stem:"시편 두께를 같은 측정기로 재서 ‘두께(mm)’와 ‘두께(μm)’ 두 열로 따로 기록했습니다. 두 변수의 관계와 알맞은 처리는?",
+  opts:["완전한 상관(r = 1)이므로 한쪽만 있어도 충분하다","단위가 다르므로 서로 다른 정보를 담고 있다","두 열을 모두 회귀분석의 설명변수로 넣어야 한다","상관이 없으므로 둘 다 버린다"],ans:0,
+  exp:"두 변수는 ‘두께’라는 같은 특징을 다른 단위로 나타냈을 뿐이라 완전한 상관(상관계수 r = 1)입니다. 한쪽만 쓰는 경우에 비해 정보가 늘지 않았으므로 어느 한쪽만 있으면 충분합니다. 이처럼 변수의 수를 줄이는 것을 차원 축소라 합니다.",back:"s-4-1a",backLabel:"4-1 변수의 차원 다시 보기"},
+ {goal:2,type:"계산",stem:"검사 5항목의 상관행렬로 주성분분석을 했더니 고윳값이 2.66, 1.76, 0.27, 0.20, 0.11(합 5)이었습니다. 제2주성분까지의 누적기여율은 약 얼마일까요?",
+  opts:["약 88%","약 53%","약 35%","100%"],ans:0,
+  exp:"기여율은 고윳값을 고윳값 총합으로 나눈 것이므로 PC1 = 2.66 ÷ 5 ≈ 0.53, PC2 = 1.76 ÷ 5 ≈ 0.35이고, 누적기여율은 (2.66 + 1.76) ÷ 5 ≈ 0.88입니다. 절대적인 기준은 없지만, 제2주성분까지 전체 정보의 약 88%를 가지므로 2개로 줄여도 충분하다고 볼 수 있습니다.",back:"s-4-2b",backLabel:"4-2 기여율과 누적기여율 다시 보기"},
+ {goal:2,type:"상황 판단",stem:"주성분부하량이 PC1은 인장강도 0.95·항복강도 0.93·경도 0.92·연신율 −0.16·충격에너지 −0.10이었습니다. PC1은 어떤 축으로 해석할 수 있을까요?",
+  opts:["강도 성분(단단하고 강한 정도)","인성 성분(잘 늘어나고 충격에 강한 정도)","측정 오차","시편 번호 순서"],ans:0,
+  exp:"주성분부하량은 각 주성분의 값과 원래 각 변수의 상관계수입니다. PC1은 인장강도, 항복강도, 경도와 강한 양의 상관을 보이고 연신율과 충격에너지와는 거의 상관이 없으므로 ‘강도 성분’이라 해석할 수 있습니다. PC2는 연신율(0.92)과 충격에너지(0.93)와 상관이 강해 ‘인성 성분’입니다.",back:"s-4-2c",backLabel:"4-2 주성분부하량 다시 보기"},
+ {goal:3,type:"상황 판단",stem:"시편 49의 주성분점수가 PC1 = 3.26, PC2 = −1.31이었습니다. 이 시편을 가장 잘 설명하는 것은?",
+  opts:["강도는 매우 높지만 인성은 평균보다 낮다","강도와 인성이 모두 높다","강도와 인성이 모두 낮다","강도는 낮고 인성은 높다"],ans:0,
+  exp:"주성분점수는 원래 데이터를 새로운 변수(주성분)로 나타낸 값입니다. PC1(강도 성분)이 크게 양수이고 PC2(인성 성분)가 음수이므로, 강도는 매우 높지만 연신율이나 충격에너지는 평균보다 낮은 시편입니다. 시편 49의 실제 값도 인장강도 583.7 MPa, 연신율 21.2%, 충격에너지 47.9 J입니다.",back:"s-4-2c",backLabel:"4-2 주성분점수 다시 보기"},
+ {goal:3,type:"O/X 오개념",stem:"“인자분석을 하면 측정한 데이터만으로 공통인자와 변수 사이의 인과관계를 발견할 수 있다.”",
+  opts:["O","X"],ans:1,ox:true,
+  exp:"인자분석은 공통인자의 존재와 공통인자와 관측한 변수 사이의 인과구조를 도메인 지식에 근거해 가정할 수 있을 때 사용하는 방법입니다. 분석 자체는 관측한 변수 사이의 상관관계에 기반을 두므로, 데이터에서 인과관계를 발견할 수는 없다는 점에 주의해야 합니다.",back:"s-4-3a",backLabel:"4-3 인자분석 다시 보기"}
+];
+
+var BINS=["차원 축소의 이유","주성분분석","인자분석"];
+var CARDS=[["설명변수끼리 상관이 강해 회귀계수가 불안정","차원 축소의 이유"],["표본에 비해 변수가 너무 많음","차원 축소의 이유"],
+           ["데이터 퍼짐이 가장 큰 방향으로 새 축","주성분분석"],["누적기여율로 남길 축의 개수 판단","주성분분석"],
+           ["잠재적인 공통인자가 변수를 구성한다고 가정","인자분석"],["각 변수에 독립인자(오차)가 작용","인자분석"]];
+var HINT={"차원 축소의 이유":"변수가 많아 생기는 분석상의 문제입니다.","주성분분석":"원래 변수를 새로운 축으로 요약하는 방법입니다.","인자분석":"관측 불가능한 잠재 인자가 원인이라는 구조를 가정합니다."};
+
+var GLOSSARY=[
+ ["차원","dimension","데이터의 변수 개수로, 검사 항목이 늘어나는 만큼 차원도 늘어납니다.","검사 5항목 → 5차원"],
+ ["차원 축소","dimension reduction","데이터의 특징을 유지하면서 변수의 수를 줄이는 것입니다.","5항목 → 강도·인성 2개 축"],
+ ["다중공선성","multicollinearity","다중회귀분석에서 설명변수끼리 강한 상관이 있어 회귀계수 추정이 불안정해지는 상황입니다.","인장강도와 항복강도 r = 0.88"],
+ ["차원의 저주","curse of dimensionality","변수가 많아 파라미터 수가 늘면서, 표본크기가 충분하지 않으면 회귀계수를 올바르게 추정할 수 없는 문제입니다.","시편 30개에 항목 40개"],
+ ["주성분분석","principal component analysis, PCA","데이터 퍼짐이 가장 커지는 방향으로 새로운 축을 설정해, 상관이 있는 변수를 소수의 변수로 정리하는 방법입니다.","검사 5항목의 상관행렬로 분석"],
+ ["제1주성분","first principal component, PC1","데이터 퍼짐이 가장 커지는 방향으로 설정한 첫 번째 새로운 축입니다.","강도 성분"],
+ ["기여율","proportion of variance","각 주성분이 가진 정보(분산)의 비율입니다.","PC1 53.1%"],
+ ["누적기여율","cumulative proportion","제1부터 제k주성분까지 전체 정보의 몇 %가 포함되는지 나타낸 값입니다.","PC2까지 88.3%"],
+ ["주성분부하량","principal component loading","각 주성분의 값과 원래 각 변수의 상관계수로, 인자부하량이라고도 합니다.","PC1과 인장강도 0.95"],
+ ["주성분점수","principal component score","원래 데이터를 새로운 변수(주성분)로 나타낸 값입니다.","시편 49 (3.26, −1.31)"],
+ ["인자분석","factor analysis","각 변수에는 소수의 공통인자가 있고, 이것이 원인이 되어 각 변수가 구성된다는 아이디어에 기반한 방법입니다.","‘강도’, ‘인성’이라는 잠재 인자"],
+ ["공통인자","common factor","여러 변수에 공통으로 작용하는 관측 불가능한 잠재적인 인자입니다.","소재의 ‘강도’"],
+ ["독립인자","unique factor","각 변수에 독립적으로 작용하는 인자로, 보통은 오차로 취급합니다.","경도 측정만의 오차"]
+];
+var REFS=[
+ {n:1,title:"On lines and planes of closest fit to systems of points in space",org:"K. Pearson, The London, Edinburgh, and Dublin Philosophical Magazine and Journal of Science 2(11), 559–572, 1901",url:"https://doi.org/10.1080/14786440109462720",date:"2026-10-27 확인"},
+ {n:2,title:"Principal component analysis: a review and recent developments",org:"I. T. Jolliffe, J. Cadima, Philosophical Transactions of the Royal Society A 374, 20150202, 2016",url:"https://doi.org/10.1098/rsta.2015.0202",date:"2026-10-27 확인"}
+];
+var NEXT={title:"M33 기계학습과 비지도 학습",line:"다음 모듈에서는 기계학습이 무엇인지, 통계학과 기계학습은 어떻게 다른지, 정답 없이 데이터의 구조를 찾는 비지도 학습을 살펴봅니다."};
+
+/* =====================================================================
+   아래부터는 공통 엔진입니다. 모듈마다 바꾸지 않습니다.
+   ===================================================================== */
+var NS="http://www.w3.org/2000/svg";
+var C={navy:"#1B2A4A",navy2:"#2C4170",navy3:"#5B6E97",soft:"#A9B8D4",grid:"#DDE1E7",gray:"#6B7280",gray2:"#9AA0AA",amber:"#E0A100",amberInk:"#6E4F00",ok:"#23704F"};
+function el(t,a,p,x){var e=document.createElementNS(NS,t);for(var k in a)e.setAttribute(k,a[k]);if(x!=null)e.textContent=x;if(p)p.appendChild(e);return e;}
+function clear(s){while(s.firstChild)s.removeChild(s.firstChild);}
+function f1(v,d){return v.toFixed(d==null?1:d);}
+function sum(a){return a.reduce(function(x,y){return x+y;},0);}
+function r1(v){return Math.round(v*10)/10;}
+var stage=document.getElementById("stage"),vp=document.getElementById("vp");
+
+/* 계산은 모두 데이터에서 직접 합니다(R0-7) */
+var N=CASE?CASE.values.length:0,SUMV=CASE?r1(sum(CASE.values)):0,AVG=N?SUMV/N:0,MAXV=CASE?Math.max.apply(null,CASE.values):0;
+var LR=!PAIRS?null:(function(){var n=PAIRS.xs.length,mx=sum(PAIRS.xs)/n,my=sum(PAIRS.ys)/n,sxy=0,sxx=0;
+  for(var i=0;i<n;i++){sxy+=(PAIRS.xs[i]-mx)*(PAIRS.ys[i]-my);sxx+=(PAIRS.xs[i]-mx)*(PAIRS.xs[i]-mx);}
+  var b=sxy/sxx;return{b:b,a:my-b*mx};})();
+var PRED=PAIRS?LR.a+LR.b*PAIRS.x0:0;
+
+document.title=MODULE.title;
+document.getElementById("brand").innerHTML=MODULE.title+"<small>"+MODULE.sub+"</small>";
+
+/* 16:9 고정 무대를 창 크기에 맞춤 */
+var S=1;
+function fit(){S=Math.min(window.innerWidth/960,window.innerHeight/540);stage.style.setProperty("--s",S);}
+window.addEventListener("resize",fit);fit();
+
+/* ---------- 그래프 ---------- */
+function barChart(svg,vals,o){
+  clear(svg);o=o||{};
+  var vb=svg.viewBox.baseVal,W=vb.width,H=vb.height,L=34,R=o.mean!=null?70:8,T=26,Bt=24,ym=o.ymax||Math.ceil(Math.max.apply(null,vals)+1),pw=W-L-R,ph=H-T-Bt,bw=pw/vals.length;
+  function y(v){return T+ph-(v/ym)*ph;}
+  for(var g=0;g<=ym;g++){el("line",{x1:L,x2:W-R,y1:y(g),y2:y(g),stroke:C.grid},svg);el("text",{x:L-6,y:y(g)+4,"text-anchor":"end","font-size":10.5,fill:C.gray2},svg,g);}
+  vals.forEach(function(v,i){
+    var sel=o.sel===i,hi=o.hi===i;
+    el("rect",{x:L+i*bw+bw*.16,y:y(v),width:bw*.68,height:Math.max(0,y(0)-y(v)),rx:2,fill:sel?C.amber:hi?C.navy2:C.soft},svg);
+    el("text",{x:L+i*bw+bw/2,y:H-Bt+16,"text-anchor":"middle","font-size":10.5,fill:C.gray},svg,CASE.labels[i]);
+  });
+  if(o.mean!=null){var m=o.mean;
+    el("line",{x1:L,x2:W-R+4,y1:y(m),y2:y(m),stroke:C.navy,"stroke-width":2,"stroke-dasharray":"6 4"},svg);
+    el("rect",{x:W-R+6,y:y(m)-10,width:R-8,height:20,rx:4,fill:C.navy},svg);
+    el("text",{x:W-R+6+(R-8)/2,y:y(m)+4,"text-anchor":"middle","font-size":11,"font-weight":700,fill:"#fff"},svg,"평균 "+f1(m,2));}
+  /* 값 라벨은 마지막에 흰 테두리로 그려 점선에 가리지 않게 함 */
+  vals.forEach(function(v,i){var sel=o.sel===i,hi=o.hi===i;
+    if(o.labels||sel)el("text",{x:L+i*bw+bw/2,y:y(v)-5,"text-anchor":"middle","font-size":10.5,"font-weight":sel||hi?800:500,fill:sel?C.amberInk:hi?C.navy:C.gray,stroke:"#EEF0F3","stroke-width":3,"paint-order":"stroke"},svg,f1(v));});
+}
+function scatter(svg,o){
+  clear(svg);o=o||{};
+  var vb=svg.viewBox.baseVal,W=vb.width,H=vb.height,L=34,R=14,T=30,Bt=40,x0=PAIRS.xmin,x1=PAIRS.xmax,y0=PAIRS.ymin,y1=PAIRS.ymax;
+  function X(v){return L+(v-x0)/(x1-x0)*(W-L-R);}
+  function Y(v){return T+(H-T-Bt)-(v-y0)/(y1-y0)*(H-T-Bt);}
+  for(var g=y0;g<=y1+1e-9;g+=PAIRS.ystep){el("line",{x1:L,x2:W-R,y1:Y(g),y2:Y(g),stroke:C.grid},svg);el("text",{x:L-6,y:Y(g)+4,"text-anchor":"end","font-size":10.5,fill:C.gray2},svg,g);}
+  for(var h=x0;h<=x1+1e-9;h+=PAIRS.xstep)el("text",{x:X(h),y:H-Bt+16,"text-anchor":"middle","font-size":10.5,fill:C.gray},svg,h);
+  el("text",{x:(L+W-R)/2,y:H-6,"text-anchor":"middle","font-size":10.5,fill:C.gray},svg,PAIRS.xlabel);
+  el("text",{x:4,y:14,"font-size":10.5,fill:C.gray},svg,PAIRS.ylabel);
+  if(o.line){var la=x0+(x1-x0)*.04,lb=x1-(x1-x0)*.04;el("line",{x1:X(la),y1:Y(LR.a+LR.b*la),x2:X(lb),y2:Y(LR.a+LR.b*lb),stroke:C.navy,"stroke-width":2},svg);}
+  PAIRS.xs.forEach(function(x,i){el("circle",{cx:X(x),cy:Y(PAIRS.ys[i]),r:4.5,fill:C.navy3,"fill-opacity":.85},svg);});
+  if(o.x0!=null){el("line",{x1:X(o.x0),y1:Y(0),x2:X(o.x0),y2:Y(y1),stroke:C.amber,"stroke-dasharray":"3 3"},svg);
+    el("text",{x:X(o.x0),y:T-4,"text-anchor":"middle","font-size":10.5,"font-weight":700,fill:C.amberInk},svg,PAIRS.x0label);}
+  if(o.pred){el("circle",{cx:X(PAIRS.x0),cy:Y(PRED),r:6,fill:C.navy},svg);
+    el("text",{x:X(PAIRS.x0)-10,y:Y(PRED)+4,"text-anchor":"end","font-size":11,"font-weight":800,fill:C.navy,stroke:"#EEF0F3","stroke-width":3,"paint-order":"stroke"},svg,"예측 "+f1(PRED,PAIRS.dp)+PAIRS.unit);}
+  if(o.guess!=null){el("circle",{cx:X(PAIRS.x0),cy:Y(o.guess),r:7,fill:C.amber,stroke:"#fff","stroke-width":2},svg);}
+  if(o.actual){var ay=Y(PAIRS.actual);el("rect",{x:X(PAIRS.x0)-6,y:ay-6,width:12,height:12,fill:C.ok,transform:"rotate(45 "+X(PAIRS.x0)+" "+ay+")"},svg);
+    el("text",{x:X(PAIRS.x0)-10,y:ay-6,"text-anchor":"end","font-size":11,"font-weight":800,fill:C.ok,stroke:"#EEF0F3","stroke-width":3,"paint-order":"stroke"},svg,"실제 "+f1(PAIRS.actual)+PAIRS.unit);}
+  return {X:X,Y:Y};
+}
+function flow(svg,names){
+  clear(svg);var n=names.length,w=118,gap=(440-40-n*w)/(n-1),y=96,h=64;
+  el("defs",{},svg).innerHTML='<marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10z" fill="'+C.navy3+'"/></marker>';
+  names.forEach(function(t,i){var x=20+i*(w+gap);
+    el("rect",{x:x,y:y,width:w,height:h,rx:10,fill:i===n-1?C.navy:"#fff",stroke:C.navy,"stroke-width":1.5},svg);
+    el("text",{x:x+w/2,y:y+h/2-6,"text-anchor":"middle","font-size":11,"font-weight":700,fill:i===n-1?"#C9D3E6":C.navy3},svg,"4-"+(i+1));
+    el("text",{x:x+w/2,y:y+h/2+13,"text-anchor":"middle","font-size":14,"font-weight":800,fill:i===n-1?"#fff":C.navy},svg,t);
+    if(i<n-1)el("line",{x1:x+w+4,y1:y+h/2,x2:x+w+gap-5,y2:y+h/2,stroke:C.navy3,"stroke-width":2,"marker-end":"url(#ar)"},svg);});
+  el("text",{x:220,y:200,"text-anchor":"middle","font-size":12,fill:C.gray},svg,"본문 소단원을 배우는 순서");
+}
+/* 화면에 해당 id가 있을 때만 그립니다(모듈마다 쓰지 않는 그림은 건너뜀) */
+function on(id,fn){var e=document.getElementById(id);if(e)fn(e);}
+on("fig-flow",function(s){flow(s,["소단원 1","소단원 2","정리"]);});
+on("fig-case",function(s){barChart(s,CASE.values,{labels:true});});
+on("fig-bar",function(s){barChart(s,CASE.values,{labels:true,mean:AVG});});
+on("fig-scatter",function(s){scatter(s,{line:true,x0:PAIRS.x0,pred:true});});
+on("fig-bridge",function(s){
+  el("defs",{},s).innerHTML='<marker id="ar2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10z" fill="'+C.navy3+'"/></marker>';
+  [["장면 1",40],["장면 2",130]].forEach(function(p){el("rect",{x:24,y:p[1],width:130,height:64,rx:10,fill:"#fff",stroke:C.navy3,"stroke-width":1.5},s);el("text",{x:89,y:p[1]+37,"text-anchor":"middle","font-size":14,"font-weight":700,fill:C.navy},s,p[0]);
+    el("line",{x1:158,y1:p[1]+32,x2:246,y2:120,stroke:C.navy3,"stroke-width":2,"marker-end":"url(#ar2)"},s);});
+  el("rect",{x:252,y:84,width:150,height:72,rx:12,fill:C.navy},s);
+  el("text",{x:327,y:116,"text-anchor":"middle","font-size":14,"font-weight":800,fill:"#fff"},s,"본문 첫 질문");
+  el("text",{x:327,y:136,"text-anchor":"middle","font-size":11.5,fill:"#C9D3E6"},s,"4-1로 이어짐");});
+on("case-n",function(e){e.textContent=N+"개";});
+on("case-sum",function(e){e.textContent=f1(SUMV);});
+on("case-max",function(e){e.textContent=f1(MAXV);});
+on("math-calc",function(e){e.textContent=f1(LR.b,2)+" × "+PAIRS.x0+" + "+f1(LR.a,2)+" = "+f1(PRED,2);});
+
+/* =====================================================================
+   [교체] 모듈 전용 그림: 모듈마다 필요한 그림 함수는 이 자리에 둡니다.
+   ===================================================================== */
+/* M32 전용 그림·실습 */
+function linZ(a,b,c,d){return function(v){return c+(v-a)/(b-a)*(d-c);};}
+function tZ(s,x,y,t,o){o=o||{};return el("text",{x:x,y:y,"text-anchor":o.a||"middle","font-size":o.fs||11,"font-weight":o.fw||600,fill:o.c||C.navy,stroke:o.halo?"#fff":"none","stroke-width":o.halo?3:0,"paint-order":"stroke"},s,t);}
+function bxZ(s,x,y,w,h,fill,stroke){return el("rect",{x:x,y:y,width:w,height:h,rx:10,fill:fill||"#fff",stroke:stroke||"none","stroke-width":stroke?1.5:0},s);}
+function mkZ(s,id,col){el("defs",{},s).innerHTML='<marker id="'+id+'" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10z" fill="'+col+'"/></marker>';}
+function arZ(s,x1,y1,x2,y2,id,col){return el("line",{x1:x1,y1:y1,x2:x2,y2:y2,stroke:col||C.navy3,"stroke-width":2,"marker-end":"url(#"+id+")"},s);}
+function fmZ(v,d){var t=Math.abs(v).toFixed(d);return (v<0&&+t!==0?"−":"")+t;}
+var RED="#B42318",GRN="#23704F",BLU="#2B8CC4",PNK="#C2416E",STR="#2B8CC4",TUF="#E0A100";
+function zcol(j){return DX.map(function(r){return (r[j]-VM[j])/VS[j];});}
+function heatZ(v){var a=Math.abs(v);return v>=0?"rgba(43,140,196,"+(0.08+0.85*a)+")":"rgba(194,65,110,"+(0.08+0.85*a)+")";}
+
+on("m32-ov",function(s){
+  mkZ(s,"oZ",C.navy3);
+  VN.forEach(function(n,i){bxZ(s,8,10+i*44,110,34,i<3?"#EEF4FB":"#FCF3D9",i<3?STR:TUF);tZ(s,63,31+i*44,n,{fw:800,fs:11});});
+  bxZ(s,160,40,110,56,C.navy);tZ(s,215,64,"PC1",{fw:800,fs:13,c:"#fff"});tZ(s,215,82,"강도 성분",{fs:10,c:"#C9D3E6"});
+  bxZ(s,160,150,110,56,C.navy);tZ(s,215,174,"PC2",{fw:800,fs:13,c:"#fff"});tZ(s,215,192,"인성 성분",{fs:10,c:"#C9D3E6"});
+  [0,1,2].forEach(function(i){arZ(s,120,27+i*44,156,68,"oZ");});[3,4].forEach(function(i){arZ(s,120,27+i*44,156,178,"oZ");});
+  bxZ(s,300,40,130,56,"#E3F1EA",GRN);tZ(s,365,62,"주성분분석",{fw:800,fs:12,c:GRN});tZ(s,365,80,"변수 → 새 축으로 요약",{fs:9.5});
+  bxZ(s,300,150,130,56,"#FBE4F0",PNK);tZ(s,365,172,"인자분석",{fw:800,fs:12,c:PNK});tZ(s,365,190,"잠재 인자 → 변수",{fs:9.5});
+  tZ(s,215,240,"5차원 → 2차원 (정보 88.3% 유지)",{fw:800,fs:11.5,c:C.amberInk});
+});
+
+on("m32-case",function(s){
+  var x0=110,y0=40,c=36;
+  VN.forEach(function(n,i){tZ(s,x0-6,y0+i*c+c/2+4,n,{a:"end",fw:800,fs:10.5});tZ(s,x0+i*c+c/2,y0-8,n.slice(0,2),{fw:800,fs:10});
+    VN.forEach(function(m,j){var v=CORR[i][j];el("rect",{x:x0+j*c,y:y0+i*c,width:c-2,height:c-2,rx:4,fill:heatZ(v)},s);tZ(s,x0+j*c+c/2-1,y0+i*c+c/2+4,v.toFixed(2),{fw:700,fs:9.5,c:Math.abs(v)>0.6?"#fff":C.navy});});});
+  el("rect",{x:x0-2,y:y0-2,width:3*c+2,height:3*c+2,fill:"none",stroke:STR,"stroke-width":2.5},s);el("rect",{x:x0+3*c-2,y:y0+3*c-2,width:2*c+2,height:2*c+2,fill:"none",stroke:TUF,"stroke-width":2.5},s);
+  tZ(s,310,90,"강도 묶음",{a:"start",fw:800,fs:11.5,c:"#1C6EA4"});tZ(s,310,108,"r 0.78~0.88",{a:"start",fs:10.5});
+  tZ(s,310,180,"인성 묶음",{a:"start",fw:800,fs:11.5,c:C.amberInk});tZ(s,310,198,"r 0.76",{a:"start",fs:10.5});
+  tZ(s,220,236,"시편 50개 · 상관행렬 (예시값)",{fw:700,fs:10,c:C.gray});
+});
+
+on("m32-dim",function(s){
+  function pane(x0,title,r,lab,col){bxZ(s,x0,4,204,262,"#F3F5F9");tZ(s,x0+102,24,title,{fw:800,fs:11.5});
+    var X=linZ(-2.6,2.6,x0+20,x0+188),Y=linZ(-2.6,2.6,200,40),rr=r;el("line",{x1:x0+20,x2:x0+188,y1:200,y2:200,stroke:C.gray2},s);el("line",{x1:x0+20,x2:x0+20,y1:40,y2:200,stroke:C.gray2},s);
+    var a=zcol(0);a.forEach(function(v,i){var y=r===1?v:rr*v+Math.sqrt(1-rr*rr)*zcol(2)[i]*0.0+ (r===1?0:(zcol(1)[i]-0.88*v));el("circle",{cx:X(Math.max(-2.5,Math.min(2.5,v))),cy:Y(Math.max(-2.5,Math.min(2.5,r===1?v:zcol(1)[i]))),r:3,fill:col},s);});
+    tZ(s,x0+102,222,lab[0],{fw:800,fs:11,c:col});tZ(s,x0+102,244,lab[1],{fw:700,fs:10,c:C.gray});}
+  pane(4,"두께(mm) vs 두께(μm)",1,["r = 1 → 한쪽만으로 충분","같은 특징을 다른 단위로"],RED);
+  pane(212,"인장강도 vs 항복강도",0.88,["r = 0.88 → ‘강도’로 요약","강한 양의 상관"],BLU);
+});
+
+on("m32-why",function(s){
+  var R=[["① 고차원 해석의 어려움","2개 합성 변수 → 평면에 플롯해 시각화","#EEF4FB","#1C6EA4"],["② 다중공선성","상관 강한 설명변수 → 회귀계수 불안정","#FCF3D9",C.amberInk],["③ 차원의 저주","변수(파라미터) 많고 n 부족 → 추정 불가","#FBE4E1",RED]];
+  R.forEach(function(r,i){var y=6+i*68;bxZ(s,4,y,412,60,r[2]);tZ(s,16,y+26,r[0],{a:"start",fw:800,fs:12,c:r[3]});tZ(s,16,y+46,r[1],{a:"start",fw:700,fs:10.5});});
+  bxZ(s,4,212,412,54,C.navy);tZ(s,210,234,"차원 축소 후 분석 → 해석 쉬움 · 추정 안정",{fw:800,fs:12,c:"#fff"});tZ(s,210,253,"고차원 분석 연구: 희소 모형화(sparse modeling) 등",{fs:9.5,c:"#C9D3E6"});
+});
+
+on("m32-axis",function(s){
+  var a=zcol(0),b=zcol(2),X=linZ(-3,3,20,250),Y=linZ(-3,3,250,20);bxZ(s,4,4,262,262,"#F8F9FB");
+  el("line",{x1:20,x2:250,y1:Y(0),y2:Y(0),stroke:C.grid},s);el("line",{x1:X(0),x2:X(0),y1:20,y2:250,stroke:C.grid},s);
+  a.forEach(function(v,i){el("circle",{cx:X(v),cy:Y(b[i]),r:3.2,fill:BLU,"fill-opacity":.8},s);});
+  el("line",{x1:X(-2.8),y1:Y(-2.8),x2:X(2.8),y2:Y(2.8),stroke:RED,"stroke-width":2.6},s);tZ(s,X(2.6),Y(2.8)-4,"PC1",{fw:800,fs:12,c:RED,halo:true});
+  el("line",{x1:X(-1.3),y1:Y(1.3),x2:X(1.3),y2:Y(-1.3),stroke:GRN,"stroke-width":2.2},s);tZ(s,X(-1.3)-2,Y(1.3)-6,"PC2",{fw:800,fs:12,c:GRN,halo:true});
+  tZ(s,246,246,"인장강도(표준화)",{a:"end",fs:9.5,c:C.gray,fw:700});tZ(s,24,30,"경도(표준화)",{a:"start",fs:9.5,c:C.gray,fw:700});
+  var r=0.80;bxZ(s,276,4,140,262,"#F3F5F9");tZ(s,346,26,"각 축의 정보(분산)",{fw:800,fs:10.5});
+  tZ(s,346,52,"원래 축",{fw:700,fs:10,c:C.gray});el("rect",{x:290,y:60,width:56,height:22,fill:"#9CCBEA"},s);el("rect",{x:346,y:60,width:56,height:22,fill:"#C9E2B8"},s);tZ(s,318,75,"인장",{fs:9.5,fw:800});tZ(s,374,75,"경도",{fs:9.5,fw:800});
+  tZ(s,346,114,"새 축",{fw:700,fs:10,c:C.gray});var w1=112*(1+r)/2;el("rect",{x:290,y:122,width:w1,height:22,fill:RED,"fill-opacity":.8},s);el("rect",{x:290+w1,y:122,width:112-w1,height:22,fill:GRN,"fill-opacity":.8},s);
+  tZ(s,290+w1/2,137,"PC1 90%",{fs:9.5,fw:800,c:"#fff"});
+  tZ(s,346,176,"r = 0.80",{fw:800,fs:11});tZ(s,346,198,"PC1 기여율",{fs:10,fw:700});tZ(s,346,216,"= (1 + 0.80) ÷ 2",{fs:10,fw:700});tZ(s,346,234,"= 0.90",{fw:800,fs:11,c:RED});
+});
+
+on("m32-cont",function(s){
+  var X=function(i){return 70+i*62;},Y=linZ(0,1,124,10);
+  [0,.5,1].forEach(function(t){el("line",{x1:40,x2:380,y1:Y(t),y2:Y(t),stroke:C.grid},s);tZ(s,34,Y(t)+4,(t*100)+"%",{a:"end",fs:9,c:C.gray2,fw:500});});
+  var cum=0,P=[];CONT.forEach(function(c,i){cum+=c;el("rect",{x:X(i)-20,y:Y(c),width:40,height:124-Y(c),rx:3,fill:i<2?BLU:"#C9CED6"},s);tZ(s,X(i),i===0?Y(c)+16:Y(c)-4,(c*100).toFixed(1),{fs:9.5,fw:800,c:i===0?"#fff":i<2?"#1C6EA4":C.gray});tZ(s,X(i),138,"PC"+(i+1),{fs:9.5,fw:800});P.push([X(i),Y(cum),cum]);});
+  el("polyline",{points:P.map(function(p){return p[0]+","+p[1];}).join(" "),fill:"none",stroke:C.amber,"stroke-width":2.2},s);P.forEach(function(p,i){el("circle",{cx:p[0],cy:p[1],r:3.5,fill:C.amber},s);});
+  tZ(s,X(1)+8,P[1][1]+14,"누적 88.3%",{a:"start",fw:800,fs:10.5,c:C.amberInk,halo:true});
+  el("rect",{x:392,y:20,width:10,height:10,fill:BLU},s);tZ(s,392,46,"기여율",{a:"start",fs:9,fw:700});el("line",{x1:392,x2:402,y1:62,y2:62,stroke:C.amber,"stroke-width":2.2},s);tZ(s,392,78,"누적",{a:"start",fs:9,fw:700});
+});
+
+on("m32-load",function(s){
+  bxZ(s,4,4,170,262,"#F3F5F9");tZ(s,89,24,"주성분부하량",{fw:800,fs:11});tZ(s,108,44,"PC1",{fw:800,fs:10.5,c:RED});tZ(s,148,44,"PC2",{fw:800,fs:10.5,c:GRN});
+  VN.forEach(function(n,i){var y=72+i*36;tZ(s,70,y,n,{a:"end",fw:800,fs:10});[0,1].forEach(function(k){var v=LOAD[i][k];el("rect",{x:88+k*40,y:y-16,width:38,height:26,rx:4,fill:heatZ(v)},s);tZ(s,107+k*40,y+2,fmZ(v,2),{fw:800,fs:9.5,c:Math.abs(v)>0.6?"#fff":C.navy});});});
+  tZ(s,89,256,"PC1 강도 · PC2 인성",{fw:800,fs:10,c:C.amberInk});
+  var X=linZ(-4,4,190,412),Y=linZ(-3.5,3.5,250,14);el("rect",{x:182,y:4,width:234,height:262,rx:10,fill:"#F8F9FB"},s);
+  el("line",{x1:190,x2:412,y1:Y(0),y2:Y(0),stroke:C.grid},s);el("line",{x1:X(0),x2:X(0),y1:14,y2:250,stroke:C.grid},s);
+  DS.forEach(function(p,i){var hl=[49,40,10].indexOf(i+1)>=0;el("circle",{cx:X(p[0]),cy:Y(p[1]),r:hl?5:3,fill:hl?RED:BLU,"fill-opacity":hl?1:.7},s);if(hl)tZ(s,X(p[0])+(p[0]>0?-6:6),Y(p[1])-8,"#"+(i+1),{a:p[0]>0?"end":"start",fw:800,fs:10,c:RED,halo:true});});
+  tZ(s,410,Y(0)-4,"PC1 강도 →",{a:"end",fs:9.5,fw:800,c:C.gray});tZ(s,X(0)+4,24,"PC2 인성 ↑",{a:"start",fs:9.5,fw:800,c:C.gray});
+});
+
+on("m32-fa",function(s){
+  mkZ(s,"fZ",PNK);var d=el("defs",{},s);d.innerHTML='<marker id="fZ2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10z" fill="#2B8CC4"/></marker>';
+  el("ellipse",{cx:70,cy:76,rx:62,ry:30,fill:"#FBE4F0",stroke:PNK,"stroke-width":2,"stroke-dasharray":"5 3"},s);tZ(s,70,72,"공통인자 1",{fw:800,fs:11,c:PNK});tZ(s,70,88,"소재의 강도",{fs:9.5});
+  el("ellipse",{cx:70,cy:196,rx:62,ry:30,fill:"#FBE4F0",stroke:PNK,"stroke-width":2,"stroke-dasharray":"5 3"},s);tZ(s,70,192,"공통인자 2",{fw:800,fs:11,c:PNK});tZ(s,70,208,"소재의 인성",{fs:9.5});
+  VN.forEach(function(n,i){var y=28+i*50;bxZ(s,180,y-16,110,32,"#fff",C.navy3);tZ(s,235,y+4,n,{fw:800,fs:11});
+    el("ellipse",{cx:370,cy:y,rx:42,ry:15,fill:"#EEF4FB",stroke:BLU,"stroke-width":1.5,"stroke-dasharray":"4 3"},s);tZ(s,370,y+4,"독립인자 e"+(i+1),{fs:9.5,fw:700,c:"#1C6EA4"});
+    el("line",{x1:326,x2:294,y1:y,y2:y,stroke:BLU,"stroke-width":1.8,"marker-end":"url(#fZ2)"},s);
+    var main=i<3,c1=main?2.4:0.9,c2=main?0.9:2.4;
+    el("line",{x1:130,y1:86,x2:176,y2:y,stroke:PNK,"stroke-width":c1,"stroke-opacity":main?1:.35,"stroke-dasharray":main?"none":"3 3","marker-end":"url(#fZ)"},s);
+    el("line",{x1:130,y1:186,x2:176,y2:y,stroke:PNK,"stroke-width":c2,"stroke-opacity":main?.35:1,"stroke-dasharray":main?"3 3":"none","marker-end":"url(#fZ)"},s);});
+  tZ(s,210,264,"모두 관측 불가능한 잠재 인자 · 인과구조는 도메인 지식으로 가정",{fw:700,fs:9.5,c:C.gray});
+});
+
+/* 실습 1 · 상관과 PC1 기여율(조작형) */
+(function(){
+  var rs=document.getElementById("m32-r");if(!rs)return;var svg=document.getElementById("m32-p1-svg");
+  var rg=(function(seed){var s=seed;return function(){s=(s*16807)%2147483647;return s/2147483647;};})(32);function gn(){var u=rg(),v=rg();return Math.sqrt(-2*Math.log(u))*Math.cos(2*Math.PI*v);}
+  var U=[],V=[];for(var i=0;i<80;i++){U.push(gn());V.push(gn());}
+  function upd(){var r=+rs.value,c1=(1+Math.abs(r))/2,c2=1-c1;document.getElementById("m32-rv").textContent=fmZ(r,2);
+    document.getElementById("m32-c1").textContent=(c1*100).toFixed(1)+"%";document.getElementById("m32-c2").textContent=(c2*100).toFixed(1)+"%";
+    var J=c1>=0.9?["충분",GRN]:c1>=0.75?["대체로",C.amberInk]:["부족",RED],je=document.getElementById("m32-j");je.textContent=J[0];je.style.color=J[1];
+    clear(svg);var X=linZ(-3.2,3.2,14,200),Y=linZ(-3.2,3.2,184,6);el("rect",{x:10,y:4,width:194,height:182,rx:8,fill:"#F8F9FB"},svg);
+    for(var i=0;i<80;i++){var x=U[i],y=r*U[i]+Math.sqrt(Math.max(0,1-r*r))*V[i];el("circle",{cx:X(Math.max(-3,Math.min(3,x))),cy:Y(Math.max(-3,Math.min(3,y))),r:3,fill:BLU,"fill-opacity":.75},svg);}
+    var sg=r>=0?1:-1;el("line",{x1:X(-3),y1:Y(-3*sg),x2:X(3),y2:Y(3*sg),stroke:RED,"stroke-width":2.4},svg);el("line",{x1:X(-1.5),y1:Y(1.5*sg),x2:X(1.5),y2:Y(-1.5*sg),stroke:GRN,"stroke-width":2},svg);
+    tZ(svg,X(2.7),Y(3*sg)+(sg>0?14:-6),"PC1",{fw:800,fs:11,c:RED,halo:true});
+    var bx=240,bw=210;tZ(svg,bx,24,"기여율",{a:"start",fw:800,fs:11});el("rect",{x:bx,y:36,width:bw*c1,height:30,fill:RED,"fill-opacity":.85},svg);el("rect",{x:bx+bw*c1,y:36,width:bw*c2,height:30,fill:GRN,"fill-opacity":.85},svg);
+    if(c1>0.15)tZ(svg,bx+bw*c1/2,56,"PC1",{fw:800,fs:10,c:"#fff"});if(c2>0.12)tZ(svg,bx+bw*c1+bw*c2/2,56,"PC2",{fw:800,fs:10,c:"#fff"});
+    el("line",{x1:bx+bw*0.9,x2:bx+bw*0.9,y1:30,y2:72,stroke:C.navy,"stroke-dasharray":"3 3"},svg);tZ(svg,bx+bw*0.9,84,"90%",{fs:9.5,fw:800});
+    tZ(svg,bx,120,"두 변수일 때",{a:"start",fw:700,fs:10.5,c:C.gray});tZ(svg,bx,142,"PC1 기여율 = (1 + |r|) ÷ 2",{a:"start",fw:800,fs:11});tZ(svg,bx,164,"= (1 + "+Math.abs(r).toFixed(2)+") ÷ 2 = "+c1.toFixed(3),{a:"start",fw:800,fs:11,c:RED});
+    var m=document.getElementById("m32-msg"),ok=Math.abs(Math.abs(r)-0.8)<0.001;m.className="pmsg"+(ok?" ok":"");
+    m.textContent=ok?"찾았습니다. |r| = 0.8이면 PC1 기여율이 정확히 90%입니다. 상관이 강할수록 하나의 축으로 더 많은 정보를 담을 수 있습니다.":
+      Math.abs(r)<0.05?"r이 0에 가까우면 두 축의 기여율이 50%씩으로 비슷해, 하나로 줄이면 정보의 절반을 잃습니다. 무상관이면 차원 축소가 잘 진행되지 않습니다.":
+      "r = "+fmZ(r,2)+"이면 PC1 기여율은 "+(c1*100).toFixed(1)+"%입니다. "+(r<0?"음의 상관이어도 |r|이 크면 PC1 하나로 잘 요약됩니다.":"|r|이 클수록 PC1 하나에 더 많은 정보가 모입니다.");}
+  rs.addEventListener("input",upd);upd();
+})();
+
+/* 실습 3 · PC1 점수 예측(추정형) */
+(function(){
+  var g=document.getElementById("m32-g");if(!g)return;var qs=document.getElementById("m32-qs"),svg=document.getElementById("m32-p3-svg"),IDS=[49,40,10,1,2],cur=0,seen={};
+  var MX=[0,1,2,3,4].map(function(j){return DX.reduce(function(a,r){return a+r[j];},0)/DX.length;}),SX=[0,1,2,3,4].map(function(j){var m=MX[j];return Math.sqrt(DX.reduce(function(a,r){return a+(r[j]-m)*(r[j]-m);},0)/(DX.length-1));});
+  IDS.forEach(function(v,i){var b=document.createElement("button");b.type="button";b.className="mbtn";b.textContent="시편 "+v;b.style.padding="3px 9px";b.onclick=function(){cur=i;reset();};qs.appendChild(b);});
+  function draw(){clear(svg);var id=IDS[cur],row=DX[id-1],z=row.map(function(v,j){return (v-MX[j])/SX[j];}),X=linZ(-3,3,190,420),bh=24;
+    tZ(svg,10,16,"시편 "+id+"의 검사값 (평균과의 차이를 표준편차로 나눈 값)",{a:"start",fw:800,fs:10.5});el("line",{x1:X(0),x2:X(0),y1:24,y2:160,stroke:C.gray2},svg);
+    VN.forEach(function(n,j){var y=34+j*26;tZ(svg,10,y+14,n,{a:"start",fw:800,fs:10.5});tZ(svg,100,y+14,row[j]+" "+VU[j],{a:"start",fs:9.5,c:C.gray,fw:700});
+      var zz=Math.max(-3,Math.min(3,z[j]));el("rect",{x:Math.min(X(0),X(zz)),y:y+2,width:Math.abs(X(zz)-X(0)),height:18,rx:3,fill:j<3?STR:TUF},svg);tZ(svg,zz>=0?X(zz)+4:X(zz)-4,y+15,fmZ(z[j],2),{a:zz>=0?"start":"end",fw:800,fs:9.5});});
+    bxZ(svg,10,168,450,28,"#F3F5F9");tZ(svg,20,187,"PC1 = 0.583·인장 + 0.574·항복 + 0.564·경도 − 0.096·연신 − 0.063·충격",{a:"start",fw:800,fs:10.5,c:RED});}
+  function txt(){var v=+g.value;document.getElementById("m32-gv").textContent=fmZ(v,1);document.getElementById("m32-mine").textContent=fmZ(v,1);}
+  function reset(){[].forEach.call(qs.children,function(x,i){x.classList.toggle("on",i===cur);x.setAttribute("aria-pressed",i===cur);});var p=DS[IDS[cur]-1];
+    document.getElementById("m32-act").textContent=seen[cur]?fmZ(p[0],2):"?";document.getElementById("m32-act2").textContent=seen[cur]?fmZ(p[1],2):"?";
+    var m=document.getElementById("m32-msg3");m.className="pmsg";m.textContent="강도 3항목(파랑)의 막대가 클수록 PC1 점수가 커집니다. 예측한 뒤 「점수 계산」을 누르세요.";draw();}
+  g.addEventListener("input",txt);
+  document.getElementById("m32-check").onclick=function(){seen[cur]=true;var p=DS[IDS[cur]-1],gv=+g.value,ok=Math.abs(gv-p[0])<=0.6,m=document.getElementById("m32-msg3");
+    document.getElementById("m32-act").textContent=fmZ(p[0],2);document.getElementById("m32-act2").textContent=fmZ(p[1],2);m.className="pmsg "+(ok?"ok":"ng");
+    var desc=(p[0]>1?"강도가 높고":p[0]<-1?"강도가 낮고":"강도는 평균 정도이고")+" "+(p[1]>1?"인성도 높은":p[1]<-1?"인성은 낮은":"인성은 평균 정도인");
+    m.textContent=(ok?"가깝게 예측했습니다. ":"차이가 있습니다. ")+"시편 "+IDS[cur]+"의 주성분점수는 (PC1 "+fmZ(p[0],2)+", PC2 "+fmZ(p[1],2)+")로, "+desc+" 시편입니다.";draw();};
+  txt();reset();
+})();
+
+
+/* ---------- ⑤ 형성평가 ---------- */
+function fill(t){return !CASE?t:t.replace(/SUM/g,f1(SUMV)).replace(/AVG/g,f1(AVG,2)).replace(/MAXV/g,f1(MAXV));}
+var firstPractice=document.getElementById("p1"),answered=0,correct=0;
+QUIZ.forEach(function(q,i){
+  var s=document.createElement("section");s.className="slide";s.dataset.step="4";s.id="q"+(i+1);
+  s.innerHTML='<div class="sh"><div class="sec"><span>문항 '+(i+1)+' / '+QUIZ.length+'</span><span class="qchips"><span>학습목표 '+q.goal+'</span><span>'+q.type+'</span></span></div><h2 class="stem">'+fill(q.stem)+'</h2></div>'+
+    '<div class="body split even"><div class="opts'+(q.ox?' ox':'')+'"></div><div class="fbp" aria-live="polite"><p class="empty">보기를 고르면 정답과 해설이 여기에 나타납니다.</p></div></div>';
+  var ob=s.querySelector(".opts"),fb=s.querySelector(".fbp");
+  q.opts.forEach(function(t,k){
+    var b=document.createElement("button");b.type="button";b.className="opt";
+    b.innerHTML=q.ox?t:'<span class="n">'+(k+1)+'</span>'+fill(t);
+    b.addEventListener("click",function(){
+      var all=ob.querySelectorAll(".opt");[].forEach.call(all,function(x){x.disabled=true;});
+      all[q.ans].classList.add("ok");var ok=k===q.ans;if(!ok)b.classList.add("ng");
+      answered++;if(ok)correct++;
+      fb.className="fbp "+(ok?"ok":"ng");
+      fb.innerHTML='<div class="verdict">'+(ok?"정답입니다":"오답입니다. 정답은 "+(q.ox?q.opts[q.ans]:(q.ans+1)+"번")+"입니다")+'</div><div>'+fill(q.exp)+'</div>'+
+        '<button type="button" class="jump back" data-jump="'+q.back+'">'+q.backLabel+'</button><div class="tally">지금까지 '+answered+'문항 중 '+correct+'문항 정답</div>';
+      bindJumps(fb);
+    });
+    ob.appendChild(b);
+  });
+  vp.insertBefore(s,firstPractice);
+});
+
+/* ---------- ⑦ 용어해설 · 참고자료 · 다음 모듈 ---------- */
+for(var gi=0;gi<GLOSSARY.length;gi+=6){
+  var part=GLOSSARY.slice(gi,gi+6),pg=gi/6+1,np=Math.ceil(GLOSSARY.length/6);
+  var s=document.createElement("section");s.className="slide";s.dataset.step="6";
+  var h='<div class="sh"><div class="sec">용어해설 '+pg+'/'+np+'</div><h2>'+(pg===1?"본문에서 굵게 표시한 용어를 나온 순서대로 모았습니다":"용어해설 계속")+'</h2></div><div class="body full"><div class="gl">';
+  part.forEach(function(g,k){h+='<div class="gi"><div class="t"><i>'+(gi+k+1)+'</i>'+g[0]+'<em>'+g[1]+'</em>'+(g[4]?'<span class="cite">['+g[4]+']</span>':'')+'</div><div class="d">'+g[2]+'</div><div class="e"><strong>예시</strong> '+g[3]+'</div></div>';});
+  h+='</div></div>';s.innerHTML=h;vp.appendChild(s);
+}
+(function(){
+  var s=document.createElement("section");s.className="slide";s.dataset.step="6";s.id="end";
+  var refs=REFS.length?'<div class="pcol" style="gap:10px"><div class="plabel" style="margin:0">참고자료</div><ol class="refs">'+REFS.map(function(r){return '<li><span>['+r.n+']</span><div>'+r.title+', '+r.org+'. <a href="'+r.url+'" target="_blank" rel="noopener">'+r.url+'</a> ('+r.date+')</div></li>';}).join("")+'</ol></div>':'';
+  s.innerHTML='<div class="sh"><div class="sec">마무리</div><h2>'+(REFS.length?"참고자료와 다음 모듈":"다음 모듈")+'</h2></div>'+
+    '<div class="body '+(REFS.length?'split even':'full')+'" style="align-content:center">'+refs+
+    '<div class="pcol" style="justify-content:center"><div class="nextmod"><small>다음 모듈 · '+NEXT.title+'</small><strong>'+NEXT.line+'</strong></div></div></div>'+
+    '<p class="foot">학습 상태는 저장되지 않습니다.</p>';
+  vp.appendChild(s);
+})();
+
+/* ---------- 이동 · 진행선 ---------- */
+var slides=[].slice.call(vp.querySelectorAll(".slide")),cur=0,seen={};
+var stepFirst=[],stepCount=[0,0,0,0,0,0,0];
+slides.forEach(function(s,i){var st=+s.dataset.step;if(stepFirst[st]==null)stepFirst[st]=i;stepCount[st]++;});
+var rail=document.getElementById("rail"),stations=[];
+STEPS.forEach(function(n,i){
+  var b=document.createElement("button");b.type="button";b.className="station";
+  b.style.left="calc(14px + (100% - 28px) * "+(i/6)+")";
+  b.innerHTML='<span class="dot">'+(i+1)+'</span><span class="lb">'+n+'</span>';
+  b.setAttribute("aria-label",(i+1)+"단계 "+n+"(으)로 이동");
+  b.addEventListener("click",function(){show(stepFirst[i]);});
+  rail.appendChild(b);stations.push(b);
+});
+function show(i){
+  cur=Math.max(0,Math.min(slides.length-1,i));
+  slides.forEach(function(s,k){s.classList.toggle("on",k===cur);});
+  var st=+slides[cur].dataset.step;seen[st]=true;
+  stations.forEach(function(b,k){b.classList.toggle("cur",k===st);b.classList.toggle("done",k<st||(!!seen[k]&&k!==st));if(k===st)b.setAttribute("aria-current","step");else b.removeAttribute("aria-current");});
+  var within=(cur-stepFirst[st])/Math.max(1,stepCount[st]);
+  var frac=st===6&&cur===slides.length-1?1:(st+within)/6;
+  document.getElementById("fill").style.width=(Math.min(1,frac)*100)+"%";
+  document.getElementById("counter").innerHTML="<strong>"+STEPS[st]+"</strong> "+(cur-stepFirst[st]+1)+" / "+stepCount[st];
+  document.getElementById("prev").disabled=cur===0;
+  var nx=document.getElementById("next");nx.disabled=cur===slides.length-1;
+  nx.textContent=(cur<slides.length-1&&+slides[cur+1].dataset.step!==st)?STEPS[+slides[cur+1].dataset.step]+"(으)로":"다음";
+}
+function bindJumps(root){[].forEach.call(root.querySelectorAll("[data-jump]"),function(b){b.addEventListener("click",function(){var t=document.getElementById(b.dataset.jump);if(t)show(slides.indexOf(t));});});}
+bindJumps(document);
+document.getElementById("prev").onclick=function(){show(cur-1);};
+document.getElementById("next").onclick=function(){show(cur+1);};
+document.addEventListener("keydown",function(e){
+  if(e.target&&(e.target.type==="range"))return;
+  if(e.key==="ArrowRight"||e.key==="PageDown"){show(cur+1);e.preventDefault();}
+  else if(e.key==="ArrowLeft"||e.key==="PageUp"){show(cur-1);e.preventDefault();}
+});
+var tx=null,ty=null;
+vp.addEventListener("touchstart",function(e){var t=e.target;if(t.closest&&(t.closest("input")||t.closest(".dcard"))){tx=null;return;}tx=e.touches[0].clientX;ty=e.touches[0].clientY;},{passive:true});
+vp.addEventListener("touchend",function(e){if(tx==null)return;var dx=e.changedTouches[0].clientX-tx,dy=e.changedTouches[0].clientY-ty;if(Math.abs(dx)>60&&Math.abs(dx)>Math.abs(dy)*1.5)show(cur+(dx<0?1:-1));tx=null;},{passive:true});
+
+/* ---------- 실습 1 · 조작형 ---------- */
+(function(){if(!document.getElementById("p1-items")||!CASE)return;
+var p1v=CASE.values.slice(),p1s=CASE.values.indexOf(MAXV),p1m=document.getElementById("p1-items"),p1r=document.getElementById("p1-range");
+CASE.labels.forEach(function(m,i){var b=document.createElement("button");b.type="button";b.className="mbtn";b.textContent=m;b.onclick=function(){p1s=i;p1d();};p1m.appendChild(b);});
+function p1d(){
+  [].forEach.call(p1m.children,function(b,i){b.classList.toggle("on",i===p1s);b.setAttribute("aria-pressed",i===p1s);});
+  p1r.value=p1v[p1s];document.getElementById("p1-label").textContent=CASE.labels[p1s]+"번";document.getElementById("p1-val").textContent=f1(p1v[p1s]);
+  var s=r1(sum(p1v)),m=s/N;
+  document.getElementById("p1-sum").textContent=f1(s);document.getElementById("p1-mean").textContent=f1(m,2);
+  barChart(document.getElementById("p1-svg"),p1v,{mean:m,sel:p1s,ymax:9});
+  var msg=document.getElementById("p1-msg");
+  if(P1.target!=null&&Math.abs(m-P1.target)<0.005){msg.className="pmsg ok";msg.textContent="성공했습니다. "+f1(s)+" ÷ "+N+" = "+f1(m,2);}
+  else if(Math.abs(s-SUMV)<1e-9){msg.className="pmsg";msg.textContent="원래 값입니다. "+f1(SUMV)+" ÷ "+N+" = "+f1(AVG,2);}
+  else{msg.className="pmsg";msg.textContent="원래 평균 "+f1(AVG,2)+"보다 "+f1(Math.abs(m-AVG),2)+" "+(m>AVG?"늘었습니다.":"줄었습니다.");}
+}
+p1r.addEventListener("input",function(){p1v[p1s]=r1(+p1r.value);p1d();});
+document.getElementById("p1-reset").onclick=function(){p1v=CASE.values.slice();p1d();};
+p1d();
+
+})();
+/* ---------- 실습 2 · 분류형 ---------- */
+(function(){if(!document.getElementById("p2-pool"))return;
+var pool=document.getElementById("p2-pool"),binWrap=document.getElementById("p2-bins"),selC=null,done2=0;
+var bins=BINS.map(function(n){var b=document.createElement("div");b.className="bin";b.dataset.bin=n;b.innerHTML="<h4>"+n+"</h4>";binWrap.appendChild(b);return b;});
+function p2msg(t,c){var m=document.getElementById("p2-msg");m.textContent=t;m.className="pmsg "+(c||"");document.getElementById("p2-count").textContent=done2+" / "+CARDS.length;}
+function p2init(){
+  pool.innerHTML="";bins.forEach(function(b){[].slice.call(b.querySelectorAll(".dcard")).forEach(function(c){c.remove();});});done2=0;selC=null;
+  var o=CARDS.map(function(_,i){return i;});for(var i=o.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1)),t=o[i];o[i]=o[j];o[j]=t;}
+  o.forEach(function(i){var d=document.createElement("div");d.className="dcard";d.tabIndex=0;d.setAttribute("role","button");d.textContent=CARDS[i][0];d.dataset.ans=CARDS[i][1];pool.appendChild(d);attach(d);});
+  p2msg("카드를 하나 골라 보세요.","");
+}
+function drop(c,b){
+  if(!b||c.classList.contains("ok"))return;
+  c.classList.remove("sel");selC=null;
+  if(c.dataset.ans===b.dataset.bin){c.classList.add("ok");c.removeAttribute("tabindex");b.appendChild(c);done2++;p2msg(done2===CARDS.length?"카드를 모두 맞게 분류했습니다.":"정답입니다.","ok");}
+  else{c.classList.add("shake");setTimeout(function(){c.classList.remove("shake");},400);p2msg("「"+b.dataset.bin+"」이 아닙니다. "+HINT[c.dataset.ans],"ng");}
+}
+function pick(d){if(selC===d){d.classList.remove("sel");selC=null;return;}if(selC)selC.classList.remove("sel");selC=d;d.classList.add("sel");p2msg("이제 알맞은 칸을 누르세요.","");}
+function attach(d){
+  var sx=null,sy,mv=false,gh=null,ov=null,offX=0,offY=0;
+  function pos(e){var r=stage.getBoundingClientRect();return{x:(e.clientX-r.left)/S,y:(e.clientY-r.top)/S};}
+  d.addEventListener("pointerdown",function(e){if(d.classList.contains("ok"))return;sx=e.clientX;sy=e.clientY;mv=false;d.setPointerCapture(e.pointerId);var r=d.getBoundingClientRect();offX=(e.clientX-r.left)/S;offY=(e.clientY-r.top)/S;});
+  d.addEventListener("pointermove",function(e){
+    if(sx==null)return;
+    if(!mv&&Math.hypot(e.clientX-sx,e.clientY-sy)>6){mv=true;gh=d.cloneNode(true);gh.classList.add("ghostc");gh.classList.remove("sel");gh.style.width=d.offsetWidth+"px";stage.appendChild(gh);d.style.opacity=".35";}
+    if(mv){var p=pos(e);gh.style.left=(p.x-offX)+"px";gh.style.top=(p.y-offY)+"px";
+      var t=document.elementFromPoint(e.clientX,e.clientY),b=t&&t.closest?t.closest(".bin"):null;
+      if(ov&&ov!==b)ov.classList.remove("hover");ov=b;if(b)b.classList.add("hover");}
+  });
+  d.addEventListener("pointerup",function(){
+    if(sx==null)return;sx=null;
+    if(mv){gh.remove();gh=null;d.style.opacity="";if(ov)ov.classList.remove("hover");var b=ov;ov=null;drop(d,b);}else pick(d);
+  });
+  d.addEventListener("pointercancel",function(){if(gh){gh.remove();gh=null;}d.style.opacity="";sx=null;if(ov)ov.classList.remove("hover");ov=null;});
+  d.addEventListener("keydown",function(e){if(e.key==="Enter"||e.key===" "){e.preventDefault();pick(d);}});
+}
+bins.forEach(function(b){b.tabIndex=0;b.setAttribute("role","button");b.setAttribute("aria-label",b.dataset.bin+" 칸에 놓기");
+  b.addEventListener("click",function(e){if(selC&&!e.target.closest(".dcard"))drop(selC,b);});
+  b.addEventListener("keydown",function(e){if((e.key==="Enter"||e.key===" ")&&selC){e.preventDefault();drop(selC,b);}});});
+document.getElementById("p2-reset").onclick=p2init;
+p2init();
+
+})();
+/* ---------- 실습 3 · 추정형 ---------- */
+(function(){if(!document.getElementById("p3-range")||!PAIRS)return;
+var p3r=document.getElementById("p3-range"),p3done=false;
+document.getElementById("p3-x0").textContent=PAIRS.x0;
+p3r.min=PAIRS.ymin;p3r.max=PAIRS.ymax;p3r.step=0.1;p3r.value=r1((PAIRS.ymin+PAIRS.ymax)/2);
+function p3d(){var g=+p3r.value;document.getElementById("p3-val").textContent=f1(g);scatter(document.getElementById("p3-svg"),{x0:PAIRS.x0,guess:g,line:p3done,pred:p3done,actual:p3done});}
+p3r.addEventListener("input",function(){if(p3done){p3done=false;document.getElementById("p3-res").classList.remove("on");}p3d();});
+document.getElementById("p3-check").onclick=function(){
+  p3done=true;var g=+p3r.value,mine=Math.abs(g-PAIRS.actual),line=Math.abs(PRED-PAIRS.actual);
+  document.getElementById("p3-mine").textContent=f1(g);document.getElementById("p3-pred").textContent=f1(PRED,PAIRS.dp);document.getElementById("p3-act").textContent=f1(PAIRS.actual);
+  var m=document.getElementById("p3-msg"),good=mine<=line;m.className="pmsg "+(good?"ok":"ng");
+  m.textContent="내 오차 "+f1(mine,PAIRS.dp)+PAIRS.unit+", 직선 오차 "+f1(line,PAIRS.dp)+PAIRS.unit+". "+(good?"직선만큼 또는 더 가깝게 추정했습니다.":"직선을 이용하면 오차를 줄일 수 있습니다.");
+  document.getElementById("p3-res").classList.add("on");p3d();
+};
+p3d();
+
+})();
+show(0);
+})();
+</script>
+</body>
+</html>

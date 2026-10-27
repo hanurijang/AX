@@ -1,0 +1,956 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>기계학습과 비지도 학습</title>
+<!-- M33 기계학습과 비지도 학습 v1.0 · 기준 템플릿 v1.3로 제작 (2026-10-27) -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<style>
+:root{
+  --navy:#1B2A4A; --navy2:#2C4170; --navy3:#5B6E97; --navy-soft:#E4E9F2;
+  --ink:#22262E; --gray:#6B7280; --gray2:#9AA0AA; --panel:#EEF0F3; --line:#D5D9E0;
+  --amber:#E0A100; --amber-ink:#6E4F00; --amber-soft:#FCF3D9;
+  --ok:#23704F; --ok-soft:#E2F1E9; --ng:#B42318; --ng-soft:#FBE6E3;
+  --letterbox:#C7CCD4;
+}
+*{box-sizing:border-box}
+html,body{margin:0;height:100%;overflow:hidden;background:var(--letterbox)}
+body{font-family:"Pretendard Variable","Pretendard","Apple SD Gothic Neo","Malgun Gothic","Noto Sans KR",system-ui,sans-serif;color:var(--ink);-webkit-text-size-adjust:100%;font-feature-settings:"tnum"}
+button{font:inherit;color:inherit}
+:focus-visible{outline:3px solid var(--amber);outline-offset:2px;border-radius:4px}
+
+/* ---------- 16:9 무대 ---------- */
+.stage{position:absolute;left:50%;top:50%;width:960px;height:540px;transform:translate(-50%,-50%) scale(var(--s,1));transform-origin:center;background:#fff;overflow:hidden;box-shadow:0 10px 40px rgba(27,42,74,.25)}
+
+/* ---------- 상단 바: 모듈명 + 7단계 진행선 ---------- */
+.topbar{position:absolute;left:0;right:0;top:0;height:60px;background:var(--navy);display:flex;align-items:center}
+.brand{flex:0 0 200px;padding-left:22px;color:#fff;font-size:14px;font-weight:800;letter-spacing:-.3px;line-height:1.2;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.brand small{display:block;font-size:11px;font-weight:500;color:#A9B6CF;letter-spacing:0;margin-top:2px;overflow:hidden;text-overflow:ellipsis}
+.rail{position:relative;flex:1;height:60px;margin-right:22px}
+.rail .track{position:absolute;left:14px;right:14px;top:21px;height:3px;background:#3A4D78;border-radius:2px}
+.rail .fill{position:absolute;left:0;top:0;bottom:0;background:var(--amber);border-radius:2px;transition:width .35s ease}
+.station{position:absolute;top:10px;width:72px;margin-left:-36px;background:none;border:0;padding:0;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:4px}
+.station .dot{width:24px;height:24px;border-radius:50%;display:grid;place-items:center;font-size:11.5px;font-weight:800;background:var(--navy);color:#8E9DBD;border:2px solid #4A5D88;transition:all .25s}
+.station .lb{font-size:11.5px;color:#8E9DBD;white-space:nowrap}
+.station.done .dot{background:#C9D3E6;border-color:#C9D3E6;color:var(--navy)}
+.station.done .lb{color:#C9D3E6}
+.station.cur .dot{background:var(--amber);border-color:#FFE08A;color:var(--navy);transform:scale(1.12)}
+.station.cur .lb{color:#fff;font-weight:700}
+
+/* ---------- 화면 ---------- */
+.viewport{position:absolute;left:0;right:0;top:60px;bottom:46px}
+.slide{position:absolute;inset:0;padding:16px 36px 10px;display:none;flex-direction:column;gap:12px}
+.slide.on{display:flex;animation:fade .22s ease}
+@keyframes fade{from{opacity:0}to{opacity:1}}
+@media (prefers-reduced-motion:reduce){.slide.on{animation:none}.rail .fill,.station .dot{transition:none}}
+.sh{flex:0 0 auto}
+.sec{font-size:12.5px;font-weight:700;color:var(--navy3);display:flex;gap:8px;align-items:center;min-height:18px}
+h2{margin:3px 0 0;font-size:24px;line-height:1.3;font-weight:800;color:var(--navy);letter-spacing:-.6px;display:flex;gap:10px;align-items:flex-start}
+h2 .q{flex:0 0 auto;margin-top:2px;width:28px;height:28px;border-radius:6px;background:var(--navy);color:#fff;font-size:15px;display:grid;place-items:center}
+h2.big{font-size:30px;line-height:1.32}
+.body{flex:1 1 auto;min-height:0;display:grid;gap:24px}
+.split{grid-template-columns:1.2fr 1fr}
+.split.even{grid-template-columns:1fr 1fr}
+.full{grid-template-columns:1fr}
+.fig{background:var(--panel);border-radius:12px;padding:12px;min-height:0;display:flex;align-items:center;justify-content:center}
+.fig svg{width:100%;height:100%;display:block}
+.figcol{min-height:0;display:flex;flex-direction:column;gap:10px}
+.figcol .fig{flex:1 1 auto}
+.side{min-height:0;display:flex;flex-direction:column;gap:12px;justify-content:center}
+
+/* 핵심 문장: 40자 안팎, 1~2개 */
+.key{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:9px}
+.key li{position:relative;padding-left:16px;font-size:18.5px;line-height:1.42;font-weight:700;letter-spacing:-.4px}
+.key li::before{content:"";position:absolute;left:0;top:.28em;width:4px;height:1.05em;border-radius:2px;background:var(--navy2)}
+.key b{color:var(--navy);background:linear-gradient(transparent 62%,var(--amber-soft) 62%)}
+/* 해설 문단: 2~4문장, 150~250자 */
+.exp{margin:0;font-size:15px;line-height:1.62;letter-spacing:-.2px;color:var(--ink)}
+.exp b{color:var(--navy)}
+/* 연결 문장: 다음 소단원으로 넘기는 질문 */
+.next{margin:0;border-top:1px dashed var(--line);padding-top:9px;font-size:14px;font-weight:700;color:var(--navy2);display:flex;gap:8px;align-items:baseline}
+.next span{flex:0 0 auto;font-size:11.5px;font-weight:800;color:var(--navy3);background:var(--navy-soft);border-radius:4px;padding:0 6px;line-height:20px}
+/* 각주: 기호의 뜻과 출처 번호만 */
+.foot{flex:0 0 auto;font-size:12px;line-height:1.5;color:var(--gray);margin:0}
+.foot b{color:var(--ink)}
+.cite{font-size:.72em;font-weight:700;color:var(--navy3);vertical-align:super;line-height:0;margin-left:1px}
+.tag-v{display:inline-block;font-size:11px;font-weight:700;border-radius:4px;padding:0 6px;line-height:18px;white-space:nowrap;vertical-align:1px;color:var(--gray);background:#F3F4F6;box-shadow:inset 0 0 0 1px var(--line)}
+
+/* 핵심 수학 개념 박스 */
+.math{flex:0 0 auto;border-left:3px solid var(--navy3);background:#F6F7F9;border-radius:0 8px 8px 0;padding:9px 13px;font-size:13.5px;line-height:1.5}
+.math .mt{font-size:12px;font-weight:800;color:var(--navy3);margin-bottom:2px}
+.math .f{font-family:"Cambria Math","Times New Roman",serif;font-size:18px;font-weight:700;color:var(--navy);margin:1px 0 4px}
+.math .r{display:grid;grid-template-columns:34px 1fr;gap:6px}
+.math .r span:first-child{font-size:11.5px;font-weight:700;color:var(--gray2);padding-top:1px}
+.math .w{margin-top:5px;padding-top:5px;border-top:1px dashed var(--line);color:var(--ng);font-weight:700;font-size:12.5px}
+
+/* ---------- 하단 바 ---------- */
+.bottombar{position:absolute;left:0;right:0;bottom:0;height:46px;border-top:1px solid var(--line);display:flex;align-items:center;padding:0 22px 0 36px;gap:12px;background:#fff}
+.counter{font-size:13px;color:var(--gray);font-weight:600}
+.counter strong{color:var(--navy)}
+.spacer{flex:1}
+.nav{border:1.5px solid var(--navy);background:#fff;color:var(--navy);border-radius:8px;height:32px;padding:0 16px;font-size:14px;font-weight:700;cursor:pointer}
+.nav.primary{background:var(--navy);color:#fff}
+.nav:disabled{opacity:.3;cursor:default}
+
+/* ---------- 홈으로 ---------- */
+.home{display:inline-flex;align-items:center;gap:6px;height:32px;padding:0 13px;border-radius:8px;border:1.5px solid var(--navy-soft);background:#fff;color:var(--navy2);font-size:13.5px;font-weight:700;line-height:1;text-decoration:none;white-space:nowrap}
+.home svg{width:14px;height:14px;flex:0 0 auto;display:block}
+.home:hover{background:var(--navy-soft);border-color:var(--navy3);color:var(--navy)}
+.home:focus-visible{outline:3px solid var(--amber);outline-offset:2px}
+@media (prefers-reduced-motion:reduce){.home{transition:none}}
+
+/* ① 학습개요 */
+.meta{display:grid;grid-template-columns:auto 1fr;gap:6px 14px;margin:0;font-size:14px}
+.meta dt{font-weight:700;color:var(--gray)}
+.meta dd{margin:0;font-weight:700;color:var(--navy)}
+.prevlink{background:var(--panel);border-radius:10px;padding:12px 14px;font-size:14.5px;line-height:1.55}
+.prevlink small{display:block;font-size:12px;font-weight:800;color:var(--navy3);margin-bottom:3px}
+
+/* ② 학습목표: 목표 → 문항 → 실습 연결 */
+.gmap{display:grid;grid-template-columns:44px 1fr 150px 150px;align-items:stretch;row-gap:12px;column-gap:0}
+.gmap .hd{font-size:12px;font-weight:700;color:var(--gray);padding:0 14px 2px}
+.gmap .gn{background:var(--navy);color:#fff;font-weight:800;font-size:18px;display:grid;place-items:center;border-radius:10px 0 0 10px}
+.gmap .gt{background:var(--panel);padding:14px 18px;font-size:17px;font-weight:700;line-height:1.42;letter-spacing:-.3px;display:flex;align-items:center}
+.gmap .gt b{color:var(--navy)}
+.gmap .ga,.gmap .gp{background:var(--panel);display:flex;align-items:center;padding:0 10px;border-left:2px solid #fff}
+.gmap .gp{border-radius:0 10px 10px 0}
+.jump{border:1.5px solid var(--navy3);background:#fff;border-radius:7px;padding:6px 10px;font-size:13px;font-weight:700;color:var(--navy);cursor:pointer;text-align:left;line-height:1.3;width:100%}
+.jump:hover{background:var(--navy-soft)}
+
+/* ④ 본문 정리 표 */
+.sumtbl{width:100%;border-collapse:separate;border-spacing:0;font-size:14.5px;line-height:1.5}
+.sumtbl th{background:var(--navy);color:#fff;font-weight:800;text-align:left;padding:10px 14px}
+.sumtbl th:first-child{border-radius:10px 0 0 0;width:150px}
+.sumtbl th:last-child{border-radius:0 10px 0 0}
+.sumtbl td{padding:11px 14px;border-bottom:1px solid var(--line);vertical-align:top}
+.sumtbl td:first-child{font-weight:800;color:var(--navy)}
+.sumtbl tr:nth-child(even) td{background:#F8F9FB}
+
+/* ⑤ 형성평가 */
+.qchips{display:flex;gap:6px}
+.qchips span{font-size:11.5px;font-weight:700;color:var(--navy2);background:var(--navy-soft);border-radius:4px;padding:0 7px;line-height:19px}
+h2.stem{font-size:21px;line-height:1.42;font-weight:800}
+.opts{display:grid;gap:9px;align-content:center}
+.opts.ox{grid-template-columns:1fr 1fr}
+.opt{border:1.5px solid var(--line);background:#fff;border-radius:10px;padding:11px 14px;text-align:left;font-size:16px;font-weight:600;cursor:pointer;display:flex;gap:10px;align-items:center}
+.opt .n{flex:0 0 26px;height:26px;border-radius:50%;background:var(--panel);display:grid;place-items:center;font-size:13px;font-weight:800;color:var(--navy)}
+.opts.ox .opt{justify-content:center;font-size:40px;font-weight:800;padding:22px;color:var(--navy)}
+.opt:hover:not(:disabled){border-color:var(--navy3);background:#F8F9FB}
+.opt:disabled{cursor:default}
+.opt.ok{border-color:var(--ok);background:var(--ok-soft);color:var(--ok)}
+.opt.ok .n{background:var(--ok);color:#fff}
+.opt.ng{border-color:var(--ng);background:var(--ng-soft);color:var(--ng)}
+.opt.ng .n{background:var(--ng);color:#fff}
+.fbp{background:var(--panel);border-radius:12px;padding:18px 20px;display:flex;flex-direction:column;gap:10px;font-size:14.5px;line-height:1.6}
+.fbp .empty{color:var(--gray);margin:auto 0}
+.fbp .verdict{font-size:19px;font-weight:800}
+.fbp.ok{background:var(--ok-soft)} .fbp.ok .verdict{color:var(--ok)}
+.fbp.ng{background:var(--ng-soft)} .fbp.ng .verdict{color:var(--ng)}
+.fbp .back{align-self:flex-start}
+.fbp .tally{margin-top:auto;font-size:12.5px;color:var(--gray);font-weight:600}
+
+/* ⑥ 실습 */
+.plabel{font-size:12px;font-weight:800;color:var(--navy3);margin-bottom:6px}
+.pcol{min-height:0;display:flex;flex-direction:column}
+.mbtns{display:flex;flex-wrap:nowrap;gap:3px;margin-bottom:8px}
+.mbtn{border:1px solid var(--line);background:#fff;border-radius:6px;padding:2px 6px;font-size:12px;cursor:pointer;min-width:26px}
+.mbtn.on{background:var(--navy);border-color:var(--navy);color:#fff}
+.ctrl{display:flex;align-items:center;gap:10px;font-size:14px;font-weight:600}
+input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
+.stats{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.stats.three{grid-template-columns:1fr 1fr 1fr}
+.stats div{background:var(--panel);border-radius:10px;padding:8px 12px}
+.stats small{display:block;font-size:11.5px;color:var(--gray);font-weight:600;line-height:1.35}
+.stats strong{font-size:22px;color:var(--navy);letter-spacing:-.4px}
+.pmsg{font-size:14.5px;font-weight:700;min-height:22px;line-height:1.45}
+.pmsg.ok{color:var(--ok)} .pmsg.ng{color:var(--ng)}
+.think{flex:0 0 auto;background:var(--amber-soft);border-radius:10px;padding:9px 14px;font-size:14.5px;font-weight:700;color:var(--amber-ink);display:flex;gap:10px;align-items:baseline}
+.think span{flex:0 0 auto;font-size:12px;font-weight:800}
+.howto{font-size:13.5px;color:var(--gray);line-height:1.5;margin:0}
+.btn{border:0;background:var(--navy);color:#fff;border-radius:8px;height:32px;padding:0 14px;font-size:13.5px;font-weight:700;cursor:pointer}
+.btn.ghost{background:#fff;color:var(--navy);box-shadow:inset 0 0 0 1.5px var(--navy)}
+.pool{flex:1;min-height:0;display:grid;grid-template-columns:1fr 1fr;align-content:start;gap:8px;padding:10px;border:1.5px dashed var(--line);border-radius:10px;background:#FAFBFC}
+.dcard{background:#fff;border:1.5px solid var(--navy3);border-radius:8px;padding:7px 10px;font-size:13.5px;font-weight:600;line-height:1.4;cursor:grab;user-select:none;-webkit-user-select:none;touch-action:none}
+.dcard.sel{box-shadow:0 0 0 3px var(--amber)}
+.dcard.ok{border-color:var(--ok);background:var(--ok-soft);color:var(--ok);cursor:default;font-size:12.5px;padding:5px 8px}
+.dcard.shake{animation:shake .35s;border-color:var(--ng);background:var(--ng-soft)}
+@keyframes shake{25%{transform:translateX(-5px)}75%{transform:translateX(5px)}}
+.ghostc{position:absolute;pointer-events:none;z-index:50;opacity:.92;box-shadow:0 8px 20px rgba(27,42,74,.25);cursor:grabbing}
+.bins{flex:1 0 auto;min-height:0;display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.bin .dcard{font-size:12px;padding:3px 7px;line-height:1.3}
+.p2row{display:flex;gap:10px;align-items:center}.p2row .pmsg{flex:1;margin:0}.p2row .btn{flex:0 0 auto}
+.bin{border:1.5px solid var(--line);border-radius:10px;padding:6px;display:flex;flex-direction:column;gap:6px;background:#fff;cursor:pointer;min-height:0}
+.bin h4{margin:0;background:var(--navy);color:#fff;border-radius:6px;text-align:center;font-size:14px;padding:4px}
+.bin.hover{border-color:var(--amber);background:var(--amber-soft)}
+.res{display:none;flex-direction:column;gap:8px}
+.res.on{display:flex}
+
+/* ⑦ 용어해설·참고자료 */
+.gl{display:grid;grid-template-columns:1fr 1fr;grid-template-rows:repeat(3,1fr);gap:10px 22px;min-height:0}
+.gi{border-top:2px solid var(--navy);padding:8px 0 0;display:flex;flex-direction:column;gap:3px;min-height:0}
+.gi .t{font-size:16.5px;font-weight:800;color:var(--navy);display:flex;gap:6px;align-items:baseline;flex-wrap:wrap}
+.gi .t em{font-style:normal;font-weight:500;font-size:12.5px;color:var(--gray)}
+.gi .t i{font-style:normal;font-size:12px;font-weight:800;color:var(--navy3);width:22px}
+.gi .d{font-size:14px;line-height:1.5}
+.gi .e{font-size:12.5px;line-height:1.45;color:var(--gray)}
+.gi .e strong{color:var(--navy3)}
+.refs{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:8px;font-size:13.5px;line-height:1.5}
+.refs li{display:grid;grid-template-columns:30px 1fr;gap:4px}
+.refs li span{font-weight:800;color:var(--navy3)}
+.refs a{color:var(--navy2);word-break:break-all}
+.nextmod{background:var(--navy);color:#fff;border-radius:12px;padding:18px 22px;display:flex;flex-direction:column;gap:6px}
+.nextmod small{font-size:12px;font-weight:700;color:#A9B6CF}
+.nextmod strong{font-size:19px;line-height:1.45;letter-spacing:-.3px}
+
+.rotate{position:fixed;left:0;right:0;bottom:max(14px,env(safe-area-inset-bottom));text-align:center;font-size:13px;color:#3A4560;display:none}
+@media (orientation:portrait) and (max-width:700px){.rotate{display:block}}
+</style>
+</head>
+<body>
+<div class="stage" id="stage">
+  <header class="topbar">
+    <!-- [교체] 모듈명 / 과정명·모듈 번호 (장·절 번호는 쓰지 않음) -->
+    <div class="brand" id="brand">기계학습과 비지도 학습<small>베이즈·기계학습·수리 모형 · M33</small></div>
+    <nav class="rail" id="rail" aria-label="학습 단계"><div class="track"><div class="fill" id="fill"></div></div></nav>
+  </header>
+
+  <main class="viewport" id="vp">
+    <!-- ① 학습개요 ─────────────────────────────── -->
+    <section class="slide" data-step="0">
+      <div class="sh"><div class="sec">학습개요</div>
+        <h2 class="big">정답 없이도 데이터 속 무리와 구조를 찾아낼 수 있습니다</h2></div>
+      <div class="body split">
+        <div class="fig"><svg id="m33-ov" viewBox="0 0 440 260" role="img" aria-label="기계학습의 세 종류 중 비지도 학습은 군집분석과 차원 축소로 데이터 구조를 찾음"></svg></div>
+        <div class="side">
+          <div class="prevlink"><small>지난 모듈에서는</small>상관이 있는 많은 변수를 소수의 축으로 요약하는 주성분분석과, 잠재 인자를 가정하는 인자분석을 배웠습니다.<small style="margin-top:8px">이번 모듈에서는</small>기계학습의 세 가지 종류와 통계학과의 차이를 살펴보고, 정답 없이 구조를 찾는 비지도 학습인 군집분석과 PCA 이외의 차원 축소 방법을 배웁니다.</div>
+          <dl class="meta"><dt>학습 시간</dt><dd>약 35분</dd><dt>본문</dt><dd>소단원 4개</dd><dt>실습</dt><dd>조작형 · 분류형 · 추정형</dd></dl>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" data-step="0">
+      <div class="sh"><div class="sec">학습개요 · 이 모듈의 예시</div><h2>라벨 없는 압연기 운전 기록 60건에서 운전 패턴을 찾습니다</h2></div>
+      <div class="body split">
+        <div class="fig"><svg id="m33-case" viewBox="0 0 440 250" role="img" aria-label="진동과 베어링 온도의 산점도 60점, 라벨 없이 회색 점"></svg></div>
+        <div class="side">
+          <ul class="key"><li>정답 라벨이 없어도 무리를 찾을 수 있을까요?</li></ul>
+          <p class="exp">압연기 운전 기록 60건에는 진동(mm/s)과 베어링 온도(℃)만 기록되어 있고, 각 기록이 정상인지 이상인지 알려 주는 라벨은 없습니다(예시값). 그래도 산점도를 보면 점들이 몇 개의 무리로 모여 있는 것 같습니다. 정답 없이 데이터의 구조를 찾는 비지도 학습으로, 이 기록들을 비슷한 운전 패턴끼리 묶어 봅니다.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ② 학습목표 ─────────────────────────────── -->
+    <section class="slide" data-step="1">
+      <div class="sh"><div class="sec">학습목표</div><h2>이 모듈을 마치면 이렇게 할 수 있습니다</h2></div>
+      <div class="body full" style="align-content:center">
+        <div class="gmap">
+          <div></div><div class="hd">목표</div><div class="hd">확인하는 문항</div><div class="hd">연결 실습</div>
+          <div class="gn">1</div><div class="gt"><span>기계학습의 종류와 통계학과의 차이를 <b>구분한다</b>.</span></div>
+          <div class="ga"><button class="jump" data-jump="q1">문항 1·2</button></div><div class="gp"><button class="jump" data-jump="p2">실습 2 분류</button></div>
+          <div class="gn">2</div><div class="gt"><span>k평균 군집화 과정을 <b>설명한다</b>.</span></div>
+          <div class="ga"><button class="jump" data-jump="q3">문항 3·4</button></div><div class="gp"><button class="jump" data-jump="p1">실습 1 조작</button></div>
+          <div class="gn">3</div><div class="gt"><span>덴드로그램과 차원 축소 결과를 <b>해석한다</b>.</span></div>
+          <div class="ga"><button class="jump" data-jump="q5">문항 5·6</button></div><div class="gp"><button class="jump" data-jump="p3">실습 3 추정</button></div>
+        </div>
+      </div>
+      <p class="foot">버튼을 누르면 해당 문항이나 실습 화면으로 바로 이동합니다.</p>
+    </section>
+
+    <!-- ③ 일상의 예시 ─────────────────────────────── -->
+    <section class="slide" data-step="2">
+      <div class="sh"><div class="sec">일상의 예시 1/5</div><h2>배우는 방법은 세 가지: 답지 없이, 답지 보며, 해 보며</h2></div>
+      <div class="body split">
+        <div class="fig"><svg viewBox="0 0 440 250" role="img" aria-label="사진을 비슷한 것끼리 정리, 답지를 보며 문제 풀기, 자전거를 넘어지며 배우기">
+          <g font-size="12" font-weight="800" text-anchor="middle">
+            <rect x="10" y="30" width="134" height="170" rx="14" fill="#EEF4FB"/><text x="77" y="56" fill="#1C6EA4">답지 없이</text><text x="77" y="100" font-size="11" fill="#22262E" font-weight="700">사진을 비슷한</text><text x="77" y="118" font-size="11" fill="#22262E" font-weight="700">것끼리 정리</text><text x="77" y="176" font-size="10.5" fill="#6B7280" font-weight="600">스스로 묶음 찾기</text>
+            <rect x="153" y="30" width="134" height="170" rx="14" fill="#FCF3D9"/><text x="220" y="56" fill="#6E4F00">답지 보며</text><text x="220" y="100" font-size="11" fill="#22262E" font-weight="700">문제를 풀고</text><text x="220" y="118" font-size="11" fill="#22262E" font-weight="700">정답과 맞춰 봄</text><text x="220" y="176" font-size="10.5" fill="#6B7280" font-weight="600">입력 → 정답 관계</text>
+            <rect x="296" y="30" width="134" height="170" rx="14" fill="#E3F1EA"/><text x="363" y="56" fill="#23704F">해 보며</text><text x="363" y="100" font-size="11" fill="#22262E" font-weight="700">자전거를 타다</text><text x="363" y="118" font-size="11" fill="#22262E" font-weight="700">넘어지며 익힘</text><text x="363" y="176" font-size="10.5" fill="#6B7280" font-weight="600">결과로 행동 수정</text>
+          </g>
+        </svg></div>
+        <div class="side">
+          <ul class="key"><li>정답이 있느냐에 따라 배우는 방식이 다릅니다.</li></ul>
+          <p class="exp">사진 수백 장을 정리할 때는 정답이 없어도 비슷한 것끼리 스스로 묶어 나갑니다. 문제집을 풀 때는 답지를 보며 문제와 정답의 관계를 익힙니다. 자전거는 누가 정답을 알려 주지 않아도 넘어지고 균형을 잡는 결과를 겪으며 몸으로 익힙니다. 컴퓨터가 데이터로 배우는 기계학습에도 이렇게 세 가지 방식이 있습니다.</p>
+          <p class="next"><span>본문에서</span>4-1 기계학습이란으로 이어집니다.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" data-step="2">
+      <div class="sh"><div class="sec">일상의 예시 2/5</div><h2>“왜 그런지” 알고 싶을 때와 “잘 맞히기”만 하면 될 때</h2></div>
+      <div class="body split">
+        <div class="fig"><svg viewBox="0 0 440 250" role="img" aria-label="정비사는 고장 원인을 설명해야 하고, 내비게이션은 도착 시간만 잘 맞히면 됨">
+          <rect x="24" y="36" width="186" height="160" rx="14" fill="#EEF4FB"/><text x="117" y="64" text-anchor="middle" font-size="13" font-weight="800" fill="#1C6EA4">정비사</text>
+          <text x="117" y="104" text-anchor="middle" font-size="12" fill="#22262E">“브레이크 패드가</text><text x="117" y="124" text-anchor="middle" font-size="12" fill="#22262E">닳아서 소리가 나요”</text><text x="117" y="172" text-anchor="middle" font-size="11" font-weight="700" fill="#1C6EA4">설명·해석이 중요</text>
+          <rect x="230" y="36" width="186" height="160" rx="14" fill="#FCF3D9"/><text x="323" y="64" text-anchor="middle" font-size="13" font-weight="800" fill="#6E4F00">내비게이션</text>
+          <text x="323" y="104" text-anchor="middle" font-size="12" fill="#22262E">“도착 예정</text><text x="323" y="124" text-anchor="middle" font-size="12" fill="#22262E">오후 3시 12분”</text><text x="323" y="172" text-anchor="middle" font-size="11" font-weight="700" fill="#6E4F00">잘 맞히는 것이 중요</text>
+        </svg></div>
+        <div class="side">
+          <ul class="key"><li>설명이 목적인지, 예측이 목적인지 다릅니다.</li></ul>
+          <p class="exp">정비사는 차에서 소리가 나는 이유를 ‘브레이크 패드가 닳아서’처럼 설명해 줘야 믿고 맡길 수 있습니다. 반면 내비게이션은 계산 과정이 아무리 복잡해도 도착 시간만 잘 맞히면 충분합니다. 데이터 분석도 원인을 설명하고 해석하는 것이 중요한 경우와, 해석은 어려워도 예측을 잘하는 것이 중요한 경우로 나뉩니다.</p>
+          <p class="next"><span>본문에서</span>4-2 통계학과 기계학습의 차이로 이어집니다.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" data-step="2">
+      <div class="sh"><div class="sec">일상의 예시 3/5</div><h2>운동장에 흩어진 학생들을 가까운 사람끼리 모읍니다</h2></div>
+      <div class="body split">
+        <div class="fig"><svg viewBox="0 0 440 250" role="img" aria-label="깃발 세 개를 세우고 가장 가까운 깃발로 모인 뒤, 깃발을 무리의 가운데로 옮기기를 반복">
+          <rect x="20" y="20" width="400" height="190" rx="14" fill="#E3F1EA"/>
+          <g fill="#2B8CC4"><circle cx="70" cy="60" r="6"/><circle cx="90" cy="80" r="6"/><circle cx="60" cy="95" r="6"/><circle cx="100" cy="55" r="6"/></g>
+          <g fill="#C2416E"><circle cx="300" cy="70" r="6"/><circle cx="330" cy="60" r="6"/><circle cx="320" cy="95" r="6"/><circle cx="350" cy="85" r="6"/></g>
+          <g fill="#E0A100"><circle cx="190" cy="160" r="6"/><circle cx="210" cy="180" r="6"/><circle cx="230" cy="150" r="6"/><circle cx="175" cy="185" r="6"/></g>
+          <g stroke="#1B2A4A" stroke-width="2.5"><line x1="82" y1="95" x2="82" y2="65"/><line x1="325" y1="100" x2="325" y2="70"/><line x1="203" y1="190" x2="203" y2="160"/></g>
+          <g fill="#B42318"><path d="M82 65 l18 6 l-18 6z"/><path d="M325 70 l18 6 l-18 6z"/><path d="M203 160 l18 6 l-18 6z"/></g>
+          <text x="220" y="232" text-anchor="middle" font-size="11.5" font-weight="700" fill="#1B2A4A">가까운 깃발로 모이기 → 깃발을 무리 가운데로 → 반복</text>
+        </svg></div>
+        <div class="side">
+          <ul class="key"><li>가까운 것끼리 모으고, 중심을 옮기기를 반복합니다.</li></ul>
+          <p class="exp">운동장에 흩어진 학생들을 세 모둠으로 나누려 할 때, 깃발 세 개를 아무 데나 세우고 각자 가장 가까운 깃발로 모이게 합니다. 그다음 깃발을 각 모둠의 한가운데로 옮기고 다시 가까운 깃발로 모이게 합니다. 이를 몇 번 반복하면 더는 옮겨 가는 학생이 없어지고, 자연스럽게 가까운 학생끼리 모둠이 만들어집니다.</p>
+          <p class="next"><span>본문에서</span>4-3 군집분석과 k평균으로 이어집니다.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" data-step="2">
+      <div class="sh"><div class="sec">일상의 예시 4/5</div><h2>족보는 가까운 친척부터 차례로 묶어 올라갑니다</h2></div>
+      <div class="body split">
+        <div class="fig"><svg viewBox="0 0 440 250" role="img" aria-label="형제끼리, 사촌끼리, 더 먼 친척 순으로 묶여 올라가는 가계도">
+          <g stroke="#1B2A4A" stroke-width="2" fill="none">
+            <path d="M60 200 L60 170 L100 170 L100 200"/><path d="M150 200 L150 160 L190 160 L190 200"/><path d="M80 170 L80 120 L170 120 L170 160"/>
+            <path d="M250 200 L250 165 L290 165 L290 200"/><path d="M340 200 L340 150 L380 150 L380 200"/><path d="M270 165 L270 110 L360 110 L360 150"/>
+            <path d="M125 120 L125 60 L315 60 L315 110"/>
+          </g>
+          <g font-size="11" font-weight="700" fill="#1B2A4A" text-anchor="middle"><text x="60" y="218">나</text><text x="100" y="218">형</text><text x="150" y="218">사촌</text><text x="190" y="218">사촌</text><text x="250" y="218">육촌</text><text x="290" y="218">육촌</text><text x="340" y="218">팔촌</text><text x="380" y="218">팔촌</text></g>
+          <line x1="30" y1="140" x2="410" y2="140" stroke="#B42318" stroke-width="2" stroke-dasharray="6 4"/><text x="410" y="134" text-anchor="end" font-size="11" font-weight="800" fill="#B42318">여기서 자르면 2무리</text>
+        </svg></div>
+        <div class="side">
+          <ul class="key"><li>가까운 것부터 합쳐 나무 모양을 만듭니다.</li></ul>
+          <p class="exp">족보를 그리면 형제끼리 먼저 묶이고, 그다음 사촌과, 그다음 더 먼 친척과 차례로 묶여 올라가 나무 모양이 됩니다. 이 나무를 어느 높이에서 잘라 보느냐에 따라 ‘가까운 가족 몇 무리’가 될 수도, ‘큰 집안 두 무리’가 될 수도 있습니다. 묶음의 개수를 미리 정하지 않고 보는 높이에 따라 정하는 방식입니다.</p>
+          <p class="next"><span>본문에서</span>4-3 계층적 군집화로 이어집니다.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" data-step="2">
+      <div class="sh"><div class="sec">일상의 예시 5/5</div><h2>현장에서는? 라벨이 없는 설비 데이터부터 이해하려면</h2></div>
+      <div class="body split even">
+        <div class="fig"><svg viewBox="0 0 420 250" role="img" aria-label="네 장면이 기계학습과 비지도 학습으로 이어지는 그림">
+          <defs><marker id="b2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10z" fill="#5B6E97"/></marker></defs>
+          <g font-size="13" font-weight="700" fill="#1B2A4A" text-anchor="middle">
+            <rect x="14" y="18" width="150" height="44" rx="10" fill="#fff" stroke="#5B6E97" stroke-width="1.5"/><text x="89" y="45">세 가지 배우는 법</text>
+            <rect x="14" y="74" width="150" height="44" rx="10" fill="#fff" stroke="#5B6E97" stroke-width="1.5"/><text x="89" y="101">설명 vs 예측</text>
+            <rect x="14" y="130" width="150" height="44" rx="10" fill="#fff" stroke="#5B6E97" stroke-width="1.5"/><text x="89" y="157">깃발로 모이기</text>
+            <rect x="14" y="186" width="150" height="44" rx="10" fill="#fff" stroke="#5B6E97" stroke-width="1.5"/><text x="89" y="213">족보처럼 묶기</text>
+          </g>
+          <g stroke="#5B6E97" stroke-width="2" fill="none"><path d="M166 40 C220 40 220 112 254 120" marker-end="url(#b2)"/><path d="M166 96 C210 96 220 118 254 122" marker-end="url(#b2)"/><path d="M166 152 C210 152 220 130 254 128" marker-end="url(#b2)"/><path d="M166 208 C220 208 220 138 254 130" marker-end="url(#b2)"/></g>
+          <rect x="258" y="84" width="150" height="82" rx="12" fill="#1B2A4A"/>
+          <text x="333" y="116" text-anchor="middle" font-size="15" font-weight="800" fill="#fff">기계학습과</text><text x="333" y="136" text-anchor="middle" font-size="15" font-weight="800" fill="#fff">비지도 학습</text>
+          <text x="333" y="156" text-anchor="middle" font-size="11" fill="#C9D3E6">군집분석 · 차원 축소</text>
+        </svg></div>
+        <div class="side">
+          <p class="exp">네 장면은 정답 유무에 따른 학습 방식, 설명과 예측이라는 목적의 차이, 가까운 것끼리 모으고 중심을 옮기는 방법, 가까운 것부터 차례로 묶는 방법으로 이어집니다. 설비 센서 데이터는 대부분 ‘정상/이상’ 라벨 없이 쌓이므로, 먼저 비지도 학습으로 운전 패턴을 나눠 보면 이상 징후를 찾는 출발점이 됩니다.</p>
+          <p class="next"><span>다음 질문</span>기계학습은 어떻게 나뉠까?</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ④ 본문 ─────────────────────────────── -->
+    <section class="slide" data-step="3" id="s-4-1a">
+      <div class="sh"><div class="sec">4-1 기계학습이란?</div><h2><span class="q">Q</span>기계학습은 어떤 종류로 나뉠까요?</h2></div>
+      <div class="body split even">
+        <div class="fig"><svg id="m33-types" viewBox="0 0 420 270" role="img" aria-label="비지도 학습은 입력 x만, 지도 학습은 입력 x와 정답 y, 강화학습은 에이전트와 환경이 행동·보상·상태를 주고받음"></svg></div>
+        <div class="side">
+          <ul class="key"><li><b>기계학습</b>: 데이터로 규칙·관계를 학습</li><li><b>비지도 학습</b>·<b>지도 학습</b>·<b>강화학습</b></li></ul>
+          <p class="exp">기계학습은 통계와 관련이 깊으며, 이미지 판정, 자율 주행, 자연어 처리 등 복잡한 데이터 분석에 쓰입니다. 크게 비지도 학습(교사 없는 학습), 지도 학습(교사 있는 학습), 강화학습 3가지로 분류합니다. ‘교사’란 정답 데이터이므로 둘의 차이는 정답 데이터의 유무에 있습니다. 비지도 학습은 차원 축소나 군집화 등 데이터 요약이 목적이고, 지도 학습은 데이터 x와 정답 y의 관계를 학습하는 회귀가 발전한 형태입니다. 강화학습은 에이전트가 행동한 뒤 보상과 상태를 통해 행동을 갱신합니다.</p>
+          <p class="next"><span>다음 질문</span>통계학과는 무엇이 다를까?</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" data-step="3" id="s-4-2a">
+      <div class="sh"><div class="sec">4-2 통계학과 기계학습의 차이</div><h2><span class="q">Q</span>통계학과 기계학습은 무엇을 더 중시할까요?</h2></div>
+      <div class="body split even">
+        <div class="fig"><svg id="m33-vs" viewBox="0 0 420 270" role="img" aria-label="통계학은 작은 표본·단순 모형·설명과 해석, 기계학습은 대량 데이터·복잡 모형·예측을 중시"></svg></div>
+        <div class="side">
+          <ul class="key"><li>통계학: 작은 표본, 설명·해석 중시</li><li>기계학습: 대량 데이터, 예측 중시</li></ul>
+          <p class="exp">통계학은 작은 표본크기의 데이터로 설명이나 해석을 중시하는 경향이 있고, 기계학습(지도 학습)은 대량의 데이터로 예측을 중시하는 경향이 있습니다. 선형회귀는 절편과 기울기를 가진 단순한 모형이라 기울기로 쉽게 해석할 수 있습니다. 기계학습 모형은 비선형이고 파라미터가 많아 대개 해석하기 어렵지만, 표현력이 강해 복잡한 현상에 대한 예측 성능이 높다고 할 수 있습니다. 최근에는 ‘어느 변수가 중요한가’를 평가하는 등 해석 가능성을 갖추려는 시도도 있습니다.</p>
+          <p class="next"><span>다음 질문</span>정답 없이 무리를 나누려면?</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" data-step="3" id="s-4-3a">
+      <div class="sh"><div class="sec">4-3 비지도 학습: 군집분석</div><h2><span class="q">Q</span>라벨 없는 운전 기록을 어떻게 무리로 나눌까요?</h2></div>
+      <div class="body split even">
+        <div class="fig"><svg id="m33-km" viewBox="0 0 420 270" role="img" aria-label="k평균 k = 3으로 운전 기록 60건을 정상 운전, 고하중 운전, 과열 의심 세 군집으로 나눈 결과와 중심"></svg></div>
+        <div class="side">
+          <ul class="key"><li><b>군집분석</b>: 데이터가 속한 군집을 구함</li><li><b>k평균</b>: 할당 → 중심 계산 → 재할당 반복</li></ul>
+          <p class="exp">비지도 학습의 대표는 비슷한 데이터 집합을 찾는 군집분석과 차원 축소입니다. 군집분석은 정답이 없으므로 결과가 데이터 구조와 분석자의 설정에 따라 도출됩니다. 기본 방법인 k평균은 군집 개수 k를 정하며 시작해, 무작위로 할당한 군집의 중심(평균)을 구하고 가장 가까운 중심으로 다시 할당하는 과정을 할당이 바뀌지 않을 때까지 반복합니다. 운전 기록을 k = 3으로 나누면 정상 운전, 고하중 운전, 과열 의심의 세 군집이 나타납니다. 결과는 초기 할당에 따라 달라질 수 있어 k평균++를 쓰기도 합니다.</p>
+          <p class="next"><span>다음 질문</span>군집 개수를 미리 정하지 않으려면?</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" data-step="3" id="s-4-3b">
+      <div class="sh"><div class="sec">4-3 비지도 학습: 군집분석</div><h2><span class="q">Q</span>군집 개수를 미리 정하지 않고 나눌 수 있을까요?</h2></div>
+      <div class="body split even">
+        <div class="fig"><svg id="m33-dend" viewBox="0 0 420 270" role="img" aria-label="운전 기록 12건의 덴드로그램, 높이 1.6에서 자르면 3개, 0.7에서 자르면 5개 군집"></svg></div>
+        <div class="side">
+          <ul class="key"><li><b>계층적 군집화</b>: 가까운 군집끼리 차례로 합침</li><li><b>덴드로그램</b>을 자르는 높이로 개수 결정</li></ul>
+          <p class="exp">계층적 군집화는 모든 데이터가 다른 군집인 상태에서 시작해, 가장 가까운(비슷한) 군집끼리 순서대로 합쳐 나갑니다. 그러면 나무 형태의 덴드로그램(수형도)을 그릴 수 있습니다. 군집 개수는 미리 정하지 않으며, 아래로 갈수록 세밀하게, 위로 갈수록 대략적으로 바라보게 됩니다. 운전 기록 12건을 높이 1.6에서 자르면 3개 군집이 됩니다. 유사도를 재는 거리의 정의는 다양해 분석자가 지정해야 하며, 정답이 없으므로 결과에 분석자의 자의성이 개입된다는 점도 염두에 두어야 합니다.</p>
+          <p class="next"><span>다음 질문</span>비선형 구조는 어떻게 요약할까?</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" data-step="3" id="s-4-4a">
+      <div class="sh"><div class="sec">4-4 PCA 이외의 차원 축소 방법</div><h2><span class="q">Q</span>주성분분석으로 구분되지 않는 구조도 있을까요?</h2></div>
+      <div class="body split even">
+        <div class="fig"><svg id="m33-tsne" viewBox="0 0 420 270" role="img" aria-label="고차원 데이터를 PCA로 2차원에 그리면 집단이 겹치고, t-SNE로 그리면 집단이 뚜렷이 나뉘는 개념도"></svg></div>
+        <div class="side">
+          <ul class="key"><li>PCA는 선형 관계 기반 → 비선형에 한계</li><li><b>t-SNE</b>, <b>UMAP</b>은 비선형에도 적용</li></ul>
+          <p class="exp">주성분분석은 선형 상관관계에 기반을 두므로 비선형관계에는 적용할 수 없다는 문제가 있습니다. 이와 달리 t-SNE는 복잡한 비선형관계에도 적용할 수 있습니다<span class="cite">[1]</span>. 손으로 쓴 숫자 이미지(28 × 28 = 784차원)를 2차원으로 시각화하면, t-SNE에서는 숫자별 집합이 명확히 구분되지만 PCA에서는 서로 겹쳐 분포합니다. t-SNE처럼 비선형관계에 적용할 수 있는 방법으로 UMAP도 있습니다<span class="cite">[2]</span>. 센서 수백 개의 운전 데이터를 2차원 지도로 펼쳐 보는 데에도 쓰입니다.</p>
+          <p class="next"><span>정리</span>기계학습과 비지도 학습을 정리해 봅시다.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" data-step="3" id="s-4-sum">
+      <div class="sh"><div class="sec">4-5 정리</div><h2>정답 없이도 군집분석과 차원 축소로 데이터의 구조를 찾습니다</h2></div>
+      <div class="body full" style="align-content:center">
+        <table class="sumtbl">
+          <thead><tr><th>개념</th><th>핵심</th><th>이 모듈의 예</th></tr></thead>
+          <tbody>
+            <tr><td>기계학습 3종류</td><td>비지도(정답 없음) · 지도(정답 y) · 강화(보상과 상태)</td><td>운전 기록 묶기 · 불량 판정 · 로봇 제어</td></tr>
+            <tr><td>통계학 vs 기계학습</td><td>작은 표본·설명 중시 vs 대량 데이터·예측 중시</td><td>선형회귀 기울기 해석 vs 복잡 모형 예측</td></tr>
+            <tr><td>군집분석</td><td>k평균(k 지정, 초기값 영향) · 계층적 군집화(덴드로그램)</td><td>k = 3 → 정상·고하중·과열 의심</td></tr>
+            <tr><td>비선형 차원 축소</td><td>PCA는 선형 기반, t-SNE·UMAP은 비선형에 적용</td><td>784차원 숫자 이미지 → 2차원</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="next"><span>형성평가로</span>이제 같은 예시로 문제를 풀어 봅니다.</p>
+    </section>
+
+    <!-- ⑤ 형성평가: 스크립트의 QUIZ 배열로 만듭니다 -->
+
+    <!-- ⑥ 실습 1 · 조작형 (모듈 전용) ─────────────── -->
+    <section class="slide" data-step="5" id="p1">
+      <div class="sh"><div class="sec">실습 1 · 조작형</div><h2>목표: k평균을 한 단계씩 진행하며 군집이 정해지는 과정을 확인합니다</h2></div>
+      <div class="body split">
+        <div class="pcol" style="gap:8px">
+          <div class="plabel" style="margin:0">해보기 · 군집 개수 k를 고르고 「한 단계 진행」을 눌러 보세요. 「처음 위치 바꾸기」로 초기 중심을 바꿀 수 있습니다</div>
+          <div class="mbtns" id="m33-kb" style="gap:6px"></div>
+          <div class="fig" style="flex:1"><svg id="m33-p1-svg" viewBox="0 0 470 180" role="img" aria-label="운전 기록 산점도와 군집 중심"></svg></div>
+        </div>
+        <div class="pcol" style="gap:10px;justify-content:center">
+          <div style="display:flex;gap:8px"><button class="btn" id="m33-step">한 단계 진행</button><button class="btn ghost" id="m33-init">처음 위치 바꾸기</button></div>
+          <div class="stats three"><div><small>진행 단계</small><strong id="m33-it">-</strong></div><div><small>바뀐 할당</small><strong id="m33-ch">-</strong></div><div><small>군집 내 제곱합</small><strong id="m33-wss">-</strong></div></div>
+          <p class="howto">도전: 할당이 더 바뀌지 않을 때까지 진행하고, k = 2·3·4의 군집 내 제곱합을 비교해 보세요.</p>
+          <p class="pmsg" id="m33-msg"></p>
+          <div class="think"><span>생각해보기</span>k를 계속 늘리면 군집 내 제곱합은 어떻게 될까요?</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ⑥ 실습 2 · 분류형 ─────────────────────── -->
+    <section class="slide" data-step="5" id="p2">
+      <div class="sh"><div class="sec">실습 2 · 분류형</div><h2>목표: 현장 과제를 비지도·지도·강화학습으로 나눕니다</h2></div>
+      <div class="body split even">
+        <div class="pcol">
+          <div class="plabel">해보기 · 정답 데이터가 있는지, 보상으로 행동을 바꾸는지 보고 칸에 놓으세요</div>
+          <div class="pool" id="p2-pool"></div>
+        </div>
+        <div class="pcol" style="gap:8px">
+          <div class="plabel" style="margin:0">결과 확인 · <span id="p2-count">0 / 0</span></div>
+          <div class="bins" id="p2-bins"></div>
+          <div class="p2row"><p class="pmsg" id="p2-msg"></p><button class="btn ghost" id="p2-reset">다시 하기</button></div>
+          <div class="think"><span>생각해보기</span>우리 공장에서 라벨 없이 쌓여 있는 데이터는 무엇일까요?</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ⑥ 실습 3 · 추정형 (모듈 전용) ─────────────── -->
+    <section class="slide" data-step="5" id="p3">
+      <div class="sh"><div class="sec">실습 3 · 추정형</div><h2>목표: 덴드로그램을 자르는 높이에 따라 군집이 몇 개가 될지 예측합니다</h2></div>
+      <div class="body split">
+        <div class="pcol">
+          <div class="plabel">해보기 · 자르는 높이를 고르고, 빨간 선이 세로선과 만나는 수를 세어 군집 개수를 예측하세요</div>
+          <div class="fig" style="flex:1"><svg id="m33-p3-svg" viewBox="0 0 470 210" role="img" aria-label="운전 기록 12건의 덴드로그램과 자르는 높이"></svg></div>
+        </div>
+        <div class="pcol" style="gap:9px;justify-content:center">
+          <div class="mbtns" id="m33-qh" style="gap:5px"></div>
+          <div class="ctrl">군집 개수 예측<input type="range" id="m33-g" min="1" max="12" step="1" value="3" aria-label="군집 개수 예측"><strong id="m33-gv" style="min-width:40px;text-align:right">-</strong></div>
+          <button class="btn" id="m33-check" style="align-self:flex-start">잘라서 확인</button>
+          <div class="stats three"><div><small>내 예측</small><strong id="m33-mine">-</strong></div><div><small>실제 군집 수</small><strong id="m33-act">?</strong></div><div><small>그 아래 결합</small><strong id="m33-mg">?</strong></div></div>
+          <p class="pmsg" id="m33-msg3"></p>
+          <div class="think"><span>생각해보기</span>현장에서는 어느 높이로 자를지를 무엇으로 정할 수 있을까요?</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ⑦ 용어해설·참고자료: 스크립트의 GLOSSARY, REFS, NEXT로 만듭니다 -->
+  </main>
+
+  <footer class="bottombar">
+    <a class="home" href="../index.html" title="홈으로 (학습 과정)" aria-label="홈으로"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 10.5 12 3l9 7.5"/><path d="M5.5 9.5V21h13V9.5"/></svg><span>홈</span></a><span class="counter" id="counter"></span><span class="spacer"></span>
+    <button class="nav" id="prev" type="button">이전</button>
+    <button class="nav primary" id="next" type="button">다음</button>
+  </footer>
+</div>
+<p class="rotate">화면을 가로로 돌리면 더 크게 볼 수 있습니다.</p>
+
+<script>
+(function(){
+"use strict";
+
+/* =====================================================================
+   [교체] 모듈 설정 — 새 모듈은 이 블록과 HTML 화면 문장만 바꿉니다.
+   ===================================================================== */
+var MODULE={title:"기계학습과 비지도 학습",sub:"베이즈·기계학습·수리 모형 · M33"};
+var STEPS=["학습개요","학습목표","일상의 예시","본문","형성평가","실습","용어해설"];
+
+/* 예시 데이터(이 모듈에서 정한 값)
+   압연기 운전 기록 60건: 진동(mm/s)과 베어링 온도(℃), 정답(운전 상태 라벨) 없음
+   생성 중심: (2.0, 45) 20건 · (4.5, 52) 20건 · (3.2, 68) 20건 → 정상 운전 · 고하중 운전 · 과열 의심
+   표준화 후 k평균 군집 내 제곱합: k 2 → 76.2, k 3 → 12.8, k 4 → 11.0
+   계층적 군집화(평균 연결, 표준화, 12건: 각 군집 4건) 결합 높이 0.10, 0.20, 0.28, 0.41, 0.43, 0.56, 0.63, 0.95, 1.34, 1.87, 2.44
+   자르는 높이 0.7 → 5개, 1.1 → 4개, 1.6 → 3개, 2.0 → 2개 */
+var CASE=null, PAIRS=null, P1={target:null};
+var CP=[[2.18,43.3],[1.75,46.9],[2.26,40.4],[2.02,41.9],[1.29,48.3],[2.45,45.3],[1.96,40.0],[2.28,45.0],[2.83,51.8],[2.12,39.7],[1.52,47.9],[1.69,47.7],[2.46,44.4],[1.34,47.1],[2.12,42.6],[2.17,50.4],[1.48,51.0],[2.08,41.9],[2.25,44.2],[1.65,45.5],[4.22,48.3],[4.66,48.7],[4.03,56.7],[4.76,48.3],[4.36,55.8],[4.48,49.2],[4.71,52.9],[4.92,56.1],[4.06,51.8],[4.86,48.0],[4.9,50.3],[4.45,56.0],[5.19,52.7],[4.16,54.5],[4.25,52.3],[4.67,53.0],[4.19,51.4],[5.13,48.5],[4.59,53.9],[5.27,52.6],[2.31,65.4],[3.2,67.2],[3.64,66.1],[4.07,62.2],[2.59,68.1],[3.25,66.3],[3.45,71.2],[3.54,67.6],[2.89,71.2],[3.43,70.7],[3.01,66.3],[3.18,66.9],[2.96,66.2],[3.34,66.4],[3.03,70.9],[3.34,66.2],[3.16,66.5],[3.61,65.2],[3.96,72.9],[3.17,66.7]];
+var CMU=[3.281, 54.942], CSD=[1.13, 9.777];
+var DL=[[5.0,7.0,0.097,2.0],[0.0,3.0,0.201,2.0],[2.0,13.0,0.283,3.0],[9.0,10.0,0.405,2.0],[4.0,12.0,0.435,3.0],[6.0,11.0,0.564,2.0],[1.0,14.0,0.632,4.0],[15.0,17.0,0.949,4.0],[8.0,19.0,1.335,5.0],[16.0,20.0,1.871,8.0],[18.0,21.0,2.438,12.0]], DORD=[1, 2, 0, 3, 4, 5, 7, 8, 9, 10, 6, 11], DPS=[[2.18,43.3],[1.75,46.9],[2.26,40.4],[2.02,41.9],[4.22,48.3],[4.66,48.7],[4.03,56.7],[4.76,48.3],[2.31,65.4],[3.2,67.2],[3.64,66.1],[4.07,62.2]];
+
+var QUIZ=[
+ {goal:1,type:"상황 판단",stem:"압연기 운전 기록 60건에는 진동과 베어링 온도만 있고 ‘정상/이상’ 같은 라벨은 없습니다. 비슷한 운전 패턴끼리 묶어 보려면 어떤 학습에 해당할까요?",
+  opts:["비지도 학습","지도 학습","강화학습","회귀분석"],ans:0,
+  exp:"기계학습은 비지도 학습, 지도 학습, 강화학습 3가지로 크게 분류하며, 비지도 학습과 지도 학습의 차이는 정답 데이터의 유무에 있습니다. 정답 없이 데이터를 비슷한 집단으로 정리하는 군집분석은 비지도 학습의 대표적인 방법입니다. 정답 y와 함께 x와 y의 관계를 학습하는 것이 지도 학습입니다.",back:"s-4-1a",backLabel:"4-1 기계학습의 세 종류 다시 보기"},
+ {goal:1,type:"O/X 오개념",stem:"“기계학습 모형은 통계학의 선형회귀보다 모형을 해석하기가 쉽다.”",
+  opts:["O","X"],ans:1,ox:true,
+  exp:"통계학의 선형회귀는 절편과 기울기를 가진 단순한 모형이라 기울기로 쉽게 해석할 수 있습니다. 반면 기계학습 모형은 비선형이고 파라미터가 많아 대개 해석하기 어렵습니다. 대신 표현력이 강해 복잡한 현상에 대한 예측 성능이 높다고 할 수 있습니다.",back:"s-4-2a",backLabel:"4-2 통계학과 기계학습의 차이 다시 보기"},
+ {goal:2,type:"상황 판단",stem:"k평균으로 운전 기록을 군집화하려 합니다. 분석을 시작할 때 분석자가 먼저 정해야 하는 것은?",
+  opts:["군집 개수 k","각 데이터의 정답 군집","덴드로그램을 자를 높이","군집별 중심 위치"],ans:0,
+  exp:"k평균은 분석자가 데이터를 몇 개의 군집으로 나눌 것인가, 즉 군집 개수 k를 정하며 시작합니다. 그런 뒤 각 데이터에 무작위로 군집을 할당하고, 각 군집의 중심 위치(데이터의 평균)를 구한 다음, 데이터마다 가장 근접한 군집을 할당하고 중심 위치를 다시 계산하는 과정을 반복합니다.",back:"s-4-3a",backLabel:"4-3 k평균 다시 보기"},
+ {goal:2,type:"O/X 오개념",stem:"“k평균은 처음에 군집을 어떻게 무작위로 할당하든 항상 같은 결과를 낸다.”",
+  opts:["O","X"],ans:1,ox:true,
+  exp:"k평균 결과는 초기 무작위 군집 할당에 따라 달라질 가능성이 있습니다. 그래서 초기 중심을 서로 멀리 떨어지게 고르도록 개량한 k평균++를 사용하기도 합니다. 실습 1에서 「처음 위치 바꾸기」로 결과가 달라지는지 확인할 수 있습니다.",back:"s-4-3a",backLabel:"4-3 k평균의 주의점 다시 보기"},
+ {goal:3,type:"계산",stem:"운전 기록 12건을 계층적 군집화했더니 군집이 합쳐진 높이가 0.10, 0.20, 0.28, 0.41, 0.43, 0.56, 0.63, 0.95, 1.34, 1.87, 2.44였습니다. 높이 1.1에서 자르면 군집은 몇 개일까요?",
+  opts:["4개","3개","8개","5개"],ans:0,
+  exp:"처음에는 12건이 모두 다른 군집이고, 한 번 합칠 때마다 군집이 하나씩 줄어듭니다. 높이 1.1보다 낮은 결합은 0.10~0.95의 8번이므로 12 − 8 = 4개 군집이 됩니다. 덴드로그램은 어느 단계에서 바라보느냐에 따라 군집 개수가 달라집니다.",back:"s-4-3b",backLabel:"4-3 계층적 군집화 다시 보기"},
+ {goal:3,type:"상황 판단",stem:"센서 수백 개로 이루어진 고차원 운전 데이터를 2차원으로 시각화하려는데, 변수 사이 관계가 비선형이라 PCA로는 집단이 겹쳐 보입니다. 알맞은 방법은?",
+  opts:["t-SNE나 UMAP을 적용한다","PCA의 제1주성분만 본다","k평균의 k를 늘린다","덴드로그램의 높이를 낮춘다"],ans:0,
+  exp:"주성분분석은 선형 상관관계에 기반을 두므로 비선형관계에는 적용할 수 없다는 문제가 있습니다. 이와 달리 t-SNE는 복잡한 비선형관계에도 적용할 수 있는 방법이며, UMAP도 비선형관계에 적용할 수 있는 차원 축소 방법입니다.",back:"s-4-4a",backLabel:"4-4 PCA 이외의 차원 축소 다시 보기"}
+];
+
+var BINS=["비지도 학습","지도 학습","강화학습"];
+var CARDS=[["라벨 없는 운전 기록을 패턴별로 묶기","비지도 학습"],["센서 수백 개를 2차원으로 요약","비지도 학습"],
+           ["불량 여부 정답으로 판정 모형 학습","지도 학습"],["과거 조업 조건으로 강도 예측","지도 학습"],
+           ["로봇 팔이 보상으로 동작을 갱신","강화학습"],["시행착오로 최적 제어 방법 습득","강화학습"]];
+var HINT={"비지도 학습":"정답 데이터 없이 구조를 찾습니다.","지도 학습":"입력 x와 정답 y의 관계를 학습합니다.","강화학습":"행동에 따른 보상과 상태로 행동을 갱신합니다."};
+
+var GLOSSARY=[
+ ["기계학습","machine learning","데이터로부터 규칙이나 관계를 학습해 데이터 요약이나 예측을 하는 방법으로, 대량의 데이터와 예측을 중시하는 경향이 있습니다.","운전 기록으로 이상 패턴 탐지"],
+ ["비지도 학습","unsupervised learning","정답 데이터 없이 데이터의 배후에 있는 구조를 추출하는 학습으로, 교사 없는 학습이라고도 합니다.","라벨 없는 운전 기록 군집화"],
+ ["지도 학습","supervised learning","입력 데이터 x와 정답 데이터 y의 관계를 학습하는 방법으로, 통계학의 회귀가 발전한 형태입니다.","불량 여부를 정답으로 판정 모형 학습"],
+ ["강화학습","reinforcement learning","정답 데이터는 주어지지 않고, 에이전트가 환경에 행동한 뒤 보상과 상태를 통해 행동을 갱신하는 학습입니다.","로봇 팔 제어"],
+ ["군집분석","cluster analysis","각 데이터가 어떤 군집(비슷한 집합)에 속하는지 구하는 방법으로, 클러스터링이라고도 합니다.","운전 기록 60건 → 3개 군집"],
+ ["k평균","k-means","군집 개수 k를 정하고, 중심 계산과 가장 가까운 중심으로의 재할당을 반복하는 가장 기본적인 군집화 방법입니다.","k = 3, 군집 내 제곱합 12.8"],
+ ["계층적 군집화","hierarchical clustering","모든 데이터가 다른 군집인 상태에서 시작해 가장 가까운 군집끼리 순서대로 합쳐 나가는 방법입니다.","12건을 평균 연결로 결합"],
+ ["덴드로그램","dendrogram","계층적 군집화에서 군집이 합쳐지는 순서와 거리를 나무 형태로 그린 그림으로, 수형도라고도 합니다.","높이 1.1에서 자르면 4개"],
+ ["t-SNE","t-distributed Stochastic Neighbor Embedding","복잡한 비선형관계에도 적용할 수 있는 차원 축소 방법입니다.","고차원 센서 데이터를 2차원 지도로"],
+ ["UMAP","Uniform Manifold Approximation and Projection","t-SNE처럼 비선형관계에 적용할 수 있는 차원 축소 방법입니다.","대량 운전 데이터 시각화"]
+];
+var REFS=[
+ {n:1,title:"Visualizing Data using t-SNE",org:"L. van der Maaten, G. Hinton, Journal of Machine Learning Research 9, 2579–2605, 2008",url:"https://jmlr.org/papers/v9/vandermaaten08a.html",date:"2026-10-27 확인"},
+ {n:2,title:"UMAP: Uniform Manifold Approximation and Projection for Dimension Reduction",org:"L. McInnes, J. Healy, J. Melville, arXiv:1802.03426, 2018",url:"https://arxiv.org/abs/1802.03426",date:"2026-10-27 확인"}
+];
+var NEXT={title:"M34 지도 학습과 예측 성능",line:"다음 모듈에서는 정답 데이터로 관계를 학습하는 지도 학습과, 이진 분류와 회귀의 예측 성능을 평가하는 방법을 살펴봅니다."};
+
+/* =====================================================================
+   아래부터는 공통 엔진입니다. 모듈마다 바꾸지 않습니다.
+   ===================================================================== */
+var NS="http://www.w3.org/2000/svg";
+var C={navy:"#1B2A4A",navy2:"#2C4170",navy3:"#5B6E97",soft:"#A9B8D4",grid:"#DDE1E7",gray:"#6B7280",gray2:"#9AA0AA",amber:"#E0A100",amberInk:"#6E4F00",ok:"#23704F"};
+function el(t,a,p,x){var e=document.createElementNS(NS,t);for(var k in a)e.setAttribute(k,a[k]);if(x!=null)e.textContent=x;if(p)p.appendChild(e);return e;}
+function clear(s){while(s.firstChild)s.removeChild(s.firstChild);}
+function f1(v,d){return v.toFixed(d==null?1:d);}
+function sum(a){return a.reduce(function(x,y){return x+y;},0);}
+function r1(v){return Math.round(v*10)/10;}
+var stage=document.getElementById("stage"),vp=document.getElementById("vp");
+
+/* 계산은 모두 데이터에서 직접 합니다(R0-7) */
+var N=CASE?CASE.values.length:0,SUMV=CASE?r1(sum(CASE.values)):0,AVG=N?SUMV/N:0,MAXV=CASE?Math.max.apply(null,CASE.values):0;
+var LR=!PAIRS?null:(function(){var n=PAIRS.xs.length,mx=sum(PAIRS.xs)/n,my=sum(PAIRS.ys)/n,sxy=0,sxx=0;
+  for(var i=0;i<n;i++){sxy+=(PAIRS.xs[i]-mx)*(PAIRS.ys[i]-my);sxx+=(PAIRS.xs[i]-mx)*(PAIRS.xs[i]-mx);}
+  var b=sxy/sxx;return{b:b,a:my-b*mx};})();
+var PRED=PAIRS?LR.a+LR.b*PAIRS.x0:0;
+
+document.title=MODULE.title;
+document.getElementById("brand").innerHTML=MODULE.title+"<small>"+MODULE.sub+"</small>";
+
+/* 16:9 고정 무대를 창 크기에 맞춤 */
+var S=1;
+function fit(){S=Math.min(window.innerWidth/960,window.innerHeight/540);stage.style.setProperty("--s",S);}
+window.addEventListener("resize",fit);fit();
+
+/* ---------- 그래프 ---------- */
+function barChart(svg,vals,o){
+  clear(svg);o=o||{};
+  var vb=svg.viewBox.baseVal,W=vb.width,H=vb.height,L=34,R=o.mean!=null?70:8,T=26,Bt=24,ym=o.ymax||Math.ceil(Math.max.apply(null,vals)+1),pw=W-L-R,ph=H-T-Bt,bw=pw/vals.length;
+  function y(v){return T+ph-(v/ym)*ph;}
+  for(var g=0;g<=ym;g++){el("line",{x1:L,x2:W-R,y1:y(g),y2:y(g),stroke:C.grid},svg);el("text",{x:L-6,y:y(g)+4,"text-anchor":"end","font-size":10.5,fill:C.gray2},svg,g);}
+  vals.forEach(function(v,i){
+    var sel=o.sel===i,hi=o.hi===i;
+    el("rect",{x:L+i*bw+bw*.16,y:y(v),width:bw*.68,height:Math.max(0,y(0)-y(v)),rx:2,fill:sel?C.amber:hi?C.navy2:C.soft},svg);
+    el("text",{x:L+i*bw+bw/2,y:H-Bt+16,"text-anchor":"middle","font-size":10.5,fill:C.gray},svg,CASE.labels[i]);
+  });
+  if(o.mean!=null){var m=o.mean;
+    el("line",{x1:L,x2:W-R+4,y1:y(m),y2:y(m),stroke:C.navy,"stroke-width":2,"stroke-dasharray":"6 4"},svg);
+    el("rect",{x:W-R+6,y:y(m)-10,width:R-8,height:20,rx:4,fill:C.navy},svg);
+    el("text",{x:W-R+6+(R-8)/2,y:y(m)+4,"text-anchor":"middle","font-size":11,"font-weight":700,fill:"#fff"},svg,"평균 "+f1(m,2));}
+  /* 값 라벨은 마지막에 흰 테두리로 그려 점선에 가리지 않게 함 */
+  vals.forEach(function(v,i){var sel=o.sel===i,hi=o.hi===i;
+    if(o.labels||sel)el("text",{x:L+i*bw+bw/2,y:y(v)-5,"text-anchor":"middle","font-size":10.5,"font-weight":sel||hi?800:500,fill:sel?C.amberInk:hi?C.navy:C.gray,stroke:"#EEF0F3","stroke-width":3,"paint-order":"stroke"},svg,f1(v));});
+}
+function scatter(svg,o){
+  clear(svg);o=o||{};
+  var vb=svg.viewBox.baseVal,W=vb.width,H=vb.height,L=34,R=14,T=30,Bt=40,x0=PAIRS.xmin,x1=PAIRS.xmax,y0=PAIRS.ymin,y1=PAIRS.ymax;
+  function X(v){return L+(v-x0)/(x1-x0)*(W-L-R);}
+  function Y(v){return T+(H-T-Bt)-(v-y0)/(y1-y0)*(H-T-Bt);}
+  for(var g=y0;g<=y1+1e-9;g+=PAIRS.ystep){el("line",{x1:L,x2:W-R,y1:Y(g),y2:Y(g),stroke:C.grid},svg);el("text",{x:L-6,y:Y(g)+4,"text-anchor":"end","font-size":10.5,fill:C.gray2},svg,g);}
+  for(var h=x0;h<=x1+1e-9;h+=PAIRS.xstep)el("text",{x:X(h),y:H-Bt+16,"text-anchor":"middle","font-size":10.5,fill:C.gray},svg,h);
+  el("text",{x:(L+W-R)/2,y:H-6,"text-anchor":"middle","font-size":10.5,fill:C.gray},svg,PAIRS.xlabel);
+  el("text",{x:4,y:14,"font-size":10.5,fill:C.gray},svg,PAIRS.ylabel);
+  if(o.line){var la=x0+(x1-x0)*.04,lb=x1-(x1-x0)*.04;el("line",{x1:X(la),y1:Y(LR.a+LR.b*la),x2:X(lb),y2:Y(LR.a+LR.b*lb),stroke:C.navy,"stroke-width":2},svg);}
+  PAIRS.xs.forEach(function(x,i){el("circle",{cx:X(x),cy:Y(PAIRS.ys[i]),r:4.5,fill:C.navy3,"fill-opacity":.85},svg);});
+  if(o.x0!=null){el("line",{x1:X(o.x0),y1:Y(0),x2:X(o.x0),y2:Y(y1),stroke:C.amber,"stroke-dasharray":"3 3"},svg);
+    el("text",{x:X(o.x0),y:T-4,"text-anchor":"middle","font-size":10.5,"font-weight":700,fill:C.amberInk},svg,PAIRS.x0label);}
+  if(o.pred){el("circle",{cx:X(PAIRS.x0),cy:Y(PRED),r:6,fill:C.navy},svg);
+    el("text",{x:X(PAIRS.x0)-10,y:Y(PRED)+4,"text-anchor":"end","font-size":11,"font-weight":800,fill:C.navy,stroke:"#EEF0F3","stroke-width":3,"paint-order":"stroke"},svg,"예측 "+f1(PRED,PAIRS.dp)+PAIRS.unit);}
+  if(o.guess!=null){el("circle",{cx:X(PAIRS.x0),cy:Y(o.guess),r:7,fill:C.amber,stroke:"#fff","stroke-width":2},svg);}
+  if(o.actual){var ay=Y(PAIRS.actual);el("rect",{x:X(PAIRS.x0)-6,y:ay-6,width:12,height:12,fill:C.ok,transform:"rotate(45 "+X(PAIRS.x0)+" "+ay+")"},svg);
+    el("text",{x:X(PAIRS.x0)-10,y:ay-6,"text-anchor":"end","font-size":11,"font-weight":800,fill:C.ok,stroke:"#EEF0F3","stroke-width":3,"paint-order":"stroke"},svg,"실제 "+f1(PAIRS.actual)+PAIRS.unit);}
+  return {X:X,Y:Y};
+}
+function flow(svg,names){
+  clear(svg);var n=names.length,w=118,gap=(440-40-n*w)/(n-1),y=96,h=64;
+  el("defs",{},svg).innerHTML='<marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10z" fill="'+C.navy3+'"/></marker>';
+  names.forEach(function(t,i){var x=20+i*(w+gap);
+    el("rect",{x:x,y:y,width:w,height:h,rx:10,fill:i===n-1?C.navy:"#fff",stroke:C.navy,"stroke-width":1.5},svg);
+    el("text",{x:x+w/2,y:y+h/2-6,"text-anchor":"middle","font-size":11,"font-weight":700,fill:i===n-1?"#C9D3E6":C.navy3},svg,"4-"+(i+1));
+    el("text",{x:x+w/2,y:y+h/2+13,"text-anchor":"middle","font-size":14,"font-weight":800,fill:i===n-1?"#fff":C.navy},svg,t);
+    if(i<n-1)el("line",{x1:x+w+4,y1:y+h/2,x2:x+w+gap-5,y2:y+h/2,stroke:C.navy3,"stroke-width":2,"marker-end":"url(#ar)"},svg);});
+  el("text",{x:220,y:200,"text-anchor":"middle","font-size":12,fill:C.gray},svg,"본문 소단원을 배우는 순서");
+}
+/* 화면에 해당 id가 있을 때만 그립니다(모듈마다 쓰지 않는 그림은 건너뜀) */
+function on(id,fn){var e=document.getElementById(id);if(e)fn(e);}
+on("fig-flow",function(s){flow(s,["소단원 1","소단원 2","정리"]);});
+on("fig-case",function(s){barChart(s,CASE.values,{labels:true});});
+on("fig-bar",function(s){barChart(s,CASE.values,{labels:true,mean:AVG});});
+on("fig-scatter",function(s){scatter(s,{line:true,x0:PAIRS.x0,pred:true});});
+on("fig-bridge",function(s){
+  el("defs",{},s).innerHTML='<marker id="ar2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10z" fill="'+C.navy3+'"/></marker>';
+  [["장면 1",40],["장면 2",130]].forEach(function(p){el("rect",{x:24,y:p[1],width:130,height:64,rx:10,fill:"#fff",stroke:C.navy3,"stroke-width":1.5},s);el("text",{x:89,y:p[1]+37,"text-anchor":"middle","font-size":14,"font-weight":700,fill:C.navy},s,p[0]);
+    el("line",{x1:158,y1:p[1]+32,x2:246,y2:120,stroke:C.navy3,"stroke-width":2,"marker-end":"url(#ar2)"},s);});
+  el("rect",{x:252,y:84,width:150,height:72,rx:12,fill:C.navy},s);
+  el("text",{x:327,y:116,"text-anchor":"middle","font-size":14,"font-weight":800,fill:"#fff"},s,"본문 첫 질문");
+  el("text",{x:327,y:136,"text-anchor":"middle","font-size":11.5,fill:"#C9D3E6"},s,"4-1로 이어짐");});
+on("case-n",function(e){e.textContent=N+"개";});
+on("case-sum",function(e){e.textContent=f1(SUMV);});
+on("case-max",function(e){e.textContent=f1(MAXV);});
+on("math-calc",function(e){e.textContent=f1(LR.b,2)+" × "+PAIRS.x0+" + "+f1(LR.a,2)+" = "+f1(PRED,2);});
+
+/* =====================================================================
+   [교체] 모듈 전용 그림: 모듈마다 필요한 그림 함수는 이 자리에 둡니다.
+   ===================================================================== */
+/* M33 전용 그림·실습 */
+function linB(a,b,c,d){return function(v){return c+(v-a)/(b-a)*(d-c);};}
+function tB(s,x,y,t,o){o=o||{};return el("text",{x:x,y:y,"text-anchor":o.a||"middle","font-size":o.fs||11,"font-weight":o.fw||600,fill:o.c||C.navy,stroke:o.halo?"#fff":"none","stroke-width":o.halo?3:0,"paint-order":"stroke"},s,t);}
+function bxB(s,x,y,w,h,fill,stroke){return el("rect",{x:x,y:y,width:w,height:h,rx:10,fill:fill||"#fff",stroke:stroke||"none","stroke-width":stroke?1.5:0},s);}
+function mkB(s,id,col){el("defs",{},s).innerHTML='<marker id="'+id+'" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10z" fill="'+col+'"/></marker>';}
+function arB(s,x1,y1,x2,y2,id,col){return el("line",{x1:x1,y1:y1,x2:x2,y2:y2,stroke:col||C.navy3,"stroke-width":2,"marker-end":"url(#"+id+")"},s);}
+var RED="#B42318",GRN="#23704F",BLU="#2B8CC4",PNK="#C2416E",KC=["#2B8CC4","#C2416E","#E0A100","#23704F"];
+function rngB(seed){var s=seed>>>0;return function(){s=(s+0x6D2B79F5)|0;var t=Math.imul(s^s>>>15,1|s);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296;};}
+var ZB=CP.map(function(p){return [(p[0]-CMU[0])/CSD[0],(p[1]-CMU[1])/CSD[1]];});
+function kmB(k,cen){var lab=ZB.map(function(z){var b=0,bd=1e9;cen.forEach(function(c,j){var d=(z[0]-c[0])*(z[0]-c[0])+(z[1]-c[1])*(z[1]-c[1]);if(d<bd){bd=d;b=j;}});return b;});return lab;}
+function upB(k,lab){var c=[];for(var j=0;j<k;j++){var sx=0,sy=0,n=0;ZB.forEach(function(z,i){if(lab[i]===j){sx+=z[0];sy+=z[1];n++;}});c.push(n?[sx/n,sy/n]:[0,0]);}return c;}
+function wssB(lab,cen){var w=0;ZB.forEach(function(z,i){var c=cen[lab[i]];w+=(z[0]-c[0])*(z[0]-c[0])+(z[1]-c[1])*(z[1]-c[1]);});return w;}
+function axB(s,x0,y0,w,h){var X=linB(0.5,6.2,x0+30,x0+w-6),Y=linB(32,82,y0+h-18,y0+6);
+  [2,4,6].forEach(function(t){tB(s,X(t),y0+h-4,t,{fs:9,c:C.gray,fw:500});});[40,60,80].forEach(function(t){el("line",{x1:x0+30,x2:x0+w-6,y1:Y(t),y2:Y(t),stroke:C.grid},s);tB(s,x0+26,Y(t)+3,t,{a:"end",fs:9,c:C.gray2,fw:500});});return[X,Y];}
+
+on("m33-ov",function(s){
+  mkB(s,"oB",C.navy3);
+  bxB(s,150,8,140,44,C.navy);tB(s,220,35,"기계학습",{fw:800,fs:13.5,c:"#fff"});
+  [[10,"비지도 학습","정답 없음","#EEF4FB","#1C6EA4"],[155,"지도 학습","정답 y 있음","#FCF3D9",C.amberInk],[300,"강화학습","보상과 상태","#E3F1EA",GRN]].forEach(function(b){bxB(s,b[0],84,130,52,b[3]);tB(s,b[0]+65,106,b[1],{fw:800,fs:12,c:b[4]});tB(s,b[0]+65,124,b[2],{fs:10});
+    el("path",{d:"M220 54 C220 70 "+(b[0]+65)+" 66 "+(b[0]+65)+" 80",fill:"none",stroke:C.navy3,"stroke-width":2,"marker-end":"url(#oB)"},s);});
+  bxB(s,10,170,130,40,"#fff",BLU);tB(s,75,195,"군집분석",{fw:800,fs:11.5,c:"#1C6EA4"});bxB(s,10,216,130,38,"#fff",BLU);tB(s,75,240,"차원 축소",{fw:800,fs:11.5,c:"#1C6EA4"});
+  arB(s,75,138,75,166,"oB");tB(s,160,196,"k평균 · 계층적 군집화",{a:"start",fw:700,fs:10.5});tB(s,160,240,"PCA · t-SNE · UMAP",{a:"start",fw:700,fs:10.5});
+});
+
+on("m33-case",function(s){
+  bxB(s,4,4,432,242,"#F8F9FB");var A=axB(s,4,4,432,242),X=A[0],Y=A[1];CP.forEach(function(p){el("circle",{cx:X(p[0]),cy:Y(p[1]),r:4.5,fill:"#9AA0AA","fill-opacity":.8},s);});
+  tB(s,430,240,"진동 (mm/s)",{a:"end",fs:9.5,c:C.gray,fw:700});tB(s,40,18,"베어링 온도 (℃) · 60건, 라벨 없음",{a:"start",fs:9.5,c:C.gray,fw:700});
+});
+
+on("m33-types",function(s){
+  function cols(x0,n,col){for(var i=0;i<n;i++)el("rect",{x:x0+i*10,y:66,width:7,height:80,rx:2,fill:col},s);}
+  bxB(s,4,4,130,200,"#EEF4FB");tB(s,69,26,"비지도 학습",{fw:800,fs:11.5,c:"#1C6EA4"});tB(s,69,52,"x",{fw:800,fs:12});cols(44,5,"#9CCBEA");tB(s,69,172,"차원 축소",{fs:10,fw:700});tB(s,69,190,"군집분석",{fs:10,fw:700});
+  bxB(s,144,4,130,200,"#FCF3D9");tB(s,209,26,"지도 학습",{fw:800,fs:11.5,c:C.amberInk});tB(s,195,52,"x",{fw:800,fs:12});tB(s,248,52,"y",{fw:800,fs:12,c:RED});cols(170,5,"#F4C66B");el("rect",{x:242,y:66,width:12,height:80,rx:2,fill:"#fff",stroke:RED,"stroke-width":2},s);
+  tB(s,209,172,"회귀",{fs:10,fw:700});tB(s,209,190,"분류",{fs:10,fw:700});
+  bxB(s,284,4,132,200,"#E3F1EA");tB(s,350,26,"강화학습",{fw:800,fs:11.5,c:GRN});mkB(s,"tB",GRN);
+  bxB(s,296,56,108,30,"#fff",GRN);tB(s,350,76,"에이전트",{fw:800,fs:10.5});bxB(s,296,126,108,30,"#fff",GRN);tB(s,350,146,"환경",{fw:800,fs:10.5});
+  el("path",{d:"M310 88 C300 105 300 108 310 124",fill:"none",stroke:GRN,"stroke-width":2,"marker-end":"url(#tB)"},s);tB(s,296,110,"행동",{a:"end",fs:9.5,fw:700});
+  el("path",{d:"M390 124 C400 108 400 105 390 88",fill:"none",stroke:GRN,"stroke-width":2,"marker-end":"url(#tB)"},s);tB(s,404,104,"보상",{a:"start",fs:9.5,fw:700});tB(s,404,118,"상태",{a:"start",fs:9.5,fw:700});
+  bxB(s,4,214,412,52,"#F3F5F9");tB(s,210,236,"차이: 정답 데이터(교사)의 유무 · 강화학습은 정답 대신 보상",{fw:800,fs:11});tB(s,210,255,"x = 입력 데이터, y = 정답 데이터",{fs:10,c:C.gray,fw:700});
+});
+
+on("m33-vs",function(s){
+  var cx=[70,190,330];el("rect",{x:4,y:6,width:412,height:30,rx:6,fill:C.navy},s);["","통계학","기계학습(지도)"].forEach(function(h,i){tB(s,cx[i],26,h,{fw:800,fs:12,c:"#fff"});});
+  var R=[["데이터","작은 표본크기","대량의 데이터"],["중시","설명·해석","예측"],["모형","단순(절편·기울기)","복잡(비선형, 파라미터 많음)"],["해석","쉬움 (기울기)","어려움"],["예측 성능","단순한 현상에 적합","복잡한 현상에 강함"]];
+  R.forEach(function(r,j){var y=62+j*36;el("rect",{x:4,y:y-20,width:412,height:32,rx:4,fill:j%2?"#F8F9FB":"#fff"},s);r.forEach(function(v,i){tB(s,cx[i],y,v,{fw:i===0?800:700,fs:i===0?11:10.5,c:i===1?"#1C6EA4":i===2?C.amberInk:C.navy});});});
+  bxB(s,4,236,412,30,"#FCF3D9");tB(s,210,256,"최근: 변수 중요도 등으로 기계학습 모형의 해석 가능성을 높이려는 시도",{fw:700,fs:10,c:C.amberInk});
+});
+
+on("m33-km",function(s){
+  bxB(s,4,4,282,262,"#F8F9FB");var A=axB(s,4,4,282,262),X=A[0],Y=A[1];
+  var c0=[[2.0,45],[4.5,52],[3.2,68]].map(function(c){return[(c[0]-CMU[0])/CSD[0],(c[1]-CMU[1])/CSD[1]];}),lab=kmB(3,c0),cen=upB(3,lab);for(var it=0;it<10;it++){lab=kmB(3,cen);cen=upB(3,lab);}
+  CP.forEach(function(p,i){el("circle",{cx:X(p[0]),cy:Y(p[1]),r:4.2,fill:KC[lab[i]],"fill-opacity":.85},s);});
+  var names=["정상 운전","고하중 운전","과열 의심"];
+  cen.forEach(function(c,j){var px=c[0]*CSD[0]+CMU[0],py=c[1]*CSD[1]+CMU[1];el("path",{d:"M"+(X(px)-7)+" "+(Y(py)-7)+" L"+(X(px)+7)+" "+(Y(py)+7)+" M"+(X(px)+7)+" "+(Y(py)-7)+" L"+(X(px)-7)+" "+(Y(py)+7),stroke:C.navy,"stroke-width":3},s);
+    el("circle",{cx:46,cy:30+j*17,r:5,fill:KC[j]},s);tB(s,56,34+j*17,names[j],{a:"start",fw:800,fs:10.5,c:KC[j]});});
+  tB(s,280,262,"진동 (mm/s)",{a:"end",fs:9,c:C.gray,fw:700});tB(s,36,16,"온도 (℃)",{a:"start",fs:9,c:C.gray,fw:700});
+  bxB(s,294,4,122,262,"#F3F5F9");tB(s,355,26,"k평균 순서",{fw:800,fs:11});
+  ["① k 정하기","② 무작위 할당","③ 중심(평균) 계산","④ 가까운 중심에","    다시 할당","⑤ ③~④ 반복","⑥ 할당이 안 바뀌면","    멈춤"].forEach(function(t,i){tB(s,302,54+i*22,t,{a:"start",fs:10,fw:700});});
+  tB(s,355,240,"× = 군집 중심",{fw:800,fs:10});
+});
+
+on("m33-dend",function(s){
+  drawDB(s,10,404,20,220,null);
+  [[1.6,"3개",RED],[0.7,"5개",PNK]].forEach(function(c){var Y=linB(0,2.6,220,20);el("line",{x1:10,x2:404,y1:Y(c[0]),y2:Y(c[0]),stroke:c[2],"stroke-width":2,"stroke-dasharray":"6 4"},s);tB(s,408,Y(c[0])+4,c[1],{a:"end",fw:800,fs:10.5,c:c[2],halo:true});});
+  tB(s,14,262,"높이 = 군집 사이 거리(표준화) · 아래 숫자 = 운전 기록 번호",{a:"start",fs:9.5,c:C.gray,fw:700});
+});
+function drawDB(s,x0,x1,yTop,yBot,cut){var n=12,pos={},Y=linB(0,2.6,yBot,yTop),step=(x1-x0-30)/(n-1);
+  var par=[];for(var q=0;q<2*n;q++)par[q]=q;function fd(q){while(par[q]!==q)q=par[q];return q;}DL.forEach(function(r,i){if(r[2]<1.6){par[fd(r[0])]=n+i;par[fd(r[1])]=n+i;}});
+  var gm={},gc=0;DORD.forEach(function(leaf,i){pos[leaf]=[x0+20+i*step,0];var rt=fd(leaf);if(gm[rt]==null)gm[rt]=gc++;var g=gm[rt];tB(s,x0+20+i*step,yBot+16,leaf+1,{fw:800,fs:10.5,c:KC[g]});});
+  DL.forEach(function(r,i){var a=pos[r[0]],b=pos[r[1]],h=r[2],id=n+i,col=cut!=null&&h>cut?"#C9CED6":C.navy;
+    el("path",{d:"M"+a[0]+" "+Y(a[1])+" L"+a[0]+" "+Y(h)+" L"+b[0]+" "+Y(h)+" L"+b[0]+" "+Y(b[1]),fill:"none",stroke:col,"stroke-width":2},s);pos[id]=[(a[0]+b[0])/2,h];});
+  [0,1,2].forEach(function(t){tB(s,x0+6,Y(t)+3,t,{a:"start",fs:8.5,c:C.gray2,fw:500});});return Y;}
+
+on("m33-tsne",function(s){
+  function blobs(x0,spread,title,col){bxB(s,x0,4,204,214,"#F8F9FB");tB(s,x0+102,26,title,{fw:800,fs:12,c:col});var r=rngB(x0+7),cs=[[60,70],[140,70],[60,150],[140,150],[100,110]];
+    cs.forEach(function(c,j){for(var i=0;i<26;i++){var u=r(),v=r(),rad=Math.sqrt(-2*Math.log(u+1e-9))*spread,ang=2*Math.PI*v;el("circle",{cx:x0+c[0]+(spread>20?(100-c[0])*0.55:0)+rad*Math.cos(ang),cy:30+c[1]+(spread>20?(110-c[1])*0.55:0)*0.4+rad*Math.sin(ang)*(spread>20?0.6:1),r:2.6,fill:KC.concat(["#7C3AED"])[j],"fill-opacity":.8},s);}});}
+  blobs(4,7,"t-SNE · UMAP","#23704F");blobs(212,24,"PCA (선형)","#B42318");
+  tB(s,106,206,"집단이 뚜렷이 나뉨",{fw:800,fs:10.5,c:GRN});tB(s,314,206,"집단이 겹쳐 보임",{fw:800,fs:10.5,c:RED});
+  bxB(s,4,226,412,40,"#FCF3D9");tB(s,210,250,"같은 고차원 데이터라도 비선형 구조는 t-SNE·UMAP이 더 잘 드러냄 (개념도)",{fw:800,fs:10.5,c:C.amberInk});
+});
+
+/* 실습 1 · k평균 단계 진행(조작형) */
+(function(){
+  var kb=document.getElementById("m33-kb");if(!kb)return;var svg=document.getElementById("m33-p1-svg"),K=3,seed=5,cen,lab,it,ch,done;
+  [2,3,4].forEach(function(k){var b=document.createElement("button");b.type="button";b.className="mbtn";b.textContent="k = "+k;b.style.padding="3px 10px";b.onclick=function(){K=k;init();};kb.appendChild(b);});
+  function init(){var r=rngB(seed),pick=[];while(pick.length<K){var i=Math.floor(r()*ZB.length);if(pick.indexOf(i)<0)pick.push(i);}cen=pick.map(function(i){return ZB[i].slice();});lab=null;it=0;ch=null;done=false;draw();}
+  function step(){if(done)return;var nl=kmB(K,cen);ch=lab?nl.filter(function(v,i){return v!==lab[i];}).length:ZB.length;lab=nl;cen=upB(K,lab);it++;if(ch===0)done=true;draw();}
+  function draw(){[].forEach.call(kb.children,function(x,i){x.classList.toggle("on",i+2===K);x.setAttribute("aria-pressed",i+2===K);});
+    clear(svg);var A=axB(svg,4,2,300,176),X=A[0],Y=A[1];
+    CP.forEach(function(p,i){el("circle",{cx:X(p[0]),cy:Y(p[1]),r:3.6,fill:lab?KC[lab[i]]:"#9AA0AA","fill-opacity":.85},svg);});
+    cen.forEach(function(c,j){var px=c[0]*CSD[0]+CMU[0],py=c[1]*CSD[1]+CMU[1];el("circle",{cx:X(px),cy:Y(py),r:8,fill:"#fff",stroke:KC[j],"stroke-width":3},svg);el("path",{d:"M"+(X(px)-4)+" "+Y(py)+" h8 M"+X(px)+" "+(Y(py)-4)+" v8",stroke:KC[j],"stroke-width":2.5},svg);});
+    tB(svg,300,174,"진동 →",{a:"end",fs:9,c:C.gray,fw:700});tB(svg,36,12,"온도",{a:"start",fs:9,c:C.gray,fw:700});
+    var w=lab?wssB(lab,cen):null;bxB(svg,316,10,148,160,"#F3F5F9");tB(svg,390,32,"k = "+K,{fw:800,fs:13});
+    tB(svg,390,58,lab?"단계 "+it+" 완료":"초기 중심만 놓음",{fw:700,fs:10.5});tB(svg,390,84,done?"수렴 (할당 변화 0)":lab?"할당 변화 "+ch+"건":"",{fw:800,fs:10.5,c:done?GRN:C.amberInk});
+    tB(svg,390,116,w!=null?"군집 내 제곱합":"",{fs:10,fw:700,c:C.gray});tB(svg,390,138,w!=null?w.toFixed(1):"",{fw:800,fs:14});
+    document.getElementById("m33-it").textContent=it;document.getElementById("m33-ch").textContent=ch==null?"-":ch+"건";document.getElementById("m33-wss").textContent=w==null?"-":w.toFixed(1);
+    var m=document.getElementById("m33-msg");m.className="pmsg"+(done?" ok":"");
+    m.textContent=!lab?"초기 중심(○+)을 무작위로 놓았습니다. 「한 단계 진행」을 누르면 가까운 중심으로 할당하고 중심을 다시 계산합니다.":
+      done?"수렴했습니다. k = "+K+"에서 "+it+"단계 만에 할당이 더 바뀌지 않았고, 군집 내 제곱합은 "+w.toFixed(1)+"입니다."+(K===3?" k = 3에서 세 운전 패턴이 잘 나뉩니다.":""):
+      (it===1?"단계 1: 60건 모두를 가장 가까운 중심에 할당하고 중심을 다시 계산했습니다.":"단계 "+it+": "+ch+"건의 할당이 바뀌었습니다.")+" 중심이 무리의 가운데로 옮겨 가고 있습니다. 계속 진행해 보세요.";}
+  document.getElementById("m33-step").onclick=step;document.getElementById("m33-init").onclick=function(){seed+=11;init();};
+  init();
+})();
+
+/* 실습 3 · 덴드로그램 자르기(추정형) */
+(function(){
+  var g=document.getElementById("m33-g");if(!g)return;var qh=document.getElementById("m33-qh"),svg=document.getElementById("m33-p3-svg"),HS=[0.7,1.1,1.6,2.0],cur=0,seen={};
+  HS.forEach(function(h,i){var b=document.createElement("button");b.type="button";b.className="mbtn";b.textContent="높이 "+h.toFixed(1);b.style.padding="3px 9px";b.onclick=function(){cur=i;reset();};qh.appendChild(b);});
+  function nmerge(h){return DL.filter(function(r){return r[2]<h;}).length;}
+  function draw(){clear(svg);var h=HS[cur],Y=drawDB(svg,10,460,14,180,seen[cur]?h:null);
+    el("line",{x1:10,x2:460,y1:Y(h),y2:Y(h),stroke:RED,"stroke-width":2.2,"stroke-dasharray":"6 4"},svg);tB(svg,460,Y(h)-5,"자르는 높이 "+h.toFixed(1),{a:"end",fw:800,fs:10.5,c:RED,halo:true});}
+  function txt(){document.getElementById("m33-gv").textContent=(+g.value)+"개";document.getElementById("m33-mine").textContent=(+g.value)+"개";}
+  function reset(){[].forEach.call(qh.children,function(x,i){x.classList.toggle("on",i===cur);x.setAttribute("aria-pressed",i===cur);});var h=HS[cur],m=nmerge(h);
+    document.getElementById("m33-act").textContent=seen[cur]?(12-m)+"개":"?";document.getElementById("m33-mg").textContent=seen[cur]?m+"번":"?";
+    var ms=document.getElementById("m33-msg3");ms.className="pmsg";ms.textContent="빨간 선과 만나는 세로선의 수가 그 높이에서의 군집 수입니다. 예측한 뒤 「잘라서 확인」을 누르세요.";draw();}
+  g.addEventListener("input",txt);
+  document.getElementById("m33-check").onclick=function(){seen[cur]=true;var h=HS[cur],m=nmerge(h),k=12-m,gv=+g.value,ok=gv===k,ms=document.getElementById("m33-msg3");
+    document.getElementById("m33-act").textContent=k+"개";document.getElementById("m33-mg").textContent=m+"번";ms.className="pmsg "+(ok?"ok":"ng");
+    ms.textContent=(ok?"정확합니다. ":"차이가 있습니다. ")+"높이 "+h.toFixed(1)+"보다 아래에서 "+m+"번 합쳐졌으므로 12 − "+m+" = "+k+"개 군집입니다."+(k===3?" k평균(k = 3)의 세 운전 패턴과 같습니다.":"");draw();};
+  txt();reset();
+})();
+
+
+/* ---------- ⑤ 형성평가 ---------- */
+function fill(t){return !CASE?t:t.replace(/SUM/g,f1(SUMV)).replace(/AVG/g,f1(AVG,2)).replace(/MAXV/g,f1(MAXV));}
+var firstPractice=document.getElementById("p1"),answered=0,correct=0;
+QUIZ.forEach(function(q,i){
+  var s=document.createElement("section");s.className="slide";s.dataset.step="4";s.id="q"+(i+1);
+  s.innerHTML='<div class="sh"><div class="sec"><span>문항 '+(i+1)+' / '+QUIZ.length+'</span><span class="qchips"><span>학습목표 '+q.goal+'</span><span>'+q.type+'</span></span></div><h2 class="stem">'+fill(q.stem)+'</h2></div>'+
+    '<div class="body split even"><div class="opts'+(q.ox?' ox':'')+'"></div><div class="fbp" aria-live="polite"><p class="empty">보기를 고르면 정답과 해설이 여기에 나타납니다.</p></div></div>';
+  var ob=s.querySelector(".opts"),fb=s.querySelector(".fbp");
+  q.opts.forEach(function(t,k){
+    var b=document.createElement("button");b.type="button";b.className="opt";
+    b.innerHTML=q.ox?t:'<span class="n">'+(k+1)+'</span>'+fill(t);
+    b.addEventListener("click",function(){
+      var all=ob.querySelectorAll(".opt");[].forEach.call(all,function(x){x.disabled=true;});
+      all[q.ans].classList.add("ok");var ok=k===q.ans;if(!ok)b.classList.add("ng");
+      answered++;if(ok)correct++;
+      fb.className="fbp "+(ok?"ok":"ng");
+      fb.innerHTML='<div class="verdict">'+(ok?"정답입니다":"오답입니다. 정답은 "+(q.ox?q.opts[q.ans]:(q.ans+1)+"번")+"입니다")+'</div><div>'+fill(q.exp)+'</div>'+
+        '<button type="button" class="jump back" data-jump="'+q.back+'">'+q.backLabel+'</button><div class="tally">지금까지 '+answered+'문항 중 '+correct+'문항 정답</div>';
+      bindJumps(fb);
+    });
+    ob.appendChild(b);
+  });
+  vp.insertBefore(s,firstPractice);
+});
+
+/* ---------- ⑦ 용어해설 · 참고자료 · 다음 모듈 ---------- */
+for(var gi=0;gi<GLOSSARY.length;gi+=6){
+  var part=GLOSSARY.slice(gi,gi+6),pg=gi/6+1,np=Math.ceil(GLOSSARY.length/6);
+  var s=document.createElement("section");s.className="slide";s.dataset.step="6";
+  var h='<div class="sh"><div class="sec">용어해설 '+pg+'/'+np+'</div><h2>'+(pg===1?"본문에서 굵게 표시한 용어를 나온 순서대로 모았습니다":"용어해설 계속")+'</h2></div><div class="body full"><div class="gl">';
+  part.forEach(function(g,k){h+='<div class="gi"><div class="t"><i>'+(gi+k+1)+'</i>'+g[0]+'<em>'+g[1]+'</em>'+(g[4]?'<span class="cite">['+g[4]+']</span>':'')+'</div><div class="d">'+g[2]+'</div><div class="e"><strong>예시</strong> '+g[3]+'</div></div>';});
+  h+='</div></div>';s.innerHTML=h;vp.appendChild(s);
+}
+(function(){
+  var s=document.createElement("section");s.className="slide";s.dataset.step="6";s.id="end";
+  var refs=REFS.length?'<div class="pcol" style="gap:10px"><div class="plabel" style="margin:0">참고자료</div><ol class="refs">'+REFS.map(function(r){return '<li><span>['+r.n+']</span><div>'+r.title+', '+r.org+'. <a href="'+r.url+'" target="_blank" rel="noopener">'+r.url+'</a> ('+r.date+')</div></li>';}).join("")+'</ol></div>':'';
+  s.innerHTML='<div class="sh"><div class="sec">마무리</div><h2>'+(REFS.length?"참고자료와 다음 모듈":"다음 모듈")+'</h2></div>'+
+    '<div class="body '+(REFS.length?'split even':'full')+'" style="align-content:center">'+refs+
+    '<div class="pcol" style="justify-content:center"><div class="nextmod"><small>다음 모듈 · '+NEXT.title+'</small><strong>'+NEXT.line+'</strong></div></div></div>'+
+    '<p class="foot">학습 상태는 저장되지 않습니다.</p>';
+  vp.appendChild(s);
+})();
+
+/* ---------- 이동 · 진행선 ---------- */
+var slides=[].slice.call(vp.querySelectorAll(".slide")),cur=0,seen={};
+var stepFirst=[],stepCount=[0,0,0,0,0,0,0];
+slides.forEach(function(s,i){var st=+s.dataset.step;if(stepFirst[st]==null)stepFirst[st]=i;stepCount[st]++;});
+var rail=document.getElementById("rail"),stations=[];
+STEPS.forEach(function(n,i){
+  var b=document.createElement("button");b.type="button";b.className="station";
+  b.style.left="calc(14px + (100% - 28px) * "+(i/6)+")";
+  b.innerHTML='<span class="dot">'+(i+1)+'</span><span class="lb">'+n+'</span>';
+  b.setAttribute("aria-label",(i+1)+"단계 "+n+"(으)로 이동");
+  b.addEventListener("click",function(){show(stepFirst[i]);});
+  rail.appendChild(b);stations.push(b);
+});
+function show(i){
+  cur=Math.max(0,Math.min(slides.length-1,i));
+  slides.forEach(function(s,k){s.classList.toggle("on",k===cur);});
+  var st=+slides[cur].dataset.step;seen[st]=true;
+  stations.forEach(function(b,k){b.classList.toggle("cur",k===st);b.classList.toggle("done",k<st||(!!seen[k]&&k!==st));if(k===st)b.setAttribute("aria-current","step");else b.removeAttribute("aria-current");});
+  var within=(cur-stepFirst[st])/Math.max(1,stepCount[st]);
+  var frac=st===6&&cur===slides.length-1?1:(st+within)/6;
+  document.getElementById("fill").style.width=(Math.min(1,frac)*100)+"%";
+  document.getElementById("counter").innerHTML="<strong>"+STEPS[st]+"</strong> "+(cur-stepFirst[st]+1)+" / "+stepCount[st];
+  document.getElementById("prev").disabled=cur===0;
+  var nx=document.getElementById("next");nx.disabled=cur===slides.length-1;
+  nx.textContent=(cur<slides.length-1&&+slides[cur+1].dataset.step!==st)?STEPS[+slides[cur+1].dataset.step]+"(으)로":"다음";
+}
+function bindJumps(root){[].forEach.call(root.querySelectorAll("[data-jump]"),function(b){b.addEventListener("click",function(){var t=document.getElementById(b.dataset.jump);if(t)show(slides.indexOf(t));});});}
+bindJumps(document);
+document.getElementById("prev").onclick=function(){show(cur-1);};
+document.getElementById("next").onclick=function(){show(cur+1);};
+document.addEventListener("keydown",function(e){
+  if(e.target&&(e.target.type==="range"))return;
+  if(e.key==="ArrowRight"||e.key==="PageDown"){show(cur+1);e.preventDefault();}
+  else if(e.key==="ArrowLeft"||e.key==="PageUp"){show(cur-1);e.preventDefault();}
+});
+var tx=null,ty=null;
+vp.addEventListener("touchstart",function(e){var t=e.target;if(t.closest&&(t.closest("input")||t.closest(".dcard"))){tx=null;return;}tx=e.touches[0].clientX;ty=e.touches[0].clientY;},{passive:true});
+vp.addEventListener("touchend",function(e){if(tx==null)return;var dx=e.changedTouches[0].clientX-tx,dy=e.changedTouches[0].clientY-ty;if(Math.abs(dx)>60&&Math.abs(dx)>Math.abs(dy)*1.5)show(cur+(dx<0?1:-1));tx=null;},{passive:true});
+
+/* ---------- 실습 1 · 조작형 ---------- */
+(function(){if(!document.getElementById("p1-items")||!CASE)return;
+var p1v=CASE.values.slice(),p1s=CASE.values.indexOf(MAXV),p1m=document.getElementById("p1-items"),p1r=document.getElementById("p1-range");
+CASE.labels.forEach(function(m,i){var b=document.createElement("button");b.type="button";b.className="mbtn";b.textContent=m;b.onclick=function(){p1s=i;p1d();};p1m.appendChild(b);});
+function p1d(){
+  [].forEach.call(p1m.children,function(b,i){b.classList.toggle("on",i===p1s);b.setAttribute("aria-pressed",i===p1s);});
+  p1r.value=p1v[p1s];document.getElementById("p1-label").textContent=CASE.labels[p1s]+"번";document.getElementById("p1-val").textContent=f1(p1v[p1s]);
+  var s=r1(sum(p1v)),m=s/N;
+  document.getElementById("p1-sum").textContent=f1(s);document.getElementById("p1-mean").textContent=f1(m,2);
+  barChart(document.getElementById("p1-svg"),p1v,{mean:m,sel:p1s,ymax:9});
+  var msg=document.getElementById("p1-msg");
+  if(P1.target!=null&&Math.abs(m-P1.target)<0.005){msg.className="pmsg ok";msg.textContent="성공했습니다. "+f1(s)+" ÷ "+N+" = "+f1(m,2);}
+  else if(Math.abs(s-SUMV)<1e-9){msg.className="pmsg";msg.textContent="원래 값입니다. "+f1(SUMV)+" ÷ "+N+" = "+f1(AVG,2);}
+  else{msg.className="pmsg";msg.textContent="원래 평균 "+f1(AVG,2)+"보다 "+f1(Math.abs(m-AVG),2)+" "+(m>AVG?"늘었습니다.":"줄었습니다.");}
+}
+p1r.addEventListener("input",function(){p1v[p1s]=r1(+p1r.value);p1d();});
+document.getElementById("p1-reset").onclick=function(){p1v=CASE.values.slice();p1d();};
+p1d();
+
+})();
+/* ---------- 실습 2 · 분류형 ---------- */
+(function(){if(!document.getElementById("p2-pool"))return;
+var pool=document.getElementById("p2-pool"),binWrap=document.getElementById("p2-bins"),selC=null,done2=0;
+var bins=BINS.map(function(n){var b=document.createElement("div");b.className="bin";b.dataset.bin=n;b.innerHTML="<h4>"+n+"</h4>";binWrap.appendChild(b);return b;});
+function p2msg(t,c){var m=document.getElementById("p2-msg");m.textContent=t;m.className="pmsg "+(c||"");document.getElementById("p2-count").textContent=done2+" / "+CARDS.length;}
+function p2init(){
+  pool.innerHTML="";bins.forEach(function(b){[].slice.call(b.querySelectorAll(".dcard")).forEach(function(c){c.remove();});});done2=0;selC=null;
+  var o=CARDS.map(function(_,i){return i;});for(var i=o.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1)),t=o[i];o[i]=o[j];o[j]=t;}
+  o.forEach(function(i){var d=document.createElement("div");d.className="dcard";d.tabIndex=0;d.setAttribute("role","button");d.textContent=CARDS[i][0];d.dataset.ans=CARDS[i][1];pool.appendChild(d);attach(d);});
+  p2msg("카드를 하나 골라 보세요.","");
+}
+function drop(c,b){
+  if(!b||c.classList.contains("ok"))return;
+  c.classList.remove("sel");selC=null;
+  if(c.dataset.ans===b.dataset.bin){c.classList.add("ok");c.removeAttribute("tabindex");b.appendChild(c);done2++;p2msg(done2===CARDS.length?"카드를 모두 맞게 분류했습니다.":"정답입니다.","ok");}
+  else{c.classList.add("shake");setTimeout(function(){c.classList.remove("shake");},400);p2msg("「"+b.dataset.bin+"」이 아닙니다. "+HINT[c.dataset.ans],"ng");}
+}
+function pick(d){if(selC===d){d.classList.remove("sel");selC=null;return;}if(selC)selC.classList.remove("sel");selC=d;d.classList.add("sel");p2msg("이제 알맞은 칸을 누르세요.","");}
+function attach(d){
+  var sx=null,sy,mv=false,gh=null,ov=null,offX=0,offY=0;
+  function pos(e){var r=stage.getBoundingClientRect();return{x:(e.clientX-r.left)/S,y:(e.clientY-r.top)/S};}
+  d.addEventListener("pointerdown",function(e){if(d.classList.contains("ok"))return;sx=e.clientX;sy=e.clientY;mv=false;d.setPointerCapture(e.pointerId);var r=d.getBoundingClientRect();offX=(e.clientX-r.left)/S;offY=(e.clientY-r.top)/S;});
+  d.addEventListener("pointermove",function(e){
+    if(sx==null)return;
+    if(!mv&&Math.hypot(e.clientX-sx,e.clientY-sy)>6){mv=true;gh=d.cloneNode(true);gh.classList.add("ghostc");gh.classList.remove("sel");gh.style.width=d.offsetWidth+"px";stage.appendChild(gh);d.style.opacity=".35";}
+    if(mv){var p=pos(e);gh.style.left=(p.x-offX)+"px";gh.style.top=(p.y-offY)+"px";
+      var t=document.elementFromPoint(e.clientX,e.clientY),b=t&&t.closest?t.closest(".bin"):null;
+      if(ov&&ov!==b)ov.classList.remove("hover");ov=b;if(b)b.classList.add("hover");}
+  });
+  d.addEventListener("pointerup",function(){
+    if(sx==null)return;sx=null;
+    if(mv){gh.remove();gh=null;d.style.opacity="";if(ov)ov.classList.remove("hover");var b=ov;ov=null;drop(d,b);}else pick(d);
+  });
+  d.addEventListener("pointercancel",function(){if(gh){gh.remove();gh=null;}d.style.opacity="";sx=null;if(ov)ov.classList.remove("hover");ov=null;});
+  d.addEventListener("keydown",function(e){if(e.key==="Enter"||e.key===" "){e.preventDefault();pick(d);}});
+}
+bins.forEach(function(b){b.tabIndex=0;b.setAttribute("role","button");b.setAttribute("aria-label",b.dataset.bin+" 칸에 놓기");
+  b.addEventListener("click",function(e){if(selC&&!e.target.closest(".dcard"))drop(selC,b);});
+  b.addEventListener("keydown",function(e){if((e.key==="Enter"||e.key===" ")&&selC){e.preventDefault();drop(selC,b);}});});
+document.getElementById("p2-reset").onclick=p2init;
+p2init();
+
+})();
+/* ---------- 실습 3 · 추정형 ---------- */
+(function(){if(!document.getElementById("p3-range")||!PAIRS)return;
+var p3r=document.getElementById("p3-range"),p3done=false;
+document.getElementById("p3-x0").textContent=PAIRS.x0;
+p3r.min=PAIRS.ymin;p3r.max=PAIRS.ymax;p3r.step=0.1;p3r.value=r1((PAIRS.ymin+PAIRS.ymax)/2);
+function p3d(){var g=+p3r.value;document.getElementById("p3-val").textContent=f1(g);scatter(document.getElementById("p3-svg"),{x0:PAIRS.x0,guess:g,line:p3done,pred:p3done,actual:p3done});}
+p3r.addEventListener("input",function(){if(p3done){p3done=false;document.getElementById("p3-res").classList.remove("on");}p3d();});
+document.getElementById("p3-check").onclick=function(){
+  p3done=true;var g=+p3r.value,mine=Math.abs(g-PAIRS.actual),line=Math.abs(PRED-PAIRS.actual);
+  document.getElementById("p3-mine").textContent=f1(g);document.getElementById("p3-pred").textContent=f1(PRED,PAIRS.dp);document.getElementById("p3-act").textContent=f1(PAIRS.actual);
+  var m=document.getElementById("p3-msg"),good=mine<=line;m.className="pmsg "+(good?"ok":"ng");
+  m.textContent="내 오차 "+f1(mine,PAIRS.dp)+PAIRS.unit+", 직선 오차 "+f1(line,PAIRS.dp)+PAIRS.unit+". "+(good?"직선만큼 또는 더 가깝게 추정했습니다.":"직선을 이용하면 오차를 줄일 수 있습니다.");
+  document.getElementById("p3-res").classList.add("on");p3d();
+};
+p3d();
+
+})();
+show(0);
+})();
+</script>
+</body>
+</html>

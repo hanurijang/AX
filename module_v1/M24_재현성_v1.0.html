@@ -1,0 +1,1102 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>재현성</title>
+<!-- M24 재현성 v1.0 · 기준 템플릿 v1.3로 제작 (2026-10-27) -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<style>
+:root{
+  --navy:#1B2A4A; --navy2:#2C4170; --navy3:#5B6E97; --navy-soft:#E4E9F2;
+  --ink:#22262E; --gray:#6B7280; --gray2:#9AA0AA; --panel:#EEF0F3; --line:#D5D9E0;
+  --amber:#E0A100; --amber-ink:#6E4F00; --amber-soft:#FCF3D9;
+  --ok:#23704F; --ok-soft:#E2F1E9; --ng:#B42318; --ng-soft:#FBE6E3;
+  --letterbox:#C7CCD4;
+}
+*{box-sizing:border-box}
+html,body{margin:0;height:100%;overflow:hidden;background:var(--letterbox)}
+body{font-family:"Pretendard Variable","Pretendard","Apple SD Gothic Neo","Malgun Gothic","Noto Sans KR",system-ui,sans-serif;color:var(--ink);-webkit-text-size-adjust:100%;font-feature-settings:"tnum"}
+button{font:inherit;color:inherit}
+:focus-visible{outline:3px solid var(--amber);outline-offset:2px;border-radius:4px}
+
+/* ---------- 16:9 무대 ---------- */
+.stage{position:absolute;left:50%;top:50%;width:960px;height:540px;transform:translate(-50%,-50%) scale(var(--s,1));transform-origin:center;background:#fff;overflow:hidden;box-shadow:0 10px 40px rgba(27,42,74,.25)}
+
+/* ---------- 상단 바: 모듈명 + 7단계 진행선 ---------- */
+.topbar{position:absolute;left:0;right:0;top:0;height:60px;background:var(--navy);display:flex;align-items:center}
+.brand{flex:0 0 200px;padding-left:22px;color:#fff;font-size:14px;font-weight:800;letter-spacing:-.3px;line-height:1.2;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.brand small{display:block;font-size:11px;font-weight:500;color:#A9B6CF;letter-spacing:0;margin-top:2px;overflow:hidden;text-overflow:ellipsis}
+.rail{position:relative;flex:1;height:60px;margin-right:22px}
+.rail .track{position:absolute;left:14px;right:14px;top:21px;height:3px;background:#3A4D78;border-radius:2px}
+.rail .fill{position:absolute;left:0;top:0;bottom:0;background:var(--amber);border-radius:2px;transition:width .35s ease}
+.station{position:absolute;top:10px;width:72px;margin-left:-36px;background:none;border:0;padding:0;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:4px}
+.station .dot{width:24px;height:24px;border-radius:50%;display:grid;place-items:center;font-size:11.5px;font-weight:800;background:var(--navy);color:#8E9DBD;border:2px solid #4A5D88;transition:all .25s}
+.station .lb{font-size:11.5px;color:#8E9DBD;white-space:nowrap}
+.station.done .dot{background:#C9D3E6;border-color:#C9D3E6;color:var(--navy)}
+.station.done .lb{color:#C9D3E6}
+.station.cur .dot{background:var(--amber);border-color:#FFE08A;color:var(--navy);transform:scale(1.12)}
+.station.cur .lb{color:#fff;font-weight:700}
+
+/* ---------- 화면 ---------- */
+.viewport{position:absolute;left:0;right:0;top:60px;bottom:46px}
+.slide{position:absolute;inset:0;padding:16px 36px 10px;display:none;flex-direction:column;gap:12px}
+.slide.on{display:flex;animation:fade .22s ease}
+@keyframes fade{from{opacity:0}to{opacity:1}}
+@media (prefers-reduced-motion:reduce){.slide.on{animation:none}.rail .fill,.station .dot{transition:none}}
+.sh{flex:0 0 auto}
+.sec{font-size:12.5px;font-weight:700;color:var(--navy3);display:flex;gap:8px;align-items:center;min-height:18px}
+h2{margin:3px 0 0;font-size:24px;line-height:1.3;font-weight:800;color:var(--navy);letter-spacing:-.6px;display:flex;gap:10px;align-items:flex-start}
+h2 .q{flex:0 0 auto;margin-top:2px;width:28px;height:28px;border-radius:6px;background:var(--navy);color:#fff;font-size:15px;display:grid;place-items:center}
+h2.big{font-size:30px;line-height:1.32}
+.body{flex:1 1 auto;min-height:0;display:grid;gap:24px}
+.split{grid-template-columns:1.2fr 1fr}
+.split.even{grid-template-columns:1fr 1fr}
+.full{grid-template-columns:1fr}
+.fig{background:var(--panel);border-radius:12px;padding:12px;min-height:0;display:flex;align-items:center;justify-content:center}
+.fig svg{width:100%;height:100%;display:block}
+.figcol{min-height:0;display:flex;flex-direction:column;gap:10px}
+.figcol .fig{flex:1 1 auto}
+.side{min-height:0;display:flex;flex-direction:column;gap:12px;justify-content:center}
+
+/* 핵심 문장: 40자 안팎, 1~2개 */
+.key{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:9px}
+.key li{position:relative;padding-left:16px;font-size:18.5px;line-height:1.42;font-weight:700;letter-spacing:-.4px}
+.key li::before{content:"";position:absolute;left:0;top:.28em;width:4px;height:1.05em;border-radius:2px;background:var(--navy2)}
+.key b{color:var(--navy);background:linear-gradient(transparent 62%,var(--amber-soft) 62%)}
+/* 해설 문단: 2~4문장, 150~250자 */
+.exp{margin:0;font-size:15px;line-height:1.62;letter-spacing:-.2px;color:var(--ink)}
+.exp b{color:var(--navy)}
+/* 연결 문장: 다음 소단원으로 넘기는 질문 */
+.next{margin:0;border-top:1px dashed var(--line);padding-top:9px;font-size:14px;font-weight:700;color:var(--navy2);display:flex;gap:8px;align-items:baseline}
+.next span{flex:0 0 auto;font-size:11.5px;font-weight:800;color:var(--navy3);background:var(--navy-soft);border-radius:4px;padding:0 6px;line-height:20px}
+/* 각주: 기호의 뜻과 출처 번호만 */
+.foot{flex:0 0 auto;font-size:12px;line-height:1.5;color:var(--gray);margin:0}
+.foot b{color:var(--ink)}
+.cite{font-size:.72em;font-weight:700;color:var(--navy3);vertical-align:super;line-height:0;margin-left:1px}
+.tag-v{display:inline-block;font-size:11px;font-weight:700;border-radius:4px;padding:0 6px;line-height:18px;white-space:nowrap;vertical-align:1px;color:var(--gray);background:#F3F4F6;box-shadow:inset 0 0 0 1px var(--line)}
+
+/* 핵심 수학 개념 박스 */
+.math{flex:0 0 auto;border-left:3px solid var(--navy3);background:#F6F7F9;border-radius:0 8px 8px 0;padding:9px 13px;font-size:13.5px;line-height:1.5}
+.math .mt{font-size:12px;font-weight:800;color:var(--navy3);margin-bottom:2px}
+.math .f{font-family:"Cambria Math","Times New Roman",serif;font-size:18px;font-weight:700;color:var(--navy);margin:1px 0 4px}
+.math .r{display:grid;grid-template-columns:34px 1fr;gap:6px}
+.math .r span:first-child{font-size:11.5px;font-weight:700;color:var(--gray2);padding-top:1px}
+.math .w{margin-top:5px;padding-top:5px;border-top:1px dashed var(--line);color:var(--ng);font-weight:700;font-size:12.5px}
+
+/* ---------- 하단 바 ---------- */
+.bottombar{position:absolute;left:0;right:0;bottom:0;height:46px;border-top:1px solid var(--line);display:flex;align-items:center;padding:0 22px 0 36px;gap:12px;background:#fff}
+.counter{font-size:13px;color:var(--gray);font-weight:600}
+.counter strong{color:var(--navy)}
+.spacer{flex:1}
+.nav{border:1.5px solid var(--navy);background:#fff;color:var(--navy);border-radius:8px;height:32px;padding:0 16px;font-size:14px;font-weight:700;cursor:pointer}
+.nav.primary{background:var(--navy);color:#fff}
+.nav:disabled{opacity:.3;cursor:default}
+
+/* ---------- 홈으로 ---------- */
+.home{display:inline-flex;align-items:center;gap:6px;height:32px;padding:0 13px;border-radius:8px;border:1.5px solid var(--navy-soft);background:#fff;color:var(--navy2);font-size:13.5px;font-weight:700;line-height:1;text-decoration:none;white-space:nowrap}
+.home svg{width:14px;height:14px;flex:0 0 auto;display:block}
+.home:hover{background:var(--navy-soft);border-color:var(--navy3);color:var(--navy)}
+.home:focus-visible{outline:3px solid var(--amber);outline-offset:2px}
+@media (prefers-reduced-motion:reduce){.home{transition:none}}
+
+/* ① 학습개요 */
+.meta{display:grid;grid-template-columns:auto 1fr;gap:6px 14px;margin:0;font-size:14px}
+.meta dt{font-weight:700;color:var(--gray)}
+.meta dd{margin:0;font-weight:700;color:var(--navy)}
+.prevlink{background:var(--panel);border-radius:10px;padding:12px 14px;font-size:14.5px;line-height:1.55}
+.prevlink small{display:block;font-size:12px;font-weight:800;color:var(--navy3);margin-bottom:3px}
+
+/* ② 학습목표: 목표 → 문항 → 실습 연결 */
+.gmap{display:grid;grid-template-columns:44px 1fr 150px 150px;align-items:stretch;row-gap:12px;column-gap:0}
+.gmap .hd{font-size:12px;font-weight:700;color:var(--gray);padding:0 14px 2px}
+.gmap .gn{background:var(--navy);color:#fff;font-weight:800;font-size:18px;display:grid;place-items:center;border-radius:10px 0 0 10px}
+.gmap .gt{background:var(--panel);padding:14px 18px;font-size:17px;font-weight:700;line-height:1.42;letter-spacing:-.3px;display:flex;align-items:center}
+.gmap .gt b{color:var(--navy)}
+.gmap .ga,.gmap .gp{background:var(--panel);display:flex;align-items:center;padding:0 10px;border-left:2px solid #fff}
+.gmap .gp{border-radius:0 10px 10px 0}
+.jump{border:1.5px solid var(--navy3);background:#fff;border-radius:7px;padding:6px 10px;font-size:13px;font-weight:700;color:var(--navy);cursor:pointer;text-align:left;line-height:1.3;width:100%}
+.jump:hover{background:var(--navy-soft)}
+
+/* ④ 본문 정리 표 */
+.sumtbl{width:100%;border-collapse:separate;border-spacing:0;font-size:14.5px;line-height:1.5}
+.sumtbl th{background:var(--navy);color:#fff;font-weight:800;text-align:left;padding:10px 14px}
+.sumtbl th:first-child{border-radius:10px 0 0 0;width:150px}
+.sumtbl th:last-child{border-radius:0 10px 0 0}
+.sumtbl td{padding:11px 14px;border-bottom:1px solid var(--line);vertical-align:top}
+.sumtbl td:first-child{font-weight:800;color:var(--navy)}
+.sumtbl tr:nth-child(even) td{background:#F8F9FB}
+
+/* ⑤ 형성평가 */
+.qchips{display:flex;gap:6px}
+.qchips span{font-size:11.5px;font-weight:700;color:var(--navy2);background:var(--navy-soft);border-radius:4px;padding:0 7px;line-height:19px}
+h2.stem{font-size:21px;line-height:1.42;font-weight:800}
+.opts{display:grid;gap:9px;align-content:center}
+.opts.ox{grid-template-columns:1fr 1fr}
+.opt{border:1.5px solid var(--line);background:#fff;border-radius:10px;padding:11px 14px;text-align:left;font-size:16px;font-weight:600;cursor:pointer;display:flex;gap:10px;align-items:center}
+.opt .n{flex:0 0 26px;height:26px;border-radius:50%;background:var(--panel);display:grid;place-items:center;font-size:13px;font-weight:800;color:var(--navy)}
+.opts.ox .opt{justify-content:center;font-size:40px;font-weight:800;padding:22px;color:var(--navy)}
+.opt:hover:not(:disabled){border-color:var(--navy3);background:#F8F9FB}
+.opt:disabled{cursor:default}
+.opt.ok{border-color:var(--ok);background:var(--ok-soft);color:var(--ok)}
+.opt.ok .n{background:var(--ok);color:#fff}
+.opt.ng{border-color:var(--ng);background:var(--ng-soft);color:var(--ng)}
+.opt.ng .n{background:var(--ng);color:#fff}
+.fbp{background:var(--panel);border-radius:12px;padding:18px 20px;display:flex;flex-direction:column;gap:10px;font-size:14.5px;line-height:1.6}
+.fbp .empty{color:var(--gray);margin:auto 0}
+.fbp .verdict{font-size:19px;font-weight:800}
+.fbp.ok{background:var(--ok-soft)} .fbp.ok .verdict{color:var(--ok)}
+.fbp.ng{background:var(--ng-soft)} .fbp.ng .verdict{color:var(--ng)}
+.fbp .back{align-self:flex-start}
+.fbp .tally{margin-top:auto;font-size:12.5px;color:var(--gray);font-weight:600}
+
+/* ⑥ 실습 */
+.plabel{font-size:12px;font-weight:800;color:var(--navy3);margin-bottom:6px}
+.pcol{min-height:0;display:flex;flex-direction:column}
+.mbtns{display:flex;flex-wrap:nowrap;gap:3px;margin-bottom:8px}
+.mbtn{border:1px solid var(--line);background:#fff;border-radius:6px;padding:2px 6px;font-size:12px;cursor:pointer;min-width:26px}
+.mbtn.on{background:var(--navy);border-color:var(--navy);color:#fff}
+.ctrl{display:flex;align-items:center;gap:10px;font-size:14px;font-weight:600}
+input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
+.stats{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.stats.three{grid-template-columns:1fr 1fr 1fr}
+.stats div{background:var(--panel);border-radius:10px;padding:8px 12px}
+.stats small{display:block;font-size:11.5px;color:var(--gray);font-weight:600;line-height:1.35}
+.stats strong{font-size:22px;color:var(--navy);letter-spacing:-.4px}
+.pmsg{font-size:14.5px;font-weight:700;min-height:22px;line-height:1.45}
+.pmsg.ok{color:var(--ok)} .pmsg.ng{color:var(--ng)}
+.think{flex:0 0 auto;background:var(--amber-soft);border-radius:10px;padding:9px 14px;font-size:14.5px;font-weight:700;color:var(--amber-ink);display:flex;gap:10px;align-items:baseline}
+.think span{flex:0 0 auto;font-size:12px;font-weight:800}
+.howto{font-size:13.5px;color:var(--gray);line-height:1.5;margin:0}
+.btn{border:0;background:var(--navy);color:#fff;border-radius:8px;height:32px;padding:0 14px;font-size:13.5px;font-weight:700;cursor:pointer}
+.btn.ghost{background:#fff;color:var(--navy);box-shadow:inset 0 0 0 1.5px var(--navy)}
+.pool{flex:1;min-height:0;display:grid;grid-template-columns:1fr 1fr;align-content:start;gap:8px;padding:10px;border:1.5px dashed var(--line);border-radius:10px;background:#FAFBFC}
+.dcard{background:#fff;border:1.5px solid var(--navy3);border-radius:8px;padding:7px 10px;font-size:13.5px;font-weight:600;line-height:1.4;cursor:grab;user-select:none;-webkit-user-select:none;touch-action:none}
+.dcard.sel{box-shadow:0 0 0 3px var(--amber)}
+.dcard.ok{border-color:var(--ok);background:var(--ok-soft);color:var(--ok);cursor:default;font-size:12.5px;padding:5px 8px}
+.dcard.shake{animation:shake .35s;border-color:var(--ng);background:var(--ng-soft)}
+@keyframes shake{25%{transform:translateX(-5px)}75%{transform:translateX(5px)}}
+.ghostc{position:absolute;pointer-events:none;z-index:50;opacity:.92;box-shadow:0 8px 20px rgba(27,42,74,.25);cursor:grabbing}
+.bins{flex:1 0 auto;min-height:0;display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.bin .dcard{font-size:12px;padding:3px 7px;line-height:1.3}
+.p2row{display:flex;gap:10px;align-items:center}.p2row .pmsg{flex:1;margin:0}.p2row .btn{flex:0 0 auto}
+.bin{border:1.5px solid var(--line);border-radius:10px;padding:6px;display:flex;flex-direction:column;gap:6px;background:#fff;cursor:pointer;min-height:0}
+.bin h4{margin:0;background:var(--navy);color:#fff;border-radius:6px;text-align:center;font-size:14px;padding:4px}
+.bin.hover{border-color:var(--amber);background:var(--amber-soft)}
+.res{display:none;flex-direction:column;gap:8px}
+.res.on{display:flex}
+
+/* ⑦ 용어해설·참고자료 */
+.gl{display:grid;grid-template-columns:1fr 1fr;grid-template-rows:repeat(3,1fr);gap:10px 22px;min-height:0}
+.gi{border-top:2px solid var(--navy);padding:8px 0 0;display:flex;flex-direction:column;gap:3px;min-height:0}
+.gi .t{font-size:16.5px;font-weight:800;color:var(--navy);display:flex;gap:6px;align-items:baseline;flex-wrap:wrap}
+.gi .t em{font-style:normal;font-weight:500;font-size:12.5px;color:var(--gray)}
+.gi .t i{font-style:normal;font-size:12px;font-weight:800;color:var(--navy3);width:22px}
+.gi .d{font-size:14px;line-height:1.5}
+.gi .e{font-size:12.5px;line-height:1.45;color:var(--gray)}
+.gi .e strong{color:var(--navy3)}
+.refs{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:8px;font-size:13.5px;line-height:1.5}
+.refs li{display:grid;grid-template-columns:30px 1fr;gap:4px}
+.refs li span{font-weight:800;color:var(--navy3)}
+.refs a{color:var(--navy2);word-break:break-all}
+.nextmod{background:var(--navy);color:#fff;border-radius:12px;padding:18px 22px;display:flex;flex-direction:column;gap:6px}
+.nextmod small{font-size:12px;font-weight:700;color:#A9B6CF}
+.nextmod strong{font-size:19px;line-height:1.45;letter-spacing:-.3px}
+
+.rotate{position:fixed;left:0;right:0;bottom:max(14px,env(safe-area-inset-bottom));text-align:center;font-size:13px;color:#3A4560;display:none}
+@media (orientation:portrait) and (max-width:700px){.rotate{display:block}}
+</style>
+</head>
+<body>
+<div class="stage" id="stage">
+  <header class="topbar">
+    <!-- [교체] 모듈명 / 과정명·모듈 번호 (장·절 번호는 쓰지 않음) -->
+    <div class="brand" id="brand">재현성<small>결과 해석과 인과 · M24</small></div>
+    <nav class="rail" id="rail" aria-label="학습 단계"><div class="track"><div class="fill" id="fill"></div></div></nav>
+  </header>
+
+  <main class="viewport" id="vp">
+    <!-- ① 학습개요 ─────────────────────────────── -->
+    <section class="slide" data-step="0">
+      <div class="sh"><div class="sec">학습개요</div>
+        <h2 class="big">p &lt; 0.05만 좇는 가설검정이 재현되지 않는 결과를 낳습니다</h2></div>
+      <div class="body split">
+        <div class="fig"><svg id="m24-ov" viewBox="0 0 440 260" role="img" aria-label="가설검정은 쉽게 시행되고 p가 0.05보다 작은 결과만 좇다 보면 p-해킹과 출판 편향을 거쳐 재현성 위기로 이어지는 흐름"></svg></div>
+        <div class="side">
+          <div class="prevlink"><small>지난 과정에서는</small>상관과 회귀, 일반화선형모형, 모형의 평가와 비교까지 여러 통계 모형을 배웠습니다.<small style="margin-top:8px">이번 과정에서는</small>분석 결과를 올바르게 해석하는 법을 다룹니다. 첫 모듈에서는 과학계의 재현성 위기와 그 원인인 p-해킹, 출판 편향을 살펴봅니다.</div>
+          <dl class="meta"><dt>학습 시간</dt><dd>약 35분</dd><dt>본문</dt><dd>소단원 4개</dd><dt>실습</dt><dd>조작형 · 분류형 · 추정형</dd></dl>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" data-step="0">
+      <div class="sh"><div class="sec">학습개요 · 이 모듈의 예시</div><h2>A공장의 개선 효과가 B공장에서는 재현되지 않았습니다</h2></div>
+      <div class="body split">
+        <div class="fig"><svg id="m24-case" viewBox="0 0 440 250" role="img" aria-label="A공장 첨가제 X 효과 +12 MPa p 0.03, B공장 추시 +4 MPa p 0.44"></svg></div>
+        <div class="side">
+          <ul class="key"><li>같은 방법으로 했는데 결과가 달랐습니다.</li></ul>
+          <p class="exp">A공장 개선팀은 첨가제 X를 넣은 강판 10장과 넣지 않은 강판 10장의 인장강도를 비교해 평균 +12 MPa, p = 0.03으로 ‘효과 있음’을 보고했습니다(예시값). 그런데 B공장에서 같은 방법으로 추시하자 +4 MPa, p = 0.44로 유의하지 않았습니다. 왜 이런 일이 생기는지 이 사례로 끝까지 살펴봅니다.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ② 학습목표 ─────────────────────────────── -->
+    <section class="slide" data-step="1">
+      <div class="sh"><div class="sec">학습목표</div><h2>이 모듈을 마치면 이렇게 할 수 있습니다</h2></div>
+      <div class="body full" style="align-content:center">
+        <div class="gmap">
+          <div></div><div class="hd">목표</div><div class="hd">확인하는 문항</div><div class="hd">연결 실습</div>
+          <div class="gn">1</div><div class="gt"><span>재현성 위기의 근거를 해석하고 재현 실패 원인을 <b>구분한다</b>.</span></div>
+          <div class="ga"><button class="jump" data-jump="q1">문항 1·2</button></div><div class="gp"><button class="jump" data-jump="p2">실습 2 분류</button></div>
+          <div class="gn">2</div><div class="gt"><span>p-해킹이 제1종 오류 확률을 키우는 정도를 <b>계산한다</b>.</span></div>
+          <div class="ga"><button class="jump" data-jump="q3">문항 3·4</button></div><div class="gp"><button class="jump" data-jump="p1">실습 1 조작</button></div>
+          <div class="gn">3</div><div class="gt"><span>출판 편향이 결과를 왜곡하는 구조를 <b>판단한다</b>.</span></div>
+          <div class="ga"><button class="jump" data-jump="q5">문항 5·6</button></div><div class="gp"><button class="jump" data-jump="p3">실습 3 추정</button></div>
+        </div>
+      </div>
+      <p class="foot">버튼을 누르면 해당 문항이나 실습 화면으로 바로 이동합니다.</p>
+    </section>
+
+    <!-- ③ 일상의 예시 ─────────────────────────────── -->
+    <section class="slide" data-step="2">
+      <div class="sh"><div class="sec">일상의 예시 1/5</div><h2>유명 레시피대로 만들었는데 같은 맛이 나지 않습니다</h2></div>
+      <div class="body split">
+        <div class="fig"><svg viewBox="0 0 440 250" role="img" aria-label="셰프의 요리와 따라 만든 요리의 맛 점수 비교">
+          <rect x="30" y="50" width="160" height="130" rx="14" fill="#E4E9F2" stroke="#5B6E97" stroke-width="2"/><text x="110" y="92" text-anchor="middle" font-size="14" font-weight="800" fill="#1B2A4A">셰프의 식당</text><text x="110" y="124" text-anchor="middle" font-size="22" font-weight="800" fill="#1B2A4A">★★★★★</text><text x="110" y="156" text-anchor="middle" font-size="11.5" fill="#6B7280">전용 화덕 · 제철 재료</text>
+          <rect x="250" y="50" width="160" height="130" rx="14" fill="#FCF3D9" stroke="#E0A100" stroke-width="2"/><text x="330" y="92" text-anchor="middle" font-size="14" font-weight="800" fill="#6E4F00">우리 집 부엌</text><text x="330" y="124" text-anchor="middle" font-size="22" font-weight="800" fill="#E0A100">★★★☆☆</text><text x="330" y="156" text-anchor="middle" font-size="11.5" fill="#6B7280">가스레인지 · 마트 재료</text>
+          <text x="220" y="122" text-anchor="middle" font-size="22" font-weight="800" fill="#5B6E97">→</text>
+          <text x="220" y="214" text-anchor="middle" font-size="12" font-weight="700" fill="#1B2A4A">같은 레시피, 다른 결과: 레시피가 틀린 걸까?</text>
+        </svg></div>
+        <div class="side">
+          <ul class="key"><li>같은 방법이면 같은 결과가 나와야 믿을 수 있습니다.</li></ul>
+          <p class="exp">유명 셰프의 레시피를 그대로 따라 했는데 식당에서 먹던 맛이 나지 않는 경우가 있습니다. 레시피가 처음부터 과장되었을 수도 있지만, 화덕이나 재료처럼 조건이 달랐을 수도 있습니다. 누가 따라 해도 같은 결과가 나와야 그 방법을 믿고 쓸 수 있습니다. 과학의 실험 결과도 마찬가지입니다.</p>
+          <p class="next"><span>본문에서</span>4-1 재현성과 재현성 위기로 이어집니다.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" data-step="2">
+      <div class="sh"><div class="sec">일상의 예시 2/5</div><h2>‘인생 맛집’ 10곳을 다시 가 보니 몇 곳만 여전했습니다</h2></div>
+      <div class="body split">
+        <div class="fig"><svg viewBox="0 0 440 250" role="img" aria-label="처음에 모두 만족했던 맛집 10곳 중 다시 갔을 때 4곳만 만족">
+          <g font-size="12.5" font-weight="800" fill="#1B2A4A"><text x="40" y="70">처음 방문</text><text x="40" y="160">다시 방문</text></g>
+          <g id="dots-a"><circle cx="140" cy="66" r="13" fill="#23704F"/><circle cx="170" cy="66" r="13" fill="#23704F"/><circle cx="200" cy="66" r="13" fill="#23704F"/><circle cx="230" cy="66" r="13" fill="#23704F"/><circle cx="260" cy="66" r="13" fill="#23704F"/><circle cx="290" cy="66" r="13" fill="#23704F"/><circle cx="320" cy="66" r="13" fill="#23704F"/><circle cx="350" cy="66" r="13" fill="#23704F"/><circle cx="380" cy="66" r="13" fill="#23704F"/><circle cx="410" cy="66" r="13" fill="#23704F"/></g>
+          <g><circle cx="140" cy="156" r="13" fill="#23704F"/><circle cx="170" cy="156" r="13" fill="#23704F"/><circle cx="200" cy="156" r="13" fill="#23704F"/><circle cx="230" cy="156" r="13" fill="#23704F"/><circle cx="260" cy="156" r="13" fill="#D1D5DB"/><circle cx="290" cy="156" r="13" fill="#D1D5DB"/><circle cx="320" cy="156" r="13" fill="#D1D5DB"/><circle cx="350" cy="156" r="13" fill="#D1D5DB"/><circle cx="380" cy="156" r="13" fill="#D1D5DB"/><circle cx="410" cy="156" r="13" fill="#D1D5DB"/></g>
+          <text x="275" y="100" text-anchor="middle" font-size="11.5" fill="#6B7280">10곳 모두 만족</text><text x="275" y="192" text-anchor="middle" font-size="11.5" font-weight="700" fill="#B42318">4곳만 다시 만족</text>
+          <text x="220" y="230" text-anchor="middle" font-size="11.5" fill="#6B7280">첫 방문은 그날따라 운이 좋았을 수도</text>
+        </svg></div>
+        <div class="side">
+          <ul class="key"><li>다시 해 보아야 진짜 실력을 알 수 있습니다.</li></ul>
+          <p class="exp">처음 방문했을 때 모두 감탄했던 맛집 10곳을 다시 찾아갔더니 4곳만 여전히 만족스러웠다면, 나머지 6곳은 그날따라 재료가 좋았거나 기분이 좋았을 수 있습니다. 한 번의 좋은 결과만으로 판단하면 실제보다 좋게 보기 쉽습니다. 과학자들도 발표된 연구를 다시 해 보며 이런 확인을 했습니다.</p>
+          <p class="next"><span>본문에서</span>4-2 심리학의 재현성 조사로 이어집니다.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" data-step="2">
+      <div class="sh"><div class="sec">일상의 예시 3/5</div><h2>6이 나올 때까지 굴리면 ‘행운의 주사위’가 됩니다</h2></div>
+      <div class="body split">
+        <div class="fig"><svg viewBox="0 0 440 250" role="img" aria-label="주사위를 여러 번 굴려 6이 나온 한 번만 보여 주는 장면">
+          <g font-size="13" font-weight="800" text-anchor="middle">
+            <rect x="30" y="60" width="54" height="54" rx="10" fill="#fff" stroke="#9AA0AA" stroke-width="2"/><text x="57" y="94" fill="#9AA0AA">2</text>
+            <rect x="96" y="60" width="54" height="54" rx="10" fill="#fff" stroke="#9AA0AA" stroke-width="2"/><text x="123" y="94" fill="#9AA0AA">4</text>
+            <rect x="162" y="60" width="54" height="54" rx="10" fill="#fff" stroke="#9AA0AA" stroke-width="2"/><text x="189" y="94" fill="#9AA0AA">1</text>
+            <rect x="228" y="60" width="54" height="54" rx="10" fill="#fff" stroke="#9AA0AA" stroke-width="2"/><text x="255" y="94" fill="#9AA0AA">3</text>
+            <rect x="294" y="60" width="54" height="54" rx="10" fill="#fff" stroke="#9AA0AA" stroke-width="2"/><text x="321" y="94" fill="#9AA0AA">5</text>
+            <rect x="360" y="54" width="66" height="66" rx="12" fill="#FCF3D9" stroke="#E0A100" stroke-width="3"/><text x="393" y="96" font-size="22" fill="#6E4F00">6</text>
+          </g>
+          <path d="M30 140 L340 140" stroke="#9AA0AA" stroke-width="2" stroke-dasharray="5 4"/><text x="185" y="160" text-anchor="middle" font-size="11.5" fill="#6B7280">보여 주지 않은 시도</text>
+          <text x="393" y="160" text-anchor="middle" font-size="11.5" font-weight="800" fill="#B42318">이것만 공개</text>
+          <text x="220" y="214" text-anchor="middle" font-size="12" font-weight="700" fill="#1B2A4A">“한 번에 6이 나왔어요!”</text>
+        </svg></div>
+        <div class="side">
+          <ul class="key"><li>원하는 결과가 나올 때까지 시도하면 안 됩니다.</li></ul>
+          <p class="exp">평범한 주사위라도 6이 나올 때까지 여러 번 굴린 뒤 마지막 한 번만 보여 주면 ‘던지면 6이 나오는 행운의 주사위’처럼 보입니다. 시도 횟수를 숨기면 우연한 결과가 특별한 결과로 둔갑합니다. 데이터 분석에서도 원하는 p값이 나올 때까지 방법을 바꾸면 같은 일이 벌어집니다.</p>
+          <p class="next"><span>본문에서</span>4-3 재현되지 않는 원인으로 이어집니다.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" data-step="2">
+      <div class="sh"><div class="sec">일상의 예시 4/5</div><h2>낚시 사진은 많이 잡은 날만 올라옵니다</h2></div>
+      <div class="body split">
+        <div class="fig"><svg viewBox="0 0 440 250" role="img" aria-label="낚시한 열흘 중 많이 잡은 이틀만 SNS에 올라감">
+          <g font-size="11" font-weight="700" text-anchor="middle" fill="#22262E">
+            <rect x="30" y="40" width="190" height="170" rx="12" fill="#F3F5F9"/><text x="125" y="64" font-size="12.5" font-weight="800" fill="#1B2A4A">실제 열흘의 조과</text>
+            <rect x="48" y="166" width="12" height="20" fill="#9AA0AA"/><rect x="64" y="176" width="12" height="10" fill="#9AA0AA"/><rect x="80" y="156" width="12" height="30" fill="#9AA0AA"/><rect x="96" y="96" width="12" height="90" fill="#E0A100"/><rect x="112" y="171" width="12" height="15" fill="#9AA0AA"/><rect x="128" y="186" width="12" height="0" fill="#9AA0AA"/><rect x="144" y="161" width="12" height="25" fill="#9AA0AA"/><rect x="160" y="86" width="12" height="100" fill="#E0A100"/><rect x="176" y="176" width="12" height="10" fill="#9AA0AA"/><rect x="192" y="166" width="12" height="20" fill="#9AA0AA"/>
+            <line x1="44" y1="186" x2="208" y2="186" stroke="#6B7280"/><text x="125" y="202">평균 약 3마리</text>
+            <rect x="260" y="40" width="160" height="170" rx="12" fill="#FCF3D9"/><text x="340" y="64" font-size="12.5" font-weight="800" fill="#6E4F00">SNS에 올린 날</text>
+            <rect x="300" y="96" width="24" height="90" fill="#E0A100"/><rect x="340" y="86" width="24" height="100" fill="#E0A100"/><line x1="290" y1="186" x2="390" y2="186" stroke="#6B7280"/><text x="340" y="202">평균 9마리 넘게</text>
+          </g>
+          <text x="240" y="125" text-anchor="middle" font-size="20" font-weight="800" fill="#5B6E97">→</text>
+        </svg></div>
+        <div class="side">
+          <ul class="key"><li>좋은 결과만 공개되면 실제보다 좋아 보입니다.</li></ul>
+          <p class="exp">열흘 동안 낚시를 다녀도 SNS에는 많이 잡은 이틀의 사진만 올라오기 쉽습니다. 사진만 보는 사람은 그 낚시터에 가면 늘 많이 잡히는 줄 압니다. 결과가 좋은 것만 세상에 나오면, 우리가 보는 정보 전체가 실제보다 좋은 쪽으로 치우칩니다. 학술 논문에도 비슷한 구조가 있습니다.</p>
+          <p class="next"><span>본문에서</span>4-4 논문 게재 과정과 출판 편향으로 이어집니다.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" data-step="2">
+      <div class="sh"><div class="sec">일상의 예시 5/5</div><h2>현장에서는? 다른 공장의 개선 사례를 그대로 믿어도 될까요?</h2></div>
+      <div class="body split even">
+        <div class="fig"><svg viewBox="0 0 420 250" role="img" aria-label="네 장면이 재현성으로 이어지는 그림">
+          <defs><marker id="b2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10z" fill="#5B6E97"/></marker></defs>
+          <g font-size="13" font-weight="700" fill="#1B2A4A" text-anchor="middle">
+            <rect x="14" y="18" width="150" height="44" rx="10" fill="#fff" stroke="#5B6E97" stroke-width="1.5"/><text x="89" y="45">따라 해도 같은 결과?</text>
+            <rect x="14" y="74" width="150" height="44" rx="10" fill="#fff" stroke="#5B6E97" stroke-width="1.5"/><text x="89" y="101">다시 해 보니 일부만</text>
+            <rect x="14" y="130" width="150" height="44" rx="10" fill="#fff" stroke="#5B6E97" stroke-width="1.5"/><text x="89" y="157">될 때까지 시도</text>
+            <rect x="14" y="186" width="150" height="44" rx="10" fill="#fff" stroke="#5B6E97" stroke-width="1.5"/><text x="89" y="213">좋은 결과만 공개</text>
+          </g>
+          <g stroke="#5B6E97" stroke-width="2" fill="none"><path d="M166 40 C220 40 220 112 254 120" marker-end="url(#b2)"/><path d="M166 96 C210 96 220 118 254 122" marker-end="url(#b2)"/><path d="M166 152 C210 152 220 130 254 128" marker-end="url(#b2)"/><path d="M166 208 C220 208 220 138 254 130" marker-end="url(#b2)"/></g>
+          <rect x="258" y="84" width="150" height="82" rx="12" fill="#1B2A4A"/>
+          <text x="333" y="122" text-anchor="middle" font-size="17" font-weight="800" fill="#fff">재현성</text>
+          <text x="333" y="146" text-anchor="middle" font-size="11" fill="#C9D3E6">p-해킹 · 출판 편향</text>
+        </svg></div>
+        <div class="side">
+          <p class="exp">네 장면은 같은 방법이면 같은 결과가 나와야 하고, 다시 해 보면 일부만 재현되며, 원하는 결과가 나올 때까지 시도하거나 좋은 결과만 공개하면 실제가 왜곡된다는 순서로 이어집니다. 다른 공장의 개선 사례나 공정 실험 보고서를 우리 공장에 적용할 때도 같은 질문을 던져야 합니다.</p>
+          <p class="next"><span>다음 질문</span>재현성이란 정확히 무엇일까?</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ④ 본문 ─────────────────────────────── -->
+    <section class="slide" data-step="3" id="s-4-1a">
+      <div class="sh"><div class="sec">4-1 재현성과 재현성 위기</div><h2><span class="q">Q</span>과학의 결과는 왜 다시 해 봐도 같아야 할까요?</h2></div>
+      <div class="body split even">
+        <div class="fig"><svg id="m24-rep" viewBox="0 0 420 270" role="img" aria-label="같은 조건이면 같은 결과가 나와야 재현성이 있음, A공장과 B공장 결과 비교"></svg></div>
+        <div class="side">
+          <ul class="key"><li><b>재현성</b>: 조건이 같으면 같은 결과</li><li><b>추시</b>로 재현되지 않으면 <b>재현성 위기</b></li></ul>
+          <p class="exp">과학의 중요한 특징 중 하나가 재현성입니다. 누가 언제 어디서 실험하더라도 조건이 같다면 같은 결과를 얻을 수 있어야 합니다. 새로 개발한 약의 효과를 조사하는 실험에 재현성이 있기 때문에 안심하고 약을 쓸 수 있습니다. 그런데 최근 발표된 논문 내용을 다른 연구자가 같은 방법과 조건으로 추시했을 때 같은 결과를 얻지 못했다는 보고가 여러 분야에서 잇따르고 있으며, 이를 재현성 위기라 합니다. 단, 한 번의 추시로 재현되지 않았다고 원래 주장이 틀렸다고 단정할 수는 없고, ‘잘못되었을 가능성이 있다’고 보아야 합니다.</p>
+          <p class="next"><span>다음 질문</span>통계학계는 어떻게 반응했을까?</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" data-step="3" id="s-4-1b">
+      <div class="sh"><div class="sec">4-1 재현성과 재현성 위기</div><h2><span class="q">Q</span>재현성 위기 이후 p값을 둘러싸고 무슨 일이 있었을까요?</h2></div>
+      <div class="body split even">
+        <div class="fig"><svg id="m24-time" viewBox="0 0 420 270" role="img" aria-label="2014년부터 2018년까지 p값과 관련된 사건 연표"></svg></div>
+        <div class="side">
+          <ul class="key"><li>p값 금지, 성명 발표, 기준 강화 제안까지</li><li>배경: 가설검정의 잘못된 사용 → 낮은 재현성</li></ul>
+          <p class="exp">가설검정은 과학계 전반의 데이터 분석 현장에서 오랫동안 사용되어 왔지만, 최근 가설검정이나 p값과 관련된 논쟁이 두드러지고 있습니다. 한 심리학 저널은 p값 사용을 금지했고, 미국통계협회는 p값에 관한 성명을 발표했습니다<span class="cite">[2]</span>. 유의수준을 0.05에서 0.005로 엄격하게 바꾸자는 제안도 나왔습니다<span class="cite">[3]</span>. 이런 논쟁의 배경에는 가설검정 원리상의 문제와, 가설검정의 잘못된 사용이 낮은 재현성으로 이어진다는 문제가 있습니다. 그러므로 가설검정의 문제점과 올바른 사용 방법을 이해하는 것은 현대 데이터 분석에 필수입니다.</p>
+          <p class="next"><span>다음 질문</span>재현성은 실제로 얼마나 낮을까?</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" data-step="3" id="s-4-2a">
+      <div class="sh"><div class="sec">4-2 심리학의 재현성 조사</div><h2><span class="q">Q</span>발표된 연구를 다시 해 보면 몇 건이나 재현될까요?</h2></div>
+      <div class="body split even">
+        <div class="figcol">
+          <div class="fig"><svg id="m24-waf" viewBox="0 0 420 150" role="img" aria-label="원래 연구 100건 중 97건 유의, 추시 97건 중 35건 유의를 칸 그림으로 표현"></svg></div>
+          <div class="math">
+            <div class="mt">핵심 수학 개념 · 재현 비율</div>
+            <div class="f">재현 비율 = 추시에서도 유의 ÷ 원래 유의</div>
+            <div class="r"><span>계산</span><span>35 ÷ 97 ≈ 0.36 → 약 36%</span></div>
+            <div class="r"><span>주의</span><span>분모는 100이 아니라 원래 유의했던 97건입니다.</span></div>
+          </div>
+        </div>
+        <div class="side">
+          <ul class="key"><li>원래 97% 유의 → 추시 36%만 유의</li><li>약 1/3 정도만 재현되었습니다.</li></ul>
+          <p class="exp">재현성 위기를 정량적으로 보고한 유명한 연구가 있습니다. 심리학 분야에서 보고된 과거 연구 100건을 재실험해 재현성을 조사한 것입니다<span class="cite">[1]</span>. 원래 연구에서는 97%(97/100)가 통계적으로 유의(p &lt; 0.05)했는데, 추시에서는 그중 36%(35/97)의 연구만 통계적으로 유의한 것으로 나타났습니다. 다시 말해 약 1/3 정도밖에 재현할 수 없었다는 결과입니다. 재현성 위기는 심리학만이 아니라 다양한 분야의 문제입니다.</p>
+          <p class="next"><span>다음 질문</span>p값과 효과의 크기는 어떻게 달라졌을까?</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" data-step="3" id="s-4-2b">
+      <div class="sh"><div class="sec">4-2 심리학의 재현성 조사</div><h2><span class="q">Q</span>추시에서는 p값과 효과의 크기가 어떻게 달라졌을까요?</h2></div>
+      <div class="body split even">
+        <div class="fig"><svg id="m24-es" viewBox="0 0 420 270" role="img" aria-label="원래 연구의 p값은 대부분 0.05 아래에 몰렸지만 추시는 넓게 퍼짐, 효과크기는 절반 정도"></svg></div>
+        <div class="side">
+          <ul class="key"><li>추시의 p값은 0~1에 폭넓게 퍼졌습니다.</li><li><b>효과크기</b>는 원래의 절반 정도</li></ul>
+          <p class="exp">원래 연구의 p값은 거의 모두 0.05 아래에 몰려 있었지만, 추시에서는 p값의 분포가 꽤 폭넓게 퍼졌습니다. 또 평균값의 차이처럼 효과가 얼마나 큰지를 나타내는 효과크기도 추시에서는 원래 연구에서 보고된 값의 절반 정도에 불과했습니다<span class="cite">[1]</span>. 이 모듈의 사례에서도 A공장이 보고한 +12 MPa가 B공장 추시에서는 +4 MPa로 줄었습니다. 발표된 효과가 실제보다 크게 보고되는 경향이 있다는 뜻입니다.</p>
+          <p class="next"><span>다음 질문</span>왜 재현되지 않을까?</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" data-step="3" id="s-4-3a">
+      <div class="sh"><div class="sec">4-3 재현되지 않는 원인</div><h2><span class="q">Q</span>정직하게 실험해도 재현되지 않을 수 있을까요?</h2></div>
+      <div class="body split even">
+        <div class="fig"><svg id="m24-cause" viewBox="0 0 420 270" role="img" aria-label="재현되지 않는 원인 두 가지: 실험 조건을 똑같이 만들기 어려움, 검정력이 100%가 아님"></svg></div>
+        <div class="side">
+          <ul class="key"><li>실험 조건을 똑같이 만들기 어렵습니다.</li><li>검정력이 100%가 아니므로 놓칠 수 있습니다.</li></ul>
+          <p class="exp">낮은 재현성을 일으키는 원인은 다양합니다. 그중 하나는 실험 조건을 동일하게 조성하기 어렵다는 점입니다. 심리학 실험에서 피험자의 성질은 원래 연구와 똑같이 갖추기가 거의 불가능하고, 공장에서도 원료 성분이나 설비 상태를 완전히 같게 맞추기 어렵습니다. 또 가설검정의 검정력은 100%가 아니므로, 원래 결론이 옳더라도 단 한 번의 추시 데이터가 반드시 유의하지는 않습니다. 그러나 이런 요인을 고려하더라도 36%라는 숫자는 낮다고밖에 말할 수 없습니다.</p>
+          <p class="next"><span>다음 질문</span>또 하나의 주된 원인은?</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" data-step="3" id="s-4-3b">
+      <div class="sh"><div class="sec">4-3 재현되지 않는 원인</div><h2><span class="q">Q</span>p &lt; 0.05에 매달리면 어떤 일이 생길까요?</h2></div>
+      <div class="body split even">
+        <div class="fig"><svg id="m24-hack" viewBox="0 0 420 270" role="img" aria-label="데이터의 p값이 0.05 이상이면 발표할 수 없고 미만이면 발표할 수 있어, p-해킹으로 결과를 밀어 넣으면 재현성이 낮아짐"></svg></div>
+        <div class="side">
+          <ul class="key"><li>p &lt; 0.05는 연구자에게 천국과 지옥의 경계</li><li><b>p-해킹</b>: p값이 작아지게 분석을 조작</li></ul>
+          <p class="exp">낮은 재현성의 또 하나의 주된 원인은 가설검정의 사용 방법에 있습니다. 과학 논문에서는 p값이 유의수준(보통 0.05)보다 낮으면 ‘통계적으로 유의’하므로 가설이 옳다고 주장할 수 있는 것이 관례입니다. 무사히 p &lt; 0.05라면 논문으로 발표할 수 있고, p ≥ 0.05라면 발표할 수 없게 됩니다. 놀랍게도 가설검정 사용 방법에 따라 p값이 0.05보다 작아지게 조작할 수 있으며, 이런 행위를 p-해킹이라 합니다. p값을 직접 고쳐 쓰는 조작과 달리 의도치 않게 저지를 수 있다는 점이 특히 우려스럽습니다.</p>
+          <p class="next"><span>다음 질문</span>p-해킹은 오류 확률을 얼마나 키울까?</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" data-step="3" id="s-4-3c">
+      <div class="sh"><div class="sec">4-3 재현되지 않는 원인</div><h2><span class="q">Q</span>여러 번 시도하면 ‘틀린 유의’가 얼마나 늘어날까요?</h2></div>
+      <div class="body split even">
+        <div class="figcol">
+          <div class="fig"><svg id="m24-fwer" viewBox="0 0 420 150" role="img" aria-label="시도한 검정 수가 늘수록 적어도 한 번 p가 0.05 미만일 확률이 커지는 그래프"></svg></div>
+          <div class="math">
+            <div class="mt">핵심 수학 개념 · 여러 번 검정할 때</div>
+            <div class="f">P(적어도 한 번 p &lt; α) = 1 − (1 − α)<sup>k</sup></div>
+            <div class="r"><span>기호</span><span>α: 유의수준, k: 서로 독립인 검정 수</span></div>
+            <div class="r"><span>계산</span><span>k = 5: 1 − 0.95⁵ ≈ 1 − 0.774 = 0.226</span></div>
+          </div>
+        </div>
+        <div class="side">
+          <ul class="key"><li>제1종 오류 확률은 α로 통제되어야 합니다.</li><li>시도를 거듭하면 α보다 훨씬 커집니다.</li></ul>
+          <p class="exp">가설검정 원리에서는 실제로는 차이가 없는데도 차이가 있다고 하는 제1종 오류(위양성)가 일어날 확률을 유의수준 α로 정하고, 분석자가 이를 통제할 수 있다는 점이 가장 중요합니다. 그런데 효과가 없는 첨가제로 서로 독립인 지표 5개를 검정해 하나라도 유의하면 보고하는 식으로 분석하면, ‘효과 있음’이라고 보고할 확률은 5%가 아니라 약 23%가 됩니다. 이처럼 p-해킹에 의해 제1종 오류가 일어날 확률이 α보다 커져 버리는 것은 심각한 문제입니다.</p>
+          <p class="next"><span>다음 질문</span>논문은 어떤 과정을 거쳐 세상에 나올까?</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" data-step="3" id="s-4-4a">
+      <div class="sh"><div class="sec">4-4 논문 게재 과정과 출판 편향</div><h2><span class="q">Q</span>논문은 어떤 과정을 거쳐 저널에 실릴까요?</h2></div>
+      <div class="body split even">
+        <div class="fig"><svg id="m24-flow" viewBox="0 0 420 270" role="img" aria-label="연구자가 투고하면 편집자가 동료평가자에게 평가를 의뢰하고 그 의견으로 승낙, 수정, 거절을 판단"></svg></div>
+        <div class="side">
+          <ul class="key"><li>투고 → <b>동료평가</b> → 편집자 판단</li><li>실린 논문에도 잘못이 있을 수 있습니다.</li></ul>
+          <p class="exp">연구자의 주된 업무는 연구 성과를 논문 형태로 과학 저널에 발표하는 것입니다. 완성한 논문을 저널 편집부에 투고하면, 편집자는 가까운 분야의 연구자 몇 명(보통 2~3명)에게 보내 동료평가를 부탁합니다. 편집자는 평가 의견을 토대로 승낙, 마이너 리비전, 메이저 리비전, 거절을 판단합니다. 많은 사람이 읽는 주요 저널일수록 게재 경쟁이 심해 게재 비율이 한 자릿수(%)에 불과한 곳도 있습니다. 그러나 게재 여부는 단 몇 명이 판단할 뿐이므로 논문에도 잘못이 있을 가능성이 있습니다.</p>
+          <p class="next"><span>다음 질문</span>유의하지 않은 결과는 어디로 갈까?</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" data-step="3" id="s-4-4b">
+      <div class="sh"><div class="sec">4-4 논문 게재 과정과 출판 편향</div><h2><span class="q">Q</span>유의한 결과만 실리면 무엇이 달라질까요?</h2></div>
+      <div class="body split even">
+        <div class="fig"><svg id="m24-pub" viewBox="0 0 420 270" role="img" aria-label="실제 효과 4 MPa인 연구 1,000건 중 p가 0.05 미만인 129건만 게재되면 게재된 결과의 평균은 12.5 MPa"></svg></div>
+        <div class="side">
+          <ul class="key"><li><b>출판 편향</b>: p ≥ 0.05인 결과는 묻힘</li><li>실린 결과만 보면 효과가 부풀려집니다.</li></ul>
+          <p class="exp">논문 출판에서는 주요 주장에 대해 통계적으로 유의한 결과(p &lt; 0.05)를 얻지 못하면, 가설을 지지하지 않는다는 이유로 게재가 거절될 때가 흔합니다. 이런 판단은 p ≥ 0.05인 결과가 세상에 나오지 못하게 하여, 출판된 내용에 치우침이 생기는 출판 편향 문제를 일으킵니다. 실제 효과가 +4 MPa인 시험을 1,000번 시뮬레이션해 p &lt; 0.05인 129건만 모으면 평균이 +12.5 MPa로 부풀려집니다. 효과가 없는 약도 효과가 인정된 결과만 보고되어 본연의 효과를 왜곡하는 것과 같은 문제입니다.</p>
+          <p class="next"><span>다음 질문</span>이 모든 것은 어떻게 연결될까?</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" data-step="3" id="s-4-4c">
+      <div class="sh"><div class="sec">4-4 논문 게재 과정과 출판 편향</div><h2><span class="q">Q</span>연구 현장의 구조가 p-해킹을 부추기는 이유는 무엇일까요?</h2></div>
+      <div class="body split even">
+        <div class="fig"><svg id="m24-cycle" viewBox="0 0 420 270" role="img" aria-label="발표 압박, p가 0.05 미만인지가 사활 문제, p-해킹, 출판 편향, 재현성 저하로 이어지는 고리"></svg></div>
+        <div class="side">
+          <ul class="key"><li>발표 압박 → p &lt; 0.05에 사활 → p-해킹</li><li>p-해킹 + 출판 편향 → 재현성 저하</li></ul>
+          <p class="exp">이 밖에도 논문 출판 과정과 가설검정이 합쳐져 일어나는 문제가 있습니다. 일정 수 이상의 논문을 발표하지 않으면 다음 일을 얻지 못하거나 고용을 유지할 수 없는 등의 냉엄한 현실에 놓인 젊은 연구자라면, 통계분석 결과가 p &lt; 0.05인지 아닌지가 사활 문제로 이어집니다. 이러한 상황이 어떻게 해서든 p &lt; 0.05가 되도록 꾀를 부리는 p-해킹을 부추기는 구조로 작용합니다. 성과 보고가 중요한 현장의 개선 활동에도 같은 구조가 생길 수 있습니다.</p>
+          <p class="next"><span>정리</span>재현성 문제를 정리해 봅시다.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" data-step="3" id="s-4-sum">
+      <div class="sh"><div class="sec">4-5 정리</div><h2>p &lt; 0.05만 좇는 분석과 출판 구조가 재현성을 떨어뜨립니다</h2></div>
+      <div class="body full" style="align-content:center">
+        <table class="sumtbl">
+          <thead><tr><th>개념</th><th>핵심</th><th>이 모듈의 예</th></tr></thead>
+          <tbody>
+            <tr><td>재현성 위기</td><td>같은 방법으로 추시해도 같은 결과를 얻지 못함</td><td>심리학 재현 비율 35/97 ≈ 36%</td></tr>
+            <tr><td>재현 실패 원인</td><td>조건 차이, 검정력 100% 아님, 가설검정의 잘못된 사용</td><td>A공장 +12 MPa → B공장 +4 MPa</td></tr>
+            <tr><td>p-해킹</td><td>p &lt; 0.05가 되도록 분석 조작 → 제1종 오류 확률 &gt; α</td><td>지표 5개 → 약 23%</td></tr>
+            <tr><td>출판 편향</td><td>유의한 결과만 게재 → 효과가 부풀려짐</td><td>실제 +4 → 게재 평균 +12.5 MPa</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="next"><span>형성평가로</span>이제 같은 예시로 문제를 풀어 봅니다.</p>
+    </section>
+
+    <!-- ⑤ 형성평가: 스크립트의 QUIZ 배열로 만듭니다 -->
+
+    <!-- ⑥ 실습 1 · 조작형 (모듈 전용) ─────────────── -->
+    <section class="slide" data-step="5" id="p1">
+      <div class="sh"><div class="sec">실습 1 · 조작형</div><h2>목표: 시도한 분석 수에 따라 ‘틀린 유의’가 얼마나 늘어나는지 확인합니다</h2></div>
+      <div class="body split">
+        <div class="pcol" style="gap:8px">
+          <div class="plabel" style="margin:0">해보기 · 효과가 없는 첨가제를 시험한 100개 팀이 각자 시도한 분석 수 k를 정하세요</div>
+          <div class="ctrl">분석 수 k<input type="range" id="m24-k" min="1" max="20" step="1" value="1" aria-label="시도한 분석 수"><strong id="m24-kv" style="min-width:40px;text-align:right">1</strong></div>
+          <div class="fig" style="flex:1"><svg id="m24-p1-svg" viewBox="0 0 470 190" role="img" aria-label="100개 팀 중 적어도 한 번 p가 0.05 미만이 나온 팀을 빨간 칸으로 표시"></svg></div>
+        </div>
+        <div class="pcol" style="gap:10px;justify-content:center">
+          <div class="plabel" style="margin:0">결과 확인</div>
+          <div class="stats three"><div><small>이론 확률</small><strong id="m24-th">-</strong></div><div><small>‘효과 있음’ 팀</small><strong id="m24-sim">-</strong></div><div><small>목표 α</small><strong>5%</strong></div></div>
+          <p class="howto">도전: ‘효과 있음’ 보고 확률이 50%를 처음 넘는 k를 찾아보세요.</p>
+          <p class="pmsg" id="m24-msg"></p>
+          <div class="think"><span>생각해보기</span>분석 계획을 미리 정해 두면 이 문제를 어떻게 막을 수 있을까요?</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ⑥ 실습 2 · 분류형 ─────────────────────── -->
+    <section class="slide" data-step="5" id="p2">
+      <div class="sh"><div class="sec">실습 2 · 분류형</div><h2>목표: B공장에서 재현되지 않은 이유를 원인별로 나눕니다</h2></div>
+      <div class="body split even">
+        <div class="pcol">
+          <div class="plabel">해보기 · 각 카드가 조건 차이인지, 정직해도 생기는 우연인지, 분석 조작인지 보고 칸에 놓으세요</div>
+          <div class="pool" id="p2-pool"></div>
+        </div>
+        <div class="pcol" style="gap:8px">
+          <div class="plabel" style="margin:0">결과 확인 · <span id="p2-count">0 / 0</span></div>
+          <div class="bins" id="p2-bins"></div>
+          <div class="p2row"><p class="pmsg" id="p2-msg"></p><button class="btn ghost" id="p2-reset">다시 하기</button></div>
+          <div class="think"><span>생각해보기</span>세 가지 원인 중 분석하는 사람이 직접 막을 수 있는 것은 무엇일까요?</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ⑥ 실습 3 · 추정형 (모듈 전용) ─────────────── -->
+    <section class="slide" data-step="5" id="p3">
+      <div class="sh"><div class="sec">실습 3 · 추정형</div><h2>목표: 유의한 결과만 모으면 효과가 얼마나 부풀려지는지 예측합니다</h2></div>
+      <div class="body split">
+        <div class="pcol">
+          <div class="plabel">해보기 · 첨가제의 실제 효과를 고르고, p &lt; 0.05인 결과만 게재될 때 게재 결과의 평균 효과를 예측하세요</div>
+          <div class="fig" style="flex:1"><svg id="m24-p3-svg" viewBox="0 0 470 210" role="img" aria-label="시험 1,000건의 효과 분포와 게재된 결과"></svg></div>
+        </div>
+        <div class="pcol" style="gap:9px;justify-content:center">
+          <div class="mbtns" id="m24-qd" style="gap:6px"></div>
+          <div class="ctrl">게재 평균 예측<input type="range" id="m24-g" min="-4" max="20" step="0.5" value="6" aria-label="게재된 결과의 평균 효과 예측"><strong id="m24-gv" style="min-width:72px;text-align:right">-</strong></div>
+          <button class="btn" id="m24-check" style="align-self:flex-start">시뮬레이션 결과 보기</button>
+          <div class="stats three"><div><small>내 예측</small><strong id="m24-mine">-</strong></div><div><small>게재 평균</small><strong id="m24-act">?</strong></div><div><small>게재 건수</small><strong id="m24-cnt">?</strong></div></div>
+          <p class="pmsg" id="m24-msg3"></p>
+          <div class="think"><span>생각해보기</span>A공장의 +12 MPa는 실제 효과가 얼마일 때도 나올 수 있을까요?</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ⑦ 용어해설·참고자료: 스크립트의 GLOSSARY, REFS, NEXT로 만듭니다 -->
+  </main>
+
+  <footer class="bottombar">
+    <a class="home" href="../index.html" title="홈으로 (학습 과정)" aria-label="홈으로"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 10.5 12 3l9 7.5"/><path d="M5.5 9.5V21h13V9.5"/></svg><span>홈</span></a><span class="counter" id="counter"></span><span class="spacer"></span>
+    <button class="nav" id="prev" type="button">이전</button>
+    <button class="nav primary" id="next" type="button">다음</button>
+  </footer>
+</div>
+<p class="rotate">화면을 가로로 돌리면 더 크게 볼 수 있습니다.</p>
+
+<script>
+(function(){
+"use strict";
+
+/* =====================================================================
+   [교체] 모듈 설정 — 새 모듈은 이 블록과 HTML 화면 문장만 바꿉니다.
+   ===================================================================== */
+var MODULE={title:"재현성",sub:"결과 해석과 인과 · M24"};
+var STEPS=["학습개요","학습목표","일상의 예시","본문","형성평가","실습","용어해설"];
+
+/* 예시 데이터(이 모듈에서 정한 값)
+   ① 첨가제 X 인장강도 시험(각 n = 10, 표준편차 11.4 MPa): A공장 평균차 +12 MPa, t = 2.35, p = 0.030 / B공장 추시 +4 MPa, t = 0.79, p = 0.44
+   ② p-해킹: 서로 독립인 검정 k개 중 하나라도 p < 0.05일 확률 1 − 0.95^k: k 1 0.05, 5 0.226, 10 0.401, 13 0.487, 14 0.512, 20 0.642
+   ③ 출판 편향 시뮬레이션(1,000회, p < 0.05이면서 효과가 +인 결과만 게재): 실제 효과 0 → 게재 23건 평균 11.0 / 4 → 129건 12.5 / 8 → 328건 13.6
+   ④ 심리학 재현성 조사: 원래 97/100 유의, 추시 35/97 ≈ 36% 유의 */
+var CASE=null, PAIRS=null, P1={target:null};
+var PUB={"0":{"np":23,"mp":11.0,"ma":-0.1,"ha":[1,9,55,147,285,281,170,45,7,0,0,0],"hp":[0,0,0,0,0,0,2,14,7,0,0,0]},"4":{"np":129,"mp":12.5,"ma":4.1,"ha":[0,1,14,53,140,303,259,154,64,12,0,0],"hp":[0,0,0,0,0,0,3,55,59,12,0,0]},"8":{"np":328,"mp":13.6,"ma":8.2,"ha":[0,0,2,9,31,172,268,292,157,54,13,2],"hp":[0,0,0,0,0,0,4,110,145,54,13,2]}};
+var PEDGE=-20, PBW=4;
+
+var QUIZ=[
+ {goal:1,type:"계산",stem:"원래 연구 100건 중 97건이 통계적으로 유의했고, 이 97건을 추시했더니 35건만 유의했습니다. 유의한 결과가 재현된 비율은 약 얼마일까요?",
+  opts:["약 36%","35%","97%","약 64%"],ans:0,
+  exp:"재현 비율은 원래 유의했던 97건을 기준으로 35 ÷ 97 ≈ 0.36, 즉 약 36%입니다. 35%는 기준을 100건으로 잘못 잡은 값이고, 약 64%는 재현되지 않은 비율입니다. 약 1/3 정도만 재현할 수 있었다는 뜻입니다.",back:"s-4-2a",backLabel:"4-2 심리학 재현성 조사 다시 보기"},
+ {goal:1,type:"O/X 오개념",stem:"“한 번의 추시에서 p < 0.05가 나오지 않았다면, 원래 논문의 주장은 틀린 것이다.”",
+  opts:["O","X"],ans:1,ox:true,
+  exp:"가설검정의 검정력은 100%가 아니므로 원래 결론이 옳아도 추시 데이터가 반드시 유의하지는 않습니다. 실험 조건을 완전히 같게 하기도 어렵습니다. 그래서 재현성이 없다는 것은 원래 주장이 ‘잘못되었을 가능성이 있다’는 뜻으로 받아들여야 합니다.",back:"s-4-1a",backLabel:"4-1 재현성 다시 보기"},
+ {goal:2,type:"계산",stem:"효과가 전혀 없는 첨가제로 서로 독립인 품질 지표 5개를 각각 유의수준 0.05로 검정하고, 하나라도 p < 0.05이면 ‘효과 있음’으로 보고합니다. 효과가 있다고 보고할 확률은 약 얼마일까요?",
+  opts:["약 23%","5%","25%","약 77%"],ans:0,
+  exp:"모든 지표가 유의하지 않을 확률은 0.95⁵ ≈ 0.774이므로, 적어도 하나가 유의할 확률은 1 − 0.774 ≈ 0.226, 약 23%입니다. 5%는 검정 한 번일 때, 25%는 0.05 × 5로 단순히 더한 값, 약 77%는 하나도 유의하지 않을 확률입니다.",back:"s-4-3c",backLabel:"4-3 제1종 오류 증가 다시 보기"},
+ {goal:2,type:"상황 판단",stem:"다음 중 p-해킹에 해당하는 것은 무엇일까요?",
+  opts:["p = 0.06이 나와 데이터를 조금씩 더 모으다가 0.05 미만이 되자 멈추고 보고한다","분석 방법과 표본크기를 미리 정해 두고 그대로 보고한다","유의하지 않은 지표의 결과도 함께 보고한다","다른 공장에서 같은 조건으로 추시해 결과를 확인한다"],ans:0,
+  exp:"자신에게 유리하도록 p값이 0.05보다 작아지게 분석 방법을 조작하는 행위가 p-해킹입니다. 결과를 보며 데이터를 더하다 유의해지는 순간 멈추면, 효과가 없어도 p < 0.05가 나올 확률이 유의수준보다 커집니다. 나머지는 p-해킹을 막는 바람직한 방법입니다.",back:"s-4-3b",backLabel:"4-3 p-해킹 다시 보기"},
+ {goal:3,type:"O/X 오개념",stem:"“동료평가를 거쳐 저널에 실린 논문의 결과는 옳다고 보아도 된다.”",
+  opts:["O","X"],ans:1,ox:true,
+  exp:"논문 게재 여부는 편집자와 평가자 몇 명이 판단할 뿐이므로 논문에도 잘못이 있을 수 있습니다. 또 p < 0.05인 결과가 주로 게재되는 출판 편향 때문에, 실린 결과만 모으면 실제보다 효과가 크게 보이기도 합니다.",back:"s-4-4a",backLabel:"4-4 논문 게재 과정 다시 보기"},
+ {goal:3,type:"상황 판단",stem:"실제로는 효과가 없는 첨가제를 여러 공장이 시험했고, p < 0.05가 나온 공장만 보고서를 냈습니다. 보고서에 실린 효과의 평균은 어떻게 보일까요?",
+  opts:["실제(0)보다 크게 부풀려져 보인다","실제 효과와 같게 보인다","실제보다 작게 보인다","보고서가 많을수록 실제 효과에 가까워진다"],ans:0,
+  exp:"유의한 결과만 세상에 나오면 우연히 큰 차이가 난 결과만 모이므로 효과가 부풀려집니다. 이 모듈의 시뮬레이션에서도 실제 효과가 0일 때 게재된 결과의 평균은 +11.0 MPa였습니다. 이것이 출판 편향이며, 보고서가 많아져도 치우침은 사라지지 않습니다.",back:"s-4-4b",backLabel:"4-4 출판 편향 다시 보기"}
+];
+
+var BINS=["실험 조건 차이","우연한 결과","p-해킹"];
+var CARDS=[["B공장 원료 성분이 A공장과 다름","실험 조건 차이"],["측정 장비와 작업 온도가 다름","실험 조건 차이"],
+           ["효과가 진짜여도 검정력이 80%뿐","우연한 결과"],["효과가 없어도 20번에 1번은 p < 0.05","우연한 결과"],
+           ["지표 5개 중 유의한 것만 골라 보고","p-해킹"],["p < 0.05가 될 때까지 데이터 추가","p-해킹"]];
+var HINT={"실험 조건 차이":"원래 실험과 똑같은 조건을 갖추기 어려워 생기는 차이입니다.","우연한 결과":"검정력과 유의수준 때문에 정직하게 분석해도 생길 수 있는 결과입니다.","p-해킹":"p값이 0.05보다 작아지도록 분석 방법을 조작한 경우입니다."};
+
+var GLOSSARY=[
+ ["재현성","reproducibility, replication","누가 언제 어디서 실험하더라도 조건이 같다면 같은 결과를 얻을 수 있어야 한다는 성질입니다.","A공장의 개선 효과가 B공장에서도 나오는가"],
+ ["추시","replication study","다른 사람이 실험한 결과를 같은 방법과 조건으로 그대로 따라 해 확인하는 것입니다.","B공장이 같은 조건으로 첨가제 X를 시험"],
+ ["재현성 위기","reproducibility crisis","발표된 결과를 같은 방법으로 추시해도 같은 결과를 얻지 못했다는 보고가 잇따르는 문제입니다.","심리학 연구의 재현 비율 약 36%"],
+ ["효과크기","effect size","평균값의 차이처럼 효과가 얼마나 큰지를 나타내는 값입니다.","A공장 +12 MPa, B공장 +4 MPa"],
+ ["p-해킹","p-hacking","자신에게 유리하도록 p값이 0.05보다 작아지게 분석 방법을 조작하는 행위입니다.","지표 5개 중 유의한 것만 보고"],
+ ["동료평가","peer review","투고된 논문을 가까운 분야 연구자 2~3명이 확인해 게재 판단을 돕는 과정입니다.","저널 편집자가 평가자에게 평가 의뢰"],
+ ["출판 편향","publication bias","p < 0.05인 결과만 주로 출판되어 세상에 알려진 내용이 한쪽으로 치우치는 문제입니다.","효과 0인 첨가제도 게재 결과는 +11.0 MPa"]
+];
+var REFS=[
+ {n:1,title:"Estimating the reproducibility of psychological science",org:"Open Science Collaboration, Science 349(6251), aac4716, 2015",url:"https://doi.org/10.1126/science.aac4716",date:"2026-10-27 확인"},
+ {n:2,title:"The ASA Statement on p-Values: Context, Process, and Purpose",org:"R. L. Wasserstein, N. A. Lazar, The American Statistician 70(2), 129–133, 2016",url:"https://doi.org/10.1080/00031305.2016.1154108",date:"2026-10-27 확인"},
+ {n:3,title:"Redefine statistical significance",org:"D. J. Benjamin 외, Nature Human Behaviour 2, 6–10, 2018",url:"https://doi.org/10.1038/s41562-017-0189-z",date:"2026-10-27 확인"}
+];
+var NEXT={title:"M25 p값과 효과크기 다시 보기",line:"다음 모듈에서는 p값의 정확한 뜻을 되짚고, 피셔류와 네이만-피어슨류 검정, 효과크기를 함께 보는 법을 배웁니다."};
+
+/* =====================================================================
+   아래부터는 공통 엔진입니다. 모듈마다 바꾸지 않습니다.
+   ===================================================================== */
+var NS="http://www.w3.org/2000/svg";
+var C={navy:"#1B2A4A",navy2:"#2C4170",navy3:"#5B6E97",soft:"#A9B8D4",grid:"#DDE1E7",gray:"#6B7280",gray2:"#9AA0AA",amber:"#E0A100",amberInk:"#6E4F00",ok:"#23704F"};
+function el(t,a,p,x){var e=document.createElementNS(NS,t);for(var k in a)e.setAttribute(k,a[k]);if(x!=null)e.textContent=x;if(p)p.appendChild(e);return e;}
+function clear(s){while(s.firstChild)s.removeChild(s.firstChild);}
+function f1(v,d){return v.toFixed(d==null?1:d);}
+function sum(a){return a.reduce(function(x,y){return x+y;},0);}
+function r1(v){return Math.round(v*10)/10;}
+var stage=document.getElementById("stage"),vp=document.getElementById("vp");
+
+/* 계산은 모두 데이터에서 직접 합니다(R0-7) */
+var N=CASE?CASE.values.length:0,SUMV=CASE?r1(sum(CASE.values)):0,AVG=N?SUMV/N:0,MAXV=CASE?Math.max.apply(null,CASE.values):0;
+var LR=!PAIRS?null:(function(){var n=PAIRS.xs.length,mx=sum(PAIRS.xs)/n,my=sum(PAIRS.ys)/n,sxy=0,sxx=0;
+  for(var i=0;i<n;i++){sxy+=(PAIRS.xs[i]-mx)*(PAIRS.ys[i]-my);sxx+=(PAIRS.xs[i]-mx)*(PAIRS.xs[i]-mx);}
+  var b=sxy/sxx;return{b:b,a:my-b*mx};})();
+var PRED=PAIRS?LR.a+LR.b*PAIRS.x0:0;
+
+document.title=MODULE.title;
+document.getElementById("brand").innerHTML=MODULE.title+"<small>"+MODULE.sub+"</small>";
+
+/* 16:9 고정 무대를 창 크기에 맞춤 */
+var S=1;
+function fit(){S=Math.min(window.innerWidth/960,window.innerHeight/540);stage.style.setProperty("--s",S);}
+window.addEventListener("resize",fit);fit();
+
+/* ---------- 그래프 ---------- */
+function barChart(svg,vals,o){
+  clear(svg);o=o||{};
+  var vb=svg.viewBox.baseVal,W=vb.width,H=vb.height,L=34,R=o.mean!=null?70:8,T=26,Bt=24,ym=o.ymax||Math.ceil(Math.max.apply(null,vals)+1),pw=W-L-R,ph=H-T-Bt,bw=pw/vals.length;
+  function y(v){return T+ph-(v/ym)*ph;}
+  for(var g=0;g<=ym;g++){el("line",{x1:L,x2:W-R,y1:y(g),y2:y(g),stroke:C.grid},svg);el("text",{x:L-6,y:y(g)+4,"text-anchor":"end","font-size":10.5,fill:C.gray2},svg,g);}
+  vals.forEach(function(v,i){
+    var sel=o.sel===i,hi=o.hi===i;
+    el("rect",{x:L+i*bw+bw*.16,y:y(v),width:bw*.68,height:Math.max(0,y(0)-y(v)),rx:2,fill:sel?C.amber:hi?C.navy2:C.soft},svg);
+    el("text",{x:L+i*bw+bw/2,y:H-Bt+16,"text-anchor":"middle","font-size":10.5,fill:C.gray},svg,CASE.labels[i]);
+  });
+  if(o.mean!=null){var m=o.mean;
+    el("line",{x1:L,x2:W-R+4,y1:y(m),y2:y(m),stroke:C.navy,"stroke-width":2,"stroke-dasharray":"6 4"},svg);
+    el("rect",{x:W-R+6,y:y(m)-10,width:R-8,height:20,rx:4,fill:C.navy},svg);
+    el("text",{x:W-R+6+(R-8)/2,y:y(m)+4,"text-anchor":"middle","font-size":11,"font-weight":700,fill:"#fff"},svg,"평균 "+f1(m,2));}
+  /* 값 라벨은 마지막에 흰 테두리로 그려 점선에 가리지 않게 함 */
+  vals.forEach(function(v,i){var sel=o.sel===i,hi=o.hi===i;
+    if(o.labels||sel)el("text",{x:L+i*bw+bw/2,y:y(v)-5,"text-anchor":"middle","font-size":10.5,"font-weight":sel||hi?800:500,fill:sel?C.amberInk:hi?C.navy:C.gray,stroke:"#EEF0F3","stroke-width":3,"paint-order":"stroke"},svg,f1(v));});
+}
+function scatter(svg,o){
+  clear(svg);o=o||{};
+  var vb=svg.viewBox.baseVal,W=vb.width,H=vb.height,L=34,R=14,T=30,Bt=40,x0=PAIRS.xmin,x1=PAIRS.xmax,y0=PAIRS.ymin,y1=PAIRS.ymax;
+  function X(v){return L+(v-x0)/(x1-x0)*(W-L-R);}
+  function Y(v){return T+(H-T-Bt)-(v-y0)/(y1-y0)*(H-T-Bt);}
+  for(var g=y0;g<=y1+1e-9;g+=PAIRS.ystep){el("line",{x1:L,x2:W-R,y1:Y(g),y2:Y(g),stroke:C.grid},svg);el("text",{x:L-6,y:Y(g)+4,"text-anchor":"end","font-size":10.5,fill:C.gray2},svg,g);}
+  for(var h=x0;h<=x1+1e-9;h+=PAIRS.xstep)el("text",{x:X(h),y:H-Bt+16,"text-anchor":"middle","font-size":10.5,fill:C.gray},svg,h);
+  el("text",{x:(L+W-R)/2,y:H-6,"text-anchor":"middle","font-size":10.5,fill:C.gray},svg,PAIRS.xlabel);
+  el("text",{x:4,y:14,"font-size":10.5,fill:C.gray},svg,PAIRS.ylabel);
+  if(o.line){var la=x0+(x1-x0)*.04,lb=x1-(x1-x0)*.04;el("line",{x1:X(la),y1:Y(LR.a+LR.b*la),x2:X(lb),y2:Y(LR.a+LR.b*lb),stroke:C.navy,"stroke-width":2},svg);}
+  PAIRS.xs.forEach(function(x,i){el("circle",{cx:X(x),cy:Y(PAIRS.ys[i]),r:4.5,fill:C.navy3,"fill-opacity":.85},svg);});
+  if(o.x0!=null){el("line",{x1:X(o.x0),y1:Y(0),x2:X(o.x0),y2:Y(y1),stroke:C.amber,"stroke-dasharray":"3 3"},svg);
+    el("text",{x:X(o.x0),y:T-4,"text-anchor":"middle","font-size":10.5,"font-weight":700,fill:C.amberInk},svg,PAIRS.x0label);}
+  if(o.pred){el("circle",{cx:X(PAIRS.x0),cy:Y(PRED),r:6,fill:C.navy},svg);
+    el("text",{x:X(PAIRS.x0)-10,y:Y(PRED)+4,"text-anchor":"end","font-size":11,"font-weight":800,fill:C.navy,stroke:"#EEF0F3","stroke-width":3,"paint-order":"stroke"},svg,"예측 "+f1(PRED,PAIRS.dp)+PAIRS.unit);}
+  if(o.guess!=null){el("circle",{cx:X(PAIRS.x0),cy:Y(o.guess),r:7,fill:C.amber,stroke:"#fff","stroke-width":2},svg);}
+  if(o.actual){var ay=Y(PAIRS.actual);el("rect",{x:X(PAIRS.x0)-6,y:ay-6,width:12,height:12,fill:C.ok,transform:"rotate(45 "+X(PAIRS.x0)+" "+ay+")"},svg);
+    el("text",{x:X(PAIRS.x0)-10,y:ay-6,"text-anchor":"end","font-size":11,"font-weight":800,fill:C.ok,stroke:"#EEF0F3","stroke-width":3,"paint-order":"stroke"},svg,"실제 "+f1(PAIRS.actual)+PAIRS.unit);}
+  return {X:X,Y:Y};
+}
+function flow(svg,names){
+  clear(svg);var n=names.length,w=118,gap=(440-40-n*w)/(n-1),y=96,h=64;
+  el("defs",{},svg).innerHTML='<marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10z" fill="'+C.navy3+'"/></marker>';
+  names.forEach(function(t,i){var x=20+i*(w+gap);
+    el("rect",{x:x,y:y,width:w,height:h,rx:10,fill:i===n-1?C.navy:"#fff",stroke:C.navy,"stroke-width":1.5},svg);
+    el("text",{x:x+w/2,y:y+h/2-6,"text-anchor":"middle","font-size":11,"font-weight":700,fill:i===n-1?"#C9D3E6":C.navy3},svg,"4-"+(i+1));
+    el("text",{x:x+w/2,y:y+h/2+13,"text-anchor":"middle","font-size":14,"font-weight":800,fill:i===n-1?"#fff":C.navy},svg,t);
+    if(i<n-1)el("line",{x1:x+w+4,y1:y+h/2,x2:x+w+gap-5,y2:y+h/2,stroke:C.navy3,"stroke-width":2,"marker-end":"url(#ar)"},svg);});
+  el("text",{x:220,y:200,"text-anchor":"middle","font-size":12,fill:C.gray},svg,"본문 소단원을 배우는 순서");
+}
+/* 화면에 해당 id가 있을 때만 그립니다(모듈마다 쓰지 않는 그림은 건너뜀) */
+function on(id,fn){var e=document.getElementById(id);if(e)fn(e);}
+on("fig-flow",function(s){flow(s,["소단원 1","소단원 2","정리"]);});
+on("fig-case",function(s){barChart(s,CASE.values,{labels:true});});
+on("fig-bar",function(s){barChart(s,CASE.values,{labels:true,mean:AVG});});
+on("fig-scatter",function(s){scatter(s,{line:true,x0:PAIRS.x0,pred:true});});
+on("fig-bridge",function(s){
+  el("defs",{},s).innerHTML='<marker id="ar2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10z" fill="'+C.navy3+'"/></marker>';
+  [["장면 1",40],["장면 2",130]].forEach(function(p){el("rect",{x:24,y:p[1],width:130,height:64,rx:10,fill:"#fff",stroke:C.navy3,"stroke-width":1.5},s);el("text",{x:89,y:p[1]+37,"text-anchor":"middle","font-size":14,"font-weight":700,fill:C.navy},s,p[0]);
+    el("line",{x1:158,y1:p[1]+32,x2:246,y2:120,stroke:C.navy3,"stroke-width":2,"marker-end":"url(#ar2)"},s);});
+  el("rect",{x:252,y:84,width:150,height:72,rx:12,fill:C.navy},s);
+  el("text",{x:327,y:116,"text-anchor":"middle","font-size":14,"font-weight":800,fill:"#fff"},s,"본문 첫 질문");
+  el("text",{x:327,y:136,"text-anchor":"middle","font-size":11.5,fill:"#C9D3E6"},s,"4-1로 이어짐");});
+on("case-n",function(e){e.textContent=N+"개";});
+on("case-sum",function(e){e.textContent=f1(SUMV);});
+on("case-max",function(e){e.textContent=f1(MAXV);});
+on("math-calc",function(e){e.textContent=f1(LR.b,2)+" × "+PAIRS.x0+" + "+f1(LR.a,2)+" = "+f1(PRED,2);});
+
+/* =====================================================================
+   [교체] 모듈 전용 그림: 모듈마다 필요한 그림 함수는 이 자리에 둡니다.
+   ===================================================================== */
+/* M24 전용 그림·실습 */
+function linR(a,b,c,d){return function(v){return c+(v-a)/(b-a)*(d-c);};}
+function tR(s,x,y,t,o){o=o||{};return el("text",{x:x,y:y,"text-anchor":o.a||"middle","font-size":o.fs||11,"font-weight":o.fw||600,fill:o.c||C.navy,stroke:o.halo?"#fff":"none","stroke-width":o.halo?3:0,"paint-order":"stroke"},s,t);}
+function bxR(s,x,y,w,h,fill,stroke){return el("rect",{x:x,y:y,width:w,height:h,rx:10,fill:fill||"#fff",stroke:stroke||"none","stroke-width":stroke?1.5:0},s);}
+function mkR(s,id,col){el("defs",{},s).innerHTML='<marker id="'+id+'" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10z" fill="'+col+'"/></marker>';}
+function arR(s,x1,y1,x2,y2,id,col,w){return el("line",{x1:x1,y1:y1,x2:x2,y2:y2,stroke:col||C.navy3,"stroke-width":w||2,"marker-end":"url(#"+id+")"},s);}
+function supR(n){return String(n).split("").map(function(c){return "⁰¹²³⁴⁵⁶⁷⁸⁹"[+c];}).join("");}
+var RED="#B42318",GRN="#23704F",BLU="#2B8CC4";
+function caseR(s,x0,y0,w){ /* 효과와 95% 신뢰구간: 차이 ± 2.101 × 5.10 */
+  var X=linR(-10,25,x0,x0+w);
+  [-10,0,10,20].forEach(function(t){el("line",{x1:X(t),x2:X(t),y1:y0,y2:y0+112,stroke:t===0?C.gray2:C.grid,"stroke-width":t===0?1.5:1},s);tR(s,X(t),y0+126,(t>0?"+":"")+t,{fs:9.5,c:C.gray,fw:500});});
+  [[y0+30,"A공장",12,"p = 0.03 · 유의",BLU],[y0+82,"B공장 추시",4,"p = 0.44 · 유의 아님",RED]].forEach(function(r){var h=10.7;
+    el("line",{x1:X(r[2]-h),x2:X(r[2]+h),y1:r[0],y2:r[0],stroke:r[4],"stroke-width":3,"stroke-linecap":"round"},s);el("circle",{cx:X(r[2]),cy:r[0],r:7,fill:r[4],stroke:"#fff","stroke-width":2},s);
+    tR(s,X(r[2]),r[0]-12,r[1]+" +"+r[2]+" MPa",{fw:800,fs:11.5,c:r[4],halo:true});tR(s,X(r[2]),r[0]+22,r[3],{fs:10,fw:700,c:"#22262E",halo:true});});
+}
+
+on("m24-ov",function(s){
+  mkR(s,"oR",C.navy3);
+  bxR(s,20,10,190,56,"#F3F5F9",C.navy3);tR(s,115,33,"가설검정 시행은 간단",{fw:800,fs:12.5});tR(s,115,52,"코드 한 줄로 p값 계산",{fs:10.5,c:C.gray});
+  bxR(s,230,10,190,56,"#FCF3D9",C.amber);tR(s,325,33,"p < 0.05만 얻으면 그만?",{fw:800,fs:12.5,c:C.amberInk});tR(s,325,52,"원리 이해 없이 관례대로",{fs:10.5,c:C.gray});
+  arR(s,212,38,226,38,"oR");
+  bxR(s,40,108,160,56,"#FBE4E1",RED);tR(s,120,132,"p-해킹",{fw:800,fs:13.5,c:RED});tR(s,120,151,"p값이 작아지게 조작",{fs:10.5,c:"#22262E"});
+  bxR(s,240,108,160,56,"#FBE4E1",RED);tR(s,320,132,"출판 편향",{fw:800,fs:13.5,c:RED});tR(s,320,151,"유의한 결과만 게재",{fs:10.5,c:"#22262E"});
+  el("path",{d:"M300 68 C300 86 140 84 128 104",fill:"none",stroke:C.navy3,"stroke-width":2,"marker-end":"url(#oR)"},s);arR(s,320,68,320,104,"oR");
+  bxR(s,110,200,220,52,C.navy);tR(s,220,223,"재현성 위기",{fw:800,fs:14,c:"#fff"});tR(s,220,241,"같은 방법으로 해도 같은 결과가 안 나옴",{fs:10.5,c:"#C9D3E6"});
+  arR(s,120,166,190,196,"oR");arR(s,320,166,250,196,"oR");
+});
+
+on("m24-case",function(s){
+  bxR(s,4,4,432,242);tR(s,20,28,"첨가제 X의 인장강도 효과와 95% 신뢰구간 (각 10장, 예시값)",{a:"start",fw:800,fs:11.5});
+  caseR(s,40,50,370);tR(s,410,236,"효과(MPa)",{a:"end",fs:10,c:C.gray,fw:700});
+});
+
+on("m24-rep",function(s){
+  mkR(s,"rR",C.navy3);
+  bxR(s,6,6,408,96,"#F3F5F9");tR(s,20,28,"재현성: 조건이 같으면 같은 결과",{a:"start",fw:800,fs:12});
+  bxR(s,20,42,110,46,"#fff",C.navy3);tR(s,75,62,"원래 실험",{fw:800,fs:11});tR(s,75,79,"A공장",{fs:10,c:C.gray});
+  bxR(s,160,42,110,46,"#fff",C.navy3);tR(s,215,62,"추시",{fw:800,fs:11});tR(s,215,79,"같은 방법·조건",{fs:10,c:C.gray});
+  arR(s,132,65,156,65,"rR");arR(s,272,65,296,65,"rR");
+  bxR(s,300,42,104,46,"#E3F1EA");tR(s,352,62,"같은 결과",{fw:800,fs:11,c:GRN});tR(s,352,79,"→ 믿고 적용",{fs:10,c:"#22262E"});
+  caseR(s,46,118,340);
+  tR(s,210,266,"한 번의 추시 실패 ≠ 원래 주장 오류, ‘잘못되었을 가능성’",{fw:800,fs:10.5,c:C.amberInk});
+});
+
+on("m24-time",function(s){
+  var R=[["2014","Nature","p값을 비판하며 베이즈 인수 개념 제안",""],["2015","심리학 저널","p값 사용 금지 발표",""],["2016","미국통계협회","p값에 관한 성명 발표","[2]"],["2017","Nature Human Behaviour","p < 0.005 기준 제안","[3]"],["2018","의학 저널 JAMA","p < 0.005 기준 제안 논문",""]];
+  el("line",{x1:40,x2:40,y1:26,y2:244,stroke:C.navy3,"stroke-width":3},s);
+  R.forEach(function(r,i){var y=30+i*52;el("circle",{cx:40,cy:y+8,r:7,fill:i===2?C.amber:C.navy,stroke:"#fff","stroke-width":2},s);
+    tR(s,58,y+12,r[0],{a:"start",fw:800,fs:13});bxR(s,104,y-8,310,40,i===2?"#FCF3D9":"#F3F5F9");
+    tR(s,116,y+8,r[1],{a:"start",fw:800,fs:11,c:C.navy});tR(s,116,y+25,r[2],{a:"start",fs:10.5,c:"#22262E"});if(r[3])tR(s,404,y+8,r[3],{a:"end",fw:800,fs:10,c:BLU});});
+});
+
+on("m24-waf",function(s){
+  function grid(x0,ok,tot,title,sub,col){tR(s,x0+64,16,title,{fw:800,fs:11.5});
+    for(var i=0;i<100;i++){var r=Math.floor(i/10),c=i%10;el("rect",{x:x0+c*13,y:24+r*11,width:11,height:9,rx:2,fill:i<ok?col:i<tot?"#D1D5DB":"#fff",stroke:i<tot?"none":"#E5E7EB"},s);}
+    tR(s,x0+64,146,sub,{fw:800,fs:11,c:col});}
+  grid(30,97,100,"원래 연구 100건","유의 97건 (97%)",GRN);grid(256,35,97,"추시 97건","유의 35건 (36%)",RED);
+  tR(s,210,84,"→",{fw:800,fs:22,c:C.navy3});tR(s,210,104,"추시",{fs:10,c:C.gray,fw:700});
+});
+
+on("m24-es",function(s){
+  bxR(s,6,6,408,124,"#F3F5F9");tR(s,20,28,"p값의 분포 (0 ~ 1)",{a:"start",fw:800,fs:12});
+  var X=linR(0,1,100,396);[["원래 연구",48,0,0.05,GRN],["추시",96,0,1,RED]].forEach(function(r){
+    el("line",{x1:X(0),x2:X(1),y1:r[1],y2:r[1],stroke:"#D1D5DB","stroke-width":10,"stroke-linecap":"round"},s);
+    el("line",{x1:X(r[2]),x2:X(r[3]),y1:r[1],y2:r[1],stroke:r[4],"stroke-width":10,"stroke-linecap":"round","stroke-opacity":.8},s);tR(s,20,r[1]+4,r[0],{a:"start",fw:800,fs:11});});
+  el("line",{x1:X(.05),x2:X(.05),y1:36,y2:110,stroke:C.amber,"stroke-width":2,"stroke-dasharray":"4 3"},s);tR(s,X(.05)+5,66,"p = 0.05",{a:"start",fs:10,fw:800,c:C.amberInk,halo:true});
+  tR(s,396,70,"거의 모두 0.05 아래",{a:"end",fs:10,fw:700,c:GRN});tR(s,396,118,"폭넓게 퍼짐",{a:"end",fs:10,fw:700,c:RED});
+  bxR(s,6,140,408,124,"#FCF3D9");tR(s,20,162,"평균 효과크기(상관계수 r)",{a:"start",fw:800,fs:12,c:C.amberInk});tR(s,404,162,"[1]",{a:"end",fw:800,fs:10,c:BLU});
+  var X2=linR(0,.5,110,380);[["원래 연구",188,.403,GRN],["추시",226,.197,RED]].forEach(function(r){el("rect",{x:X2(0),y:r[1]-12,width:X2(r[2])-X2(0),height:22,rx:4,fill:r[3]},s);
+    tR(s,20,r[1]+4,r[0],{a:"start",fw:800,fs:11});tR(s,X2(r[2])+6,r[1]+4,r[2].toFixed(3),{a:"start",fw:800,fs:11,c:r[3]});});
+  tR(s,404,254,"약 절반",{a:"end",fw:800,fs:11,c:RED});
+});
+
+on("m24-cause",function(s){
+  bxR(s,6,6,408,124,"#F3F5F9");tR(s,20,28,"① 실험 조건을 똑같이 만들기 어려움",{a:"start",fw:800,fs:12});
+  var cx=[80,210,330];[["","A공장","B공장"],["원료 성분","철광석 산지 1","철광석 산지 2"],["설비 상태","신규 압연기","10년 된 압연기"],["피험자(심리학)","대학생","다른 나라 성인"]].forEach(function(r,j){var y=50+j*21;
+    r.forEach(function(v,i){tR(s,cx[i],y,v,{fw:j===0||i===0?800:600,fs:10.5,c:j===0?C.navy3:C.navy});});if(j>0)tR(s,270,y,"≠",{fw:800,fs:12,c:RED});});
+  bxR(s,6,140,408,124,"#FCF3D9");tR(s,20,162,"② 검정력이 100%가 아님 (예: 검정력 80%)",{a:"start",fw:800,fs:12,c:C.amberInk});
+  for(var i=0;i<10;i++){var x=40+i*36;el("rect",{x:x,y:178,width:26,height:30,rx:5,fill:i<8?GRN:RED},s);tR(s,x+13,198,i<8?"○":"×",{fw:800,fs:13,c:"#fff"});}
+  tR(s,210,232,"효과가 진짜여도 추시 10번 중 2번은 p ≥ 0.05",{fw:800,fs:11});tR(s,210,251,"그래도 36%는 이것만으로 설명하기에 너무 낮음",{fs:10.5,c:C.gray,fw:700});
+});
+
+on("m24-hack",function(s){
+  mkR(s,"hR",C.navy3);
+  bxR(s,6,100,90,44,"#FCF3D9",C.amber);tR(s,51,127,"실험·관찰",{fw:800,fs:11.5});
+  bxR(s,120,100,76,44,"#EEF4FB",BLU);tR(s,158,127,"데이터",{fw:800,fs:11.5});arR(s,98,122,116,122,"hR");
+  bxR(s,250,14,164,64,"#fff",GRN);tR(s,262,36,"p ≥ 0.05",{a:"start",fw:800,fs:12,c:GRN});tR(s,262,54,"가설을 지지하지 않음",{a:"start",fs:10.5});tR(s,262,70,"논문으로 발표할 수 없음",{a:"start",fs:10.5});
+  bxR(s,250,160,164,64,"#fff",RED);tR(s,262,182,"p < 0.05",{a:"start",fw:800,fs:12,c:RED});tR(s,262,200,"가설을 지지함",{a:"start",fs:10.5});tR(s,262,216,"논문으로 발표할 수 있음",{a:"start",fs:10.5});
+  el("path",{d:"M198 114 C226 100 226 60 246 50",fill:"none",stroke:C.navy3,"stroke-width":2,"marker-end":"url(#hR)"},s);
+  el("path",{d:"M198 130 C226 146 226 182 246 190",fill:"none",stroke:C.navy3,"stroke-width":2,"marker-end":"url(#hR)"},s);
+  el("path",{d:"M300 82 C300 120 300 130 300 154",fill:"none",stroke:RED,"stroke-width":3,"stroke-dasharray":"7 4","marker-end":"url(#hR)"},s);
+  tR(s,308,124,"p-해킹",{a:"start",fw:800,fs:12.5,c:RED,halo:true});
+  bxR(s,40,190,150,46,C.navy);tR(s,115,212,"재현성 저하",{fw:800,fs:13,c:"#fff"});tR(s,115,228,"제1종 오류 확률 > α",{fs:10,c:"#C9D3E6"});
+  el("path",{d:"M248 214 C220 214 214 213 194 213",fill:"none",stroke:RED,"stroke-width":2,"marker-end":"url(#hR)"},s);
+  tR(s,210,262,"의도치 않게도 저지를 수 있다는 점이 특히 우려스러움",{fw:700,fs:10.5,c:C.gray});
+});
+
+on("m24-fwer",function(s){
+  var X=linR(0,20,50,330),Y=linR(0,.7,128,10);
+  [0,.2,.4,.6].forEach(function(t){el("line",{x1:50,x2:330,y1:Y(t),y2:Y(t),stroke:C.grid},s);tR(s,44,Y(t)+4,(t*100)+"%",{a:"end",fs:9.5,c:C.gray2,fw:500});});
+  [1,5,10,15,20].forEach(function(t){tR(s,X(t),142,t,{fs:9.5,c:C.gray,fw:500});});tR(s,330,154,"",{});
+  el("line",{x1:X(1),x2:X(20),y1:Y(.05),y2:Y(.05),stroke:C.amber,"stroke-width":2,"stroke-dasharray":"5 3"},s);tR(s,X(20),Y(.05)-5,"α = 5%",{a:"end",fs:10,fw:800,c:C.amberInk});
+  var p=[];for(var k=1;k<=20;k++)p.push(X(k).toFixed(1)+" "+Y(1-Math.pow(.95,k)).toFixed(1));el("path",{d:"M"+p.join(" L"),fill:"none",stroke:RED,"stroke-width":2.6},s);
+  [[5,"23%"],[14,"51%"],[20,"64%"]].forEach(function(m){var v=1-Math.pow(.95,m[0]);el("circle",{cx:X(m[0]),cy:Y(v),r:5,fill:RED,stroke:"#fff","stroke-width":1.5},s);tR(s,X(m[0])-6,Y(v)-8,"k = "+m[0]+" → "+m[1],{a:"end",fs:10,fw:800,c:RED,halo:true});});
+  bxR(s,342,24,74,96,"#F3F5F9");tR(s,379,46,"검정 수 k",{fs:10,fw:800});tR(s,379,66,"(가로축)",{fs:9.5,c:C.gray});tR(s,379,90,"효과는",{fs:10,fw:700});tR(s,379,106,"없는 상황",{fs:10,fw:700});
+});
+
+on("m24-flow",function(s){
+  mkR(s,"fR",C.navy3);
+  bxR(s,6,40,90,56,"#EEF4FB",BLU);tR(s,51,64,"연구자",{fw:800,fs:12.5,c:"#1C6EA4"});tR(s,51,82,"논문 작성",{fs:10,c:C.gray});
+  bxR(s,150,24,120,88,"#FCF3D9",C.amber);tR(s,210,44,"저널",{fw:800,fs:10.5,c:C.amberInk});tR(s,210,70,"편집자",{fw:800,fs:13});tR(s,210,90,"게재 여부 판단",{fs:10,c:C.gray});
+  bxR(s,322,40,92,56,"#E3F1EA",GRN);tR(s,368,62,"동료평가자",{fw:800,fs:11.5,c:GRN});tR(s,368,80,"보통 2~3명",{fs:10,c:C.gray});
+  arR(s,98,58,146,58,"fR");tR(s,122,52,"투고",{fs:10,fw:700});
+  arR(s,272,58,318,58,"fR");tR(s,295,52,"평가 의뢰",{fs:9.5,fw:700});
+  arR(s,318,80,274,80,"fR");tR(s,296,94,"평가 의견",{fs:9.5,fw:700});
+  arR(s,146,80,100,80,"fR");tR(s,122,94,"판단",{fs:10,fw:700});
+  var R=[["승낙","게재 결정",GRN],["마이너 리비전","작은 수정 후 재심",BLU],["메이저 리비전","큰 수정 후 재심",C.amberInk],["거절","게재 불가, 다른 저널 고려",RED]];
+  R.forEach(function(r,i){var x=6+(i%2)*206,y=128+Math.floor(i/2)*44;bxR(s,x,y,202,38,"#F8F9FB");tR(s,x+12,y+24,r[0],{a:"start",fw:800,fs:11.5,c:r[2]});tR(s,x+192,y+24,r[1],{a:"end",fs:10,c:"#22262E"});});
+  tR(s,210,236,"주요 저널은 게재 비율이 한 자릿수(%)인 곳도 있음",{fw:700,fs:10.5,c:C.gray});
+  tR(s,210,258,"그래도 판단하는 사람은 몇 명뿐 → 논문에도 잘못이 있을 수 있음",{fw:800,fs:10.5,c:C.amberInk});
+});
+
+function histR(s,d,X,Y,y0,showPub){var D=PUB[d];
+  D.ha.forEach(function(h,k){var x0=PEDGE+k*PBW;el("rect",{x:X(x0)+1,y:Y(h),width:X(PBW)-X(0)-2,height:y0-Y(h),fill:"#C9CED6"},s);
+    if(showPub&&D.hp[k])el("rect",{x:X(x0)+1,y:Y(D.hp[k]),width:X(PBW)-X(0)-2,height:y0-Y(D.hp[k]),fill:C.amber},s);});}
+on("m24-pub",function(s){
+  bxR(s,4,4,412,262);var X=linR(-20,28,40,404),Y=linR(0,380,206,40);
+  [0,100,200,300].forEach(function(t){el("line",{x1:40,x2:404,y1:Y(t),y2:Y(t),stroke:C.grid},s);tR(s,34,Y(t)+4,t,{a:"end",fs:9.5,c:C.gray2,fw:500});});
+  histR(s,"4",X,Y,206,true);[-20,-10,0,10,20].forEach(function(t){tR(s,X(t),220,(t>0?"+":"")+t,{fs:9.5,c:C.gray,fw:500});});
+  tR(s,404,236,"시험 결과의 효과(MPa)",{a:"end",fs:10,c:C.gray,fw:700});tR(s,14,24,"시험 1,000건 (실제 효과 +4 MPa)",{a:"start",fs:10.5,fw:800});
+  [[4,"실제 +4",C.navy],[12.5,"게재 평균 +12.5",RED]].forEach(function(m,i){el("line",{x1:X(m[0]),x2:X(m[0]),y1:40,y2:206,stroke:m[2],"stroke-width":2,"stroke-dasharray":"5 3"},s);tR(s,X(m[0])+(i?6:-6),56+i*18,m[1],{a:i?"start":"end",fw:800,fs:11,c:m[2],halo:true});});
+  el("rect",{x:40,y:246,width:12,height:10,fill:"#C9CED6"},s);tR(s,56,255,"전체 1,000건",{a:"start",fs:10,fw:700});
+  el("rect",{x:150,y:246,width:12,height:10,fill:C.amber},s);tR(s,166,255,"p < 0.05로 게재된 129건",{a:"start",fs:10,fw:700});
+});
+
+on("m24-cycle",function(s){
+  mkR(s,"cR",C.navy3);
+  var B=[[10,20,"논문 수 압박","고용·다음 일과 직결","#F3F5F9",C.navy],[150,20,"p < 0.05가 사활","유의 여부에 집착","#FCF3D9",C.amberInk],[290,20,"p-해킹","될 때까지 분석 조작","#FBE4E1",RED],
+         [290,150,"출판 편향","유의한 결과만 게재","#FBE4E1",RED],[150,150,"부풀려진 효과","제1종 오류 증가","#FCF3D9",C.amberInk],[10,150,"재현성 저하","추시에서 재현 안 됨",C.navy,"#fff"]];
+  B.forEach(function(b){bxR(s,b[0],b[1],120,70,b[4]);tR(s,b[0]+60,b[1]+30,b[2],{fw:800,fs:12.5,c:b[5]});tR(s,b[0]+60,b[1]+50,b[3],{fs:10,c:b[5]==="#fff"?"#C9D3E6":"#22262E"});});
+  arR(s,132,55,146,55,"cR");arR(s,272,55,286,55,"cR");arR(s,350,92,350,146,"cR");arR(s,288,185,274,185,"cR");arR(s,148,185,134,185,"cR");
+  tR(s,210,250,"현장 개선 활동에서도 성과 압박이 같은 구조를 만들 수 있음",{fw:800,fs:10.5,c:C.gray});
+});
+
+/* 실습 1 · 분석 수와 ‘틀린 유의’(조작형) */
+(function(){
+  var ks=document.getElementById("m24-k");if(!ks)return;var svg=document.getElementById("m24-p1-svg");
+  var seed=24;function rnd(){seed|=0;seed=seed+0x6D2B79F5|0;var t=Math.imul(seed^seed>>>15,1|seed);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296;}
+  var P=[];for(var i=0;i<100;i++){var a=[];for(var j=0;j<20;j++)a.push(rnd());P.push(a);}
+  function upd(){var k=+ks.value,th=1-Math.pow(.95,k),n=0;document.getElementById("m24-kv").textContent=k;
+    clear(svg);
+    for(var i=0;i<100;i++){var hit=false;for(var j=0;j<k;j++)if(P[i][j]<.05)hit=true;if(hit)n++;var r=Math.floor(i/10),c=i%10;
+      el("rect",{x:12+c*19,y:8+r*17,width:16,height:14,rx:3,fill:hit?RED:"#D1D5DB"},svg);}
+    tR(svg,107,184,"100개 팀 (빨강: ‘효과 있음’ 보고)",{fs:10,fw:700,c:C.gray});
+    var X=linR(1,20,248,456),Y=linR(0,.7,160,14);
+    [0,.2,.4,.6].forEach(function(t){el("line",{x1:248,x2:456,y1:Y(t),y2:Y(t),stroke:C.grid},svg);tR(svg,242,Y(t)+4,(t*100)+"%",{a:"end",fs:9,c:C.gray2,fw:500});});
+    [1,5,10,15,20].forEach(function(t){tR(svg,X(t),174,t,{fs:9,c:C.gray,fw:500});});tR(svg,456,186,"분석 수 k",{a:"end",fs:9.5,c:C.gray,fw:700});
+    el("line",{x1:248,x2:456,y1:Y(.05),y2:Y(.05),stroke:C.amber,"stroke-width":1.5,"stroke-dasharray":"4 3"},svg);
+    el("line",{x1:248,x2:456,y1:Y(.5),y2:Y(.5),stroke:C.gray2,"stroke-width":1,"stroke-dasharray":"2 3"},svg);tR(svg,456,Y(.5)-4,"50%",{a:"end",fs:9,c:C.gray,fw:700});
+    var p=[];for(var q=1;q<=20;q++)p.push(X(q).toFixed(1)+" "+Y(1-Math.pow(.95,q)).toFixed(1));el("path",{d:"M"+p.join(" L"),fill:"none",stroke:RED,"stroke-width":2.2},svg);
+    el("circle",{cx:X(k),cy:Y(th),r:6,fill:RED,stroke:"#fff","stroke-width":2},svg);
+    document.getElementById("m24-th").textContent=(th*100).toFixed(1)+"%";document.getElementById("m24-sim").textContent=n+"팀";
+    var m=document.getElementById("m24-msg");m.className="pmsg"+(k===14?" ok":"");
+    m.textContent=k===1?"분석을 한 번만 하면 ‘효과 있음’ 확률은 5%로 유의수준과 같습니다. 효과가 없는데도 100팀 중 "+n+"팀이 우연히 유의한 결과를 얻었습니다.":
+      k===14?"찾았습니다. k = 14에서 1 − 0.95¹⁴ ≈ 0.512로 처음 50%를 넘습니다(k = 13은 0.487). 효과가 없는데도 절반 넘는 팀이 ‘효과 있음’을 보고하게 됩니다.":
+      "k = "+k+"이면 1 − 0.95"+supR(k)+" ≈ "+th.toFixed(3)+"입니다. 목표한 유의수준 5%의 약 "+(th/.05).toFixed(1)+"배이며, 시뮬레이션에서는 100팀 중 "+n+"팀이 ‘효과 있음’을 보고했습니다.";
+  }
+  ks.addEventListener("input",upd);upd();
+})();
+
+/* 실습 3 · 출판 편향(추정형) */
+(function(){
+  var g=document.getElementById("m24-g");if(!g)return;var qb=document.getElementById("m24-qd"),svg=document.getElementById("m24-p3-svg"),DS=["0","4","8"],cur="4",seen={};
+  DS.forEach(function(d){var b=document.createElement("button");b.type="button";b.className="mbtn";b.textContent="실제 효과 "+(d==="0"?"0":"+"+d);b.style.padding="3px 10px";b.onclick=function(){cur=d;reset();};qb.appendChild(b);});
+  function draw(){clear(svg);var X=linR(-20,28,40,456),Y=linR(0,380,180,14),D=PUB[cur];
+    [0,100,200,300].forEach(function(t){el("line",{x1:40,x2:456,y1:Y(t),y2:Y(t),stroke:C.grid},svg);tR(svg,34,Y(t)+4,t,{a:"end",fs:9,c:C.gray2,fw:500});});
+    histR(svg,cur,X,Y,180,!!seen[cur]);[-20,-10,0,10,20].forEach(function(t){tR(svg,X(t),194,(t>0?"+":"")+t,{fs:9.5,c:C.gray,fw:500});});tR(svg,456,206,"효과(MPa)",{a:"end",fs:9.5,c:C.gray,fw:700});
+    el("line",{x1:X(+cur),x2:X(+cur),y1:14,y2:180,stroke:C.navy,"stroke-width":2,"stroke-dasharray":"5 3"},svg);tR(svg,X(+cur)-5,26,"실제 "+(cur==="0"?"0":"+"+cur),{a:"end",fw:800,fs:10.5,halo:true});
+    var gv=+g.value;el("line",{x1:X(gv),x2:X(gv),y1:30,y2:180,stroke:BLU,"stroke-width":2.5},svg);tR(svg,X(gv)+5,44,"내 예측 "+(gv>0?"+":"")+gv,{a:"start",fw:800,fs:10.5,c:"#1C6EA4",halo:true});
+    if(seen[cur]){el("line",{x1:X(D.mp),x2:X(D.mp),y1:56,y2:180,stroke:RED,"stroke-width":2.5},svg);tR(svg,X(D.mp)+5,70,"게재 평균 +"+D.mp.toFixed(1),{a:"start",fw:800,fs:10.5,c:RED,halo:true});}}
+  function txt(){var v=+g.value;document.getElementById("m24-gv").textContent=(v>0?"+":"")+v.toFixed(1)+" MPa";document.getElementById("m24-mine").textContent=(v>0?"+":"")+v.toFixed(1);}
+  function reset(){[].forEach.call(qb.children,function(x,i){var on=DS[i]===cur;x.classList.toggle("on",on);x.setAttribute("aria-pressed",on);});
+    document.getElementById("m24-act").textContent=seen[cur]?"+"+PUB[cur].mp.toFixed(1):"?";document.getElementById("m24-cnt").textContent=seen[cur]?PUB[cur].np+"건":"?";
+    var m=document.getElementById("m24-msg3");m.className="pmsg";m.textContent="실제 효과가 "+(cur==="0"?"0":"+"+cur)+" MPa인 시험 1,000건 중 p < 0.05인 결과만 게재된다면, 게재 결과의 평균은 얼마일지 예측한 뒤 「시뮬레이션 결과 보기」를 누르세요.";draw();}
+  g.addEventListener("input",function(){txt();draw();});
+  document.getElementById("m24-check").onclick=function(){seen[cur]=true;var D=PUB[cur],gv=+g.value,ok=Math.abs(gv-D.mp)<=2,m=document.getElementById("m24-msg3");
+    document.getElementById("m24-act").textContent="+"+D.mp.toFixed(1);document.getElementById("m24-cnt").textContent=D.np+"건";m.className="pmsg "+(ok?"ok":"ng");
+    m.textContent=(ok?"가깝게 예측했습니다. ":"차이가 있습니다. ")+"실제 효과 "+(cur==="0"?"0":"+"+cur)+" MPa에서 1,000건 중 "+D.np+"건만 게재되고, 게재 평균은 +"+D.mp.toFixed(1)+" MPa입니다. 실제 효과가 0~8 MPa여도 게재 결과는 +11~14 MPa로 부풀려집니다.";draw();};
+  txt();reset();
+})();
+
+
+/* ---------- ⑤ 형성평가 ---------- */
+function fill(t){return !CASE?t:t.replace(/SUM/g,f1(SUMV)).replace(/AVG/g,f1(AVG,2)).replace(/MAXV/g,f1(MAXV));}
+var firstPractice=document.getElementById("p1"),answered=0,correct=0;
+QUIZ.forEach(function(q,i){
+  var s=document.createElement("section");s.className="slide";s.dataset.step="4";s.id="q"+(i+1);
+  s.innerHTML='<div class="sh"><div class="sec"><span>문항 '+(i+1)+' / '+QUIZ.length+'</span><span class="qchips"><span>학습목표 '+q.goal+'</span><span>'+q.type+'</span></span></div><h2 class="stem">'+fill(q.stem)+'</h2></div>'+
+    '<div class="body split even"><div class="opts'+(q.ox?' ox':'')+'"></div><div class="fbp" aria-live="polite"><p class="empty">보기를 고르면 정답과 해설이 여기에 나타납니다.</p></div></div>';
+  var ob=s.querySelector(".opts"),fb=s.querySelector(".fbp");
+  q.opts.forEach(function(t,k){
+    var b=document.createElement("button");b.type="button";b.className="opt";
+    b.innerHTML=q.ox?t:'<span class="n">'+(k+1)+'</span>'+fill(t);
+    b.addEventListener("click",function(){
+      var all=ob.querySelectorAll(".opt");[].forEach.call(all,function(x){x.disabled=true;});
+      all[q.ans].classList.add("ok");var ok=k===q.ans;if(!ok)b.classList.add("ng");
+      answered++;if(ok)correct++;
+      fb.className="fbp "+(ok?"ok":"ng");
+      fb.innerHTML='<div class="verdict">'+(ok?"정답입니다":"오답입니다. 정답은 "+(q.ox?q.opts[q.ans]:(q.ans+1)+"번")+"입니다")+'</div><div>'+fill(q.exp)+'</div>'+
+        '<button type="button" class="jump back" data-jump="'+q.back+'">'+q.backLabel+'</button><div class="tally">지금까지 '+answered+'문항 중 '+correct+'문항 정답</div>';
+      bindJumps(fb);
+    });
+    ob.appendChild(b);
+  });
+  vp.insertBefore(s,firstPractice);
+});
+
+/* ---------- ⑦ 용어해설 · 참고자료 · 다음 모듈 ---------- */
+for(var gi=0;gi<GLOSSARY.length;gi+=6){
+  var part=GLOSSARY.slice(gi,gi+6),pg=gi/6+1,np=Math.ceil(GLOSSARY.length/6);
+  var s=document.createElement("section");s.className="slide";s.dataset.step="6";
+  var h='<div class="sh"><div class="sec">용어해설 '+pg+'/'+np+'</div><h2>'+(pg===1?"본문에서 굵게 표시한 용어를 나온 순서대로 모았습니다":"용어해설 계속")+'</h2></div><div class="body full"><div class="gl">';
+  part.forEach(function(g,k){h+='<div class="gi"><div class="t"><i>'+(gi+k+1)+'</i>'+g[0]+'<em>'+g[1]+'</em>'+(g[4]?'<span class="cite">['+g[4]+']</span>':'')+'</div><div class="d">'+g[2]+'</div><div class="e"><strong>예시</strong> '+g[3]+'</div></div>';});
+  h+='</div></div>';s.innerHTML=h;vp.appendChild(s);
+}
+(function(){
+  var s=document.createElement("section");s.className="slide";s.dataset.step="6";s.id="end";
+  var refs=REFS.length?'<div class="pcol" style="gap:10px"><div class="plabel" style="margin:0">참고자료</div><ol class="refs">'+REFS.map(function(r){return '<li><span>['+r.n+']</span><div>'+r.title+', '+r.org+'. <a href="'+r.url+'" target="_blank" rel="noopener">'+r.url+'</a> ('+r.date+')</div></li>';}).join("")+'</ol></div>':'';
+  s.innerHTML='<div class="sh"><div class="sec">마무리</div><h2>'+(REFS.length?"참고자료와 다음 모듈":"다음 모듈")+'</h2></div>'+
+    '<div class="body '+(REFS.length?'split even':'full')+'" style="align-content:center">'+refs+
+    '<div class="pcol" style="justify-content:center"><div class="nextmod"><small>다음 모듈 · '+NEXT.title+'</small><strong>'+NEXT.line+'</strong></div></div></div>'+
+    '<p class="foot">학습 상태는 저장되지 않습니다.</p>';
+  vp.appendChild(s);
+})();
+
+/* ---------- 이동 · 진행선 ---------- */
+var slides=[].slice.call(vp.querySelectorAll(".slide")),cur=0,seen={};
+var stepFirst=[],stepCount=[0,0,0,0,0,0,0];
+slides.forEach(function(s,i){var st=+s.dataset.step;if(stepFirst[st]==null)stepFirst[st]=i;stepCount[st]++;});
+var rail=document.getElementById("rail"),stations=[];
+STEPS.forEach(function(n,i){
+  var b=document.createElement("button");b.type="button";b.className="station";
+  b.style.left="calc(14px + (100% - 28px) * "+(i/6)+")";
+  b.innerHTML='<span class="dot">'+(i+1)+'</span><span class="lb">'+n+'</span>';
+  b.setAttribute("aria-label",(i+1)+"단계 "+n+"(으)로 이동");
+  b.addEventListener("click",function(){show(stepFirst[i]);});
+  rail.appendChild(b);stations.push(b);
+});
+function show(i){
+  cur=Math.max(0,Math.min(slides.length-1,i));
+  slides.forEach(function(s,k){s.classList.toggle("on",k===cur);});
+  var st=+slides[cur].dataset.step;seen[st]=true;
+  stations.forEach(function(b,k){b.classList.toggle("cur",k===st);b.classList.toggle("done",k<st||(!!seen[k]&&k!==st));if(k===st)b.setAttribute("aria-current","step");else b.removeAttribute("aria-current");});
+  var within=(cur-stepFirst[st])/Math.max(1,stepCount[st]);
+  var frac=st===6&&cur===slides.length-1?1:(st+within)/6;
+  document.getElementById("fill").style.width=(Math.min(1,frac)*100)+"%";
+  document.getElementById("counter").innerHTML="<strong>"+STEPS[st]+"</strong> "+(cur-stepFirst[st]+1)+" / "+stepCount[st];
+  document.getElementById("prev").disabled=cur===0;
+  var nx=document.getElementById("next");nx.disabled=cur===slides.length-1;
+  nx.textContent=(cur<slides.length-1&&+slides[cur+1].dataset.step!==st)?STEPS[+slides[cur+1].dataset.step]+"(으)로":"다음";
+}
+function bindJumps(root){[].forEach.call(root.querySelectorAll("[data-jump]"),function(b){b.addEventListener("click",function(){var t=document.getElementById(b.dataset.jump);if(t)show(slides.indexOf(t));});});}
+bindJumps(document);
+document.getElementById("prev").onclick=function(){show(cur-1);};
+document.getElementById("next").onclick=function(){show(cur+1);};
+document.addEventListener("keydown",function(e){
+  if(e.target&&(e.target.type==="range"))return;
+  if(e.key==="ArrowRight"||e.key==="PageDown"){show(cur+1);e.preventDefault();}
+  else if(e.key==="ArrowLeft"||e.key==="PageUp"){show(cur-1);e.preventDefault();}
+});
+var tx=null,ty=null;
+vp.addEventListener("touchstart",function(e){var t=e.target;if(t.closest&&(t.closest("input")||t.closest(".dcard"))){tx=null;return;}tx=e.touches[0].clientX;ty=e.touches[0].clientY;},{passive:true});
+vp.addEventListener("touchend",function(e){if(tx==null)return;var dx=e.changedTouches[0].clientX-tx,dy=e.changedTouches[0].clientY-ty;if(Math.abs(dx)>60&&Math.abs(dx)>Math.abs(dy)*1.5)show(cur+(dx<0?1:-1));tx=null;},{passive:true});
+
+/* ---------- 실습 1 · 조작형 ---------- */
+(function(){if(!document.getElementById("p1-items")||!CASE)return;
+var p1v=CASE.values.slice(),p1s=CASE.values.indexOf(MAXV),p1m=document.getElementById("p1-items"),p1r=document.getElementById("p1-range");
+CASE.labels.forEach(function(m,i){var b=document.createElement("button");b.type="button";b.className="mbtn";b.textContent=m;b.onclick=function(){p1s=i;p1d();};p1m.appendChild(b);});
+function p1d(){
+  [].forEach.call(p1m.children,function(b,i){b.classList.toggle("on",i===p1s);b.setAttribute("aria-pressed",i===p1s);});
+  p1r.value=p1v[p1s];document.getElementById("p1-label").textContent=CASE.labels[p1s]+"번";document.getElementById("p1-val").textContent=f1(p1v[p1s]);
+  var s=r1(sum(p1v)),m=s/N;
+  document.getElementById("p1-sum").textContent=f1(s);document.getElementById("p1-mean").textContent=f1(m,2);
+  barChart(document.getElementById("p1-svg"),p1v,{mean:m,sel:p1s,ymax:9});
+  var msg=document.getElementById("p1-msg");
+  if(P1.target!=null&&Math.abs(m-P1.target)<0.005){msg.className="pmsg ok";msg.textContent="성공했습니다. "+f1(s)+" ÷ "+N+" = "+f1(m,2);}
+  else if(Math.abs(s-SUMV)<1e-9){msg.className="pmsg";msg.textContent="원래 값입니다. "+f1(SUMV)+" ÷ "+N+" = "+f1(AVG,2);}
+  else{msg.className="pmsg";msg.textContent="원래 평균 "+f1(AVG,2)+"보다 "+f1(Math.abs(m-AVG),2)+" "+(m>AVG?"늘었습니다.":"줄었습니다.");}
+}
+p1r.addEventListener("input",function(){p1v[p1s]=r1(+p1r.value);p1d();});
+document.getElementById("p1-reset").onclick=function(){p1v=CASE.values.slice();p1d();};
+p1d();
+
+})();
+/* ---------- 실습 2 · 분류형 ---------- */
+(function(){if(!document.getElementById("p2-pool"))return;
+var pool=document.getElementById("p2-pool"),binWrap=document.getElementById("p2-bins"),selC=null,done2=0;
+var bins=BINS.map(function(n){var b=document.createElement("div");b.className="bin";b.dataset.bin=n;b.innerHTML="<h4>"+n+"</h4>";binWrap.appendChild(b);return b;});
+function p2msg(t,c){var m=document.getElementById("p2-msg");m.textContent=t;m.className="pmsg "+(c||"");document.getElementById("p2-count").textContent=done2+" / "+CARDS.length;}
+function p2init(){
+  pool.innerHTML="";bins.forEach(function(b){[].slice.call(b.querySelectorAll(".dcard")).forEach(function(c){c.remove();});});done2=0;selC=null;
+  var o=CARDS.map(function(_,i){return i;});for(var i=o.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1)),t=o[i];o[i]=o[j];o[j]=t;}
+  o.forEach(function(i){var d=document.createElement("div");d.className="dcard";d.tabIndex=0;d.setAttribute("role","button");d.textContent=CARDS[i][0];d.dataset.ans=CARDS[i][1];pool.appendChild(d);attach(d);});
+  p2msg("카드를 하나 골라 보세요.","");
+}
+function drop(c,b){
+  if(!b||c.classList.contains("ok"))return;
+  c.classList.remove("sel");selC=null;
+  if(c.dataset.ans===b.dataset.bin){c.classList.add("ok");c.removeAttribute("tabindex");b.appendChild(c);done2++;p2msg(done2===CARDS.length?"카드를 모두 맞게 분류했습니다.":"정답입니다.","ok");}
+  else{c.classList.add("shake");setTimeout(function(){c.classList.remove("shake");},400);p2msg("「"+b.dataset.bin+"」이 아닙니다. "+HINT[c.dataset.ans],"ng");}
+}
+function pick(d){if(selC===d){d.classList.remove("sel");selC=null;return;}if(selC)selC.classList.remove("sel");selC=d;d.classList.add("sel");p2msg("이제 알맞은 칸을 누르세요.","");}
+function attach(d){
+  var sx=null,sy,mv=false,gh=null,ov=null,offX=0,offY=0;
+  function pos(e){var r=stage.getBoundingClientRect();return{x:(e.clientX-r.left)/S,y:(e.clientY-r.top)/S};}
+  d.addEventListener("pointerdown",function(e){if(d.classList.contains("ok"))return;sx=e.clientX;sy=e.clientY;mv=false;d.setPointerCapture(e.pointerId);var r=d.getBoundingClientRect();offX=(e.clientX-r.left)/S;offY=(e.clientY-r.top)/S;});
+  d.addEventListener("pointermove",function(e){
+    if(sx==null)return;
+    if(!mv&&Math.hypot(e.clientX-sx,e.clientY-sy)>6){mv=true;gh=d.cloneNode(true);gh.classList.add("ghostc");gh.classList.remove("sel");gh.style.width=d.offsetWidth+"px";stage.appendChild(gh);d.style.opacity=".35";}
+    if(mv){var p=pos(e);gh.style.left=(p.x-offX)+"px";gh.style.top=(p.y-offY)+"px";
+      var t=document.elementFromPoint(e.clientX,e.clientY),b=t&&t.closest?t.closest(".bin"):null;
+      if(ov&&ov!==b)ov.classList.remove("hover");ov=b;if(b)b.classList.add("hover");}
+  });
+  d.addEventListener("pointerup",function(){
+    if(sx==null)return;sx=null;
+    if(mv){gh.remove();gh=null;d.style.opacity="";if(ov)ov.classList.remove("hover");var b=ov;ov=null;drop(d,b);}else pick(d);
+  });
+  d.addEventListener("pointercancel",function(){if(gh){gh.remove();gh=null;}d.style.opacity="";sx=null;if(ov)ov.classList.remove("hover");ov=null;});
+  d.addEventListener("keydown",function(e){if(e.key==="Enter"||e.key===" "){e.preventDefault();pick(d);}});
+}
+bins.forEach(function(b){b.tabIndex=0;b.setAttribute("role","button");b.setAttribute("aria-label",b.dataset.bin+" 칸에 놓기");
+  b.addEventListener("click",function(e){if(selC&&!e.target.closest(".dcard"))drop(selC,b);});
+  b.addEventListener("keydown",function(e){if((e.key==="Enter"||e.key===" ")&&selC){e.preventDefault();drop(selC,b);}});});
+document.getElementById("p2-reset").onclick=p2init;
+p2init();
+
+})();
+/* ---------- 실습 3 · 추정형 ---------- */
+(function(){if(!document.getElementById("p3-range")||!PAIRS)return;
+var p3r=document.getElementById("p3-range"),p3done=false;
+document.getElementById("p3-x0").textContent=PAIRS.x0;
+p3r.min=PAIRS.ymin;p3r.max=PAIRS.ymax;p3r.step=0.1;p3r.value=r1((PAIRS.ymin+PAIRS.ymax)/2);
+function p3d(){var g=+p3r.value;document.getElementById("p3-val").textContent=f1(g);scatter(document.getElementById("p3-svg"),{x0:PAIRS.x0,guess:g,line:p3done,pred:p3done,actual:p3done});}
+p3r.addEventListener("input",function(){if(p3done){p3done=false;document.getElementById("p3-res").classList.remove("on");}p3d();});
+document.getElementById("p3-check").onclick=function(){
+  p3done=true;var g=+p3r.value,mine=Math.abs(g-PAIRS.actual),line=Math.abs(PRED-PAIRS.actual);
+  document.getElementById("p3-mine").textContent=f1(g);document.getElementById("p3-pred").textContent=f1(PRED,PAIRS.dp);document.getElementById("p3-act").textContent=f1(PAIRS.actual);
+  var m=document.getElementById("p3-msg"),good=mine<=line;m.className="pmsg "+(good?"ok":"ng");
+  m.textContent="내 오차 "+f1(mine,PAIRS.dp)+PAIRS.unit+", 직선 오차 "+f1(line,PAIRS.dp)+PAIRS.unit+". "+(good?"직선만큼 또는 더 가깝게 추정했습니다.":"직선을 이용하면 오차를 줄일 수 있습니다.");
+  document.getElementById("p3-res").classList.add("on");p3d();
+};
+p3d();
+
+})();
+show(0);
+})();
+</script>
+</body>
+</html>

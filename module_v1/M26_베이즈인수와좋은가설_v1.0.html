@@ -1,0 +1,1011 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>베이즈 인수와 좋은 가설</title>
+<!-- M26 베이즈 인수와 좋은 가설 v1.0 · 기준 템플릿 v1.3로 제작 (2026-10-27) -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<style>
+:root{
+  --navy:#1B2A4A; --navy2:#2C4170; --navy3:#5B6E97; --navy-soft:#E4E9F2;
+  --ink:#22262E; --gray:#6B7280; --gray2:#9AA0AA; --panel:#EEF0F3; --line:#D5D9E0;
+  --amber:#E0A100; --amber-ink:#6E4F00; --amber-soft:#FCF3D9;
+  --ok:#23704F; --ok-soft:#E2F1E9; --ng:#B42318; --ng-soft:#FBE6E3;
+  --letterbox:#C7CCD4;
+}
+*{box-sizing:border-box}
+html,body{margin:0;height:100%;overflow:hidden;background:var(--letterbox)}
+body{font-family:"Pretendard Variable","Pretendard","Apple SD Gothic Neo","Malgun Gothic","Noto Sans KR",system-ui,sans-serif;color:var(--ink);-webkit-text-size-adjust:100%;font-feature-settings:"tnum"}
+button{font:inherit;color:inherit}
+:focus-visible{outline:3px solid var(--amber);outline-offset:2px;border-radius:4px}
+
+/* ---------- 16:9 무대 ---------- */
+.stage{position:absolute;left:50%;top:50%;width:960px;height:540px;transform:translate(-50%,-50%) scale(var(--s,1));transform-origin:center;background:#fff;overflow:hidden;box-shadow:0 10px 40px rgba(27,42,74,.25)}
+
+/* ---------- 상단 바: 모듈명 + 7단계 진행선 ---------- */
+.topbar{position:absolute;left:0;right:0;top:0;height:60px;background:var(--navy);display:flex;align-items:center}
+.brand{flex:0 0 200px;padding-left:22px;color:#fff;font-size:14px;font-weight:800;letter-spacing:-.3px;line-height:1.2;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.brand small{display:block;font-size:11px;font-weight:500;color:#A9B6CF;letter-spacing:0;margin-top:2px;overflow:hidden;text-overflow:ellipsis}
+.rail{position:relative;flex:1;height:60px;margin-right:22px}
+.rail .track{position:absolute;left:14px;right:14px;top:21px;height:3px;background:#3A4D78;border-radius:2px}
+.rail .fill{position:absolute;left:0;top:0;bottom:0;background:var(--amber);border-radius:2px;transition:width .35s ease}
+.station{position:absolute;top:10px;width:72px;margin-left:-36px;background:none;border:0;padding:0;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:4px}
+.station .dot{width:24px;height:24px;border-radius:50%;display:grid;place-items:center;font-size:11.5px;font-weight:800;background:var(--navy);color:#8E9DBD;border:2px solid #4A5D88;transition:all .25s}
+.station .lb{font-size:11.5px;color:#8E9DBD;white-space:nowrap}
+.station.done .dot{background:#C9D3E6;border-color:#C9D3E6;color:var(--navy)}
+.station.done .lb{color:#C9D3E6}
+.station.cur .dot{background:var(--amber);border-color:#FFE08A;color:var(--navy);transform:scale(1.12)}
+.station.cur .lb{color:#fff;font-weight:700}
+
+/* ---------- 화면 ---------- */
+.viewport{position:absolute;left:0;right:0;top:60px;bottom:46px}
+.slide{position:absolute;inset:0;padding:16px 36px 10px;display:none;flex-direction:column;gap:12px}
+.slide.on{display:flex;animation:fade .22s ease}
+@keyframes fade{from{opacity:0}to{opacity:1}}
+@media (prefers-reduced-motion:reduce){.slide.on{animation:none}.rail .fill,.station .dot{transition:none}}
+.sh{flex:0 0 auto}
+.sec{font-size:12.5px;font-weight:700;color:var(--navy3);display:flex;gap:8px;align-items:center;min-height:18px}
+h2{margin:3px 0 0;font-size:24px;line-height:1.3;font-weight:800;color:var(--navy);letter-spacing:-.6px;display:flex;gap:10px;align-items:flex-start}
+h2 .q{flex:0 0 auto;margin-top:2px;width:28px;height:28px;border-radius:6px;background:var(--navy);color:#fff;font-size:15px;display:grid;place-items:center}
+h2.big{font-size:30px;line-height:1.32}
+.body{flex:1 1 auto;min-height:0;display:grid;gap:24px}
+.split{grid-template-columns:1.2fr 1fr}
+.split.even{grid-template-columns:1fr 1fr}
+.full{grid-template-columns:1fr}
+.fig{background:var(--panel);border-radius:12px;padding:12px;min-height:0;display:flex;align-items:center;justify-content:center}
+.fig svg{width:100%;height:100%;display:block}
+.figcol{min-height:0;display:flex;flex-direction:column;gap:10px}
+.figcol .fig{flex:1 1 auto}
+.side{min-height:0;display:flex;flex-direction:column;gap:12px;justify-content:center}
+
+/* 핵심 문장: 40자 안팎, 1~2개 */
+.key{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:9px}
+.key li{position:relative;padding-left:16px;font-size:18.5px;line-height:1.42;font-weight:700;letter-spacing:-.4px}
+.key li::before{content:"";position:absolute;left:0;top:.28em;width:4px;height:1.05em;border-radius:2px;background:var(--navy2)}
+.key b{color:var(--navy);background:linear-gradient(transparent 62%,var(--amber-soft) 62%)}
+/* 해설 문단: 2~4문장, 150~250자 */
+.exp{margin:0;font-size:15px;line-height:1.62;letter-spacing:-.2px;color:var(--ink)}
+.exp b{color:var(--navy)}
+/* 연결 문장: 다음 소단원으로 넘기는 질문 */
+.next{margin:0;border-top:1px dashed var(--line);padding-top:9px;font-size:14px;font-weight:700;color:var(--navy2);display:flex;gap:8px;align-items:baseline}
+.next span{flex:0 0 auto;font-size:11.5px;font-weight:800;color:var(--navy3);background:var(--navy-soft);border-radius:4px;padding:0 6px;line-height:20px}
+/* 각주: 기호의 뜻과 출처 번호만 */
+.foot{flex:0 0 auto;font-size:12px;line-height:1.5;color:var(--gray);margin:0}
+.foot b{color:var(--ink)}
+.cite{font-size:.72em;font-weight:700;color:var(--navy3);vertical-align:super;line-height:0;margin-left:1px}
+.tag-v{display:inline-block;font-size:11px;font-weight:700;border-radius:4px;padding:0 6px;line-height:18px;white-space:nowrap;vertical-align:1px;color:var(--gray);background:#F3F4F6;box-shadow:inset 0 0 0 1px var(--line)}
+
+/* 핵심 수학 개념 박스 */
+.math{flex:0 0 auto;border-left:3px solid var(--navy3);background:#F6F7F9;border-radius:0 8px 8px 0;padding:9px 13px;font-size:13.5px;line-height:1.5}
+.math .mt{font-size:12px;font-weight:800;color:var(--navy3);margin-bottom:2px}
+.math .f{font-family:"Cambria Math","Times New Roman",serif;font-size:18px;font-weight:700;color:var(--navy);margin:1px 0 4px}
+.math .r{display:grid;grid-template-columns:34px 1fr;gap:6px}
+.math .r span:first-child{font-size:11.5px;font-weight:700;color:var(--gray2);padding-top:1px}
+.math .w{margin-top:5px;padding-top:5px;border-top:1px dashed var(--line);color:var(--ng);font-weight:700;font-size:12.5px}
+
+/* ---------- 하단 바 ---------- */
+.bottombar{position:absolute;left:0;right:0;bottom:0;height:46px;border-top:1px solid var(--line);display:flex;align-items:center;padding:0 22px 0 36px;gap:12px;background:#fff}
+.counter{font-size:13px;color:var(--gray);font-weight:600}
+.counter strong{color:var(--navy)}
+.spacer{flex:1}
+.nav{border:1.5px solid var(--navy);background:#fff;color:var(--navy);border-radius:8px;height:32px;padding:0 16px;font-size:14px;font-weight:700;cursor:pointer}
+.nav.primary{background:var(--navy);color:#fff}
+.nav:disabled{opacity:.3;cursor:default}
+
+/* ---------- 홈으로 ---------- */
+.home{display:inline-flex;align-items:center;gap:6px;height:32px;padding:0 13px;border-radius:8px;border:1.5px solid var(--navy-soft);background:#fff;color:var(--navy2);font-size:13.5px;font-weight:700;line-height:1;text-decoration:none;white-space:nowrap}
+.home svg{width:14px;height:14px;flex:0 0 auto;display:block}
+.home:hover{background:var(--navy-soft);border-color:var(--navy3);color:var(--navy)}
+.home:focus-visible{outline:3px solid var(--amber);outline-offset:2px}
+@media (prefers-reduced-motion:reduce){.home{transition:none}}
+
+/* ① 학습개요 */
+.meta{display:grid;grid-template-columns:auto 1fr;gap:6px 14px;margin:0;font-size:14px}
+.meta dt{font-weight:700;color:var(--gray)}
+.meta dd{margin:0;font-weight:700;color:var(--navy)}
+.prevlink{background:var(--panel);border-radius:10px;padding:12px 14px;font-size:14.5px;line-height:1.55}
+.prevlink small{display:block;font-size:12px;font-weight:800;color:var(--navy3);margin-bottom:3px}
+
+/* ② 학습목표: 목표 → 문항 → 실습 연결 */
+.gmap{display:grid;grid-template-columns:44px 1fr 150px 150px;align-items:stretch;row-gap:12px;column-gap:0}
+.gmap .hd{font-size:12px;font-weight:700;color:var(--gray);padding:0 14px 2px}
+.gmap .gn{background:var(--navy);color:#fff;font-weight:800;font-size:18px;display:grid;place-items:center;border-radius:10px 0 0 10px}
+.gmap .gt{background:var(--panel);padding:14px 18px;font-size:17px;font-weight:700;line-height:1.42;letter-spacing:-.3px;display:flex;align-items:center}
+.gmap .gt b{color:var(--navy)}
+.gmap .ga,.gmap .gp{background:var(--panel);display:flex;align-items:center;padding:0 10px;border-left:2px solid #fff}
+.gmap .gp{border-radius:0 10px 10px 0}
+.jump{border:1.5px solid var(--navy3);background:#fff;border-radius:7px;padding:6px 10px;font-size:13px;font-weight:700;color:var(--navy);cursor:pointer;text-align:left;line-height:1.3;width:100%}
+.jump:hover{background:var(--navy-soft)}
+
+/* ④ 본문 정리 표 */
+.sumtbl{width:100%;border-collapse:separate;border-spacing:0;font-size:14.5px;line-height:1.5}
+.sumtbl th{background:var(--navy);color:#fff;font-weight:800;text-align:left;padding:10px 14px}
+.sumtbl th:first-child{border-radius:10px 0 0 0;width:150px}
+.sumtbl th:last-child{border-radius:0 10px 0 0}
+.sumtbl td{padding:11px 14px;border-bottom:1px solid var(--line);vertical-align:top}
+.sumtbl td:first-child{font-weight:800;color:var(--navy)}
+.sumtbl tr:nth-child(even) td{background:#F8F9FB}
+
+/* ⑤ 형성평가 */
+.qchips{display:flex;gap:6px}
+.qchips span{font-size:11.5px;font-weight:700;color:var(--navy2);background:var(--navy-soft);border-radius:4px;padding:0 7px;line-height:19px}
+h2.stem{font-size:21px;line-height:1.42;font-weight:800}
+.opts{display:grid;gap:9px;align-content:center}
+.opts.ox{grid-template-columns:1fr 1fr}
+.opt{border:1.5px solid var(--line);background:#fff;border-radius:10px;padding:11px 14px;text-align:left;font-size:16px;font-weight:600;cursor:pointer;display:flex;gap:10px;align-items:center}
+.opt .n{flex:0 0 26px;height:26px;border-radius:50%;background:var(--panel);display:grid;place-items:center;font-size:13px;font-weight:800;color:var(--navy)}
+.opts.ox .opt{justify-content:center;font-size:40px;font-weight:800;padding:22px;color:var(--navy)}
+.opt:hover:not(:disabled){border-color:var(--navy3);background:#F8F9FB}
+.opt:disabled{cursor:default}
+.opt.ok{border-color:var(--ok);background:var(--ok-soft);color:var(--ok)}
+.opt.ok .n{background:var(--ok);color:#fff}
+.opt.ng{border-color:var(--ng);background:var(--ng-soft);color:var(--ng)}
+.opt.ng .n{background:var(--ng);color:#fff}
+.fbp{background:var(--panel);border-radius:12px;padding:18px 20px;display:flex;flex-direction:column;gap:10px;font-size:14.5px;line-height:1.6}
+.fbp .empty{color:var(--gray);margin:auto 0}
+.fbp .verdict{font-size:19px;font-weight:800}
+.fbp.ok{background:var(--ok-soft)} .fbp.ok .verdict{color:var(--ok)}
+.fbp.ng{background:var(--ng-soft)} .fbp.ng .verdict{color:var(--ng)}
+.fbp .back{align-self:flex-start}
+.fbp .tally{margin-top:auto;font-size:12.5px;color:var(--gray);font-weight:600}
+
+/* ⑥ 실습 */
+.plabel{font-size:12px;font-weight:800;color:var(--navy3);margin-bottom:6px}
+.pcol{min-height:0;display:flex;flex-direction:column}
+.mbtns{display:flex;flex-wrap:nowrap;gap:3px;margin-bottom:8px}
+.mbtn{border:1px solid var(--line);background:#fff;border-radius:6px;padding:2px 6px;font-size:12px;cursor:pointer;min-width:26px}
+.mbtn.on{background:var(--navy);border-color:var(--navy);color:#fff}
+.ctrl{display:flex;align-items:center;gap:10px;font-size:14px;font-weight:600}
+input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
+.stats{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.stats.three{grid-template-columns:1fr 1fr 1fr}
+.stats div{background:var(--panel);border-radius:10px;padding:8px 12px}
+.stats small{display:block;font-size:11.5px;color:var(--gray);font-weight:600;line-height:1.35}
+.stats strong{font-size:22px;color:var(--navy);letter-spacing:-.4px}
+.pmsg{font-size:14.5px;font-weight:700;min-height:22px;line-height:1.45}
+.pmsg.ok{color:var(--ok)} .pmsg.ng{color:var(--ng)}
+.think{flex:0 0 auto;background:var(--amber-soft);border-radius:10px;padding:9px 14px;font-size:14.5px;font-weight:700;color:var(--amber-ink);display:flex;gap:10px;align-items:baseline}
+.think span{flex:0 0 auto;font-size:12px;font-weight:800}
+.howto{font-size:13.5px;color:var(--gray);line-height:1.5;margin:0}
+.btn{border:0;background:var(--navy);color:#fff;border-radius:8px;height:32px;padding:0 14px;font-size:13.5px;font-weight:700;cursor:pointer}
+.btn.ghost{background:#fff;color:var(--navy);box-shadow:inset 0 0 0 1.5px var(--navy)}
+.pool{flex:1;min-height:0;display:grid;grid-template-columns:1fr 1fr;align-content:start;gap:8px;padding:10px;border:1.5px dashed var(--line);border-radius:10px;background:#FAFBFC}
+.dcard{background:#fff;border:1.5px solid var(--navy3);border-radius:8px;padding:7px 10px;font-size:13.5px;font-weight:600;line-height:1.4;cursor:grab;user-select:none;-webkit-user-select:none;touch-action:none}
+.dcard.sel{box-shadow:0 0 0 3px var(--amber)}
+.dcard.ok{border-color:var(--ok);background:var(--ok-soft);color:var(--ok);cursor:default;font-size:12.5px;padding:5px 8px}
+.dcard.shake{animation:shake .35s;border-color:var(--ng);background:var(--ng-soft)}
+@keyframes shake{25%{transform:translateX(-5px)}75%{transform:translateX(5px)}}
+.ghostc{position:absolute;pointer-events:none;z-index:50;opacity:.92;box-shadow:0 8px 20px rgba(27,42,74,.25);cursor:grabbing}
+.bins{flex:1 0 auto;min-height:0;display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.bin .dcard{font-size:12px;padding:3px 7px;line-height:1.3}
+.p2row{display:flex;gap:10px;align-items:center}.p2row .pmsg{flex:1;margin:0}.p2row .btn{flex:0 0 auto}
+.bin{border:1.5px solid var(--line);border-radius:10px;padding:6px;display:flex;flex-direction:column;gap:6px;background:#fff;cursor:pointer;min-height:0}
+.bin h4{margin:0;background:var(--navy);color:#fff;border-radius:6px;text-align:center;font-size:14px;padding:4px}
+.bin.hover{border-color:var(--amber);background:var(--amber-soft)}
+.res{display:none;flex-direction:column;gap:8px}
+.res.on{display:flex}
+
+/* ⑦ 용어해설·참고자료 */
+.gl{display:grid;grid-template-columns:1fr 1fr;grid-template-rows:repeat(3,1fr);gap:10px 22px;min-height:0}
+.gi{border-top:2px solid var(--navy);padding:8px 0 0;display:flex;flex-direction:column;gap:3px;min-height:0}
+.gi .t{font-size:16.5px;font-weight:800;color:var(--navy);display:flex;gap:6px;align-items:baseline;flex-wrap:wrap}
+.gi .t em{font-style:normal;font-weight:500;font-size:12.5px;color:var(--gray)}
+.gi .t i{font-style:normal;font-size:12px;font-weight:800;color:var(--navy3);width:22px}
+.gi .d{font-size:14px;line-height:1.5}
+.gi .e{font-size:12.5px;line-height:1.45;color:var(--gray)}
+.gi .e strong{color:var(--navy3)}
+.refs{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:8px;font-size:13.5px;line-height:1.5}
+.refs li{display:grid;grid-template-columns:30px 1fr;gap:4px}
+.refs li span{font-weight:800;color:var(--navy3)}
+.refs a{color:var(--navy2);word-break:break-all}
+.nextmod{background:var(--navy);color:#fff;border-radius:12px;padding:18px 22px;display:flex;flex-direction:column;gap:6px}
+.nextmod small{font-size:12px;font-weight:700;color:#A9B6CF}
+.nextmod strong{font-size:19px;line-height:1.45;letter-spacing:-.3px}
+
+.rotate{position:fixed;left:0;right:0;bottom:max(14px,env(safe-area-inset-bottom));text-align:center;font-size:13px;color:#3A4560;display:none}
+@media (orientation:portrait) and (max-width:700px){.rotate{display:block}}
+</style>
+</head>
+<body>
+<div class="stage" id="stage">
+  <header class="topbar">
+    <!-- [교체] 모듈명 / 과정명·모듈 번호 (장·절 번호는 쓰지 않음) -->
+    <div class="brand" id="brand">베이즈 인수와 좋은 가설<small>결과 해석과 인과 · M26</small></div>
+    <nav class="rail" id="rail" aria-label="학습 단계"><div class="track"><div class="fill" id="fill"></div></div></nav>
+  </header>
+
+  <main class="viewport" id="vp">
+    <!-- ① 학습개요 ─────────────────────────────── -->
+    <section class="slide" data-step="0">
+      <div class="sh"><div class="sec">학습개요</div>
+        <h2 class="big">가설은 대등하게 비교하고, 옳을 법한 가설부터 검증합니다</h2></div>
+      <div class="body split">
+        <div class="fig"><svg id="m26-ov" viewBox="0 0 440 260" role="img" aria-label="p값의 비대칭 문제를 베이즈 인수로 보완하고, 허위발견율을 낮추려면 좋은 가설이 필요하다는 흐름"></svg></div>
+        <div class="side">
+          <div class="prevlink"><small>지난 모듈에서는</small>p값의 정확한 뜻과 피셔류·네이만-피어슨류 검정, 표본크기와 p값의 관계, 효과크기를 배웠습니다.<small style="margin-top:8px">이번 모듈에서는</small>p값 대신 쓸 수 있는 베이즈 인수, 유의한 결과 중 틀린 것의 비율인 허위발견율, 좋은 가설을 세우는 일의 중요성을 배웁니다.</div>
+          <dl class="meta"><dt>학습 시간</dt><dd>약 35분</dd><dt>본문</dt><dd>소단원 3개</dd><dt>실습</dt><dd>조작형 · 분류형 · 추정형</dd></dl>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" data-step="0">
+      <div class="sh"><div class="sec">학습개요 · 이 모듈의 예시</div><h2>신규 냉각 방식의 효과를 p값과 베이즈 인수로 함께 판단합니다</h2></div>
+      <div class="body split">
+        <div class="fig"><svg id="m26-case" viewBox="0 0 440 250" role="img" aria-label="실험 각 20장은 p 0.027과 베이즈 인수 2.8, 추시 각 200장은 p 0.62와 차이 없음 지지 8.9"></svg></div>
+        <div class="side">
+          <ul class="key"><li>p값만으로는 ‘차이 없음’을 말할 수 없습니다.</li></ul>
+          <p class="exp">신규 냉각 방식이 강판 인장강도를 높이는지 확인합니다(예시값, 공정 표준편차 10 MPa). 각 20장 실험에서는 평균 +7.0 MPa, p = 0.027로 유의했지만, 각 200장 추시에서는 +0.5 MPa, p = 0.62였습니다. p값만으로는 추시 결과를 ‘판단 보류’라고밖에 말할 수 없습니다. 베이즈 인수로 두 결과를 다시 읽어 봅니다.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ② 학습목표 ─────────────────────────────── -->
+    <section class="slide" data-step="1">
+      <div class="sh"><div class="sec">학습목표</div><h2>이 모듈을 마치면 이렇게 할 수 있습니다</h2></div>
+      <div class="body full" style="align-content:center">
+        <div class="gmap">
+          <div></div><div class="hd">목표</div><div class="hd">확인하는 문항</div><div class="hd">연결 실습</div>
+          <div class="gn">1</div><div class="gt"><span>베이즈 인수 값을 기준에 따라 <b>해석한다</b>.</span></div>
+          <div class="ga"><button class="jump" data-jump="q1">문항 1·2</button></div><div class="gp"><button class="jump" data-jump="p1">실습 1 조작</button></div>
+          <div class="gn">2</div><div class="gt"><span>베이즈 인수와 p값의 특징을 <b>구분한다</b>.</span></div>
+          <div class="ga"><button class="jump" data-jump="q3">문항 3·4</button></div><div class="gp"><button class="jump" data-jump="p2">실습 2 분류</button></div>
+          <div class="gn">3</div><div class="gt"><span>허위발견율을 계산하고 좋은 가설의 효과를 <b>판단한다</b>.</span></div>
+          <div class="ga"><button class="jump" data-jump="q5">문항 5·6</button></div><div class="gp"><button class="jump" data-jump="p3">실습 3 추정</button></div>
+        </div>
+      </div>
+      <p class="foot">버튼을 누르면 해당 문항이나 실습 화면으로 바로 이동합니다.</p>
+    </section>
+
+    <!-- ③ 일상의 예시 ─────────────────────────────── -->
+    <section class="slide" data-step="2">
+      <div class="sh"><div class="sec">일상의 예시 1/4</div><h2>어제 비가 왔다면, 어느 날씨 앱이 더 잘 맞혔을까요?</h2></div>
+      <div class="body split">
+        <div class="fig"><svg viewBox="0 0 440 250" role="img" aria-label="앱 A는 비 올 확률 80%, 앱 B는 20%, 실제로 비가 와서 A가 4배 더 잘 맞힘">
+          <rect x="30" y="40" width="160" height="130" rx="14" fill="#EEF4FB" stroke="#2B8CC4" stroke-width="2"/><text x="110" y="72" text-anchor="middle" font-size="14" font-weight="800" fill="#1C6EA4">앱 A</text><text x="110" y="104" text-anchor="middle" font-size="12" fill="#22262E">비 올 확률</text><text x="110" y="142" text-anchor="middle" font-size="26" font-weight="800" fill="#1C6EA4">80%</text>
+          <rect x="250" y="40" width="160" height="130" rx="14" fill="#F3F5F9" stroke="#9AA0AA" stroke-width="2"/><text x="330" y="72" text-anchor="middle" font-size="14" font-weight="800" fill="#1B2A4A">앱 B</text><text x="330" y="104" text-anchor="middle" font-size="12" fill="#22262E">비 올 확률</text><text x="330" y="142" text-anchor="middle" font-size="26" font-weight="800" fill="#6B7280">20%</text>
+          <text x="220" y="112" text-anchor="middle" font-size="13" font-weight="800" fill="#5B6E97">vs</text>
+          <text x="220" y="204" text-anchor="middle" font-size="12.5" font-weight="800" fill="#1B2A4A">실제로 비가 옴 → 80 ÷ 20 = A가 4배 더 잘 설명</text>
+          <text x="220" y="228" text-anchor="middle" font-size="11" fill="#6B7280">단, 두 앱 모두 엉터리일 수도 있음</text>
+        </svg></div>
+        <div class="side">
+          <ul class="key"><li>두 예측이 결과를 얼마나 잘 설명했는지 비율로 봅니다.</li></ul>
+          <p class="exp">앱 A는 비 올 확률을 80%, 앱 B는 20%로 예보했는데 실제로 비가 왔다면, A가 일어난 일을 4배 더 잘 예측한 셈입니다. 이처럼 두 설명이 실제 결과를 얼마나 잘 예측했는지 비율로 견주면 어느 쪽 편도 들지 않고 대등하게 비교할 수 있습니다. 단, 이것은 두 앱끼리의 비교일 뿐 둘 다 엉터리일 가능성은 남아 있습니다.</p>
+          <p class="next"><span>본문에서</span>4-1 베이즈 인수로 이어집니다.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" data-step="2">
+      <div class="sh"><div class="sec">일상의 예시 2/4</div><h2>스팸이 드문 메일함에서는 걸러진 메일에도 정상 메일이 많습니다</h2></div>
+      <div class="body split">
+        <div class="fig"><svg viewBox="0 0 440 250" role="img" aria-label="메일 1,000통 중 스팸 20통, 필터가 스팸 18통과 정상 메일 49통을 걸러 걸러진 메일의 약 73%가 정상 메일">
+          <g font-size="12" font-weight="700" text-anchor="middle">
+            <rect x="20" y="30" width="120" height="70" rx="12" fill="#F3F5F9"/><text x="80" y="58" fill="#1B2A4A">메일 1,000통</text><text x="80" y="80" font-size="11" fill="#6B7280">스팸은 20통뿐</text>
+            <rect x="170" y="30" width="250" height="70" rx="12" fill="#FCF3D9"/><text x="295" y="56" fill="#6E4F00">필터가 걸러 낸 메일 67통</text><text x="295" y="80" font-size="11" fill="#22262E">스팸 18통 + 정상 메일 49통</text>
+          </g>
+          <path d="M142 65 L166 65" stroke="#5B6E97" stroke-width="2"/><path d="M160 60 L168 65 L160 70z" fill="#5B6E97"/>
+          <rect x="60" y="130" width="320" height="30" rx="6" fill="#E5E7EB"/><rect x="60" y="130" width="86" height="30" rx="6" fill="#23704F"/><rect x="146" y="130" width="234" height="30" fill="#B42318"/>
+          <text x="103" y="150" text-anchor="middle" font-size="11" font-weight="800" fill="#fff">스팸 27%</text><text x="263" y="150" text-anchor="middle" font-size="11" font-weight="800" fill="#fff">정상 메일 73%</text>
+          <text x="220" y="200" text-anchor="middle" font-size="12" font-weight="800" fill="#1B2A4A">스팸이 드물면 걸러진 것 중 오탐이 많아짐</text>
+          <text x="220" y="222" text-anchor="middle" font-size="10.5" fill="#6B7280">스팸의 90%를 잡고 정상 메일의 5%를 잘못 거른다고 가정</text>
+        </svg></div>
+        <div class="side">
+          <ul class="key"><li>원래 드문 것을 찾으면 잘못 찾은 비율이 커집니다.</li></ul>
+          <p class="exp">메일 1,000통 중 스팸이 20통뿐인데, 필터가 스팸의 90%를 잡고 정상 메일의 5%를 잘못 거른다면 걸러진 67통 중 49통, 약 73%가 정상 메일입니다. 필터 성능이 나쁘지 않아도, 찾으려는 것이 원래 드물면 ‘찾았다’는 결과 중 틀린 것의 비율이 커집니다. 연구에서 세운 가설이 옳을 확률이 낮을 때도 같은 일이 벌어집니다.</p>
+          <p class="next"><span>본문에서</span>4-2 논문이 옳지 않을 확률로 이어집니다.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" data-step="2">
+      <div class="sh"><div class="sec">일상의 예시 3/4</div><h2>열쇠는 마지막으로 둔 곳부터 찾아야 빨리 찾습니다</h2></div>
+      <div class="body split">
+        <div class="fig"><svg viewBox="0 0 440 250" role="img" aria-label="집 안 서랍을 아무 데나 여는 방법과 마지막으로 둔 곳부터 찾는 방법 비교">
+          <rect x="24" y="36" width="186" height="160" rx="14" fill="#FBE4E1"/><text x="117" y="64" text-anchor="middle" font-size="13" font-weight="800" fill="#B42318">아무 서랍이나</text>
+          <g fill="#fff" stroke="#B42318" stroke-width="1.5"><rect x="44" y="82" width="40" height="26" rx="4"/><rect x="96" y="82" width="40" height="26" rx="4"/><rect x="148" y="82" width="40" height="26" rx="4"/><rect x="44" y="118" width="40" height="26" rx="4"/><rect x="96" y="118" width="40" height="26" rx="4"/><rect x="148" y="118" width="40" height="26" rx="4"/></g>
+          <text x="117" y="176" text-anchor="middle" font-size="11.5" fill="#22262E">헛수고 · ‘찾은 줄 알았는데…’</text>
+          <rect x="230" y="36" width="186" height="160" rx="14" fill="#E3F1EA"/><text x="323" y="64" text-anchor="middle" font-size="13" font-weight="800" fill="#23704F">마지막으로 둔 곳부터</text>
+          <text x="323" y="104" text-anchor="middle" font-size="12" fill="#22262E">어제 입은 외투 주머니</text><text x="323" y="128" text-anchor="middle" font-size="12" fill="#22262E">→ 현관 선반</text>
+          <text x="323" y="176" text-anchor="middle" font-size="11.5" fill="#22262E">근거 있는 곳 → 빨리 찾음</text>
+        </svg></div>
+        <div class="side">
+          <ul class="key"><li>근거 있는 곳부터 찾아야 헛수고가 줄어듭니다.</li></ul>
+          <p class="exp">열쇠를 잃어버렸을 때 집 안 서랍을 아무 데나 열어 보면 시간이 오래 걸리고 엉뚱한 물건을 열쇠로 착각하기도 합니다. 어제 입은 외투 주머니처럼 마지막으로 둔 곳부터 찾으면 훨씬 빨리 찾습니다. 연구에서도 근거 없는 가설을 많이 시험하기보다, 옳을 확률이 높은 가설을 세우는 것이 중요합니다.</p>
+          <p class="next"><span>본문에서</span>4-3 좋은 가설 세우기로 이어집니다.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" data-step="2">
+      <div class="sh"><div class="sec">일상의 예시 4/4</div><h2>현장에서는? 개선 과제 검증 결과를 얼마나 믿을 수 있을까요?</h2></div>
+      <div class="body split even">
+        <div class="fig"><svg viewBox="0 0 420 250" role="img" aria-label="세 장면이 베이즈 인수와 좋은 가설로 이어지는 그림">
+          <defs><marker id="b2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10z" fill="#5B6E97"/></marker></defs>
+          <g font-size="13" font-weight="700" fill="#1B2A4A" text-anchor="middle">
+            <rect x="14" y="36" width="150" height="48" rx="10" fill="#fff" stroke="#5B6E97" stroke-width="1.5"/><text x="89" y="65">예측력의 비율로 비교</text>
+            <rect x="14" y="101" width="150" height="48" rx="10" fill="#fff" stroke="#5B6E97" stroke-width="1.5"/><text x="89" y="130">드문 것을 찾을 때 오탐</text>
+            <rect x="14" y="166" width="150" height="48" rx="10" fill="#fff" stroke="#5B6E97" stroke-width="1.5"/><text x="89" y="195">근거 있는 곳부터</text>
+          </g>
+          <g stroke="#5B6E97" stroke-width="2" fill="none"><path d="M166 60 C220 60 220 112 254 120" marker-end="url(#b2)"/><path d="M166 125 L254 125" marker-end="url(#b2)"/><path d="M166 190 C220 190 220 138 254 130" marker-end="url(#b2)"/></g>
+          <rect x="258" y="84" width="150" height="82" rx="12" fill="#1B2A4A"/>
+          <text x="333" y="116" text-anchor="middle" font-size="15" font-weight="800" fill="#fff">베이즈 인수와</text><text x="333" y="136" text-anchor="middle" font-size="15" font-weight="800" fill="#fff">좋은 가설</text>
+          <text x="333" y="156" text-anchor="middle" font-size="11" fill="#C9D3E6">허위발견율</text>
+        </svg></div>
+        <div class="side">
+          <p class="exp">세 장면은 두 가설을 예측력의 비율로 대등하게 비교하는 법, 원래 옳을 확률이 낮은 것을 찾을 때 생기는 오탐, 근거 있는 가설부터 검증하는 일의 중요성으로 이어집니다. 공장에서 수많은 개선 아이디어를 검증할 때 ‘유의함’으로 보고된 결과가 얼마나 믿을 만한지도 같은 원리로 판단할 수 있습니다.</p>
+          <p class="next"><span>다음 질문</span>‘차이가 없다’를 지지하는 방법은?</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ④ 본문 ─────────────────────────────── -->
+    <section class="slide" data-step="3" id="s-4-1a">
+      <div class="sh"><div class="sec">4-1 베이즈 인수</div><h2><span class="q">Q</span>p ≥ 0.05라면 ‘차이가 없다’고 말할 수 있을까요?</h2></div>
+      <div class="body split even">
+        <div class="figcol">
+          <div class="fig"><svg id="m26-ml" viewBox="0 0 420 150" role="img" aria-label="차이 없음 모형 M0과 차이 있음 모형 M1의 예측 분포, 관찰값 7에서 높이 비율이 2.8"></svg></div>
+          <div class="math">
+            <div class="mt">핵심 수학 개념 · 주변 가능도와 베이즈 인수</div>
+            <div class="f">p(x|M) = ∫ p(x|θ, M) p(θ|M) dθ,  B = p(x|M<sub>1</sub>) ÷ p(x|M<sub>0</sub>)</div>
+            <div class="r"><span>기호</span><span>∫ = 모든 θ에 대해 더하기, θ: 파라미터(차이 δ)</span></div>
+            <div class="r"><span>계산</span><span>실험(D = +7.0): 0.0304 ÷ 0.0109 ≈ 2.8</span></div>
+          </div>
+        </div>
+        <div class="side">
+          <ul class="key"><li><b>베이즈 인수</b>: 두 모형의 <b>주변 가능도</b> 비율</li><li>모형 = 확률분포 + 파라미터의 <b>사전분포</b></li></ul>
+          <p class="exp">가설검정에서는 p &lt; 0.05일 때 귀무가설을 기각하지만, p ≥ 0.05일 때는 귀무가설을 채택하는 것이 아니라 판단을 보류합니다. 귀무가설과 대립가설이 대등하지 않아 귀무가설을 지지할 수는 없기 때문입니다. 이 문제의 해결책 중 하나가 베이즈 인수입니다. 가설을 수학적으로 나타낸 모형 M은 데이터를 생성하는 확률분포와 파라미터 θ의 사전분포로 구성되며, θ를 사전분포로 평균한 모형의 예측력이 주변 가능도(에비던스)입니다. 베이즈 인수는 두 모형의 주변 가능도 비율이며, 1보다 크면 분자의 M<sub>1</sub>이 데이터를 더 잘 설명합니다.</p>
+          <p class="next"><span>다음 질문</span>베이즈 인수가 얼마면 충분할까?</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" data-step="3" id="s-4-1b">
+      <div class="sh"><div class="sec">4-1 베이즈 인수</div><h2><span class="q">Q</span>베이즈 인수가 얼마면 실질적인 증거일까요?</h2></div>
+      <div class="body split even">
+        <div class="fig"><svg id="m26-scale" viewBox="0 0 420 270" role="img" aria-label="베이즈 인수 해석 기준 눈금과 실험 2.8, 추시 차이 없음 지지 8.9의 위치, 유의수준 0.05와 0.005에 대응하는 범위"></svg></div>
+        <div class="side">
+          <ul class="key"><li>1~3.2 약함 · 3.2 초과 실질적 · 10 초과 강함</li><li>α = 0.05는 베이즈 인수 약 2.5~3.4에 대응</li></ul>
+          <p class="exp">값의 크기를 해석할 때는 주의해야 합니다. 제프리스는 베이즈 인수가 1보다 크고 3.2 미만이면 지지하는 경향이 있더라도 실질적인 의미가 있다고 보기 어렵고, 3.2보다 크면 실질적인 의미가 있으며, 10보다 크면 강하게 지지한다는 기준을 제안했습니다. 이를 수정한 카스와 래프터리의 기준을 비롯해 몇 가지 기준이 있습니다<span class="cite">[1]</span>. α = 0.05는 약 2.5~3.4(약한 증거), α = 0.005는 약 14~26(강한 증거)의 베이즈 인수에 대응하므로, 기준을 0.005로 바꾸면 허위발견율을 줄일 수 있다고 합니다<span class="cite">[2]</span>. 실험의 2.8은 p = 0.027이어도 약한 증거입니다.</p>
+          <p class="next"><span>다음 질문</span>베이즈 인수의 장점과 주의점은?</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" data-step="3" id="s-4-1c">
+      <div class="sh"><div class="sec">4-1 베이즈 인수</div><h2><span class="q">Q</span>베이즈 인수는 언제나 p값보다 나을까요?</h2></div>
+      <div class="body split even">
+        <div class="fig"><svg id="m26-pro" viewBox="0 0 420 270" role="img" aria-label="베이즈 인수의 장점 세 가지와 주의점 세 가지, 사전분포 폭에 따라 3.08, 2.80, 1.71로 달라짐"></svg></div>
+        <div class="side">
+          <ul class="key"><li>장점: 대등 비교, 귀무가설 지지, 순차적 갱신</li><li>주의: 상대 비교(<b>사후예측점검</b>)·사전분포·계산</li></ul>
+          <p class="exp">베이즈 인수에는 귀무가설과 대립가설 간 비대칭성 문제가 없어 두 가설을 대등하게 비교할 수 있고 귀무가설을 지지할 수도 있습니다. 한쪽 가설을 강하게 지지할 때까지 표본크기를 늘리는 순차적인 갱신도 가능하고, 예측력이 같으면 파라미터가 적은 단순한 모형이 선택되며 일치성도 있습니다. 한편 두 가설의 상대적인 비교일 뿐이라 한쪽이 나쁜 것만으로도 큰 값이 될 수 있으므로, 절대적인 좋고 나쁨은 사후예측점검으로 확인해야 합니다. 또 파라미터의 사전분포에 영향을 받고, 적분 계산이 필요해 p값보다 시간과 노력이 듭니다.</p>
+          <p class="next"><span>다음 질문</span>유의한 논문은 얼마나 옳을까?</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" data-step="3" id="s-4-2a">
+      <div class="sh"><div class="sec">4-2 논문이 옳지 않을 확률</div><h2><span class="q">Q</span>‘유의하다’고 보고된 가설은 얼마나 옳을까요?</h2></div>
+      <div class="body split even">
+        <div class="figcol">
+          <div class="fig"><svg id="m26-tree" viewBox="0 0 420 150" role="img" aria-label="가설 1,000건 중 옳은 100건에서 80건, 잘못된 900건에서 45건이 유의, 유의한 125건 중 45건이 위양성"></svg></div>
+          <div class="math">
+            <div class="mt">핵심 수학 개념 · 허위발견율(FDR)</div>
+            <div class="f">FDR = α(1 − Q) ÷ (α(1 − Q) + (1 − β)Q)</div>
+            <div class="r"><span>기호</span><span>Q: 세운 가설이 옳을 확률, 1 − β: 검정력</span></div>
+            <div class="r"><span>계산</span><span>45 ÷ (80 + 45) = 0.36 → 36%, 옳음은 64%</span></div>
+          </div>
+        </div>
+        <div class="side">
+          <ul class="key"><li><b>허위발견율</b>: 유의한 결과 중 위양성 비율</li><li>Q = 10%라면 유의한 결과의 36%가 틀림</li></ul>
+          <p class="exp">유의수준 α = 0.05, 검정력 0.8로 검정하고, 세운 가설이 옳을 확률을 Q라 합니다. 보통은 Q를 알 수 없으므로 ‘만약 Q가 10%라면’처럼 생각해 봅니다. 1,000개의 가설 중 옳은 100건에서는 80건이 유의하다고 검출되고, 잘못된 900건에서도 45건이 위양성으로 유의해집니다. 옳다고 주장된 것 중 위양성의 비율을 허위발견율이라 하며, 이 예에서는 45 ÷ 125 = 36%입니다<span class="cite">[3]</span>. 예비 실험이나 추시 없이 1번의 실험 결과를 보고한다면 논문의 36%가 옳지 않다는 뜻이며, 높은 허위발견율은 재현성 저하로 직결됩니다.</p>
+          <p class="next"><span>다음 질문</span>허위발견율을 낮추려면?</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" data-step="3" id="s-4-2b">
+      <div class="sh"><div class="sec">4-2 논문이 옳지 않을 확률</div><h2><span class="q">Q</span>허위발견율은 무엇에 따라 달라질까요?</h2></div>
+      <div class="body split even">
+        <div class="fig"><svg id="m26-fdr" viewBox="0 0 420 270" role="img" aria-label="가설이 옳을 확률 Q에 따른 허위발견율 곡선 네 개, 유의수준 0.05와 0.005, 검정력 0.8과 0.4"></svg></div>
+        <div class="side">
+          <ul class="key"><li>Q가 높을수록 허위발견율이 낮아집니다.</li><li>α를 작게 하면 크게 억제, 검정력↓면 증가</li></ul>
+          <p class="exp">α와 검정력은 같게 두고 Q만 바꿔 계산하면, 허위발견율은 Q = 50%에서 5.9%, Q = 80%에서 1.5%로 상당히 낮아집니다. 즉 가설검정에서는 좋은 가설, 다시 말해 옳을 확률 Q가 높은 가설을 세우는 것이 매우 중요합니다. 또 유의수준을 0.005처럼 작게 하면 허위발견율이 크게 억제되는 반면, 검정력이 0.8에서 0.4로 줄면 허위발견율은 커집니다. 특히 α = 0.05일 때는 검정력의 차이가 허위발견율에 큰 영향을 미칩니다.</p>
+          <p class="next"><span>다음 질문</span>좋은 가설이란 어떤 가설일까?</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" data-step="3" id="s-4-3a">
+      <div class="sh"><div class="sec">4-3 좋은 가설 세우기</div><h2><span class="q">Q</span>어떤 가설이 ‘좋은 가설’일까요?</h2></div>
+      <div class="body split even">
+        <div class="fig"><svg id="m26-good" viewBox="0 0 420 270" role="img" aria-label="근거 없는 가설을 여러 개 검증하면 허위발견율이 오르고, 메커니즘으로 뒷받침되는 가설은 옳을 확률이 높음"></svg></div>
+        <div class="side">
+          <ul class="key"><li><b>좋은 가설</b>: 진실을 말하는, 옳을 확률이 높은 가설</li><li>메커니즘이나 이론이 뒷받침합니다.</li></ul>
+          <p class="exp">여기서 말하는 좋은 가설이란 진실을 말하는 가설입니다. 예를 들어 ‘작업장 조명 색을 바꾸면 압연 강판의 강도가 오른다’는 가설은 그럴 만한 메커니즘이 없으니 나쁜 가설입니다. 그런데 황당무계한 가설이라도 조명 색을 여러 가지로 바꿔 가며 검정하다 보면 어쩌다 p &lt; 0.05가 되어 효과가 있는 것처럼 보이고, 허위발견율은 상승합니다. 반면 ‘냉각 속도를 높이면 결정립이 미세해져 강도가 오른다’처럼 메커니즘이 상정 가능하거나 이론이 존재하면 좋은 가설을 세울 수 있습니다.</p>
+          <p class="next"><span>다음 질문</span>좋은 가설을 세우기 어려운 이유는?</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" data-step="3" id="s-4-3b">
+      <div class="sh"><div class="sec">4-3 좋은 가설 세우기</div><h2><span class="q">Q</span>왜 나쁜 가설이 자주 검증될까요?</h2></div>
+      <div class="body split even">
+        <div class="fig"><svg id="m26-skill" viewBox="0 0 420 270" role="img" aria-label="예상 밖이면서 좋은 가설이 연구자의 실력, 강한 인상만 노린 나쁜 가설은 허위발견율을 높임"></svg></div>
+        <div class="side">
+          <ul class="key"><li>이론적 토대가 약하면 좋은 가설이 어렵습니다.</li><li>예상 밖이면서 좋은 가설 = 실력</li></ul>
+          <p class="exp">학문의 이론적 토대가 약하면 좋은 가설을 세우기 어렵다는 문제가 있으며, 이것이 낮은 재현성의 원인이 아니냐는 의견도 있습니다. 또 논문으로서 그럴듯하고 강한 인상을 주는 것은 지금까지 아무도 생각하지 않았던 예상 외의 요소를 다룬 가설인 경향이 있습니다. 그래서 강한 인상을 줄 가설을 한 번에 입증하려 하고, 그 결과 나쁜 가설을 검증하는 일이 횡행하기 쉽습니다. 그런 만큼 예상 외면서도 좋은 가설을 세우고 이를 검증하는 것이 연구자의 실력을 판가름합니다. 현장의 개선 활동에서도 같습니다.</p>
+          <p class="next"><span>정리</span>베이즈 인수와 좋은 가설을 정리해 봅시다.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" data-step="3" id="s-4-sum">
+      <div class="sh"><div class="sec">4-4 정리</div><h2>가설을 대등하게 비교하고, 옳을 확률이 높은 가설을 검증합니다</h2></div>
+      <div class="body full" style="align-content:center">
+        <table class="sumtbl">
+          <thead><tr><th>개념</th><th>핵심</th><th>이 모듈의 예</th></tr></thead>
+          <tbody>
+            <tr><td>베이즈 인수</td><td>두 모형의 주변 가능도 비율, 귀무가설도 지지 가능</td><td>실험 2.8(약함) · 추시 차이 없음 8.9</td></tr>
+            <tr><td>해석 기준</td><td>1~3.2 약함, 3.2 초과 실질적, 10 초과 강함</td><td>α 0.05 ≈ 2.5~3.4, α 0.005 ≈ 14~26</td></tr>
+            <tr><td>주의점</td><td>상대 비교(사후예측점검), 사전분포 영향, 계산 노력</td><td>τ 5 · 10 · 20 → 3.08 · 2.80 · 1.71</td></tr>
+            <tr><td>허위발견율</td><td>유의한 결과 중 위양성 비율, Q가 높을수록 낮음</td><td>Q 10% → 36%, 50% → 5.9%</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="next"><span>형성평가로</span>이제 같은 예시로 문제를 풀어 봅니다.</p>
+    </section>
+
+    <!-- ⑤ 형성평가: 스크립트의 QUIZ 배열로 만듭니다 -->
+
+    <!-- ⑥ 실습 1 · 조작형 (모듈 전용) ─────────────── -->
+    <section class="slide" data-step="5" id="p1">
+      <div class="sh"><div class="sec">실습 1 · 조작형</div><h2>목표: 관찰된 차이와 표본크기를 바꾸며 p값과 베이즈 인수를 비교합니다</h2></div>
+      <div class="body split">
+        <div class="pcol" style="gap:7px">
+          <div class="plabel" style="margin:0">해보기 · 냉각 방식의 평균 차이 D와 집단당 표본크기 n을 움직이세요 (σ = 10 MPa, 사전분포 폭 τ = 10)</div>
+          <div class="ctrl">평균 차이 D<input type="range" id="m26-D" min="-5" max="15" step="0.5" value="7" aria-label="평균 차이"><strong id="m26-Dv" style="min-width:72px;text-align:right">-</strong></div>
+          <div class="ctrl">표본크기 n<input type="range" id="m26-n" min="0" max="11" step="1" value="2" aria-label="집단당 표본크기"><strong id="m26-nv" style="min-width:72px;text-align:right">-</strong></div>
+          <div class="fig" style="flex:1"><svg id="m26-p1-svg" viewBox="0 0 470 150" role="img" aria-label="베이즈 인수 눈금 위의 현재 값"></svg></div>
+        </div>
+        <div class="pcol" style="gap:10px;justify-content:center">
+          <div class="plabel" style="margin:0">결과 확인</div>
+          <div class="stats three"><div><small>p값</small><strong id="m26-p">-</strong></div><div><small>B = M1 ÷ M0</small><strong id="m26-b">-</strong></div><div><small>판정</small><strong id="m26-j" style="font-size:13px">-</strong></div></div>
+          <p class="howto">도전: p ≥ 0.05이면서 ‘차이 없음(M0)’을 실질적으로 지지(1 ÷ B &gt; 3.2)하는 조건을 찾아보세요.</p>
+          <p class="pmsg" id="m26-msg"></p>
+          <div class="think"><span>생각해보기</span>같은 D에서 n이 커지면 베이즈 인수는 어느 방향으로 움직이나요?</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ⑥ 실습 2 · 분류형 ─────────────────────── -->
+    <section class="slide" data-step="5" id="p2">
+      <div class="sh"><div class="sec">실습 2 · 분류형</div><h2>목표: 특징 카드를 p값과 베이즈 인수로 나눕니다</h2></div>
+      <div class="body split even">
+        <div class="pcol">
+          <div class="plabel">해보기 · 두 가설을 대등하게 다루는지, 무엇을 가정하고 계산하는지 생각하며 칸에 놓으세요</div>
+          <div class="pool" id="p2-pool"></div>
+        </div>
+        <div class="pcol" style="gap:8px">
+          <div class="plabel" style="margin:0">결과 확인 · <span id="p2-count">0 / 0</span></div>
+          <div class="bins" id="p2-bins" style="grid-template-columns:repeat(2,1fr)"></div>
+          <div class="p2row"><p class="pmsg" id="p2-msg"></p><button class="btn ghost" id="p2-reset">다시 하기</button></div>
+          <div class="think"><span>생각해보기</span>보고서에 두 지표를 함께 쓴다면 각각 무엇을 알려 줄까요?</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ⑥ 실습 3 · 추정형 (모듈 전용) ─────────────── -->
+    <section class="slide" data-step="5" id="p3">
+      <div class="sh"><div class="sec">실습 3 · 추정형</div><h2>목표: 가설이 옳을 확률에 따른 허위발견율을 예측합니다</h2></div>
+      <div class="body split">
+        <div class="pcol">
+          <div class="plabel">해보기 · 개선 가설 1,000건 중 옳은 비율 Q와 유의수준을 고르고, 유의한 결과 중 틀린 비율을 예측하세요 (검정력 0.8)</div>
+          <div class="fig" style="flex:1"><svg id="m26-p3-svg" viewBox="0 0 470 200" role="img" aria-label="가설 1,000건을 100칸으로 나타낸 그림과 유의한 결과의 구성"></svg></div>
+        </div>
+        <div class="pcol" style="gap:8px;justify-content:center">
+          <div class="mbtns" id="m26-qq" style="gap:5px"></div>
+          <div class="mbtns" id="m26-qa" style="gap:5px"></div>
+          <div class="ctrl">FDR 예측<input type="range" id="m26-g" min="0" max="60" step="1" value="20" aria-label="허위발견율 예측"><strong id="m26-gv" style="min-width:48px;text-align:right">-</strong></div>
+          <button class="btn" id="m26-check" style="align-self:flex-start">계산해서 확인</button>
+          <div class="stats three"><div><small>내 예측</small><strong id="m26-mine">-</strong></div><div><small>실제 FDR</small><strong id="m26-act">?</strong></div><div><small>유의한 건수</small><strong id="m26-cnt">?</strong></div></div>
+          <p class="pmsg" id="m26-msg3"></p>
+          <div class="think"><span>생각해보기</span>Q를 높이는 것과 α를 낮추는 것 중 현장에서 더 하기 쉬운 것은?</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ⑦ 용어해설·참고자료: 스크립트의 GLOSSARY, REFS, NEXT로 만듭니다 -->
+  </main>
+
+  <footer class="bottombar">
+    <a class="home" href="../index.html" title="홈으로 (학습 과정)" aria-label="홈으로"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 10.5 12 3l9 7.5"/><path d="M5.5 9.5V21h13V9.5"/></svg><span>홈</span></a><span class="counter" id="counter"></span><span class="spacer"></span>
+    <button class="nav" id="prev" type="button">이전</button>
+    <button class="nav primary" id="next" type="button">다음</button>
+  </footer>
+</div>
+<p class="rotate">화면을 가로로 돌리면 더 크게 볼 수 있습니다.</p>
+
+<script>
+(function(){
+"use strict";
+
+/* =====================================================================
+   [교체] 모듈 설정 — 새 모듈은 이 블록과 HTML 화면 문장만 바꿉니다.
+   ===================================================================== */
+var MODULE={title:"베이즈 인수와 좋은 가설",sub:"결과 해석과 인과 · M26"};
+var STEPS=["학습개요","학습목표","일상의 예시","본문","형성평가","실습","용어해설"];
+
+/* 예시 데이터(이 모듈에서 정한 값)
+   ① 신규 냉각 방식 인장강도 차이 D, 공정 표준편차 σ 10 MPa, 표준오차 se = σ√(2/n)
+      M0: 차이 δ = 0 / M1: δ ~ 정규분포(평균 0, 표준편차 τ 10) → BF10 = N(D; 0, se² + τ²) ÷ N(D; 0, se²)
+      실험(각 20장): D +7.0, se 3.16, z 2.21, p 0.027, BF10 2.80 (τ 5 → 3.08, τ 20 → 1.71)
+      추시(각 200장): D +0.5, se 1.00, z 0.50, p 0.62, BF10 0.113 → BF01 8.9
+   ② 허위발견율 FDR = α(1 − Q) ÷ (α(1 − Q) + (1 − β)Q)
+      α 0.05, 1 − β 0.8: Q 10% 36.0, 30% 12.7, 50% 5.9, 80% 1.5 / α 0.005: 5.3, 1.4, 0.6, 0.2
+      α 0.05, 1 − β 0.4: 52.9, 22.6, 11.1, 3.0 / α 0.005, 0.4: 10.1, 2.8, 1.2, 0.3 */
+var CASE=null, PAIRS=null, P1={target:null};
+var SIG=10;
+
+
+var QUIZ=[
+ {goal:1,type:"상황 판단",stem:"신규 냉각 방식 실험(각 20장)에서 p = 0.027, 베이즈 인수 B = p(x|M1) ÷ p(x|M0) = 2.8이 나왔습니다. 제프리스의 기준으로 가장 알맞은 해석은 무엇일까요?",
+  opts:["M1을 지지하는 경향은 있지만 실질적인 의미가 있다고 보기 어렵다","p < 0.05이므로 M1을 강하게 지지한다","B가 1보다 크므로 M0을 지지한다","B가 10보다 작으므로 M0이 옳다"],ans:0,
+  exp:"베이즈 인수가 1보다 크고 3.2 미만이면 분자 모형(M1)을 지지하는 경향은 있어도 실질적인 의미가 있다고 생각하기 어렵고, 3.2보다 크면 실질적 의미, 10보다 크면 강한 지지로 봅니다. α = 0.05로 유의한 결과는 약 2.5~3.4의 베이즈 인수에 대응하는 약한 증거입니다.",back:"s-4-1b",backLabel:"4-1 베이즈 인수 해석 기준 다시 보기"},
+ {goal:1,type:"계산",stem:"추시(각 200장)에서 p = 0.62, 베이즈 인수 B = p(x|M1) ÷ p(x|M0) = 0.113이 나왔습니다. 귀무가설 모형 M0을 분자로 놓은 베이즈 인수는 약 얼마이고, 어떻게 해석할까요?",
+  opts:["약 8.9 → M0(차이 없음)을 실질적으로 지지","약 0.113 → 판단 보류","약 0.89 → M1을 약하게 지지","약 1.13 → 차이가 없다고 확정"],ans:0,
+  exp:"분자와 분모를 바꾸면 1 ÷ 0.113 ≈ 8.9입니다. 3.2보다 크므로 차이가 없다는 M0을 지지하는 데 실질적인 의미가 있습니다. p ≥ 0.05인 가설검정에서는 ‘판단 보류’밖에 말할 수 없지만, 베이즈 인수는 두 가설을 대등하게 비교하므로 귀무가설을 지지할 수도 있습니다.",back:"s-4-1a",backLabel:"4-1 베이즈 인수의 정의 다시 보기"},
+ {goal:2,type:"O/X 오개념",stem:"“베이즈 인수가 충분히 크면, 분자에 놓은 가설은 그 자체로 좋은 가설이라고 판단해도 된다.”",
+  opts:["O","X"],ans:1,ox:true,
+  exp:"베이즈 인수는 두 가설의 상대적인 비교일 뿐이어서, 한쪽 가설이 나쁜 것만으로도 큰 값이 될 수 있습니다. 그래서 절대적인 가설의 좋고 나쁨을 확인하려면 사후예측분포를 평가하는 사후예측점검을 함께 수행할 필요가 있습니다.",back:"s-4-1c",backLabel:"4-1 베이즈 인수의 주의점 다시 보기"},
+ {goal:2,type:"상황 판단",stem:"같은 실험 데이터인데 M1의 사전분포 폭 τ를 10 MPa에서 20 MPa로 바꾸자 베이즈 인수가 2.8에서 1.7로 바뀌었습니다. 이 현상을 가장 잘 설명하는 것은 무엇일까요?",
+  opts:["베이즈 인수는 파라미터의 사전분포에 영향을 받는다","데이터에 오류가 있다","베이즈 인수는 표본크기에만 의존한다","계산이 틀렸으므로 p값만 보고한다"],ans:0,
+  exp:"모형은 확률분포와 파라미터의 사전분포로 구성되고, 주변 가능도는 사전분포로 평균한 예측력이므로 베이즈 인수는 사전분포에 영향을 받습니다. 그래서 사전분포를 어떻게 정했는지 함께 밝혀야 합니다. 또 적분 계산이 필요해 p값보다 계산에 시간과 노력이 듭니다.",back:"s-4-1c",backLabel:"4-1 베이즈 인수의 주의점 다시 보기"},
+ {goal:3,type:"계산",stem:"개선 가설 1,000건 중 실제로 옳은 것이 10%(Q = 0.1)이고, 모두 α = 0.05, 검정력 0.8로 검정합니다. 유의하다고 보고된 결과 중 위양성의 비율(허위발견율)은 약 얼마일까요?",
+  opts:["약 36%","5%","약 20%","약 64%"],ans:0,
+  exp:"옳은 가설 100건 중 80건, 잘못된 가설 900건 중 45건이 유의해지므로 허위발견율 = 45 ÷ (80 + 45) = 45 ÷ 125 = 0.36입니다. 5%는 유의수준 α 그대로이고, 약 64%는 유의한 결과 중 옳은 것의 비율입니다.",back:"s-4-2a",backLabel:"4-2 허위발견율 계산 다시 보기"},
+ {goal:3,type:"상황 판단",stem:"허위발견율을 낮추려는 품질 개선팀에 가장 효과적인 조언은 무엇일까요?",
+  opts:["메커니즘이나 이론으로 뒷받침되는 좋은 가설을 골라 검증한다","떠오르는 아이디어를 최대한 많이 검정해 본다","검정력을 0.8에서 0.4로 낮춰 실험 비용을 줄인다","유의수준을 0.05에서 0.1로 올린다"],ans:0,
+  exp:"가설이 옳을 확률 Q가 높을수록 허위발견율은 낮아집니다(Q 10% → 36%, 50% → 5.9%, 80% → 1.5%). 근거 없는 가설을 많이 검정하면 Q가 낮아져 허위발견율이 오릅니다. 검정력을 낮추거나 α를 올리면 허위발견율은 오히려 커집니다.",back:"s-4-3a",backLabel:"4-3 좋은 가설 세우기 다시 보기"}
+];
+
+var BINS=["p값(가설검정)","베이즈 인수"];
+var CARDS=[["p ≥ 0.05면 판단을 보류할 뿐","p값(가설검정)"],["귀무가설이 옳다고 가정하고 계산","p값(가설검정)"],["간단하게 계산할 수 있음","p값(가설검정)"],
+           ["귀무가설을 지지할 수도 있음","베이즈 인수"],["파라미터의 사전분포에 영향을 받음","베이즈 인수"],["두 가설을 대등하게 비교","베이즈 인수"]];
+var HINT={"p값(가설검정)":"귀무가설과 대립가설이 대등하지 않은 비대칭 구조입니다.","베이즈 인수":"두 모형의 주변 가능도 비율로 대등하게 비교합니다."};
+
+var GLOSSARY=[
+ ["베이즈 인수","Bayes factor","얻은 데이터에 대해 두 모형(가설)의 주변 가능도 비율로, 어느 쪽이 데이터를 더 잘 설명하는지 나타냅니다.","실험 B = 2.8, 추시 M0 지지 8.9"],
+ ["주변 가능도","marginal likelihood, evidence","파라미터를 사전분포로 평균한, 얻은 데이터에 대한 모형의 평균 예측력으로 에비던스라고도 부릅니다.","p(x | M) = ∫ p(x | θ, M) p(θ | M) dθ"],
+ ["사전분포","prior distribution","데이터를 얻기 전에 파라미터가 어떤 값을 가질지에 대한 생각을 확률분포로 나타낸 것입니다.","차이 δ ~ 정규분포(평균 0, 표준편차 10 MPa)"],
+ ["사후예측점검","posterior predictive check","추정한 모형이 만들어 내는 예측 데이터의 분포를 실제 데이터와 비교해 모형의 절대적인 좋고 나쁨을 확인하는 방법입니다.","예측한 강도 분포가 실측과 맞는지 확인"],
+ ["허위발견율","false discovery rate, FDR","옳다고 주장된 것(유의한 결과) 중 위양성인 것의 비율입니다.","Q 10%, α 0.05, 검정력 0.8 → 36%"],
+ ["좋은 가설","good hypothesis","진실을 말하는, 즉 옳을 확률이 높은 가설로, 메커니즘이나 이론으로 뒷받침되는 경우가 많습니다.","냉각 속도 ↑ → 결정립 미세화 → 강도 ↑"]
+];
+var REFS=[
+ {n:1,title:"Bayes Factors",org:"R. E. Kass, A. E. Raftery, Journal of the American Statistical Association 90(430), 773–795, 1995",url:"https://doi.org/10.1080/01621459.1995.10476572",date:"2026-10-27 확인"},
+ {n:2,title:"Redefine statistical significance",org:"D. J. Benjamin 외, Nature Human Behaviour 2, 6–10, 2018",url:"https://doi.org/10.1038/s41562-017-0189-z",date:"2026-10-27 확인"},
+ {n:3,title:"Why Most Published Research Findings Are False",org:"J. P. A. Ioannidis, PLoS Medicine 2(8), e124, 2005",url:"https://doi.org/10.1371/journal.pmed.0020124",date:"2026-10-27 확인"}
+];
+var NEXT={title:"M27 p-해킹",line:"다음 모듈에서는 p-해킹의 구체적인 예와 이를 예방하기 위한 노력, 가설검정 결과를 읽을 때 확인할 항목을 살펴봅니다."};
+
+/* =====================================================================
+   아래부터는 공통 엔진입니다. 모듈마다 바꾸지 않습니다.
+   ===================================================================== */
+var NS="http://www.w3.org/2000/svg";
+var C={navy:"#1B2A4A",navy2:"#2C4170",navy3:"#5B6E97",soft:"#A9B8D4",grid:"#DDE1E7",gray:"#6B7280",gray2:"#9AA0AA",amber:"#E0A100",amberInk:"#6E4F00",ok:"#23704F"};
+function el(t,a,p,x){var e=document.createElementNS(NS,t);for(var k in a)e.setAttribute(k,a[k]);if(x!=null)e.textContent=x;if(p)p.appendChild(e);return e;}
+function clear(s){while(s.firstChild)s.removeChild(s.firstChild);}
+function f1(v,d){return v.toFixed(d==null?1:d);}
+function sum(a){return a.reduce(function(x,y){return x+y;},0);}
+function r1(v){return Math.round(v*10)/10;}
+var stage=document.getElementById("stage"),vp=document.getElementById("vp");
+
+/* 계산은 모두 데이터에서 직접 합니다(R0-7) */
+var N=CASE?CASE.values.length:0,SUMV=CASE?r1(sum(CASE.values)):0,AVG=N?SUMV/N:0,MAXV=CASE?Math.max.apply(null,CASE.values):0;
+var LR=!PAIRS?null:(function(){var n=PAIRS.xs.length,mx=sum(PAIRS.xs)/n,my=sum(PAIRS.ys)/n,sxy=0,sxx=0;
+  for(var i=0;i<n;i++){sxy+=(PAIRS.xs[i]-mx)*(PAIRS.ys[i]-my);sxx+=(PAIRS.xs[i]-mx)*(PAIRS.xs[i]-mx);}
+  var b=sxy/sxx;return{b:b,a:my-b*mx};})();
+var PRED=PAIRS?LR.a+LR.b*PAIRS.x0:0;
+
+document.title=MODULE.title;
+document.getElementById("brand").innerHTML=MODULE.title+"<small>"+MODULE.sub+"</small>";
+
+/* 16:9 고정 무대를 창 크기에 맞춤 */
+var S=1;
+function fit(){S=Math.min(window.innerWidth/960,window.innerHeight/540);stage.style.setProperty("--s",S);}
+window.addEventListener("resize",fit);fit();
+
+/* ---------- 그래프 ---------- */
+function barChart(svg,vals,o){
+  clear(svg);o=o||{};
+  var vb=svg.viewBox.baseVal,W=vb.width,H=vb.height,L=34,R=o.mean!=null?70:8,T=26,Bt=24,ym=o.ymax||Math.ceil(Math.max.apply(null,vals)+1),pw=W-L-R,ph=H-T-Bt,bw=pw/vals.length;
+  function y(v){return T+ph-(v/ym)*ph;}
+  for(var g=0;g<=ym;g++){el("line",{x1:L,x2:W-R,y1:y(g),y2:y(g),stroke:C.grid},svg);el("text",{x:L-6,y:y(g)+4,"text-anchor":"end","font-size":10.5,fill:C.gray2},svg,g);}
+  vals.forEach(function(v,i){
+    var sel=o.sel===i,hi=o.hi===i;
+    el("rect",{x:L+i*bw+bw*.16,y:y(v),width:bw*.68,height:Math.max(0,y(0)-y(v)),rx:2,fill:sel?C.amber:hi?C.navy2:C.soft},svg);
+    el("text",{x:L+i*bw+bw/2,y:H-Bt+16,"text-anchor":"middle","font-size":10.5,fill:C.gray},svg,CASE.labels[i]);
+  });
+  if(o.mean!=null){var m=o.mean;
+    el("line",{x1:L,x2:W-R+4,y1:y(m),y2:y(m),stroke:C.navy,"stroke-width":2,"stroke-dasharray":"6 4"},svg);
+    el("rect",{x:W-R+6,y:y(m)-10,width:R-8,height:20,rx:4,fill:C.navy},svg);
+    el("text",{x:W-R+6+(R-8)/2,y:y(m)+4,"text-anchor":"middle","font-size":11,"font-weight":700,fill:"#fff"},svg,"평균 "+f1(m,2));}
+  /* 값 라벨은 마지막에 흰 테두리로 그려 점선에 가리지 않게 함 */
+  vals.forEach(function(v,i){var sel=o.sel===i,hi=o.hi===i;
+    if(o.labels||sel)el("text",{x:L+i*bw+bw/2,y:y(v)-5,"text-anchor":"middle","font-size":10.5,"font-weight":sel||hi?800:500,fill:sel?C.amberInk:hi?C.navy:C.gray,stroke:"#EEF0F3","stroke-width":3,"paint-order":"stroke"},svg,f1(v));});
+}
+function scatter(svg,o){
+  clear(svg);o=o||{};
+  var vb=svg.viewBox.baseVal,W=vb.width,H=vb.height,L=34,R=14,T=30,Bt=40,x0=PAIRS.xmin,x1=PAIRS.xmax,y0=PAIRS.ymin,y1=PAIRS.ymax;
+  function X(v){return L+(v-x0)/(x1-x0)*(W-L-R);}
+  function Y(v){return T+(H-T-Bt)-(v-y0)/(y1-y0)*(H-T-Bt);}
+  for(var g=y0;g<=y1+1e-9;g+=PAIRS.ystep){el("line",{x1:L,x2:W-R,y1:Y(g),y2:Y(g),stroke:C.grid},svg);el("text",{x:L-6,y:Y(g)+4,"text-anchor":"end","font-size":10.5,fill:C.gray2},svg,g);}
+  for(var h=x0;h<=x1+1e-9;h+=PAIRS.xstep)el("text",{x:X(h),y:H-Bt+16,"text-anchor":"middle","font-size":10.5,fill:C.gray},svg,h);
+  el("text",{x:(L+W-R)/2,y:H-6,"text-anchor":"middle","font-size":10.5,fill:C.gray},svg,PAIRS.xlabel);
+  el("text",{x:4,y:14,"font-size":10.5,fill:C.gray},svg,PAIRS.ylabel);
+  if(o.line){var la=x0+(x1-x0)*.04,lb=x1-(x1-x0)*.04;el("line",{x1:X(la),y1:Y(LR.a+LR.b*la),x2:X(lb),y2:Y(LR.a+LR.b*lb),stroke:C.navy,"stroke-width":2},svg);}
+  PAIRS.xs.forEach(function(x,i){el("circle",{cx:X(x),cy:Y(PAIRS.ys[i]),r:4.5,fill:C.navy3,"fill-opacity":.85},svg);});
+  if(o.x0!=null){el("line",{x1:X(o.x0),y1:Y(0),x2:X(o.x0),y2:Y(y1),stroke:C.amber,"stroke-dasharray":"3 3"},svg);
+    el("text",{x:X(o.x0),y:T-4,"text-anchor":"middle","font-size":10.5,"font-weight":700,fill:C.amberInk},svg,PAIRS.x0label);}
+  if(o.pred){el("circle",{cx:X(PAIRS.x0),cy:Y(PRED),r:6,fill:C.navy},svg);
+    el("text",{x:X(PAIRS.x0)-10,y:Y(PRED)+4,"text-anchor":"end","font-size":11,"font-weight":800,fill:C.navy,stroke:"#EEF0F3","stroke-width":3,"paint-order":"stroke"},svg,"예측 "+f1(PRED,PAIRS.dp)+PAIRS.unit);}
+  if(o.guess!=null){el("circle",{cx:X(PAIRS.x0),cy:Y(o.guess),r:7,fill:C.amber,stroke:"#fff","stroke-width":2},svg);}
+  if(o.actual){var ay=Y(PAIRS.actual);el("rect",{x:X(PAIRS.x0)-6,y:ay-6,width:12,height:12,fill:C.ok,transform:"rotate(45 "+X(PAIRS.x0)+" "+ay+")"},svg);
+    el("text",{x:X(PAIRS.x0)-10,y:ay-6,"text-anchor":"end","font-size":11,"font-weight":800,fill:C.ok,stroke:"#EEF0F3","stroke-width":3,"paint-order":"stroke"},svg,"실제 "+f1(PAIRS.actual)+PAIRS.unit);}
+  return {X:X,Y:Y};
+}
+function flow(svg,names){
+  clear(svg);var n=names.length,w=118,gap=(440-40-n*w)/(n-1),y=96,h=64;
+  el("defs",{},svg).innerHTML='<marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10z" fill="'+C.navy3+'"/></marker>';
+  names.forEach(function(t,i){var x=20+i*(w+gap);
+    el("rect",{x:x,y:y,width:w,height:h,rx:10,fill:i===n-1?C.navy:"#fff",stroke:C.navy,"stroke-width":1.5},svg);
+    el("text",{x:x+w/2,y:y+h/2-6,"text-anchor":"middle","font-size":11,"font-weight":700,fill:i===n-1?"#C9D3E6":C.navy3},svg,"4-"+(i+1));
+    el("text",{x:x+w/2,y:y+h/2+13,"text-anchor":"middle","font-size":14,"font-weight":800,fill:i===n-1?"#fff":C.navy},svg,t);
+    if(i<n-1)el("line",{x1:x+w+4,y1:y+h/2,x2:x+w+gap-5,y2:y+h/2,stroke:C.navy3,"stroke-width":2,"marker-end":"url(#ar)"},svg);});
+  el("text",{x:220,y:200,"text-anchor":"middle","font-size":12,fill:C.gray},svg,"본문 소단원을 배우는 순서");
+}
+/* 화면에 해당 id가 있을 때만 그립니다(모듈마다 쓰지 않는 그림은 건너뜀) */
+function on(id,fn){var e=document.getElementById(id);if(e)fn(e);}
+on("fig-flow",function(s){flow(s,["소단원 1","소단원 2","정리"]);});
+on("fig-case",function(s){barChart(s,CASE.values,{labels:true});});
+on("fig-bar",function(s){barChart(s,CASE.values,{labels:true,mean:AVG});});
+on("fig-scatter",function(s){scatter(s,{line:true,x0:PAIRS.x0,pred:true});});
+on("fig-bridge",function(s){
+  el("defs",{},s).innerHTML='<marker id="ar2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10z" fill="'+C.navy3+'"/></marker>';
+  [["장면 1",40],["장면 2",130]].forEach(function(p){el("rect",{x:24,y:p[1],width:130,height:64,rx:10,fill:"#fff",stroke:C.navy3,"stroke-width":1.5},s);el("text",{x:89,y:p[1]+37,"text-anchor":"middle","font-size":14,"font-weight":700,fill:C.navy},s,p[0]);
+    el("line",{x1:158,y1:p[1]+32,x2:246,y2:120,stroke:C.navy3,"stroke-width":2,"marker-end":"url(#ar2)"},s);});
+  el("rect",{x:252,y:84,width:150,height:72,rx:12,fill:C.navy},s);
+  el("text",{x:327,y:116,"text-anchor":"middle","font-size":14,"font-weight":800,fill:"#fff"},s,"본문 첫 질문");
+  el("text",{x:327,y:136,"text-anchor":"middle","font-size":11.5,fill:"#C9D3E6"},s,"4-1로 이어짐");});
+on("case-n",function(e){e.textContent=N+"개";});
+on("case-sum",function(e){e.textContent=f1(SUMV);});
+on("case-max",function(e){e.textContent=f1(MAXV);});
+on("math-calc",function(e){e.textContent=f1(LR.b,2)+" × "+PAIRS.x0+" + "+f1(LR.a,2)+" = "+f1(PRED,2);});
+
+/* =====================================================================
+   [교체] 모듈 전용 그림: 모듈마다 필요한 그림 함수는 이 자리에 둡니다.
+   ===================================================================== */
+/* M26 전용 그림·실습 */
+function linT(a,b,c,d){return function(v){return c+(v-a)/(b-a)*(d-c);};}
+function tT(s,x,y,t,o){o=o||{};return el("text",{x:x,y:y,"text-anchor":o.a||"middle","font-size":o.fs||11,"font-weight":o.fw||600,fill:o.c||C.navy,stroke:o.halo?"#fff":"none","stroke-width":o.halo?3:0,"paint-order":"stroke"},s,t);}
+function bxT(s,x,y,w,h,fill,stroke){return el("rect",{x:x,y:y,width:w,height:h,rx:10,fill:fill||"#fff",stroke:stroke||"none","stroke-width":stroke?1.5:0},s);}
+function mkT(s,id,col){el("defs",{},s).innerHTML='<marker id="'+id+'" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10z" fill="'+col+'"/></marker>';}
+function arT(s,x1,y1,x2,y2,id,col){return el("line",{x1:x1,y1:y1,x2:x2,y2:y2,stroke:col||C.navy3,"stroke-width":2,"marker-end":"url(#"+id+")"},s);}
+var RED="#B42318",GRN="#23704F",BLU="#2B8CC4",PNK="#C2416E";
+function npdfT(x,m,s){return Math.exp(-0.5*Math.pow((x-m)/s,2))/(s*Math.sqrt(2*Math.PI));}
+function erfT(x){var t=1/(1+0.3275911*Math.abs(x)),y=1-(((((1.061405429*t-1.453152027)*t)+1.421413741)*t-0.284496736)*t+0.254829592)*t*Math.exp(-x*x);return x>=0?y:-y;}
+function bfT(D,n,tau){var se2=SIG*SIG*2/n;return npdfT(D,0,Math.sqrt(se2+tau*tau))/npdfT(D,0,Math.sqrt(se2));}
+function pT(D,n){var z=Math.abs(D)/(SIG*Math.sqrt(2/n));return 1-erfT(z/Math.SQRT2);}
+function fdrT(Q,a,pw){return a*(1-Q)/(a*(1-Q)+pw*Q);}
+function judgeT(B){return B>10?["M1 강하게 지지",GRN]:B>3.2?["M1 실질적 지지",GRN]:B>1?["M1 약함(실질적 의미 어려움)",C.amberInk]:B>=1/3.2?["M0 약함(실질적 의미 어려움)",C.amberInk]:B>=0.1?["M0 실질적 지지",BLU]:["M0 강하게 지지",BLU];}
+/* 베이즈 인수 눈금: log10 B를 -1.5 ~ 2 */
+function scaleT(s,x0,x1,y,h){var X=linT(-1.5,2,x0,x1),Z=[[-1.5,-1,"#9CCBEA","M0 강함"],[-1,-Math.log10(3.2),"#C9E2F3","M0 실질적"],[-Math.log10(3.2),0,"#F3F4F6","약함"],[0,Math.log10(3.2),"#F3F4F6","약함"],[Math.log10(3.2),1,"#CFE9DA","M1 실질적"],[1,2,"#9FD4B5","M1 강함"]];
+  Z.forEach(function(z){el("rect",{x:X(z[0]),y:y,width:X(z[1])-X(z[0]),height:h,fill:z[2]},s);tT(s,(X(z[0])+X(z[1]))/2,y+h/2+4,z[3],{fs:9.5,fw:800,c:"#22262E"});});
+  [[0.1,"0.1"],[1/3.2,"1/3.2"],[1,"1"],[3.2,"3.2"],[10,"10"],[100,"100"]].forEach(function(t){var x=X(Math.log10(t[0]));el("line",{x1:x,x2:x,y1:y,y2:y+h+4,stroke:C.gray2},s);tT(s,x,y+h+16,t[1],{fs:9.5,c:C.gray,fw:700});});
+  return X;}
+
+on("m26-ov",function(s){
+  mkT(s,"oT",C.navy3);
+  bxT(s,10,10,200,60,"#FBE4E1",RED);tT(s,110,34,"p ≥ 0.05 → 판단 보류",{fw:800,fs:12,c:RED});tT(s,110,54,"귀무가설을 지지할 수 없음",{fs:10.5,c:"#22262E"});
+  bxT(s,10,100,200,60,"#EEF4FB",BLU);tT(s,110,124,"베이즈 인수",{fw:800,fs:13,c:"#1C6EA4"});tT(s,110,144,"두 가설을 대등하게 비교",{fs:10.5,c:"#22262E"});arT(s,110,72,110,96,"oT");
+  bxT(s,230,10,200,60,"#FBE4E1",RED);tT(s,330,34,"유의한 결과 중 위양성",{fw:800,fs:12,c:RED});tT(s,330,54,"허위발견율(FDR)",{fs:10.5,c:"#22262E"});
+  bxT(s,230,100,200,60,"#E3F1EA",GRN);tT(s,330,124,"좋은 가설",{fw:800,fs:13,c:GRN});tT(s,330,144,"옳을 확률 Q ↑ → FDR ↓",{fs:10.5,c:"#22262E"});arT(s,330,72,330,96,"oT");
+  bxT(s,90,196,260,52,C.navy);tT(s,220,218,"믿을 수 있는 결과",{fw:800,fs:13.5,c:"#fff"});tT(s,220,236,"대등한 비교 + 옳을 법한 가설 검증",{fs:10.5,c:"#C9D3E6"});
+  arT(s,110,162,180,192,"oT");arT(s,330,162,260,192,"oT");
+});
+
+on("m26-case",function(s){
+  var B=[[10,"실험 (각 20장)","차이 +7.0 MPa","p = 0.027 · 유의","B = 2.8","M1 지지가 약함",C.amberInk,"#FCF3D9"],[226,"추시 (각 200장)","차이 +0.5 MPa","p = 0.62 · 판단 보류","M0 ÷ M1 = 8.9","‘차이 없음’ 실질적 지지",BLU,"#EEF4FB"]];
+  B.forEach(function(b){bxT(s,b[0],14,204,196,b[7]);tT(s,b[0]+102,42,b[1],{fw:800,fs:12.5});tT(s,b[0]+102,78,b[2],{fw:800,fs:12});tT(s,b[0]+102,106,b[3],{fw:700,fs:11.5,c:"#22262E"});
+    el("line",{x1:b[0]+20,x2:b[0]+184,y1:124,y2:124,stroke:C.gray2,"stroke-dasharray":"3 3"},s);tT(s,b[0]+102,154,b[4],{fw:800,fs:16,c:b[6]});tT(s,b[0]+102,182,b[5],{fw:800,fs:11,c:b[6]});});
+  tT(s,220,236,"M0: 차이 δ = 0 · M1: δ ~ 정규분포(평균 0, 표준편차 10 MPa)",{fs:10.5,fw:700,c:C.gray});
+});
+
+on("m26-ml",function(s){
+  var X=linT(-22,26,20,404),Y=linT(0,0.13,120,12);
+  el("line",{x1:20,x2:404,y1:120,y2:120,stroke:C.gray2},s);[-20,-10,0,10,20].forEach(function(t){tT(s,X(t),134,(t>0?"+":"")+t,{fs:9,c:C.gray,fw:500});});tT(s,404,146,"평균 차이 D(MPa)",{a:"end",fs:9.5,c:C.gray,fw:700});
+  [[Math.sqrt(10),BLU,"M0 예측"],[Math.sqrt(110),PNK,"M1 예측"]].forEach(function(c){var p=[];for(var i=0;i<=200;i++){var x=-22+48*i/200;p.push(X(x).toFixed(1)+" "+Y(npdfT(x,0,c[0])).toFixed(1));}el("path",{d:"M"+p.join(" L"),fill:"none",stroke:c[1],"stroke-width":2.4},s);});
+  el("line",{x1:X(7),x2:X(7),y1:14,y2:120,stroke:C.navy,"stroke-dasharray":"4 3"},s);tT(s,X(7)+4,22,"관찰 D = +7.0",{a:"start",fw:800,fs:10.5,halo:true});
+  var h0=npdfT(7,0,Math.sqrt(10)),h1=npdfT(7,0,Math.sqrt(110));
+  el("circle",{cx:X(7),cy:Y(h0),r:5,fill:BLU,stroke:"#fff","stroke-width":1.5},s);el("circle",{cx:X(7),cy:Y(h1),r:5,fill:PNK,stroke:"#fff","stroke-width":1.5},s);
+  tT(s,X(7)+8,Y(h1)-4,"M1: 0.0304",{a:"start",fw:800,fs:10,c:PNK,halo:true});tT(s,X(7)+8,Y(h0)+12,"M0: 0.0109",{a:"start",fw:800,fs:10,c:BLU,halo:true});
+  tT(s,X(-1),Y(npdfT(0,0,Math.sqrt(10)))+14,"M0: 차이 0 근처만 예측",{a:"end",fw:800,fs:10,c:BLU,halo:true});tT(s,X(-15),Y(0.032),"M1: 넓게 예측",{fw:800,fs:10,c:PNK,halo:true});
+});
+
+on("m26-scale",function(s){
+  bxT(s,4,4,412,134,"#F3F5F9");tT(s,14,24,"베이즈 인수 B = p(x|M1) ÷ p(x|M0)의 해석 기준",{a:"start",fw:800,fs:11});tT(s,404,24,"[1]",{a:"end",fw:800,fs:10,c:BLU});
+  var X=scaleT(s,20,400,62,28);
+  [[2.8,"실험 2.8",C.amberInk,46],[0.113,"추시 0.113 (= 1 ÷ 8.9)",BLU,46]].forEach(function(m){var x=X(Math.log10(m[0]));el("path",{d:"M"+x+" "+(m[3]+12)+" l-6 -9 h12z",fill:m[2]},s);tT(s,x,m[3]-1,m[1],{fw:800,fs:10.5,c:m[2],halo:true});});
+  tT(s,210,128,"1을 기준으로 위아래가 대칭: 귀무가설(M0)도 지지할 수 있음",{fw:700,fs:10,c:C.gray});
+  bxT(s,4,148,412,118,"#FCF3D9");tT(s,14,168,"유의수준과 대응하는 베이즈 인수",{a:"start",fw:800,fs:11,c:C.amberInk});tT(s,404,168,"[2]",{a:"end",fw:800,fs:10,c:BLU});
+  var X2=linT(0,30,40,400);el("line",{x1:40,x2:400,y1:236,y2:236,stroke:C.gray2},s);[0,5,10,15,20,25,30].forEach(function(t){tT(s,X2(t),250,t,{fs:9,c:C.gray,fw:500});});
+  [[2.5,3.4,"α = 0.05 → 약 2.5~3.4 (약한 증거)",C.amber,190],[14,26,"α = 0.005 → 약 14~26 (강한 증거)",GRN,214]].forEach(function(r){el("rect",{x:X2(r[0]),y:r[4]+4,width:Math.max(6,X2(r[1])-X2(r[0])),height:12,rx:3,fill:r[3]},s);
+    tT(s,r[0]<10?X2(r[1])+8:X2(r[0])-8,r[4]+14,r[2],{a:r[0]<10?"start":"end",fw:800,fs:10.5});});
+});
+
+on("m26-pro",function(s){
+  bxT(s,4,4,204,200,"#E3F1EA");tT(s,106,26,"장점",{fw:800,fs:12.5,c:GRN});
+  ["두 가설을 대등하게 비교","귀무가설도 지지 가능","n을 늘리며 순차적 갱신","단순한 모형 선택 · 일치성"].forEach(function(t,i){tT(s,16,56+i*38,"✓ "+t,{a:"start",fw:700,fs:11});});
+  bxT(s,212,4,204,200,"#FBE4E1");tT(s,314,26,"주의점",{fw:800,fs:12.5,c:RED});
+  ["상대 비교일 뿐","→ 사후예측점검 필요","사전분포에 영향을 받음","적분 계산 · 시간과 노력"].forEach(function(t,i){tT(s,224,56+i*38,(i===1?"   ":"! ")+t,{a:"start",fw:i===1?600:700,fs:11,c:i===1?C.gray:C.navy});});
+  bxT(s,4,212,412,54,"#F3F5F9");tT(s,14,230,"실험 데이터, M1 사전분포 폭 τ에 따른 B",{a:"start",fw:800,fs:10.5});
+  [[5,3.08],[10,2.80],[20,1.71]].forEach(function(r,i){var x=40+i*126;tT(s,x,254,"τ = "+r[0]+" MPa",{a:"start",fw:700,fs:10.5,c:C.gray});tT(s,x+108,254,"B = "+r[1].toFixed(2),{a:"end",fw:800,fs:11.5,c:i===2?C.amberInk:C.navy});});
+});
+
+on("m26-tree",function(s){
+  mkT(s,"tT",C.navy3);
+  bxT(s,4,52,82,46,"#F3F5F9",C.navy3);tT(s,45,72,"가설",{fw:800,fs:11.5});tT(s,45,88,"1,000건",{fw:800,fs:11});
+  bxT(s,112,8,108,46,"#EEF4FB");tT(s,166,28,"옳음 Q = 10%",{fw:800,fs:10.5,c:"#1C6EA4"});tT(s,166,45,"100건",{fs:10});
+  bxT(s,112,96,108,46,"#F3F5F9");tT(s,166,116,"잘못됨 90%",{fw:800,fs:10.5});tT(s,166,133,"900건",{fs:10});
+  arT(s,88,70,108,36,"tT");arT(s,88,80,108,114,"tT");
+  bxT(s,248,8,90,46,"#E3F1EA");tT(s,293,28,"유의 80건",{fw:800,fs:11,c:GRN});tT(s,293,45,"× 검정력 0.8",{fs:9.5,c:C.gray});
+  bxT(s,248,96,90,46,"#FBE4E1");tT(s,293,116,"유의 45건",{fw:800,fs:11,c:RED});tT(s,293,133,"× α 0.05 (위양성)",{fs:9,c:C.gray});
+  arT(s,222,31,244,31,"tT");arT(s,222,119,244,119,"tT");
+  bxT(s,350,40,66,70,C.navy);tT(s,383,62,"45 ÷ 125",{fw:800,fs:10.5,c:"#fff"});tT(s,383,84,"= 36%",{fw:800,fs:14,c:"#FCD34D"});tT(s,383,101,"FDR",{fs:9.5,c:"#C9D3E6"});
+});
+
+on("m26-fdr",function(s){
+  bxT(s,4,4,412,262);var X=linT(0,1,50,330),Y=linT(0,1,226,20);
+  [0,.25,.5,.75,1].forEach(function(t){el("line",{x1:50,x2:330,y1:Y(t),y2:Y(t),stroke:C.grid},s);tT(s,44,Y(t)+4,(t*100)+"%",{a:"end",fs:9,c:C.gray2,fw:500});tT(s,X(t),240,(t*100)+"%",{fs:9,c:C.gray,fw:500});});
+  tT(s,330,256,"가설이 옳을 확률 Q",{a:"end",fs:10,c:C.gray,fw:700});tT(s,14,16,"허위발견율",{a:"start",fs:10,c:C.gray,fw:700});
+  var L=[[.05,.8,BLU,"none","α 0.05 · 검정력 0.8"],[.005,.8,BLU,"5 4","α 0.005 · 검정력 0.8"],[.05,.4,RED,"none","α 0.05 · 검정력 0.4"],[.005,.4,RED,"5 4","α 0.005 · 검정력 0.4"]];
+  L.forEach(function(l,j){var p=[];for(var i=1;i<=200;i++){var q=i/200;p.push(X(q).toFixed(1)+" "+Y(fdrT(q,l[0],l[1])).toFixed(1));}el("path",{d:"M"+p.join(" L"),fill:"none",stroke:l[2],"stroke-width":2.3,"stroke-dasharray":l[3]},s);
+    el("line",{x1:340,x2:358,y1:52+j*22,y2:52+j*22,stroke:l[2],"stroke-width":2.3,"stroke-dasharray":l[3]},s);tT(s,362,56+j*22,l[0]+" · "+l[1],{a:"start",fs:9.5,fw:800,c:l[2]});});
+  tT(s,340,34,"α · 검정력",{a:"start",fs:9.5,fw:800,c:C.gray});
+  [[.1,"36%"],[.5,"5.9%"],[.8,"1.5%"]].forEach(function(m){var v=fdrT(m[0],.05,.8);el("circle",{cx:X(m[0]),cy:Y(v),r:5,fill:BLU,stroke:"#fff","stroke-width":1.5},s);tT(s,X(m[0])+7,Y(v)-7,"Q "+(m[0]*100)+"% → "+m[1],{a:"start",fw:800,fs:10,c:"#1C6EA4",halo:true});});
+});
+
+on("m26-good",function(s){
+  mkT(s,"gT",C.navy3);
+  bxT(s,4,4,204,190,"#FBE4E1");tT(s,106,26,"나쁜 가설: 조명 색 → 강도?",{fw:800,fs:11.5,c:RED});
+  var cols=["#F87171","#FBBF24","#34D399","#60A5FA","#A78BFA","#F472B6","#FCD34D","#94A3B8","#FB923C","#2DD4BF"];
+  cols.forEach(function(c,i){var x=22+(i%5)*36,y=46+Math.floor(i/5)*44;el("circle",{cx:x+12,cy:y+12,r:12,fill:c},s);tT(s,x+12,y+38,i===6?"p<.05":"",{fs:9,fw:800,c:RED});});
+  el("circle",{cx:22+1*36+12,cy:46+44+12,r:15,fill:"none",stroke:RED,"stroke-width":2.5},s);
+  tT(s,106,160,"10가지 색을 시험하면",{fs:10.5,fw:700});tT(s,106,178,"우연히 1가지쯤 p < 0.05",{fs:10.5,fw:800,c:RED});
+  bxT(s,212,4,204,190,"#E3F1EA");tT(s,314,26,"좋은 가설: 메커니즘이 있음",{fw:800,fs:11.5,c:GRN});
+  [["냉각 속도 ↑",50],["결정립 미세화",100],["인장강도 ↑",150]].forEach(function(r,i){bxT(s,252,r[1]-16,124,32,"#fff",GRN);tT(s,314,r[1]+4,r[0],{fw:800,fs:11});if(i<2)arT(s,314,r[1]+17,314,r[1]+32,"gT");});
+  bxT(s,4,204,204,62,"#F3F5F9");tT(s,106,228,"옳을 확률 Q 낮음",{fw:800,fs:11.5});tT(s,106,250,"→ 허위발견율 ↑",{fw:800,fs:12,c:RED});
+  bxT(s,212,204,204,62,"#F3F5F9");tT(s,314,228,"옳을 확률 Q 높음",{fw:800,fs:11.5});tT(s,314,250,"→ 허위발견율 ↓",{fw:800,fs:12,c:GRN});
+});
+
+on("m26-skill",function(s){
+  var X=linT(0,1,70,404),Y=linT(0,1,220,20);
+  el("rect",{x:70,y:20,width:334,height:200,fill:"#F8F9FB",stroke:C.grid},s);el("line",{x1:237,x2:237,y1:20,y2:220,stroke:C.gray2,"stroke-dasharray":"4 3"},s);el("line",{x1:70,x2:404,y1:120,y2:120,stroke:C.gray2,"stroke-dasharray":"4 3"},s);
+  tT(s,237,244,"예상 밖 · 강한 인상 →",{fw:800,fs:10.5,c:C.gray});tT(s,30,120,"옳을 확률",{fw:800,fs:10.5,c:C.gray});tT(s,30,136,"(좋음) ↑",{fw:800,fs:10.5,c:C.gray});
+  [[153,70,"당연하고 좋은 가설","확인은 쉽지만 새롭지 않음","#fff",C.navy],[320,70,"예상 밖이면서 좋은 가설","연구자의 실력","#E3F1EA",GRN],[153,170,"평범하고 나쁜 가설","검증할 이유가 적음","#fff",C.gray],[320,170,"강한 인상만 노린 가설","나쁜 가설 검증 → FDR ↑","#FBE4E1",RED]].forEach(function(q){
+    bxT(s,q[0]-78,q[1]-34,156,68,q[4]);tT(s,q[0],q[1]-6,q[2],{fw:800,fs:11,c:q[5]});tT(s,q[0],q[1]+14,q[3],{fs:10,fw:700,c:"#22262E"});});
+  tT(s,320,30,"★",{fw:800,fs:14,c:C.amber});
+  tT(s,210,264,"이론적 토대가 약한 분야일수록 좋은 가설을 세우기 어려움",{fw:700,fs:10,c:C.gray});
+});
+
+/* 실습 1 · p값과 베이즈 인수(조작형) */
+(function(){
+  var ds=document.getElementById("m26-D");if(!ds)return;var ns=document.getElementById("m26-n"),svg=document.getElementById("m26-p1-svg"),NA=[5,10,20,30,50,100,200,300,500,1000,2000,5000];
+  function upd(){var D=+ds.value,n=NA[+ns.value],p=pT(D,n),B=bfT(D,n,10),J=judgeT(B);
+    document.getElementById("m26-Dv").textContent=(D>0?"+":"")+D.toFixed(1)+" MPa";document.getElementById("m26-nv").textContent=n.toLocaleString()+"장";
+    document.getElementById("m26-p").textContent=p<0.001?"< 0.001":p.toFixed(3);document.getElementById("m26-b").textContent=B>=100?"> 100":B>=1?B.toFixed(2):B.toFixed(3);
+    var je=document.getElementById("m26-j");je.textContent=J[0].replace(/\(.*\)/,"");je.style.color=J[1];
+    clear(svg);tT(svg,10,18,"베이즈 인수 눈금",{a:"start",fw:800,fs:10.5});var X=scaleT(svg,20,456,58,30);
+    var lb=Math.max(-1.5,Math.min(2,Math.log10(B))),x=X(lb);el("path",{d:"M"+x+" 54 l-8 -12 h16z",fill:C.navy},svg);tT(svg,Math.max(40,Math.min(430,x)),36,"B = "+(B>=1?B.toFixed(2):B.toFixed(3)),{fw:800,fs:11,halo:true});
+    tT(svg,20,134,"p값 판정: "+(p<0.05?"유의(귀무가설 기각)":"판단 보류"),{a:"start",fw:800,fs:11,c:p<0.05?RED:C.gray});
+    var m=document.getElementById("m26-msg"),ok=p>=0.05&&1/B>3.2;m.className="pmsg"+(ok?" ok":"");
+    m.textContent=ok?"찾았습니다. p = "+p.toFixed(2)+"이므로 가설검정은 판단 보류이지만, M0 ÷ M1 = "+(1/B).toFixed(1)+"이며 ‘차이 없음’을 "+(1/B>10?"강하게":"실질적으로")+" 지지합니다. 차이가 0에 가깝고 n이 클수록 이렇게 됩니다.":
+      "D = "+(D>0?"+":"")+D.toFixed(1)+" MPa, n = "+n.toLocaleString()+"이면 p = "+(p<0.001?"0.001 미만":p.toFixed(3))+", B = "+(B>=100?"100 초과":B>=1?B.toFixed(2):B.toFixed(3))+"이며, 기준상 ‘"+J[0]+"’입니다.";}
+  ds.addEventListener("input",upd);ns.addEventListener("input",upd);upd();
+})();
+
+/* 실습 3 · 허위발견율 예측(추정형) */
+(function(){
+  var g=document.getElementById("m26-g");if(!g)return;var qq=document.getElementById("m26-qq"),qa=document.getElementById("m26-qa"),svg=document.getElementById("m26-p3-svg"),QS=[.1,.3,.5,.8],AS=[.05,.005],cq=0,ca=0,seen={};
+  QS.forEach(function(q,i){var b=document.createElement("button");b.type="button";b.className="mbtn";b.textContent="Q "+(q*100)+"%";b.style.padding="3px 9px";b.onclick=function(){cq=i;reset();};qq.appendChild(b);});
+  AS.forEach(function(a,i){var b=document.createElement("button");b.type="button";b.className="mbtn";b.textContent="α "+a;b.style.padding="3px 9px";b.onclick=function(){ca=i;reset();};qa.appendChild(b);});
+  function key(){return cq+"_"+ca;}
+  function draw(){clear(svg);var Q=QS[cq],a=AS[ca],nt=Math.round(Q*100);
+    tT(svg,8,14,"가설 1,000건 (1칸 = 10건)",{a:"start",fw:800,fs:10.5});
+    for(var i=0;i<100;i++){var r=Math.floor(i/10),c=i%10;el("rect",{x:8+c*19,y:22+r*17,width:16,height:14,rx:3,fill:i<nt?BLU:"#D1D5DB"},svg);}
+    el("rect",{x:10,y:196-2,width:10,height:8,fill:BLU},svg);tT(svg,24,200,"옳은 가설",{a:"start",fs:9.5,fw:700});el("rect",{x:90,y:196-2,width:10,height:8,fill:"#D1D5DB"},svg);tT(svg,104,200,"잘못된 가설",{a:"start",fs:9.5,fw:700});
+    var tp=Q*1000*.8,fp=(1-Q)*1000*a,tot=tp+fp,H=150,y0=30;tT(svg,330,14,"유의하다고 보고된 결과",{fw:800,fs:10.5});
+    if(seen[key()]){var h1=H*tp/tot,h2=H*fp/tot;el("rect",{x:280,y:y0,width:100,height:h2,fill:RED},svg);el("rect",{x:280,y:y0+h2,width:100,height:h1,fill:GRN},svg);
+      tT(svg,388,y0+h2/2+4,"위양성 "+Math.round(fp)+"건",{a:"start",fw:800,fs:10,c:RED});tT(svg,388,y0+h2+h1/2+4,"옳음 "+Math.round(tp)+"건",{a:"start",fw:800,fs:10,c:GRN});
+      tT(svg,330,y0+H+18,"합계 "+(Math.round(tot*10)/10)+"건",{fw:800,fs:10.5});}
+    else{el("rect",{x:280,y:y0,width:100,height:H,rx:6,fill:"#F3F5F9",stroke:C.grid},svg);tT(svg,330,y0+H/2+6,"?",{fw:800,fs:24,c:C.gray2});}}
+  function txt(){document.getElementById("m26-gv").textContent=(+g.value)+"%";document.getElementById("m26-mine").textContent=(+g.value)+"%";}
+  function reset(){[].forEach.call(qq.children,function(x,i){x.classList.toggle("on",i===cq);x.setAttribute("aria-pressed",i===cq);});[].forEach.call(qa.children,function(x,i){x.classList.toggle("on",i===ca);x.setAttribute("aria-pressed",i===ca);});
+    var Q=QS[cq],a=AS[ca],f=fdrT(Q,a,.8);document.getElementById("m26-act").textContent=seen[key()]?(f*100).toFixed(1)+"%":"?";document.getElementById("m26-cnt").textContent=seen[key()]?(Math.round((Q*800+(1-Q)*1000*a)*10)/10)+"건":"?";
+    var m=document.getElementById("m26-msg3");m.className="pmsg";m.textContent="Q "+(Q*100)+"%, α "+a+"일 때 유의한 결과 중 틀린 것의 비율을 예측한 뒤 「계산해서 확인」을 누르세요.";draw();}
+  g.addEventListener("input",txt);
+  document.getElementById("m26-check").onclick=function(){seen[key()]=true;var Q=QS[cq],a=AS[ca],f=fdrT(Q,a,.8)*100,gv=+g.value,ok=Math.abs(gv-f)<=Math.max(3,.25*f),m=document.getElementById("m26-msg3"),tp=Q*800,fp=(1-Q)*1000*a;
+    document.getElementById("m26-act").textContent=f.toFixed(1)+"%";document.getElementById("m26-cnt").textContent=(Math.round((tp+fp)*10)/10)+"건";m.className="pmsg "+(ok?"ok":"ng");
+    m.textContent=(ok?"가깝게 예측했습니다. ":"차이가 있습니다. ")+"위양성 "+(Math.round(fp*10)/10)+"건 ÷ 유의 "+(Math.round((tp+fp)*10)/10)+"건 = "+f.toFixed(1)+"%입니다. Q가 높고 α가 작을수록 낮아집니다.";draw();};
+  txt();reset();
+})();
+
+
+/* ---------- ⑤ 형성평가 ---------- */
+function fill(t){return !CASE?t:t.replace(/SUM/g,f1(SUMV)).replace(/AVG/g,f1(AVG,2)).replace(/MAXV/g,f1(MAXV));}
+var firstPractice=document.getElementById("p1"),answered=0,correct=0;
+QUIZ.forEach(function(q,i){
+  var s=document.createElement("section");s.className="slide";s.dataset.step="4";s.id="q"+(i+1);
+  s.innerHTML='<div class="sh"><div class="sec"><span>문항 '+(i+1)+' / '+QUIZ.length+'</span><span class="qchips"><span>학습목표 '+q.goal+'</span><span>'+q.type+'</span></span></div><h2 class="stem">'+fill(q.stem)+'</h2></div>'+
+    '<div class="body split even"><div class="opts'+(q.ox?' ox':'')+'"></div><div class="fbp" aria-live="polite"><p class="empty">보기를 고르면 정답과 해설이 여기에 나타납니다.</p></div></div>';
+  var ob=s.querySelector(".opts"),fb=s.querySelector(".fbp");
+  q.opts.forEach(function(t,k){
+    var b=document.createElement("button");b.type="button";b.className="opt";
+    b.innerHTML=q.ox?t:'<span class="n">'+(k+1)+'</span>'+fill(t);
+    b.addEventListener("click",function(){
+      var all=ob.querySelectorAll(".opt");[].forEach.call(all,function(x){x.disabled=true;});
+      all[q.ans].classList.add("ok");var ok=k===q.ans;if(!ok)b.classList.add("ng");
+      answered++;if(ok)correct++;
+      fb.className="fbp "+(ok?"ok":"ng");
+      fb.innerHTML='<div class="verdict">'+(ok?"정답입니다":"오답입니다. 정답은 "+(q.ox?q.opts[q.ans]:(q.ans+1)+"번")+"입니다")+'</div><div>'+fill(q.exp)+'</div>'+
+        '<button type="button" class="jump back" data-jump="'+q.back+'">'+q.backLabel+'</button><div class="tally">지금까지 '+answered+'문항 중 '+correct+'문항 정답</div>';
+      bindJumps(fb);
+    });
+    ob.appendChild(b);
+  });
+  vp.insertBefore(s,firstPractice);
+});
+
+/* ---------- ⑦ 용어해설 · 참고자료 · 다음 모듈 ---------- */
+for(var gi=0;gi<GLOSSARY.length;gi+=6){
+  var part=GLOSSARY.slice(gi,gi+6),pg=gi/6+1,np=Math.ceil(GLOSSARY.length/6);
+  var s=document.createElement("section");s.className="slide";s.dataset.step="6";
+  var h='<div class="sh"><div class="sec">용어해설 '+pg+'/'+np+'</div><h2>'+(pg===1?"본문에서 굵게 표시한 용어를 나온 순서대로 모았습니다":"용어해설 계속")+'</h2></div><div class="body full"><div class="gl">';
+  part.forEach(function(g,k){h+='<div class="gi"><div class="t"><i>'+(gi+k+1)+'</i>'+g[0]+'<em>'+g[1]+'</em>'+(g[4]?'<span class="cite">['+g[4]+']</span>':'')+'</div><div class="d">'+g[2]+'</div><div class="e"><strong>예시</strong> '+g[3]+'</div></div>';});
+  h+='</div></div>';s.innerHTML=h;vp.appendChild(s);
+}
+(function(){
+  var s=document.createElement("section");s.className="slide";s.dataset.step="6";s.id="end";
+  var refs=REFS.length?'<div class="pcol" style="gap:10px"><div class="plabel" style="margin:0">참고자료</div><ol class="refs">'+REFS.map(function(r){return '<li><span>['+r.n+']</span><div>'+r.title+', '+r.org+'. <a href="'+r.url+'" target="_blank" rel="noopener">'+r.url+'</a> ('+r.date+')</div></li>';}).join("")+'</ol></div>':'';
+  s.innerHTML='<div class="sh"><div class="sec">마무리</div><h2>'+(REFS.length?"참고자료와 다음 모듈":"다음 모듈")+'</h2></div>'+
+    '<div class="body '+(REFS.length?'split even':'full')+'" style="align-content:center">'+refs+
+    '<div class="pcol" style="justify-content:center"><div class="nextmod"><small>다음 모듈 · '+NEXT.title+'</small><strong>'+NEXT.line+'</strong></div></div></div>'+
+    '<p class="foot">학습 상태는 저장되지 않습니다.</p>';
+  vp.appendChild(s);
+})();
+
+/* ---------- 이동 · 진행선 ---------- */
+var slides=[].slice.call(vp.querySelectorAll(".slide")),cur=0,seen={};
+var stepFirst=[],stepCount=[0,0,0,0,0,0,0];
+slides.forEach(function(s,i){var st=+s.dataset.step;if(stepFirst[st]==null)stepFirst[st]=i;stepCount[st]++;});
+var rail=document.getElementById("rail"),stations=[];
+STEPS.forEach(function(n,i){
+  var b=document.createElement("button");b.type="button";b.className="station";
+  b.style.left="calc(14px + (100% - 28px) * "+(i/6)+")";
+  b.innerHTML='<span class="dot">'+(i+1)+'</span><span class="lb">'+n+'</span>';
+  b.setAttribute("aria-label",(i+1)+"단계 "+n+"(으)로 이동");
+  b.addEventListener("click",function(){show(stepFirst[i]);});
+  rail.appendChild(b);stations.push(b);
+});
+function show(i){
+  cur=Math.max(0,Math.min(slides.length-1,i));
+  slides.forEach(function(s,k){s.classList.toggle("on",k===cur);});
+  var st=+slides[cur].dataset.step;seen[st]=true;
+  stations.forEach(function(b,k){b.classList.toggle("cur",k===st);b.classList.toggle("done",k<st||(!!seen[k]&&k!==st));if(k===st)b.setAttribute("aria-current","step");else b.removeAttribute("aria-current");});
+  var within=(cur-stepFirst[st])/Math.max(1,stepCount[st]);
+  var frac=st===6&&cur===slides.length-1?1:(st+within)/6;
+  document.getElementById("fill").style.width=(Math.min(1,frac)*100)+"%";
+  document.getElementById("counter").innerHTML="<strong>"+STEPS[st]+"</strong> "+(cur-stepFirst[st]+1)+" / "+stepCount[st];
+  document.getElementById("prev").disabled=cur===0;
+  var nx=document.getElementById("next");nx.disabled=cur===slides.length-1;
+  nx.textContent=(cur<slides.length-1&&+slides[cur+1].dataset.step!==st)?STEPS[+slides[cur+1].dataset.step]+"(으)로":"다음";
+}
+function bindJumps(root){[].forEach.call(root.querySelectorAll("[data-jump]"),function(b){b.addEventListener("click",function(){var t=document.getElementById(b.dataset.jump);if(t)show(slides.indexOf(t));});});}
+bindJumps(document);
+document.getElementById("prev").onclick=function(){show(cur-1);};
+document.getElementById("next").onclick=function(){show(cur+1);};
+document.addEventListener("keydown",function(e){
+  if(e.target&&(e.target.type==="range"))return;
+  if(e.key==="ArrowRight"||e.key==="PageDown"){show(cur+1);e.preventDefault();}
+  else if(e.key==="ArrowLeft"||e.key==="PageUp"){show(cur-1);e.preventDefault();}
+});
+var tx=null,ty=null;
+vp.addEventListener("touchstart",function(e){var t=e.target;if(t.closest&&(t.closest("input")||t.closest(".dcard"))){tx=null;return;}tx=e.touches[0].clientX;ty=e.touches[0].clientY;},{passive:true});
+vp.addEventListener("touchend",function(e){if(tx==null)return;var dx=e.changedTouches[0].clientX-tx,dy=e.changedTouches[0].clientY-ty;if(Math.abs(dx)>60&&Math.abs(dx)>Math.abs(dy)*1.5)show(cur+(dx<0?1:-1));tx=null;},{passive:true});
+
+/* ---------- 실습 1 · 조작형 ---------- */
+(function(){if(!document.getElementById("p1-items")||!CASE)return;
+var p1v=CASE.values.slice(),p1s=CASE.values.indexOf(MAXV),p1m=document.getElementById("p1-items"),p1r=document.getElementById("p1-range");
+CASE.labels.forEach(function(m,i){var b=document.createElement("button");b.type="button";b.className="mbtn";b.textContent=m;b.onclick=function(){p1s=i;p1d();};p1m.appendChild(b);});
+function p1d(){
+  [].forEach.call(p1m.children,function(b,i){b.classList.toggle("on",i===p1s);b.setAttribute("aria-pressed",i===p1s);});
+  p1r.value=p1v[p1s];document.getElementById("p1-label").textContent=CASE.labels[p1s]+"번";document.getElementById("p1-val").textContent=f1(p1v[p1s]);
+  var s=r1(sum(p1v)),m=s/N;
+  document.getElementById("p1-sum").textContent=f1(s);document.getElementById("p1-mean").textContent=f1(m,2);
+  barChart(document.getElementById("p1-svg"),p1v,{mean:m,sel:p1s,ymax:9});
+  var msg=document.getElementById("p1-msg");
+  if(P1.target!=null&&Math.abs(m-P1.target)<0.005){msg.className="pmsg ok";msg.textContent="성공했습니다. "+f1(s)+" ÷ "+N+" = "+f1(m,2);}
+  else if(Math.abs(s-SUMV)<1e-9){msg.className="pmsg";msg.textContent="원래 값입니다. "+f1(SUMV)+" ÷ "+N+" = "+f1(AVG,2);}
+  else{msg.className="pmsg";msg.textContent="원래 평균 "+f1(AVG,2)+"보다 "+f1(Math.abs(m-AVG),2)+" "+(m>AVG?"늘었습니다.":"줄었습니다.");}
+}
+p1r.addEventListener("input",function(){p1v[p1s]=r1(+p1r.value);p1d();});
+document.getElementById("p1-reset").onclick=function(){p1v=CASE.values.slice();p1d();};
+p1d();
+
+})();
+/* ---------- 실습 2 · 분류형 ---------- */
+(function(){if(!document.getElementById("p2-pool"))return;
+var pool=document.getElementById("p2-pool"),binWrap=document.getElementById("p2-bins"),selC=null,done2=0;
+var bins=BINS.map(function(n){var b=document.createElement("div");b.className="bin";b.dataset.bin=n;b.innerHTML="<h4>"+n+"</h4>";binWrap.appendChild(b);return b;});
+function p2msg(t,c){var m=document.getElementById("p2-msg");m.textContent=t;m.className="pmsg "+(c||"");document.getElementById("p2-count").textContent=done2+" / "+CARDS.length;}
+function p2init(){
+  pool.innerHTML="";bins.forEach(function(b){[].slice.call(b.querySelectorAll(".dcard")).forEach(function(c){c.remove();});});done2=0;selC=null;
+  var o=CARDS.map(function(_,i){return i;});for(var i=o.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1)),t=o[i];o[i]=o[j];o[j]=t;}
+  o.forEach(function(i){var d=document.createElement("div");d.className="dcard";d.tabIndex=0;d.setAttribute("role","button");d.textContent=CARDS[i][0];d.dataset.ans=CARDS[i][1];pool.appendChild(d);attach(d);});
+  p2msg("카드를 하나 골라 보세요.","");
+}
+function drop(c,b){
+  if(!b||c.classList.contains("ok"))return;
+  c.classList.remove("sel");selC=null;
+  if(c.dataset.ans===b.dataset.bin){c.classList.add("ok");c.removeAttribute("tabindex");b.appendChild(c);done2++;p2msg(done2===CARDS.length?"카드를 모두 맞게 분류했습니다.":"정답입니다.","ok");}
+  else{c.classList.add("shake");setTimeout(function(){c.classList.remove("shake");},400);p2msg("「"+b.dataset.bin+"」이 아닙니다. "+HINT[c.dataset.ans],"ng");}
+}
+function pick(d){if(selC===d){d.classList.remove("sel");selC=null;return;}if(selC)selC.classList.remove("sel");selC=d;d.classList.add("sel");p2msg("이제 알맞은 칸을 누르세요.","");}
+function attach(d){
+  var sx=null,sy,mv=false,gh=null,ov=null,offX=0,offY=0;
+  function pos(e){var r=stage.getBoundingClientRect();return{x:(e.clientX-r.left)/S,y:(e.clientY-r.top)/S};}
+  d.addEventListener("pointerdown",function(e){if(d.classList.contains("ok"))return;sx=e.clientX;sy=e.clientY;mv=false;d.setPointerCapture(e.pointerId);var r=d.getBoundingClientRect();offX=(e.clientX-r.left)/S;offY=(e.clientY-r.top)/S;});
+  d.addEventListener("pointermove",function(e){
+    if(sx==null)return;
+    if(!mv&&Math.hypot(e.clientX-sx,e.clientY-sy)>6){mv=true;gh=d.cloneNode(true);gh.classList.add("ghostc");gh.classList.remove("sel");gh.style.width=d.offsetWidth+"px";stage.appendChild(gh);d.style.opacity=".35";}
+    if(mv){var p=pos(e);gh.style.left=(p.x-offX)+"px";gh.style.top=(p.y-offY)+"px";
+      var t=document.elementFromPoint(e.clientX,e.clientY),b=t&&t.closest?t.closest(".bin"):null;
+      if(ov&&ov!==b)ov.classList.remove("hover");ov=b;if(b)b.classList.add("hover");}
+  });
+  d.addEventListener("pointerup",function(){
+    if(sx==null)return;sx=null;
+    if(mv){gh.remove();gh=null;d.style.opacity="";if(ov)ov.classList.remove("hover");var b=ov;ov=null;drop(d,b);}else pick(d);
+  });
+  d.addEventListener("pointercancel",function(){if(gh){gh.remove();gh=null;}d.style.opacity="";sx=null;if(ov)ov.classList.remove("hover");ov=null;});
+  d.addEventListener("keydown",function(e){if(e.key==="Enter"||e.key===" "){e.preventDefault();pick(d);}});
+}
+bins.forEach(function(b){b.tabIndex=0;b.setAttribute("role","button");b.setAttribute("aria-label",b.dataset.bin+" 칸에 놓기");
+  b.addEventListener("click",function(e){if(selC&&!e.target.closest(".dcard"))drop(selC,b);});
+  b.addEventListener("keydown",function(e){if((e.key==="Enter"||e.key===" ")&&selC){e.preventDefault();drop(selC,b);}});});
+document.getElementById("p2-reset").onclick=p2init;
+p2init();
+
+})();
+/* ---------- 실습 3 · 추정형 ---------- */
+(function(){if(!document.getElementById("p3-range")||!PAIRS)return;
+var p3r=document.getElementById("p3-range"),p3done=false;
+document.getElementById("p3-x0").textContent=PAIRS.x0;
+p3r.min=PAIRS.ymin;p3r.max=PAIRS.ymax;p3r.step=0.1;p3r.value=r1((PAIRS.ymin+PAIRS.ymax)/2);
+function p3d(){var g=+p3r.value;document.getElementById("p3-val").textContent=f1(g);scatter(document.getElementById("p3-svg"),{x0:PAIRS.x0,guess:g,line:p3done,pred:p3done,actual:p3done});}
+p3r.addEventListener("input",function(){if(p3done){p3done=false;document.getElementById("p3-res").classList.remove("on");}p3d();});
+document.getElementById("p3-check").onclick=function(){
+  p3done=true;var g=+p3r.value,mine=Math.abs(g-PAIRS.actual),line=Math.abs(PRED-PAIRS.actual);
+  document.getElementById("p3-mine").textContent=f1(g);document.getElementById("p3-pred").textContent=f1(PRED,PAIRS.dp);document.getElementById("p3-act").textContent=f1(PAIRS.actual);
+  var m=document.getElementById("p3-msg"),good=mine<=line;m.className="pmsg "+(good?"ok":"ng");
+  m.textContent="내 오차 "+f1(mine,PAIRS.dp)+PAIRS.unit+", 직선 오차 "+f1(line,PAIRS.dp)+PAIRS.unit+". "+(good?"직선만큼 또는 더 가깝게 추정했습니다.":"직선을 이용하면 오차를 줄일 수 있습니다.");
+  document.getElementById("p3-res").classList.add("on");p3d();
+};
+p3d();
+
+})();
+show(0);
+})();
+</script>
+</body>
+</html>

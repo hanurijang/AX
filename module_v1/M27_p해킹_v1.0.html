@@ -1,0 +1,1026 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>p-해킹</title>
+<!-- M27 p-해킹 v1.0 · 기준 템플릿 v1.3로 제작 (2026-10-27) -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<style>
+:root{
+  --navy:#1B2A4A; --navy2:#2C4170; --navy3:#5B6E97; --navy-soft:#E4E9F2;
+  --ink:#22262E; --gray:#6B7280; --gray2:#9AA0AA; --panel:#EEF0F3; --line:#D5D9E0;
+  --amber:#E0A100; --amber-ink:#6E4F00; --amber-soft:#FCF3D9;
+  --ok:#23704F; --ok-soft:#E2F1E9; --ng:#B42318; --ng-soft:#FBE6E3;
+  --letterbox:#C7CCD4;
+}
+*{box-sizing:border-box}
+html,body{margin:0;height:100%;overflow:hidden;background:var(--letterbox)}
+body{font-family:"Pretendard Variable","Pretendard","Apple SD Gothic Neo","Malgun Gothic","Noto Sans KR",system-ui,sans-serif;color:var(--ink);-webkit-text-size-adjust:100%;font-feature-settings:"tnum"}
+button{font:inherit;color:inherit}
+:focus-visible{outline:3px solid var(--amber);outline-offset:2px;border-radius:4px}
+
+/* ---------- 16:9 무대 ---------- */
+.stage{position:absolute;left:50%;top:50%;width:960px;height:540px;transform:translate(-50%,-50%) scale(var(--s,1));transform-origin:center;background:#fff;overflow:hidden;box-shadow:0 10px 40px rgba(27,42,74,.25)}
+
+/* ---------- 상단 바: 모듈명 + 7단계 진행선 ---------- */
+.topbar{position:absolute;left:0;right:0;top:0;height:60px;background:var(--navy);display:flex;align-items:center}
+.brand{flex:0 0 200px;padding-left:22px;color:#fff;font-size:14px;font-weight:800;letter-spacing:-.3px;line-height:1.2;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.brand small{display:block;font-size:11px;font-weight:500;color:#A9B6CF;letter-spacing:0;margin-top:2px;overflow:hidden;text-overflow:ellipsis}
+.rail{position:relative;flex:1;height:60px;margin-right:22px}
+.rail .track{position:absolute;left:14px;right:14px;top:21px;height:3px;background:#3A4D78;border-radius:2px}
+.rail .fill{position:absolute;left:0;top:0;bottom:0;background:var(--amber);border-radius:2px;transition:width .35s ease}
+.station{position:absolute;top:10px;width:72px;margin-left:-36px;background:none;border:0;padding:0;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:4px}
+.station .dot{width:24px;height:24px;border-radius:50%;display:grid;place-items:center;font-size:11.5px;font-weight:800;background:var(--navy);color:#8E9DBD;border:2px solid #4A5D88;transition:all .25s}
+.station .lb{font-size:11.5px;color:#8E9DBD;white-space:nowrap}
+.station.done .dot{background:#C9D3E6;border-color:#C9D3E6;color:var(--navy)}
+.station.done .lb{color:#C9D3E6}
+.station.cur .dot{background:var(--amber);border-color:#FFE08A;color:var(--navy);transform:scale(1.12)}
+.station.cur .lb{color:#fff;font-weight:700}
+
+/* ---------- 화면 ---------- */
+.viewport{position:absolute;left:0;right:0;top:60px;bottom:46px}
+.slide{position:absolute;inset:0;padding:16px 36px 10px;display:none;flex-direction:column;gap:12px}
+.slide.on{display:flex;animation:fade .22s ease}
+@keyframes fade{from{opacity:0}to{opacity:1}}
+@media (prefers-reduced-motion:reduce){.slide.on{animation:none}.rail .fill,.station .dot{transition:none}}
+.sh{flex:0 0 auto}
+.sec{font-size:12.5px;font-weight:700;color:var(--navy3);display:flex;gap:8px;align-items:center;min-height:18px}
+h2{margin:3px 0 0;font-size:24px;line-height:1.3;font-weight:800;color:var(--navy);letter-spacing:-.6px;display:flex;gap:10px;align-items:flex-start}
+h2 .q{flex:0 0 auto;margin-top:2px;width:28px;height:28px;border-radius:6px;background:var(--navy);color:#fff;font-size:15px;display:grid;place-items:center}
+h2.big{font-size:30px;line-height:1.32}
+.body{flex:1 1 auto;min-height:0;display:grid;gap:24px}
+.split{grid-template-columns:1.2fr 1fr}
+.split.even{grid-template-columns:1fr 1fr}
+.full{grid-template-columns:1fr}
+.fig{background:var(--panel);border-radius:12px;padding:12px;min-height:0;display:flex;align-items:center;justify-content:center}
+.fig svg{width:100%;height:100%;display:block}
+.figcol{min-height:0;display:flex;flex-direction:column;gap:10px}
+.figcol .fig{flex:1 1 auto}
+.side{min-height:0;display:flex;flex-direction:column;gap:12px;justify-content:center}
+
+/* 핵심 문장: 40자 안팎, 1~2개 */
+.key{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:9px}
+.key li{position:relative;padding-left:16px;font-size:18.5px;line-height:1.42;font-weight:700;letter-spacing:-.4px}
+.key li::before{content:"";position:absolute;left:0;top:.28em;width:4px;height:1.05em;border-radius:2px;background:var(--navy2)}
+.key b{color:var(--navy);background:linear-gradient(transparent 62%,var(--amber-soft) 62%)}
+/* 해설 문단: 2~4문장, 150~250자 */
+.exp{margin:0;font-size:15px;line-height:1.62;letter-spacing:-.2px;color:var(--ink)}
+.exp b{color:var(--navy)}
+/* 연결 문장: 다음 소단원으로 넘기는 질문 */
+.next{margin:0;border-top:1px dashed var(--line);padding-top:9px;font-size:14px;font-weight:700;color:var(--navy2);display:flex;gap:8px;align-items:baseline}
+.next span{flex:0 0 auto;font-size:11.5px;font-weight:800;color:var(--navy3);background:var(--navy-soft);border-radius:4px;padding:0 6px;line-height:20px}
+/* 각주: 기호의 뜻과 출처 번호만 */
+.foot{flex:0 0 auto;font-size:12px;line-height:1.5;color:var(--gray);margin:0}
+.foot b{color:var(--ink)}
+.cite{font-size:.72em;font-weight:700;color:var(--navy3);vertical-align:super;line-height:0;margin-left:1px}
+.tag-v{display:inline-block;font-size:11px;font-weight:700;border-radius:4px;padding:0 6px;line-height:18px;white-space:nowrap;vertical-align:1px;color:var(--gray);background:#F3F4F6;box-shadow:inset 0 0 0 1px var(--line)}
+
+/* 핵심 수학 개념 박스 */
+.math{flex:0 0 auto;border-left:3px solid var(--navy3);background:#F6F7F9;border-radius:0 8px 8px 0;padding:9px 13px;font-size:13.5px;line-height:1.5}
+.math .mt{font-size:12px;font-weight:800;color:var(--navy3);margin-bottom:2px}
+.math .f{font-family:"Cambria Math","Times New Roman",serif;font-size:18px;font-weight:700;color:var(--navy);margin:1px 0 4px}
+.math .r{display:grid;grid-template-columns:34px 1fr;gap:6px}
+.math .r span:first-child{font-size:11.5px;font-weight:700;color:var(--gray2);padding-top:1px}
+.math .w{margin-top:5px;padding-top:5px;border-top:1px dashed var(--line);color:var(--ng);font-weight:700;font-size:12.5px}
+
+/* ---------- 하단 바 ---------- */
+.bottombar{position:absolute;left:0;right:0;bottom:0;height:46px;border-top:1px solid var(--line);display:flex;align-items:center;padding:0 22px 0 36px;gap:12px;background:#fff}
+.counter{font-size:13px;color:var(--gray);font-weight:600}
+.counter strong{color:var(--navy)}
+.spacer{flex:1}
+.nav{border:1.5px solid var(--navy);background:#fff;color:var(--navy);border-radius:8px;height:32px;padding:0 16px;font-size:14px;font-weight:700;cursor:pointer}
+.nav.primary{background:var(--navy);color:#fff}
+.nav:disabled{opacity:.3;cursor:default}
+
+/* ---------- 홈으로 ---------- */
+.home{display:inline-flex;align-items:center;gap:6px;height:32px;padding:0 13px;border-radius:8px;border:1.5px solid var(--navy-soft);background:#fff;color:var(--navy2);font-size:13.5px;font-weight:700;line-height:1;text-decoration:none;white-space:nowrap}
+.home svg{width:14px;height:14px;flex:0 0 auto;display:block}
+.home:hover{background:var(--navy-soft);border-color:var(--navy3);color:var(--navy)}
+.home:focus-visible{outline:3px solid var(--amber);outline-offset:2px}
+@media (prefers-reduced-motion:reduce){.home{transition:none}}
+
+/* ① 학습개요 */
+.meta{display:grid;grid-template-columns:auto 1fr;gap:6px 14px;margin:0;font-size:14px}
+.meta dt{font-weight:700;color:var(--gray)}
+.meta dd{margin:0;font-weight:700;color:var(--navy)}
+.prevlink{background:var(--panel);border-radius:10px;padding:12px 14px;font-size:14.5px;line-height:1.55}
+.prevlink small{display:block;font-size:12px;font-weight:800;color:var(--navy3);margin-bottom:3px}
+
+/* ② 학습목표: 목표 → 문항 → 실습 연결 */
+.gmap{display:grid;grid-template-columns:44px 1fr 150px 150px;align-items:stretch;row-gap:12px;column-gap:0}
+.gmap .hd{font-size:12px;font-weight:700;color:var(--gray);padding:0 14px 2px}
+.gmap .gn{background:var(--navy);color:#fff;font-weight:800;font-size:18px;display:grid;place-items:center;border-radius:10px 0 0 10px}
+.gmap .gt{background:var(--panel);padding:14px 18px;font-size:17px;font-weight:700;line-height:1.42;letter-spacing:-.3px;display:flex;align-items:center}
+.gmap .gt b{color:var(--navy)}
+.gmap .ga,.gmap .gp{background:var(--panel);display:flex;align-items:center;padding:0 10px;border-left:2px solid #fff}
+.gmap .gp{border-radius:0 10px 10px 0}
+.jump{border:1.5px solid var(--navy3);background:#fff;border-radius:7px;padding:6px 10px;font-size:13px;font-weight:700;color:var(--navy);cursor:pointer;text-align:left;line-height:1.3;width:100%}
+.jump:hover{background:var(--navy-soft)}
+
+/* ④ 본문 정리 표 */
+.sumtbl{width:100%;border-collapse:separate;border-spacing:0;font-size:14.5px;line-height:1.5}
+.sumtbl th{background:var(--navy);color:#fff;font-weight:800;text-align:left;padding:10px 14px}
+.sumtbl th:first-child{border-radius:10px 0 0 0;width:150px}
+.sumtbl th:last-child{border-radius:0 10px 0 0}
+.sumtbl td{padding:11px 14px;border-bottom:1px solid var(--line);vertical-align:top}
+.sumtbl td:first-child{font-weight:800;color:var(--navy)}
+.sumtbl tr:nth-child(even) td{background:#F8F9FB}
+
+/* ⑤ 형성평가 */
+.qchips{display:flex;gap:6px}
+.qchips span{font-size:11.5px;font-weight:700;color:var(--navy2);background:var(--navy-soft);border-radius:4px;padding:0 7px;line-height:19px}
+h2.stem{font-size:21px;line-height:1.42;font-weight:800}
+.opts{display:grid;gap:9px;align-content:center}
+.opts.ox{grid-template-columns:1fr 1fr}
+.opt{border:1.5px solid var(--line);background:#fff;border-radius:10px;padding:11px 14px;text-align:left;font-size:16px;font-weight:600;cursor:pointer;display:flex;gap:10px;align-items:center}
+.opt .n{flex:0 0 26px;height:26px;border-radius:50%;background:var(--panel);display:grid;place-items:center;font-size:13px;font-weight:800;color:var(--navy)}
+.opts.ox .opt{justify-content:center;font-size:40px;font-weight:800;padding:22px;color:var(--navy)}
+.opt:hover:not(:disabled){border-color:var(--navy3);background:#F8F9FB}
+.opt:disabled{cursor:default}
+.opt.ok{border-color:var(--ok);background:var(--ok-soft);color:var(--ok)}
+.opt.ok .n{background:var(--ok);color:#fff}
+.opt.ng{border-color:var(--ng);background:var(--ng-soft);color:var(--ng)}
+.opt.ng .n{background:var(--ng);color:#fff}
+.fbp{background:var(--panel);border-radius:12px;padding:18px 20px;display:flex;flex-direction:column;gap:10px;font-size:14.5px;line-height:1.6}
+.fbp .empty{color:var(--gray);margin:auto 0}
+.fbp .verdict{font-size:19px;font-weight:800}
+.fbp.ok{background:var(--ok-soft)} .fbp.ok .verdict{color:var(--ok)}
+.fbp.ng{background:var(--ng-soft)} .fbp.ng .verdict{color:var(--ng)}
+.fbp .back{align-self:flex-start}
+.fbp .tally{margin-top:auto;font-size:12.5px;color:var(--gray);font-weight:600}
+
+/* ⑥ 실습 */
+.plabel{font-size:12px;font-weight:800;color:var(--navy3);margin-bottom:6px}
+.pcol{min-height:0;display:flex;flex-direction:column}
+.mbtns{display:flex;flex-wrap:nowrap;gap:3px;margin-bottom:8px}
+.mbtn{border:1px solid var(--line);background:#fff;border-radius:6px;padding:2px 6px;font-size:12px;cursor:pointer;min-width:26px}
+.mbtn.on{background:var(--navy);border-color:var(--navy);color:#fff}
+.ctrl{display:flex;align-items:center;gap:10px;font-size:14px;font-weight:600}
+input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
+.stats{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.stats.three{grid-template-columns:1fr 1fr 1fr}
+.stats div{background:var(--panel);border-radius:10px;padding:8px 12px}
+.stats small{display:block;font-size:11.5px;color:var(--gray);font-weight:600;line-height:1.35}
+.stats strong{font-size:22px;color:var(--navy);letter-spacing:-.4px}
+.pmsg{font-size:14.5px;font-weight:700;min-height:22px;line-height:1.45}
+.pmsg.ok{color:var(--ok)} .pmsg.ng{color:var(--ng)}
+.think{flex:0 0 auto;background:var(--amber-soft);border-radius:10px;padding:9px 14px;font-size:14.5px;font-weight:700;color:var(--amber-ink);display:flex;gap:10px;align-items:baseline}
+.think span{flex:0 0 auto;font-size:12px;font-weight:800}
+.howto{font-size:13.5px;color:var(--gray);line-height:1.5;margin:0}
+.btn{border:0;background:var(--navy);color:#fff;border-radius:8px;height:32px;padding:0 14px;font-size:13.5px;font-weight:700;cursor:pointer}
+.btn.ghost{background:#fff;color:var(--navy);box-shadow:inset 0 0 0 1.5px var(--navy)}
+.pool{flex:1;min-height:0;display:grid;grid-template-columns:1fr 1fr;align-content:start;gap:8px;padding:10px;border:1.5px dashed var(--line);border-radius:10px;background:#FAFBFC}
+.dcard{background:#fff;border:1.5px solid var(--navy3);border-radius:8px;padding:7px 10px;font-size:13.5px;font-weight:600;line-height:1.4;cursor:grab;user-select:none;-webkit-user-select:none;touch-action:none}
+.dcard.sel{box-shadow:0 0 0 3px var(--amber)}
+.dcard.ok{border-color:var(--ok);background:var(--ok-soft);color:var(--ok);cursor:default;font-size:12.5px;padding:5px 8px}
+.dcard.shake{animation:shake .35s;border-color:var(--ng);background:var(--ng-soft)}
+@keyframes shake{25%{transform:translateX(-5px)}75%{transform:translateX(5px)}}
+.ghostc{position:absolute;pointer-events:none;z-index:50;opacity:.92;box-shadow:0 8px 20px rgba(27,42,74,.25);cursor:grabbing}
+.bins{flex:1 0 auto;min-height:0;display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.bin .dcard{font-size:12px;padding:3px 7px;line-height:1.3}
+.p2row{display:flex;gap:10px;align-items:center}.p2row .pmsg{flex:1;margin:0}.p2row .btn{flex:0 0 auto}
+.bin{border:1.5px solid var(--line);border-radius:10px;padding:6px;display:flex;flex-direction:column;gap:6px;background:#fff;cursor:pointer;min-height:0}
+.bin h4{margin:0;background:var(--navy);color:#fff;border-radius:6px;text-align:center;font-size:14px;padding:4px}
+.bin.hover{border-color:var(--amber);background:var(--amber-soft)}
+.res{display:none;flex-direction:column;gap:8px}
+.res.on{display:flex}
+
+/* ⑦ 용어해설·참고자료 */
+.gl{display:grid;grid-template-columns:1fr 1fr;grid-template-rows:repeat(3,1fr);gap:10px 22px;min-height:0}
+.gi{border-top:2px solid var(--navy);padding:8px 0 0;display:flex;flex-direction:column;gap:3px;min-height:0}
+.gi .t{font-size:16.5px;font-weight:800;color:var(--navy);display:flex;gap:6px;align-items:baseline;flex-wrap:wrap}
+.gi .t em{font-style:normal;font-weight:500;font-size:12.5px;color:var(--gray)}
+.gi .t i{font-style:normal;font-size:12px;font-weight:800;color:var(--navy3);width:22px}
+.gi .d{font-size:14px;line-height:1.5}
+.gi .e{font-size:12.5px;line-height:1.45;color:var(--gray)}
+.gi .e strong{color:var(--navy3)}
+.refs{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:8px;font-size:13.5px;line-height:1.5}
+.refs li{display:grid;grid-template-columns:30px 1fr;gap:4px}
+.refs li span{font-weight:800;color:var(--navy3)}
+.refs a{color:var(--navy2);word-break:break-all}
+.nextmod{background:var(--navy);color:#fff;border-radius:12px;padding:18px 22px;display:flex;flex-direction:column;gap:6px}
+.nextmod small{font-size:12px;font-weight:700;color:#A9B6CF}
+.nextmod strong{font-size:19px;line-height:1.45;letter-spacing:-.3px}
+
+.rotate{position:fixed;left:0;right:0;bottom:max(14px,env(safe-area-inset-bottom));text-align:center;font-size:13px;color:#3A4560;display:none}
+@media (orientation:portrait) and (max-width:700px){.rotate{display:block}}
+</style>
+</head>
+<body>
+<div class="stage" id="stage">
+  <header class="topbar">
+    <!-- [교체] 모듈명 / 과정명·모듈 번호 (장·절 번호는 쓰지 않음) -->
+    <div class="brand" id="brand">p-해킹<small>결과 해석과 인과 · M27</small></div>
+    <nav class="rail" id="rail" aria-label="학습 단계"><div class="track"><div class="fill" id="fill"></div></div></nav>
+  </header>
+
+  <main class="viewport" id="vp">
+    <!-- ① 학습개요 ─────────────────────────────── -->
+    <section class="slide" data-step="0">
+      <div class="sh"><div class="sec">학습개요</div>
+        <h2 class="big">p &lt; 0.05를 ‘만들어 내는’ 분석을 알아보고 막는 법을 익힙니다</h2></div>
+      <div class="body split">
+        <div class="fig"><svg id="m27-ov" viewBox="0 0 440 260" role="img" aria-label="p-해킹의 세 가지 예와 예방하는 노력, 가설검정 결과를 읽을 때 확인할 항목의 흐름"></svg></div>
+        <div class="side">
+          <div class="prevlink"><small>지난 모듈에서는</small>베이즈 인수, 유의한 결과 중 틀린 것의 비율인 허위발견율, 좋은 가설을 세우는 일의 중요성을 배웠습니다.<small style="margin-top:8px">이번 모듈에서는</small>가설검정을 사용하는 쪽의 문제인 p-해킹의 구체적인 예와 이를 예방하는 노력, 가설검정 결과를 읽을 때 확인할 항목을 배웁니다.</div>
+          <dl class="meta"><dt>학습 시간</dt><dd>약 40분</dd><dt>본문</dt><dd>소단원 3개</dd><dt>실습</dt><dd>조작형 · 분류형 · 추정형</dd></dl>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" data-step="0">
+      <div class="sh"><div class="sec">학습개요 · 이 모듈의 예시</div><h2>냉각 첨가제 개선 프로젝트에 숨어 있는 p-해킹을 찾습니다</h2></div>
+      <div class="body split">
+        <div class="fig"><svg id="m27-case" viewBox="0 0 440 250" role="img" aria-label="품질팀의 세 가지 장면: 시험편을 늘려 가며 검정, 첨가제 20종 중 유의한 것만 보고, 센서 변수 100개의 상관 검정"></svg></div>
+        <div class="side">
+          <ul class="key"><li>수치를 고치지 않아도 p-해킹이 될 수 있습니다.</li></ul>
+          <p class="exp">품질팀이 냉각 첨가제로 강판 인장강도를 높이는 프로젝트를 진행합니다(예시값). 유의하지 않으면 시험편을 몇 장씩 더 측정하고, 후보 첨가제 20종을 차례로 시험해 유의한 것만 보고하며, 압연 설비 센서 변수 100개의 상관을 모두 검정합니다. 효과가 전혀 없는 상황에서도 이런 방식이 ‘유의한 결과’를 얼마나 만들어 내는지 살펴봅니다.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ② 학습목표 ─────────────────────────────── -->
+    <section class="slide" data-step="1">
+      <div class="sh"><div class="sec">학습목표</div><h2>이 모듈을 마치면 이렇게 할 수 있습니다</h2></div>
+      <div class="body full" style="align-content:center">
+        <div class="gmap">
+          <div></div><div class="hd">목표</div><div class="hd">확인하는 문항</div><div class="hd">연결 실습</div>
+          <div class="gn">1</div><div class="gt"><span>p-해킹과 HARKing 사례를 예방법과 <b>구분한다</b>.</span></div>
+          <div class="ga"><button class="jump" data-jump="q1">문항 1·2</button></div><div class="gp"><button class="jump" data-jump="p2">실습 2 분류</button></div>
+          <div class="gn">2</div><div class="gt"><span>다중성으로 늘어나는 위양성과 교정 기준을 <b>계산한다</b>.</span></div>
+          <div class="ga"><button class="jump" data-jump="q3">문항 3·4</button></div><div class="gp"><button class="jump" data-jump="p3">실습 3 추정</button></div>
+          <div class="gn">3</div><div class="gt"><span>결과를 보며 표본을 늘리는 위험과 예방책을 <b>판단한다</b>.</span></div>
+          <div class="ga"><button class="jump" data-jump="q5">문항 5·6</button></div><div class="gp"><button class="jump" data-jump="p1">실습 1 조작</button></div>
+        </div>
+      </div>
+      <p class="foot">버튼을 누르면 해당 문항이나 실습 화면으로 바로 이동합니다.</p>
+    </section>
+
+    <!-- ③ 일상의 예시 ─────────────────────────────── -->
+    <section class="slide" data-step="2">
+      <div class="sh"><div class="sec">일상의 예시 1/5</div><h2>“한 판만 더!” 이길 때까지 하면 결국 이깁니다</h2></div>
+      <div class="body split">
+        <div class="fig"><svg viewBox="0 0 440 250" role="img" aria-label="가위바위보에서 질 때마다 한 판 더를 외쳐 결국 이긴 판에서 멈춤">
+          <g font-size="12" font-weight="800" text-anchor="middle">
+            <rect x="24" y="60" width="72" height="70" rx="12" fill="#FBE4E1"/><text x="60" y="92" fill="#B42318">1판</text><text x="60" y="114" fill="#B42318">짐</text>
+            <rect x="110" y="60" width="72" height="70" rx="12" fill="#FBE4E1"/><text x="146" y="92" fill="#B42318">2판</text><text x="146" y="114" fill="#B42318">짐</text>
+            <rect x="196" y="60" width="72" height="70" rx="12" fill="#F3F5F9"/><text x="232" y="92" fill="#6B7280">3판</text><text x="232" y="114" fill="#6B7280">비김</text>
+            <rect x="282" y="60" width="72" height="70" rx="12" fill="#E3F1EA" stroke="#23704F" stroke-width="2.5"/><text x="318" y="92" fill="#23704F">4판</text><text x="318" y="114" fill="#23704F">이김!</text>
+          </g>
+          <text x="388" y="100" font-size="22" font-weight="800" fill="#1B2A4A">■</text><text x="398" y="140" text-anchor="middle" font-size="11" font-weight="800" fill="#1B2A4A">여기서 멈춤</text>
+          <text x="104" y="160" text-anchor="middle" font-size="11.5" font-weight="700" fill="#B42318">“한 판만 더!”</text><text x="190" y="160" text-anchor="middle" font-size="11.5" font-weight="700" fill="#B42318">“한 판만 더!”</text>
+          <text x="220" y="212" text-anchor="middle" font-size="12" font-weight="700" fill="#1B2A4A">“내가 가위바위보를 더 잘해!” — 정말일까?</text>
+        </svg></div>
+        <div class="side">
+          <ul class="key"><li>멈추는 시점을 결과에 맞춰 고르면 안 됩니다.</li></ul>
+          <p class="exp">가위바위보에서 질 때마다 “한 판만 더!”를 외치고, 이긴 순간 바로 멈추면 언젠가는 반드시 ‘이긴 상태’로 끝납니다. 그렇다고 가위바위보를 더 잘한다고 할 수는 없습니다. 몇 판을 할지 미리 정하지 않고 결과를 보며 멈추는 시점을 고르면, 운이 좋았던 순간을 실력처럼 보이게 만들 수 있습니다.</p>
+          <p class="next"><span>본문에서</span>4-1 결과를 보며 표본 늘리기로 이어집니다.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" data-step="2">
+      <div class="sh"><div class="sec">일상의 예시 2/5</div><h2>화살을 먼저 쏘고 꽂힌 자리에 과녁을 그리면 백발백중입니다</h2></div>
+      <div class="body split">
+        <div class="fig"><svg viewBox="0 0 440 250" role="img" aria-label="벽에 화살이 여기저기 꽂힌 뒤 한 화살 주위에 과녁을 그림">
+          <rect x="24" y="30" width="392" height="170" rx="12" fill="#F3F5F9"/>
+          <g stroke="#6B7280" stroke-width="2"><line x1="70" y1="70" x2="56" y2="58"/><line x1="140" y1="150" x2="126" y2="138"/><line x1="200" y1="80" x2="186" y2="68"/><line x1="330" y1="160" x2="316" y2="148"/><line x1="360" y1="70" x2="346" y2="58"/></g>
+          <g fill="#6B7280"><circle cx="70" cy="70" r="3"/><circle cx="140" cy="150" r="3"/><circle cx="200" cy="80" r="3"/><circle cx="330" cy="160" r="3"/><circle cx="360" cy="70" r="3"/></g>
+          <g fill="none" stroke="#B42318" stroke-width="2.5"><circle cx="260" cy="120" r="34"/><circle cx="260" cy="120" r="22"/><circle cx="260" cy="120" r="10"/></g>
+          <line x1="260" y1="120" x2="246" y2="108" stroke="#1B2A4A" stroke-width="2.5"/><circle cx="260" cy="120" r="3.5" fill="#1B2A4A"/>
+          <text x="220" y="226" text-anchor="middle" font-size="12" font-weight="700" fill="#1B2A4A">맞힌 뒤에 그린 과녁 → “정중앙 명중!”</text>
+        </svg></div>
+        <div class="side">
+          <ul class="key"><li>결과를 본 뒤 목표를 정하면 무엇이든 맞힙니다.</li></ul>
+          <p class="exp">화살을 여기저기 쏜 다음, 하나가 꽂힌 자리에 과녁을 그려 넣으면 정중앙에 명중한 명사수처럼 보입니다. 쏘기 전에 과녁을 정해 두지 않았기 때문에 생기는 착시입니다. 데이터 분석에서도 여러 가지를 시험한 뒤 우연히 유의하게 나온 결과에 맞춰 가설을 세우면, 처음부터 그 가설을 확인한 것처럼 보입니다.</p>
+          <p class="next"><span>본문에서</span>4-1 HARKing으로 이어집니다.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" data-step="2">
+      <div class="sh"><div class="sec">일상의 예시 3/5</div><h2>당구에서는 넣을 공과 구멍을 먼저 말하고 칩니다</h2></div>
+      <div class="body split">
+        <div class="fig"><svg viewBox="0 0 440 250" role="img" aria-label="당구대에서 3번 공을 오른쪽 위 구멍에 넣겠다고 먼저 선언">
+          <rect x="40" y="40" width="360" height="170" rx="14" fill="#2F6B4F"/><rect x="54" y="54" width="332" height="142" rx="6" fill="#3E8A64"/>
+          <g fill="#1B2A4A"><circle cx="58" cy="58" r="10"/><circle cx="220" cy="54" r="10"/><circle cx="382" cy="58" r="10"/><circle cx="58" cy="192" r="10"/><circle cx="220" cy="196" r="10"/><circle cx="382" cy="192" r="10"/></g>
+          <circle cx="150" cy="140" r="11" fill="#fff"/><circle cx="300" cy="100" r="11" fill="#E0A100"/><text x="300" y="104" text-anchor="middle" font-size="11" font-weight="800" fill="#1B2A4A">3</text>
+          <path d="M310 92 L374 64" stroke="#fff" stroke-width="2" stroke-dasharray="5 4"/>
+          <rect x="70" y="66" width="150" height="34" rx="8" fill="#fff"/><text x="145" y="88" text-anchor="middle" font-size="12" font-weight="800" fill="#1B2A4A">“3번 공, 오른쪽 위!”</text>
+          <text x="220" y="232" text-anchor="middle" font-size="12" font-weight="700" fill="#1B2A4A">먼저 선언 → 우연히 들어간 공은 인정하지 않음</text>
+        </svg></div>
+        <div class="side">
+          <ul class="key"><li>무엇을 확인할지 미리 밝혀 두면 착시를 막습니다.</li></ul>
+          <p class="exp">당구 경기에서는 칠 때마다 어느 공을 어느 구멍에 넣을지 먼저 말하고, 선언하지 않은 공이 우연히 들어가면 인정하지 않는 방식이 있습니다. 결과를 본 뒤에 ‘원래 그걸 노렸다’고 말할 수 없게 만드는 장치입니다. 연구에서도 가설과 분석 방법을 실험 전에 밝혀 두면 결과에 맞춰 가설을 바꾸는 일을 막을 수 있습니다.</p>
+          <p class="next"><span>본문에서</span>4-2 p-해킹을 예방하는 노력으로 이어집니다.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" data-step="2">
+      <div class="sh"><div class="sec">일상의 예시 4/5</div><h2>경고등이 꺼져 있다고 고장이 없다는 뜻은 아닙니다</h2></div>
+      <div class="body split">
+        <div class="fig"><svg viewBox="0 0 440 250" role="img" aria-label="경고등이 켜지면 이상 가능성이 있지만, 꺼져 있다고 이상이 없음을 증명하지는 않음">
+          <rect x="24" y="36" width="186" height="160" rx="14" fill="#FBE4E1"/><circle cx="117" cy="92" r="24" fill="#E0A100"/><text x="117" y="99" text-anchor="middle" font-size="20" font-weight="800" fill="#fff">!</text>
+          <text x="117" y="146" text-anchor="middle" font-size="12" font-weight="800" fill="#B42318">켜짐</text><text x="117" y="170" text-anchor="middle" font-size="11" fill="#22262E">점검해 볼 신호</text>
+          <rect x="230" y="36" width="186" height="160" rx="14" fill="#F3F5F9"/><circle cx="323" cy="92" r="24" fill="#D1D5DB"/>
+          <text x="323" y="146" text-anchor="middle" font-size="12" font-weight="800" fill="#1B2A4A">꺼짐</text><text x="323" y="170" text-anchor="middle" font-size="11" fill="#22262E">‘고장 없음’ 증명은 아님</text>
+          <text x="220" y="226" text-anchor="middle" font-size="12" font-weight="700" fill="#1B2A4A">신호가 무엇을 말하고, 무엇을 말하지 않는지 구분</text>
+        </svg></div>
+        <div class="side">
+          <ul class="key"><li>신호가 말하지 않는 것까지 읽어 내면 안 됩니다.</li></ul>
+          <p class="exp">자동차 계기판의 경고등이 켜지면 점검해 볼 신호지만, 꺼져 있다고 해서 고장이 전혀 없다는 증명은 아닙니다. 센서가 감지하지 못하는 문제도 있기 때문입니다. 가설검정 결과도 마찬가지로 p &lt; 0.05나 p ≥ 0.05가 무엇을 말해 주고 무엇을 말해 주지 않는지 정확히 구분해서 읽어야 합니다.</p>
+          <p class="next"><span>본문에서</span>4-3 가설검정을 이해할 때 확인할 항목으로 이어집니다.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" data-step="2">
+      <div class="sh"><div class="sec">일상의 예시 5/5</div><h2>현장에서는? 개선 보고서의 ‘유의함’은 어떻게 만들어졌을까요?</h2></div>
+      <div class="body split even">
+        <div class="fig"><svg viewBox="0 0 420 250" role="img" aria-label="네 장면이 p-해킹으로 이어지는 그림">
+          <defs><marker id="b2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10z" fill="#5B6E97"/></marker></defs>
+          <g font-size="13" font-weight="700" fill="#1B2A4A" text-anchor="middle">
+            <rect x="14" y="18" width="150" height="44" rx="10" fill="#fff" stroke="#5B6E97" stroke-width="1.5"/><text x="89" y="45">이길 때까지 한 판 더</text>
+            <rect x="14" y="74" width="150" height="44" rx="10" fill="#fff" stroke="#5B6E97" stroke-width="1.5"/><text x="89" y="101">쏜 뒤에 과녁 그리기</text>
+            <rect x="14" y="130" width="150" height="44" rx="10" fill="#fff" stroke="#5B6E97" stroke-width="1.5"/><text x="89" y="157">먼저 선언하고 치기</text>
+            <rect x="14" y="186" width="150" height="44" rx="10" fill="#fff" stroke="#5B6E97" stroke-width="1.5"/><text x="89" y="213">신호를 바르게 읽기</text>
+          </g>
+          <g stroke="#5B6E97" stroke-width="2" fill="none"><path d="M166 40 C220 40 220 112 254 120" marker-end="url(#b2)"/><path d="M166 96 C210 96 220 118 254 122" marker-end="url(#b2)"/><path d="M166 152 C210 152 220 130 254 128" marker-end="url(#b2)"/><path d="M166 208 C220 208 220 138 254 130" marker-end="url(#b2)"/></g>
+          <rect x="258" y="84" width="150" height="82" rx="12" fill="#1B2A4A"/>
+          <text x="333" y="122" text-anchor="middle" font-size="17" font-weight="800" fill="#fff">p-해킹</text>
+          <text x="333" y="146" text-anchor="middle" font-size="11" fill="#C9D3E6">알아보기 · 막기 · 읽기</text>
+        </svg></div>
+        <div class="side">
+          <p class="exp">네 장면은 결과를 보며 멈추는 시점을 고르는 일, 결과를 본 뒤 목표를 정하는 일, 무엇을 확인할지 미리 선언하는 예방책, 신호가 말하는 것과 말하지 않는 것을 구분하는 읽기로 이어집니다. 현장의 개선 보고서에 적힌 ‘유의함’도 어떤 순서로 분석해 얻었는지 확인해야 믿을 수 있습니다.</p>
+          <p class="next"><span>다음 질문</span>p-해킹이란 정확히 무엇일까?</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ④ 본문 ─────────────────────────────── -->
+    <section class="slide" data-step="3" id="s-4-1a">
+      <div class="sh"><div class="sec">4-1 p-해킹이란?</div><h2><span class="q">Q</span>숫자를 고치지 않아도 p값을 조작할 수 있을까요?</h2></div>
+      <div class="body split even">
+        <div class="fig"><svg id="m27-def" viewBox="0 0 420 270" role="img" aria-label="p-해킹의 세 가지 예: p가 0.05 미만이 될 때까지 표본 늘리기, 0.07이어서 10개 추가, 여러 요인 중 유의한 것만 보고"></svg></div>
+        <div class="side">
+          <ul class="key"><li><b>p-해킹</b>: p &lt; 0.05가 되도록 설계·해석</li><li>의도하지 않아도 저지를 수 있습니다.</li></ul>
+          <p class="exp">지금까지는 가설검정 자체의 문제점을 알아보았습니다. 이제 가설검정을 사용하는 쪽의 문제인 p-해킹을 살펴봅니다. p-해킹이란 의도하든 의도하지 않든 p값을 원하는 방향(유의수준 0.05 미만)으로 조작하는 행위입니다. 수치를 고치는 것이 아니라 p값이 0.05 미만이 되도록 실험을 설계하거나 해석하는 것을 말합니다. 이로 인해 실제로는 귀무가설이 옳음에도 대립가설이 옳다는 오판이 초래되고, 그 결과 재현성이 낮아집니다. ‘의도하지 않았는데 눈치채 보니 p-해킹’인 상황이 될 수 있다는 점이 무섭습니다.</p>
+          <p class="next"><span>다음 질문</span>표본을 늘려 가며 보면 왜 안 될까?</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" data-step="3" id="s-4-1b">
+      <div class="sh"><div class="sec">4-1 p-해킹이란?</div><h2><span class="q">Q</span>결과를 보며 표본을 늘리면 위양성은 얼마나 늘까요?</h2></div>
+      <div class="body split even">
+        <div class="fig"><svg id="m27-seq" viewBox="0 0 420 270" role="img" aria-label="귀무가설이 옳을 때 표본을 1장씩 늘리며 검정한 p값의 경로 세 개, 27장째, 45장째, 78장째에 0.05 아래로 내려감"></svg></div>
+        <div class="side">
+          <ul class="key"><li>1장씩 늘리며 보면 위양성 약 30%</li><li>p = 0.07이라 10장 추가해도 약 6%</li></ul>
+          <p class="exp">두 집단이 동일해 귀무가설이 옳은 상황에서 각 10장으로 시작해 1장씩 늘리며 t검정을 하고, p &lt; 0.05가 되면 멈추는 시뮬레이션을 해 보았습니다. 최대 100장까지 4,000번 반복하자 29.4%가 어딘가에서 p &lt; 0.05에 도달했습니다. 유의수준이 0.05이니 위양성은 5%여야 하는데, 표본을 늘려 가다 보면 적어도 한 번은 p &lt; 0.05가 될 확률이 커지기 때문입니다. 각 30장일 때 0.05 ≤ p &lt; 0.1이면 10장씩 추가해 다시 검정하는 방식도 4만 번 시뮬레이션에서 약 6%로, 설정한 유의수준을 벗어납니다.</p>
+          <p class="next"><span>다음 질문</span>여러 요인 중 유의한 것만 보고하면?</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" data-step="3" id="s-4-1c">
+      <div class="sh"><div class="sec">4-1 p-해킹이란?</div><h2><span class="q">Q</span>유의한 것만 골라 가설인 양 보고하면 무엇이 문제일까요?</h2></div>
+      <div class="body split even">
+        <div class="figcol">
+          <div class="fig"><svg id="m27-hark" viewBox="0 0 420 150" role="img" aria-label="첨가제 A부터 T까지 20종을 시험해 G만 p 0.04, 이를 처음부터의 가설로 보고하면 HARKing"></svg></div>
+          <div class="math">
+            <div class="mt">핵심 수학 개념 · 효과 없는 후보 k개를 검정할 때</div>
+            <div class="f">평균 kα개,  P(1개 이상 유의) = 1 − (1 − α)<sup>k</sup></div>
+            <div class="r"><span>계산</span><span>k = 20: 20 × 0.05 = 1종, 1 − 0.95²⁰ ≈ 0.64</span></div>
+            <div class="r"><span>대책</span><span>예비 실험 → 가설 → 새 데이터로 본 실험, 또는 모두 보고</span></div>
+          </div>
+        </div>
+        <div class="side">
+          <ul class="key"><li><b>HARKing</b>: 결과를 보고 나서 가설 만들기</li><li><b>체리 피킹</b>·<b>다중성 문제</b>와 같은 뿌리</li></ul>
+          <p class="exp">첨가제 A, B, C…를 차례로 시험해 7번째인 G에서 p &lt; 0.05를 얻고 ‘G에 효과가 있다는 가설을 세우고 검증했다’고 쓰면, p-해킹의 연관 개념인 HARKing의 예입니다. 더 넓게는 편리한 근거만 골라 자기 이론을 뒷받침하는 것을 체리 피킹이라 합니다. 전혀 효과가 없는 첨가제 20종을 각각 유의수준 0.05로 검정해도 평균 1종이 유의해지고, 적어도 1종이 유의할 확률은 64%입니다. 이는 검정을 반복할 때 나타나는 다중성 문제와 같습니다. 버린 결과는 논문에 실리지 않으니 독자는 그 존재조차 알 수 없어 HARKing을 눈치채기 어렵습니다<span class="cite">[1]</span>.</p>
+          <p class="next"><span>다음 질문</span>p-해킹은 어떻게 예방할까?</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" data-step="3" id="s-4-2a">
+      <div class="sh"><div class="sec">4-2 p-해킹을 예방하기 위한 노력</div><h2><span class="q">Q</span>여러 후보를 시험하는 것 자체가 잘못일까요?</h2></div>
+      <div class="body split even">
+        <div class="fig"><svg id="m27-two" viewBox="0 0 420 270" role="img" aria-label="탐색형 예비 실험으로 가설을 세우고, 범위를 좁혀 새 데이터로 가설검증형 본 실험을 수행"></svg></div>
+        <div class="side">
+          <ul class="key"><li><b>탐색형 연구</b>로 가설을 찾고</li><li><b>가설검증형 연구</b>로 새 데이터에서 확인</li></ul>
+          <p class="exp">HARKing이 발생하지 않도록 하려면 첨가제 A, B, C…처럼 여러 가지를 시험해 보는 것은 예비 실험으로 수행하고, 여기서 얻은 결과를 바탕으로 가설을 세워 본 실험에서 범위를 좁혀 다시 실험하는 것이 바람직합니다. 단, 본 실험에서 얻은 새로운 데이터는 독립적으로 해석해야 하며, 예비 실험 데이터와 섞으면 유의한 결과가 되기 쉬운 편향이 생겨 위양성 확률이 유의수준보다 커집니다. 이렇게 전체를 탐색적으로 해석하는 연구를 탐색형 연구, 가설을 세우고 검증하는 연구를 가설검증형 연구라 합니다.</p>
+          <p class="next"><span>다음 질문</span>탐색형 연구밖에 할 수 없다면?</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" data-step="3" id="s-4-2b">
+      <div class="sh"><div class="sec">4-2 p-해킹을 예방하기 위한 노력</div><h2><span class="q">Q</span>센서 변수 100개의 상관을 모두 검정하면 어떻게 될까요?</h2></div>
+      <div class="body split even">
+        <div class="figcol">
+          <div class="fig"><svg id="m27-pairs" viewBox="0 0 420 150" role="img" aria-label="변수 100개에서 4,950쌍, 상관이 없어도 평균 247.5쌍이 유의, 본페로니 기준 0.00001"></svg></div>
+          <div class="math">
+            <div class="mt">핵심 수학 개념 · 본페로니 교정</div>
+            <div class="f">각 검정의 기준 = α ÷ 검정 횟수</div>
+            <div class="r"><span>기호</span><span><sub>100</sub>C<sub>2</sub> = 100 × 99 ÷ 2 = 4,950쌍</span></div>
+            <div class="r"><span>계산</span><span>0.05 ÷ 4,950 ≈ 0.0000101 (보정 없으면 247.5쌍 유의)</span></div>
+          </div>
+        </div>
+        <div class="side">
+          <ul class="key"><li><b>본페로니 교정</b>: α를 검정 횟수로 나눔</li><li>탐색형 연구에서 다중성을 놓치기 쉽습니다.</li></ul>
+          <p class="exp">가설검증형 연구에 따라 올바르게 가설검정을 사용하는 것이 이상적입니다. 탐색형 연구밖에 할 수 없는 상황이라면 실험이나 해석에 사용한 변수를 모두 보고하고, 검정을 반복한 횟수로 유의수준 α를 나누는 본페로니 교정으로 이를 보정해야 합니다. 분산분석 등 여러 집단 간 비교에서 다중비교 보정은 잘 알려졌으나, 탐색형 연구에서는 검정의 다중성을 놓치기 쉽습니다. 예를 들어 압연 설비 센서 변수 100개 사이의 상관계수를 모두 검정하면 4,950쌍이 생기며, 모두 독립이라도 α = 0.05라면 유의한 상관이 평균 약 250쌍 나타납니다.</p>
+          <p class="next"><span>다음 질문</span>결과를 본 뒤 가설을 바꾸지 못하게 하려면?</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" data-step="3" id="s-4-2c">
+      <div class="sh"><div class="sec">4-2 p-해킹을 예방하기 위한 노력</div><h2><span class="q">Q</span>가설을 나중에 바꾸지 못하게 하는 제도가 있을까요?</h2></div>
+      <div class="body split even">
+        <div class="fig"><svg id="m27-prereg" viewBox="0 0 420 270" role="img" aria-label="사전 등록은 계획 등록 후 데이터 수집과 분석, HARKing은 데이터를 본 뒤 가설을 만듦"></svg></div>
+        <div class="side">
+          <ul class="key"><li><b>사전 등록</b>: 연구 전에 계획을 등록</li><li>결과와 관계없이 채택하는 제도도 늘고 있음</li></ul>
+          <p class="exp">얻은 데이터를 주물러 가설을 끌어내고 마치 처음부터 그렇게 생각한 것처럼 보고하는 문제를 예방하고자, 최근에는 사전 등록이라는 제도를 널리 사용합니다. 사전 등록이란 연구를 실시하기 전에 가설과 실험 설계, 분석 방법 등의 연구 계획을 등록하는 것입니다. 등록한 내용에 따라 연구를 진행하므로 데이터를 얻은 다음 가설을 세우는 HARKing을 막을 수 있습니다<span class="cite">[2]</span>. 결과가 p &lt; 0.05가 아닐 때를 고민하는 연구자를 위해, 사전에 심사를 완료해 결과가 어떻든 채택하는 방식이나 부정적인 데이터를 게재하는 저널도 늘어나는 추세입니다.</p>
+          <p class="next"><span>다음 질문</span>p값 문제를 어떻게 정리할까?</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" data-step="3" id="s-4-3a">
+      <div class="sh"><div class="sec">4-3 가설검정을 이해할 때 확인할 항목</div><h2><span class="q">Q</span>p값 문제에 대처하려면 무엇을 염두에 두어야 할까요?</h2></div>
+      <div class="body split even">
+        <div class="fig"><svg id="m27-list" viewBox="0 0 420 270" role="img" aria-label="p값 관련 문제에 대처하기 위한 여섯 가지 항목"></svg></div>
+        <div class="side">
+          <ul class="key"><li>완벽한 답은 없지만 대처할 수 있습니다.</li><li>여섯 가지를 늘 염두에 둡니다.</li></ul>
+          <p class="exp">가설검정 문제, 재현성 문제, 그리고 p-해킹을 어떻게 방지할 것인가 같은 문제에 대한 완벽한 답은 아직 없습니다. 그러나 다음 내용을 염두에 두면 많은 부분에 대처할 수 있습니다. p값을 제대로 이해하고 사용하는 것, 가설검정을 반복하면 다중성 문제가 발생해 위양성이 증가한다는 것을 이해하는 것, 탐색형 연구와 가설검증형 연구의 차이를 이해하는 것, 실시한 실험이나 해석은 제대로 보고하는 것, 재현성이 있는지 염두에 두고 가능하다면 재실험해 확인하는 것, 그리고 좋은 가설을 세우는 것입니다.</p>
+          <p class="next"><span>다음 질문</span>흔히 하는 오해는 무엇일까?</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" data-step="3" id="s-4-3b">
+      <div class="sh"><div class="sec">4-3 가설검정을 이해할 때 확인할 항목</div><h2><span class="q">Q</span>가설검정 결과를 읽을 때 자주 하는 오해는 무엇일까요?</h2></div>
+      <div class="body split even">
+        <div class="fig"><svg id="m27-myth" viewBox="0 0 420 270" role="img" aria-label="p값과 유의성에 관한 흔한 오해 여덟 가지와 바른 이해"></svg></div>
+        <div class="side">
+          <ul class="key"><li>p값 ≠ 귀무가설이 옳을 확률</li><li>p ≥ 0.05 ≠ 효과가 없음을 입증</li></ul>
+          <p class="exp">자주 오해하는 지점을 소개한 자료에서 몇 가지를 정리했습니다<span class="cite">[3]</span>. p값은 귀무가설이 옳을 확률이 아니며, ‘우연만으로 관찰 데이터가 나타날 확률’도 아닙니다. 귀무가설이 옳다는 가정하에 그 데이터 또는 그보다 극단적인 데이터가 나타날 확률이라면 옳습니다. p ≥ 0.05는 귀무가설이 옳다거나 효과가 없음을 입증했다는 뜻이 아니고, 유의하지 않다고 효과크기가 작다는 뜻도 아닙니다. 또 p값은 p &lt; 0.02나 p &gt; 0.05처럼 부등호로 쓰기보다 p = 0.015처럼 정확한 값을 쓰는 것이 바람직하며, 검정 결과는 단순한 통계적 결론에 지나지 않으므로 현상의 의미까지 말해 주지는 않습니다.</p>
+          <p class="next"><span>정리</span>p-해킹과 예방법을 정리해 봅시다.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" data-step="3" id="s-4-sum">
+      <div class="sh"><div class="sec">4-4 정리</div><h2>계획을 먼저 정하고, 모두 보고하고, 검정 횟수만큼 보정합니다</h2></div>
+      <div class="body full" style="align-content:center">
+        <table class="sumtbl">
+          <thead><tr><th>구분</th><th>핵심</th><th>이 모듈의 예</th></tr></thead>
+          <tbody>
+            <tr><td>표본 늘리기</td><td>결과를 보며 n을 늘리면 위양성 &gt; α</td><td>1장씩 최대 100장 → 29.4%</td></tr>
+            <tr><td>HARKing</td><td>결과를 보고 가설을 만듦, 다중성 문제와 같음</td><td>효과 없는 20종 → 적어도 1종 유의 64%</td></tr>
+            <tr><td>예방 노력</td><td>탐색형과 가설검증형 분리, 본페로니 교정, 사전 등록</td><td>4,950쌍 → 기준 0.05 ÷ 4,950</td></tr>
+            <tr><td>바른 읽기</td><td>p값 ≠ 귀무가설이 옳을 확률, p ≥ 0.05 ≠ 효과 없음</td><td>p는 정확한 값으로 기재</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="next"><span>형성평가로</span>이제 같은 예시로 문제를 풀어 봅니다.</p>
+    </section>
+
+    <!-- ⑤ 형성평가: 스크립트의 QUIZ 배열로 만듭니다 -->
+
+    <!-- ⑥ 실습 1 · 조작형 (모듈 전용) ─────────────── -->
+    <section class="slide" data-step="5" id="p1">
+      <div class="sh"><div class="sec">실습 1 · 조작형</div><h2>목표: 확인 간격과 최대 표본크기에 따라 위양성이 얼마나 늘어나는지 봅니다</h2></div>
+      <div class="body split">
+        <div class="pcol" style="gap:8px">
+          <div class="plabel" style="margin:0">해보기 · 효과가 없는 첨가제를 각 10장부터 시험하며, 몇 장마다 p값을 확인할지와 최대 몇 장까지 늘릴지 정하세요</div>
+          <div class="mbtns" id="m27-st" style="gap:6px"></div>
+          <div class="ctrl">최대 표본<input type="range" id="m27-mx" min="0" max="9" step="1" value="9" aria-label="최대 표본크기"><strong id="m27-mxv" style="min-width:48px;text-align:right">-</strong></div>
+          <div class="fig" style="flex:1"><svg id="m27-p1-svg" viewBox="0 0 470 170" role="img" aria-label="최대 표본크기에 따른 위양성 비율 곡선"></svg></div>
+        </div>
+        <div class="pcol" style="gap:10px;justify-content:center">
+          <div class="plabel" style="margin:0">결과 확인 (4,000번 시뮬레이션)</div>
+          <div class="stats three"><div><small>위양성 비율</small><strong id="m27-fp">-</strong></div><div><small>목표 α</small><strong>5%</strong></div><div><small>α의 몇 배</small><strong id="m27-x">-</strong></div></div>
+          <p class="howto">도전: 위양성을 목표 5% 근처로 유지하는 설정을 찾아보세요.</p>
+          <p class="pmsg" id="m27-msg"></p>
+          <div class="think"><span>생각해보기</span>표본크기를 미리 정해 두는 것이 왜 가장 확실한 예방책일까요?</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ⑥ 실습 2 · 분류형 ─────────────────────── -->
+    <section class="slide" data-step="5" id="p2">
+      <div class="sh"><div class="sec">실습 2 · 분류형</div><h2>목표: 개선 프로젝트의 행동을 p-해킹 유형과 예방법으로 나눕니다</h2></div>
+      <div class="body split even">
+        <div class="pcol">
+          <div class="plabel">해보기 · 결과를 본 뒤 무엇을 바꿨는지, 아니면 미리 정해 두었는지 생각하며 칸에 놓으세요</div>
+          <div class="pool" id="p2-pool"></div>
+        </div>
+        <div class="pcol" style="gap:8px">
+          <div class="plabel" style="margin:0">결과 확인 · <span id="p2-count">0 / 0</span></div>
+          <div class="bins" id="p2-bins"></div>
+          <div class="p2row"><p class="pmsg" id="p2-msg"></p><button class="btn ghost" id="p2-reset">다시 하기</button></div>
+          <div class="think"><span>생각해보기</span>우리 부서의 보고 관행 중 바꿔야 할 것은 무엇일까요?</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ⑥ 실습 3 · 추정형 (모듈 전용) ─────────────── -->
+    <section class="slide" data-step="5" id="p3">
+      <div class="sh"><div class="sec">실습 3 · 추정형</div><h2>목표: 변수 수에 따라 우연히 유의해지는 상관의 개수를 예측합니다</h2></div>
+      <div class="body split">
+        <div class="pcol">
+          <div class="plabel">해보기 · 서로 상관이 전혀 없는 센서 변수의 개수를 고르고, 모든 쌍을 α = 0.05로 검정할 때 평균 몇 쌍이 유의할지 예측하세요</div>
+          <div class="fig" style="flex:1"><svg id="m27-p3-svg" viewBox="0 0 470 200" role="img" aria-label="변수 쌍의 수와 우연히 유의한 쌍의 수"></svg></div>
+        </div>
+        <div class="pcol" style="gap:9px;justify-content:center">
+          <div class="mbtns" id="m27-qm" style="gap:6px"></div>
+          <div class="ctrl">유의한 쌍 예측<input type="range" id="m27-g" min="0" max="300" step="1" value="20" aria-label="유의한 쌍 개수 예측"><strong id="m27-gv" style="min-width:56px;text-align:right">-</strong></div>
+          <button class="btn" id="m27-check" style="align-self:flex-start">계산해서 확인</button>
+          <div class="stats three"><div><small>내 예측</small><strong id="m27-mine">-</strong></div><div><small>평균 유의 쌍</small><strong id="m27-act">?</strong></div><div><small>본페로니 기준</small><strong id="m27-bf" style="font-size:15px">?</strong></div></div>
+          <p class="pmsg" id="m27-msg3"></p>
+          <div class="think"><span>생각해보기</span>보정 없이 ‘유의한 상관 250쌍’을 보고하면 어떤 일이 생길까요?</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ⑦ 용어해설·참고자료: 스크립트의 GLOSSARY, REFS, NEXT로 만듭니다 -->
+  </main>
+
+  <footer class="bottombar">
+    <a class="home" href="../index.html" title="홈으로 (학습 과정)" aria-label="홈으로"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 10.5 12 3l9 7.5"/><path d="M5.5 9.5V21h13V9.5"/></svg><span>홈</span></a><span class="counter" id="counter"></span><span class="spacer"></span>
+    <button class="nav" id="prev" type="button">이전</button>
+    <button class="nav primary" id="next" type="button">다음</button>
+  </footer>
+</div>
+<p class="rotate">화면을 가로로 돌리면 더 크게 볼 수 있습니다.</p>
+
+<script>
+(function(){
+"use strict";
+
+/* =====================================================================
+   [교체] 모듈 설정 — 새 모듈은 이 블록과 HTML 화면 문장만 바꿉니다.
+   ===================================================================== */
+var MODULE={title:"p-해킹",sub:"결과 해석과 인과 · M27"};
+var STEPS=["학습개요","학습목표","일상의 예시","본문","형성평가","실습","용어해설"];
+
+/* 예시 데이터(이 모듈에서 정한 값, 모두 귀무가설이 옳은 상황의 시뮬레이션)
+   ① 결과를 보며 표본 늘리기: 각 10장으로 시작, 1장씩 늘리며 p < 0.05면 중지(최대 100장) → 4,000번 중 29.4%
+      확인 간격 5장 → 21.9%, 10장 → 19.2% / 최대 50장, 1장씩 → 22.7%
+   ② 각 30장일 때 0.05 ≤ p < 0.1이면 10장 추가해 40장으로 재검정 → 4만 번 중 약 6% (6.2%)
+   ③ 효과 없는 첨가제 20종: 평균 20 × 0.05 = 1종 유의, 적어도 1종 유의 1 − 0.95^20 = 0.64
+   ④ 센서 변수 100개: 100C2 = 4,950쌍 × 0.05 = 247.5쌍 유의, 본페로니 0.05 ÷ 4,950 ≈ 0.0000101
+   예시 경로(시드 10, 48, 45): 27장, 45장, 78장째에 처음 p < 0.05 */
+var CASE=null, PAIRS=null, P1={target:null};
+var FP={"1":[0.055,0.134,0.169,0.198,0.227,0.222,0.245,0.266,0.27,0.294],"5":[0.054,0.097,0.134,0.148,0.181,0.181,0.203,0.212,0.22,0.219],"10":[0.05,0.085,0.106,0.139,0.139,0.165,0.17,0.183,0.172,0.192]};
+var TR=[[0.755,0.867,0.415,0.318,0.223,0.192,0.253,0.2,0.156,0.093,0.118,0.054,0.051,0.087,0.091,0.089,0.054,0.034,0.073,0.157,0.254,0.358,0.378,0.492,0.56,0.606,0.871,0.903,0.861,0.943,0.882,0.911,0.82,0.855,0.969,0.926,0.798,0.772,0.991,0.908,0.949,0.947,0.866,0.841,0.827,0.725,0.885,0.897,0.891,0.834,0.805,0.737,0.854,0.854,0.875,0.867,0.777,0.83,0.677,0.696,0.801,0.939,0.858,0.881,0.747,0.601,0.656,0.653,0.712,0.702,0.683,0.859,0.78,0.801,0.751,0.762,0.572,0.517,0.565,0.558,0.43,0.473,0.502,0.494,0.475,0.504,0.563,0.583,0.629,0.528,0.481],[0.519,0.481,0.265,0.736,0.817,0.858,0.612,0.49,0.396,0.373,0.41,0.49,0.452,0.593,0.707,0.683,0.543,0.564,0.669,0.777,0.453,0.514,0.438,0.541,0.496,0.431,0.377,0.351,0.248,0.199,0.128,0.14,0.129,0.131,0.091,0.048,0.064,0.053,0.036,0.042,0.061,0.058,0.035,0.02,0.031,0.023,0.018,0.022,0.02,0.037,0.026,0.042,0.076,0.046,0.038,0.053,0.049,0.041,0.062,0.087,0.125,0.105,0.103,0.111,0.1,0.101,0.073,0.077,0.075,0.081,0.074,0.07,0.063,0.087,0.087,0.109,0.095,0.099,0.072,0.07,0.071,0.052,0.052,0.062,0.071,0.062,0.077,0.058,0.054,0.035,0.029],[0.995,0.938,0.577,0.479,0.59,0.595,0.346,0.446,0.395,0.498,0.562,0.662,0.477,0.291,0.225,0.353,0.397,0.309,0.418,0.466,0.355,0.359,0.317,0.234,0.157,0.125,0.093,0.105,0.111,0.177,0.182,0.095,0.196,0.176,0.162,0.128,0.102,0.123,0.126,0.131,0.159,0.217,0.244,0.254,0.244,0.204,0.157,0.153,0.13,0.154,0.198,0.201,0.113,0.11,0.099,0.111,0.073,0.099,0.064,0.053,0.067,0.066,0.064,0.091,0.086,0.08,0.074,0.053,0.044,0.044,0.06,0.064,0.066,0.061,0.052,0.032,0.042,0.031,0.026,0.039,0.036,0.043,0.045,0.043,0.031,0.048,0.041,0.03,0.023,0.028,0.048]];
+
+var QUIZ=[
+ {goal:1,type:"상황 판단",stem:"개선팀이 냉각 첨가제 A~G를 차례로 시험했더니 G만 p < 0.05였습니다. 보고서에 ‘첨가제 G가 강도를 높인다는 가설을 세우고 검증했다’고 썼다면, 이것은 무엇에 해당할까요?",
+  opts:["HARKing (결과를 보고 가설 만들기)","가설검증형 연구","사전 등록","본페로니 교정"],ans:0,
+  exp:"HARKing은 ‘Hypothesizing After the Results are Known’의 약자로, 데이터를 얻어 결과를 보고 나서 가설을 만드는 행위입니다. 많은 실험을 반복하거나 여러 변수를 만져서 의미 있어 보이는 결과만 골라, 처음에 세운 가설인 양 보고하는 것을 말하며 p-해킹과 마찬가지로 재현성 저하로 이어집니다.",back:"s-4-1c",backLabel:"4-1 HARKing 다시 보기"},
+ {goal:1,type:"O/X 오개념",stem:"“측정값이나 p값 숫자를 직접 고치지 않았다면 p-해킹이 아니다.”",
+  opts:["O","X"],ans:1,ox:true,
+  exp:"p-해킹은 수치를 고치는 것이 아니라, p값이 0.05 미만이 되도록 실험을 설계하거나 해석하는 행위입니다. 결과를 보며 표본을 늘리거나, 여러 요인 중 p < 0.05인 것만 보고하는 것이 해당합니다. ‘의도하지 않았는데 눈치채 보니 p-해킹’인 상황이 될 수 있다는 점이 무섭습니다.",back:"s-4-1a",backLabel:"4-1 p-해킹의 정의 다시 보기"},
+ {goal:2,type:"계산",stem:"실제로는 효과가 없는 냉각 첨가제 20종을 각각 유의수준 0.05로 검정합니다. 적어도 1종이 ‘유의’하게 나올 확률은 약 얼마일까요?",
+  opts:["약 64%","5%","100%","약 36%"],ans:0,
+  exp:"20종 모두 유의하지 않을 확률은 0.95²⁰ ≈ 0.36이므로, 적어도 1종이 유의할 확률은 1 − 0.36 ≈ 0.64입니다. 평균적으로는 20 × 0.05 = 1종이 유의해집니다. 100%는 0.05 × 20을 확률로 잘못 계산한 값이고, 약 36%는 하나도 유의하지 않을 확률입니다. 이것이 검정을 반복할 때 나타나는 다중성 문제입니다.",back:"s-4-1c",backLabel:"4-1 다중성 문제 다시 보기"},
+ {goal:2,type:"계산",stem:"압연 설비의 센서 변수 100개 사이의 상관계수를 모두 검정하려 합니다(4,950쌍). 본페로니 교정으로 전체 유의수준을 0.05로 유지하려면 각 검정의 기준은 얼마로 해야 할까요?",
+  opts:["0.05 ÷ 4,950 ≈ 0.00001","0.05","0.05 ÷ 100 = 0.0005","0.05 × 4,950"],ans:0,
+  exp:"본페로니 교정은 유의수준 α를 검정을 반복한 횟수로 나눕니다. 4,950쌍이 모두 독립이라도 α = 0.05라면 상관이 없어도 평균 4,950 × 0.05 ≈ 247.5쌍이 유의해지므로, 0.05 ÷ 4,950 ≈ 0.0000101을 기준으로 써서 위양성을 줄입니다. 변수 개수(100)가 아니라 검정 횟수(4,950)로 나눕니다.",back:"s-4-2b",backLabel:"4-2 본페로니 교정 다시 보기"},
+ {goal:3,type:"상황 판단",stem:"각 30장으로 검정했더니 p = 0.07이 나와, 10장씩 더 측정해 40장으로 다시 검정했더니 p = 0.04였습니다. 이 결과를 어떻게 보아야 할까요?",
+  opts:["결과를 보고 표본을 늘렸으므로 위양성 확률이 설정한 5%보다 커져 있다","최종 p < 0.05이므로 유의수준 5%로 검정한 것과 같다","표본이 늘었으므로 결과가 더 믿을 만하다","처음 30장의 결과는 버려야 한다"],ans:0,
+  exp:"결과를 보고 데이터를 조금 더 추가하면 p < 0.05가 될지 모른다는 기대로 표본을 늘리는 것은 p-해킹입니다. 귀무가설이 옳은 상황에서 이 방식을 시뮬레이션하면 전체에서 p < 0.05가 될 확률이 약 6%로, 설정한 유의수준 5%를 벗어납니다. 표본크기는 데이터를 얻기 전에 정해야 합니다.",back:"s-4-1b",backLabel:"4-1 표본 늘리기 다시 보기"},
+ {goal:3,type:"상황 판단",stem:"데이터를 얻은 뒤 가설을 바꾸는 일을 막기 위해, 연구를 실시하기 전에 가설과 실험 설계, 분석 방법을 미리 등록해 두는 제도는 무엇일까요?",
+  opts:["사전 등록","동료평가","메타 분석","체리 피킹"],ans:0,
+  exp:"사전 등록은 연구를 실시하기 전에 가설과 실험 설계, 분석 방법 등의 연구 계획을 등록하는 것입니다. 등록한 내용에 따라 연구를 진행하므로 데이터를 얻은 다음 가설을 세우는 HARKing을 막을 수 있습니다. 결과와 관계없이 채택하는 사전 심사 포함 사전 등록도 늘고 있습니다.",back:"s-4-2c",backLabel:"4-2 사전 등록 다시 보기"}
+];
+
+var BINS=["표본 늘리기","HARKing","예방법"];
+var CARDS=[["p = 0.07이라 10장 더 측정해 재검정","표본 늘리기"],["p < 0.05가 될 때까지 1장씩 추가","표본 늘리기"],
+           ["유의한 첨가제를 처음부터 가설이었다고 보고","HARKing"],["지표 여러 개 중 유의한 것만 골라 보고","HARKing"],
+           ["가설과 분석 방법을 실험 전에 등록","예방법"],["예비 실험 뒤 새 데이터로 본 실험","예방법"]];
+var HINT={"표본 늘리기":"p값을 확인하면서 표본크기를 바꾸는 행위입니다.","HARKing":"결과를 본 뒤 유리한 것만 골라 가설인 양 보고하는 행위입니다.","예방법":"계획을 미리 정하거나 탐색과 검증을 나누는 방법입니다."};
+
+var GLOSSARY=[
+ ["p-해킹","p-hacking","의도하든 의도하지 않든 p값을 원하는 방향(0.05 미만)이 되도록 실험을 설계하거나 해석하는 행위입니다.","p < 0.05가 될 때까지 시험편 추가"],
+ ["HARKing","Hypothesizing After the Results are Known","데이터를 얻어 결과를 보고 나서 가설을 만들어, 처음에 세운 가설인 양 보고하는 행위입니다.","유의했던 첨가제 G만 가설로 보고"],
+ ["체리 피킹","cherry picking","편리한 근거만 골라 자신의 이론을 뒷받침하는 것으로, HARKing보다 넓은 의미입니다.","유리한 지표만 골라 보고"],
+ ["다중성 문제","multiplicity problem","검정을 여러 번 반복하면 그중 어느 하나가 우연히 유의해질 확률이 유의수준보다 커지는 문제입니다.","효과 없는 20종 중 적어도 1종 유의 64%"],
+ ["탐색형 연구","exploratory research","다양한 요인을 시험하며 전체를 탐색적으로 해석하는 연구입니다.","첨가제 20종을 넓게 시험하는 예비 실험"],
+ ["가설검증형 연구","confirmatory research","가설을 먼저 세우고 이를 검증하는 연구로, 새로 얻은 데이터를 독립적으로 해석해야 합니다.","후보를 좁혀 새 시험편으로 본 실험"],
+ ["본페로니 교정","Bonferroni correction","유의수준 α를 검정을 반복한 횟수로 나눈 값을 각 검정의 기준으로 써서 위양성을 줄이는 방법입니다.","0.05 ÷ 4,950 ≈ 0.00001"],
+ ["사전 등록","preregistration","연구를 실시하기 전에 가설과 실험 설계, 분석 방법 등의 연구 계획을 등록하는 제도입니다.","시험 전 분석 계획서를 등록"]
+];
+var REFS=[
+ {n:1,title:"HARKing: Hypothesizing After the Results are Known",org:"N. L. Kerr, Personality and Social Psychology Review 2(3), 196–217, 1998",url:"https://doi.org/10.1207/s15327957pspr0203_4",date:"2026-10-27 확인"},
+ {n:2,title:"The preregistration revolution",org:"B. A. Nosek 외, PNAS 115(11), 2600–2606, 2018",url:"https://doi.org/10.1073/pnas.1708274114",date:"2026-10-27 확인"},
+ {n:3,title:"Statistical tests, P values, confidence intervals, and power: a guide to misinterpretations",org:"S. Greenland 외, European Journal of Epidemiology 31, 337–350, 2016",url:"https://doi.org/10.1007/s10654-016-0149-3",date:"2026-10-27 확인"}
+];
+var NEXT={title:"M28 인과와 상관",line:"다음 모듈에서는 인과관계와 상관관계의 차이, 인과관계를 밝히는 방법과 다양한 사례를 살펴봅니다."};
+
+/* =====================================================================
+   아래부터는 공통 엔진입니다. 모듈마다 바꾸지 않습니다.
+   ===================================================================== */
+var NS="http://www.w3.org/2000/svg";
+var C={navy:"#1B2A4A",navy2:"#2C4170",navy3:"#5B6E97",soft:"#A9B8D4",grid:"#DDE1E7",gray:"#6B7280",gray2:"#9AA0AA",amber:"#E0A100",amberInk:"#6E4F00",ok:"#23704F"};
+function el(t,a,p,x){var e=document.createElementNS(NS,t);for(var k in a)e.setAttribute(k,a[k]);if(x!=null)e.textContent=x;if(p)p.appendChild(e);return e;}
+function clear(s){while(s.firstChild)s.removeChild(s.firstChild);}
+function f1(v,d){return v.toFixed(d==null?1:d);}
+function sum(a){return a.reduce(function(x,y){return x+y;},0);}
+function r1(v){return Math.round(v*10)/10;}
+var stage=document.getElementById("stage"),vp=document.getElementById("vp");
+
+/* 계산은 모두 데이터에서 직접 합니다(R0-7) */
+var N=CASE?CASE.values.length:0,SUMV=CASE?r1(sum(CASE.values)):0,AVG=N?SUMV/N:0,MAXV=CASE?Math.max.apply(null,CASE.values):0;
+var LR=!PAIRS?null:(function(){var n=PAIRS.xs.length,mx=sum(PAIRS.xs)/n,my=sum(PAIRS.ys)/n,sxy=0,sxx=0;
+  for(var i=0;i<n;i++){sxy+=(PAIRS.xs[i]-mx)*(PAIRS.ys[i]-my);sxx+=(PAIRS.xs[i]-mx)*(PAIRS.xs[i]-mx);}
+  var b=sxy/sxx;return{b:b,a:my-b*mx};})();
+var PRED=PAIRS?LR.a+LR.b*PAIRS.x0:0;
+
+document.title=MODULE.title;
+document.getElementById("brand").innerHTML=MODULE.title+"<small>"+MODULE.sub+"</small>";
+
+/* 16:9 고정 무대를 창 크기에 맞춤 */
+var S=1;
+function fit(){S=Math.min(window.innerWidth/960,window.innerHeight/540);stage.style.setProperty("--s",S);}
+window.addEventListener("resize",fit);fit();
+
+/* ---------- 그래프 ---------- */
+function barChart(svg,vals,o){
+  clear(svg);o=o||{};
+  var vb=svg.viewBox.baseVal,W=vb.width,H=vb.height,L=34,R=o.mean!=null?70:8,T=26,Bt=24,ym=o.ymax||Math.ceil(Math.max.apply(null,vals)+1),pw=W-L-R,ph=H-T-Bt,bw=pw/vals.length;
+  function y(v){return T+ph-(v/ym)*ph;}
+  for(var g=0;g<=ym;g++){el("line",{x1:L,x2:W-R,y1:y(g),y2:y(g),stroke:C.grid},svg);el("text",{x:L-6,y:y(g)+4,"text-anchor":"end","font-size":10.5,fill:C.gray2},svg,g);}
+  vals.forEach(function(v,i){
+    var sel=o.sel===i,hi=o.hi===i;
+    el("rect",{x:L+i*bw+bw*.16,y:y(v),width:bw*.68,height:Math.max(0,y(0)-y(v)),rx:2,fill:sel?C.amber:hi?C.navy2:C.soft},svg);
+    el("text",{x:L+i*bw+bw/2,y:H-Bt+16,"text-anchor":"middle","font-size":10.5,fill:C.gray},svg,CASE.labels[i]);
+  });
+  if(o.mean!=null){var m=o.mean;
+    el("line",{x1:L,x2:W-R+4,y1:y(m),y2:y(m),stroke:C.navy,"stroke-width":2,"stroke-dasharray":"6 4"},svg);
+    el("rect",{x:W-R+6,y:y(m)-10,width:R-8,height:20,rx:4,fill:C.navy},svg);
+    el("text",{x:W-R+6+(R-8)/2,y:y(m)+4,"text-anchor":"middle","font-size":11,"font-weight":700,fill:"#fff"},svg,"평균 "+f1(m,2));}
+  /* 값 라벨은 마지막에 흰 테두리로 그려 점선에 가리지 않게 함 */
+  vals.forEach(function(v,i){var sel=o.sel===i,hi=o.hi===i;
+    if(o.labels||sel)el("text",{x:L+i*bw+bw/2,y:y(v)-5,"text-anchor":"middle","font-size":10.5,"font-weight":sel||hi?800:500,fill:sel?C.amberInk:hi?C.navy:C.gray,stroke:"#EEF0F3","stroke-width":3,"paint-order":"stroke"},svg,f1(v));});
+}
+function scatter(svg,o){
+  clear(svg);o=o||{};
+  var vb=svg.viewBox.baseVal,W=vb.width,H=vb.height,L=34,R=14,T=30,Bt=40,x0=PAIRS.xmin,x1=PAIRS.xmax,y0=PAIRS.ymin,y1=PAIRS.ymax;
+  function X(v){return L+(v-x0)/(x1-x0)*(W-L-R);}
+  function Y(v){return T+(H-T-Bt)-(v-y0)/(y1-y0)*(H-T-Bt);}
+  for(var g=y0;g<=y1+1e-9;g+=PAIRS.ystep){el("line",{x1:L,x2:W-R,y1:Y(g),y2:Y(g),stroke:C.grid},svg);el("text",{x:L-6,y:Y(g)+4,"text-anchor":"end","font-size":10.5,fill:C.gray2},svg,g);}
+  for(var h=x0;h<=x1+1e-9;h+=PAIRS.xstep)el("text",{x:X(h),y:H-Bt+16,"text-anchor":"middle","font-size":10.5,fill:C.gray},svg,h);
+  el("text",{x:(L+W-R)/2,y:H-6,"text-anchor":"middle","font-size":10.5,fill:C.gray},svg,PAIRS.xlabel);
+  el("text",{x:4,y:14,"font-size":10.5,fill:C.gray},svg,PAIRS.ylabel);
+  if(o.line){var la=x0+(x1-x0)*.04,lb=x1-(x1-x0)*.04;el("line",{x1:X(la),y1:Y(LR.a+LR.b*la),x2:X(lb),y2:Y(LR.a+LR.b*lb),stroke:C.navy,"stroke-width":2},svg);}
+  PAIRS.xs.forEach(function(x,i){el("circle",{cx:X(x),cy:Y(PAIRS.ys[i]),r:4.5,fill:C.navy3,"fill-opacity":.85},svg);});
+  if(o.x0!=null){el("line",{x1:X(o.x0),y1:Y(0),x2:X(o.x0),y2:Y(y1),stroke:C.amber,"stroke-dasharray":"3 3"},svg);
+    el("text",{x:X(o.x0),y:T-4,"text-anchor":"middle","font-size":10.5,"font-weight":700,fill:C.amberInk},svg,PAIRS.x0label);}
+  if(o.pred){el("circle",{cx:X(PAIRS.x0),cy:Y(PRED),r:6,fill:C.navy},svg);
+    el("text",{x:X(PAIRS.x0)-10,y:Y(PRED)+4,"text-anchor":"end","font-size":11,"font-weight":800,fill:C.navy,stroke:"#EEF0F3","stroke-width":3,"paint-order":"stroke"},svg,"예측 "+f1(PRED,PAIRS.dp)+PAIRS.unit);}
+  if(o.guess!=null){el("circle",{cx:X(PAIRS.x0),cy:Y(o.guess),r:7,fill:C.amber,stroke:"#fff","stroke-width":2},svg);}
+  if(o.actual){var ay=Y(PAIRS.actual);el("rect",{x:X(PAIRS.x0)-6,y:ay-6,width:12,height:12,fill:C.ok,transform:"rotate(45 "+X(PAIRS.x0)+" "+ay+")"},svg);
+    el("text",{x:X(PAIRS.x0)-10,y:ay-6,"text-anchor":"end","font-size":11,"font-weight":800,fill:C.ok,stroke:"#EEF0F3","stroke-width":3,"paint-order":"stroke"},svg,"실제 "+f1(PAIRS.actual)+PAIRS.unit);}
+  return {X:X,Y:Y};
+}
+function flow(svg,names){
+  clear(svg);var n=names.length,w=118,gap=(440-40-n*w)/(n-1),y=96,h=64;
+  el("defs",{},svg).innerHTML='<marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10z" fill="'+C.navy3+'"/></marker>';
+  names.forEach(function(t,i){var x=20+i*(w+gap);
+    el("rect",{x:x,y:y,width:w,height:h,rx:10,fill:i===n-1?C.navy:"#fff",stroke:C.navy,"stroke-width":1.5},svg);
+    el("text",{x:x+w/2,y:y+h/2-6,"text-anchor":"middle","font-size":11,"font-weight":700,fill:i===n-1?"#C9D3E6":C.navy3},svg,"4-"+(i+1));
+    el("text",{x:x+w/2,y:y+h/2+13,"text-anchor":"middle","font-size":14,"font-weight":800,fill:i===n-1?"#fff":C.navy},svg,t);
+    if(i<n-1)el("line",{x1:x+w+4,y1:y+h/2,x2:x+w+gap-5,y2:y+h/2,stroke:C.navy3,"stroke-width":2,"marker-end":"url(#ar)"},svg);});
+  el("text",{x:220,y:200,"text-anchor":"middle","font-size":12,fill:C.gray},svg,"본문 소단원을 배우는 순서");
+}
+/* 화면에 해당 id가 있을 때만 그립니다(모듈마다 쓰지 않는 그림은 건너뜀) */
+function on(id,fn){var e=document.getElementById(id);if(e)fn(e);}
+on("fig-flow",function(s){flow(s,["소단원 1","소단원 2","정리"]);});
+on("fig-case",function(s){barChart(s,CASE.values,{labels:true});});
+on("fig-bar",function(s){barChart(s,CASE.values,{labels:true,mean:AVG});});
+on("fig-scatter",function(s){scatter(s,{line:true,x0:PAIRS.x0,pred:true});});
+on("fig-bridge",function(s){
+  el("defs",{},s).innerHTML='<marker id="ar2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10z" fill="'+C.navy3+'"/></marker>';
+  [["장면 1",40],["장면 2",130]].forEach(function(p){el("rect",{x:24,y:p[1],width:130,height:64,rx:10,fill:"#fff",stroke:C.navy3,"stroke-width":1.5},s);el("text",{x:89,y:p[1]+37,"text-anchor":"middle","font-size":14,"font-weight":700,fill:C.navy},s,p[0]);
+    el("line",{x1:158,y1:p[1]+32,x2:246,y2:120,stroke:C.navy3,"stroke-width":2,"marker-end":"url(#ar2)"},s);});
+  el("rect",{x:252,y:84,width:150,height:72,rx:12,fill:C.navy},s);
+  el("text",{x:327,y:116,"text-anchor":"middle","font-size":14,"font-weight":800,fill:"#fff"},s,"본문 첫 질문");
+  el("text",{x:327,y:136,"text-anchor":"middle","font-size":11.5,fill:"#C9D3E6"},s,"4-1로 이어짐");});
+on("case-n",function(e){e.textContent=N+"개";});
+on("case-sum",function(e){e.textContent=f1(SUMV);});
+on("case-max",function(e){e.textContent=f1(MAXV);});
+on("math-calc",function(e){e.textContent=f1(LR.b,2)+" × "+PAIRS.x0+" + "+f1(LR.a,2)+" = "+f1(PRED,2);});
+
+/* =====================================================================
+   [교체] 모듈 전용 그림: 모듈마다 필요한 그림 함수는 이 자리에 둡니다.
+   ===================================================================== */
+/* M27 전용 그림·실습 */
+function linU(a,b,c,d){return function(v){return c+(v-a)/(b-a)*(d-c);};}
+function tU(s,x,y,t,o){o=o||{};return el("text",{x:x,y:y,"text-anchor":o.a||"middle","font-size":o.fs||11,"font-weight":o.fw||600,fill:o.c||C.navy,stroke:o.halo?"#fff":"none","stroke-width":o.halo?3:0,"paint-order":"stroke"},s,t);}
+function bxU(s,x,y,w,h,fill,stroke){return el("rect",{x:x,y:y,width:w,height:h,rx:10,fill:fill||"#fff",stroke:stroke||"none","stroke-width":stroke?1.5:0},s);}
+function mkU(s,id,col){el("defs",{},s).innerHTML='<marker id="'+id+'" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10z" fill="'+col+'"/></marker>';}
+function arU(s,x1,y1,x2,y2,id,col){return el("line",{x1:x1,y1:y1,x2:x2,y2:y2,stroke:col||C.navy3,"stroke-width":2,"marker-end":"url(#"+id+")"},s);}
+var RED="#B42318",GRN="#23704F",BLU="#2B8CC4",PNK="#C2416E";
+var DRG=[.62,.35,.81,.17,.93,.44,.04,.71,.26,.58,.09,.87,.33,.66,.49,.12,.95,.21,.74,.39];
+
+on("m27-ov",function(s){
+  mkU(s,"oU",C.navy3);
+  [["결과 보며 표본 늘리기",14],["유의한 것만 골라 보고",158],["결과 본 뒤 가설 만들기",302]].forEach(function(b){bxU(s,b[1],10,124,52,"#FBE4E1",RED);tU(s,b[1]+62,32,b[0].split(" ").slice(0,2).join(" "),{fw:800,fs:11,c:RED});tU(s,b[1]+62,50,b[0].split(" ").slice(2).join(" "),{fw:800,fs:11,c:RED});
+    arU(s,b[1]+62,64,220,92,"oU");});
+  bxU(s,130,96,180,46,C.navy);tU(s,220,116,"p-해킹",{fw:800,fs:14,c:"#fff"});tU(s,220,133,"위양성 > α → 재현성 저하",{fs:10,c:"#C9D3E6"});
+  bxU(s,14,180,196,70,"#E3F1EA",GRN);tU(s,112,202,"예방하는 노력",{fw:800,fs:12.5,c:GRN});tU(s,112,222,"탐색과 검증 분리 · 보정",{fs:10.5,c:"#22262E"});tU(s,112,239,"사전 등록",{fs:10.5,c:"#22262E"});
+  bxU(s,230,180,196,70,"#EEF4FB",BLU);tU(s,328,202,"바르게 읽기",{fw:800,fs:12.5,c:"#1C6EA4"});tU(s,328,222,"p값의 흔한 오해 확인",{fs:10.5,c:"#22262E"});tU(s,328,239,"정확한 p값 보고",{fs:10.5,c:"#22262E"});
+  arU(s,180,144,120,176,"oU");arU(s,260,144,320,176,"oU");
+});
+
+on("m27-case",function(s){
+  var B=[["① 시험편 늘리기","유의하지 않으면","몇 장씩 더 측정","→ 위양성 약 30%"],["② 첨가제 20종","차례로 시험해","유의한 것만 보고","→ 적어도 1종 64%"],["③ 센서 변수 100개","모든 쌍의 상관","4,950쌍 검정","→ 평균 247.5쌍 유의"]];
+  B.forEach(function(b,i){var x=6+i*146;bxU(s,x,20,138,196,"#FBE4E1");tU(s,x+69,50,b[0],{fw:800,fs:12,c:RED});tU(s,x+69,96,b[1],{fw:700,fs:11.5});tU(s,x+69,120,b[2],{fw:700,fs:11.5});tU(s,x+69,170,b[3],{fw:800,fs:11.5,c:RED});});
+  tU(s,220,240,"모두 효과가 전혀 없는 상황의 시뮬레이션·계산 결과",{fw:700,fs:10.5,c:C.gray});
+});
+
+on("m27-def",function(s){
+  var R=[["예 ①","p < 0.05가 될 때까지 표본크기 n을 늘림"],["예 ②","n = 30에서 p = 0.07 → 10개 추가해 n = 40, p < 0.05로 보고"],["예 ③","여러 요인을 탐색해 그중 p < 0.05인 것만 보고"]];
+  R.forEach(function(r,i){var y=8+i*56;bxU(s,4,y,412,48,"#FBE4E1");el("rect",{x:14,y:y+12,width:48,height:24,rx:6,fill:RED},s);tU(s,38,y+29,r[0],{fw:800,fs:11,c:"#fff"});tU(s,74,y+29,r[1],{a:"start",fw:700,fs:11});});
+  mkU(s,"dU",C.navy3);
+  bxU(s,4,184,128,78,"#F3F5F9");tU(s,68,212,"수치는 그대로",{fw:800,fs:11});tU(s,68,232,"설계·해석을 조작",{fw:700,fs:10.5,c:C.gray});
+  bxU(s,146,184,128,78,"#FCF3D9");tU(s,210,212,"귀무가설이 옳은데",{fw:800,fs:11,c:C.amberInk});tU(s,210,232,"‘효과 있음’ 오판",{fw:700,fs:10.5});
+  bxU(s,288,184,128,78,C.navy);tU(s,352,212,"재현성 저하",{fw:800,fs:12,c:"#fff"});tU(s,352,232,"의도치 않아도 발생",{fs:10,c:"#C9D3E6"});
+  arU(s,134,223,142,223,"dU");arU(s,276,223,284,223,"dU");
+});
+
+on("m27-seq",function(s){
+  bxU(s,4,4,412,150,"#F3F5F9");tU(s,14,22,"귀무가설이 옳을 때, 1장씩 늘리며 본 p값 (예시 3가지)",{a:"start",fw:800,fs:10.5});
+  var X=linU(10,100,44,404),Y=linU(0,1,140,30),cols=[BLU,PNK,C.amber];
+  [0,.5,1].forEach(function(t){el("line",{x1:44,x2:404,y1:Y(t),y2:Y(t),stroke:C.grid},s);tU(s,38,Y(t)+4,t,{a:"end",fs:9,c:C.gray2,fw:500});});
+  el("line",{x1:44,x2:404,y1:Y(.05),y2:Y(.05),stroke:RED,"stroke-width":1.5,"stroke-dasharray":"4 3"},s);tU(s,404,Y(.05)-4,"0.05",{a:"end",fs:9,fw:800,c:RED});
+  TR.forEach(function(t,j){var st=t.findIndex(function(v){return v<.05;}),p=[];for(var i=0;i<=st;i++)p.push(X(i+10).toFixed(1)+" "+Y(t[i]).toFixed(1));
+    el("path",{d:"M"+p.join(" L"),fill:"none",stroke:cols[j],"stroke-width":2},s);el("circle",{cx:X(st+10),cy:Y(t[st]),r:5,fill:cols[j],stroke:"#fff","stroke-width":1.5},s);
+    tU(s,X(st+10)+(j===2?-4:4),Y(t[st])-10,(st+10)+"장에서 중지",{a:j===2?"end":"start",fw:800,fs:9.5,c:cols[j],halo:true});});
+  [10,40,70,100].forEach(function(t){tU(s,X(t),150,t,{fs:9,c:C.gray,fw:500});});
+  bxU(s,4,162,412,104,"#FCF3D9");tU(s,14,180,"위양성 비율 (목표 5%)",{a:"start",fw:800,fs:10.5,c:C.amberInk});
+  var X2=linU(0,.35,170,380);[["표본크기 고정",.05,GRN],["1장씩, 최대 100장",.294,RED],["30장 → 0.05~0.1이면 40장",.062,C.amberInk]].forEach(function(r,i){var y=200+i*22;tU(s,162,y+4,r[0],{a:"end",fw:700,fs:10});
+    el("rect",{x:X2(0),y:y-8,width:X2(r[1])-X2(0),height:14,rx:3,fill:r[2]},s);tU(s,X2(r[1])+5,y+4,(r[1]*100).toFixed(i===2?0:1)+"%"+(i===2?" 내외":""),{a:"start",fw:800,fs:10,c:r[2]});});
+});
+
+on("m27-hark",function(s){
+  DRG.forEach(function(p,i){var x=6+(i%10)*41,y=6+Math.floor(i/10)*46,sig=p<.05;bxU(s,x,y,37,40,sig?"#FBE4E1":"#F3F5F9",sig?RED:null);
+    tU(s,x+18.5,y+17,String.fromCharCode(65+i),{fw:800,fs:11,c:sig?RED:C.navy});tU(s,x+18.5,y+33,p.toFixed(2),{fs:9,fw:700,c:sig?RED:C.gray});});
+  bxU(s,6,104,408,40,"#FCF3D9");tU(s,210,121,"G만 p = 0.04 → “G에 효과가 있다는 가설을 검증했다” = HARKing ✕",{fw:800,fs:10.5,c:RED});tU(s,210,137,"효과 없는 후보 20종 중 하나쯤은 우연히 유의 (예시값)",{fs:9.5,fw:700,c:C.gray});
+});
+
+on("m27-two",function(s){
+  mkU(s,"wU",C.navy3);
+  bxU(s,4,8,130,150,"#EEF4FB",BLU);tU(s,69,32,"예비 실험",{fw:800,fs:12.5,c:"#1C6EA4"});tU(s,69,50,"탐색형 연구",{fw:700,fs:10.5,c:C.gray});
+  for(var i=0;i<20;i++){el("rect",{x:18+(i%5)*22,y:64+Math.floor(i/5)*20,width:18,height:16,rx:3,fill:i===6||i===10?C.amber:"#C9D3E6"},s);}
+  bxU(s,148,48,120,70,"#FCF3D9",C.amber);tU(s,208,76,"가설 세우기",{fw:800,fs:12,c:C.amberInk});tU(s,208,96,"“G·K가 유망”",{fw:700,fs:10.5});
+  bxU(s,282,8,134,150,"#E3F1EA",GRN);tU(s,349,32,"본 실험",{fw:800,fs:12.5,c:GRN});tU(s,349,50,"가설검증형 연구",{fw:700,fs:10.5,c:C.gray});
+  tU(s,349,84,"후보를 좁혀",{fw:700,fs:10.5});tU(s,349,104,"새 시험편으로",{fw:700,fs:10.5});tU(s,349,124,"독립적으로 해석",{fw:800,fs:10.5,c:GRN});
+  arU(s,136,83,144,83,"wU");arU(s,270,83,278,83,"wU");
+  bxU(s,4,172,412,94,"#FBE4E1");tU(s,210,196,"✕ 예비 실험 데이터와 본 실험 데이터를 섞어 해석",{fw:800,fs:11.5,c:RED});
+  tU(s,210,220,"이미 유의하게 나온 데이터가 섞여 유의한 결과가 되기 쉬운 편향",{fw:700,fs:10.5});tU(s,210,242,"→ 위양성 확률이 설정한 유의수준 α보다 커짐",{fw:800,fs:10.5,c:RED});
+});
+
+on("m27-pairs",function(s){
+  var N=10,cx=70,cy=72,r=56,P=[];for(var i=0;i<N;i++){var a=-Math.PI/2+2*Math.PI*i/N;P.push([cx+r*Math.cos(a),cy+r*Math.sin(a)]);}
+  for(var i=0;i<N;i++)for(var j=i+1;j<N;j++){var hl=(i===1&&j===6)||(i===3&&j===8);el("line",{x1:P[i][0],y1:P[i][1],x2:P[j][0],y2:P[j][1],stroke:hl?RED:"#C9D3E6","stroke-width":hl?2.4:1},s);}
+  P.forEach(function(p){el("circle",{cx:p[0],cy:p[1],r:6,fill:C.navy3,stroke:"#fff","stroke-width":1.5},s);});tU(s,cx,146,"변수 10개만 그려도 45쌍",{fs:9.5,fw:700,c:C.gray});
+  var R=[["변수 100개","→ 4,950쌍",C.navy],["상관이 전혀 없어도","× 0.05 = 평균 247.5쌍 유의",RED],["본페로니 기준","0.05 ÷ 4,950 ≈ 0.0000101",GRN]];
+  R.forEach(function(r,i){var y=14+i*44;bxU(s,148,y,268,38,i===1?"#FBE4E1":i===2?"#E3F1EA":"#F3F5F9");tU(s,160,y+24,r[0],{a:"start",fw:800,fs:11});tU(s,406,y+24,r[1],{a:"end",fw:800,fs:11,c:r[2]});});
+});
+
+on("m27-prereg",function(s){
+  mkU(s,"pU",GRN);el("defs",{},s).innerHTML+='<marker id="pU2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10z" fill="#B42318"/></marker>';
+  bxU(s,4,4,412,104,"#E3F1EA");tU(s,14,24,"사전 등록 ✓",{a:"start",fw:800,fs:12,c:GRN});
+  ["가설·설계·분석 등록","데이터 수집","등록대로 분석","결과 보고"].forEach(function(t,i){var x=14+i*101;bxU(s,x,40,90,48,"#fff",GRN);tU(s,x+45,68,t,{fw:800,fs:i===0?9.5:10.5});if(i<3)arU(s,x+91,64,x+99,64,"pU",GRN);});
+  bxU(s,4,118,412,104,"#FBE4E1");tU(s,14,138,"HARKing ✕",{a:"start",fw:800,fs:12,c:RED});
+  ["데이터 수집","여러 가지 분석","유의한 것 선택","가설 작성·보고"].forEach(function(t,i){var x=14+i*101;bxU(s,x,154,90,48,"#fff",RED);tU(s,x+45,182,t,{fw:800,fs:10.5});if(i<3)arU(s,x+91,178,x+99,178,"pU2",RED);});
+  bxU(s,4,230,412,36,"#FCF3D9");tU(s,210,253,"사전 심사 포함 사전 등록: 결과가 어떻든 채택 · 부정적 데이터 게재 저널 증가",{fw:800,fs:10,c:C.amberInk});
+});
+
+on("m27-list",function(s){
+  var R=["p값을 제대로 이해하고 사용한다","검정을 반복하면 다중성 문제로 위양성이 증가함을 이해한다","탐색형 연구와 가설검증형 연구의 차이를 이해한다","실시한 실험이나 해석은 모두 제대로 보고한다","재현성을 염두에 두고, 가능하면 재실험해 확인한다","좋은 가설을 세운다"];
+  R.forEach(function(t,i){var y=6+i*43;bxU(s,4,y,412,37,i%2?"#F8F9FB":"#F3F5F9");el("rect",{x:14,y:y+9,width:20,height:20,rx:5,fill:GRN},s);tU(s,24,y+24,"✓",{fw:800,fs:12,c:"#fff"});tU(s,44,y+24,t,{a:"start",fw:700,fs:11});});
+});
+
+on("m27-myth",function(s){
+  var R=[["p값 = 귀무가설이 옳을 확률","가정하에 그 이상 극단적 데이터의 확률"],["p값 = 우연만으로 데이터가 나타날 확률","‘그보다 극단적인’ 포함 시 옳음"],["p < 0.05 = 귀무가설이 틀렸다","틀렸다고 확정하는 것은 아님"],["p ≥ 0.05 = 효과가 없음을 입증","판단 보류일 뿐"],["p값이 클수록 귀무가설을 지지","지지의 증거가 아님"],["유의하지 않다 = 효과크기가 작다","효과크기는 따로 확인"],["p < 0.02, p > 0.05처럼 부등호로 기재","p = 0.015처럼 정확한 값"],["검정으로 현상의 의미까지 알 수 있다","통계적 결론에 지나지 않음"]];
+  el("rect",{x:4,y:4,width:412,height:24,rx:6,fill:C.navy},s);tU(s,110,21,"✕ 흔한 오해",{fw:800,fs:11,c:"#FCA5A5"});tU(s,318,21,"○ 바른 이해",{fw:800,fs:11,c:"#86EFAC"});
+  R.forEach(function(r,i){var y=34+i*29;el("rect",{x:4,y:y,width:412,height:26,rx:4,fill:i%2?"#F8F9FB":"#fff"},s);tU(s,12,y+17,r[0],{a:"start",fw:700,fs:9.8,c:RED});tU(s,410,y+17,r[1],{a:"end",fw:700,fs:9.8,c:GRN});});
+});
+
+/* 실습 1 · 결과를 보며 표본 늘리기(조작형) */
+(function(){
+  var mx=document.getElementById("m27-mx");if(!mx)return;var box=document.getElementById("m27-st"),svg=document.getElementById("m27-p1-svg"),SS=["1","5","10"],cur=0;
+  SS.forEach(function(v,i){var b=document.createElement("button");b.type="button";b.className="mbtn";b.textContent=v+"장마다 확인";b.style.padding="3px 10px";b.onclick=function(){cur=i;upd();};box.appendChild(b);});
+  function upd(){[].forEach.call(box.children,function(x,i){x.classList.toggle("on",i===cur);x.setAttribute("aria-pressed",i===cur);});
+    var k=+mx.value,M=10+10*k,f=FP[SS[cur]][k];document.getElementById("m27-mxv").textContent=M+"장";document.getElementById("m27-fp").textContent=(f*100).toFixed(1)+"%";document.getElementById("m27-x").textContent=(f/.05).toFixed(1)+"배";
+    clear(svg);var X=linU(10,100,44,454),Y=linU(0,.35,146,12);
+    [0,.1,.2,.3].forEach(function(t){el("line",{x1:44,x2:454,y1:Y(t),y2:Y(t),stroke:C.grid},svg);tU(svg,38,Y(t)+4,(t*100)+"%",{a:"end",fs:9,c:C.gray2,fw:500});});
+    [10,40,70,100].forEach(function(t){tU(svg,X(t),160,t+"장",{fs:9,c:C.gray,fw:500});});
+    el("line",{x1:44,x2:454,y1:Y(.05),y2:Y(.05),stroke:GRN,"stroke-width":1.5,"stroke-dasharray":"4 3"},svg);tU(svg,454,Y(.05)-4,"목표 5%",{a:"end",fs:9,fw:800,c:GRN});
+    SS.forEach(function(sv,j){var p=[];FP[sv].forEach(function(v,i){p.push(X(10+10*i).toFixed(1)+" "+Y(v).toFixed(1));});el("path",{d:"M"+p.join(" L"),fill:"none",stroke:j===cur?RED:"#C9CED6","stroke-width":j===cur?2.6:1.5},svg);
+      tU(svg,X(100)-4,Y(FP[sv][9])-6,sv+"장마다",{a:"end",fs:9,fw:800,c:j===cur?RED:C.gray2,halo:true});});
+    el("circle",{cx:X(M),cy:Y(f),r:6,fill:RED,stroke:"#fff","stroke-width":2},svg);
+    var m=document.getElementById("m27-msg"),ok=M===10;m.className="pmsg"+(ok?" ok":"");
+    m.textContent=ok?"맞습니다. 최대 표본이 처음 정한 10장이면 중간 확인이 없어 위양성이 "+(f*100).toFixed(1)+"%로 목표 5% 근처입니다. 표본크기를 미리 정하고 그대로 검정하는 것이 가장 확실합니다.":
+      SS[cur]+"장마다 확인하며 최대 "+M+"장까지 늘리면 위양성이 "+(f*100).toFixed(1)+"%로 목표의 "+(f/.05).toFixed(1)+"배입니다. 자주 확인할수록, 오래 늘릴수록 커집니다.";}
+  mx.addEventListener("input",upd);upd();
+})();
+
+/* 실습 3 · 다중성(추정형) */
+(function(){
+  var g=document.getElementById("m27-g");if(!g)return;var qm=document.getElementById("m27-qm"),svg=document.getElementById("m27-p3-svg"),MS=[10,20,50,100],cur=0,seen={};
+  MS.forEach(function(v,i){var b=document.createElement("button");b.type="button";b.className="mbtn";b.textContent="변수 "+v+"개";b.style.padding="3px 9px";b.onclick=function(){cur=i;reset();};qm.appendChild(b);});
+  function pr(m){return m*(m-1)/2;}
+  function fmt(x){return x>=100?x.toFixed(1):x%1?x.toFixed(2).replace(/0$/,""):String(x);}
+  function draw(){clear(svg);var m=MS[cur],P=pr(m),E=P*.05;
+    tU(svg,10,20,"변수 "+m+"개 → "+m+" × "+(m-1)+" ÷ 2 = "+P.toLocaleString()+"쌍",{a:"start",fw:800,fs:12});
+    var cells=Math.min(P,400),cols=40,sz=10;for(var i=0;i<cells;i++){var r=Math.floor(i/cols),c=i%cols;el("rect",{x:10+c*11.3,y:34+r*11.3,width:sz,height:sz,rx:2,fill:"#D1D5DB"},svg);}
+    if(P>400)tU(svg,460,34+10*11.3+14,"(400칸까지만 표시, 1칸 = 1쌍)",{a:"end",fs:9.5,c:C.gray,fw:700});
+    if(seen[cur]){var k=Math.round(Math.min(E,400*.05)),step=Math.floor(cells/Math.max(1,k));for(var j=0;j<k;j++){var i2=j*step+Math.floor(step/2),r2=Math.floor(i2/cols),c2=i2%cols;el("rect",{x:10+c2*11.3,y:34+r2*11.3,width:sz,height:sz,rx:2,fill:RED},svg);}
+      tU(svg,10,196,"빨강: 상관이 없는데도 α = 0.05에서 우연히 유의해지는 쌍(평균 "+fmt(E)+"쌍)",{a:"start",fw:800,fs:10,c:RED});}}
+  function txt(){document.getElementById("m27-gv").textContent=(+g.value)+"쌍";document.getElementById("m27-mine").textContent=(+g.value)+"쌍";}
+  function reset(){[].forEach.call(qm.children,function(x,i){x.classList.toggle("on",i===cur);x.setAttribute("aria-pressed",i===cur);});var P=pr(MS[cur]);
+    document.getElementById("m27-act").textContent=seen[cur]?fmt(P*.05)+"쌍":"?";document.getElementById("m27-bf").textContent=seen[cur]?(.05/P).toPrecision(3):"?";
+    var m=document.getElementById("m27-msg3");m.className="pmsg";m.textContent="변수 "+MS[cur]+"개의 모든 쌍을 검정할 때 우연히 유의해지는 쌍의 수를 예측한 뒤 「계산해서 확인」을 누르세요.";draw();}
+  g.addEventListener("input",txt);
+  document.getElementById("m27-check").onclick=function(){seen[cur]=true;var P=pr(MS[cur]),E=P*.05,gv=+g.value,ok=Math.abs(gv-E)<=Math.max(2,.25*E),m=document.getElementById("m27-msg3");
+    document.getElementById("m27-act").textContent=fmt(E)+"쌍";document.getElementById("m27-bf").textContent=(.05/P).toPrecision(3);m.className="pmsg "+(ok?"ok":"ng");
+    m.textContent=(ok?"가깝게 예측했습니다. ":"차이가 있습니다. ")+P.toLocaleString()+"쌍 × 0.05 = 평균 "+fmt(E)+"쌍입니다. 본페로니 기준은 0.05 ÷ "+P.toLocaleString()+" ≈ "+(.05/P).toPrecision(3)+"입니다.";draw();};
+  txt();reset();
+})();
+
+
+/* ---------- ⑤ 형성평가 ---------- */
+function fill(t){return !CASE?t:t.replace(/SUM/g,f1(SUMV)).replace(/AVG/g,f1(AVG,2)).replace(/MAXV/g,f1(MAXV));}
+var firstPractice=document.getElementById("p1"),answered=0,correct=0;
+QUIZ.forEach(function(q,i){
+  var s=document.createElement("section");s.className="slide";s.dataset.step="4";s.id="q"+(i+1);
+  s.innerHTML='<div class="sh"><div class="sec"><span>문항 '+(i+1)+' / '+QUIZ.length+'</span><span class="qchips"><span>학습목표 '+q.goal+'</span><span>'+q.type+'</span></span></div><h2 class="stem">'+fill(q.stem)+'</h2></div>'+
+    '<div class="body split even"><div class="opts'+(q.ox?' ox':'')+'"></div><div class="fbp" aria-live="polite"><p class="empty">보기를 고르면 정답과 해설이 여기에 나타납니다.</p></div></div>';
+  var ob=s.querySelector(".opts"),fb=s.querySelector(".fbp");
+  q.opts.forEach(function(t,k){
+    var b=document.createElement("button");b.type="button";b.className="opt";
+    b.innerHTML=q.ox?t:'<span class="n">'+(k+1)+'</span>'+fill(t);
+    b.addEventListener("click",function(){
+      var all=ob.querySelectorAll(".opt");[].forEach.call(all,function(x){x.disabled=true;});
+      all[q.ans].classList.add("ok");var ok=k===q.ans;if(!ok)b.classList.add("ng");
+      answered++;if(ok)correct++;
+      fb.className="fbp "+(ok?"ok":"ng");
+      fb.innerHTML='<div class="verdict">'+(ok?"정답입니다":"오답입니다. 정답은 "+(q.ox?q.opts[q.ans]:(q.ans+1)+"번")+"입니다")+'</div><div>'+fill(q.exp)+'</div>'+
+        '<button type="button" class="jump back" data-jump="'+q.back+'">'+q.backLabel+'</button><div class="tally">지금까지 '+answered+'문항 중 '+correct+'문항 정답</div>';
+      bindJumps(fb);
+    });
+    ob.appendChild(b);
+  });
+  vp.insertBefore(s,firstPractice);
+});
+
+/* ---------- ⑦ 용어해설 · 참고자료 · 다음 모듈 ---------- */
+for(var gi=0;gi<GLOSSARY.length;gi+=6){
+  var part=GLOSSARY.slice(gi,gi+6),pg=gi/6+1,np=Math.ceil(GLOSSARY.length/6);
+  var s=document.createElement("section");s.className="slide";s.dataset.step="6";
+  var h='<div class="sh"><div class="sec">용어해설 '+pg+'/'+np+'</div><h2>'+(pg===1?"본문에서 굵게 표시한 용어를 나온 순서대로 모았습니다":"용어해설 계속")+'</h2></div><div class="body full"><div class="gl">';
+  part.forEach(function(g,k){h+='<div class="gi"><div class="t"><i>'+(gi+k+1)+'</i>'+g[0]+'<em>'+g[1]+'</em>'+(g[4]?'<span class="cite">['+g[4]+']</span>':'')+'</div><div class="d">'+g[2]+'</div><div class="e"><strong>예시</strong> '+g[3]+'</div></div>';});
+  h+='</div></div>';s.innerHTML=h;vp.appendChild(s);
+}
+(function(){
+  var s=document.createElement("section");s.className="slide";s.dataset.step="6";s.id="end";
+  var refs=REFS.length?'<div class="pcol" style="gap:10px"><div class="plabel" style="margin:0">참고자료</div><ol class="refs">'+REFS.map(function(r){return '<li><span>['+r.n+']</span><div>'+r.title+', '+r.org+'. <a href="'+r.url+'" target="_blank" rel="noopener">'+r.url+'</a> ('+r.date+')</div></li>';}).join("")+'</ol></div>':'';
+  s.innerHTML='<div class="sh"><div class="sec">마무리</div><h2>'+(REFS.length?"참고자료와 다음 모듈":"다음 모듈")+'</h2></div>'+
+    '<div class="body '+(REFS.length?'split even':'full')+'" style="align-content:center">'+refs+
+    '<div class="pcol" style="justify-content:center"><div class="nextmod"><small>다음 모듈 · '+NEXT.title+'</small><strong>'+NEXT.line+'</strong></div></div></div>'+
+    '<p class="foot">학습 상태는 저장되지 않습니다.</p>';
+  vp.appendChild(s);
+})();
+
+/* ---------- 이동 · 진행선 ---------- */
+var slides=[].slice.call(vp.querySelectorAll(".slide")),cur=0,seen={};
+var stepFirst=[],stepCount=[0,0,0,0,0,0,0];
+slides.forEach(function(s,i){var st=+s.dataset.step;if(stepFirst[st]==null)stepFirst[st]=i;stepCount[st]++;});
+var rail=document.getElementById("rail"),stations=[];
+STEPS.forEach(function(n,i){
+  var b=document.createElement("button");b.type="button";b.className="station";
+  b.style.left="calc(14px + (100% - 28px) * "+(i/6)+")";
+  b.innerHTML='<span class="dot">'+(i+1)+'</span><span class="lb">'+n+'</span>';
+  b.setAttribute("aria-label",(i+1)+"단계 "+n+"(으)로 이동");
+  b.addEventListener("click",function(){show(stepFirst[i]);});
+  rail.appendChild(b);stations.push(b);
+});
+function show(i){
+  cur=Math.max(0,Math.min(slides.length-1,i));
+  slides.forEach(function(s,k){s.classList.toggle("on",k===cur);});
+  var st=+slides[cur].dataset.step;seen[st]=true;
+  stations.forEach(function(b,k){b.classList.toggle("cur",k===st);b.classList.toggle("done",k<st||(!!seen[k]&&k!==st));if(k===st)b.setAttribute("aria-current","step");else b.removeAttribute("aria-current");});
+  var within=(cur-stepFirst[st])/Math.max(1,stepCount[st]);
+  var frac=st===6&&cur===slides.length-1?1:(st+within)/6;
+  document.getElementById("fill").style.width=(Math.min(1,frac)*100)+"%";
+  document.getElementById("counter").innerHTML="<strong>"+STEPS[st]+"</strong> "+(cur-stepFirst[st]+1)+" / "+stepCount[st];
+  document.getElementById("prev").disabled=cur===0;
+  var nx=document.getElementById("next");nx.disabled=cur===slides.length-1;
+  nx.textContent=(cur<slides.length-1&&+slides[cur+1].dataset.step!==st)?STEPS[+slides[cur+1].dataset.step]+"(으)로":"다음";
+}
+function bindJumps(root){[].forEach.call(root.querySelectorAll("[data-jump]"),function(b){b.addEventListener("click",function(){var t=document.getElementById(b.dataset.jump);if(t)show(slides.indexOf(t));});});}
+bindJumps(document);
+document.getElementById("prev").onclick=function(){show(cur-1);};
+document.getElementById("next").onclick=function(){show(cur+1);};
+document.addEventListener("keydown",function(e){
+  if(e.target&&(e.target.type==="range"))return;
+  if(e.key==="ArrowRight"||e.key==="PageDown"){show(cur+1);e.preventDefault();}
+  else if(e.key==="ArrowLeft"||e.key==="PageUp"){show(cur-1);e.preventDefault();}
+});
+var tx=null,ty=null;
+vp.addEventListener("touchstart",function(e){var t=e.target;if(t.closest&&(t.closest("input")||t.closest(".dcard"))){tx=null;return;}tx=e.touches[0].clientX;ty=e.touches[0].clientY;},{passive:true});
+vp.addEventListener("touchend",function(e){if(tx==null)return;var dx=e.changedTouches[0].clientX-tx,dy=e.changedTouches[0].clientY-ty;if(Math.abs(dx)>60&&Math.abs(dx)>Math.abs(dy)*1.5)show(cur+(dx<0?1:-1));tx=null;},{passive:true});
+
+/* ---------- 실습 1 · 조작형 ---------- */
+(function(){if(!document.getElementById("p1-items")||!CASE)return;
+var p1v=CASE.values.slice(),p1s=CASE.values.indexOf(MAXV),p1m=document.getElementById("p1-items"),p1r=document.getElementById("p1-range");
+CASE.labels.forEach(function(m,i){var b=document.createElement("button");b.type="button";b.className="mbtn";b.textContent=m;b.onclick=function(){p1s=i;p1d();};p1m.appendChild(b);});
+function p1d(){
+  [].forEach.call(p1m.children,function(b,i){b.classList.toggle("on",i===p1s);b.setAttribute("aria-pressed",i===p1s);});
+  p1r.value=p1v[p1s];document.getElementById("p1-label").textContent=CASE.labels[p1s]+"번";document.getElementById("p1-val").textContent=f1(p1v[p1s]);
+  var s=r1(sum(p1v)),m=s/N;
+  document.getElementById("p1-sum").textContent=f1(s);document.getElementById("p1-mean").textContent=f1(m,2);
+  barChart(document.getElementById("p1-svg"),p1v,{mean:m,sel:p1s,ymax:9});
+  var msg=document.getElementById("p1-msg");
+  if(P1.target!=null&&Math.abs(m-P1.target)<0.005){msg.className="pmsg ok";msg.textContent="성공했습니다. "+f1(s)+" ÷ "+N+" = "+f1(m,2);}
+  else if(Math.abs(s-SUMV)<1e-9){msg.className="pmsg";msg.textContent="원래 값입니다. "+f1(SUMV)+" ÷ "+N+" = "+f1(AVG,2);}
+  else{msg.className="pmsg";msg.textContent="원래 평균 "+f1(AVG,2)+"보다 "+f1(Math.abs(m-AVG),2)+" "+(m>AVG?"늘었습니다.":"줄었습니다.");}
+}
+p1r.addEventListener("input",function(){p1v[p1s]=r1(+p1r.value);p1d();});
+document.getElementById("p1-reset").onclick=function(){p1v=CASE.values.slice();p1d();};
+p1d();
+
+})();
+/* ---------- 실습 2 · 분류형 ---------- */
+(function(){if(!document.getElementById("p2-pool"))return;
+var pool=document.getElementById("p2-pool"),binWrap=document.getElementById("p2-bins"),selC=null,done2=0;
+var bins=BINS.map(function(n){var b=document.createElement("div");b.className="bin";b.dataset.bin=n;b.innerHTML="<h4>"+n+"</h4>";binWrap.appendChild(b);return b;});
+function p2msg(t,c){var m=document.getElementById("p2-msg");m.textContent=t;m.className="pmsg "+(c||"");document.getElementById("p2-count").textContent=done2+" / "+CARDS.length;}
+function p2init(){
+  pool.innerHTML="";bins.forEach(function(b){[].slice.call(b.querySelectorAll(".dcard")).forEach(function(c){c.remove();});});done2=0;selC=null;
+  var o=CARDS.map(function(_,i){return i;});for(var i=o.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1)),t=o[i];o[i]=o[j];o[j]=t;}
+  o.forEach(function(i){var d=document.createElement("div");d.className="dcard";d.tabIndex=0;d.setAttribute("role","button");d.textContent=CARDS[i][0];d.dataset.ans=CARDS[i][1];pool.appendChild(d);attach(d);});
+  p2msg("카드를 하나 골라 보세요.","");
+}
+function drop(c,b){
+  if(!b||c.classList.contains("ok"))return;
+  c.classList.remove("sel");selC=null;
+  if(c.dataset.ans===b.dataset.bin){c.classList.add("ok");c.removeAttribute("tabindex");b.appendChild(c);done2++;p2msg(done2===CARDS.length?"카드를 모두 맞게 분류했습니다.":"정답입니다.","ok");}
+  else{c.classList.add("shake");setTimeout(function(){c.classList.remove("shake");},400);p2msg("「"+b.dataset.bin+"」이 아닙니다. "+HINT[c.dataset.ans],"ng");}
+}
+function pick(d){if(selC===d){d.classList.remove("sel");selC=null;return;}if(selC)selC.classList.remove("sel");selC=d;d.classList.add("sel");p2msg("이제 알맞은 칸을 누르세요.","");}
+function attach(d){
+  var sx=null,sy,mv=false,gh=null,ov=null,offX=0,offY=0;
+  function pos(e){var r=stage.getBoundingClientRect();return{x:(e.clientX-r.left)/S,y:(e.clientY-r.top)/S};}
+  d.addEventListener("pointerdown",function(e){if(d.classList.contains("ok"))return;sx=e.clientX;sy=e.clientY;mv=false;d.setPointerCapture(e.pointerId);var r=d.getBoundingClientRect();offX=(e.clientX-r.left)/S;offY=(e.clientY-r.top)/S;});
+  d.addEventListener("pointermove",function(e){
+    if(sx==null)return;
+    if(!mv&&Math.hypot(e.clientX-sx,e.clientY-sy)>6){mv=true;gh=d.cloneNode(true);gh.classList.add("ghostc");gh.classList.remove("sel");gh.style.width=d.offsetWidth+"px";stage.appendChild(gh);d.style.opacity=".35";}
+    if(mv){var p=pos(e);gh.style.left=(p.x-offX)+"px";gh.style.top=(p.y-offY)+"px";
+      var t=document.elementFromPoint(e.clientX,e.clientY),b=t&&t.closest?t.closest(".bin"):null;
+      if(ov&&ov!==b)ov.classList.remove("hover");ov=b;if(b)b.classList.add("hover");}
+  });
+  d.addEventListener("pointerup",function(){
+    if(sx==null)return;sx=null;
+    if(mv){gh.remove();gh=null;d.style.opacity="";if(ov)ov.classList.remove("hover");var b=ov;ov=null;drop(d,b);}else pick(d);
+  });
+  d.addEventListener("pointercancel",function(){if(gh){gh.remove();gh=null;}d.style.opacity="";sx=null;if(ov)ov.classList.remove("hover");ov=null;});
+  d.addEventListener("keydown",function(e){if(e.key==="Enter"||e.key===" "){e.preventDefault();pick(d);}});
+}
+bins.forEach(function(b){b.tabIndex=0;b.setAttribute("role","button");b.setAttribute("aria-label",b.dataset.bin+" 칸에 놓기");
+  b.addEventListener("click",function(e){if(selC&&!e.target.closest(".dcard"))drop(selC,b);});
+  b.addEventListener("keydown",function(e){if((e.key==="Enter"||e.key===" ")&&selC){e.preventDefault();drop(selC,b);}});});
+document.getElementById("p2-reset").onclick=p2init;
+p2init();
+
+})();
+/* ---------- 실습 3 · 추정형 ---------- */
+(function(){if(!document.getElementById("p3-range")||!PAIRS)return;
+var p3r=document.getElementById("p3-range"),p3done=false;
+document.getElementById("p3-x0").textContent=PAIRS.x0;
+p3r.min=PAIRS.ymin;p3r.max=PAIRS.ymax;p3r.step=0.1;p3r.value=r1((PAIRS.ymin+PAIRS.ymax)/2);
+function p3d(){var g=+p3r.value;document.getElementById("p3-val").textContent=f1(g);scatter(document.getElementById("p3-svg"),{x0:PAIRS.x0,guess:g,line:p3done,pred:p3done,actual:p3done});}
+p3r.addEventListener("input",function(){if(p3done){p3done=false;document.getElementById("p3-res").classList.remove("on");}p3d();});
+document.getElementById("p3-check").onclick=function(){
+  p3done=true;var g=+p3r.value,mine=Math.abs(g-PAIRS.actual),line=Math.abs(PRED-PAIRS.actual);
+  document.getElementById("p3-mine").textContent=f1(g);document.getElementById("p3-pred").textContent=f1(PRED,PAIRS.dp);document.getElementById("p3-act").textContent=f1(PAIRS.actual);
+  var m=document.getElementById("p3-msg"),good=mine<=line;m.className="pmsg "+(good?"ok":"ng");
+  m.textContent="내 오차 "+f1(mine,PAIRS.dp)+PAIRS.unit+", 직선 오차 "+f1(line,PAIRS.dp)+PAIRS.unit+". "+(good?"직선만큼 또는 더 가깝게 추정했습니다.":"직선을 이용하면 오차를 줄일 수 있습니다.");
+  document.getElementById("p3-res").classList.add("on");p3d();
+};
+p3d();
+
+})();
+show(0);
+})();
+</script>
+</body>
+</html>

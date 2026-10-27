@@ -1,0 +1,1091 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>모형의 평가와 비교</title>
+<!-- M23 모형의 평가와 비교 v1.0 · 기준 템플릿 v1.3로 제작 (2026-10-27) -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<style>
+:root{
+  --navy:#1B2A4A; --navy2:#2C4170; --navy3:#5B6E97; --navy-soft:#E4E9F2;
+  --ink:#22262E; --gray:#6B7280; --gray2:#9AA0AA; --panel:#EEF0F3; --line:#D5D9E0;
+  --amber:#E0A100; --amber-ink:#6E4F00; --amber-soft:#FCF3D9;
+  --ok:#23704F; --ok-soft:#E2F1E9; --ng:#B42318; --ng-soft:#FBE6E3;
+  --letterbox:#C7CCD4;
+}
+*{box-sizing:border-box}
+html,body{margin:0;height:100%;overflow:hidden;background:var(--letterbox)}
+body{font-family:"Pretendard Variable","Pretendard","Apple SD Gothic Neo","Malgun Gothic","Noto Sans KR",system-ui,sans-serif;color:var(--ink);-webkit-text-size-adjust:100%;font-feature-settings:"tnum"}
+button{font:inherit;color:inherit}
+:focus-visible{outline:3px solid var(--amber);outline-offset:2px;border-radius:4px}
+
+/* ---------- 16:9 무대 ---------- */
+.stage{position:absolute;left:50%;top:50%;width:960px;height:540px;transform:translate(-50%,-50%) scale(var(--s,1));transform-origin:center;background:#fff;overflow:hidden;box-shadow:0 10px 40px rgba(27,42,74,.25)}
+
+/* ---------- 상단 바: 모듈명 + 7단계 진행선 ---------- */
+.topbar{position:absolute;left:0;right:0;top:0;height:60px;background:var(--navy);display:flex;align-items:center}
+.brand{flex:0 0 200px;padding-left:22px;color:#fff;font-size:14px;font-weight:800;letter-spacing:-.3px;line-height:1.2;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.brand small{display:block;font-size:11px;font-weight:500;color:#A9B6CF;letter-spacing:0;margin-top:2px;overflow:hidden;text-overflow:ellipsis}
+.rail{position:relative;flex:1;height:60px;margin-right:22px}
+.rail .track{position:absolute;left:14px;right:14px;top:21px;height:3px;background:#3A4D78;border-radius:2px}
+.rail .fill{position:absolute;left:0;top:0;bottom:0;background:var(--amber);border-radius:2px;transition:width .35s ease}
+.station{position:absolute;top:10px;width:72px;margin-left:-36px;background:none;border:0;padding:0;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:4px}
+.station .dot{width:24px;height:24px;border-radius:50%;display:grid;place-items:center;font-size:11.5px;font-weight:800;background:var(--navy);color:#8E9DBD;border:2px solid #4A5D88;transition:all .25s}
+.station .lb{font-size:11.5px;color:#8E9DBD;white-space:nowrap}
+.station.done .dot{background:#C9D3E6;border-color:#C9D3E6;color:var(--navy)}
+.station.done .lb{color:#C9D3E6}
+.station.cur .dot{background:var(--amber);border-color:#FFE08A;color:var(--navy);transform:scale(1.12)}
+.station.cur .lb{color:#fff;font-weight:700}
+
+/* ---------- 화면 ---------- */
+.viewport{position:absolute;left:0;right:0;top:60px;bottom:46px}
+.slide{position:absolute;inset:0;padding:16px 36px 10px;display:none;flex-direction:column;gap:12px}
+.slide.on{display:flex;animation:fade .22s ease}
+@keyframes fade{from{opacity:0}to{opacity:1}}
+@media (prefers-reduced-motion:reduce){.slide.on{animation:none}.rail .fill,.station .dot{transition:none}}
+.sh{flex:0 0 auto}
+.sec{font-size:12.5px;font-weight:700;color:var(--navy3);display:flex;gap:8px;align-items:center;min-height:18px}
+h2{margin:3px 0 0;font-size:24px;line-height:1.3;font-weight:800;color:var(--navy);letter-spacing:-.6px;display:flex;gap:10px;align-items:flex-start}
+h2 .q{flex:0 0 auto;margin-top:2px;width:28px;height:28px;border-radius:6px;background:var(--navy);color:#fff;font-size:15px;display:grid;place-items:center}
+h2.big{font-size:30px;line-height:1.32}
+.body{flex:1 1 auto;min-height:0;display:grid;gap:24px}
+.split{grid-template-columns:1.2fr 1fr}
+.split.even{grid-template-columns:1fr 1fr}
+.full{grid-template-columns:1fr}
+.fig{background:var(--panel);border-radius:12px;padding:12px;min-height:0;display:flex;align-items:center;justify-content:center}
+.fig svg{width:100%;height:100%;display:block}
+.figcol{min-height:0;display:flex;flex-direction:column;gap:10px}
+.figcol .fig{flex:1 1 auto}
+.side{min-height:0;display:flex;flex-direction:column;gap:12px;justify-content:center}
+
+/* 핵심 문장: 40자 안팎, 1~2개 */
+.key{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:9px}
+.key li{position:relative;padding-left:16px;font-size:18.5px;line-height:1.42;font-weight:700;letter-spacing:-.4px}
+.key li::before{content:"";position:absolute;left:0;top:.28em;width:4px;height:1.05em;border-radius:2px;background:var(--navy2)}
+.key b{color:var(--navy);background:linear-gradient(transparent 62%,var(--amber-soft) 62%)}
+/* 해설 문단: 2~4문장, 150~250자 */
+.exp{margin:0;font-size:15px;line-height:1.62;letter-spacing:-.2px;color:var(--ink)}
+.exp b{color:var(--navy)}
+/* 연결 문장: 다음 소단원으로 넘기는 질문 */
+.next{margin:0;border-top:1px dashed var(--line);padding-top:9px;font-size:14px;font-weight:700;color:var(--navy2);display:flex;gap:8px;align-items:baseline}
+.next span{flex:0 0 auto;font-size:11.5px;font-weight:800;color:var(--navy3);background:var(--navy-soft);border-radius:4px;padding:0 6px;line-height:20px}
+/* 각주: 기호의 뜻과 출처 번호만 */
+.foot{flex:0 0 auto;font-size:12px;line-height:1.5;color:var(--gray);margin:0}
+.foot b{color:var(--ink)}
+.cite{font-size:.72em;font-weight:700;color:var(--navy3);vertical-align:super;line-height:0;margin-left:1px}
+.tag-v{display:inline-block;font-size:11px;font-weight:700;border-radius:4px;padding:0 6px;line-height:18px;white-space:nowrap;vertical-align:1px;color:var(--gray);background:#F3F4F6;box-shadow:inset 0 0 0 1px var(--line)}
+
+/* 핵심 수학 개념 박스 */
+.math{flex:0 0 auto;border-left:3px solid var(--navy3);background:#F6F7F9;border-radius:0 8px 8px 0;padding:9px 13px;font-size:13.5px;line-height:1.5}
+.math .mt{font-size:12px;font-weight:800;color:var(--navy3);margin-bottom:2px}
+.math .f{font-family:"Cambria Math","Times New Roman",serif;font-size:18px;font-weight:700;color:var(--navy);margin:1px 0 4px}
+.math .r{display:grid;grid-template-columns:34px 1fr;gap:6px}
+.math .r span:first-child{font-size:11.5px;font-weight:700;color:var(--gray2);padding-top:1px}
+.math .w{margin-top:5px;padding-top:5px;border-top:1px dashed var(--line);color:var(--ng);font-weight:700;font-size:12.5px}
+
+/* ---------- 하단 바 ---------- */
+.bottombar{position:absolute;left:0;right:0;bottom:0;height:46px;border-top:1px solid var(--line);display:flex;align-items:center;padding:0 22px 0 36px;gap:12px;background:#fff}
+.counter{font-size:13px;color:var(--gray);font-weight:600}
+.counter strong{color:var(--navy)}
+.spacer{flex:1}
+.nav{border:1.5px solid var(--navy);background:#fff;color:var(--navy);border-radius:8px;height:32px;padding:0 16px;font-size:14px;font-weight:700;cursor:pointer}
+.nav.primary{background:var(--navy);color:#fff}
+.nav:disabled{opacity:.3;cursor:default}
+
+/* ---------- 홈으로 ---------- */
+.home{display:inline-flex;align-items:center;gap:6px;height:32px;padding:0 13px;border-radius:8px;border:1.5px solid var(--navy-soft);background:#fff;color:var(--navy2);font-size:13.5px;font-weight:700;line-height:1;text-decoration:none;white-space:nowrap}
+.home svg{width:14px;height:14px;flex:0 0 auto;display:block}
+.home:hover{background:var(--navy-soft);border-color:var(--navy3);color:var(--navy)}
+.home:focus-visible{outline:3px solid var(--amber);outline-offset:2px}
+@media (prefers-reduced-motion:reduce){.home{transition:none}}
+
+/* ① 학습개요 */
+.meta{display:grid;grid-template-columns:auto 1fr;gap:6px 14px;margin:0;font-size:14px}
+.meta dt{font-weight:700;color:var(--gray)}
+.meta dd{margin:0;font-weight:700;color:var(--navy)}
+.prevlink{background:var(--panel);border-radius:10px;padding:12px 14px;font-size:14.5px;line-height:1.55}
+.prevlink small{display:block;font-size:12px;font-weight:800;color:var(--navy3);margin-bottom:3px}
+
+/* ② 학습목표: 목표 → 문항 → 실습 연결 */
+.gmap{display:grid;grid-template-columns:44px 1fr 150px 150px;align-items:stretch;row-gap:12px;column-gap:0}
+.gmap .hd{font-size:12px;font-weight:700;color:var(--gray);padding:0 14px 2px}
+.gmap .gn{background:var(--navy);color:#fff;font-weight:800;font-size:18px;display:grid;place-items:center;border-radius:10px 0 0 10px}
+.gmap .gt{background:var(--panel);padding:14px 18px;font-size:17px;font-weight:700;line-height:1.42;letter-spacing:-.3px;display:flex;align-items:center}
+.gmap .gt b{color:var(--navy)}
+.gmap .ga,.gmap .gp{background:var(--panel);display:flex;align-items:center;padding:0 10px;border-left:2px solid #fff}
+.gmap .gp{border-radius:0 10px 10px 0}
+.jump{border:1.5px solid var(--navy3);background:#fff;border-radius:7px;padding:6px 10px;font-size:13px;font-weight:700;color:var(--navy);cursor:pointer;text-align:left;line-height:1.3;width:100%}
+.jump:hover{background:var(--navy-soft)}
+
+/* ④ 본문 정리 표 */
+.sumtbl{width:100%;border-collapse:separate;border-spacing:0;font-size:14.5px;line-height:1.5}
+.sumtbl th{background:var(--navy);color:#fff;font-weight:800;text-align:left;padding:10px 14px}
+.sumtbl th:first-child{border-radius:10px 0 0 0;width:150px}
+.sumtbl th:last-child{border-radius:0 10px 0 0}
+.sumtbl td{padding:11px 14px;border-bottom:1px solid var(--line);vertical-align:top}
+.sumtbl td:first-child{font-weight:800;color:var(--navy)}
+.sumtbl tr:nth-child(even) td{background:#F8F9FB}
+
+/* ⑤ 형성평가 */
+.qchips{display:flex;gap:6px}
+.qchips span{font-size:11.5px;font-weight:700;color:var(--navy2);background:var(--navy-soft);border-radius:4px;padding:0 7px;line-height:19px}
+h2.stem{font-size:21px;line-height:1.42;font-weight:800}
+.opts{display:grid;gap:9px;align-content:center}
+.opts.ox{grid-template-columns:1fr 1fr}
+.opt{border:1.5px solid var(--line);background:#fff;border-radius:10px;padding:11px 14px;text-align:left;font-size:16px;font-weight:600;cursor:pointer;display:flex;gap:10px;align-items:center}
+.opt .n{flex:0 0 26px;height:26px;border-radius:50%;background:var(--panel);display:grid;place-items:center;font-size:13px;font-weight:800;color:var(--navy)}
+.opts.ox .opt{justify-content:center;font-size:40px;font-weight:800;padding:22px;color:var(--navy)}
+.opt:hover:not(:disabled){border-color:var(--navy3);background:#F8F9FB}
+.opt:disabled{cursor:default}
+.opt.ok{border-color:var(--ok);background:var(--ok-soft);color:var(--ok)}
+.opt.ok .n{background:var(--ok);color:#fff}
+.opt.ng{border-color:var(--ng);background:var(--ng-soft);color:var(--ng)}
+.opt.ng .n{background:var(--ng);color:#fff}
+.fbp{background:var(--panel);border-radius:12px;padding:18px 20px;display:flex;flex-direction:column;gap:10px;font-size:14.5px;line-height:1.6}
+.fbp .empty{color:var(--gray);margin:auto 0}
+.fbp .verdict{font-size:19px;font-weight:800}
+.fbp.ok{background:var(--ok-soft)} .fbp.ok .verdict{color:var(--ok)}
+.fbp.ng{background:var(--ng-soft)} .fbp.ng .verdict{color:var(--ng)}
+.fbp .back{align-self:flex-start}
+.fbp .tally{margin-top:auto;font-size:12.5px;color:var(--gray);font-weight:600}
+
+/* ⑥ 실습 */
+.plabel{font-size:12px;font-weight:800;color:var(--navy3);margin-bottom:6px}
+.pcol{min-height:0;display:flex;flex-direction:column}
+.mbtns{display:flex;flex-wrap:nowrap;gap:3px;margin-bottom:8px}
+.mbtn{border:1px solid var(--line);background:#fff;border-radius:6px;padding:2px 6px;font-size:12px;cursor:pointer;min-width:26px}
+.mbtn.on{background:var(--navy);border-color:var(--navy);color:#fff}
+.ctrl{display:flex;align-items:center;gap:10px;font-size:14px;font-weight:600}
+input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
+.stats{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.stats.three{grid-template-columns:1fr 1fr 1fr}
+.stats div{background:var(--panel);border-radius:10px;padding:8px 12px}
+.stats small{display:block;font-size:11.5px;color:var(--gray);font-weight:600;line-height:1.35}
+.stats strong{font-size:22px;color:var(--navy);letter-spacing:-.4px}
+.pmsg{font-size:14.5px;font-weight:700;min-height:22px;line-height:1.45}
+.pmsg.ok{color:var(--ok)} .pmsg.ng{color:var(--ng)}
+.think{flex:0 0 auto;background:var(--amber-soft);border-radius:10px;padding:9px 14px;font-size:14.5px;font-weight:700;color:var(--amber-ink);display:flex;gap:10px;align-items:baseline}
+.think span{flex:0 0 auto;font-size:12px;font-weight:800}
+.howto{font-size:13.5px;color:var(--gray);line-height:1.5;margin:0}
+.btn{border:0;background:var(--navy);color:#fff;border-radius:8px;height:32px;padding:0 14px;font-size:13.5px;font-weight:700;cursor:pointer}
+.btn.ghost{background:#fff;color:var(--navy);box-shadow:inset 0 0 0 1.5px var(--navy)}
+.pool{flex:1;min-height:0;display:grid;grid-template-columns:1fr 1fr;align-content:start;gap:8px;padding:10px;border:1.5px dashed var(--line);border-radius:10px;background:#FAFBFC}
+.dcard{background:#fff;border:1.5px solid var(--navy3);border-radius:8px;padding:7px 10px;font-size:13.5px;font-weight:600;line-height:1.4;cursor:grab;user-select:none;-webkit-user-select:none;touch-action:none}
+.dcard.sel{box-shadow:0 0 0 3px var(--amber)}
+.dcard.ok{border-color:var(--ok);background:var(--ok-soft);color:var(--ok);cursor:default;font-size:12.5px;padding:5px 8px}
+.dcard.shake{animation:shake .35s;border-color:var(--ng);background:var(--ng-soft)}
+@keyframes shake{25%{transform:translateX(-5px)}75%{transform:translateX(5px)}}
+.ghostc{position:absolute;pointer-events:none;z-index:50;opacity:.92;box-shadow:0 8px 20px rgba(27,42,74,.25);cursor:grabbing}
+.bins{flex:1 0 auto;min-height:0;display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.bin .dcard{font-size:12px;padding:3px 7px;line-height:1.3}
+.p2row{display:flex;gap:10px;align-items:center}.p2row .pmsg{flex:1;margin:0}.p2row .btn{flex:0 0 auto}
+.bin{border:1.5px solid var(--line);border-radius:10px;padding:6px;display:flex;flex-direction:column;gap:6px;background:#fff;cursor:pointer;min-height:0}
+.bin h4{margin:0;background:var(--navy);color:#fff;border-radius:6px;text-align:center;font-size:14px;padding:4px}
+.bin.hover{border-color:var(--amber);background:var(--amber-soft)}
+.res{display:none;flex-direction:column;gap:8px}
+.res.on{display:flex}
+
+/* ⑦ 용어해설·참고자료 */
+.gl{display:grid;grid-template-columns:1fr 1fr;grid-template-rows:repeat(3,1fr);gap:10px 22px;min-height:0}
+.gi{border-top:2px solid var(--navy);padding:8px 0 0;display:flex;flex-direction:column;gap:3px;min-height:0}
+.gi .t{font-size:16.5px;font-weight:800;color:var(--navy);display:flex;gap:6px;align-items:baseline;flex-wrap:wrap}
+.gi .t em{font-style:normal;font-weight:500;font-size:12.5px;color:var(--gray)}
+.gi .t i{font-style:normal;font-size:12px;font-weight:800;color:var(--navy3);width:22px}
+.gi .d{font-size:14px;line-height:1.5}
+.gi .e{font-size:12.5px;line-height:1.45;color:var(--gray)}
+.gi .e strong{color:var(--navy3)}
+.refs{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:8px;font-size:13.5px;line-height:1.5}
+.refs li{display:grid;grid-template-columns:30px 1fr;gap:4px}
+.refs li span{font-weight:800;color:var(--navy3)}
+.refs a{color:var(--navy2);word-break:break-all}
+.nextmod{background:var(--navy);color:#fff;border-radius:12px;padding:18px 22px;display:flex;flex-direction:column;gap:6px}
+.nextmod small{font-size:12px;font-weight:700;color:#A9B6CF}
+.nextmod strong{font-size:19px;line-height:1.45;letter-spacing:-.3px}
+
+.rotate{position:fixed;left:0;right:0;bottom:max(14px,env(safe-area-inset-bottom));text-align:center;font-size:13px;color:#3A4560;display:none}
+@media (orientation:portrait) and (max-width:700px){.rotate{display:block}}
+</style>
+</head>
+<body>
+<div class="stage" id="stage">
+  <header class="topbar">
+    <!-- [교체] 모듈명 / 과정명·모듈 번호 (장·절 번호는 쓰지 않음) -->
+    <div class="brand" id="brand">모형의 평가와 비교<small>상관·회귀·통계 모형 · M23</small></div>
+    <nav class="rail" id="rail" aria-label="학습 단계"><div class="track"><div class="fill" id="fill"></div></div></nav>
+  </header>
+
+  <main class="viewport" id="vp">
+    <!-- ① 학습개요 ─────────────────────────────── -->
+    <section class="slide" data-step="0">
+      <div class="sh"><div class="sec">학습개요</div>
+        <h2 class="big">여러 모형 중 무엇이 좋은지, 검정과 정보기준으로 판단합니다</h2></div>
+      <div class="body split">
+        <div class="fig"><svg id="m23-ov" viewBox="0 0 440 260" role="img" aria-label="후보 모형들을 왈드 검정, 가능도비 검정, AIC, BIC로 비교하는 흐름"></svg></div>
+        <div class="side">
+          <div class="prevlink"><small>지난 모듈에서는</small>개수 데이터를 다루는 푸아송 회귀와 여러 가지 일반화선형모형, 과분산, 일반화선형혼합모형을 배웠습니다.<small style="margin-top:8px">이번 모듈에서는</small>최대가능도 방법으로 얻은 모형을 평가하고 비교하는 방법으로 왈드 검정, 가능도비 검정, AIC와 BIC 같은 정보기준을 배웁니다.</div>
+          <dl class="meta"><dt>학습 시간</dt><dd>약 40분</dd><dt>본문</dt><dd>소단원 4개</dd><dt>실습</dt><dd>조작형 · 분류형 · 추정형</dd></dl>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" data-step="0">
+      <div class="sh"><div class="sec">학습개요 · 이 모듈의 예시</div><h2>꽃 20그루 데이터에 세 가지 푸아송 회귀 모형을 견줍니다</h2></div>
+      <div class="body split">
+        <div class="fig"><svg id="m23-case" viewBox="0 0 440 250" role="img" aria-label="꽃 데이터와 모형 M1 상수, M2 1차, M3 2차의 곡선"></svg></div>
+        <div class="side">
+          <ul class="key"><li>같은 데이터, 복잡도가 다른 모형 3개</li></ul>
+          <p class="exp">지난 모듈의 꽃 20그루 데이터(비료 양과 꽃 개수, 예시값)에 세 가지 푸아송 회귀 모형을 적용합니다. M1은 비료 양과 관계없이 평균이 일정한 log λ = a, M2는 log λ = a + bx, M3는 x²항을 더한 log λ = a + bx + cx²입니다. 셋 중 어느 모형이 가장 좋은지를 여러 방법으로 판단해 봅니다.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ② 학습목표 ─────────────────────────────── -->
+    <section class="slide" data-step="1">
+      <div class="sh"><div class="sec">학습목표</div><h2>이 모듈을 마치면 이렇게 할 수 있습니다</h2></div>
+      <div class="body full" style="align-content:center">
+        <div class="gmap">
+          <div></div><div class="hd">목표</div><div class="hd">확인하는 문항</div><div class="hd">연결 실습</div>
+          <div class="gn">1</div><div class="gt"><span>가능도비 검정의 ΔD를 구하고 조건을 <b>판단한다</b>.</span></div>
+          <div class="ga"><button class="jump" data-jump="q1">문항 1·2</button></div><div class="gp"><button class="jump" data-jump="p2">실습 2 분류</button></div>
+          <div class="gn">2</div><div class="gt"><span>AIC를 계산하고 과대적합을 <b>설명한다</b>.</span></div>
+          <div class="ga"><button class="jump" data-jump="q3">문항 3·4</button></div><div class="gp"><button class="jump" data-jump="p1">실습 1 조작</button></div>
+          <div class="gn">3</div><div class="gt"><span>목적에 따라 AIC와 BIC를 <b>구분한다</b>.</span></div>
+          <div class="ga"><button class="jump" data-jump="q5">문항 5·6</button></div><div class="gp"><button class="jump" data-jump="p3">실습 3 추정</button></div>
+        </div>
+      </div>
+      <p class="foot">버튼을 누르면 해당 문항이나 실습 화면으로 바로 이동합니다.</p>
+    </section>
+
+    <!-- ③ 일상의 예시 ─────────────────────────────── -->
+    <section class="slide" data-step="2">
+      <div class="sh"><div class="sec">일상의 예시 1/5</div><h2>새 옵션을 추가한 만큼 정말 좋아졌는지 따져 봅니다</h2></div>
+      <div class="body split">
+        <div class="fig"><svg viewBox="0 0 440 250" role="img" aria-label="기본 모델과 옵션을 더한 모델의 성능 차이가 우연인지 비교">
+          <rect x="40" y="60" width="150" height="110" rx="14" fill="#E4E9F2" stroke="#5B6E97" stroke-width="2"/><text x="115" y="108" text-anchor="middle" font-size="14" font-weight="800" fill="#1B2A4A">기본형</text><text x="115" y="134" text-anchor="middle" font-size="12" fill="#6B7280">연비 15.0</text>
+          <rect x="250" y="60" width="150" height="110" rx="14" fill="#FCF3D9" stroke="#E0A100" stroke-width="2"/><text x="325" y="100" text-anchor="middle" font-size="14" font-weight="800" fill="#6E4F00">기본형 + 옵션</text><text x="325" y="126" text-anchor="middle" font-size="12" fill="#6B7280">연비 15.1</text>
+          <text x="220" y="120" text-anchor="middle" font-size="22" font-weight="800" fill="#5B6E97">⊂</text>
+          <text x="220" y="210" text-anchor="middle" font-size="12" font-weight="700" fill="#1B2A4A">0.1 차이는 의미 있는 개선일까, 우연일까?</text>
+        </svg></div>
+        <div class="side">
+          <ul class="key"><li>더한 만큼 정말 좋아졌는지 검정합니다.</li></ul>
+          <p class="exp">자동차 기본형에 옵션 하나를 더했더니 연비가 15.0에서 15.1로 조금 올랐다면, 이 차이가 옵션 덕분인지 측정할 때마다 생기는 흔들림인지 따져 봐야 합니다. 옵션을 더한 차는 기본형을 포함하므로, 더한 부분이 ‘의미 있게’ 좋아졌는지만 확인하면 됩니다. 차이가 작을수록 이런 확인이 더 중요해집니다.</p>
+          <p class="next"><span>본문에서</span>4-1 왈드 검정과 가능도비 검정으로 이어집니다.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" data-step="2">
+      <div class="sh"><div class="sec">일상의 예시 2/5</div><h2>기출문제만 통째로 외우면 새 시험에서 무너집니다</h2></div>
+      <div class="body split">
+        <div class="fig"><svg viewBox="0 0 440 250" role="img" aria-label="기출문제는 100점이지만 새 문제는 낮은 점수, 원리를 익힌 학생은 둘 다 고르게 높음">
+          <line x1="60" y1="200" x2="400" y2="200" stroke="#9AA0AA" stroke-width="1.5"/>
+          <g><rect x="90" y="40" width="40" height="160" fill="#9AA0AA"/><rect x="140" y="140" width="40" height="60" fill="#B42318"/><rect x="260" y="70" width="40" height="130" fill="#9AA0AA"/><rect x="310" y="80" width="40" height="120" fill="#23704F"/></g>
+          <g font-size="11" font-weight="700" fill="#22262E" text-anchor="middle"><text x="110" y="34">100</text><text x="160" y="134">40</text><text x="280" y="64">80</text><text x="330" y="74">78</text></g>
+          <g font-size="12.5" font-weight="800" fill="#1B2A4A" text-anchor="middle"><text x="135" y="222">통째로 암기</text><text x="305" y="222">원리 이해</text></g>
+          <g font-size="10.5" fill="#6B7280"><rect x="300" y="20" width="10" height="10" fill="#9AA0AA"/><text x="314" y="29">기출</text><rect x="350" y="20" width="10" height="10" fill="#B42318"/><text x="364" y="29">새 문제</text></g>
+        </svg></div>
+        <div class="side">
+          <ul class="key"><li>지금 데이터에만 딱 맞추면 새 데이터에 약합니다.</li></ul>
+          <p class="exp">기출문제의 답을 통째로 외운 학생은 같은 문제로 본 모의고사에서 100점을 받지만, 처음 보는 문제가 나오면 점수가 뚝 떨어집니다. 원리를 익힌 학생은 기출 점수는 조금 낮아도 새 문제에서도 고르게 잘 봅니다. 모형도 가진 데이터에만 지나치게 맞추면 새 데이터를 잘 예측하지 못합니다.</p>
+          <p class="next"><span>본문에서</span>4-2 AIC와 과대적합으로 이어집니다.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" data-step="2">
+      <div class="sh"><div class="sec">일상의 예시 3/5</div><h2>설명은 정확하면서도 간단해야 좋은 설명입니다</h2></div>
+      <div class="body split">
+        <div class="fig"><svg viewBox="0 0 440 250" role="img" aria-label="잘 맞음과 간단함 사이의 저울">
+          <line x1="220" y1="60" x2="220" y2="190" stroke="#1B2A4A" stroke-width="4"/><path d="M190 200 L250 200 L220 180z" fill="#1B2A4A"/>
+          <line x1="90" y1="80" x2="350" y2="80" stroke="#1B2A4A" stroke-width="4"/>
+          <path d="M60 80 L120 80 L105 130 L75 130z" fill="#EEF4FB" stroke="#2B8CC4" stroke-width="2"/><path d="M320 80 L380 80 L365 130 L335 130z" fill="#FCF3D9" stroke="#E0A100" stroke-width="2"/>
+          <g font-size="12.5" font-weight="800" text-anchor="middle"><text x="90" y="152" fill="#1C6EA4">잘 들어맞음</text><text x="350" y="152" fill="#6E4F00">간단함</text></g>
+          <text x="220" y="228" text-anchor="middle" font-size="11.5" fill="#6B7280">둘 다를 함께 고려해 고름</text>
+        </svg></div>
+        <div class="side">
+          <ul class="key"><li>잘 맞음과 간단함을 함께 고려합니다.</li></ul>
+          <p class="exp">길을 알려 줄 때 골목마다 자세히 설명하면 정확하지만 듣는 사람이 기억하기 어렵고, 너무 짧게 말하면 길을 잃기 쉽습니다. 좋은 설명은 충분히 정확하면서도 간단합니다. 모형을 고를 때도 ‘데이터에 얼마나 잘 맞는가’와 ‘얼마나 복잡한가’를 함께 저울질하는 기준이 필요합니다.</p>
+          <p class="next"><span>본문에서</span>4-2 AIC, 4-3 BIC로 이어집니다.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" data-step="2">
+      <div class="sh"><div class="sec">일상의 예시 4/5</div><h2>목적에 따라 고르는 기준이 다릅니다</h2></div>
+      <div class="body split">
+        <div class="fig"><svg viewBox="0 0 440 250" role="img" aria-label="일기예보는 맞히는 것이 목적, 범인 찾기는 진짜를 가리는 것이 목적">
+          <rect x="20" y="40" width="190" height="160" rx="12" fill="#EEF4FB"/><rect x="230" y="40" width="190" height="160" rx="12" fill="#FCF3D9"/>
+          <g font-size="13" font-weight="800" text-anchor="middle"><text x="115" y="70" fill="#1C6EA4">일기예보</text><text x="325" y="70" fill="#6E4F00">범인 찾기</text></g>
+          <g font-size="12" fill="#22262E" text-anchor="middle"><text x="115" y="112">내일 날씨를</text><text x="115" y="134">잘 맞히면 좋음</text><text x="325" y="112">여러 용의자 중</text><text x="325" y="134">진짜 한 명을 가림</text></g>
+          <g font-size="11.5" font-weight="700" text-anchor="middle"><text x="115" y="176" fill="#1C6EA4">예측이 목적</text><text x="325" y="176" fill="#6E4F00">참을 고르는 것이 목적</text></g>
+        </svg></div>
+        <div class="side">
+          <ul class="key"><li>예측이 목적인지, 참을 고르는 것이 목적인지</li></ul>
+          <p class="exp">일기예보는 원리가 다소 복잡해도 내일 날씨를 잘 맞히기만 하면 좋은 예보입니다. 반면 범인을 찾을 때는 여러 용의자 가운데 진짜 한 명을 가려내는 것이 목적입니다. 같은 증거를 보더라도 목적이 다르면 판단 기준이 달라지듯, 모형을 고르는 기준도 분석 목적에 맞춰 골라야 합니다.</p>
+          <p class="next"><span>본문에서</span>4-3 AIC와 BIC 가려 쓰기로 이어집니다.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" data-step="2">
+      <div class="sh"><div class="sec">일상의 예시 5/5</div><h2>현장에서는? 품질 예측 모형 후보 중 무엇을 쓸까요?</h2></div>
+      <div class="body split even">
+        <div class="fig"><svg viewBox="0 0 420 250" role="img" aria-label="네 장면이 모형의 평가와 비교로 이어지는 그림">
+          <defs><marker id="b2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10z" fill="#5B6E97"/></marker></defs>
+          <g font-size="13" font-weight="700" fill="#1B2A4A" text-anchor="middle">
+            <rect x="14" y="18" width="150" height="44" rx="10" fill="#fff" stroke="#5B6E97" stroke-width="1.5"/><text x="89" y="45">더한 만큼 좋아졌나</text>
+            <rect x="14" y="74" width="150" height="44" rx="10" fill="#fff" stroke="#5B6E97" stroke-width="1.5"/><text x="89" y="101">통째 암기의 함정</text>
+            <rect x="14" y="130" width="150" height="44" rx="10" fill="#fff" stroke="#5B6E97" stroke-width="1.5"/><text x="89" y="157">정확함 + 간단함</text>
+            <rect x="14" y="186" width="150" height="44" rx="10" fill="#fff" stroke="#5B6E97" stroke-width="1.5"/><text x="89" y="213">목적에 맞는 기준</text>
+          </g>
+          <g stroke="#5B6E97" stroke-width="2" fill="none"><path d="M166 40 C220 40 220 112 254 120" marker-end="url(#b2)"/><path d="M166 96 C210 96 220 118 254 122" marker-end="url(#b2)"/><path d="M166 152 C210 152 220 130 254 128" marker-end="url(#b2)"/><path d="M166 208 C220 208 220 138 254 130" marker-end="url(#b2)"/></g>
+          <rect x="258" y="84" width="150" height="82" rx="12" fill="#1B2A4A"/>
+          <text x="333" y="116" text-anchor="middle" font-size="15" font-weight="800" fill="#fff">모형의</text><text x="333" y="136" text-anchor="middle" font-size="15" font-weight="800" fill="#fff">평가와 비교</text>
+          <text x="333" y="156" text-anchor="middle" font-size="11" fill="#C9D3E6">검정 · AIC · BIC</text>
+        </svg></div>
+        <div class="side">
+          <p class="exp">네 장면은 더한 부분이 정말 개선인지 확인하고, 지금 데이터에만 맞추는 함정을 피하고, 정확함과 간단함을 함께 보고, 목적에 맞는 기준을 고르는 순서로 이어집니다. 강판 강도를 예측하는 회귀모형 후보가 여럿일 때, 어떤 설명변수까지 넣을지 정할 때도 같은 순서로 판단합니다.</p>
+          <p class="next"><span>다음 질문</span>회귀계수 하나는 어떻게 검정할까?</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ④ 본문 ─────────────────────────────── -->
+    <section class="slide" data-step="3" id="s-4-1a">
+      <div class="sh"><div class="sec">4-1 왈드 검정과 가능도비 검정</div><h2><span class="q">Q</span>일반화선형모형의 회귀계수는 어떻게 검정할까요?</h2></div>
+      <div class="body split even">
+        <div class="figcol">
+          <div class="fig"><svg id="m23-wald" viewBox="0 0 420 150" role="img" aria-label="M2와 M3 회귀계수의 추정값, 표준오차, 왈드 통계량, p값 표"></svg></div>
+          <div class="math">
+            <div class="mt">핵심 수학 개념 · 왈드 통계량</div>
+            <div class="f">z = 추정값 ÷ 표준오차</div>
+            <div class="r"><span>계산</span><span>M2의 b: 0.577 ÷ 0.0614 ≈ 9.41 → p &lt; 0.001</span></div>
+            <div class="r"><span>해석</span><span>귀무가설 ‘회귀계수 = 0’을 정규분포로 판단합니다.</span></div>
+          </div>
+        </div>
+        <div class="side">
+          <ul class="key"><li><b>왈드 통계량</b>: 추정값 ÷ 표준오차</li><li>표본크기가 작으면 신뢰도가 떨어집니다.</li></ul>
+          <p class="exp">일반적인 선형회귀모형과 마찬가지로 일반화선형모형에서도 추정한 회귀계수를 대상으로 귀무가설 ‘회귀계수 = 0’, 대립가설 ‘회귀계수 ≠ 0’으로 가설검정을 할 수 있습니다. 최대가능도 방법으로 얻은 추정값 ÷ 표준오차를 왈드 통계량이라 하며, 최대가능도 추정량이 정규분포를 따른다고 가정하면 신뢰구간이나 p값을 얻을 수 있습니다. 이 방법이 왈드 검정입니다. 단, 표본크기가 크지 않을 때는 정규분포라는 가정이 미심쩍어, 다음의 가능도비 검정 쪽이 신뢰도가 높다고 합니다.</p>
+          <p class="next"><span>다음 질문</span>모형 전체는 어떻게 비교할까?</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" data-step="3" id="s-4-1b">
+      <div class="sh"><div class="sec">4-1 왈드 검정과 가능도비 검정</div><h2><span class="q">Q</span>항을 더한 모형이 정말 더 잘 들어맞을까요?</h2></div>
+      <div class="body split even">
+        <div class="figcol">
+          <div class="fig"><svg id="m23-lr" viewBox="0 0 420 150" role="img" aria-label="M1은 M2에, M2는 M3에 내포되는 관계와 각 모형의 로그 가능도, ΔD"></svg></div>
+          <div class="math">
+            <div class="mt">핵심 수학 개념 · 가능도비 검정</div>
+            <div class="f">ΔD₁,₂ = −2 × (log L₁* − log L₂*)</div>
+            <div class="r"><span>기호</span><span>L*: 최대가능도, 모형 1이 모형 2에 내포됨</span></div>
+            <div class="r"><span>계산</span><span>M2 vs M3: −2 × (−32.15 + 32.07) ≈ 0.16 → p = 0.69</span></div>
+          </div>
+        </div>
+        <div class="side">
+          <ul class="key"><li><b>가능도비 검정</b>: 내포 관계인 두 모형 비교</li><li>ΔD가 크면 대립가설 모형이 더 잘 맞음</li></ul>
+          <p class="exp">최대가능도 방법으로 얻은 모형을 비교하는 방법으로, 모형이 데이터에 잘 맞도록 개선되었는지 확인하는 가능도비 검정이 있습니다. 비교할 2개 모형 중 어느 한쪽이 다른 쪽을 포함해야(내포 관계) 하며, y = a는 y = a + bx에 내포됩니다. 각 모형의 최대가능도 비율에 로그를 취해 −2를 곱한 ΔD를 검정통계량으로 합니다. M1과 M2는 ΔD = 152.9로 크게 개선되었지만, M2에 x²항을 더한 M3는 ΔD = 0.16으로 개선되었다고 말할 수 없습니다.</p>
+          <p class="next"><span>다음 질문</span>ΔD가 큰지는 무엇과 비교할까?</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" data-step="3" id="s-4-1c">
+      <div class="sh"><div class="sec">4-1 왈드 검정과 가능도비 검정</div><h2><span class="q">Q</span>ΔD가 충분히 큰지는 어떻게 판단할까요?</h2></div>
+      <div class="body split even">
+        <div class="fig"><svg id="m23-boot" viewBox="0 0 420 270" role="img" aria-label="귀무가설 모형에서 1,000번 데이터를 만들어 얻은 ΔD 히스토그램과 상위 5% 경계 3.82, 관찰값 0.16"></svg></div>
+        <div class="side">
+          <ul class="key"><li>귀무가설이 옳을 때의 ΔD 분포와 비교</li><li><b>부트스트랩 방법</b>이나 카이제곱분포로</li></ul>
+          <p class="exp">일반적으로 복잡한 모형일수록 잘 들어맞으므로, 귀무가설에서 얻은 데이터라도 파라미터가 많은 모형 쪽이 더 잘 들어맞게 됩니다. 그래서 귀무가설(M2)이 옳다고 가정하고 같은 표본크기의 무작위 데이터를 생성해 두 모형의 최대가능도를 추정하고 ΔD를 계산하는 일을 반복하면, 귀무가설이 옳을 때의 ΔD 분포를 얻을 수 있습니다. 이렇게 어떤 가정에서 데이터를 생성해 성질을 조사하는 방법을 부트스트랩 방법이라 합니다. 1,000번 반복한 상위 5% 경계는 3.82로, 간편한 근사인 카이제곱분포의 3.84와 거의 같았습니다.</p>
+          <p class="next"><span>다음 질문</span>내포 관계가 아니면 어떻게 비교할까?</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" data-step="3" id="s-4-2a">
+      <div class="sh"><div class="sec">4-2 AIC</div><h2><span class="q">Q</span>잘 맞음과 복잡함을 함께 고려하는 기준은 무엇일까요?</h2></div>
+      <div class="body split even">
+        <div class="figcol">
+          <div class="fig"><svg id="m23-aic" viewBox="0 0 420 150" role="img" aria-label="세 모형의 AIC를 −2 log L 부분과 2k 부분으로 나눈 막대, M2가 가장 작음"></svg></div>
+          <div class="math">
+            <div class="mt">핵심 수학 개념 · AIC</div>
+            <div class="f">AIC = −2 log L* + 2k</div>
+            <div class="r"><span>기호</span><span>L*: 최대가능도, k: 파라미터 개수</span></div>
+            <div class="r"><span>계산</span><span>M2: −2 × (−32.15) + 2 × 2 = 68.3 (최소)</span></div>
+          </div>
+        </div>
+        <div class="side">
+          <ul class="key"><li><b>AIC</b>: 새 데이터 예측 관점의 정보기준</li><li>후보 중 AIC가 최소인 모형을 고릅니다.</li></ul>
+          <p class="exp">통계 모형을 비교하는 또 다른 방법으로 정보량에 근거한 모형 선택이 있으며, 잘 알려진 것이 AIC(아카이케 정보기준)입니다. AIC는 새롭게 얻을 데이터를 얼마나 잘 예측할 수 있는지를 바탕으로 모형의 좋음을 정하는 지표로, 우변 첫째 항은 가능도가 클수록, 둘째 항은 파라미터 개수가 적을수록 작아집니다. 즉 ‘적합도’와 ‘복잡함’을 모두 고려합니다. 꽃 데이터에서 M1 219.1, M2 68.3, M3 70.1로 M2를 고르며, 가능도비 검정과 달리 내포 관계가 아니어도 적용할 수 있습니다.</p>
+          <p class="next"><span>다음 질문</span>파라미터가 많으면 왜 벌점을 줄까?</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" data-step="3" id="s-4-2b">
+      <div class="sh"><div class="sec">4-2 AIC</div><h2><span class="q">Q</span>파라미터가 많은 모형은 왜 조심해야 할까요?</h2></div>
+      <div class="body split even">
+        <div class="fig"><svg id="m23-ovf" viewBox="0 0 420 270" role="img" aria-label="실제 모형은 직선인데 점 9개를 지나는 7차식은 새 데이터를 크게 빗나감, 차수별 잔차제곱합과 새 데이터 오차"></svg></div>
+        <div class="side">
+          <ul class="key"><li><b>과대적합</b>: 지금 데이터에만 무리하게 맞춤</li><li>잔차는 작아도 새 데이터 예측이 나빠짐</li></ul>
+          <p class="exp">파라미터 개수 k가 많은 모형일수록 실제 데이터에 잘 들어맞는 성질이 있습니다. 실제 모형이 y = 20 + 0.6x인 데이터 9개에 7차식을 적용하면 대부분의 점을 지나 잔차제곱합이 140.8에서 20.3으로 줄지만, 새로 얻은 데이터를 예측한 오차는 18.9에서 67.5로 크게 어긋납니다. 이처럼 무리하게 맞추는 바람에 새 데이터를 제대로 나타내지 못하는 상태가 과대적합입니다. AIC는 예측 분포와 실제 분포의 차이를 최소화하는 관점에서 도출되어 파라미터 개수 항이 나타납니다. 다만 이 예처럼 파라미터 수가 표본크기에 가까우면 AIC로도 막지 못하므로 보정한 기준을 씁니다.</p>
+          <p class="next"><span>다음 질문</span>AIC를 쓸 때 주의할 점은?</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" data-step="3" id="s-4-2c">
+      <div class="sh"><div class="sec">4-2 AIC</div><h2><span class="q">Q</span>AIC가 최소인 모형이 곧 실제 모형일까요?</h2></div>
+      <div class="body split even">
+        <div class="fig"><svg id="m23-caution" viewBox="0 0 420 270" role="img" aria-label="AIC의 두 가지 주의점: 실제 모형이라는 보장 없음, 가설검정과 섞어 쓰지 않음"></svg></div>
+        <div class="side">
+          <ul class="key"><li>AIC 최소 ≠ 실제 모형(데이터를 만든 분포)</li><li>AIC 선택과 p값 해석을 섞지 않습니다.</li></ul>
+          <p class="exp">AIC는 새로 얻을 데이터의 예측도를 높이는 모형을 고르는 것이 목적이므로, AIC를 최소화한다고 해서 그것이 반드시 실제 모형이지는 않습니다. 후보 중에 실제 모형이 있어도 표본크기를 아무리 키워 AIC로 실제 모형을 고를 확률은 1이 되지 않으며, 표본크기가 클 때는 실제보다 파라미터가 많은 모형을 고르기도 합니다. 또 AIC로 모형을 고른 뒤 가설검정으로 p값을 구하는 분석은 서로 다른 방식의 해석이 섞여 부적절할 수 있습니다. 어느 쪽이 더 바람직하다는 뜻은 아니며, 분석 목적에 맞게 가려 씁니다.</p>
+          <p class="next"><span>다음 질문</span>실제 모형을 고르는 기준은?</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" data-step="3" id="s-4-3a">
+      <div class="sh"><div class="sec">4-3 BIC</div><h2><span class="q">Q</span>후보 중 실제 모형을 고르려면 어떤 기준을 쓸까요?</h2></div>
+      <div class="body split even">
+        <div class="figcol">
+          <div class="fig"><svg id="m23-bic" viewBox="0 0 420 150" role="img" aria-label="표본크기 20, 100, 1000에서 AIC와 BIC가 실제 모형을 고른 비율"></svg></div>
+          <div class="math">
+            <div class="mt">핵심 수학 개념 · BIC</div>
+            <div class="f">BIC = −2 log L* + k log n</div>
+            <div class="r"><span>기호</span><span>n: 표본크기, log: 자연로그</span></div>
+            <div class="r"><span>계산</span><span>M2: 64.3 + 2 × log 20 ≈ 64.3 + 6.0 = 70.3 (최소)</span></div>
+          </div>
+        </div>
+        <div class="side">
+          <ul class="key"><li><b>BIC</b>: n이 클수록 파라미터 벌점이 커짐</li><li>BIC에는 <b>일치성</b>이 있습니다.</li></ul>
+          <p class="exp">자주 쓰는 또 다른 정보기준으로 BIC(베이즈 정보기준)가 있으며, 값을 최소화하는 것이 좋은 모형입니다. AIC와 다른 점은 표본크기 n에 따라 달라져 n이 클수록 파라미터 개수 k의 벌점이 커진다는 것입니다. BIC는 후보 중 실제 모형일 확률이 높은 것을 고르는 관점을 취하며, 표본크기 n을 무한대로 하면 실제 모형을 고를 확률이 1이 되는 일치성이 있습니다. 1,000번 시뮬레이션에서 실제 모형을 고른 비율은 n = 1,000일 때 AIC 0.75, BIC 0.99였습니다.</p>
+          <p class="next"><span>다음 질문</span>AIC와 BIC는 어떻게 가려 쓸까?</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" data-step="3" id="s-4-3b">
+      <div class="sh"><div class="sec">4-3 BIC</div><h2><span class="q">Q</span>AIC와 BIC는 언제 무엇을 쓸까요?</h2></div>
+      <div class="body split even">
+        <div class="fig"><svg id="m23-vs" viewBox="0 0 420 270" role="img" aria-label="AIC와 BIC의 관점, 벌점, 성질, 쓰는 상황 비교표"></svg></div>
+        <div class="side">
+          <ul class="key"><li>복잡한 현상 · 예측 중시 → AIC</li><li>간단한 현상 · 올바른 하나 선택 → BIC</li></ul>
+          <p class="exp">BIC라는 이름은 베이즈 통계 개념에서 출발해 붙었지만, 최종적으로는 보듯이 최대가능도를 이용하는 덕택에 쉽게 계산할 수 있습니다. AIC와 BIC를 가려 쓰기는 쉽지 않지만, 복잡한 현상에 대해 여러 개의 후보 중 실제 모형이 있다고 상정할 수 없는 경우에는 AIC를, 비교적 간단한 현상에 대해 몇 개의 후보 중 올바른 것으로 보이는 한 가지를 선택하는 경우에는 BIC를 사용하는 경향이 있습니다<span class="cite">[1]</span>. 꽃 데이터에서는 두 기준 모두 M2를 골랐습니다.</p>
+          <p class="next"><span>다음 질문</span>그 밖의 정보기준은?</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" data-step="3" id="s-4-4a">
+      <div class="sh"><div class="sec">4-4 그 밖의 정보기준</div><h2><span class="q">Q</span>AIC와 BIC를 쓰기 어려운 경우에는 무엇을 쓸까요?</h2></div>
+      <div class="body split even">
+        <div class="fig"><svg id="m23-other" viewBox="0 0 420 270" role="img" aria-label="표본이 작을 때 AICc, 베이즈 추정 모형에 DIC, 계층적 베이지안 모형에 WAIC와 WBIC"></svg></div>
+        <div class="side">
+          <ul class="key"><li>표본크기가 작을 때 <b>AICc</b></li><li>복잡한 베이즈 모형에는 <b>WAIC</b>, WBIC</li></ul>
+          <p class="exp">AIC를 보정해 표본크기가 작을 때 사용하는 AICc, 최대가능도 방법이 아닌 베이즈 추정으로 얻은 모형을 대상으로 한 편차정보기준 DIC 등 보다 개량된 정보기준도 있습니다. 또한 AIC나 BIC는 파라미터 추정량분포를 정규분포로 근사할 수 있는 단순한 모형일 때 사용하는 방법입니다. 그렇지 않은 계층적 베이지안 모형이나 관찰할 수 없는 변수를 포함하는 모형일 때는 WAIC나 WBIC를 사용할 수 있으며, 이는 베이즈 통계를 다루는 과정에서 다시 만납니다.</p>
+          <p class="next"><span>정리</span>모형의 평가와 비교를 정리해 봅시다.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" data-step="3" id="s-4-sum">
+      <div class="sh"><div class="sec">4-5 정리</div><h2>검정으로 개선을 확인하고, 정보기준으로 목적에 맞는 모형을 고릅니다</h2></div>
+      <div class="body full" style="align-content:center">
+        <table class="sumtbl">
+          <thead><tr><th>방법</th><th>핵심</th><th>꽃 데이터 예시</th></tr></thead>
+          <tbody>
+            <tr><td>왈드 검정</td><td>추정값 ÷ 표준오차. 표본이 작으면 신뢰도가 떨어짐</td><td>b의 z = 9.41</td></tr>
+            <tr><td>가능도비 검정</td><td>내포 관계인 두 모형, ΔD = −2(log L₁ − log L₂)</td><td>M2 vs M3 ΔD = 0.16, p = 0.69</td></tr>
+            <tr><td>AIC</td><td>−2 log L + 2k. 예측 관점, 내포 관계 불필요, 일치성 없음</td><td>M1 219.1 · M2 68.3 · M3 70.1</td></tr>
+            <tr><td>BIC</td><td>−2 log L + k log n. 실제 모형 선택 관점, 일치성 있음</td><td>M1 220.1 · M2 70.3 · M3 73.1</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="next"><span>형성평가로</span>이제 같은 예시로 문제를 풀어 봅니다.</p>
+    </section>
+
+    <!-- ⑤ 형성평가: 스크립트의 QUIZ 배열로 만듭니다 -->
+
+    <!-- ⑥ 실습 1 · 조작형 (모듈 전용) ─────────────── -->
+    <section class="slide" data-step="5" id="p1">
+      <div class="sh"><div class="sec">실습 1 · 조작형</div><h2>목표: 다항식 차수를 바꾸며 잔차, AIC, 새 데이터 오차를 비교합니다</h2></div>
+      <div class="body split">
+        <div class="pcol" style="gap:8px">
+          <div class="plabel" style="margin:0">해보기 · 실제 모형이 직선인 점 9개에 적용할 차수를 고르세요</div>
+          <div class="mbtns" id="m23-d" style="gap:5px"></div>
+          <div class="fig" style="flex:1"><svg id="m23-p1-svg" viewBox="0 0 470 190" role="img" aria-label="점 9개와 고른 차수의 곡선, 실제 직선"></svg></div>
+        </div>
+        <div class="pcol" style="gap:10px;justify-content:center">
+          <div class="plabel" style="margin:0">결과 확인</div>
+          <div class="stats three"><div><small>잔차제곱합</small><strong id="m23-rss">-</strong></div><div><small>AIC</small><strong id="m23-aicv">-</strong></div><div><small>새 데이터 오차</small><strong id="m23-mse">-</strong></div></div>
+          <p class="howto">도전: 잔차제곱합이 가장 작은 차수와 새 데이터 오차가 가장 작은 차수가 같은지 확인하세요.</p>
+          <p class="pmsg" id="m23-msg"></p>
+          <div class="think"><span>생각해보기</span>7차식에서 AIC가 오히려 작아진 이유는 무엇일까요?</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ⑥ 실습 2 · 분류형 ─────────────────────── -->
+    <section class="slide" data-step="5" id="p2">
+      <div class="sh"><div class="sec">실습 2 · 분류형</div><h2>목표: 상황 카드를 알맞은 모형 비교 방법에 따라 나눕니다</h2></div>
+      <div class="body split even">
+        <div class="pcol">
+          <div class="plabel">해보기 · 내포 관계인지, 목적이 예측인지 실제 모형 선택인지 보고 칸에 놓으세요</div>
+          <div class="pool" id="p2-pool"></div>
+        </div>
+        <div class="pcol" style="gap:8px">
+          <div class="plabel" style="margin:0">결과 확인 · <span id="p2-count">0 / 0</span></div>
+          <div class="bins" id="p2-bins"></div>
+          <div class="p2row"><p class="pmsg" id="p2-msg"></p><button class="btn ghost" id="p2-reset">다시 하기</button></div>
+          <div class="think"><span>생각해보기</span>내포 관계인 모형이라면 AIC도 함께 쓸 수 있을까요?</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ⑥ 실습 3 · 추정형 (모듈 전용) ─────────────── -->
+    <section class="slide" data-step="5" id="p3">
+      <div class="sh"><div class="sec">실습 3 · 추정형</div><h2>목표: 표본크기에 따라 정보기준이 실제 모형을 고를 확률을 예측합니다</h2></div>
+      <div class="body split">
+        <div class="pcol">
+          <div class="plabel">해보기 · 실제 모형이 1차식이고 후보가 1~4차식일 때, 1,000번 중 실제 모형을 고르는 비율은?</div>
+          <div class="fig" style="flex:1"><svg id="m23-p3-svg" viewBox="0 0 470 210" role="img" aria-label="표본크기별 AIC, BIC의 실제 모형 선택 비율"></svg></div>
+        </div>
+        <div class="pcol" style="gap:9px;justify-content:center">
+          <div class="mbtns" id="m23-qn" style="gap:6px"></div>
+          <div class="ctrl">BIC 예측<input type="range" id="m23-g" min="0" max="100" step="1" value="70" aria-label="BIC가 실제 모형을 고를 비율 예측"><strong id="m23-gv" style="min-width:56px;text-align:right">-</strong></div>
+          <button class="btn" id="m23-check" style="align-self:flex-start">시뮬레이션 결과 보기</button>
+          <div class="stats three"><div><small>내 예측(BIC)</small><strong id="m23-mine">-</strong></div><div><small>BIC 실제</small><strong id="m23-act">?</strong></div><div><small>AIC 실제</small><strong id="m23-aact">?</strong></div></div>
+          <p class="pmsg" id="m23-msg3"></p>
+          <div class="think"><span>생각해보기</span>n이 커져도 AIC의 비율이 1에 다가가지 않는 이유는 무엇일까요?</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ⑦ 용어해설·참고자료: 스크립트의 GLOSSARY, REFS, NEXT로 만듭니다 -->
+  </main>
+
+  <footer class="bottombar">
+    <a class="home" href="../index.html" title="홈으로 (학습 과정)" aria-label="홈으로"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 10.5 12 3l9 7.5"/><path d="M5.5 9.5V21h13V9.5"/></svg><span>홈</span></a><span class="counter" id="counter"></span><span class="spacer"></span>
+    <button class="nav" id="prev" type="button">이전</button>
+    <button class="nav primary" id="next" type="button">다음</button>
+  </footer>
+</div>
+<p class="rotate">화면을 가로로 돌리면 더 크게 볼 수 있습니다.</p>
+
+<script>
+(function(){
+"use strict";
+
+/* =====================================================================
+   [교체] 모듈 설정 — 새 모듈은 이 블록과 HTML 화면 문장만 바꿉니다.
+   ===================================================================== */
+var MODULE={title:"모형의 평가와 비교",sub:"상관·회귀·통계 모형 · M23"};
+var STEPS=["학습개요","학습목표","일상의 예시","본문","형성평가","실습","용어해설"];
+
+/* 예시 데이터(이 모듈에서 정한 값)
+   ① 꽃 20그루 푸아송 회귀: M1(a) log L −108.57, AIC 219.15, BIC 220.14 / M2(a+bx) −32.15, 68.29, 70.28 / M3(a+bx+cx²) −32.07, 70.14, 73.12
+      왈드: M2의 b z = 9.41(SE 0.0614), M3의 c z = −0.38(p 0.70)
+      가능도비: M1 vs M2 ΔD 152.9(p < 0.001), M2 vs M3 ΔD 0.155(p 0.69), 부트스트랩 1,000회 상위 5% 3.82(카이제곱 3.84), 부트스트랩 p 0.70
+   ② 과대적합: 실제 y = 20 + 0.6x + 오차(SD 4), 점 9개. 차수 1 → 7: 잔차제곱합 140.8 → 20.3, 새 데이터 오차(MSE) 18.9 → 67.5, AIC 차수 1~5: 56.3, 58.2, 59.8, 61.4, 63.2
+   ③ 선택 확률(참 모형 1차, 후보 1~4차, 1,000회): n 20 AIC 0.64 BIC 0.78 / n 100 0.72, 0.95 / n 1000 0.75, 0.99 */
+var CASE=null, PAIRS=null, P1={target:null};
+var MS={"M1": {"b": [1.60944], "ll": -108.573, "k": 1, "aic": 219.15, "bic": 220.14}, "M2": {"b": [-2.54119, 0.57734], "ll": -32.145, "k": 2, "aic": 68.29, "bic": 70.28}, "M3": {"b": [-3.02823, 0.72411, -0.01016], "ll": -32.068, "k": 3, "aic": 70.14, "bic": 73.12}};
+var BOOT=[0.63, 2.79, 0.08, 0.87, 0.0, 3.5, 0.09, 0.02, 0.86, 0.01, 1.62, 0.0, 0.44, 0.79, 0.11, 9.02, 0.0, 2.04, 0.39, 0.0, 0.19, 3.59, 1.63, 0.18, 1.76, 2.97, 0.0, 0.03, 3.03, 0.08, 0.81, 0.01, 0.04, 3.27, 1.16, 0.0, 0.28, 0.0, 0.29, 1.85, 1.78, 0.28, 0.01, 0.35, 0.49, 0.66, 0.0, 1.89, 1.1, 0.69, 2.87, 0.01, 0.11, 0.2, 0.09, 0.03, 3.44, 0.44, 4.0, 1.2, 0.62, 6.63, 1.18, 0.02, 0.45, 0.01, 0.26, 1.15, 3.87, 0.34, 0.46, 0.06, 0.95, 0.07, 0.84, 0.0, 0.96, 0.04, 1.26, 0.01, 0.59, 0.0, 0.26, 1.86, 2.62, 0.52, 2.52, 1.32, 0.03, 0.4, 3.96, 0.44, 1.06, 5.37, 1.44, 0.38, 1.82, 1.67, 0.0, 0.28, 0.01, 0.74, 0.0, 0.06, 0.0, 0.01, 0.97, 0.3, 0.0, 1.01, 0.17, 0.13, 0.02, 0.13, 0.22, 3.83, 0.03, 2.23, 1.65, 0.0, 1.97, 0.38, 0.07, 0.62, 3.47, 0.96, 0.68, 1.58, 0.04, 0.06, 0.01, 1.44, 0.5, 0.49, 0.0, 2.06, 0.19, 0.11, 0.78, 0.95, 5.64, 0.43, 0.05, 1.58, 0.05, 0.69, 0.42, 2.81, 2.76, 0.11, 1.19, 1.34, 1.51, 0.34, 3.69, 0.07, 0.33, 0.06, 0.06, 0.0, 0.01, 0.15, 0.53, 0.47, 0.08, 0.39, 1.18, 1.37, 0.59, 0.04, 2.37, 0.03, 1.26, 0.63, 0.71, 0.5, 0.97, 1.67, 0.04, 0.14, 1.02, 0.34, 3.41, 2.67, 1.26, 0.54, 0.19, 2.57, 0.24, 2.15, 6.2, 0.69, 0.51, 0.01, 1.08, 2.2, 0.0, 0.01, 1.74, 0.83, 0.04, 1.05, 0.1, 1.32, 0.22, 0.06, 1.97, 0.45, 0.23, 1.17, 0.12, 0.81, 1.11, 0.01, 0.0, 0.01, 6.14, 0.07, 0.93, 0.39, 0.81, 0.8, 0.53, 1.35, 0.0, 0.15, 1.5, 0.15, 0.45, 1.27, 0.01, 0.43, 1.95, 0.96, 2.6, 1.08, 0.59, 0.38, 7.57, 0.23, 0.59, 0.03, 2.58, 0.21, 0.16, 0.06, 0.01, 0.02, 5.84, 0.71, 4.14, 0.73, 0.68, 0.36, 0.06, 2.78, 0.15, 0.3, 8.6, 3.97, 3.43, 1.1, 0.16, 0.34, 0.38, 0.27, 0.02, 0.86, 0.09, 0.01, 0.21, 0.03, 0.08, 1.54, 1.95, 1.51, 0.05, 1.34, 0.22, 0.24, 0.07, 2.59, 0.14, 3.46, 0.04, 0.02, 0.3, 0.15, 0.15, 0.87, 1.96, 0.22, 0.28, 0.2, 1.4, 0.02, 2.11, 1.35, 0.02, 0.35, 2.39, 0.81, 2.79, 0.16, 0.17, 0.66, 0.12, 0.88, 0.06, 0.07, 0.26, 2.05, 0.08, 0.22, 0.2, 0.32, 2.31, 0.47, 0.91, 0.0, 0.11, 7.28, 1.09, 0.0, 0.0, 2.14, 0.18, 0.33, 0.05, 5.75, 2.03, 2.19, 0.68, 0.62, 0.63, 0.38, 0.32, 1.85, 2.15, 0.06, 0.11, 0.12, 0.44, 2.11, 0.49, 0.08, 0.64, 1.81, 0.83, 1.9, 0.42, 1.49, 0.02, 1.29, 1.12, 1.37, 4.11, 3.27, 0.07, 0.0, 0.59, 2.44, 1.43, 0.39, 0.05, 0.06, 0.4, 0.8, 1.62, 2.15, 1.09, 2.27, 1.12, 0.55, 0.34, 0.58, 0.81, 0.01, 0.0, 0.84, 1.05, 0.53, 0.48, 1.29, 1.18, 0.0, 0.53, 2.02, 0.46, 0.14, 0.07, 0.03, 3.49, 0.1, 0.16, 0.0, 0.68, 0.1, 1.64, 0.05, 0.37, 0.03, 0.86, 3.14, 2.3, 0.04, 0.01, 1.11, 1.17, 0.46, 2.7, 0.13, 0.33, 0.17, 1.64, 0.32, 0.49, 0.35, 2.17, 0.61, 0.0, 0.52, 1.01, 0.42, 2.06, 1.44, 0.29, 0.1, 0.01, 0.0, 1.7, 1.34, 3.25, 0.02, 0.02, 0.0, 9.41, 1.03, 2.9, 0.11, 0.17, 3.03, 0.18, 2.5, 2.37, 0.17, 3.66, 0.15, 0.48, 1.37, 1.23, 4.94, 0.65, 0.01, 0.27, 0.24, 1.08, 2.04, 0.83, 0.19, 4.77, 0.29, 0.1, 0.29, 0.83, 3.54, 1.34, 0.35, 0.33, 0.19, 0.62, 0.32, 0.62, 0.51, 1.99, 0.26, 0.65, 0.02, 0.48, 1.68, 0.33, 0.02, 4.77, 0.39, 2.4, 0.15, 2.24, 1.59, 0.93, 3.91, 0.73, 0.84, 1.32, 0.34, 2.61, 1.04, 0.16, 0.96, 0.69, 1.93, 0.02, 0.0, 1.41, 0.0, 0.2, 0.71, 0.87, 0.87, 0.1, 0.66, 1.85, 0.13, 1.08, 0.03, 2.09, 0.39, 0.08, 0.38, 0.28, 0.57, 0.03, 0.03, 0.9, 0.17, 1.8, 3.79, 0.42, 0.37, 0.18, 1.7, 0.73, 0.14, 1.18, 0.13, 0.04, 0.92, 0.1, 0.2, 5.67, 0.0, 5.57, 2.27, 0.01, 0.0, 3.09, 0.31, 0.0, 0.06, 0.06, 0.85, 0.7, 0.48, 0.32, 0.28, 0.03, 0.17, 0.92, 0.73, 1.07, 0.01, 0.24, 0.03, 0.07, 0.02, 1.47, 0.04, 0.04, 0.54, 0.15, 0.33, 1.37, 2.06, 0.01, 1.27, 1.89, 1.19, 0.56, 0.62, 0.73, 4.92, 0.34, 0.95, 1.03, 1.06, 0.27, 0.24, 0.12, 2.42, 0.55, 1.46, 0.75, 0.11, 0.08, 0.05, 0.01, 0.48, 1.12, 0.01, 3.06, 2.28, 0.27, 0.37, 0.69, 2.0, 0.31, 10.65, 1.43, 0.12, 0.61, 1.17, 0.14, 0.01, 0.63, 0.26, 0.43, 0.01, 0.1, 4.46, 0.0, 0.34, 0.01, 1.01, 4.92, 1.08, 0.03, 2.41, 0.44, 0.11, 0.19, 1.12, 0.01, 0.06, 0.45, 0.48, 0.07, 0.24, 2.59, 0.23, 2.82, 0.0, 0.02, 0.22, 0.25, 0.36, 0.04, 1.02, 0.0, 1.44, 0.01, 0.44, 0.08, 0.08, 0.0, 0.77, 0.96, 0.08, 0.87, 5.79, 0.23, 2.92, 4.07, 0.57, 2.65, 1.28, 0.27, 1.21, 0.53, 1.3, 1.42, 0.5, 0.11, 2.29, 0.08, 0.12, 0.0, 0.09, 0.02, 0.85, 0.15, 0.19, 0.55, 3.9, 0.26, 0.75, 0.0, 0.31, 1.81, 0.35, 0.11, 4.3, 0.32, 1.03, 0.03, 0.45, 0.03, 0.79, 2.33, 0.09, 1.49, 1.47, 0.02, 0.9, 0.06, 0.03, 0.11, 3.33, 0.02, 12.46, 4.6, 0.2, 0.14, 0.17, 0.05, 4.94, 4.88, 3.15, 0.63, 0.27, 0.0, 3.99, 0.04, 0.0, 0.78, 1.64, 0.16, 1.69, 0.34, 1.26, 0.93, 0.36, 3.54, 0.01, 5.88, 0.11, 0.14, 1.71, 0.74, 0.16, 7.29, 0.01, 0.6, 0.08, 0.03, 0.0, 0.0, 0.23, 0.01, 0.31, 0.48, 0.28, 0.14, 0.03, 0.06, 0.65, 0.29, 0.56, 0.65, 0.18, 1.09, 1.08, 0.18, 0.08, 1.0, 1.56, 0.92, 0.01, 0.0, 0.01, 0.49, 3.82, 0.38, 0.09, 1.76, 2.06, 0.21, 1.0, 0.13, 0.18, 0.87, 0.03, 0.3, 0.52, 3.51, 1.56, 0.73, 1.68, 3.15, 0.03, 0.11, 0.01, 0.07, 4.71, 0.06, 0.62, 1.57, 0.42, 4.34, 3.82, 0.97, 1.8, 0.0, 0.03, 0.49, 1.22, 0.01, 0.12, 1.28, 0.01, 0.58, 0.3, 0.29, 1.0, 1.08, 1.74, 1.0, 0.4, 3.54, 0.94, 0.87, 0.01, 1.42, 3.52, 1.74, 4.99, 1.04, 3.72, 0.04, 0.2, 1.56, 3.06, 2.69, 3.03, 0.1, 0.55, 2.57, 2.86, 0.01, 0.0, 3.48, 0.05, 0.64, 0.0, 4.7, 4.83, 0.45, 1.5, 0.93, 0.56, 0.72, 2.11, 0.06, 1.61, 2.09, 0.23, 0.43, 0.01, 0.8, 0.02, 1.04, 3.2, 0.16, 1.18, 0.37, 0.94, 3.12, 1.74, 0.8, 1.75, 0.29, 0.57, 4.9, 2.15, 1.06, 0.02, 0.22, 1.31, 0.0, 0.01, 0.06, 0.04, 0.21, 0.05, 1.02, 0.94, 0.75, 0.01, 0.38, 7.21, 1.97, 1.01, 0.61, 2.36, 0.06, 0.19, 0.17, 0.38, 0.99, 0.0, 0.1, 2.06, 3.26, 0.0, 0.03, 3.17, 0.07, 0.08, 0.53, 0.01, 0.85, 0.63, 1.34, 0.92, 2.74, 0.28, 0.04, 2.87, 0.97, 0.12, 0.35, 0.12, 3.15, 0.01, 0.82, 1.11, 1.33, 0.03, 0.11, 0.27, 3.46, 0.65, 0.41, 0.15, 0.12, 0.12, 0.53, 0.14, 0.0, 1.96, 0.39, 0.18, 1.75, 0.7, 1.92, 0.98, 0.06, 4.04, 0.03, 0.7, 0.33, 0.22, 0.02, 1.19, 0.78, 0.24, 1.18, 0.01, 0.8, 1.47, 1.5, 4.53, 0.0, 0.01, 0.02, 1.42, 0.27, 0.12, 0.17, 0.57, 0.31, 0.0, 0.01, 1.21, 2.4, 0.62, 0.31, 0.1, 0.86, 1.85, 0.7, 1.28, 3.35, 1.25, 1.9, 0.47, 0.38, 1.1, 0.29, 0.0, 1.71, 0.12, 2.21, 0.24, 1.53, 0.0, 1.59, 1.32, 2.04, 0.38, 0.0, 1.58];
+var OX=[36.0, 40.0, 44.0, 48.0, 52.0, 56.0, 60.0, 64.0, 68.0], OY=[43.0, 50.0, 39.3, 55.5, 51.0, 50.4, 52.8, 54.1, 59.9];
+var OF=[{"d": 1, "rss": 140.84, "aic": 56.29, "mse": 18.91, "b": [50.66667, 6.78667]}, {"d": 2, "rss": 139.83, "aic": 58.23, "mse": 19.09, "b": [50.28571, 6.78667, 0.91429]}, {"d": 3, "rss": 133.64, "aic": 59.82, "mse": 20.71, "b": [50.28571, 3.67576, 0.91429, 4.21818]}, {"d": 4, "rss": 127.32, "aic": 61.39, "mse": 21.44, "b": [51.2972, 3.67576, -7.7021, 4.21818, 8.39161]}, {"d": 5, "rss": 125.32, "aic": 63.24, "mse": 22.15, "b": [51.2972, 6.79678, -7.7021, -8.68438, 8.39161, 10.04308]}, {"d": 6, "rss": 94.75, "aic": 62.73, "mse": 28.86, "b": [53.78205, 6.79678, -57.86291, -8.68438, 148.86838, 10.04308, -93.29778]}, {"d": 7, "rss": 20.33, "aic": 50.87, "mse": 67.52, "b": [53.78205, -26.73667, -57.86291, 305.55111, 148.86838, -681.10222, -93.29778, 410.73778]}];
+var SEL={"20": [0.639, 0.779], "100": [0.724, 0.95], "1000": [0.751, 0.989]};
+var FX=[0.6,0.9,1.3,1.8,2.6,3.2,3.5,4.1,4.5,5.2,5.6,5.8,6.6,6.8,7.6,7.9,8.6,9.0,9.4,10.0], FY=[0,0,0,0,0,0,3,1,0,2,3,2,3,4,4,5,12,16,27,18];
+
+var QUIZ=[
+ {goal:1,type:"계산",stem:"모형 M2(a + bx)의 최대 로그 가능도는 −32.15, 모형 M3(a + bx + cx²)는 −32.07입니다. 가능도비 검정의 검정통계량 ΔD는 약 얼마일까요?",
+  opts:["약 0.16","약 −0.16","약 0.08","약 64.2"],ans:0,
+  exp:"ΔD = −2 × (log L₁ − log L₂) = −2 × (−32.15 − (−32.07)) = −2 × (−0.08) = 0.16입니다. 카이제곱분포(자유도 1)의 상위 5% 경계 3.84보다 훨씬 작아 p = 0.69이므로, x²항을 넣어도 데이터에 잘 맞도록 개선되었다고 말할 수 없습니다.",back:"s-4-1b",backLabel:"4-1 가능도비 검정 다시 보기"},
+ {goal:1,type:"O/X 오개념",stem:"“가능도비 검정은 y = a + bx와 y = a + cx²처럼 서로 포함하지 않는 두 모형도 비교할 수 있다.”",
+  opts:["O","X"],ans:1,ox:true,
+  exp:"가능도비 검정을 하려면 비교할 2개 모형 중 한쪽이 다른 쪽을 포함하는 관계(내포 관계)여야 합니다. y = a는 y = a + bx에 내포되지만, a + bx와 a + cx²는 서로를 포함하지 않습니다. 내포 관계가 아니어도 비교할 수 있는 것은 AIC입니다.",back:"s-4-1b",backLabel:"4-1 내포 관계 다시 보기"},
+ {goal:2,type:"계산",stem:"최대 로그 가능도가 −32.15이고 파라미터가 2개인 모형의 AIC는 얼마일까요?",
+  opts:["68.3","64.3","−60.3","36.15"],ans:0,
+  exp:"AIC = −2 log L* + 2k = −2 × (−32.15) + 2 × 2 = 64.3 + 4 = 68.3입니다. 64.3은 파라미터 수에 따른 둘째 항을 빠뜨린 값입니다. AIC가 작을수록 좋은 모형이며, 후보 M1·M2·M3 중 M2의 AIC가 가장 작습니다.",back:"s-4-2a",backLabel:"4-2 AIC 계산 다시 보기"},
+ {goal:2,type:"상황 판단",stem:"점 9개에 7차 다항식을 적용했더니 잔차제곱합이 1차식의 140.8에서 20.3으로 줄었습니다. 가장 알맞은 판단은 무엇일까요?",
+  opts:["과대적합일 수 있으므로 새 데이터에 대한 예측 성능이나 정보기준으로 평가한다","잔차가 작으므로 7차식이 가장 좋은 모형이다","파라미터가 많을수록 항상 실제 모형에 가깝다","잔차제곱합은 모형 평가와 관계없다"],ans:0,
+  exp:"파라미터가 많은 모형일수록 데이터에 잘 들어맞는 성질이 있어, 데이터에 무리하게 맞춘 나머지 새로 얻은 데이터는 제대로 나타내지 못하는 과대적합이 생깁니다. 이 예에서 새 데이터의 오차는 18.9에서 67.5로 커졌습니다. 파라미터 수가 표본크기에 가까우면 AIC도 이를 막지 못해 AICc 등을 씁니다.",back:"s-4-2b",backLabel:"4-2 과대적합 다시 보기"},
+ {goal:3,type:"O/X 오개념",stem:"“후보 중에 실제 모형이 있다면, 표본크기를 아주 크게 할수록 AIC 최소화로 실제 모형을 고를 확률은 1에 가까워진다.”",
+  opts:["O","X"],ans:1,ox:true,
+  exp:"AIC에는 일치성이 없어, 표본크기 n을 아무리 크게 해도 실제 모형을 고를 확률이 1이 되지 않으며 n이 클 때는 실제보다 파라미터가 많은 모형을 고르는 일이 벌어집니다. 이 모듈의 시뮬레이션에서도 n = 1,000에서 AIC는 0.75, BIC는 0.99였습니다.",back:"s-4-3a",backLabel:"4-3 일치성 다시 보기"},
+ {goal:3,type:"상황 판단",stem:"단순한 현상에 대해 후보 모형 몇 개 중 올바른 하나를 고르는 것이 목적이고, 표본크기는 500입니다. 어느 정보기준이 목적에 더 맞을까요?",
+  opts:["BIC","AIC","결정계수 R²","정보기준은 쓰지 않는다"],ans:0,
+  exp:"BIC는 후보 중 실제 모형일 확률이 높은 것을 고르는 관점이며, 표본크기 n을 무한대로 하면 실제 모형을 고를 확률이 1이 되는 일치성이 있습니다. 비교적 간단한 현상에 몇 개의 후보 중 올바른 하나를 선택할 때는 BIC를, 복잡한 현상에서 예측을 중시할 때는 AIC를 쓰는 경향이 있습니다.",back:"s-4-3b",backLabel:"4-3 AIC와 BIC 가려 쓰기 다시 보기"}
+];
+
+var BINS=["가능도비 검정","AIC","BIC"];
+var CARDS=[["y = a와 y = a + bx를 검정으로 비교","가능도비 검정"],["x² 항 추가가 유의한 개선인지","가능도비 검정"],
+           ["내포 관계가 아닌 모형끼리 예측 비교","AIC"],["새 데이터 예측을 가장 중시","AIC"],
+           ["후보 중 실제 모형을 고르고 싶음","BIC"],["n이 클수록 파라미터 벌점을 키움","BIC"]];
+var HINT={"가능도비 검정":"내포 관계인 두 모형을 가설검정으로 비교합니다.","AIC":"예측 성능 관점의 정보기준이며 내포 관계가 아니어도 됩니다.","BIC":"실제 모형일 확률 관점이며 k log n으로 n이 클수록 벌점이 커집니다."};
+
+var GLOSSARY=[
+ ["왈드 통계량","Wald statistic","최대가능도 방법으로 얻은 추정값을 표준오차로 나눈 값으로, 이를 이용한 검정이 왈드 검정입니다.","b의 z = 0.577 ÷ 0.061 = 9.41"],
+ ["가능도비 검정","likelihood ratio test","내포 관계인 두 모형의 최대가능도 비에 로그를 취해 −2를 곱한 ΔD로, 모형이 개선되었는지 조사하는 검정입니다.","M2 vs M3 ΔD = 0.16, p = 0.69"],
+ ["부트스트랩 방법","bootstrap method","어떤 가정에서 무작위로 데이터를 반복 생성해 추정량의 성질을 조사하는 방법입니다.","1,000회 반복한 ΔD의 상위 5% = 3.82"],
+ ["AIC","Akaike information criterion","−2 log L* + 2k로, 새로 얻을 데이터를 얼마나 잘 예측할 수 있는지를 기준으로 모형의 좋음을 정하는 지표입니다.","M2의 AIC 68.3"],
+ ["과대적합","overfitting","실제 데이터에 무리하게 맞추는 바람에 새로 얻은 데이터는 제대로 나타내지 못하는 상태입니다.","7차식: 새 데이터 오차 67.5"],
+ ["BIC","Bayesian information criterion","−2 log L* + k log n으로, 후보 중 실제 모형일 확률이 높은 것을 고르는 정보기준입니다.","M2의 BIC 70.3"],
+ ["일치성","consistency","표본크기를 무한대로 하면 실제 모형을 고를 확률이 1이 되는 성질로, BIC에는 있고 AIC에는 없습니다.","n = 1,000에서 BIC 0.99"],
+ ["AICc","corrected AIC","표본크기가 작을 때 AIC를 보정한 정보기준입니다.","점 9개에 파라미터 9개인 모형"],
+ ["WAIC","widely applicable information criterion","계층적 베이지안 모형 등에도 쓸 수 있는 정보기준으로, 비슷한 것으로 WBIC가 있습니다.","관찰할 수 없는 변수를 포함한 모형"]
+];
+var REFS=[
+ {n:1,title:"Model selection for ecologists: the worldviews of AIC and BIC",org:"K. Aho, D. Derryberry, T. Peterson, Ecology 95(3), 631–636, 2014",url:"https://doi.org/10.1890/13-1452.1",date:"2026-10-27 확인"}
+];
+var NEXT={title:"M24 재현성",line:"이제 네 번째 과정 ‘결과 해석과 인과’를 시작합니다. 다음 모듈에서는 과학계의 재현성 위기와 그 원인, 가설검정을 올바르게 쓰는 법을 살펴봅니다."};
+
+/* =====================================================================
+   아래부터는 공통 엔진입니다. 모듈마다 바꾸지 않습니다.
+   ===================================================================== */
+var NS="http://www.w3.org/2000/svg";
+var C={navy:"#1B2A4A",navy2:"#2C4170",navy3:"#5B6E97",soft:"#A9B8D4",grid:"#DDE1E7",gray:"#6B7280",gray2:"#9AA0AA",amber:"#E0A100",amberInk:"#6E4F00",ok:"#23704F"};
+function el(t,a,p,x){var e=document.createElementNS(NS,t);for(var k in a)e.setAttribute(k,a[k]);if(x!=null)e.textContent=x;if(p)p.appendChild(e);return e;}
+function clear(s){while(s.firstChild)s.removeChild(s.firstChild);}
+function f1(v,d){return v.toFixed(d==null?1:d);}
+function sum(a){return a.reduce(function(x,y){return x+y;},0);}
+function r1(v){return Math.round(v*10)/10;}
+var stage=document.getElementById("stage"),vp=document.getElementById("vp");
+
+/* 계산은 모두 데이터에서 직접 합니다(R0-7) */
+var N=CASE?CASE.values.length:0,SUMV=CASE?r1(sum(CASE.values)):0,AVG=N?SUMV/N:0,MAXV=CASE?Math.max.apply(null,CASE.values):0;
+var LR=!PAIRS?null:(function(){var n=PAIRS.xs.length,mx=sum(PAIRS.xs)/n,my=sum(PAIRS.ys)/n,sxy=0,sxx=0;
+  for(var i=0;i<n;i++){sxy+=(PAIRS.xs[i]-mx)*(PAIRS.ys[i]-my);sxx+=(PAIRS.xs[i]-mx)*(PAIRS.xs[i]-mx);}
+  var b=sxy/sxx;return{b:b,a:my-b*mx};})();
+var PRED=PAIRS?LR.a+LR.b*PAIRS.x0:0;
+
+document.title=MODULE.title;
+document.getElementById("brand").innerHTML=MODULE.title+"<small>"+MODULE.sub+"</small>";
+
+/* 16:9 고정 무대를 창 크기에 맞춤 */
+var S=1;
+function fit(){S=Math.min(window.innerWidth/960,window.innerHeight/540);stage.style.setProperty("--s",S);}
+window.addEventListener("resize",fit);fit();
+
+/* ---------- 그래프 ---------- */
+function barChart(svg,vals,o){
+  clear(svg);o=o||{};
+  var vb=svg.viewBox.baseVal,W=vb.width,H=vb.height,L=34,R=o.mean!=null?70:8,T=26,Bt=24,ym=o.ymax||Math.ceil(Math.max.apply(null,vals)+1),pw=W-L-R,ph=H-T-Bt,bw=pw/vals.length;
+  function y(v){return T+ph-(v/ym)*ph;}
+  for(var g=0;g<=ym;g++){el("line",{x1:L,x2:W-R,y1:y(g),y2:y(g),stroke:C.grid},svg);el("text",{x:L-6,y:y(g)+4,"text-anchor":"end","font-size":10.5,fill:C.gray2},svg,g);}
+  vals.forEach(function(v,i){
+    var sel=o.sel===i,hi=o.hi===i;
+    el("rect",{x:L+i*bw+bw*.16,y:y(v),width:bw*.68,height:Math.max(0,y(0)-y(v)),rx:2,fill:sel?C.amber:hi?C.navy2:C.soft},svg);
+    el("text",{x:L+i*bw+bw/2,y:H-Bt+16,"text-anchor":"middle","font-size":10.5,fill:C.gray},svg,CASE.labels[i]);
+  });
+  if(o.mean!=null){var m=o.mean;
+    el("line",{x1:L,x2:W-R+4,y1:y(m),y2:y(m),stroke:C.navy,"stroke-width":2,"stroke-dasharray":"6 4"},svg);
+    el("rect",{x:W-R+6,y:y(m)-10,width:R-8,height:20,rx:4,fill:C.navy},svg);
+    el("text",{x:W-R+6+(R-8)/2,y:y(m)+4,"text-anchor":"middle","font-size":11,"font-weight":700,fill:"#fff"},svg,"평균 "+f1(m,2));}
+  /* 값 라벨은 마지막에 흰 테두리로 그려 점선에 가리지 않게 함 */
+  vals.forEach(function(v,i){var sel=o.sel===i,hi=o.hi===i;
+    if(o.labels||sel)el("text",{x:L+i*bw+bw/2,y:y(v)-5,"text-anchor":"middle","font-size":10.5,"font-weight":sel||hi?800:500,fill:sel?C.amberInk:hi?C.navy:C.gray,stroke:"#EEF0F3","stroke-width":3,"paint-order":"stroke"},svg,f1(v));});
+}
+function scatter(svg,o){
+  clear(svg);o=o||{};
+  var vb=svg.viewBox.baseVal,W=vb.width,H=vb.height,L=34,R=14,T=30,Bt=40,x0=PAIRS.xmin,x1=PAIRS.xmax,y0=PAIRS.ymin,y1=PAIRS.ymax;
+  function X(v){return L+(v-x0)/(x1-x0)*(W-L-R);}
+  function Y(v){return T+(H-T-Bt)-(v-y0)/(y1-y0)*(H-T-Bt);}
+  for(var g=y0;g<=y1+1e-9;g+=PAIRS.ystep){el("line",{x1:L,x2:W-R,y1:Y(g),y2:Y(g),stroke:C.grid},svg);el("text",{x:L-6,y:Y(g)+4,"text-anchor":"end","font-size":10.5,fill:C.gray2},svg,g);}
+  for(var h=x0;h<=x1+1e-9;h+=PAIRS.xstep)el("text",{x:X(h),y:H-Bt+16,"text-anchor":"middle","font-size":10.5,fill:C.gray},svg,h);
+  el("text",{x:(L+W-R)/2,y:H-6,"text-anchor":"middle","font-size":10.5,fill:C.gray},svg,PAIRS.xlabel);
+  el("text",{x:4,y:14,"font-size":10.5,fill:C.gray},svg,PAIRS.ylabel);
+  if(o.line){var la=x0+(x1-x0)*.04,lb=x1-(x1-x0)*.04;el("line",{x1:X(la),y1:Y(LR.a+LR.b*la),x2:X(lb),y2:Y(LR.a+LR.b*lb),stroke:C.navy,"stroke-width":2},svg);}
+  PAIRS.xs.forEach(function(x,i){el("circle",{cx:X(x),cy:Y(PAIRS.ys[i]),r:4.5,fill:C.navy3,"fill-opacity":.85},svg);});
+  if(o.x0!=null){el("line",{x1:X(o.x0),y1:Y(0),x2:X(o.x0),y2:Y(y1),stroke:C.amber,"stroke-dasharray":"3 3"},svg);
+    el("text",{x:X(o.x0),y:T-4,"text-anchor":"middle","font-size":10.5,"font-weight":700,fill:C.amberInk},svg,PAIRS.x0label);}
+  if(o.pred){el("circle",{cx:X(PAIRS.x0),cy:Y(PRED),r:6,fill:C.navy},svg);
+    el("text",{x:X(PAIRS.x0)-10,y:Y(PRED)+4,"text-anchor":"end","font-size":11,"font-weight":800,fill:C.navy,stroke:"#EEF0F3","stroke-width":3,"paint-order":"stroke"},svg,"예측 "+f1(PRED,PAIRS.dp)+PAIRS.unit);}
+  if(o.guess!=null){el("circle",{cx:X(PAIRS.x0),cy:Y(o.guess),r:7,fill:C.amber,stroke:"#fff","stroke-width":2},svg);}
+  if(o.actual){var ay=Y(PAIRS.actual);el("rect",{x:X(PAIRS.x0)-6,y:ay-6,width:12,height:12,fill:C.ok,transform:"rotate(45 "+X(PAIRS.x0)+" "+ay+")"},svg);
+    el("text",{x:X(PAIRS.x0)-10,y:ay-6,"text-anchor":"end","font-size":11,"font-weight":800,fill:C.ok,stroke:"#EEF0F3","stroke-width":3,"paint-order":"stroke"},svg,"실제 "+f1(PAIRS.actual)+PAIRS.unit);}
+  return {X:X,Y:Y};
+}
+function flow(svg,names){
+  clear(svg);var n=names.length,w=118,gap=(440-40-n*w)/(n-1),y=96,h=64;
+  el("defs",{},svg).innerHTML='<marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10z" fill="'+C.navy3+'"/></marker>';
+  names.forEach(function(t,i){var x=20+i*(w+gap);
+    el("rect",{x:x,y:y,width:w,height:h,rx:10,fill:i===n-1?C.navy:"#fff",stroke:C.navy,"stroke-width":1.5},svg);
+    el("text",{x:x+w/2,y:y+h/2-6,"text-anchor":"middle","font-size":11,"font-weight":700,fill:i===n-1?"#C9D3E6":C.navy3},svg,"4-"+(i+1));
+    el("text",{x:x+w/2,y:y+h/2+13,"text-anchor":"middle","font-size":14,"font-weight":800,fill:i===n-1?"#fff":C.navy},svg,t);
+    if(i<n-1)el("line",{x1:x+w+4,y1:y+h/2,x2:x+w+gap-5,y2:y+h/2,stroke:C.navy3,"stroke-width":2,"marker-end":"url(#ar)"},svg);});
+  el("text",{x:220,y:200,"text-anchor":"middle","font-size":12,fill:C.gray},svg,"본문 소단원을 배우는 순서");
+}
+/* 화면에 해당 id가 있을 때만 그립니다(모듈마다 쓰지 않는 그림은 건너뜀) */
+function on(id,fn){var e=document.getElementById(id);if(e)fn(e);}
+on("fig-flow",function(s){flow(s,["소단원 1","소단원 2","정리"]);});
+on("fig-case",function(s){barChart(s,CASE.values,{labels:true});});
+on("fig-bar",function(s){barChart(s,CASE.values,{labels:true,mean:AVG});});
+on("fig-scatter",function(s){scatter(s,{line:true,x0:PAIRS.x0,pred:true});});
+on("fig-bridge",function(s){
+  el("defs",{},s).innerHTML='<marker id="ar2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10z" fill="'+C.navy3+'"/></marker>';
+  [["장면 1",40],["장면 2",130]].forEach(function(p){el("rect",{x:24,y:p[1],width:130,height:64,rx:10,fill:"#fff",stroke:C.navy3,"stroke-width":1.5},s);el("text",{x:89,y:p[1]+37,"text-anchor":"middle","font-size":14,"font-weight":700,fill:C.navy},s,p[0]);
+    el("line",{x1:158,y1:p[1]+32,x2:246,y2:120,stroke:C.navy3,"stroke-width":2,"marker-end":"url(#ar2)"},s);});
+  el("rect",{x:252,y:84,width:150,height:72,rx:12,fill:C.navy},s);
+  el("text",{x:327,y:116,"text-anchor":"middle","font-size":14,"font-weight":800,fill:"#fff"},s,"본문 첫 질문");
+  el("text",{x:327,y:136,"text-anchor":"middle","font-size":11.5,fill:"#C9D3E6"},s,"4-1로 이어짐");});
+on("case-n",function(e){e.textContent=N+"개";});
+on("case-sum",function(e){e.textContent=f1(SUMV);});
+on("case-max",function(e){e.textContent=f1(MAXV);});
+on("math-calc",function(e){e.textContent=f1(LR.b,2)+" × "+PAIRS.x0+" + "+f1(LR.a,2)+" = "+f1(PRED,2);});
+
+/* =====================================================================
+   [교체] 모듈 전용 그림: 모듈마다 필요한 그림 함수는 이 자리에 둡니다.
+   ===================================================================== */
+/* M23 전용 그림·실습 */
+function linQ(a,b,c,d){return function(v){return c+(v-a)/(b-a)*(d-c);};}
+function tQ(s,x,y,t,o){o=o||{};return el("text",{x:x,y:y,"text-anchor":o.a||"middle","font-size":o.fs||11,"font-weight":o.fw||600,fill:o.c||C.navy,stroke:o.halo?"#fff":"none","stroke-width":o.halo?3:0,"paint-order":"stroke"},s,t);}
+function bxQ(s,x,y,w,h,fill,stroke){return el("rect",{x:x,y:y,width:w,height:h,rx:10,fill:fill||"#fff",stroke:stroke||"none","stroke-width":stroke?1.5:0},s);}
+function mkQ(s,id,col){el("defs",{},s).innerHTML='<marker id="'+id+'" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10z" fill="'+col+'"/></marker>';}
+function lamQ(m,x){var b=MS[m].b,z=0;for(var j=0;j<b.length;j++)z+=b[j]*Math.pow(x,j);return Math.exp(z);}
+function polyQ(d,x){var b=OF[d-1].b,u=(x-52)/16,y=0;for(var j=0;j<b.length;j++)y+=b[j]*Math.pow(u,j);return y;}
+function erfQ(x){var t=1/(1+0.3275911*Math.abs(x)),y=1-(((((1.061405429*t-1.453152027)*t)+1.421413741)*t-0.284496736)*t+0.254829592)*t*Math.exp(-x*x);return x>=0?y:-y;}
+function chi1Q(x){return x<=0?0:erfQ(Math.sqrt(x/2));}
+var MCQ={M1:"#9AA0AA",M2:"#2B8CC4",M3:"#C2416E"};
+
+on("m23-ov",function(s){
+  mkQ(s,"oQ",C.navy3);
+  bxQ(s,120,8,200,50,"#F3F5F9",C.navy3);tQ(s,220,30,"후보 모형 여러 개",{fw:800,fs:13});tQ(s,220,48,"최대가능도 방법으로 추정",{fs:10.5,c:C.gray});
+  var B=[[10,"왈드 검정","회귀계수 하나","#EEF4FB","#1C6EA4"],[155,"가능도비 검정","내포 관계인 두 모형","#FCF3D9",C.amberInk],[300,"AIC · BIC","내포 관계 불필요","#E3F1EA",C.ok]];
+  B.forEach(function(b){bxQ(s,b[0],100,130,62,b[3]);tQ(s,b[0]+65,126,b[1],{fw:800,fs:13,c:b[4]});tQ(s,b[0]+65,146,b[2],{fs:10.5,c:"#22262E"});
+    el("path",{d:"M220 60 C220 80 "+(b[0]+65)+" 76 "+(b[0]+65)+" 96",fill:"none",stroke:C.navy3,"stroke-width":2,"marker-end":"url(#oQ)"},s);});
+  tQ(s,145,186,"검정",{fw:800,fs:11,c:C.gray});el("line",{x1:20,x2:270,y1:176,y2:176,stroke:C.gray2,"stroke-dasharray":"4 3"},s);
+  tQ(s,365,186,"정보기준",{fw:800,fs:11,c:C.gray});el("line",{x1:305,x2:425,y1:176,y2:176,stroke:C.gray2,"stroke-dasharray":"4 3"},s);
+  bxQ(s,80,206,280,46,C.navy);tQ(s,220,227,"목적에 맞는 모형 선택",{fw:800,fs:13.5,c:"#fff"});tQ(s,220,244,"예측 중시 → AIC · 실제 모형 선택 → BIC",{fs:10.5,c:"#C9D3E6"});
+});
+
+on("m23-case",function(s){
+  bxQ(s,4,4,432,242);var X=linQ(0,10.5,56,410),Y=linQ(0,30,206,22);
+  [0,10,20,30].forEach(function(t){el("line",{x1:56,x2:410,y1:Y(t),y2:Y(t),stroke:C.grid},s);tQ(s,50,Y(t)+4,t,{a:"end",fs:10,c:C.gray2,fw:500});});
+  [0,2,4,6,8,10].forEach(function(t){tQ(s,X(t),222,t,{fs:10,c:C.gray,fw:500});});tQ(s,410,240,"비료 양 x",{a:"end",fs:10.5,c:C.gray,fw:700});tQ(s,16,16,"꽃의 개수",{a:"start",fs:10.5,c:C.gray,fw:700});
+  ["M1","M2","M3"].forEach(function(m){var p=[];for(var i=0;i<=120;i++){var x=10.5*i/120;p.push(X(x).toFixed(1)+" "+Y(Math.min(31,lamQ(m,x))).toFixed(1));}
+    el("path",{d:"M"+p.join(" L"),fill:"none",stroke:MCQ[m],"stroke-width":m==="M1"?2:2.6,"stroke-dasharray":m==="M3"?"6 4":"none"},s);});
+  for(var i=0;i<FX.length;i++)el("circle",{cx:X(FX[i]),cy:Y(FY[i]),r:4.6,fill:C.amber,stroke:"#fff","stroke-width":1},s);
+  var L=[["M1","log λ = a"],["M2","log λ = a + bx"],["M3","log λ = a + bx + cx²"]];
+  bxQ(s,66,32,170,70,"#F8F9FB");L.forEach(function(l,j){var y=50+j*20;el("line",{x1:76,x2:98,y1:y-4,y2:y-4,stroke:MCQ[l[0]],"stroke-width":2.6,"stroke-dasharray":l[0]==="M3"?"6 4":"none"},s);tQ(s,104,y,l[0]+"  "+l[1],{a:"start",fs:10.5,fw:700});});
+});
+
+on("m23-wald",function(s){
+  var cx=[54,140,222,300,374];el("rect",{x:4,y:4,width:412,height:28,rx:6,fill:C.navy},s);
+  ["계수","추정값","표준오차","왈드 z","p값"].forEach(function(h,i){tQ(s,cx[i],23,h,{fw:800,fs:11,c:"#fff"});});
+  var R=[["M2의 a","−2.54","0.532","−4.78","< 0.001"],["M2의 b","0.577","0.0614","9.41","< 0.001"],["M3의 c","−0.0102","0.0264","−0.38","0.70"]];
+  R.forEach(function(r,j){var y=56+j*32;el("rect",{x:4,y:y-19,width:412,height:28,rx:4,fill:j===1?"#EEF4FB":j===2?"#FBE4E1":"#F8F9FB"},s);
+    r.forEach(function(v,i){tQ(s,cx[i],y,v,{fw:i===0||i===3?800:600,fs:11.5,c:i===3&&j===2?"#B42318":C.navy});});});
+  tQ(s,210,146,"|z| > 1.96이면 유의수준 5%에서 ‘계수 = 0’ 기각",{fw:700,fs:10.5,c:C.gray});
+});
+
+on("m23-lr",function(s){
+  mkQ(s,"lQ",C.navy3);
+  bxQ(s,4,4,196,142,"#FBE4F0","#C2416E");tQ(s,14,22,"M3: a + bx + cx²",{a:"start",fw:800,fs:10.5,c:"#C2416E"});
+  bxQ(s,14,30,176,94,"#EEF4FB","#2B8CC4");tQ(s,24,48,"M2: a + bx",{a:"start",fw:800,fs:10.5,c:"#1C6EA4"});
+  bxQ(s,24,56,120,58,"#F3F5F9","#9AA0AA");tQ(s,84,80,"M1: a",{fw:800,fs:11});tQ(s,84,98,"log L* −108.57",{fs:9.5,c:C.gray});
+  tQ(s,168,100,"−32.15",{fs:9.5,c:"#1C6EA4",fw:700});tQ(s,102,138,"log L* −32.07",{fs:9.5,c:"#C2416E",fw:700});
+  var R=[[20,"M1 → M2","ΔD = 152.9","p < 0.001","개선됨",C.ok,"#E3F1EA"],[84,"M2 → M3","ΔD = 0.16","p = 0.69","개선 아님","#B42318","#FBE4E1"]];
+  R.forEach(function(r){bxQ(s,214,r[0],202,54,r[6]);tQ(s,226,r[0]+22,r[1],{a:"start",fw:800,fs:11.5});tQ(s,404,r[0]+22,r[4],{a:"end",fw:800,fs:11.5,c:r[5]});
+    tQ(s,226,r[0]+42,r[2]+"  ·  "+r[3],{a:"start",fs:10.5,fw:700,c:"#22262E"});});
+});
+
+on("m23-boot",function(s){
+  bxQ(s,4,4,412,262);var bw=0.5,NB=17,H=[];for(var i=0;i<NB;i++)H.push(0);BOOT.forEach(function(v){H[Math.min(NB-1,Math.floor(v/bw))]++;});
+  var X=linQ(0,NB*bw,48,404),Y=linQ(0,560,218,30);
+  [0,100,200,300,400,500].forEach(function(t){el("line",{x1:48,x2:404,y1:Y(t),y2:Y(t),stroke:C.grid},s);tQ(s,42,Y(t)+4,t,{a:"end",fs:9.5,c:C.gray2,fw:500});});
+  H.forEach(function(h,k){var x0=k*bw;el("rect",{x:X(x0)+1,y:Y(h),width:X(bw)-X(0)-2,height:218-Y(h),fill:x0>=3.8?"#B42318":"#9AA0AA","fill-opacity":.85},s);});
+  var p=[];for(var k=0;k<NB-1;k++){var e=1000*(chi1Q((k+1)*bw)-chi1Q(k*bw));p.push(X(k*bw+bw/2).toFixed(1)+" "+Y(e).toFixed(1));}
+  el("path",{d:"M"+p.join(" L"),fill:"none",stroke:"#2B8CC4","stroke-width":2.2},s);
+  [0,2,4,6,8].forEach(function(t){tQ(s,X(t),232,t,{fs:9.5,c:C.gray,fw:500});});tQ(s,404,248,"ΔD (8 이상은 마지막 칸)",{a:"end",fs:10,c:C.gray,fw:700});tQ(s,14,20,"횟수 (1,000번 중)",{a:"start",fs:10,c:C.gray,fw:700});
+  el("line",{x1:X(3.82),x2:X(3.82),y1:60,y2:218,stroke:"#B42318","stroke-width":2,"stroke-dasharray":"5 3"},s);
+  tQ(s,X(3.82)+6,72,"상위 5% 경계 3.82",{a:"start",fw:800,fs:11,c:"#B42318",halo:true});tQ(s,X(3.82)+6,90,"(카이제곱분포 3.84)",{a:"start",fw:700,fs:10,c:"#1C6EA4",halo:true});
+  el("circle",{cx:X(0.16),cy:218,r:5,fill:C.amber,stroke:"#fff","stroke-width":1.5},s);el("path",{d:"M"+X(0.16)+" 213 L"+(X(0.16)+58)+" 110",fill:"none",stroke:C.amber,"stroke-width":2},s);
+  tQ(s,X(0.16)+60,106,"관찰값 ΔD = 0.16 → p = 0.70",{a:"start",fw:800,fs:11,c:C.amberInk,halo:true});
+  el("line",{x1:250,x2:270,y1:126,y2:126,stroke:"#2B8CC4","stroke-width":2.2},s);tQ(s,276,130,"카이제곱분포(자유도 1)",{a:"start",fs:10,fw:700,c:"#1C6EA4"});
+});
+
+on("m23-aic",function(s){
+  var X=linQ(0,230,70,370);
+  ["M1","M2","M3"].forEach(function(m,j){var y=10+j*36,a=-2*MS[m].ll,b=2*MS[m].k,hi=m==="M2";
+    if(hi)el("rect",{x:2,y:y-4,width:416,height:34,rx:6,fill:"#EEF4FB"},s);
+    tQ(s,12,y+18,m,{a:"start",fw:800,fs:12,c:MCQ[m]==="#9AA0AA"?C.navy:MCQ[m]});
+    el("rect",{x:X(0),y:y,width:X(a)-X(0),height:24,fill:C.navy3},s);el("rect",{x:X(a),y:y,width:X(a+b)-X(a),height:24,fill:C.amber},s);
+    tQ(s,X(a+b)+6,y+17,MS[m].aic.toFixed(1)+(hi?"  최소":""),{a:"start",fw:800,fs:11.5,c:hi?"#1C6EA4":C.navy});});
+  el("rect",{x:70,y:124,width:12,height:12,fill:C.navy3},s);tQ(s,88,134,"−2 log L* (잘 맞을수록 작음)",{a:"start",fs:10,fw:700});
+  el("rect",{x:256,y:124,width:12,height:12,fill:C.amber},s);tQ(s,274,134,"2k (간단할수록 작음)",{a:"start",fs:10,fw:700});
+});
+
+on("m23-ovf",function(s){
+  bxQ(s,4,4,412,262);var X=linQ(33,71,50,404),Y=linQ(30,70,176,16);
+  el("defs",{},s).innerHTML='<clipPath id="cQ"><rect x="50" y="16" width="354" height="160"/></clipPath>';
+  [30,40,50,60,70].forEach(function(t){el("line",{x1:50,x2:404,y1:Y(t),y2:Y(t),stroke:C.grid},s);tQ(s,44,Y(t)+4,t,{a:"end",fs:9.5,c:C.gray2,fw:500});});
+  [36,44,52,60,68].forEach(function(t){tQ(s,X(t),190,t,{fs:9.5,c:C.gray,fw:500});});
+  var g=el("g",{"clip-path":"url(#cQ)"},s);
+  el("line",{x1:X(33),x2:X(71),y1:Y(20+0.6*33),y2:Y(20+0.6*71),stroke:C.gray2,"stroke-width":2,"stroke-dasharray":"6 4"},g);
+  [[1,"#2B8CC4"],[7,"#B42318"]].forEach(function(d){var p=[];for(var i=0;i<=200;i++){var x=34+34*i/200;p.push(X(x).toFixed(1)+" "+Y(Math.max(28,Math.min(72,polyQ(d[0],x)))).toFixed(1));}el("path",{d:"M"+p.join(" L"),fill:"none",stroke:d[1],"stroke-width":2.4},g);});
+  for(var i=0;i<OX.length;i++)el("circle",{cx:X(OX[i]),cy:Y(OY[i]),r:4.8,fill:C.amber,stroke:"#fff","stroke-width":1},s);
+  var L=[["#2B8CC4","1차식","none"],["#B42318","7차식","none"],[C.gray2,"실제 y = 20 + 0.6x","6 4"]];
+  L.forEach(function(l,j){var x=60+j*92+(j===2?0:0);el("line",{x1:x,x2:x+18,y1:30,y2:30,stroke:l[0],"stroke-width":2.4,"stroke-dasharray":l[2]},s);tQ(s,x+22,34,l[1],{a:"start",fs:10,fw:700,halo:true});});
+  var cx=[80,200,330];el("rect",{x:14,y:202,width:392,height:22,rx:5,fill:C.navy},s);["","잔차제곱합","새 데이터 오차"].forEach(function(h,i){tQ(s,cx[i],217,h,{fw:800,fs:10.5,c:"#fff"});});
+  [["1차식","140.8","18.9","#1C6EA4"],["7차식","20.3 (작음)","67.5 (큼)","#B42318"]].forEach(function(r,j){var y=241+j*20;r.slice(0,3).forEach(function(v,i){tQ(s,cx[i],y,v,{fw:i===0?800:700,fs:11,c:i===0?r[3]:C.navy});});});
+});
+
+on("m23-caution",function(s){
+  bxQ(s,6,6,408,118,"#F3F5F9");tQ(s,20,30,"① AIC 최소 ≠ 실제 모형",{a:"start",fw:800,fs:12.5});
+  tQ(s,20,52,"후보에 실제 모형이 있어도, n을 키워 고를 확률이 1이 되지 않음",{a:"start",fs:10.5,c:"#22262E"});
+  var X=linQ(0,1,120,380);el("rect",{x:X(0),y:68,width:X(1)-X(0),height:18,rx:4,fill:"#E5E7EB"},s);el("rect",{x:X(0),y:68,width:X(.751)-X(0),height:18,rx:4,fill:"#2B8CC4"},s);
+  tQ(s,20,82,"n = 1,000 AIC",{a:"start",fs:10.5,fw:800});tQ(s,X(.751)-6,82,"0.75",{a:"end",fs:10.5,fw:800,c:"#fff"});tQ(s,X(1)+6,82,"1",{a:"start",fs:10,c:C.gray});
+  tQ(s,20,110,"나머지는 대부분 실제보다 파라미터가 많은 모형을 고름",{a:"start",fs:10.5,c:C.gray,fw:700});
+  bxQ(s,6,134,408,96,"#FCF3D9");tQ(s,20,158,"② 정보기준과 가설검정을 섞지 않기",{a:"start",fw:800,fs:12.5,c:C.amberInk});
+  bxQ(s,24,170,150,44,"#fff");tQ(s,99,191,"AIC로 모형 선택",{fw:800,fs:11});tQ(s,99,206,"예측 관점",{fs:9.5,c:C.gray});
+  bxQ(s,246,170,150,44,"#fff");tQ(s,321,191,"그 모형으로 p값 해석",{fw:800,fs:11});tQ(s,321,206,"기각 여부 관점",{fs:9.5,c:C.gray});
+  tQ(s,210,198,"+",{fw:800,fs:20,c:C.gray});el("path",{d:"M196 178 L224 206 M224 178 L196 206",stroke:"#B42318","stroke-width":3},s);
+  tQ(s,210,256,"어느 쪽이 더 좋다는 뜻이 아니라, 목적에 맞게 가려 씁니다",{fw:800,fs:11,c:C.navy});
+});
+
+on("m23-bic",function(s){
+  var ns=["20","100","1000"],Y=linQ(0,1,118,12),bw=34;
+  [0,.5,1].forEach(function(t){el("line",{x1:44,x2:330,y1:Y(t),y2:Y(t),stroke:C.grid},s);tQ(s,38,Y(t)+4,t,{a:"end",fs:9.5,c:C.gray2,fw:500});});
+  ns.forEach(function(n,j){var cx=100+j*96;[[0,"#2B8CC4",-bw-1],[1,C.amber,1]].forEach(function(c){var v=SEL[n][c[0]];el("rect",{x:cx+c[2],y:Y(v),width:bw,height:118-Y(v),fill:c[1]},s);tQ(s,cx+c[2]+bw/2,Y(v)-4,v.toFixed(2),{fs:10,fw:800,c:c[0]?C.amberInk:"#1C6EA4"});});
+    tQ(s,cx,134,"n = "+(+n).toLocaleString(),{fs:10.5,fw:700});});
+  el("rect",{x:342,y:40,width:12,height:12,fill:"#2B8CC4"},s);tQ(s,360,50,"AIC",{a:"start",fs:10.5,fw:800});
+  el("rect",{x:342,y:62,width:12,height:12,fill:C.amber},s);tQ(s,360,72,"BIC",{a:"start",fs:10.5,fw:800});
+  tQ(s,342,104,"실제 모형을",{a:"start",fs:9.5,c:C.gray,fw:700});tQ(s,342,118,"고른 비율",{a:"start",fs:9.5,c:C.gray,fw:700});
+});
+
+on("m23-vs",function(s){
+  var cx=[66,196,336];el("rect",{x:4,y:6,width:412,height:30,rx:6,fill:C.navy},s);["","AIC","BIC"].forEach(function(h,i){tQ(s,cx[i],26,h,{fw:800,fs:12.5,c:"#fff"});});
+  var R=[["둘째 항(벌점)","2k","k log n"],["관점","새 데이터 예측","실제 모형일 확률"],["n이 커지면","벌점 그대로","벌점이 커짐"],["일치성","없음","있음"],["주로 쓰는 경우","복잡한 현상, 예측 중시","간단한 현상, 하나 선택"],["꽃 데이터 선택","M2 (68.3)","M2 (70.3)"]];
+  R.forEach(function(r,j){var y=60+j*35;el("rect",{x:4,y:y-20,width:412,height:31,rx:4,fill:j===4?"#FCF3D9":j%2?"#F8F9FB":"#fff"},s);
+    r.forEach(function(v,i){tQ(s,cx[i],y,v,{fw:i===0?800:700,fs:i===0?10.5:11,c:i===1?"#1C6EA4":i===2?C.amberInk:C.navy});});});
+});
+
+on("m23-other",function(s){
+  var R=[["AICc","표본크기가 작을 때","AIC를 보정한 기준","#EEF4FB","#1C6EA4"],["DIC","베이즈 추정으로 얻은 모형","편차정보기준","#FCF3D9",C.amberInk],["WAIC · WBIC","계층적 베이지안 모형","관찰할 수 없는 변수 포함 모형","#E3F1EA",C.ok]];
+  R.forEach(function(r,i){var y=8+i*64;bxQ(s,6,y,408,56,r[3]);tQ(s,22,y+34,r[0],{a:"start",fw:800,fs:14,c:r[4]});tQ(s,150,y+24,r[1],{a:"start",fw:800,fs:11.5});tQ(s,150,y+42,r[2],{a:"start",fs:10.5,c:C.gray,fw:600});});
+  bxQ(s,6,206,408,58,C.navy);tQ(s,210,230,"AIC · BIC: 추정량분포를 정규분포로",{fw:800,fs:12,c:"#fff"});tQ(s,210,250,"근사할 수 있는 단순한 모형일 때 사용",{fw:800,fs:12,c:"#fff"});
+});
+
+/* 실습 1 · 다항식 차수(조작형) */
+(function(){
+  var box=document.getElementById("m23-d");if(!box)return;var svg=document.getElementById("m23-p1-svg"),cur=1;
+  for(var d=1;d<=7;d++)(function(d){var b=document.createElement("button");b.type="button";b.className="mbtn";b.textContent=d+"차";b.style.padding="3px 10px";b.onclick=function(){cur=d;upd();};box.appendChild(b);})(d);
+  var AICC={1:61.1,2:68.2,3:79.8,4:103.4,5:175.2};
+  function upd(){
+    [].forEach.call(box.children,function(x,i){var on=i+1===cur;x.classList.toggle("on",on);x.setAttribute("aria-pressed",on);});
+    var o=OF[cur-1];document.getElementById("m23-rss").textContent=o.rss.toFixed(1);document.getElementById("m23-aicv").textContent=o.aic.toFixed(1);document.getElementById("m23-mse").textContent=o.mse.toFixed(1);
+    clear(svg);var X=linQ(33,71,40,462),Y=linQ(30,70,170,10);
+    el("defs",{},svg).innerHTML='<clipPath id="cQ1"><rect x="40" y="10" width="422" height="160"/></clipPath>';
+    [30,40,50,60,70].forEach(function(t){el("line",{x1:40,x2:462,y1:Y(t),y2:Y(t),stroke:C.grid},svg);tQ(svg,34,Y(t)+4,t,{a:"end",fs:9.5,c:C.gray2,fw:500});});
+    [36,44,52,60,68].forEach(function(t){tQ(svg,X(t),184,t,{fs:9.5,c:C.gray,fw:500});});
+    var g=el("g",{"clip-path":"url(#cQ1)"},svg);
+    el("line",{x1:X(33),x2:X(71),y1:Y(39.8),y2:Y(62.6),stroke:C.gray2,"stroke-width":2,"stroke-dasharray":"6 4"},g);
+    var p=[];for(var i=0;i<=240;i++){var x=34+34*i/240;p.push(X(x).toFixed(1)+" "+Y(Math.max(28,Math.min(72,polyQ(cur,x)))).toFixed(1));}el("path",{d:"M"+p.join(" L"),fill:"none",stroke:cur===1?"#2B8CC4":"#B42318","stroke-width":2.6},g);
+    for(var j=0;j<OX.length;j++)el("circle",{cx:X(OX[j]),cy:Y(OY[j]),r:4.8,fill:C.amber,stroke:"#fff","stroke-width":1},svg);
+    tQ(svg,48,24,cur+"차식 · 파라미터 "+(cur+2)+"개 (점 9개)",{a:"start",fw:800,fs:11,c:cur===1?"#1C6EA4":"#B42318",halo:true});
+    tQ(svg,456,160,"점선: 실제 직선",{a:"end",fs:10,fw:700,c:C.gray,halo:true});
+    var m=document.getElementById("m23-msg");m.className="pmsg"+(cur===1?" ok":"");
+    m.textContent=cur===1?"1차식은 잔차제곱합 140.8로 가장 크지만, AIC 56.3과 새 데이터 오차 18.9는 가장 작습니다. 실제 모형이 직선이기 때문입니다.":
+      cur<=5?cur+"차식에서는 잔차제곱합이 "+o.rss.toFixed(1)+"까지 줄었지만 AIC는 "+o.aic.toFixed(1)+", 새 데이터 오차는 "+o.mse.toFixed(1)+"로 1차식보다 커졌습니다. AICc는 "+AICC[cur]+"입니다.":
+      cur===6?"6차식은 잔차제곱합 94.8로 줄었지만 새 데이터 오차는 28.9로 커졌습니다. AIC 62.7은 5차식보다 작아지기 시작합니다.":
+      "7차식은 잔차제곱합 20.3, AIC 50.9로 가장 작지만 새 데이터 오차는 67.5로 가장 큽니다. 파라미터 9개가 점 9개와 같아 AIC도 과대적합을 막지 못합니다. 이럴 때 AICc를 씁니다.";
+  }
+  upd();
+})();
+
+/* 실습 3 · 실제 모형 선택 확률(추정형) */
+(function(){
+  var g=document.getElementById("m23-g");if(!g)return;var qb=document.getElementById("m23-qn"),svg=document.getElementById("m23-p3-svg"),NS=["20","100","1000"],cur="20",seen={};
+  NS.forEach(function(n){var b=document.createElement("button");b.type="button";b.className="mbtn";b.textContent="n = "+(+n).toLocaleString();b.style.padding="3px 10px";b.onclick=function(){cur=n;reset();};qb.appendChild(b);});
+  function draw(){clear(svg);var Y=linQ(0,1,176,16),bw=40;
+    [0,.25,.5,.75,1].forEach(function(t){el("line",{x1:44,x2:400,y1:Y(t),y2:Y(t),stroke:C.grid},svg);tQ(svg,38,Y(t)+4,t,{a:"end",fs:9.5,c:C.gray2,fw:500});});
+    NS.forEach(function(n,j){var cx=110+j*120;if(n===cur)el("rect",{x:cx-58,y:10,width:116,height:170,rx:8,fill:"#F3F5F9"},svg);
+      tQ(svg,cx,196,"n = "+(+n).toLocaleString(),{fs:10.5,fw:800});
+      if(seen[n]){[[0,"#2B8CC4",-bw-2],[1,C.amber,2]].forEach(function(c){var v=SEL[n][c[0]];el("rect",{x:cx+c[2],y:Y(v),width:bw,height:176-Y(v),fill:c[1]},svg);tQ(svg,cx+c[2]+bw/2,Y(v)+15,v.toFixed(2),{fs:10.5,fw:800,c:c[0]?"#22262E":"#fff"});});}
+      else tQ(svg,cx,110,"?",{fs:22,fw:800,c:C.gray2});});
+    var cx0=110+NS.indexOf(cur)*120,gv=+g.value/100;el("line",{x1:cx0-50,x2:cx0+50,y1:Y(gv),y2:Y(gv),stroke:"#B42318","stroke-width":2.5,"stroke-dasharray":"5 3"},svg);
+    tQ(svg,cx0-50,Y(gv)-6,"내 예측 "+gv.toFixed(2),{a:"start",fs:10,fw:800,c:"#B42318",halo:true});
+    el("rect",{x:414,y:30,width:11,height:11,fill:"#2B8CC4"},svg);tQ(svg,430,40,"AIC",{a:"start",fs:10,fw:800});el("rect",{x:414,y:50,width:11,height:11,fill:C.amber},svg);tQ(svg,430,60,"BIC",{a:"start",fs:10,fw:800});}
+  function txt(){document.getElementById("m23-gv").textContent=(+g.value/100).toFixed(2);document.getElementById("m23-mine").textContent=(+g.value/100).toFixed(2);}
+  function reset(){[].forEach.call(qb.children,function(x,i){var on=NS[i]===cur;x.classList.toggle("on",on);x.setAttribute("aria-pressed",on);});
+    document.getElementById("m23-act").textContent=seen[cur]?SEL[cur][1].toFixed(2):"?";document.getElementById("m23-aact").textContent=seen[cur]?SEL[cur][0].toFixed(2):"?";
+    var m=document.getElementById("m23-msg3");m.className="pmsg";m.textContent="n = "+(+cur).toLocaleString()+"일 때 BIC가 실제 모형(1차식)을 고를 비율을 예측한 뒤 「시뮬레이션 결과 보기」를 누르세요.";draw();}
+  g.addEventListener("input",function(){txt();draw();});
+  document.getElementById("m23-check").onclick=function(){seen[cur]=true;var a=SEL[cur],gv=+g.value/100,ok=Math.abs(gv-a[1])<=0.1,m=document.getElementById("m23-msg3");
+    document.getElementById("m23-act").textContent=a[1].toFixed(2);document.getElementById("m23-aact").textContent=a[0].toFixed(2);m.className="pmsg "+(ok?"ok":"ng");
+    m.textContent=(ok?"가깝게 예측했습니다. ":"차이가 있습니다. ")+"n = "+(+cur).toLocaleString()+"에서 BIC "+a[1].toFixed(2)+", AIC "+a[0].toFixed(2)+"입니다. n이 커질수록 BIC는 1에 다가가지만(일치성) AIC는 0.75 근처에 머뭅니다.";draw();};
+  txt();reset();
+})();
+
+
+/* ---------- ⑤ 형성평가 ---------- */
+function fill(t){return !CASE?t:t.replace(/SUM/g,f1(SUMV)).replace(/AVG/g,f1(AVG,2)).replace(/MAXV/g,f1(MAXV));}
+var firstPractice=document.getElementById("p1"),answered=0,correct=0;
+QUIZ.forEach(function(q,i){
+  var s=document.createElement("section");s.className="slide";s.dataset.step="4";s.id="q"+(i+1);
+  s.innerHTML='<div class="sh"><div class="sec"><span>문항 '+(i+1)+' / '+QUIZ.length+'</span><span class="qchips"><span>학습목표 '+q.goal+'</span><span>'+q.type+'</span></span></div><h2 class="stem">'+fill(q.stem)+'</h2></div>'+
+    '<div class="body split even"><div class="opts'+(q.ox?' ox':'')+'"></div><div class="fbp" aria-live="polite"><p class="empty">보기를 고르면 정답과 해설이 여기에 나타납니다.</p></div></div>';
+  var ob=s.querySelector(".opts"),fb=s.querySelector(".fbp");
+  q.opts.forEach(function(t,k){
+    var b=document.createElement("button");b.type="button";b.className="opt";
+    b.innerHTML=q.ox?t:'<span class="n">'+(k+1)+'</span>'+fill(t);
+    b.addEventListener("click",function(){
+      var all=ob.querySelectorAll(".opt");[].forEach.call(all,function(x){x.disabled=true;});
+      all[q.ans].classList.add("ok");var ok=k===q.ans;if(!ok)b.classList.add("ng");
+      answered++;if(ok)correct++;
+      fb.className="fbp "+(ok?"ok":"ng");
+      fb.innerHTML='<div class="verdict">'+(ok?"정답입니다":"오답입니다. 정답은 "+(q.ox?q.opts[q.ans]:(q.ans+1)+"번")+"입니다")+'</div><div>'+fill(q.exp)+'</div>'+
+        '<button type="button" class="jump back" data-jump="'+q.back+'">'+q.backLabel+'</button><div class="tally">지금까지 '+answered+'문항 중 '+correct+'문항 정답</div>';
+      bindJumps(fb);
+    });
+    ob.appendChild(b);
+  });
+  vp.insertBefore(s,firstPractice);
+});
+
+/* ---------- ⑦ 용어해설 · 참고자료 · 다음 모듈 ---------- */
+for(var gi=0;gi<GLOSSARY.length;gi+=6){
+  var part=GLOSSARY.slice(gi,gi+6),pg=gi/6+1,np=Math.ceil(GLOSSARY.length/6);
+  var s=document.createElement("section");s.className="slide";s.dataset.step="6";
+  var h='<div class="sh"><div class="sec">용어해설 '+pg+'/'+np+'</div><h2>'+(pg===1?"본문에서 굵게 표시한 용어를 나온 순서대로 모았습니다":"용어해설 계속")+'</h2></div><div class="body full"><div class="gl">';
+  part.forEach(function(g,k){h+='<div class="gi"><div class="t"><i>'+(gi+k+1)+'</i>'+g[0]+'<em>'+g[1]+'</em>'+(g[4]?'<span class="cite">['+g[4]+']</span>':'')+'</div><div class="d">'+g[2]+'</div><div class="e"><strong>예시</strong> '+g[3]+'</div></div>';});
+  h+='</div></div>';s.innerHTML=h;vp.appendChild(s);
+}
+(function(){
+  var s=document.createElement("section");s.className="slide";s.dataset.step="6";s.id="end";
+  var refs=REFS.length?'<div class="pcol" style="gap:10px"><div class="plabel" style="margin:0">참고자료</div><ol class="refs">'+REFS.map(function(r){return '<li><span>['+r.n+']</span><div>'+r.title+', '+r.org+'. <a href="'+r.url+'" target="_blank" rel="noopener">'+r.url+'</a> ('+r.date+')</div></li>';}).join("")+'</ol></div>':'';
+  s.innerHTML='<div class="sh"><div class="sec">마무리</div><h2>'+(REFS.length?"참고자료와 다음 모듈":"다음 모듈")+'</h2></div>'+
+    '<div class="body '+(REFS.length?'split even':'full')+'" style="align-content:center">'+refs+
+    '<div class="pcol" style="justify-content:center"><div class="nextmod"><small>다음 모듈 · '+NEXT.title+'</small><strong>'+NEXT.line+'</strong></div></div></div>'+
+    '<p class="foot">학습 상태는 저장되지 않습니다.</p>';
+  vp.appendChild(s);
+})();
+
+/* ---------- 이동 · 진행선 ---------- */
+var slides=[].slice.call(vp.querySelectorAll(".slide")),cur=0,seen={};
+var stepFirst=[],stepCount=[0,0,0,0,0,0,0];
+slides.forEach(function(s,i){var st=+s.dataset.step;if(stepFirst[st]==null)stepFirst[st]=i;stepCount[st]++;});
+var rail=document.getElementById("rail"),stations=[];
+STEPS.forEach(function(n,i){
+  var b=document.createElement("button");b.type="button";b.className="station";
+  b.style.left="calc(14px + (100% - 28px) * "+(i/6)+")";
+  b.innerHTML='<span class="dot">'+(i+1)+'</span><span class="lb">'+n+'</span>';
+  b.setAttribute("aria-label",(i+1)+"단계 "+n+"(으)로 이동");
+  b.addEventListener("click",function(){show(stepFirst[i]);});
+  rail.appendChild(b);stations.push(b);
+});
+function show(i){
+  cur=Math.max(0,Math.min(slides.length-1,i));
+  slides.forEach(function(s,k){s.classList.toggle("on",k===cur);});
+  var st=+slides[cur].dataset.step;seen[st]=true;
+  stations.forEach(function(b,k){b.classList.toggle("cur",k===st);b.classList.toggle("done",k<st||(!!seen[k]&&k!==st));if(k===st)b.setAttribute("aria-current","step");else b.removeAttribute("aria-current");});
+  var within=(cur-stepFirst[st])/Math.max(1,stepCount[st]);
+  var frac=st===6&&cur===slides.length-1?1:(st+within)/6;
+  document.getElementById("fill").style.width=(Math.min(1,frac)*100)+"%";
+  document.getElementById("counter").innerHTML="<strong>"+STEPS[st]+"</strong> "+(cur-stepFirst[st]+1)+" / "+stepCount[st];
+  document.getElementById("prev").disabled=cur===0;
+  var nx=document.getElementById("next");nx.disabled=cur===slides.length-1;
+  nx.textContent=(cur<slides.length-1&&+slides[cur+1].dataset.step!==st)?STEPS[+slides[cur+1].dataset.step]+"(으)로":"다음";
+}
+function bindJumps(root){[].forEach.call(root.querySelectorAll("[data-jump]"),function(b){b.addEventListener("click",function(){var t=document.getElementById(b.dataset.jump);if(t)show(slides.indexOf(t));});});}
+bindJumps(document);
+document.getElementById("prev").onclick=function(){show(cur-1);};
+document.getElementById("next").onclick=function(){show(cur+1);};
+document.addEventListener("keydown",function(e){
+  if(e.target&&(e.target.type==="range"))return;
+  if(e.key==="ArrowRight"||e.key==="PageDown"){show(cur+1);e.preventDefault();}
+  else if(e.key==="ArrowLeft"||e.key==="PageUp"){show(cur-1);e.preventDefault();}
+});
+var tx=null,ty=null;
+vp.addEventListener("touchstart",function(e){var t=e.target;if(t.closest&&(t.closest("input")||t.closest(".dcard"))){tx=null;return;}tx=e.touches[0].clientX;ty=e.touches[0].clientY;},{passive:true});
+vp.addEventListener("touchend",function(e){if(tx==null)return;var dx=e.changedTouches[0].clientX-tx,dy=e.changedTouches[0].clientY-ty;if(Math.abs(dx)>60&&Math.abs(dx)>Math.abs(dy)*1.5)show(cur+(dx<0?1:-1));tx=null;},{passive:true});
+
+/* ---------- 실습 1 · 조작형 ---------- */
+(function(){if(!document.getElementById("p1-items")||!CASE)return;
+var p1v=CASE.values.slice(),p1s=CASE.values.indexOf(MAXV),p1m=document.getElementById("p1-items"),p1r=document.getElementById("p1-range");
+CASE.labels.forEach(function(m,i){var b=document.createElement("button");b.type="button";b.className="mbtn";b.textContent=m;b.onclick=function(){p1s=i;p1d();};p1m.appendChild(b);});
+function p1d(){
+  [].forEach.call(p1m.children,function(b,i){b.classList.toggle("on",i===p1s);b.setAttribute("aria-pressed",i===p1s);});
+  p1r.value=p1v[p1s];document.getElementById("p1-label").textContent=CASE.labels[p1s]+"번";document.getElementById("p1-val").textContent=f1(p1v[p1s]);
+  var s=r1(sum(p1v)),m=s/N;
+  document.getElementById("p1-sum").textContent=f1(s);document.getElementById("p1-mean").textContent=f1(m,2);
+  barChart(document.getElementById("p1-svg"),p1v,{mean:m,sel:p1s,ymax:9});
+  var msg=document.getElementById("p1-msg");
+  if(P1.target!=null&&Math.abs(m-P1.target)<0.005){msg.className="pmsg ok";msg.textContent="성공했습니다. "+f1(s)+" ÷ "+N+" = "+f1(m,2);}
+  else if(Math.abs(s-SUMV)<1e-9){msg.className="pmsg";msg.textContent="원래 값입니다. "+f1(SUMV)+" ÷ "+N+" = "+f1(AVG,2);}
+  else{msg.className="pmsg";msg.textContent="원래 평균 "+f1(AVG,2)+"보다 "+f1(Math.abs(m-AVG),2)+" "+(m>AVG?"늘었습니다.":"줄었습니다.");}
+}
+p1r.addEventListener("input",function(){p1v[p1s]=r1(+p1r.value);p1d();});
+document.getElementById("p1-reset").onclick=function(){p1v=CASE.values.slice();p1d();};
+p1d();
+
+})();
+/* ---------- 실습 2 · 분류형 ---------- */
+(function(){if(!document.getElementById("p2-pool"))return;
+var pool=document.getElementById("p2-pool"),binWrap=document.getElementById("p2-bins"),selC=null,done2=0;
+var bins=BINS.map(function(n){var b=document.createElement("div");b.className="bin";b.dataset.bin=n;b.innerHTML="<h4>"+n+"</h4>";binWrap.appendChild(b);return b;});
+function p2msg(t,c){var m=document.getElementById("p2-msg");m.textContent=t;m.className="pmsg "+(c||"");document.getElementById("p2-count").textContent=done2+" / "+CARDS.length;}
+function p2init(){
+  pool.innerHTML="";bins.forEach(function(b){[].slice.call(b.querySelectorAll(".dcard")).forEach(function(c){c.remove();});});done2=0;selC=null;
+  var o=CARDS.map(function(_,i){return i;});for(var i=o.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1)),t=o[i];o[i]=o[j];o[j]=t;}
+  o.forEach(function(i){var d=document.createElement("div");d.className="dcard";d.tabIndex=0;d.setAttribute("role","button");d.textContent=CARDS[i][0];d.dataset.ans=CARDS[i][1];pool.appendChild(d);attach(d);});
+  p2msg("카드를 하나 골라 보세요.","");
+}
+function drop(c,b){
+  if(!b||c.classList.contains("ok"))return;
+  c.classList.remove("sel");selC=null;
+  if(c.dataset.ans===b.dataset.bin){c.classList.add("ok");c.removeAttribute("tabindex");b.appendChild(c);done2++;p2msg(done2===CARDS.length?"카드를 모두 맞게 분류했습니다.":"정답입니다.","ok");}
+  else{c.classList.add("shake");setTimeout(function(){c.classList.remove("shake");},400);p2msg("「"+b.dataset.bin+"」이 아닙니다. "+HINT[c.dataset.ans],"ng");}
+}
+function pick(d){if(selC===d){d.classList.remove("sel");selC=null;return;}if(selC)selC.classList.remove("sel");selC=d;d.classList.add("sel");p2msg("이제 알맞은 칸을 누르세요.","");}
+function attach(d){
+  var sx=null,sy,mv=false,gh=null,ov=null,offX=0,offY=0;
+  function pos(e){var r=stage.getBoundingClientRect();return{x:(e.clientX-r.left)/S,y:(e.clientY-r.top)/S};}
+  d.addEventListener("pointerdown",function(e){if(d.classList.contains("ok"))return;sx=e.clientX;sy=e.clientY;mv=false;d.setPointerCapture(e.pointerId);var r=d.getBoundingClientRect();offX=(e.clientX-r.left)/S;offY=(e.clientY-r.top)/S;});
+  d.addEventListener("pointermove",function(e){
+    if(sx==null)return;
+    if(!mv&&Math.hypot(e.clientX-sx,e.clientY-sy)>6){mv=true;gh=d.cloneNode(true);gh.classList.add("ghostc");gh.classList.remove("sel");gh.style.width=d.offsetWidth+"px";stage.appendChild(gh);d.style.opacity=".35";}
+    if(mv){var p=pos(e);gh.style.left=(p.x-offX)+"px";gh.style.top=(p.y-offY)+"px";
+      var t=document.elementFromPoint(e.clientX,e.clientY),b=t&&t.closest?t.closest(".bin"):null;
+      if(ov&&ov!==b)ov.classList.remove("hover");ov=b;if(b)b.classList.add("hover");}
+  });
+  d.addEventListener("pointerup",function(){
+    if(sx==null)return;sx=null;
+    if(mv){gh.remove();gh=null;d.style.opacity="";if(ov)ov.classList.remove("hover");var b=ov;ov=null;drop(d,b);}else pick(d);
+  });
+  d.addEventListener("pointercancel",function(){if(gh){gh.remove();gh=null;}d.style.opacity="";sx=null;if(ov)ov.classList.remove("hover");ov=null;});
+  d.addEventListener("keydown",function(e){if(e.key==="Enter"||e.key===" "){e.preventDefault();pick(d);}});
+}
+bins.forEach(function(b){b.tabIndex=0;b.setAttribute("role","button");b.setAttribute("aria-label",b.dataset.bin+" 칸에 놓기");
+  b.addEventListener("click",function(e){if(selC&&!e.target.closest(".dcard"))drop(selC,b);});
+  b.addEventListener("keydown",function(e){if((e.key==="Enter"||e.key===" ")&&selC){e.preventDefault();drop(selC,b);}});});
+document.getElementById("p2-reset").onclick=p2init;
+p2init();
+
+})();
+/* ---------- 실습 3 · 추정형 ---------- */
+(function(){if(!document.getElementById("p3-range")||!PAIRS)return;
+var p3r=document.getElementById("p3-range"),p3done=false;
+document.getElementById("p3-x0").textContent=PAIRS.x0;
+p3r.min=PAIRS.ymin;p3r.max=PAIRS.ymax;p3r.step=0.1;p3r.value=r1((PAIRS.ymin+PAIRS.ymax)/2);
+function p3d(){var g=+p3r.value;document.getElementById("p3-val").textContent=f1(g);scatter(document.getElementById("p3-svg"),{x0:PAIRS.x0,guess:g,line:p3done,pred:p3done,actual:p3done});}
+p3r.addEventListener("input",function(){if(p3done){p3done=false;document.getElementById("p3-res").classList.remove("on");}p3d();});
+document.getElementById("p3-check").onclick=function(){
+  p3done=true;var g=+p3r.value,mine=Math.abs(g-PAIRS.actual),line=Math.abs(PRED-PAIRS.actual);
+  document.getElementById("p3-mine").textContent=f1(g);document.getElementById("p3-pred").textContent=f1(PRED,PAIRS.dp);document.getElementById("p3-act").textContent=f1(PAIRS.actual);
+  var m=document.getElementById("p3-msg"),good=mine<=line;m.className="pmsg "+(good?"ok":"ng");
+  m.textContent="내 오차 "+f1(mine,PAIRS.dp)+PAIRS.unit+", 직선 오차 "+f1(line,PAIRS.dp)+PAIRS.unit+". "+(good?"직선만큼 또는 더 가깝게 추정했습니다.":"직선을 이용하면 오차를 줄일 수 있습니다.");
+  document.getElementById("p3-res").classList.add("on");p3d();
+};
+p3d();
+
+})();
+show(0);
+})();
+</script>
+</body>
+</html>
