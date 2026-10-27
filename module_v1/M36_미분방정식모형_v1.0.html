@@ -1,0 +1,1094 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>미분 방정식 모형</title>
+<!-- M36 미분 방정식 모형 v1.0 · 기준 템플릿 v1.3로 제작 (2026-10-27) -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<style>
+:root{
+  --navy:#1B2A4A; --navy2:#2C4170; --navy3:#5B6E97; --navy-soft:#E4E9F2;
+  --ink:#22262E; --gray:#6B7280; --gray2:#9AA0AA; --panel:#EEF0F3; --line:#D5D9E0;
+  --amber:#E0A100; --amber-ink:#6E4F00; --amber-soft:#FCF3D9;
+  --ok:#23704F; --ok-soft:#E2F1E9; --ng:#B42318; --ng-soft:#FBE6E3;
+  --letterbox:#C7CCD4;
+}
+*{box-sizing:border-box}
+html,body{margin:0;height:100%;overflow:hidden;background:var(--letterbox)}
+body{font-family:"Pretendard Variable","Pretendard","Apple SD Gothic Neo","Malgun Gothic","Noto Sans KR",system-ui,sans-serif;color:var(--ink);-webkit-text-size-adjust:100%;font-feature-settings:"tnum"}
+button{font:inherit;color:inherit}
+:focus-visible{outline:3px solid var(--amber);outline-offset:2px;border-radius:4px}
+
+/* ---------- 16:9 무대 ---------- */
+.stage{position:absolute;left:50%;top:50%;width:960px;height:540px;transform:translate(-50%,-50%) scale(var(--s,1));transform-origin:center;background:#fff;overflow:hidden;box-shadow:0 10px 40px rgba(27,42,74,.25)}
+
+/* ---------- 상단 바: 모듈명 + 7단계 진행선 ---------- */
+.topbar{position:absolute;left:0;right:0;top:0;height:60px;background:var(--navy);display:flex;align-items:center}
+.brand{flex:0 0 200px;padding-left:22px;color:#fff;font-size:14px;font-weight:800;letter-spacing:-.3px;line-height:1.2;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.brand small{display:block;font-size:11px;font-weight:500;color:#A9B6CF;letter-spacing:0;margin-top:2px;overflow:hidden;text-overflow:ellipsis}
+.rail{position:relative;flex:1;height:60px;margin-right:22px}
+.rail .track{position:absolute;left:14px;right:14px;top:21px;height:3px;background:#3A4D78;border-radius:2px}
+.rail .fill{position:absolute;left:0;top:0;bottom:0;background:var(--amber);border-radius:2px;transition:width .35s ease}
+.station{position:absolute;top:10px;width:72px;margin-left:-36px;background:none;border:0;padding:0;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:4px}
+.station .dot{width:24px;height:24px;border-radius:50%;display:grid;place-items:center;font-size:11.5px;font-weight:800;background:var(--navy);color:#8E9DBD;border:2px solid #4A5D88;transition:all .25s}
+.station .lb{font-size:11.5px;color:#8E9DBD;white-space:nowrap}
+.station.done .dot{background:#C9D3E6;border-color:#C9D3E6;color:var(--navy)}
+.station.done .lb{color:#C9D3E6}
+.station.cur .dot{background:var(--amber);border-color:#FFE08A;color:var(--navy);transform:scale(1.12)}
+.station.cur .lb{color:#fff;font-weight:700}
+
+/* ---------- 화면 ---------- */
+.viewport{position:absolute;left:0;right:0;top:60px;bottom:46px}
+.slide{position:absolute;inset:0;padding:16px 36px 10px;display:none;flex-direction:column;gap:12px}
+.slide.on{display:flex;animation:fade .22s ease}
+@keyframes fade{from{opacity:0}to{opacity:1}}
+@media (prefers-reduced-motion:reduce){.slide.on{animation:none}.rail .fill,.station .dot{transition:none}}
+.sh{flex:0 0 auto}
+.sec{font-size:12.5px;font-weight:700;color:var(--navy3);display:flex;gap:8px;align-items:center;min-height:18px}
+h2{margin:3px 0 0;font-size:24px;line-height:1.3;font-weight:800;color:var(--navy);letter-spacing:-.6px;display:flex;gap:10px;align-items:flex-start}
+h2 .q{flex:0 0 auto;margin-top:2px;width:28px;height:28px;border-radius:6px;background:var(--navy);color:#fff;font-size:15px;display:grid;place-items:center}
+h2.big{font-size:30px;line-height:1.32}
+.body{flex:1 1 auto;min-height:0;display:grid;gap:24px}
+.split{grid-template-columns:1.2fr 1fr}
+.split.even{grid-template-columns:1fr 1fr}
+.full{grid-template-columns:1fr}
+.fig{background:var(--panel);border-radius:12px;padding:12px;min-height:0;display:flex;align-items:center;justify-content:center}
+.fig svg{width:100%;height:100%;display:block}
+.figcol{min-height:0;display:flex;flex-direction:column;gap:10px}
+.figcol .fig{flex:1 1 auto}
+.side{min-height:0;display:flex;flex-direction:column;gap:12px;justify-content:center}
+
+/* 핵심 문장: 40자 안팎, 1~2개 */
+.key{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:9px}
+.key li{position:relative;padding-left:16px;font-size:18.5px;line-height:1.42;font-weight:700;letter-spacing:-.4px}
+.key li::before{content:"";position:absolute;left:0;top:.28em;width:4px;height:1.05em;border-radius:2px;background:var(--navy2)}
+.key b{color:var(--navy);background:linear-gradient(transparent 62%,var(--amber-soft) 62%)}
+/* 해설 문단: 2~4문장, 150~250자 */
+.exp{margin:0;font-size:15px;line-height:1.62;letter-spacing:-.2px;color:var(--ink)}
+.exp b{color:var(--navy)}
+/* 연결 문장: 다음 소단원으로 넘기는 질문 */
+.next{margin:0;border-top:1px dashed var(--line);padding-top:9px;font-size:14px;font-weight:700;color:var(--navy2);display:flex;gap:8px;align-items:baseline}
+.next span{flex:0 0 auto;font-size:11.5px;font-weight:800;color:var(--navy3);background:var(--navy-soft);border-radius:4px;padding:0 6px;line-height:20px}
+/* 각주: 기호의 뜻과 출처 번호만 */
+.foot{flex:0 0 auto;font-size:12px;line-height:1.5;color:var(--gray);margin:0}
+.foot b{color:var(--ink)}
+.cite{font-size:.72em;font-weight:700;color:var(--navy3);vertical-align:super;line-height:0;margin-left:1px}
+.tag-v{display:inline-block;font-size:11px;font-weight:700;border-radius:4px;padding:0 6px;line-height:18px;white-space:nowrap;vertical-align:1px;color:var(--gray);background:#F3F4F6;box-shadow:inset 0 0 0 1px var(--line)}
+
+/* 핵심 수학 개념 박스 */
+.math{flex:0 0 auto;border-left:3px solid var(--navy3);background:#F6F7F9;border-radius:0 8px 8px 0;padding:9px 13px;font-size:13.5px;line-height:1.5}
+.math .mt{font-size:12px;font-weight:800;color:var(--navy3);margin-bottom:2px}
+.math .f{font-family:"Cambria Math","Times New Roman",serif;font-size:18px;font-weight:700;color:var(--navy);margin:1px 0 4px}
+.math .r{display:grid;grid-template-columns:34px 1fr;gap:6px}
+.math .r span:first-child{font-size:11.5px;font-weight:700;color:var(--gray2);padding-top:1px}
+.math .w{margin-top:5px;padding-top:5px;border-top:1px dashed var(--line);color:var(--ng);font-weight:700;font-size:12.5px}
+
+/* ---------- 하단 바 ---------- */
+.bottombar{position:absolute;left:0;right:0;bottom:0;height:46px;border-top:1px solid var(--line);display:flex;align-items:center;padding:0 22px 0 36px;gap:12px;background:#fff}
+.counter{font-size:13px;color:var(--gray);font-weight:600}
+.counter strong{color:var(--navy)}
+.spacer{flex:1}
+.nav{border:1.5px solid var(--navy);background:#fff;color:var(--navy);border-radius:8px;height:32px;padding:0 16px;font-size:14px;font-weight:700;cursor:pointer}
+.nav.primary{background:var(--navy);color:#fff}
+.nav:disabled{opacity:.3;cursor:default}
+
+/* ---------- 홈으로 ---------- */
+.home{display:inline-flex;align-items:center;gap:6px;height:32px;padding:0 13px;border-radius:8px;border:1.5px solid var(--navy-soft);background:#fff;color:var(--navy2);font-size:13.5px;font-weight:700;line-height:1;text-decoration:none;white-space:nowrap}
+.home svg{width:14px;height:14px;flex:0 0 auto;display:block}
+.home:hover{background:var(--navy-soft);border-color:var(--navy3);color:var(--navy)}
+.home:focus-visible{outline:3px solid var(--amber);outline-offset:2px}
+@media (prefers-reduced-motion:reduce){.home{transition:none}}
+
+/* ① 학습개요 */
+.meta{display:grid;grid-template-columns:auto 1fr;gap:6px 14px;margin:0;font-size:14px}
+.meta dt{font-weight:700;color:var(--gray)}
+.meta dd{margin:0;font-weight:700;color:var(--navy)}
+.prevlink{background:var(--panel);border-radius:10px;padding:12px 14px;font-size:14.5px;line-height:1.55}
+.prevlink small{display:block;font-size:12px;font-weight:800;color:var(--navy3);margin-bottom:3px}
+
+/* ② 학습목표: 목표 → 문항 → 실습 연결 */
+.gmap{display:grid;grid-template-columns:44px 1fr 150px 150px;align-items:stretch;row-gap:12px;column-gap:0}
+.gmap .hd{font-size:12px;font-weight:700;color:var(--gray);padding:0 14px 2px}
+.gmap .gn{background:var(--navy);color:#fff;font-weight:800;font-size:18px;display:grid;place-items:center;border-radius:10px 0 0 10px}
+.gmap .gt{background:var(--panel);padding:14px 18px;font-size:17px;font-weight:700;line-height:1.42;letter-spacing:-.3px;display:flex;align-items:center}
+.gmap .gt b{color:var(--navy)}
+.gmap .ga,.gmap .gp{background:var(--panel);display:flex;align-items:center;padding:0 10px;border-left:2px solid #fff}
+.gmap .gp{border-radius:0 10px 10px 0}
+.jump{border:1.5px solid var(--navy3);background:#fff;border-radius:7px;padding:6px 10px;font-size:13px;font-weight:700;color:var(--navy);cursor:pointer;text-align:left;line-height:1.3;width:100%}
+.jump:hover{background:var(--navy-soft)}
+
+/* ④ 본문 정리 표 */
+.sumtbl{width:100%;border-collapse:separate;border-spacing:0;font-size:14.5px;line-height:1.5}
+.sumtbl th{background:var(--navy);color:#fff;font-weight:800;text-align:left;padding:10px 14px}
+.sumtbl th:first-child{border-radius:10px 0 0 0;width:150px}
+.sumtbl th:last-child{border-radius:0 10px 0 0}
+.sumtbl td{padding:11px 14px;border-bottom:1px solid var(--line);vertical-align:top}
+.sumtbl td:first-child{font-weight:800;color:var(--navy)}
+.sumtbl tr:nth-child(even) td{background:#F8F9FB}
+
+/* ⑤ 형성평가 */
+.qchips{display:flex;gap:6px}
+.qchips span{font-size:11.5px;font-weight:700;color:var(--navy2);background:var(--navy-soft);border-radius:4px;padding:0 7px;line-height:19px}
+h2.stem{font-size:21px;line-height:1.42;font-weight:800}
+.opts{display:grid;gap:9px;align-content:center}
+.opts.ox{grid-template-columns:1fr 1fr}
+.opt{border:1.5px solid var(--line);background:#fff;border-radius:10px;padding:11px 14px;text-align:left;font-size:16px;font-weight:600;cursor:pointer;display:flex;gap:10px;align-items:center}
+.opt .n{flex:0 0 26px;height:26px;border-radius:50%;background:var(--panel);display:grid;place-items:center;font-size:13px;font-weight:800;color:var(--navy)}
+.opts.ox .opt{justify-content:center;font-size:40px;font-weight:800;padding:22px;color:var(--navy)}
+.opt:hover:not(:disabled){border-color:var(--navy3);background:#F8F9FB}
+.opt:disabled{cursor:default}
+.opt.ok{border-color:var(--ok);background:var(--ok-soft);color:var(--ok)}
+.opt.ok .n{background:var(--ok);color:#fff}
+.opt.ng{border-color:var(--ng);background:var(--ng-soft);color:var(--ng)}
+.opt.ng .n{background:var(--ng);color:#fff}
+.fbp{background:var(--panel);border-radius:12px;padding:18px 20px;display:flex;flex-direction:column;gap:10px;font-size:14.5px;line-height:1.6}
+.fbp .empty{color:var(--gray);margin:auto 0}
+.fbp .verdict{font-size:19px;font-weight:800}
+.fbp.ok{background:var(--ok-soft)} .fbp.ok .verdict{color:var(--ok)}
+.fbp.ng{background:var(--ng-soft)} .fbp.ng .verdict{color:var(--ng)}
+.fbp .back{align-self:flex-start}
+.fbp .tally{margin-top:auto;font-size:12.5px;color:var(--gray);font-weight:600}
+
+/* ⑥ 실습 */
+.plabel{font-size:12px;font-weight:800;color:var(--navy3);margin-bottom:6px}
+.pcol{min-height:0;display:flex;flex-direction:column}
+.mbtns{display:flex;flex-wrap:nowrap;gap:3px;margin-bottom:8px}
+.mbtn{border:1px solid var(--line);background:#fff;border-radius:6px;padding:2px 6px;font-size:12px;cursor:pointer;min-width:26px}
+.mbtn.on{background:var(--navy);border-color:var(--navy);color:#fff}
+.ctrl{display:flex;align-items:center;gap:10px;font-size:14px;font-weight:600}
+input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
+.stats{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.stats.three{grid-template-columns:1fr 1fr 1fr}
+.stats div{background:var(--panel);border-radius:10px;padding:8px 12px}
+.stats small{display:block;font-size:11.5px;color:var(--gray);font-weight:600;line-height:1.35}
+.stats strong{font-size:22px;color:var(--navy);letter-spacing:-.4px}
+.pmsg{font-size:14.5px;font-weight:700;min-height:22px;line-height:1.45}
+.pmsg.ok{color:var(--ok)} .pmsg.ng{color:var(--ng)}
+.think{flex:0 0 auto;background:var(--amber-soft);border-radius:10px;padding:9px 14px;font-size:14.5px;font-weight:700;color:var(--amber-ink);display:flex;gap:10px;align-items:baseline}
+.think span{flex:0 0 auto;font-size:12px;font-weight:800}
+.howto{font-size:13.5px;color:var(--gray);line-height:1.5;margin:0}
+.btn{border:0;background:var(--navy);color:#fff;border-radius:8px;height:32px;padding:0 14px;font-size:13.5px;font-weight:700;cursor:pointer}
+.btn.ghost{background:#fff;color:var(--navy);box-shadow:inset 0 0 0 1.5px var(--navy)}
+.pool{flex:1;min-height:0;display:grid;grid-template-columns:1fr 1fr;align-content:start;gap:8px;padding:10px;border:1.5px dashed var(--line);border-radius:10px;background:#FAFBFC}
+.dcard{background:#fff;border:1.5px solid var(--navy3);border-radius:8px;padding:7px 10px;font-size:13.5px;font-weight:600;line-height:1.4;cursor:grab;user-select:none;-webkit-user-select:none;touch-action:none}
+.dcard.sel{box-shadow:0 0 0 3px var(--amber)}
+.dcard.ok{border-color:var(--ok);background:var(--ok-soft);color:var(--ok);cursor:default;font-size:12.5px;padding:5px 8px}
+.dcard.shake{animation:shake .35s;border-color:var(--ng);background:var(--ng-soft)}
+@keyframes shake{25%{transform:translateX(-5px)}75%{transform:translateX(5px)}}
+.ghostc{position:absolute;pointer-events:none;z-index:50;opacity:.92;box-shadow:0 8px 20px rgba(27,42,74,.25);cursor:grabbing}
+.bins{flex:1 0 auto;min-height:0;display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.bin .dcard{font-size:12px;padding:3px 7px;line-height:1.3}
+.p2row{display:flex;gap:10px;align-items:center}.p2row .pmsg{flex:1;margin:0}.p2row .btn{flex:0 0 auto}
+.bin{border:1.5px solid var(--line);border-radius:10px;padding:6px;display:flex;flex-direction:column;gap:6px;background:#fff;cursor:pointer;min-height:0}
+.bin h4{margin:0;background:var(--navy);color:#fff;border-radius:6px;text-align:center;font-size:14px;padding:4px}
+.bin.hover{border-color:var(--amber);background:var(--amber-soft)}
+.res{display:none;flex-direction:column;gap:8px}
+.res.on{display:flex}
+
+/* ⑦ 용어해설·참고자료 */
+.gl{display:grid;grid-template-columns:1fr 1fr;grid-template-rows:repeat(3,1fr);gap:10px 22px;min-height:0}
+.gi{border-top:2px solid var(--navy);padding:8px 0 0;display:flex;flex-direction:column;gap:3px;min-height:0}
+.gi .t{font-size:16.5px;font-weight:800;color:var(--navy);display:flex;gap:6px;align-items:baseline;flex-wrap:wrap}
+.gi .t em{font-style:normal;font-weight:500;font-size:12.5px;color:var(--gray)}
+.gi .t i{font-style:normal;font-size:12px;font-weight:800;color:var(--navy3);width:22px}
+.gi .d{font-size:14px;line-height:1.5}
+.gi .e{font-size:12.5px;line-height:1.45;color:var(--gray)}
+.gi .e strong{color:var(--navy3)}
+.refs{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:8px;font-size:13.5px;line-height:1.5}
+.refs li{display:grid;grid-template-columns:30px 1fr;gap:4px}
+.refs li span{font-weight:800;color:var(--navy3)}
+.refs a{color:var(--navy2);word-break:break-all}
+.nextmod{background:var(--navy);color:#fff;border-radius:12px;padding:18px 22px;display:flex;flex-direction:column;gap:6px}
+.nextmod small{font-size:12px;font-weight:700;color:#A9B6CF}
+.nextmod strong{font-size:19px;line-height:1.45;letter-spacing:-.3px}
+
+.rotate{position:fixed;left:0;right:0;bottom:max(14px,env(safe-area-inset-bottom));text-align:center;font-size:13px;color:#3A4560;display:none}
+@media (orientation:portrait) and (max-width:700px){.rotate{display:block}}
+</style>
+</head>
+<body>
+<div class="stage" id="stage">
+  <header class="topbar">
+    <!-- [교체] 모듈명 / 과정명·모듈 번호 (장·절 번호는 쓰지 않음) -->
+    <div class="brand" id="brand">미분 방정식 모형<small>베이즈·기계학습·수리 모형 · M36</small></div>
+    <nav class="rail" id="rail" aria-label="학습 단계"><div class="track"><div class="fill" id="fill"></div></div></nav>
+  </header>
+
+  <main class="viewport" id="vp">
+    <!-- ① 학습개요 ─────────────────────────────── -->
+    <section class="slide" data-step="0">
+      <div class="sh"><div class="sec">학습개요</div>
+        <h2 class="big">변화 규칙을 식으로 세워 앞날을 미리 따져 봅니다</h2></div>
+      <div class="body split">
+        <div class="fig"><svg id="m36-ov" viewBox="0 0 440 260" role="img" aria-label="차분 방정식에서 미분 방정식, 밀도 효과를 넣은 로지스틱 방정식, 감염병 SIR 모형, 예측과 통제로 이어지는 흐름"></svg></div>
+        <div class="side">
+          <div class="prevlink"><small>지난 모듈에서는</small>통계 모형·기계학습 모형과 메커니즘에서 출발하는 수리 모형을 비교하고, 모형이 현상을 이해하는 근사 도구라는 점을 배웠습니다.<small style="margin-top:8px">이번 모듈에서는</small>대표적인 결정론 모형인 차분 방정식과 미분 방정식으로 수의 변화를 나타내고, 감염병의 SIR 모형으로 유행을 예측하고 대책의 효과를 따져 봅니다.</div>
+          <dl class="meta"><dt>학습 시간</dt><dd>약 40분</dd><dt>본문</dt><dd>소단원 4개</dd><dt>실습</dt><dd>조작형 · 분류형 · 추정형</dd></dl>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" data-step="0">
+      <div class="sh"><div class="sec">학습개요 · 이 모듈의 예시</div><h2>직원 1,000명 사업장에 호흡기 감염병이 들어왔습니다</h2></div>
+      <div class="body split">
+        <div class="fig"><svg id="m36-case" viewBox="0 0 440 250" role="img" aria-label="첫 감염자 1명이 생긴 뒤 30일 동안 감염자가 1, 4, 15, 48명으로 늘어나는 막대와 직원 1,000명"></svg></div>
+        <div class="side">
+          <ul class="key"><li>감염자는 앞으로 얼마나 늘어날까요?</li></ul>
+          <p class="exp">교대 근무 직원 1,000명이 일하는 사업장에서 첫 감염자 1명이 나온 뒤, 감염자 수가 10일째 4명, 20일째 15명, 30일째 48명으로 늘었습니다(예시값). 처음에는 대략 5일마다 2배씩 늘고 있습니다. 이대로 두면 몇 명까지 늘어날지, 접촉을 줄이거나 조기 격리를 하면 어떻게 달라질지 수리 모형으로 내다봅니다.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ② 학습목표 ─────────────────────────────── -->
+    <section class="slide" data-step="1">
+      <div class="sh"><div class="sec">학습목표</div><h2>이 모듈을 마치면 이렇게 할 수 있습니다</h2></div>
+      <div class="body full" style="align-content:center">
+        <div class="gmap">
+          <div></div><div class="hd">목표</div><div class="hd">확인하는 문항</div><div class="hd">연결 실습</div>
+          <div class="gn">1</div><div class="gt"><span>차분·미분 방정식의 해로 수의 변화를 <b>계산한다</b>.</span></div>
+          <div class="ga"><button class="jump" data-jump="q1">문항 1·2</button></div><div class="gp"><button class="jump" data-jump="p3">실습 3 추정</button></div>
+          <div class="gn">2</div><div class="gt"><span>평형점의 안정성과 선형·비선형을 <b>구분한다</b>.</span></div>
+          <div class="ga"><button class="jump" data-jump="q3">문항 3·4</button></div><div class="gp"><button class="jump" data-jump="p2">실습 2 분류</button></div>
+          <div class="gn">3</div><div class="gt"><span>재생산수로 유행과 대책 효과를 <b>판단한다</b>.</span></div>
+          <div class="ga"><button class="jump" data-jump="q5">문항 5·6</button></div><div class="gp"><button class="jump" data-jump="p1">실습 1 조작</button></div>
+        </div>
+      </div>
+      <p class="foot">버튼을 누르면 해당 문항이나 실습 화면으로 바로 이동합니다.</p>
+    </section>
+
+    <!-- ③ 일상의 예시 ─────────────────────────────── -->
+    <section class="slide" data-step="2">
+      <div class="sh"><div class="sec">일상의 예시 1/5</div><h2>종이를 42번 접으면 두께가 달까지 닿는다는 계산이 나옵니다</h2></div>
+      <div class="body split">
+        <div class="fig"><svg viewBox="0 0 440 250" role="img" aria-label="두께 0.1 mm 종이를 접을 때마다 두께가 2배가 되어 10번 102 mm, 20번 약 105 m, 42번 약 44만 km">
+          <g font-size="12" font-weight="700" fill="#1B2A4A">
+            <rect x="30" y="196" width="70" height="4" fill="#5B6E97"/><text x="65" y="222" text-anchor="middle">0번 0.1 mm</text>
+            <rect x="130" y="176" width="70" height="24" fill="#5B6E97"/><text x="165" y="222" text-anchor="middle">10번 약 10 cm</text>
+            <rect x="230" y="96" width="70" height="104" fill="#5B6E97"/><text x="265" y="222" text-anchor="middle">20번 약 105 m</text>
+            <rect x="330" y="20" width="70" height="180" fill="#E0A100"/><text x="365" y="222" text-anchor="middle">42번</text>
+            <text x="365" y="110" text-anchor="middle" font-size="12" font-weight="800" fill="#1B2A4A">약 44만 km</text><text x="365" y="128" text-anchor="middle" font-size="10" fill="#1B2A4A">(달 약 38만 km)</text>
+          </g>
+          <text x="220" y="244" text-anchor="middle" font-size="10.5" font-weight="700" fill="#6B7280">막대 높이는 실제 비율이 아닌 개념도</text>
+        </svg></div>
+        <div class="side">
+          <ul class="key"><li>2배씩 늘면 금세 상상을 넘어섭니다.</li></ul>
+          <p class="exp">두께 0.1 mm인 종이를 반으로 접을 때마다 두께는 2배가 됩니다. 10번 접으면 약 10 cm, 20번이면 약 105 m이고, 42번 접으면 계산상 약 44만 km로 지구에서 달까지 거리(약 38만 km)를 넘습니다. 실제로는 몇 번 못 접지만, ‘일정 시간마다 몇 배’로 늘어나는 변화가 얼마나 빠른지를 잘 보여 줍니다.</p>
+          <p class="next"><span>본문에서</span>4-1 차분 방정식과 지수함수 증가로 이어집니다.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" data-step="2">
+      <div class="sh"><div class="sec">일상의 예시 2/5</div><h2>어항 속 물고기는 끝없이 늘지 않습니다</h2></div>
+      <div class="body split">
+        <div class="fig"><svg viewBox="0 0 440 250" role="img" aria-label="어항의 물고기 수가 처음에는 빠르게 늘다가 어항 크기의 한계에 가까워지며 늘어나는 속도가 줄어 멈추는 S자 곡선">
+          <rect x="30" y="30" width="160" height="150" rx="12" fill="#EEF4FB" stroke="#5B6E97" stroke-width="2"/>
+          <g fill="#E0A100"><path d="M60 80 l14 -7 v14z"/><path d="M110 70 l14 -7 v14z"/><path d="M80 120 l14 -7 v14z"/><path d="M140 110 l14 -7 v14z"/><path d="M60 150 l14 -7 v14z"/><path d="M120 150 l14 -7 v14z"/><path d="M150 60 l14 -7 v14z"/></g>
+          <text x="110" y="204" text-anchor="middle" font-size="11" font-weight="700" fill="#1B2A4A">공간·먹이가 한정된 어항</text>
+          <line x1="220" y1="190" x2="420" y2="190" stroke="#9AA0AA"/><line x1="220" y1="190" x2="220" y2="30" stroke="#9AA0AA"/>
+          <line x1="220" y1="60" x2="420" y2="60" stroke="#B42318" stroke-dasharray="5 4"/><text x="416" y="54" text-anchor="end" font-size="10.5" font-weight="800" fill="#B42318">한계</text>
+          <path d="M220 186 C280 184 300 70 420 62" fill="none" stroke="#2B8CC4" stroke-width="3"/>
+          <text x="320" y="212" text-anchor="middle" font-size="11" font-weight="700" fill="#1B2A4A">시간 → 물고기 수</text>
+        </svg></div>
+        <div class="side">
+          <ul class="key"><li>많아질수록 늘어나는 속도가 줄어듭니다.</li></ul>
+          <p class="exp">어항에 물고기 몇 마리를 넣어 두면 처음에는 새끼가 태어나며 빠르게 늘어납니다. 하지만 공간과 먹이가 한정되어 있어 수가 많아질수록 늘어나는 속도가 느려지고, 결국 어항이 감당할 수 있는 수에 가까워지면 더는 늘지 않습니다. 한 번 그 수에 다다르면, 조금 늘거나 줄어도 다시 그 근처로 돌아오는 경향이 있습니다.</p>
+          <p class="next"><span>본문에서</span>4-2 미분 방정식과 밀도 효과로 이어집니다.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" data-step="2">
+      <div class="sh"><div class="sec">일상의 예시 3/5</div><h2>반에 퍼진 소문은 왜 결국 잠잠해질까요</h2></div>
+      <div class="body split">
+        <div class="fig"><svg viewBox="0 0 440 250" role="img" aria-label="아직 모르는 학생, 소문을 퍼뜨리는 학생, 흥미를 잃은 학생의 세 무리와 그 사이의 이동">
+          <defs><marker id="g1" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10z" fill="#5B6E97"/></marker></defs>
+          <g font-size="12.5" font-weight="800" text-anchor="middle">
+            <rect x="14" y="70" width="120" height="80" rx="14" fill="#EEF4FB"/><text x="74" y="104" fill="#1C6EA4">아직 모름</text><text x="74" y="126" font-size="10.5" font-weight="700" fill="#22262E">듣으면 전할 수 있음</text>
+            <rect x="160" y="70" width="120" height="80" rx="14" fill="#FBE9E7"/><text x="220" y="104" fill="#B42318">퍼뜨리는 중</text><text x="220" y="126" font-size="10.5" font-weight="700" fill="#22262E">만나는 사람에게 전함</text>
+            <rect x="306" y="70" width="120" height="80" rx="14" fill="#E3F1EA"/><text x="366" y="104" fill="#23704F">흥미 잃음</text><text x="366" y="126" font-size="10.5" font-weight="700" fill="#22262E">더는 전하지 않음</text>
+          </g>
+          <g stroke="#5B6E97" stroke-width="2.2"><line x1="136" y1="110" x2="156" y2="110" marker-end="url(#g1)"/><line x1="282" y1="110" x2="302" y2="110" marker-end="url(#g1)"/></g>
+          <text x="146" y="60" text-anchor="middle" font-size="10.5" font-weight="700" fill="#1B2A4A">만나서 들음</text><text x="292" y="60" text-anchor="middle" font-size="10.5" font-weight="700" fill="#1B2A4A">시간이 지남</text>
+          <text x="220" y="196" text-anchor="middle" font-size="11.5" font-weight="700" fill="#1B2A4A">모르는 사람이 줄면 퍼지는 속도도 줄어듦</text>
+        </svg></div>
+        <div class="side">
+          <ul class="key"><li>세 무리 사이의 이동으로 퍼짐을 설명합니다.</li></ul>
+          <p class="exp">반에 소문이 퍼질 때, 아직 모르는 학생은 소문을 퍼뜨리는 친구를 만나면 소문을 듣고 자신도 퍼뜨리게 됩니다. 시간이 지나면 흥미를 잃어 더는 전하지 않습니다. 처음에는 빠르게 퍼지지만 모르는 학생이 줄어들면 퍼지는 속도도 줄고, 모두가 듣기 전에 잠잠해지기도 합니다.</p>
+          <p class="next"><span>본문에서</span>4-3 감염병 모형으로 이어집니다.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" data-step="2">
+      <div class="sh"><div class="sec">일상의 예시 4/5</div><h2>내비게이션은 “이 길로 가면?”을 미리 계산해 보여 줍니다</h2></div>
+      <div class="body split">
+        <div class="fig"><svg viewBox="0 0 440 250" role="img" aria-label="지금 경로로 가면 도착 3시 10분, 다른 경로로 가면 2시 58분을 미리 보여 주는 내비게이션">
+          <rect x="60" y="20" width="320" height="200" rx="20" fill="#1B2A4A"/><rect x="74" y="34" width="292" height="172" rx="10" fill="#F3F5F9"/>
+          <path d="M100 180 C150 160 160 100 220 90 S300 60 340 50" fill="none" stroke="#9AA0AA" stroke-width="6"/>
+          <path d="M100 180 C180 190 260 160 340 50" fill="none" stroke="#2B8CC4" stroke-width="6"/>
+          <circle cx="100" cy="180" r="7" fill="#B42318"/><circle cx="340" cy="50" r="7" fill="#23704F"/>
+          <rect x="88" y="44" width="130" height="44" rx="8" fill="#fff"/><text x="153" y="62" text-anchor="middle" font-size="10.5" font-weight="700" fill="#6B7280">지금 경로</text><text x="153" y="80" text-anchor="middle" font-size="12" font-weight="800" fill="#1B2A4A">도착 3:10</text>
+          <rect x="226" y="140" width="130" height="44" rx="8" fill="#fff" stroke="#2B8CC4" stroke-width="2"/><text x="291" y="158" text-anchor="middle" font-size="10.5" font-weight="700" fill="#1C6EA4">다른 경로라면</text><text x="291" y="176" text-anchor="middle" font-size="12" font-weight="800" fill="#1C6EA4">도착 2:58</text>
+        </svg></div>
+        <div class="side">
+          <ul class="key"><li>지금대로라면, 바꾼다면을 미리 비교합니다.</li></ul>
+          <p class="exp">내비게이션은 지금 속도와 교통 상황이 이어진다는 전제로 도착 시각을 예측합니다. 또 “다른 길로 가면 몇 분 빨라질까?”처럼 아직 가 보지 않은 경로의 결과도 미리 계산해 보여 줍니다. 직접 두 길을 다 달려 보지 않아도 규칙만 알면 선택지를 비교하고, 원하는 결과를 얻으려면 무엇을 바꿔야 할지 알 수 있습니다.</p>
+          <p class="next"><span>본문에서</span>4-4 예측과 통제로 이어집니다.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" data-step="2">
+      <div class="sh"><div class="sec">일상의 예시 5/5</div><h2>현장에서는? 감염병 대책을 언제, 얼마나 해야 할까</h2></div>
+      <div class="body split even">
+        <div class="fig"><svg viewBox="0 0 420 250" role="img" aria-label="네 장면이 미분 방정식 모형으로 이어지는 그림">
+          <defs><marker id="g2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10z" fill="#5B6E97"/></marker></defs>
+          <g font-size="13" font-weight="700" fill="#1B2A4A" text-anchor="middle">
+            <rect x="14" y="18" width="150" height="44" rx="10" fill="#fff" stroke="#5B6E97" stroke-width="1.5"/><text x="89" y="45">종이 접기</text>
+            <rect x="14" y="74" width="150" height="44" rx="10" fill="#fff" stroke="#5B6E97" stroke-width="1.5"/><text x="89" y="101">어항 속 물고기</text>
+            <rect x="14" y="130" width="150" height="44" rx="10" fill="#fff" stroke="#5B6E97" stroke-width="1.5"/><text x="89" y="157">반에 퍼진 소문</text>
+            <rect x="14" y="186" width="150" height="44" rx="10" fill="#fff" stroke="#5B6E97" stroke-width="1.5"/><text x="89" y="213">내비의 “이 길이면?”</text>
+          </g>
+          <g stroke="#5B6E97" stroke-width="2" fill="none"><path d="M166 40 C220 40 220 112 254 120" marker-end="url(#g2)"/><path d="M166 96 C210 96 220 118 254 122" marker-end="url(#g2)"/><path d="M166 152 C210 152 220 130 254 128" marker-end="url(#g2)"/><path d="M166 208 C220 208 220 138 254 130" marker-end="url(#g2)"/></g>
+          <rect x="258" y="84" width="150" height="82" rx="12" fill="#1B2A4A"/>
+          <text x="333" y="116" text-anchor="middle" font-size="15" font-weight="800" fill="#fff">미분 방정식</text><text x="333" y="136" text-anchor="middle" font-size="15" font-weight="800" fill="#fff">모형</text>
+          <text x="333" y="156" text-anchor="middle" font-size="11" fill="#C9D3E6">증가 · 포화 · 감염 · 통제</text>
+        </svg></div>
+        <div class="side">
+          <p class="exp">네 장면은 일정 시간마다 몇 배로 늘어나는 변화, 많아질수록 증가가 느려지는 효과, 세 무리 사이를 옮겨 가는 퍼짐, 규칙으로 선택지의 결과를 미리 계산하기로 이어집니다. 사업장에 감염병이 들어왔을 때 접촉 분산, 조기 격리 같은 대책을 언제, 얼마나 해야 유행이 꺾이는지 실제로 해 보기 전에 모형으로 따져 볼 수 있습니다.</p>
+          <p class="next"><span>다음 질문</span>2배씩 늘어나는 규칙은 어떻게 쓸까?</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ④ 본문 ─────────────────────────────── -->
+    <section class="slide" data-step="3" id="s-4-1a">
+      <div class="sh"><div class="sec">4-1 차분 방정식과 지수함수 증가</div><h2><span class="q">Q</span>5일마다 2배로 늘어나는 규칙은 어떻게 쓸까요?</h2></div>
+      <div class="body split even">
+        <div class="figcol">
+          <div class="fig"><svg id="m36-diff" viewBox="0 0 420 150" role="img" aria-label="5일마다 2배인 감염자 수 1, 2, 4, 8 … 이 50일에 1,024명이 되어 직원 수 1,000명을 넘는 지수함수 증가 그래프"></svg></div>
+          <div class="math">
+            <div class="mt">핵심 수학 개념 · 차분 방정식과 그 해</div>
+            <div class="f">x(t+1) = 2x(t), x(0) = 1 → x(t) = 2<sup>t</sup></div>
+            <div class="r"><span>기호</span><span>t: 5일 단위 시각(이산 시간), x(t): 시각 t의 감염자 수</span></div>
+            <div class="r"><span>계산</span><span>50일 → t = 10 → 2<sup>10</sup> = 1,024명</span></div>
+          </div>
+        </div>
+        <div class="side">
+          <ul class="key"><li><b>차분 방정식</b>: 다음 값 = 규칙(지금 값)</li><li><b>지수함수 증가</b>: 2<sup>t</sup>처럼 급격히 늘어남</li></ul>
+          <p class="exp">시간을 5일 단위 t = 0, 1, 2…로 띄엄띄엄 보고 감염자 수를 x(t)라 하면, 5일 뒤 수는 지금의 2배라는 증가 규칙을 식으로 쓸 수 있습니다. 차분 방정식을 푼다는 것은 x(t)를 t의 함수로 나타내는 것으로, 초항 1·공비 2인 등비수열이므로 x(t) = 2<sup>t</sup>입니다. 50일 뒤에는 1,024명으로 직원 수를 넘습니다.</p>
+          <p class="next"><span>다음 질문</span>배율이 2가 아니라면?</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" data-step="3" id="s-4-1b">
+      <div class="sh"><div class="sec">4-1 차분 방정식과 지수함수 증가</div><h2><span class="q">Q</span>배율 r을 바꾸면 움직임은 어떻게 달라질까요?</h2></div>
+      <div class="body split even">
+        <div class="fig"><svg id="m36-bif" viewBox="0 0 420 270" role="img" aria-label="x(t+1) = r x(t)에서 r 1.2는 증가, 1.0은 유지, 0.8은 감소하는 곡선과, r = 1을 경계로 소멸과 증식이 나뉘는 분기 다이어그램"></svg></div>
+        <div class="side">
+          <ul class="key"><li>r &gt; 1 증가, r = 1 유지, r &lt; 1 감소(0까지)</li><li><b>분기 다이어그램</b>: r = 1이 질적 경계</li></ul>
+          <p class="exp">일반적으로 파라미터 r을 써서 x(t+1) = r·x(t)로 나타내면 해는 x(t) = x(0)·r<sup>t</sup>입니다. r이 1보다 크면 정량적으로는 달라도 지수적으로 늘어난다는 점에서 같고, r이 딱 1이면 변하지 않으며, 1보다 작으면 지수적으로 감소합니다. 파라미터 r을 가로축, 충분한 시간이 흐른 뒤의 값을 세로축에 두면 r = 1을 경계로 질적으로 다른 움직임이 한눈에 보입니다. 이처럼 파라미터를 다양하게 바꿨을 때 무슨 일이 일어나는지 조사할 수 있다는 것이 수리 모형의 강점입니다.</p>
+          <p class="next"><span>다음 질문</span>시간을 연속으로 보면?</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" data-step="3" id="s-4-2a">
+      <div class="sh"><div class="sec">4-2 미분 방정식과 밀도 효과</div><h2><span class="q">Q</span>시간 간격을 아주 작게 하면 규칙은 어떻게 쓸까요?</h2></div>
+      <div class="body split even">
+        <div class="figcol">
+          <div class="fig"><svg id="m36-ode" viewBox="0 0 420 150" role="img" aria-label="dx/dt = ax의 해 x(0)e^(at), a가 양수면 증가, 0이면 유지, 음수면 감소"></svg></div>
+          <div class="math">
+            <div class="mt">핵심 수학 개념 · 선형 미분 방정식</div>
+            <div class="f">dx/dt = ax → x(t) = x(0)e<sup>at</sup></div>
+            <div class="r"><span>기호</span><span>dx/dt: 아주 짧은 시간의 변화율, a: 증가율 파라미터</span></div>
+            <div class="r"><span>계산</span><span>5일마다 2배 → a = ln2 ÷ 5 ≈ 0.139/일</span></div>
+          </div>
+        </div>
+        <div class="side">
+          <ul class="key"><li><b>미분 방정식</b>: 연속 시간의 변화율 규칙</li><li>a &gt; 0 증가, a = 0 경계, a &lt; 0 감소</li></ul>
+          <p class="exp">차분 방정식의 시간 간격을 작게 하면 연속 시간 모형인 미분 방정식을 얻습니다. dx/dt = ax는 가장 단순한 선형 미분 방정식이라 해를 간단히 구할 수 있습니다. 지수적 증가·감소라는 성질은 같지만, 변화율을 나타내므로 경계는 a = 0이 됩니다. 사업장 초기 감염의 a는 약 0.139/일입니다.</p>
+          <p class="next"><span>다음 질문</span>지수 증가는 언제까지 계속될까?</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" data-step="3" id="s-4-2b">
+      <div class="sh"><div class="sec">4-2 미분 방정식과 밀도 효과</div><h2><span class="q">Q</span>지수적 증가가 끝없이 이어지는 것이 현실적일까요?</h2></div>
+      <div class="body split even">
+        <div class="fig"><svg id="m36-logi" viewBox="0 0 420 270" role="img" aria-label="지수적 증가는 직원 수를 넘어 계속 커지지만, 로지스틱 방정식은 K = 1,000에 가까워지며 포화하는 S자 곡선"></svg></div>
+        <div class="side">
+          <ul class="key"><li><b>밀도 효과</b>: 늘수록 증가율이 줄어듦</li><li><b>로지스틱 방정식</b>: K에서 포화</li></ul>
+          <p class="exp">x(t+1) = 2x(t)나 dx/dt = ax는 모두 x 자신의 정수배로 나타낸 선형 방정식이고, 지수적 증가와 감소는 그 전형적인 움직임입니다. 그러나 지수적 증가가 언제까지나 계속되는 것은 현실적이지 않으므로, x가 늘어날수록 증가율이 줄어드는 밀도 효과를 넣는 것이 자연스럽습니다. 흔히 쓰는 로지스틱 방정식 dx/dt = ax(1 − x/K)는 x가 환경 수용력 K에 가까울수록 증가율을 0에 가깝게 합니다. 회복을 생각하지 않으면 누적 감염자는 이 식을 따르며 K = 직원 1,000명에서 포화합니다.</p>
+          <p class="next"><span>다음 질문</span>K에 도달하면 무슨 일이 생길까?</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" data-step="3" id="s-4-2c">
+      <div class="sh"><div class="sec">4-2 미분 방정식과 밀도 효과</div><h2><span class="q">Q</span>더 변하지 않는 상태는 어디이고, 그곳은 안정할까요?</h2></div>
+      <div class="body split even">
+        <div class="fig"><svg id="m36-eq" viewBox="0 0 420 270" role="img" aria-label="로지스틱 방정식의 변화율 그래프와 평형점, x = 0은 불안정평형점, x = K는 안정평형점이며 화살표가 K로 모임"></svg></div>
+        <div class="side">
+          <ul class="key"><li>x = K는 <b>안정평형점</b>, x = 0은 <b>불안정평형점</b></li><li><b>비선형 방정식</b>은 상태에 따라 규칙이 변함</li></ul>
+          <p class="exp">dx/dt = 0을 만족하는 x가 평형점입니다. x가 K보다 크면 dx/dt &lt; 0, 작으면 dx/dt &gt; 0이 되어 x = K로 되돌아가므로 안정평형점입니다. x = 0에서는 조금만 커져도 늘어나기 시작하므로 불안정평형점입니다. 로지스틱 방정식은 x × x의 곱이 있는 비선형 방정식으로, 대부분 식으로 풀 수 없어 수치 계산이나 평형점 근처의 선형 근사로 조사합니다.</p>
+          <p class="next"><span>다음 질문</span>감염병은 어떻게 모형으로 만들까?</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" data-step="3" id="s-4-3a">
+      <div class="sh"><div class="sec">4-3 감염병 모형</div><h2><span class="q">Q</span>감염되고 회복하는 흐름은 어떻게 식으로 쓸까요?</h2></div>
+      <div class="body split even">
+        <div class="figcol">
+          <div class="fig"><svg id="m36-sir" viewBox="0 0 420 150" role="img" aria-label="직원 1,000명 SIR 모형의 S, I, R 곡선, 감염자 정점 약 100명(44일), 최종 누적 감염 약 692명"></svg></div>
+          <div class="math">
+            <div class="mt">핵심 수학 개념 · SIR 모형</div>
+            <div class="f">dS/dt = −βSI/N, dI/dt = βSI/N − γI, dR/dt = γI</div>
+            <div class="r"><span>기호</span><span>β 감염률, γ 회복률, N = S + I + R = 1,000명</span></div>
+            <div class="r"><span>계산</span><span>β 0.34, γ 0.2 → 정점 약 100명, 최종 약 692명</span></div>
+          </div>
+        </div>
+        <div class="side">
+          <ul class="key"><li><b>SIR 모형</b>: S → I → R의 이동</li><li>S × I 항이 있어 비선형 미분 방정식</li></ul>
+          <p class="exp">감수성 보유자 S는 감염자와 접촉하면 감염률 β로 감염자 I가 되고, 감염자는 일정 비율 γ로 회복자 R이 됩니다<span class="cite">[1]</span>. 감수성이 감염자 수에 비례하므로 S와 I가 곱해집니다. 감염자는 처음에 지수적으로 늘다가 S가 줄면서 감소하고, 모두가 걸리기 전에 유행이 끝납니다.</p>
+          <p class="next"><span>다음 질문</span>유행이 시작될지는 무엇이 정할까?</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" data-step="3" id="s-4-3b">
+      <div class="sh"><div class="sec">4-3 감염병 모형</div><h2><span class="q">Q</span>감염자 한 명이 유행으로 번질지는 무엇으로 알 수 있을까요?</h2></div>
+      <div class="body split even">
+        <div class="fig"><svg id="m36-r0" viewBox="0 0 420 270" role="img" aria-label="가로축 R0, 세로축 최종 누적 감염 비율인 분기 다이어그램, R0 = 1 아래에서는 0, 위에서는 늘어나며 이 사업장 R0 1.7에서 약 69%"></svg></div>
+        <div class="side">
+          <ul class="key"><li><b>기초감염재생산수</b> R₀ = β/γ × S(0)/N</li><li>R₀ &gt; 1이면 유행이 확산됨</li></ul>
+          <p class="exp">감염 초기에 최초 감염자 수 I(0)가 늘어나는지가 유행을 결정합니다. dI/dt = I(0)(βS(0)/N − γ) &gt; 0이면 유행하므로, 기초감염재생산수 R₀ = (β/γ) × S(0)/N이 1보다 큰지가 기준입니다. R₀는 대책이 없는 감수성 보유자뿐인 집단에서 감염자 1명이 감염시키는 사람 수의 평균이므로, 1보다 크면 확산된다는 것을 직관적으로도 알 수 있습니다. 이 사업장은 0.34 ÷ 0.2 = 1.7로 1을 넘으며, 최종적으로 약 69%가 감염을 겪습니다.</p>
+          <p class="next"><span>다음 질문</span>대책을 쓰면 어떻게 달라질까?</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" data-step="3" id="s-4-4a">
+      <div class="sh"><div class="sec">4-4 예측과 통제, 더 좋은 모형으로</div><h2><span class="q">Q</span>30일째에 대책을 쓰면 유행은 어떻게 달라질까요?</h2></div>
+      <div class="body split even">
+        <div class="fig"><svg id="m36-ctrl" viewBox="0 0 420 270" role="img" aria-label="30일까지 관측한 감염자 수 이후 대책 없음 Rt 1.48, 마스크 Rt 1.05, 접촉 절반 Rt 0.74의 감염자 수 시나리오"></svg></div>
+        <div class="side">
+          <ul class="key"><li><b>실질감염재생산수</b> Rₜ를 1 아래로</li><li>예측은 규칙이 그대로라는 전제 아래서만</li></ul>
+          <p class="exp">데이터로 파라미터를 추정하면 앞날을 예측할 수 있지만, 지금까지의 규칙이 달라지지 않는다는 전제의 예측입니다. 유행이 시작된 뒤 면역이나 대책이 반영된 값이 실질감염재생산수 Rₜ이며, 1보다 크면 감염자가 늘어납니다. 접촉을 줄이는 대책은 β를, 조기 격리는 γ를 바꿉니다. 30일째 Rₜ 1.48에서 교대·휴게를 분산해 접촉을 절반으로 줄이면 Rₜ는 0.74가 되어 최종 감염이 692명에서 236명으로 줄어듭니다. 이렇게 데이터로 얻을 수 없는 조건도 탐색할 수 있다는 것이 통계·기계학습 모형에는 없는 강점입니다.</p>
+          <p class="next"><span>다음 질문</span>이 모형을 더 좋게 만들려면?</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" data-step="3" id="s-4-4b">
+      <div class="sh"><div class="sec">4-4 예측과 통제, 더 좋은 모형으로</div><h2><span class="q">Q</span>SIR 모형의 가정을 바꾸면 무엇을 더 알 수 있을까요?</h2></div>
+      <div class="body split even">
+        <div class="fig"><svg id="m36-ext" viewBox="0 0 420 270" role="img" aria-label="SIR 모형의 가정인 사람의 동질성, 무작위 접촉, 백신 없음을 연령 구조, 네트워크 구조, 백신 효과로 확장"></svg></div>
+        <div class="side">
+          <ul class="key"><li>단순한 SIR도 유행을 잘 기술함</li><li>가정을 바꿔 현실 요소를 더함</li></ul>
+          <p class="exp">현상을 적절하게 나타내는 좋은 모형일수록 예측과 통제에 뛰어나며, SIR 모형은 매우 간단하면서도 감염병의 유행을 제대로 기술할 수 있다고 알려져 있습니다. 더 좋은 모형을 얻으려면 가정을 바꾸고 현실적인 요소를 도입합니다. 사람이 모두 동질하다는 가정 대신 연령에 따라 감염률·회복률이 다른 구조를, 접촉 상대가 무작위라는 가정 대신 사회 네트워크 구조를 넣을 수 있습니다. 사업장이라면 교대조·부서별 접촉 구조나 백신 접종 효과를 넣어 대책을 더 정밀하게 비교할 수 있습니다.</p>
+          <p class="next"><span>정리</span>미분 방정식 모형을 정리해 봅시다.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" data-step="3" id="s-4-sum">
+      <div class="sh"><div class="sec">4-5 정리</div><h2>규칙을 식으로 세우면 파라미터를 바꿔 미래를 탐색할 수 있습니다</h2></div>
+      <div class="body full" style="align-content:center">
+        <table class="sumtbl">
+          <thead><tr><th>개념</th><th>핵심</th><th>이 모듈의 예</th></tr></thead>
+          <tbody>
+            <tr><td>차분 방정식</td><td>x(t+1) = r·x(t), r = 1이 증가·감소의 경계</td><td>5일마다 2배 → 50일 1,024명</td></tr>
+            <tr><td>미분 방정식·밀도 효과</td><td>dx/dt = ax(1 − x/K): K는 안정, 0은 불안정 평형점</td><td>누적 감염자가 1,000명에서 포화</td></tr>
+            <tr><td>SIR 모형</td><td>S → I → R, R₀ = β/γ × S(0)/N &gt; 1이면 유행</td><td>R₀ 1.7, 정점 약 100명, 최종 약 692명</td></tr>
+            <tr><td>예측과 통제</td><td>Rₜ를 1 아래로, 규칙이 같다는 전제의 예측</td><td>접촉 절반 → Rₜ 0.74, 최종 236명</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="next"><span>형성평가로</span>이제 같은 예시로 문제를 풀어 봅니다.</p>
+    </section>
+
+    <!-- ⑤ 형성평가: 스크립트의 QUIZ 배열로 만듭니다 -->
+
+    <!-- ⑥ 실습 1 · 조작형 (모듈 전용) ─────────────── -->
+    <section class="slide" data-step="5" id="p1">
+      <div class="sh"><div class="sec">실습 1 · 조작형</div><h2>목표: 감염률과 회복률을 바꾸며 유행의 크기가 어떻게 바뀌는지 확인합니다</h2></div>
+      <div class="body split">
+        <div class="pcol" style="gap:8px">
+          <div class="plabel" style="margin:0">해보기 · β와 γ를 움직이면 직원 1,000명의 S·I·R 곡선이 바로 다시 계산됩니다 (150일)</div>
+          <div class="fig" style="flex:1"><svg id="m36-p1-svg" viewBox="0 0 470 200" role="img" aria-label="SIR 모형의 감수성 보유자, 감염자, 회복자 곡선"></svg></div>
+        </div>
+        <div class="pcol" style="gap:10px;justify-content:center">
+          <div class="ctrl">감염률 β<input type="range" id="m36-b" min="0.1" max="0.6" step="0.02" value="0.34" aria-label="감염률 베타"><strong id="m36-bv" style="min-width:48px;text-align:right">-</strong></div>
+          <div class="ctrl">회복률 γ<input type="range" id="m36-g1" min="0.1" max="0.5" step="0.02" value="0.2" aria-label="회복률 감마"><strong id="m36-gv1" style="min-width:48px;text-align:right">-</strong></div>
+          <div class="stats three"><div><small>R₀</small><strong id="m36-rr">-</strong></div><div><small>감염자 정점</small><strong id="m36-pk">-</strong></div><div><small>최종 누적 감염</small><strong id="m36-fin">-</strong></div></div>
+          <p class="howto">도전: R₀가 1 근처를 넘나들도록 β나 γ를 움직여 최종 누적 감염이 어떻게 달라지는지 보세요.</p>
+          <p class="pmsg" id="m36-msg"></p>
+          <div class="think"><span>생각해보기</span>우리 사업장에서 β를 줄이는 대책과 γ를 키우는 대책은 각각 무엇일까요?</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ⑥ 실습 2 · 분류형 ─────────────────────── -->
+    <section class="slide" data-step="5" id="p2">
+      <div class="sh"><div class="sec">실습 2 · 분류형</div><h2>목표: 식과 특징을 보고 선형·비선형 방정식으로 나눕니다</h2></div>
+      <div class="body split even">
+        <div class="pcol">
+          <div class="plabel">해보기 · 변수끼리 곱해지는 항이 있는지, 규칙이 상태에 따라 바뀌는지 보고 칸에 놓으세요</div>
+          <div class="pool" id="p2-pool"></div>
+        </div>
+        <div class="pcol" style="gap:8px">
+          <div class="plabel" style="margin:0">결과 확인 · <span id="p2-count">0 / 0</span></div>
+          <div class="bins" id="p2-bins"></div>
+          <div class="p2row"><p class="pmsg" id="p2-msg"></p><button class="btn ghost" id="p2-reset">다시 하기</button></div>
+          <div class="think"><span>생각해보기</span>비선형 모형을 이해하려면 무엇부터 살펴볼까요?</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ⑥ 실습 3 · 추정형 (모듈 전용) ─────────────── -->
+    <section class="slide" data-step="5" id="p3">
+      <div class="sh"><div class="sec">실습 3 · 추정형</div><h2>목표: 5일마다 2배로 늘 때 감염자 수를 직감으로 예측하고 계산과 비교합니다</h2></div>
+      <div class="body split">
+        <div class="pcol">
+          <div class="plabel">해보기 · 날짜를 고르고 감염자 수를 예측한 뒤 확인하세요 (첫 감염자 1명)</div>
+          <div class="fig" style="flex:1"><svg id="m36-p3-svg" viewBox="0 0 470 210" role="img" aria-label="지수함수 증가와 로지스틱 곡선, 고른 날짜의 예측값"></svg></div>
+        </div>
+        <div class="pcol" style="gap:9px;justify-content:center">
+          <div class="mbtns" id="m36-db" style="gap:5px"></div>
+          <div class="ctrl">감염자 예측<input type="range" id="m36-g" min="0" max="1200" step="4" value="100" aria-label="감염자 수 예측"><strong id="m36-gv" style="min-width:56px;text-align:right">-</strong></div>
+          <button class="btn" id="m36-check" style="align-self:flex-start">계산해서 확인</button>
+          <div class="stats three"><div><small>내 예측</small><strong id="m36-mine">-</strong></div><div><small>지수함수 증가</small><strong id="m36-ex">?</strong></div><div><small>밀도 효과 반영</small><strong id="m36-lg">?</strong></div></div>
+          <p class="pmsg" id="m36-msg3"></p>
+          <div class="think"><span>생각해보기</span>지수적으로 늘어나는 현상에서 대책이 하루 늦으면 어떻게 될까요?</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ⑦ 용어해설·참고자료: 스크립트의 GLOSSARY, REFS, NEXT로 만듭니다 -->
+  </main>
+
+  <footer class="bottombar">
+    <a class="home" href="../index.html" title="홈으로 (학습 과정)" aria-label="홈으로"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 10.5 12 3l9 7.5"/><path d="M5.5 9.5V21h13V9.5"/></svg><span>홈</span></a><span class="counter" id="counter"></span><span class="spacer"></span>
+    <button class="nav" id="prev" type="button">이전</button>
+    <button class="nav primary" id="next" type="button">다음</button>
+  </footer>
+</div>
+<p class="rotate">화면을 가로로 돌리면 더 크게 볼 수 있습니다.</p>
+
+<script>
+(function(){
+"use strict";
+
+/* =====================================================================
+   [교체] 모듈 설정 — 새 모듈은 이 블록과 HTML 화면 문장만 바꿉니다.
+   ===================================================================== */
+var MODULE={title:"미분 방정식 모형",sub:"베이즈·기계학습·수리 모형 · M36"};
+var STEPS=["학습개요","학습목표","일상의 예시","본문","형성평가","실습","용어해설"];
+
+/* 예시 데이터(이 모듈에서 정한 값)
+   사업장(직원 1,000명) 호흡기 감염병 유행: 첫 감염자 1명
+   차분 방정식: 5일마다 2배 x(t+1) = 2x(t) → x(t) = 2^t (t = 5일 단위): 25일 32명, 40일 256명, 50일 1,024명(직원 수 초과)
+   로지스틱(K = 1,000, a = ln2 ÷ 5 ≈ 0.139/일, x0 = 1): 25일 31명, 40일 204명, 50일 506명
+   SIR(RK4, dt 0.1): β = 0.34/일, γ = 0.2/일(평균 5일 앓음), R0 = β/γ × S(0)/N ≈ 1.7
+     감염자 I: 10일 4, 20일 15, 30일 48, 40일 93 / 정점 약 100명(44.5일) / 최종 누적 감염 약 692명(69%)
+     30일째 대책: β 0.17(접촉 절반) → Rt 0.74, 최종 236명 / β 0.24 → Rt 1.05, 최종 420명 / 대책 없음 Rt 1.48, 최종 692명
+   최종 규모 방정식 z = 1 − e^(−R0 z): R0 1.2 → 0.31, 1.5 → 0.58, 2 → 0.80, 3 → 0.94 */
+var CASE=null, PAIRS=null, P1={target:null};
+var NW=1000, BETA=0.34, GAMMA=0.2, I0=1, A_EXP=Math.log(2)/5;
+
+var QUIZ=[
+ {goal:1,type:"계산",stem:"사업장 첫 감염자 1명에서 시작해 감염자가 5일마다 2배가 됩니다(x(t+1) = 2x(t), t는 5일 단위). 35일 뒤 감염자는 몇 명일까요?",
+  opts:["128명","14명","64명","49명"],ans:0,
+  exp:"35일은 5일 단위로 t = 7이므로 해 x(t) = 2^t에 넣으면 2^7 = 128명입니다. 14명은 5일마다 2명씩 더하는 것으로 잘못 계산한 값, 64명은 t = 6(30일)의 값입니다. 지수함수 증가는 처음에는 느려 보여도 금세 직관을 벗어나 커집니다.",back:"s-4-1a",backLabel:"4-1 차분 방정식과 지수함수 증가 다시 보기"},
+ {goal:1,type:"O/X 오개념",stem:"“x(t+1) = r·x(t)에서 r이 1보다 작으면, x는 줄어들다가 어느 일정한 값에서 멈춘다.”",
+  opts:["O","X"],ans:1,ox:true,
+  exp:"r이 1보다 크면 지수적으로 늘어나고, r이 딱 1이면 변하지 않으며, r이 1보다 작으면 지수적으로 감소해 0까지 줄어듭니다. 분기 다이어그램에서 보듯 r = 1을 경계로 움직임이 질적으로 달라지며, 중간의 다른 값에서 멈추지는 않습니다.",back:"s-4-1b",backLabel:"4-1 파라미터 r과 분기 다이어그램 다시 보기"},
+ {goal:2,type:"상황 판단",stem:"로지스틱 방정식 dx/dt = ax(1 − x/K)에서 K = 1,000입니다. x가 1,200으로 K보다 커졌다면 이후 x는 어떻게 될까요?",
+  opts:["줄어들어 1,000으로 돌아간다","계속 지수적으로 늘어난다","1,200에서 그대로 멈춘다","0까지 줄어든다"],ans:0,
+  exp:"x가 K보다 크면 (1 − x/K)가 음수가 되어 dx/dt < 0이므로 x가 줄어들고, K보다 작으면 dx/dt > 0이 되어 늘어납니다. 그래서 x는 K로 되돌아가며, 이렇게 벗어나도 되돌아오는 평형점을 안정평형점이라 합니다.",back:"s-4-2c",backLabel:"4-2 평형점의 안정성 다시 보기"},
+ {goal:2,type:"O/X 오개념",stem:"“로지스틱 방정식의 평형점 x = 0은, x가 0에서 조금 벗어나도 다시 0으로 되돌아오는 안정평형점이다.”",
+  opts:["O","X"],ans:1,ox:true,
+  exp:"x = 0에서는 x가 0보다 조금이라도 커지면 dx/dt > 0이 되어 x가 늘어나기 시작하고, 자연적으로 0으로 되돌아가는 일은 없습니다. 이런 평형점을 불안정평형점이라 합니다. 반면 x = K는 벗어나도 되돌아오는 안정평형점입니다.",back:"s-4-2c",backLabel:"4-2 평형점의 안정성 다시 보기"},
+ {goal:3,type:"계산",stem:"사업장 SIR 모형에서 감염률 β = 0.34/일, 회복률 γ = 0.2/일이고, 처음에는 거의 모두 감수성 보유자(S(0)/N ≈ 1)입니다. 기초감염재생산수 R₀는?",
+  opts:["약 1.7","약 0.14","약 0.59","약 0.068"],ans:0,
+  exp:"R₀ = (β ÷ γ) × S(0)/N = 0.34 ÷ 0.2 × 1 = 1.7입니다. 1보다 크므로 유행이 확산됩니다. 0.14는 β − γ(초기 증가 속도), 0.59는 γ ÷ β, 0.068은 β × γ입니다. R₀는 감수성 보유자뿐인 집단에서 감염자 1명이 감염시키는 사람 수의 평균입니다.",back:"s-4-3b",backLabel:"4-3 기초감염재생산수 다시 보기"},
+ {goal:3,type:"상황 판단",stem:"30일째 감염자 48명, 실질감염재생산수 Rₜ ≈ 1.48입니다(β 0.34, γ 0.2). 다음 대책 중 Rₜ를 1 미만으로 낮춰 감염자 수를 줄어들게 하는 것은?",
+  opts:["교대·휴게 분산으로 접촉을 절반으로(β 0.17)","마스크로 β를 0.24로","조기 격리로 γ를 0.25로","검사만 늘리고 β·γ는 그대로"],ans:0,
+  exp:"Rₜ는 β에 비례하고 γ에 반비례합니다. 접촉을 절반으로 줄이면 β도 절반이 되어 Rₜ는 약 0.74로 1 아래가 됩니다. β 0.24는 Rₜ 약 1.05, γ 0.25는 약 1.19로 여전히 1보다 커 감염자 수가 늘어납니다. 수리 모형으로 ‘만약 ~라면’을 미리 따져 볼 수 있습니다.",back:"s-4-4a",backLabel:"4-4 예측과 통제 다시 보기"}
+];
+
+var BINS=["선형 방정식","비선형 방정식"];
+var CARDS=[["x(t+1) = 2x(t)","선형 방정식"],["dx/dt = ax","선형 방정식"],["x가 어떤 값이든 규칙이 같음","선형 방정식"],["대부분 해를 식으로 구할 수 있음","선형 방정식"],
+           ["dx/dt = ax(1 − x/K)","비선형 방정식"],["S × I 항이 있는 SIR 모형","비선형 방정식"],["x의 값에 따라 규칙이 달라짐","비선형 방정식"],["대부분 수치 계산으로 조사","비선형 방정식"]];
+var HINT={"선형 방정식":"변수의 정수배와 합으로만 쓰며, 규칙이 항상 같습니다.","비선형 방정식":"x × x나 S × I 같은 곱이 있어 상태에 따라 규칙이 달라집니다."};
+
+var GLOSSARY=[
+ ["차분 방정식","difference equation","시간이 0, 1, 2…처럼 띄엄띄엄 흐를 때, 다음 시각의 값을 지금 값으로 나타낸 증가 규칙입니다.","x(t+1) = 2x(t)"],
+ ["지수함수 증가","exponential growth","2^t처럼 일정 시간마다 몇 배씩 늘어나는 변화로, 직관을 벗어날 만큼 빠르게 커집니다.","5일마다 2배 → 50일 1,024명"],
+ ["분기 다이어그램","bifurcation diagram","파라미터를 가로축, 충분한 시간이 흐른 뒤의 값을 세로축으로 그려 움직임이 질적으로 바뀌는 경계를 보여 주는 그림입니다.","r = 1을 경계로 증식·소멸"],
+ ["미분 방정식","differential equation","아주 짧은 시간의 변화율로 나타낸 연속 시간 모형입니다.","dx/dt = 0.139x"],
+ ["밀도 효과","density effect","x가 늘어날수록 그 증가율이 줄어드는 효과입니다.","감수성 직원이 줄수록 감염 증가 둔화"],
+ ["로지스틱 방정식","logistic equation","dx/dt = ax(1 − x/K)로, x가 K에 가까울수록 증가율이 0에 가까워져 K에서 포화합니다.","K = 직원 1,000명"],
+ ["안정평형점","stable equilibrium","벗어나더라도 다시 되돌아오는 평형점입니다.","로지스틱의 x = K"],
+ ["불안정평형점","unstable equilibrium","조금만 벗어나도 되돌아오지 않고 멀어지는 평형점입니다.","로지스틱의 x = 0"],
+ ["비선형 방정식","nonlinear equation","x × x 같은 곱이 들어 있어 변수의 값에 따라 규칙이 달라지는 방정식으로, 대부분 식으로 풀 수 없습니다.","로지스틱 방정식, SIR 모형"],
+ ["SIR 모형","SIR model","감수성 보유자 S, 감염자 I, 회복자 R의 수 변화를 미분 방정식으로 나타낸 감염병의 기본 모형입니다.","직원 1,000명, β 0.34, γ 0.2"],
+ ["기초감염재생산수","basic reproduction number, R₀","대책이 없는 감수성 보유자뿐인 집단에서 감염자 1명이 감염시키는 사람 수의 평균으로, 1보다 크면 유행이 확산됩니다.","0.34 ÷ 0.2 = 1.7"],
+ ["실질감염재생산수","effective reproduction number, Rₜ","유행이 시작된 뒤 면역이나 대책을 반영해 감염자 1명이 감염시키는 사람 수의 평균입니다.","접촉 절반 → 1.48에서 0.74로"]
+];
+var REFS=[
+ {n:1,title:"A Contribution to the Mathematical Theory of Epidemics",org:"W. O. Kermack, A. G. McKendrick, Proceedings of the Royal Society of London A 115(772), 700–721, 1927",url:"https://doi.org/10.1098/rspa.1927.0118",date:"2026-10-27 확인"}
+];
+var NEXT={title:"M37 확률 모형과 수리 모형의 역할",line:"다음 모듈에서는 불확실한 요소가 본질인 현상을 다루는 확률 모형(무작위 행보)과, 수리 모형이 현상의 이해·예측·통제에서 맡는 역할을 살펴봅니다."};
+
+/* =====================================================================
+   아래부터는 공통 엔진입니다. 모듈마다 바꾸지 않습니다.
+   ===================================================================== */
+var NS="http://www.w3.org/2000/svg";
+var C={navy:"#1B2A4A",navy2:"#2C4170",navy3:"#5B6E97",soft:"#A9B8D4",grid:"#DDE1E7",gray:"#6B7280",gray2:"#9AA0AA",amber:"#E0A100",amberInk:"#6E4F00",ok:"#23704F"};
+function el(t,a,p,x){var e=document.createElementNS(NS,t);for(var k in a)e.setAttribute(k,a[k]);if(x!=null)e.textContent=x;if(p)p.appendChild(e);return e;}
+function clear(s){while(s.firstChild)s.removeChild(s.firstChild);}
+function f1(v,d){return v.toFixed(d==null?1:d);}
+function sum(a){return a.reduce(function(x,y){return x+y;},0);}
+function r1(v){return Math.round(v*10)/10;}
+var stage=document.getElementById("stage"),vp=document.getElementById("vp");
+
+/* 계산은 모두 데이터에서 직접 합니다(R0-7) */
+var N=CASE?CASE.values.length:0,SUMV=CASE?r1(sum(CASE.values)):0,AVG=N?SUMV/N:0,MAXV=CASE?Math.max.apply(null,CASE.values):0;
+var LR=!PAIRS?null:(function(){var n=PAIRS.xs.length,mx=sum(PAIRS.xs)/n,my=sum(PAIRS.ys)/n,sxy=0,sxx=0;
+  for(var i=0;i<n;i++){sxy+=(PAIRS.xs[i]-mx)*(PAIRS.ys[i]-my);sxx+=(PAIRS.xs[i]-mx)*(PAIRS.xs[i]-mx);}
+  var b=sxy/sxx;return{b:b,a:my-b*mx};})();
+var PRED=PAIRS?LR.a+LR.b*PAIRS.x0:0;
+
+document.title=MODULE.title;
+document.getElementById("brand").innerHTML=MODULE.title+"<small>"+MODULE.sub+"</small>";
+
+/* 16:9 고정 무대를 창 크기에 맞춤 */
+var S=1;
+function fit(){S=Math.min(window.innerWidth/960,window.innerHeight/540);stage.style.setProperty("--s",S);}
+window.addEventListener("resize",fit);fit();
+
+/* ---------- 그래프 ---------- */
+function barChart(svg,vals,o){
+  clear(svg);o=o||{};
+  var vb=svg.viewBox.baseVal,W=vb.width,H=vb.height,L=34,R=o.mean!=null?70:8,T=26,Bt=24,ym=o.ymax||Math.ceil(Math.max.apply(null,vals)+1),pw=W-L-R,ph=H-T-Bt,bw=pw/vals.length;
+  function y(v){return T+ph-(v/ym)*ph;}
+  for(var g=0;g<=ym;g++){el("line",{x1:L,x2:W-R,y1:y(g),y2:y(g),stroke:C.grid},svg);el("text",{x:L-6,y:y(g)+4,"text-anchor":"end","font-size":10.5,fill:C.gray2},svg,g);}
+  vals.forEach(function(v,i){
+    var sel=o.sel===i,hi=o.hi===i;
+    el("rect",{x:L+i*bw+bw*.16,y:y(v),width:bw*.68,height:Math.max(0,y(0)-y(v)),rx:2,fill:sel?C.amber:hi?C.navy2:C.soft},svg);
+    el("text",{x:L+i*bw+bw/2,y:H-Bt+16,"text-anchor":"middle","font-size":10.5,fill:C.gray},svg,CASE.labels[i]);
+  });
+  if(o.mean!=null){var m=o.mean;
+    el("line",{x1:L,x2:W-R+4,y1:y(m),y2:y(m),stroke:C.navy,"stroke-width":2,"stroke-dasharray":"6 4"},svg);
+    el("rect",{x:W-R+6,y:y(m)-10,width:R-8,height:20,rx:4,fill:C.navy},svg);
+    el("text",{x:W-R+6+(R-8)/2,y:y(m)+4,"text-anchor":"middle","font-size":11,"font-weight":700,fill:"#fff"},svg,"평균 "+f1(m,2));}
+  /* 값 라벨은 마지막에 흰 테두리로 그려 점선에 가리지 않게 함 */
+  vals.forEach(function(v,i){var sel=o.sel===i,hi=o.hi===i;
+    if(o.labels||sel)el("text",{x:L+i*bw+bw/2,y:y(v)-5,"text-anchor":"middle","font-size":10.5,"font-weight":sel||hi?800:500,fill:sel?C.amberInk:hi?C.navy:C.gray,stroke:"#EEF0F3","stroke-width":3,"paint-order":"stroke"},svg,f1(v));});
+}
+function scatter(svg,o){
+  clear(svg);o=o||{};
+  var vb=svg.viewBox.baseVal,W=vb.width,H=vb.height,L=34,R=14,T=30,Bt=40,x0=PAIRS.xmin,x1=PAIRS.xmax,y0=PAIRS.ymin,y1=PAIRS.ymax;
+  function X(v){return L+(v-x0)/(x1-x0)*(W-L-R);}
+  function Y(v){return T+(H-T-Bt)-(v-y0)/(y1-y0)*(H-T-Bt);}
+  for(var g=y0;g<=y1+1e-9;g+=PAIRS.ystep){el("line",{x1:L,x2:W-R,y1:Y(g),y2:Y(g),stroke:C.grid},svg);el("text",{x:L-6,y:Y(g)+4,"text-anchor":"end","font-size":10.5,fill:C.gray2},svg,g);}
+  for(var h=x0;h<=x1+1e-9;h+=PAIRS.xstep)el("text",{x:X(h),y:H-Bt+16,"text-anchor":"middle","font-size":10.5,fill:C.gray},svg,h);
+  el("text",{x:(L+W-R)/2,y:H-6,"text-anchor":"middle","font-size":10.5,fill:C.gray},svg,PAIRS.xlabel);
+  el("text",{x:4,y:14,"font-size":10.5,fill:C.gray},svg,PAIRS.ylabel);
+  if(o.line){var la=x0+(x1-x0)*.04,lb=x1-(x1-x0)*.04;el("line",{x1:X(la),y1:Y(LR.a+LR.b*la),x2:X(lb),y2:Y(LR.a+LR.b*lb),stroke:C.navy,"stroke-width":2},svg);}
+  PAIRS.xs.forEach(function(x,i){el("circle",{cx:X(x),cy:Y(PAIRS.ys[i]),r:4.5,fill:C.navy3,"fill-opacity":.85},svg);});
+  if(o.x0!=null){el("line",{x1:X(o.x0),y1:Y(0),x2:X(o.x0),y2:Y(y1),stroke:C.amber,"stroke-dasharray":"3 3"},svg);
+    el("text",{x:X(o.x0),y:T-4,"text-anchor":"middle","font-size":10.5,"font-weight":700,fill:C.amberInk},svg,PAIRS.x0label);}
+  if(o.pred){el("circle",{cx:X(PAIRS.x0),cy:Y(PRED),r:6,fill:C.navy},svg);
+    el("text",{x:X(PAIRS.x0)-10,y:Y(PRED)+4,"text-anchor":"end","font-size":11,"font-weight":800,fill:C.navy,stroke:"#EEF0F3","stroke-width":3,"paint-order":"stroke"},svg,"예측 "+f1(PRED,PAIRS.dp)+PAIRS.unit);}
+  if(o.guess!=null){el("circle",{cx:X(PAIRS.x0),cy:Y(o.guess),r:7,fill:C.amber,stroke:"#fff","stroke-width":2},svg);}
+  if(o.actual){var ay=Y(PAIRS.actual);el("rect",{x:X(PAIRS.x0)-6,y:ay-6,width:12,height:12,fill:C.ok,transform:"rotate(45 "+X(PAIRS.x0)+" "+ay+")"},svg);
+    el("text",{x:X(PAIRS.x0)-10,y:ay-6,"text-anchor":"end","font-size":11,"font-weight":800,fill:C.ok,stroke:"#EEF0F3","stroke-width":3,"paint-order":"stroke"},svg,"실제 "+f1(PAIRS.actual)+PAIRS.unit);}
+  return {X:X,Y:Y};
+}
+function flow(svg,names){
+  clear(svg);var n=names.length,w=118,gap=(440-40-n*w)/(n-1),y=96,h=64;
+  el("defs",{},svg).innerHTML='<marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10z" fill="'+C.navy3+'"/></marker>';
+  names.forEach(function(t,i){var x=20+i*(w+gap);
+    el("rect",{x:x,y:y,width:w,height:h,rx:10,fill:i===n-1?C.navy:"#fff",stroke:C.navy,"stroke-width":1.5},svg);
+    el("text",{x:x+w/2,y:y+h/2-6,"text-anchor":"middle","font-size":11,"font-weight":700,fill:i===n-1?"#C9D3E6":C.navy3},svg,"4-"+(i+1));
+    el("text",{x:x+w/2,y:y+h/2+13,"text-anchor":"middle","font-size":14,"font-weight":800,fill:i===n-1?"#fff":C.navy},svg,t);
+    if(i<n-1)el("line",{x1:x+w+4,y1:y+h/2,x2:x+w+gap-5,y2:y+h/2,stroke:C.navy3,"stroke-width":2,"marker-end":"url(#ar)"},svg);});
+  el("text",{x:220,y:200,"text-anchor":"middle","font-size":12,fill:C.gray},svg,"본문 소단원을 배우는 순서");
+}
+/* 화면에 해당 id가 있을 때만 그립니다(모듈마다 쓰지 않는 그림은 건너뜀) */
+function on(id,fn){var e=document.getElementById(id);if(e)fn(e);}
+on("fig-flow",function(s){flow(s,["소단원 1","소단원 2","정리"]);});
+on("fig-case",function(s){barChart(s,CASE.values,{labels:true});});
+on("fig-bar",function(s){barChart(s,CASE.values,{labels:true,mean:AVG});});
+on("fig-scatter",function(s){scatter(s,{line:true,x0:PAIRS.x0,pred:true});});
+on("fig-bridge",function(s){
+  el("defs",{},s).innerHTML='<marker id="ar2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10z" fill="'+C.navy3+'"/></marker>';
+  [["장면 1",40],["장면 2",130]].forEach(function(p){el("rect",{x:24,y:p[1],width:130,height:64,rx:10,fill:"#fff",stroke:C.navy3,"stroke-width":1.5},s);el("text",{x:89,y:p[1]+37,"text-anchor":"middle","font-size":14,"font-weight":700,fill:C.navy},s,p[0]);
+    el("line",{x1:158,y1:p[1]+32,x2:246,y2:120,stroke:C.navy3,"stroke-width":2,"marker-end":"url(#ar2)"},s);});
+  el("rect",{x:252,y:84,width:150,height:72,rx:12,fill:C.navy},s);
+  el("text",{x:327,y:116,"text-anchor":"middle","font-size":14,"font-weight":800,fill:"#fff"},s,"본문 첫 질문");
+  el("text",{x:327,y:136,"text-anchor":"middle","font-size":11.5,fill:"#C9D3E6"},s,"4-1로 이어짐");});
+on("case-n",function(e){e.textContent=N+"개";});
+on("case-sum",function(e){e.textContent=f1(SUMV);});
+on("case-max",function(e){e.textContent=f1(MAXV);});
+on("math-calc",function(e){e.textContent=f1(LR.b,2)+" × "+PAIRS.x0+" + "+f1(LR.a,2)+" = "+f1(PRED,2);});
+
+/* =====================================================================
+   [교체] 모듈 전용 그림: 모듈마다 필요한 그림 함수는 이 자리에 둡니다.
+   ===================================================================== */
+/* M36 전용 그림·실습 */
+function linG(a,b,c,d){return function(v){return c+(v-a)/(b-a)*(d-c);};}
+function tG(s,x,y,t,o){o=o||{};return el("text",{x:x,y:y,"text-anchor":o.a||"middle","font-size":o.fs||11,"font-weight":o.fw||600,fill:o.c||C.navy,stroke:o.halo?"#fff":"none","stroke-width":o.halo?3:0,"paint-order":"stroke"},s,t);}
+function bxG(s,x,y,w,h,fill,stroke,rx){return el("rect",{x:x,y:y,width:w,height:h,rx:rx==null?10:rx,fill:fill||"#fff",stroke:stroke||"none","stroke-width":stroke?1.5:0},s);}
+function mkG(s,id,col){el("defs",{},s).innerHTML='<marker id="'+id+'" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10z" fill="'+col+'"/></marker>';}
+function arG(s,x1,y1,x2,y2,id,col){return el("line",{x1:x1,y1:y1,x2:x2,y2:y2,stroke:col||C.navy3,"stroke-width":2,"marker-end":"url(#"+id+")"},s);}
+var REDG="#B42318",GRNG="#23704F",BLUG="#2B8CC4",ORGG="#E0A100",PRPG="#7C3AED";
+function plG(pts,X,Y,cl){return pts.map(function(p,i){var y=p[1];if(cl!=null)y=Math.min(y,cl);return(i?"L":"M")+X(p[0]).toFixed(1)+" "+Y(y).toFixed(1);}).join(" ");}
+function fnG(f,a,b,n){var o=[];for(var i=0;i<=n;i++){var t=a+(b-a)*i/n;o.push([t,f(t)]);}return o;}
+/* SIR: RK4, dt 0.1, 하루 단위로 기록 */
+function sirG(b,g,T,sw){var S=NW-I0,I=I0,R=0,dt=0.1,out=[[0,S,I,R]],n=Math.round(1/dt);
+  function f(S,I,bb){var inf=bb*S*I/NW;return[-inf,inf-g*I,g*I];}
+  for(var d=1;d<=T;d++){for(var k=0;k<n;k++){var t=(d-1)+k*dt,bb=(sw&&t>=sw[0]-1e-9)?sw[1]:b;
+      var k1=f(S,I,bb),k2=f(S+dt/2*k1[0],I+dt/2*k1[1],bb),k3=f(S+dt/2*k2[0],I+dt/2*k2[1],bb),k4=f(S+dt*k3[0],I+dt*k3[1],bb);
+      S+=dt/6*(k1[0]+2*k2[0]+2*k3[0]+k4[0]);I+=dt/6*(k1[1]+2*k2[1]+2*k3[1]+k4[1]);R+=dt/6*(k1[2]+2*k2[2]+2*k3[2]+k4[2]);}
+    out.push([d,S,I,R]);}return out;}
+function logiG(t){return 1000/(1+999*Math.exp(-A_EXP*t));}
+function axG(s,x0,x1,y0,y1,xmax,xstep,ymax,ystep,fmt){var X=linG(0,xmax,x0,x1),Y=linG(0,ymax,y1,y0);
+  for(var v=0;v<=ymax+1e-9;v+=ystep){el("line",{x1:x0,x2:x1,y1:Y(v),y2:Y(v),stroke:C.grid},s);tG(s,x0-5,Y(v)+3,fmt?fmt(v):v.toLocaleString(),{a:"end",fs:9,c:C.gray2,fw:500});}
+  for(var t=0;t<=xmax+1e-9;t+=xstep)tG(s,X(t),y1+13,t,{fs:9,c:C.gray2,fw:500});return[X,Y];}
+var BASEG=null;function baseG(){if(!BASEG)BASEG=sirG(BETA,GAMMA,200);return BASEG;}
+
+on("m36-ov",function(s){
+  mkG(s,"oG",C.navy3);
+  var B=[[10,10,"차분 방정식","x(t+1) = 2x(t)","#EEF4FB","#1C6EA4"],[240,10,"미분 방정식","dx/dt = ax","#EEF4FB","#1C6EA4"],[240,96,"밀도 효과","로지스틱 방정식","#E3F1EA",GRNG],[10,96,"감염병 모형","SIR · R₀","#FBE9E7",REDG],[125,184,"예측과 통제","만약 ~라면?","#FCF3D9",C.amberInk]];
+  B.forEach(function(b){bxG(s,b[0],b[1],190,64,b[4]);tG(s,b[0]+95,b[1]+27,b[2],{fw:800,fs:12.5,c:b[5]});tG(s,b[0]+95,b[1]+48,b[3],{fs:10.5,fw:700});});
+  arG(s,204,42,236,42,"oG");arG(s,335,76,335,92,"oG");arG(s,236,128,204,128,"oG");arG(s,105,162,170,182,"oG");
+  tG(s,220,32,"연속으로",{fs:9,fw:700,c:C.gray});tG(s,370,88,"현실 반영",{fs:9,fw:700,a:"start",c:C.gray});tG(s,220,118,"S×I",{fs:9,fw:700,c:C.gray});
+});
+
+on("m36-case",function(s){
+  var o=baseG(),X=linG(0,30,50,420),Y=linG(0,60,200,24);
+  bxG(s,4,4,432,242,"#F8F9FB");[0,20,40,60].forEach(function(v){el("line",{x1:50,x2:420,y1:Y(v),y2:Y(v),stroke:C.grid},s);tG(s,44,Y(v)+3,v,{a:"end",fs:9,c:C.gray2,fw:500});});
+  for(var d=0;d<=30;d++){var v=o[d][2];el("rect",{x:X(d)-4.5,y:Y(v),width:9,height:Y(0)-Y(v),rx:2,fill:d%10===0?REDG:"#E9A7A0"},s);}
+  [10,20,30].forEach(function(d){tG(s,X(d),Y(o[d][2])-7,Math.round(o[d][2])+"명",{fw:800,fs:10.5,c:REDG,halo:true});});
+  [0,10,20,30].forEach(function(d){tG(s,X(d),216,d+"일",{fs:9.5,c:C.gray,fw:600});});
+  tG(s,54,18,"감염자 수 (명) · 예시값",{a:"start",fs:9.5,c:C.gray,fw:700});
+  bxG(s,262,30,164,46,"#fff",C.navy3);tG(s,344,50,"직원 1,000명",{fw:800,fs:12});tG(s,344,67,"첫 감염자 1명에서 시작",{fs:9.5,fw:700,c:C.gray});
+  tG(s,236,238,"처음에는 대략 5일마다 2배",{fw:800,fs:10.5,c:C.amberInk});
+});
+
+on("m36-diff",function(s){
+  var A=axG(s,44,250,10,124,50,10,1200,400),X=A[0],Y=A[1];tG(s,250,146,"일",{a:"end",fs:9,c:C.gray,fw:700});
+  el("line",{x1:44,x2:250,y1:Y(1000),y2:Y(1000),stroke:GRNG,"stroke-width":1.4,"stroke-dasharray":"4 3"},s);tG(s,48,Y(1000)-4,"직원 1,000명",{a:"start",fs:9,c:GRNG,fw:800,halo:true});
+  var pts=[];for(var t=0;t<=10;t++)pts.push([t*5,Math.pow(2,t)]);
+  el("path",{d:plG(pts,X,Y),fill:"none",stroke:REDG,"stroke-width":2.4},s);pts.forEach(function(p){el("circle",{cx:X(p[0]),cy:Y(p[1]),r:3,fill:REDG},s);});
+  tG(s,X(50)-6,Y(1024)+4,"1,024",{a:"end",fs:10,fw:800,c:REDG,halo:true});
+  bxG(s,264,10,152,124,"#F3F5F9");tG(s,340,32,"5일마다 2배",{fw:800,fs:11});
+  [["0일","1명"],["10일","4명"],["25일","32명"],["40일","256명"],["50일","1,024명"]].forEach(function(r,i){tG(s,300,56+i*17,r[0],{fs:10,fw:700,c:C.gray});tG(s,396,56+i*17,r[1],{a:"end",fs:10.5,fw:800,c:i===4?REDG:C.navy});});
+});
+
+on("m36-bif",function(s){
+  bxG(s,4,4,204,262,"#F8F9FB");tG(s,106,24,"x(t+1) = r·x(t), x(0) = 10",{fw:800,fs:10});
+  var X=linG(0,15,24,198),Y=linG(0,40,232,40);[0,10,20,30,40].forEach(function(v){el("line",{x1:24,x2:198,y1:Y(v),y2:Y(v),stroke:C.grid},s);});
+  [[1.1,REDG,"r = 1.1"],[1.0,GRNG,"r = 1.0"],[0.8,BLUG,"r = 0.8"]].forEach(function(c,i){var p=[];for(var t=0;t<=15;t++)p.push([t,10*Math.pow(c[0],t)]);el("path",{d:plG(p,X,Y,40),fill:"none",stroke:c[1],"stroke-width":2.4},s);tG(s,198,[Y(40)+14,Y(10)-5,Y(0.35)-4][i],c[2],{a:"end",fs:9.5,fw:800,c:c[1],halo:true});});
+  tG(s,106,252,"시각 t →",{fs:9.5,c:C.gray,fw:700});
+  bxG(s,212,4,204,262,"#F8F9FB");tG(s,314,24,"분기 다이어그램",{fw:800,fs:11});
+  var X2=linG(0,2,232,400);el("line",{x1:232,x2:400,y1:200,y2:200,stroke:C.navy},s);el("line",{x1:232,x2:232,y1:40,y2:200,stroke:C.navy},s);
+  el("line",{x1:X2(1),x2:X2(1),y1:40,y2:200,stroke:C.navy3,"stroke-width":1.5,"stroke-dasharray":"4 3"},s);
+  mkG(s,"bG",ORGG);el("defs",{},s).innerHTML+='<marker id="bG2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10z" fill="'+PRPG+'"/></marker>';
+  [0.2,0.45,0.7].forEach(function(r){arG(s,X2(r),150,X2(r),190,"bG2",PRPG);});[1.25,1.5,1.75].forEach(function(r){arG(s,X2(r),110,X2(r),50,"bG",ORGG);});
+  tG(s,X2(0.45),130,"소멸 (0으로)",{fw:800,fs:10.5,c:PRPG});tG(s,X2(1.5),130,"증식 (무한히)",{fw:800,fs:10.5,c:C.amberInk});
+  [0,1,2].forEach(function(v){tG(s,X2(v),214,v,{fs:9.5,c:C.gray2,fw:600});});tG(s,X2(1),232,"r",{fs:10.5,fw:800});tG(s,250,52,"x∞",{fs:10,fw:800,a:"start"});
+  tG(s,314,252,"r = 1을 경계로 움직임이 질적으로 바뀜",{fs:9.5,fw:800,c:C.navy3});
+});
+
+on("m36-ode",function(s){
+  var X=linG(0,20,44,250),Y=linG(0,30,124,10);[0,10,20,30].forEach(function(v){el("line",{x1:44,x2:250,y1:Y(v),y2:Y(v),stroke:C.grid},s);tG(s,39,Y(v)+3,v,{a:"end",fs:9,c:C.gray2,fw:500});});
+  [0,10,20].forEach(function(t){tG(s,X(t),138,t,{fs:9,c:C.gray2,fw:500});});tG(s,250,148,"일",{a:"end",fs:9,c:C.gray,fw:700});
+  [[0.139,REDG,"a = 0.139"],[0,GRNG,"a = 0"],[-0.1,BLUG,"a = −0.1"]].forEach(function(c,i){el("path",{d:plG(fnG(function(t){return 5*Math.exp(c[0]*t);},0,20,60),X,Y,30),fill:"none",stroke:c[1],"stroke-width":2.4},s);tG(s,[X(13)-4,X(20)-2,X(20)-2][i],[Y(30)+12,Y(5)-5,Y(0.7)-3][i],c[2],{a:"end",fs:9.5,fw:800,c:c[1],halo:true});});
+  bxG(s,264,10,152,124,"#F3F5F9");tG(s,340,32,"x(t) = x(0)e^(at)",{fw:800,fs:11});
+  tG(s,340,58,"a > 0 → 지수적 증가",{fs:10,fw:700,c:REDG});tG(s,340,80,"a = 0 → 변하지 않음",{fs:10,fw:700,c:GRNG});tG(s,340,102,"a < 0 → 지수적 감소",{fs:10,fw:700,c:BLUG});tG(s,340,124,"x(0) = 5",{fs:9.5,fw:700,c:C.gray});
+});
+
+on("m36-logi",function(s){
+  var A=axG(s,50,410,20,226,100,20,1400,200),X=A[0],Y=A[1];tG(s,410,252,"경과 일수",{a:"end",fs:9.5,c:C.gray,fw:700});
+  el("line",{x1:50,x2:410,y1:Y(1000),y2:Y(1000),stroke:GRNG,"stroke-width":1.5,"stroke-dasharray":"5 4"},s);tG(s,408,Y(1000)-5,"K = 1,000",{a:"end",fs:10,c:GRNG,fw:800,halo:true});
+  el("path",{d:plG(fnG(function(t){return Math.exp(A_EXP*t);},0,52.3,80),X,Y,1400),fill:"none",stroke:REDG,"stroke-width":2.6},s);
+  el("path",{d:plG(fnG(logiG,0,100,100),X,Y),fill:"none",stroke:BLUG,"stroke-width":2.6},s);
+  tG(s,X(50),Y(1300),"지수적 증가",{a:"end",fs:10.5,fw:800,c:REDG,halo:true});tG(s,X(74),Y(780),"로지스틱 방정식",{fs:10.5,fw:800,c:"#1C6EA4",halo:true});
+  [[40,204],[50,506],[70,942]].forEach(function(p){el("circle",{cx:X(p[0]),cy:Y(p[1]),r:3.5,fill:BLUG},s);tG(s,X(p[0])+6,Y(p[1])+12,p[1]+"명",{a:"start",fs:9.5,fw:800,c:"#1C6EA4",halo:true});});
+  tG(s,56,14,"누적 감염자 (명) · 회복 미고려",{a:"start",fs:9.5,c:C.gray,fw:700});
+});
+
+on("m36-eq",function(s){
+  var X=linG(0,1300,40,300),Y=linG(-40,40,210,40),f=function(x){return A_EXP*x*(1-x/1000);};
+  el("line",{x1:40,x2:300,y1:Y(0),y2:Y(0),stroke:C.navy,"stroke-width":1.5},s);el("line",{x1:40,x2:40,y1:40,y2:210,stroke:C.navy},s);
+  el("path",{d:plG(fnG(f,0,1300,80),X,Y),fill:"none",stroke:BLUG,"stroke-width":2.6},s);
+  tG(s,44,50,"dx/dt",{a:"start",fs:10,fw:800});tG(s,300,Y(0)+16,"x",{a:"end",fs:10,fw:800});
+  mkG(s,"eG",ORGG);arG(s,X(250),Y(0)-10,X(850),Y(0)-10,"eG",ORGG);arG(s,X(1280),Y(0)-10,X(1060),Y(0)-10,"eG",ORGG);
+  el("circle",{cx:X(0),cy:Y(0),r:7,fill:"#fff",stroke:REDG,"stroke-width":2.5},s);el("circle",{cx:X(1000),cy:Y(0),r:7,fill:GRNG},s);
+  tG(s,X(0)+4,Y(0)+24,"x = 0 불안정",{a:"start",fs:10,fw:800,c:REDG,halo:true});tG(s,X(1000),Y(0)+24,"x = K 안정",{fs:10,fw:800,c:GRNG,halo:true});
+  tG(s,X(500),Y(36)+2,"dx/dt > 0 → 증가",{fs:9.5,fw:700,c:C.gray,halo:true});tG(s,X(1200),Y(-20),"dx/dt < 0",{fs:9.5,fw:700,c:C.gray,halo:true});
+  bxG(s,312,40,104,170,"#F3F5F9");tG(s,364,62,"선형 vs 비선형",{fw:800,fs:10.5});
+  [["선형","규칙이 항상 같음",C.navy3],["2x, ax","주로 지수 증감",C.gray],["비선형","상태에 따라 다름",REDG],["x×x, S×I","복잡한 움직임",C.gray]].forEach(function(r,i){tG(s,364,90+i*30,r[0],{fw:800,fs:10.5,c:r[2]});tG(s,364,104+i*30,r[1],{fs:9,fw:700,c:C.gray});});
+  tG(s,170,250,"평형점: dx/dt = 0인 x",{fw:800,fs:10.5});
+});
+
+on("m36-sir",function(s){
+  var o=baseG(),A=axG(s,40,270,10,124,150,30,1000,500),X=A[0],Y=A[1];tG(s,270,146,"일",{a:"end",fs:9,c:C.gray,fw:700});
+  [[1,BLUG,"S"],[2,REDG,"I"],[3,GRNG,"R"]].forEach(function(c){var p=o.slice(0,151).map(function(r){return[r[0],r[c[0]]];});el("path",{d:plG(p,X,Y),fill:"none",stroke:c[1],"stroke-width":2.4},s);});
+  tG(s,X(12),Y(960),"S",{fs:11,fw:800,c:BLUG,halo:true});tG(s,X(140),Y(740),"R",{fs:11,fw:800,c:GRNG,halo:true});
+  var pk=o.reduce(function(a,r){return r[2]>a[2]?r:a;});el("circle",{cx:X(pk[0]),cy:Y(pk[2]),r:3.5,fill:REDG},s);tG(s,X(pk[0])+6,Y(pk[2])-6,"I 정점 "+Math.round(pk[2])+"명",{a:"start",fs:9.5,fw:800,c:REDG,halo:true});
+  mkG(s,"sG",C.navy3);bxG(s,290,12,126,120,"#F3F5F9");
+  [["S",BLUG,26],["I",REDG,66],["R",GRNG,106]].forEach(function(b){bxG(s,300,b[2],36,26,b[1],null,6);tG(s,318,b[2]+18,b[0],{fw:800,fs:12,c:"#fff"});});
+  arG(s,318,54,318,64,"sG");arG(s,318,94,318,104,"sG");tG(s,344,62,"β × S × I/N",{a:"start",fs:9.5,fw:700});tG(s,344,102,"γ × I",{a:"start",fs:9.5,fw:700});
+});
+
+on("m36-r0",function(s){
+  var X=linG(0,3,50,400),Y=linG(0,1,220,40);
+  [0,0.25,0.5,0.75,1].forEach(function(v){el("line",{x1:50,x2:400,y1:Y(v),y2:Y(v),stroke:C.grid},s);tG(s,44,Y(v)+3,Math.round(v*100)+"%",{a:"end",fs:9,c:C.gray2,fw:500});});
+  [0,0.5,1,1.5,2,2.5,3].forEach(function(v){tG(s,X(v),236,v,{fs:9,c:C.gray2,fw:500});});tG(s,400,256,"R₀ = β/γ × S(0)/N",{a:"end",fs:10,c:C.gray,fw:800});
+  function fs(R){if(R<=1)return 0;var z=0.5;for(var i=0;i<300;i++)z=1-Math.exp(-R*z);return z;}
+  el("rect",{x:X(0),y:40,width:X(1)-X(0),height:180,fill:"#EEF4FB"},s);tG(s,X(0.5),60,"유행이 시작되지 않음",{fw:800,fs:10.5,c:"#1C6EA4"});tG(s,X(2.1),60,"유행이 시작됨",{fw:800,fs:10.5,c:REDG});
+  el("line",{x1:X(1),x2:X(1),y1:40,y2:220,stroke:C.navy3,"stroke-dasharray":"4 3"},s);
+  el("path",{d:plG(fnG(fs,0,3,120),X,Y),fill:"none",stroke:C.navy,"stroke-width":2.6},s);
+  var z=fs(1.7);el("circle",{cx:X(1.7),cy:Y(z),r:6,fill:REDG,stroke:"#fff","stroke-width":2},s);tG(s,X(1.7)+10,Y(z)+18,"이 사업장 R₀ 1.7 → 약 "+Math.round(z*100)+"%",{a:"start",fs:10.5,fw:800,c:REDG,halo:true});
+  tG(s,54,30,"최종 누적 감염 비율",{a:"start",fs:9.5,c:C.gray,fw:700});
+});
+
+on("m36-ctrl",function(s){
+  var A=axG(s,44,410,20,220,120,20,120,40),X=A[0],Y=A[1],base=baseG();tG(s,410,246,"일",{a:"end",fs:9.5,c:C.gray,fw:700});
+  el("rect",{x:X(0),y:20,width:X(30)-X(0),height:200,fill:"#F3F5F9"},s);tG(s,X(15),36,"관측(30일까지)",{fs:9.5,fw:800,c:C.gray});
+  var sc=[[BETA,REDG,"대책 없음 Rₜ 1.48 → 692명"],[0.24,ORGG,"β 0.24 Rₜ 1.05 → 420명"],[0.17,GRNG,"접촉 절반 Rₜ 0.74 → 236명"]];
+  sc.forEach(function(c,i){var o=sirG(BETA,GAMMA,120,[30,c[0]]);el("path",{d:plG(o.slice(30).map(function(r){return[r[0],r[2]];}),X,Y),fill:"none",stroke:c[1],"stroke-width":2.4,"stroke-dasharray":"6 4"},s);
+    el("line",{x1:246,x2:266,y1:44+i*18,y2:44+i*18,stroke:c[1],"stroke-width":3,"stroke-dasharray":"6 4"},s);tG(s,270,48+i*18,c[2],{a:"start",fs:9.5,fw:700,halo:true});});
+  el("path",{d:plG(base.slice(0,31).map(function(r){return[r[0],r[2]];}),X,Y),fill:"none",stroke:C.navy,"stroke-width":2.8},s);
+  for(var d=0;d<=30;d+=5)el("circle",{cx:X(d),cy:Y(base[d][2]),r:3.4,fill:C.navy},s);
+  tG(s,48,14,"감염자 수 I (명)",{a:"start",fs:9.5,c:C.gray,fw:700});
+});
+
+on("m36-ext",function(s){
+  mkG(s,"xG",C.navy3);
+  bxG(s,4,98,120,74,C.navy);tG(s,64,128,"SIR 모형",{fw:800,fs:13,c:"#fff"});tG(s,64,150,"단순하지만 유효",{fs:9.5,c:"#C9D3E6",fw:700});
+  var R=[["모두 동질하다","연령 구조","연령별 감염률·회복률",18],["접촉은 무작위","네트워크 구조","교대조·부서별 접촉",104],["대책 요소 없음","백신 효과","접종률에 따른 변화",190]];
+  R.forEach(function(r){arG(s,126,135,154,r[3]+30,"xG");bxG(s,158,r[3],100,60,"#F3F5F9");tG(s,208,r[3]+22,"가정",{fs:9,fw:700,c:C.gray});tG(s,208,r[3]+42,r[0],{fs:10,fw:800});
+    arG(s,260,r[3]+30,282,r[3]+30,"xG");bxG(s,286,r[3],130,60,"#E3F1EA");tG(s,351,r[3]+24,r[1],{fs:11,fw:800,c:GRNG});tG(s,351,r[3]+44,r[2],{fs:9.5,fw:700});});
+});
+
+/* 실습 1 · SIR 조작(조작형) */
+(function(){
+  var bb=document.getElementById("m36-b");if(!bb)return;var gg=document.getElementById("m36-g1"),svg=document.getElementById("m36-p1-svg");
+  function draw(){var b=+bb.value,g=+gg.value,o=sirG(b,g,150),r0=b/g*(NW-I0)/NW;clear(svg);
+    var A=axG(svg,44,320,10,176,150,30,1000,250),X=A[0],Y=A[1];tG(svg,320,198,"일",{a:"end",fs:9,c:C.gray,fw:700});
+    var bs=baseG();el("path",{d:plG(bs.slice(0,151).map(function(r){return[r[0],r[2]];}),X,Y),fill:"none",stroke:"#E9A7A0","stroke-width":1.6,"stroke-dasharray":"4 3"},svg);
+    [[1,BLUG],[2,REDG],[3,GRNG]].forEach(function(c){el("path",{d:plG(o.map(function(r){return[r[0],r[c[0]]];}),X,Y),fill:"none",stroke:c[1],"stroke-width":2.4},svg);});
+    var pk=o.reduce(function(a,r){return r[2]>a[2]?r:a;}),last=o[o.length-1],fin=last[2]+last[3];
+    bxG(svg,334,10,132,170,"#F3F5F9");[["S 감수성",BLUG],["I 감염자",REDG],["R 회복자",GRNG],["I(β 0.34, γ 0.2)","#E9A7A0"]].forEach(function(l,i){el("line",{x1:344,x2:362,y1:30+i*20,y2:30+i*20,stroke:l[1],"stroke-width":3,"stroke-dasharray":i===3?"4 3":"none"},svg);tG(svg,366,34+i*20,l[0],{a:"start",fs:9.5,fw:700});});
+    tG(svg,400,124,"R₀ = β ÷ γ",{fs:10,fw:700,c:C.gray});tG(svg,400,150,r0.toFixed(2),{fw:800,fs:17,c:r0>1?REDG:GRNG});tG(svg,400,170,r0>1?"유행 확산":"유행 안 됨",{fs:10,fw:800,c:r0>1?REDG:GRNG});
+    document.getElementById("m36-bv").textContent=b.toFixed(2);document.getElementById("m36-gv1").textContent=g.toFixed(2);document.getElementById("m36-rr").textContent=r0.toFixed(2);
+    document.getElementById("m36-pk").textContent=Math.round(pk[2])+"명";document.getElementById("m36-fin").textContent=Math.round(fin)+"명";
+    var m=document.getElementById("m36-msg");m.className="pmsg"+(r0<=1?" ok":"");
+    m.textContent=r0<=1?"R₀ = "+r0.toFixed(2)+" ≤ 1이므로 감염자가 늘지 못하고 줄어들어 150일 동안 누적 감염은 "+Math.round(fin)+"명에 그칩니다.":
+      "R₀ = "+r0.toFixed(2)+" > 1이므로 유행이 확산됩니다. 감염자는 "+pk[0]+"일째 "+Math.round(pk[2])+"명으로 정점에 이르고, 150일까지 누적 "+Math.round(fin)+"명이 감염됩니다.";}
+  bb.addEventListener("input",draw);gg.addEventListener("input",draw);draw();
+})();
+
+/* 실습 3 · 지수 증가 직감(추정형) */
+(function(){
+  var g=document.getElementById("m36-g");if(!g)return;var db=document.getElementById("m36-db"),svg=document.getElementById("m36-p3-svg"),DS=[25,40,50],cur=0,seen={};
+  DS.forEach(function(d,i){var b=document.createElement("button");b.type="button";b.className="mbtn";b.textContent=d+"일 뒤";b.style.padding="3px 9px";b.onclick=function(){cur=i;reset();};db.appendChild(b);});
+  function draw(){clear(svg);var A=axG(svg,50,456,12,180,50,10,1200,300),X=A[0],Y=A[1],d=DS[cur];tG(svg,456,206,"일",{a:"end",fs:9,c:C.gray,fw:700});
+    el("line",{x1:50,x2:456,y1:Y(1000),y2:Y(1000),stroke:GRNG,"stroke-width":1.3,"stroke-dasharray":"4 3"},svg);tG(svg,54,Y(1000)-4,"직원 1,000명",{a:"start",fs:9,c:GRNG,fw:800,halo:true});
+    el("line",{x1:X(d),x2:X(d),y1:12,y2:180,stroke:C.navy3,"stroke-width":1.3,"stroke-dasharray":"4 4"},svg);
+    for(var t=0;t<=10;t++){if(t*5<=10)el("circle",{cx:X(t*5),cy:Y(Math.pow(2,t)),r:3.4,fill:C.navy},svg);}
+    if(Object.keys(seen).length){var p=[];for(var k=0;k<=10;k++)p.push([k*5,Math.pow(2,k)]);el("path",{d:plG(p,X,Y),fill:"none",stroke:REDG,"stroke-width":2.2},svg);
+      el("path",{d:plG(fnG(logiG,0,50,60),X,Y),fill:"none",stroke:BLUG,"stroke-width":2.2},svg);
+      tG(svg,X(47),Y(1150),"지수",{a:"end",fs:9.5,fw:800,c:REDG,halo:true});tG(svg,X(48),Y(420),"밀도 효과",{a:"end",fs:9.5,fw:800,c:"#1C6EA4",halo:true});}
+    el("circle",{cx:X(d),cy:Y(+g.value),r:6,fill:"#fff",stroke:C.navy,"stroke-width":2.5},svg);
+    tG(svg,54,26,"0~10일: 1 → 2 → 4명",{a:"start",fs:9.5,fw:700,c:C.gray});}
+  function txt(){document.getElementById("m36-gv").textContent=g.value+"명";document.getElementById("m36-mine").textContent=g.value+"명";draw();}
+  function reset(){[].forEach.call(db.children,function(x,i){x.classList.toggle("on",i===cur);x.setAttribute("aria-pressed",i===cur);});var d=DS[cur];
+    document.getElementById("m36-ex").textContent=seen[cur]?Math.pow(2,d/5).toLocaleString()+"명":"?";document.getElementById("m36-lg").textContent=seen[cur]?Math.round(logiG(d))+"명":"?";
+    var ms=document.getElementById("m36-msg3");ms.className="pmsg";ms.textContent="5일마다 2배라면 "+d+"일 뒤 감염자는 몇 명일까요? 직감으로 정한 뒤 「계산해서 확인」을 누르세요.";txt();}
+  g.addEventListener("input",txt);
+  document.getElementById("m36-check").onclick=function(){seen[cur]=true;var d=DS[cur],ex=Math.pow(2,d/5),lg=Math.round(logiG(d)),gv=+g.value,ok=Math.abs(gv-ex)<=ex*0.2,ms=document.getElementById("m36-msg3");
+    document.getElementById("m36-ex").textContent=ex.toLocaleString()+"명";document.getElementById("m36-lg").textContent=lg+"명";ms.className="pmsg "+(ok?"ok":"ng");
+    ms.textContent=(ok?"근접했습니다. ":"차이가 있습니다. ")+d+"일은 5일 단위로 "+(d/5)+"번이므로 2^"+(d/5)+" = "+ex.toLocaleString()+"명입니다."+(ex>1000?" 직원 수를 넘으므로 현실과 맞지 않으며, 밀도 효과를 넣으면 "+lg+"명이고 이후 1,000명에 가까워지며 포화합니다.":" 밀도 효과를 넣으면 "+lg+"명입니다.");draw();};
+  reset();
+})();
+
+
+/* ---------- ⑤ 형성평가 ---------- */
+function fill(t){return !CASE?t:t.replace(/SUM/g,f1(SUMV)).replace(/AVG/g,f1(AVG,2)).replace(/MAXV/g,f1(MAXV));}
+var firstPractice=document.getElementById("p1"),answered=0,correct=0;
+QUIZ.forEach(function(q,i){
+  var s=document.createElement("section");s.className="slide";s.dataset.step="4";s.id="q"+(i+1);
+  s.innerHTML='<div class="sh"><div class="sec"><span>문항 '+(i+1)+' / '+QUIZ.length+'</span><span class="qchips"><span>학습목표 '+q.goal+'</span><span>'+q.type+'</span></span></div><h2 class="stem">'+fill(q.stem)+'</h2></div>'+
+    '<div class="body split even"><div class="opts'+(q.ox?' ox':'')+'"></div><div class="fbp" aria-live="polite"><p class="empty">보기를 고르면 정답과 해설이 여기에 나타납니다.</p></div></div>';
+  var ob=s.querySelector(".opts"),fb=s.querySelector(".fbp");
+  q.opts.forEach(function(t,k){
+    var b=document.createElement("button");b.type="button";b.className="opt";
+    b.innerHTML=q.ox?t:'<span class="n">'+(k+1)+'</span>'+fill(t);
+    b.addEventListener("click",function(){
+      var all=ob.querySelectorAll(".opt");[].forEach.call(all,function(x){x.disabled=true;});
+      all[q.ans].classList.add("ok");var ok=k===q.ans;if(!ok)b.classList.add("ng");
+      answered++;if(ok)correct++;
+      fb.className="fbp "+(ok?"ok":"ng");
+      fb.innerHTML='<div class="verdict">'+(ok?"정답입니다":"오답입니다. 정답은 "+(q.ox?q.opts[q.ans]:(q.ans+1)+"번")+"입니다")+'</div><div>'+fill(q.exp)+'</div>'+
+        '<button type="button" class="jump back" data-jump="'+q.back+'">'+q.backLabel+'</button><div class="tally">지금까지 '+answered+'문항 중 '+correct+'문항 정답</div>';
+      bindJumps(fb);
+    });
+    ob.appendChild(b);
+  });
+  vp.insertBefore(s,firstPractice);
+});
+
+/* ---------- ⑦ 용어해설 · 참고자료 · 다음 모듈 ---------- */
+for(var gi=0;gi<GLOSSARY.length;gi+=6){
+  var part=GLOSSARY.slice(gi,gi+6),pg=gi/6+1,np=Math.ceil(GLOSSARY.length/6);
+  var s=document.createElement("section");s.className="slide";s.dataset.step="6";
+  var h='<div class="sh"><div class="sec">용어해설 '+pg+'/'+np+'</div><h2>'+(pg===1?"본문에서 굵게 표시한 용어를 나온 순서대로 모았습니다":"용어해설 계속")+'</h2></div><div class="body full"><div class="gl">';
+  part.forEach(function(g,k){h+='<div class="gi"><div class="t"><i>'+(gi+k+1)+'</i>'+g[0]+'<em>'+g[1]+'</em>'+(g[4]?'<span class="cite">['+g[4]+']</span>':'')+'</div><div class="d">'+g[2]+'</div><div class="e"><strong>예시</strong> '+g[3]+'</div></div>';});
+  h+='</div></div>';s.innerHTML=h;vp.appendChild(s);
+}
+(function(){
+  var s=document.createElement("section");s.className="slide";s.dataset.step="6";s.id="end";
+  var refs=REFS.length?'<div class="pcol" style="gap:10px"><div class="plabel" style="margin:0">참고자료</div><ol class="refs">'+REFS.map(function(r){return '<li><span>['+r.n+']</span><div>'+r.title+', '+r.org+'. <a href="'+r.url+'" target="_blank" rel="noopener">'+r.url+'</a> ('+r.date+')</div></li>';}).join("")+'</ol></div>':'';
+  s.innerHTML='<div class="sh"><div class="sec">마무리</div><h2>'+(REFS.length?"참고자료와 다음 모듈":"다음 모듈")+'</h2></div>'+
+    '<div class="body '+(REFS.length?'split even':'full')+'" style="align-content:center">'+refs+
+    '<div class="pcol" style="justify-content:center"><div class="nextmod"><small>다음 모듈 · '+NEXT.title+'</small><strong>'+NEXT.line+'</strong></div></div></div>'+
+    '<p class="foot">학습 상태는 저장되지 않습니다.</p>';
+  vp.appendChild(s);
+})();
+
+/* ---------- 이동 · 진행선 ---------- */
+var slides=[].slice.call(vp.querySelectorAll(".slide")),cur=0,seen={};
+var stepFirst=[],stepCount=[0,0,0,0,0,0,0];
+slides.forEach(function(s,i){var st=+s.dataset.step;if(stepFirst[st]==null)stepFirst[st]=i;stepCount[st]++;});
+var rail=document.getElementById("rail"),stations=[];
+STEPS.forEach(function(n,i){
+  var b=document.createElement("button");b.type="button";b.className="station";
+  b.style.left="calc(14px + (100% - 28px) * "+(i/6)+")";
+  b.innerHTML='<span class="dot">'+(i+1)+'</span><span class="lb">'+n+'</span>';
+  b.setAttribute("aria-label",(i+1)+"단계 "+n+"(으)로 이동");
+  b.addEventListener("click",function(){show(stepFirst[i]);});
+  rail.appendChild(b);stations.push(b);
+});
+function show(i){
+  cur=Math.max(0,Math.min(slides.length-1,i));
+  slides.forEach(function(s,k){s.classList.toggle("on",k===cur);});
+  var st=+slides[cur].dataset.step;seen[st]=true;
+  stations.forEach(function(b,k){b.classList.toggle("cur",k===st);b.classList.toggle("done",k<st||(!!seen[k]&&k!==st));if(k===st)b.setAttribute("aria-current","step");else b.removeAttribute("aria-current");});
+  var within=(cur-stepFirst[st])/Math.max(1,stepCount[st]);
+  var frac=st===6&&cur===slides.length-1?1:(st+within)/6;
+  document.getElementById("fill").style.width=(Math.min(1,frac)*100)+"%";
+  document.getElementById("counter").innerHTML="<strong>"+STEPS[st]+"</strong> "+(cur-stepFirst[st]+1)+" / "+stepCount[st];
+  document.getElementById("prev").disabled=cur===0;
+  var nx=document.getElementById("next");nx.disabled=cur===slides.length-1;
+  nx.textContent=(cur<slides.length-1&&+slides[cur+1].dataset.step!==st)?STEPS[+slides[cur+1].dataset.step]+"(으)로":"다음";
+}
+function bindJumps(root){[].forEach.call(root.querySelectorAll("[data-jump]"),function(b){b.addEventListener("click",function(){var t=document.getElementById(b.dataset.jump);if(t)show(slides.indexOf(t));});});}
+bindJumps(document);
+document.getElementById("prev").onclick=function(){show(cur-1);};
+document.getElementById("next").onclick=function(){show(cur+1);};
+document.addEventListener("keydown",function(e){
+  if(e.target&&(e.target.type==="range"))return;
+  if(e.key==="ArrowRight"||e.key==="PageDown"){show(cur+1);e.preventDefault();}
+  else if(e.key==="ArrowLeft"||e.key==="PageUp"){show(cur-1);e.preventDefault();}
+});
+var tx=null,ty=null;
+vp.addEventListener("touchstart",function(e){var t=e.target;if(t.closest&&(t.closest("input")||t.closest(".dcard"))){tx=null;return;}tx=e.touches[0].clientX;ty=e.touches[0].clientY;},{passive:true});
+vp.addEventListener("touchend",function(e){if(tx==null)return;var dx=e.changedTouches[0].clientX-tx,dy=e.changedTouches[0].clientY-ty;if(Math.abs(dx)>60&&Math.abs(dx)>Math.abs(dy)*1.5)show(cur+(dx<0?1:-1));tx=null;},{passive:true});
+
+/* ---------- 실습 1 · 조작형 ---------- */
+(function(){if(!document.getElementById("p1-items")||!CASE)return;
+var p1v=CASE.values.slice(),p1s=CASE.values.indexOf(MAXV),p1m=document.getElementById("p1-items"),p1r=document.getElementById("p1-range");
+CASE.labels.forEach(function(m,i){var b=document.createElement("button");b.type="button";b.className="mbtn";b.textContent=m;b.onclick=function(){p1s=i;p1d();};p1m.appendChild(b);});
+function p1d(){
+  [].forEach.call(p1m.children,function(b,i){b.classList.toggle("on",i===p1s);b.setAttribute("aria-pressed",i===p1s);});
+  p1r.value=p1v[p1s];document.getElementById("p1-label").textContent=CASE.labels[p1s]+"번";document.getElementById("p1-val").textContent=f1(p1v[p1s]);
+  var s=r1(sum(p1v)),m=s/N;
+  document.getElementById("p1-sum").textContent=f1(s);document.getElementById("p1-mean").textContent=f1(m,2);
+  barChart(document.getElementById("p1-svg"),p1v,{mean:m,sel:p1s,ymax:9});
+  var msg=document.getElementById("p1-msg");
+  if(P1.target!=null&&Math.abs(m-P1.target)<0.005){msg.className="pmsg ok";msg.textContent="성공했습니다. "+f1(s)+" ÷ "+N+" = "+f1(m,2);}
+  else if(Math.abs(s-SUMV)<1e-9){msg.className="pmsg";msg.textContent="원래 값입니다. "+f1(SUMV)+" ÷ "+N+" = "+f1(AVG,2);}
+  else{msg.className="pmsg";msg.textContent="원래 평균 "+f1(AVG,2)+"보다 "+f1(Math.abs(m-AVG),2)+" "+(m>AVG?"늘었습니다.":"줄었습니다.");}
+}
+p1r.addEventListener("input",function(){p1v[p1s]=r1(+p1r.value);p1d();});
+document.getElementById("p1-reset").onclick=function(){p1v=CASE.values.slice();p1d();};
+p1d();
+
+})();
+/* ---------- 실습 2 · 분류형 ---------- */
+(function(){if(!document.getElementById("p2-pool"))return;
+var pool=document.getElementById("p2-pool"),binWrap=document.getElementById("p2-bins"),selC=null,done2=0;
+var bins=BINS.map(function(n){var b=document.createElement("div");b.className="bin";b.dataset.bin=n;b.innerHTML="<h4>"+n+"</h4>";binWrap.appendChild(b);return b;});
+function p2msg(t,c){var m=document.getElementById("p2-msg");m.textContent=t;m.className="pmsg "+(c||"");document.getElementById("p2-count").textContent=done2+" / "+CARDS.length;}
+function p2init(){
+  pool.innerHTML="";bins.forEach(function(b){[].slice.call(b.querySelectorAll(".dcard")).forEach(function(c){c.remove();});});done2=0;selC=null;
+  var o=CARDS.map(function(_,i){return i;});for(var i=o.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1)),t=o[i];o[i]=o[j];o[j]=t;}
+  o.forEach(function(i){var d=document.createElement("div");d.className="dcard";d.tabIndex=0;d.setAttribute("role","button");d.textContent=CARDS[i][0];d.dataset.ans=CARDS[i][1];pool.appendChild(d);attach(d);});
+  p2msg("카드를 하나 골라 보세요.","");
+}
+function drop(c,b){
+  if(!b||c.classList.contains("ok"))return;
+  c.classList.remove("sel");selC=null;
+  if(c.dataset.ans===b.dataset.bin){c.classList.add("ok");c.removeAttribute("tabindex");b.appendChild(c);done2++;p2msg(done2===CARDS.length?"카드를 모두 맞게 분류했습니다.":"정답입니다.","ok");}
+  else{c.classList.add("shake");setTimeout(function(){c.classList.remove("shake");},400);p2msg("「"+b.dataset.bin+"」이 아닙니다. "+HINT[c.dataset.ans],"ng");}
+}
+function pick(d){if(selC===d){d.classList.remove("sel");selC=null;return;}if(selC)selC.classList.remove("sel");selC=d;d.classList.add("sel");p2msg("이제 알맞은 칸을 누르세요.","");}
+function attach(d){
+  var sx=null,sy,mv=false,gh=null,ov=null,offX=0,offY=0;
+  function pos(e){var r=stage.getBoundingClientRect();return{x:(e.clientX-r.left)/S,y:(e.clientY-r.top)/S};}
+  d.addEventListener("pointerdown",function(e){if(d.classList.contains("ok"))return;sx=e.clientX;sy=e.clientY;mv=false;d.setPointerCapture(e.pointerId);var r=d.getBoundingClientRect();offX=(e.clientX-r.left)/S;offY=(e.clientY-r.top)/S;});
+  d.addEventListener("pointermove",function(e){
+    if(sx==null)return;
+    if(!mv&&Math.hypot(e.clientX-sx,e.clientY-sy)>6){mv=true;gh=d.cloneNode(true);gh.classList.add("ghostc");gh.classList.remove("sel");gh.style.width=d.offsetWidth+"px";stage.appendChild(gh);d.style.opacity=".35";}
+    if(mv){var p=pos(e);gh.style.left=(p.x-offX)+"px";gh.style.top=(p.y-offY)+"px";
+      var t=document.elementFromPoint(e.clientX,e.clientY),b=t&&t.closest?t.closest(".bin"):null;
+      if(ov&&ov!==b)ov.classList.remove("hover");ov=b;if(b)b.classList.add("hover");}
+  });
+  d.addEventListener("pointerup",function(){
+    if(sx==null)return;sx=null;
+    if(mv){gh.remove();gh=null;d.style.opacity="";if(ov)ov.classList.remove("hover");var b=ov;ov=null;drop(d,b);}else pick(d);
+  });
+  d.addEventListener("pointercancel",function(){if(gh){gh.remove();gh=null;}d.style.opacity="";sx=null;if(ov)ov.classList.remove("hover");ov=null;});
+  d.addEventListener("keydown",function(e){if(e.key==="Enter"||e.key===" "){e.preventDefault();pick(d);}});
+}
+bins.forEach(function(b){b.tabIndex=0;b.setAttribute("role","button");b.setAttribute("aria-label",b.dataset.bin+" 칸에 놓기");
+  b.addEventListener("click",function(e){if(selC&&!e.target.closest(".dcard"))drop(selC,b);});
+  b.addEventListener("keydown",function(e){if((e.key==="Enter"||e.key===" ")&&selC){e.preventDefault();drop(selC,b);}});});
+document.getElementById("p2-reset").onclick=p2init;
+p2init();
+
+})();
+/* ---------- 실습 3 · 추정형 ---------- */
+(function(){if(!document.getElementById("p3-range")||!PAIRS)return;
+var p3r=document.getElementById("p3-range"),p3done=false;
+document.getElementById("p3-x0").textContent=PAIRS.x0;
+p3r.min=PAIRS.ymin;p3r.max=PAIRS.ymax;p3r.step=0.1;p3r.value=r1((PAIRS.ymin+PAIRS.ymax)/2);
+function p3d(){var g=+p3r.value;document.getElementById("p3-val").textContent=f1(g);scatter(document.getElementById("p3-svg"),{x0:PAIRS.x0,guess:g,line:p3done,pred:p3done,actual:p3done});}
+p3r.addEventListener("input",function(){if(p3done){p3done=false;document.getElementById("p3-res").classList.remove("on");}p3d();});
+document.getElementById("p3-check").onclick=function(){
+  p3done=true;var g=+p3r.value,mine=Math.abs(g-PAIRS.actual),line=Math.abs(PRED-PAIRS.actual);
+  document.getElementById("p3-mine").textContent=f1(g);document.getElementById("p3-pred").textContent=f1(PRED,PAIRS.dp);document.getElementById("p3-act").textContent=f1(PAIRS.actual);
+  var m=document.getElementById("p3-msg"),good=mine<=line;m.className="pmsg "+(good?"ok":"ng");
+  m.textContent="내 오차 "+f1(mine,PAIRS.dp)+PAIRS.unit+", 직선 오차 "+f1(line,PAIRS.dp)+PAIRS.unit+". "+(good?"직선만큼 또는 더 가깝게 추정했습니다.":"직선을 이용하면 오차를 줄일 수 있습니다.");
+  document.getElementById("p3-res").classList.add("on");p3d();
+};
+p3d();
+
+})();
+show(0);
+})();
+</script>
+</body>
+</html>
