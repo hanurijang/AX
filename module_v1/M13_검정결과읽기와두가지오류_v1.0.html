@@ -368,12 +368,12 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
     </section>
 
     <section class="slide" data-step="3" id="s-4-1b">
-      <div class="sh"><div class="sec">4-1 오차 막대</div><h2><span class="q">Q</span>오차 막대가 겹치면 유의하지 않은 걸까요?</h2></div>
+      <div class="sh"><div class="sec">4-1 오차 막대</div><h2><span class="q">Q</span>각 평균의 구간이 겹쳐도 차이가 유의할까요?</h2></div>
       <div class="body split even">
-        <div class="fig"><svg id="m13-rule" viewBox="0 0 420 270" role="img" aria-label="표본크기 3이면 표준오차 막대 2개만큼, 10 이상이면 1개만큼 떨어지면 p는 약 0.05"></svg></div>
+        <div class="fig"><svg id="m13-rule" viewBox="0 0 420 270" role="img" aria-label="독립 정규 평균 추정값 10과 13, 알려진 표준오차 1씩: 각 95% 구간은 겹치지만 평균차 구간 0.23~5.77은 0 제외"></svg></div>
         <div class="side">
-          <ul class="key"><li>범례에 무엇을 표시했는지 반드시 적습니다.</li><li>오차 막대만으로 유의성을 판단할 수는 없습니다.</li></ul>
-          <p class="exp">막대가 겹친다고 곧 유의하지 않은 것은 아닙니다. 표준오차 막대와 신뢰구간 막대는 겹침의 뜻이 다릅니다. 두 집단의 크기가 비슷할 때 표준오차 막대를 대략 보면, 표본크기 3은 막대 2개만큼, 10 이상은 1개만큼 떨어져야 p가 약 0.05에 가깝다는 경험적 눈금이 있습니다<span class="cite">[1]</span>. 판정은 본문의 p값과 별표를 봅니다.</p>
+          <ul class="key"><li>범례에 무엇을 표시했는지 반드시 적습니다.</li><li>차이의 구간·검정과 설계 조건을 함께 확인합니다.</li></ul>
+          <p class="exp">오차 막대의 겹침만으로 두 집단의 차이를 판정하지 않습니다. 그림은 서로 독립인 정규 평균 추정값 10과 13, 알려진 표준오차가 각각 1인 별도 예입니다. 각 평균의 95% 구간은 겹치지만, 차이의 표준오차는 √(1²+1²)=√2이고 차이의 구간 3±1.96√2는 0을 포함하지 않습니다. 대응자료라면 공분산도 필요하므로 설계에 맞는 차이의 구간·검정을 확인합니다.</p>
           <p class="next"><span>다음 질문</span>별표는 무엇을 뜻할까?</p>
         </div>
       </div>
@@ -394,10 +394,10 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
     <section class="slide" data-step="3" id="s-4-3a">
       <div class="sh"><div class="sec">4-3 진실과 판단의 4패턴</div><h2><span class="q">Q</span>가설검정의 판단은 어떤 식으로 틀릴 수 있을까요?</h2></div>
       <div class="body split even">
-        <div class="fig"><svg id="m13-grid" viewBox="0 0 420 270" role="img" aria-label="진실 2가지와 판단 2가지의 2×2 표, 제1종 오류 α와 제2종 오류 β"></svg></div>
+        <div class="fig"><svg id="m13-grid" viewBox="0 0 420 270" role="img" aria-label="행은 실제 H0 참·거짓, 열은 H0 비기각·기각인 2×2 표: 제1종 오류와 제2종 오류"></svg></div>
         <div class="side">
-          <ul class="key"><li>진실 2 × 판단 2 = 4패턴</li><li><b>제1종 오류</b>(α)와 <b>제2종 오류</b>(β)</li></ul>
-          <p class="exp">진실은 귀무가설이 옳은 경우와 대립가설이 옳은 경우의 2가지이고, 판단은 귀무가설을 기각하는 것과 기각하지 않는 것의 2가지이므로 도합 2 × 2 패턴입니다. 귀무가설이 옳은데 기각하고 대립가설을 채택하는 잘못이 제1종 오류(위양성)이며 확률을 α로 나타냅니다. 대립가설이 옳은데 귀무가설을 기각하지 않는 잘못이 제2종 오류(위음성)이며 확률을 β로 나타냅니다.</p>
+          <ul class="key"><li>행: 실제 상태 · 열: 기각 여부</li><li><b>제1종 오류</b>(α)와 <b>제2종 오류</b>(β)</li></ul>
+          <p class="exp">실제 상태는 H0가 참인지 거짓인지, 판단은 H0를 기각하는지 기각하지 않는지로 나눕니다. 참인 H0를 기각하면 제1종 오류, 특정한 대립 효과가 있는데 H0를 기각하지 못하면 제2종 오류입니다. 기각은 H0에 반하는 증거이며 대립 설명 전체의 진실을 확정하지 않습니다. 비기각 역시 H0가 참이라는 증명이 아닙니다.</p>
           <p class="next"><span>다음 질문</span>제1종 오류는 얼마나 일어날까?</p>
         </div>
       </div>
@@ -410,14 +410,14 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
           <div class="fig"><svg id="m13-twenty" viewBox="0 0 420 150" role="img" aria-label="효과가 없는 약 20종을 검증하면 평균 1종이 유의하게 나옴"></svg></div>
           <div class="math">
             <div class="mt">핵심 수학 개념 · 제1종 오류의 확률</div>
-            <div class="f">귀무가설이 옳을 때 P(p &lt; α) = α</div>
+            <div class="f">H0가 참일 때 P(p &lt; α) ≤ α</div>
             <div class="r"><span>계산</span><span>효과 없는 약 20종 × α(0.05) = 평균 1종이 ‘유의’</span></div>
             <div class="r"><span>해석</span><span>α를 미리 정해 제1종 오류의 확률을 통제합니다.</span></div>
           </div>
         </div>
         <div class="side">
-          <ul class="key"><li>α를 미리 정해 제1종 오류를 통제합니다.</li><li>α = 0.05는 20번 중 1번 위험을 허용함</li></ul>
-          <p class="exp">우리는 진실을 직접 알 수 없어 결과가 제1종 오류인지 아닌지는 알 수 없지만, 그 확률은 통제할 수 있습니다. 데이터가 정말 귀무가설에서 나왔다면 p &lt; α일 확률이 α이므로, 유의수준 α를 미리 정해 두면 귀무가설을 착오로 기각하는 오류가 확률 α로 발생합니다. 전혀 효과가 없는 약 20종을 검증하면, α = 0.05에서는 평균적으로 1종의 약에 유의미한 차이가 나타나 효과가 있다고 주장하게 됩니다.</p>
+          <ul class="key"><li>α를 미리 정해 제1종 오류를 통제합니다.</li><li>α는 H0가 참일 때의 오류율 기준입니다.</li></ul>
+          <p class="exp">유의수준 α는 H0가 참일 때의 기각 확률을 통제하는 기준입니다. 유효한 검정에서는 이 확률이 α 이하이며, 연속형의 정확한 검정에서는 α와 같아질 수 있습니다. 이산형 검정은 더 보수적일 수 있습니다. 각 검정의 실제 오류율이 0.05라면 효과 없는 약 20종의 기대 위양성 수는 1종입니다. 매번 정확히 1종이라는 뜻은 아닙니다.</p>
           <p class="next"><span>다음 질문</span>제2종 오류는 어떻게 다를까?</p>
         </div>
       </div>
@@ -428,8 +428,8 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
       <div class="body split even">
         <div class="fig"><svg id="m13-power" viewBox="0 0 420 270" role="img" aria-label="대립가설이 옳을 때의 분포에서 기각역에 들어가지 않는 부분이 β, 들어가는 부분이 검정력"></svg></div>
         <div class="side">
-          <ul class="key"><li><b>검정력</b> 1 − β: 차이를 올바르게 찾을 확률</li><li>보통 검정력 80%로 설정합니다.</li></ul>
-          <p class="exp">제2종 오류는 정말로 차이가 있는데도 차이가 있다고 말할 수 없어 귀무가설을 기각하지 않는 잘못입니다. 제2종 오류가 일어나지 않는 확률, 즉 차이가 있을 때 올바르게 판단할 확률을 검정력 1 − β라 하며, 일반적으로 80%로 설정합니다. β는 α와 달리 직접 통제할 수 없지만, 표본크기 n이 커지거나 효과크기가 커지면 작아집니다. 그래서 검정력이 80%가 되도록 표본크기를 설계하는 것이 이상적인 순서입니다.</p>
+          <ul class="key"><li><b>검정력</b> 1 − β: 차이를 올바르게 찾을 확률</li><li>특정 효과에서의 검정력을 설계합니다.</li></ul>
+          <p class="exp">β는 특정한 실제 효과에서 H0를 기각하지 못할 확률이고, 검정력 1−β는 그 효과를 검출할 확률입니다. 효과크기·분산·표본크기·설계·검정 방법에 따라 달라집니다. 80%는 설계 목표의 한 예이며 보장된 실제 결과가 아닙니다. 의미 있게 검출할 효과와 검정 방법을 먼저 정해 필요한 표본크기를 계획합니다.</p>
           <p class="next"><span>다음 질문</span>α를 줄이면 β는 어떻게 될까?</p>
         </div>
       </div>
@@ -441,7 +441,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
         <div class="fig"><svg id="m13-tradeoff" viewBox="0 0 420 270" role="img" aria-label="표본크기 10, 20, 40일 때 α와 β의 상충 관계 곡선"></svg></div>
         <div class="side">
           <ul class="key"><li>n과 효과크기를 고정하면 α와 β는 <b>상충</b>합니다.</li><li>n이 커지면 같은 α에서 β가 줄어듭니다.</li></ul>
-          <p class="exp">α와 β를 모두 0에 가깝게 만들고 싶지만, 표본크기와 효과크기를 고정하면 한쪽이 작아질 때 다른 쪽이 커집니다. α = 0.05를 0.01로 바꾸면 차이가 없는데 있다고 말하는 오류는 5%에서 1%로 줄지만 β가 증가합니다. 이 관계 자체는 변하지 않지만, 표본크기 n이 커지면 곡선이 왼쪽 아래로 이동합니다. 그래프는 두 집단의 표준편차가 1, 평균 차이가 1일 때로, n = 10이면 α = 0.05에서 β ≈ 0.44, n = 40이면 β ≈ 0.01입니다.</p>
+          <p class="exp">같은 검정·설계·표본크기와 실제 효과를 고정하고 기각 기준만 엄격하게 하면, 일반적으로 α는 줄고 β는 늘어납니다. 반비례식 αβ=상수라는 뜻은 아닙니다. 이 그림은 독립·정규·등분산인 두 집단의 양측 t검정이며 n은 각 집단 크기입니다. d=1, α=0.05에서 n=10의 β≈0.44, n=40의 β≈0.01입니다.</p>
           <p class="next"><span>다음 질문</span>효과의 크기는 어떻게 나타낼까?</p>
         </div>
       </div>
@@ -460,7 +460,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
           </div>
         </div>
         <div class="side">
-          <ul class="key"><li><b>효과크기</b>: 효과가 얼마나 큰지 나타내는 지표</li><li>d가 클수록 β가 작아집니다.</li></ul>
+          <ul class="key"><li><b>효과크기</b>: 효과가 얼마나 큰지 나타내는 지표</li><li>같은 조건에서 |d|가 클수록 검출이 쉬워집니다.</li></ul>
           <p class="exp">2개 집단의 평균값이라면 단순히 평균값의 절대적인 차이가 아니라, 원래의 데이터 퍼짐에 대해 상대적으로 평가한 d = (μA − μB)/σ를 씁니다. 차이에 비해 표준편차가 클수록 두 분포의 겹치는 부분이 커져 d가 작아지고 검출이 어렵습니다. 표본크기가 아주 큰 실험으로 평균 혈압 하락이 0.1mmHg뿐인 극히 작은 효과를 검출했다면 혈압약으로서 의미가 있을까요? 그래서 검출하고 싶은 효과크기를 미리 설정하는 것이 바람직합니다.</p>
           <p class="next"><span>다음 질문</span>표본크기는 어떻게 정할까?</p>
         </div>
@@ -470,10 +470,10 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
     <section class="slide" data-step="3" id="s-4-4c">
       <div class="sh"><div class="sec">4-4 α와 β, 효과크기</div><h2><span class="q">Q</span>실험에 필요한 표본크기는 어떻게 정할까요?</h2></div>
       <div class="body split even">
-        <div class="fig"><svg id="m13-four" viewBox="0 0 420 270" role="img" aria-label="α, β, n, d 중 셋을 정하면 나머지 하나가 정해짐과 효과크기별 α-β 곡선"></svg></div>
+        <div class="fig"><svg id="m13-four" viewBox="0 0 420 270" role="img" aria-label="검정과 설계를 정한 뒤 α, 검정력, 효과크기로 표본수를 정함과 효과크기별 α-β 곡선"></svg></div>
         <div class="side">
-          <ul class="key"><li>α, β, n, d 중 셋을 정하면 나머지가 정해집니다.</li><li>α = 0.05, 1 − β = 0.8, d를 정해 n을 구합니다.</li></ul>
-          <p class="exp">α와 β, 표본크기 n, 효과크기 d의 네 값 중 셋을 결정하면 나머지 하나는 자동으로 정해집니다. 따라서 α = 0.05, 1 − β = 0.8과 검출하고 싶은 효과크기 d를 미리 설정함으로써 필요한 표본크기 n을 구할 수 있습니다. 효과크기 d가 클수록 분포가 겹치는 부분이 줄어 검출이 간단해지므로 β는 작아집니다. 한편 결과를 확인할 때의 효과크기는 데이터로 계산한 값으로, p값과 함께 기술해 어느 정도의 효과인지 평가합니다.</p>
+          <ul class="key"><li>검정·설계를 고정한 뒤 α·검정력·d로 n을 구합니다.</li><li>α = 0.05, 1 − β = 0.8, d를 정해 n을 구합니다.</li></ul>
+          <p class="exp">검정 방법, 단측·양측, 집단 배분, 분산과 표본추출 조건을 정한 뒤 α·목표 검정력·검출할 효과 d를 지정하면 필요한 n을 계산할 수 있습니다. 여기서는 두 독립 정규 집단, 공통 분산, 각 n명인 양측 t검정입니다. α=0.05와 검정력 80%에서 d=0.5·1·2이면 각각 최소 64·17·6명씩 필요합니다. 총 표본수는 2n입니다.</p>
           <p class="next"><span>정리</span>배운 개념을 나란히 놓아 봅시다.</p>
         </div>
       </div>
@@ -488,7 +488,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
             <tr><td>오차 막대 · 유의 표기</td><td>평균 ± SE / 95% 신뢰구간 / 평균 ± SD. 뜻을 범례에 적습니다.</td><td>예 ① *, 예 ② N.S.</td></tr>
             <tr><td>제1종 오류 α</td><td>효과가 없는데 있다고 판단. α를 미리 정해 통제합니다.</td><td>효과 없는 약 20종 → 평균 1종 ‘유의’</td></tr>
             <tr><td>제2종 오류 β · 검정력</td><td>효과가 있는데 놓침. 1 − β를 보통 80%로 설계합니다.</td><td>d = 1, n = 10 → β ≈ 0.44</td></tr>
-            <tr><td>α · β · n · d</td><td>α와 β는 상충. 셋을 정하면 나머지 하나가 정해집니다.</td><td>d = 1, 검정력 0.8 → 17명씩</td></tr>
+            <tr><td>α · β · n · d</td><td>같은 설계·n·효과에서 α를 줄이면 일반적으로 β는 늘어납니다.</td><td>d = 1, 검정력 0.8 → 17명씩</td></tr>
           </tbody>
         </table>
       </div>
@@ -502,7 +502,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
       <div class="sh"><div class="sec">실습 1 · 조작형</div><h2>목표: α, 표본크기, 효과크기를 바꾸며 β와 검정력이 어떻게 변하는지 봅니다</h2></div>
       <div class="body split">
         <div class="pcol" style="gap:8px">
-          <div class="plabel" style="margin:0">해보기 · 이표본 t검정(두 집단 각 n명)의 조건을 바꿔 보세요</div>
+          <div class="plabel" style="margin:0">해보기 · 독립·정규·등분산 양측 t검정 · 각 집단 n명</div>
           <div class="ctrl">유의수준 α<input type="range" id="m13-a" min="0" max="99" step="1" value="9" aria-label="유의수준"><strong id="m13-av" style="min-width:56px;text-align:right">-</strong></div>
           <div style="display:flex;gap:12px;flex-wrap:wrap"><div class="mbtns" id="m13-n" style="gap:5px"></div><div class="mbtns" id="m13-dd" style="gap:5px"></div></div>
           <div class="fig" style="flex:1"><svg id="m13-p1-svg" viewBox="0 0 470 190" role="img" aria-label="α와 β의 곡선과 현재 위치"></svg></div>
@@ -529,7 +529,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
           <div class="plabel" style="margin:0">결과 확인 · <span id="p2-count">0 / 0</span></div>
           <div class="bins" id="p2-bins"></div>
           <div class="p2row"><p class="pmsg" id="p2-msg"></p><button class="btn ghost" id="p2-reset">다시 하기</button></div>
-          <div class="think" style="flex-wrap:wrap"><span>생각해보기</span>현실에서는 진실을 모르는데, 두 오류의 ‘확률’은 어떻게 다룰 수 있었나요?<details style="flex-basis:100%;font-weight:600"><summary style="cursor:pointer">예시 답</summary>진실은 몰라도 α는 미리 정하고, β는 표본크기와 효과크기로 줄입니다.</details></div>
+          <div class="think" style="flex-wrap:wrap"><span>생각해보기</span>현실에서는 진실을 모르는데, 두 오류의 ‘확률’은 어떻게 다룰 수 있었나요?<details style="flex-basis:100%;font-weight:600"><summary style="cursor:pointer">예시 답</summary>진실은 몰라도 α는 미리 정하고, β는 사전에 정한 효과와 검정 설계에 따라 계획합니다.</details></div>
         </div>
       </div>
     </section>
@@ -548,7 +548,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
           <button class="btn" id="m13-check" style="align-self:flex-start">계산해서 확인</button>
           <div class="stats"><div><small>내 예측</small><strong id="m13-mine">-</strong></div><div><small>필요한 n (한 집단)</small><strong id="m13-act">?</strong></div></div>
           <p class="pmsg" id="m13-msg3"></p>
-          <div class="think" style="flex-wrap:wrap"><span>생각해보기</span>d가 절반이 되면 필요한 표본크기는 약 몇 배가 되나요?<details style="flex-basis:100%;font-weight:600"><summary style="cursor:pointer">예시 답</summary>필요한 표본크기는 약 4배가 됩니다.</details></div>
+          <div class="think" style="flex-wrap:wrap"><span>생각해보기</span>d가 절반이 되면 필요한 표본크기는 약 몇 배가 되나요?<details style="flex-basis:100%;font-weight:600"><summary style="cursor:pointer">예시 답</summary>약 4배는 큰 표본 근사입니다.</details></div>
         </div>
       </div>
     </section>
@@ -588,16 +588,16 @@ var QUIZ=[
  {goal:1,type:"상황 판단",stem:"그래프에 ‘**’가 표시되어 있고, 범례에 ‘* p < 0.05, ** p < 0.01, *** p < 0.001’이라 적혀 있습니다. p값의 범위로 알맞은 것은 무엇일까요?",
   opts:["0.001 ≤ p < 0.01","0.01 ≤ p < 0.05","p < 0.001","p ≥ 0.05"],ans:0,
   exp:"별표 2개는 0.001 ≤ p < 0.01을 뜻합니다. 0.01 ≤ p < 0.05는 별표 1개, p < 0.001은 3개이고, 유의하지 않으면 N.S.로 표시합니다.",back:"s-4-2a",backLabel:"4-2 유의 표기 다시 보기"},
- {goal:2,type:"상황 판단",stem:"실제로는 효과가 없는 신약인데, 실험에서 p = 0.03이 나와 ‘효과가 있다’고 판단했습니다. 이 잘못은 무엇일까요?",
+ {goal:2,type:"상황 판단",stem:"실제로는 효과가 없는 신약인데, 미리 정한 α=0.05에서 p = 0.03이 나와 ‘효과가 있다’고 판단했습니다. 이 잘못은 무엇일까요?",
   opts:["제1종 오류(위양성)","제2종 오류(위음성)","올바른 판단","검정력"],ans:0,
-  exp:"귀무가설(효과가 없다)이 옳은데 귀무가설을 기각하고 대립가설을 채택했으므로 제1종 오류입니다. 일어날 확률은 α이며, 효과가 있는데 놓치는 것이 제2종 오류입니다.",back:"s-4-3a",backLabel:"4-3 4패턴 다시 보기"},
- {goal:2,type:"계산",stem:"전혀 효과가 없는 약 40종을 각각 유의수준 α = 0.05로 검정합니다. ‘통계적으로 유의’하게 나오는 약은 평균 몇 종일까요?",
+  exp:"참인 H0를 기각한 제1종 오류입니다. 유효한 검정은 H0 아래 이 오류율을 α 이하로 통제합니다. 대립 효과가 있는데 놓치는 것은 제2종 오류이며, 비기각은 효과 0의 증명이 아닙니다.",back:"s-4-3a",backLabel:"4-3 4패턴 다시 보기"},
+ {goal:2,type:"계산",stem:"효과 없는 약 40종을 각각 검정하며 실제 제1종 오류율은 모두 0.05입니다. ‘통계적으로 유의’하게 나오는 약은 평균 몇 종일까요?",
   opts:["2종","0종","1종","20종"],ans:0,
-  exp:"귀무가설이 옳을 때 p < α일 확률이 α이므로 40 × 0.05 = 평균 2종이 제1종 오류로 ‘유의’하게 나옵니다. 20종 중이면 평균 1종입니다.",back:"s-4-3b",backLabel:"4-3 제1종 오류의 확률 다시 보기"},
- {goal:3,type:"O/X 오개념",stem:"“유의수준 α를 0.05에서 0.01로 엄격하게 하면, 제1종 오류와 제2종 오류가 모두 줄어든다.”",
+  exp:"기대값의 선형성으로 40×0.05=2종입니다. 검정 사이의 독립성은 이 기대값 계산에 필요하지 않습니다. 매번 2종이 나온다는 뜻도, 유의한 결과의 5%가 거짓이라는 뜻도 아닙니다.",back:"s-4-3b",backLabel:"4-3 제1종 오류의 확률 다시 보기"},
+ {goal:3,type:"O/X 오개념",stem:"“검정·설계·n·실제 효과를 고정하고 α만 0.05에서 0.01로 낮추면 두 오류가 모두 줄어든다.”",
   opts:["O","X"],ans:1,ox:true,
-  exp:"α와 β는 상충 관계여서 α를 줄이면 제1종 오류는 줄지만 β(제2종 오류)는 늘어납니다. 같은 α에서 β를 줄이려면 표본크기를 늘리거나 효과크기가 커야 합니다.",back:"s-4-4a",backLabel:"4-4 상충 관계 다시 보기"},
- {goal:3,type:"상황 판단",stem:"α = 0.05, 검정력 0.8로 효과크기 d = 1을 검출하려면 한 집단에 17명이 필요합니다. 검출하고 싶은 효과크기를 d = 2로 크게 잡으면 필요한 표본크기는 어떻게 될까요?",
+  exp:"이 문항처럼 다른 조건을 고정하면 기각 기준이 엄격해져 β는 일반적으로 늘어납니다. α와 β가 정확히 반비례한다는 뜻은 아닙니다. 같은 α에서 β를 줄이려면 표본크기를 늘리거나 효과크기가 커야 합니다.",back:"s-4-4a",backLabel:"4-4 상충 관계 다시 보기"},
+ {goal:3,type:"상황 판단",stem:"독립·정규·등분산 두 집단의 양측 t검정에서 α=0.05, 검정력 0.8로 d=1을 검출하려면 한 집단에 17명이 필요합니다. 검출하고 싶은 효과크기를 d = 2로 크게 잡으면 필요한 표본크기는 어떻게 될까요?",
   opts:["줄어든다(약 6명)","늘어난다(약 64명)","그대로 17명이다","효과크기와 표본크기는 관계없다"],ans:0,
   exp:"효과크기가 클수록 두 분포가 겹치는 부분이 줄어 검출이 쉬우므로, 같은 α와 검정력에서 필요한 표본크기가 줄어듭니다(약 6명). d = 0.5처럼 작은 효과를 검출하려면 약 64명이 필요합니다.",back:"s-4-4c",backLabel:"4-4 표본크기 설계 다시 보기"}
 ];
@@ -605,16 +605,16 @@ var QUIZ=[
 var BINS=["올바른 판단","제1종 오류","제2종 오류"];
 var CARDS=[["효과 없는 약 · ‘유의하지 않음’ 판단","올바른 판단"],["효과 있는 약 · ‘유의함’ 판단","올바른 판단"],
            ["효과 없는 약 · ‘유의함’ 판단","제1종 오류"],["불량률이 같은 두 공정 · ‘차이 있음’ 판단","제1종 오류"],
-           ["효과 있는 약 · ‘유의하지 않음’ 판단","제2종 오류"],["불량률이 다른 두 공정 · ‘차이 없음’ 판단","제2종 오류"]];
-var HINT={"올바른 판단":"진실과 판단이 일치합니다.","제1종 오류":"차이가 없는데 있다고 판단했습니다(위양성, 확률 α).","제2종 오류":"차이가 있는데 있다고 말하지 못했습니다(위음성, 확률 β)."};
+           ["효과 있는 약 · ‘유의하지 않음’ 판단","제2종 오류"],["불량률이 다른 두 공정 · ‘차이 검출 못함’ 판단","제2종 오류"]];
+var HINT={"올바른 판단":"진실과 판단이 일치합니다.","제1종 오류":"차이가 없는데 있다고 판단했습니다(위양성, H0 아래 오류율≤α).","제2종 오류":"차이가 있는데 있다고 말하지 못했습니다(위음성, 확률 β)."};
 
 var GLOSSARY=[
  ["오차 막대","error bar","평균값 위아래로 그려 표준오차, 신뢰구간, 표준편차 등을 나타내는 막대입니다.","예 ① 신약군 134.1 ± 2.66(SE)"],
  ["N.S.","non-significant","통계적으로 유의하지 않다는 것을 나타내는 표기입니다.","예 ②(p = 0.246)"],
- ["제1종 오류","type I error","귀무가설이 옳은데 기각하는 잘못(위양성)으로, 일어날 확률을 α로 나타냅니다.","효과 없는 약을 ‘효과 있다’고 판단"],
+ ["제1종 오류","type I error","귀무가설이 옳은데 기각하는 잘못(위양성)으로, 유효한 검정에서 H0가 참일 때의 발생 확률을 α 이하로 통제합니다.","효과 없는 약을 ‘효과 있다’고 판단"],
  ["제2종 오류","type II error","대립가설이 옳은데 귀무가설을 기각하지 않는 잘못(위음성)으로, 일어날 확률을 β로 나타냅니다.","효과 있는 약을 ‘유의하지 않다’고 판단"],
- ["검정력","power of test","차이가 있을 때 차이가 있다고 올바르게 판단할 확률 1 − β로, 보통 80%로 설정합니다.","d = 1, n = 10, α = 0.05이면 약 56%"],
- ["상충 관계","trade-off","한쪽이 작아지면 다른 쪽이 커지는 관계로, α와 β 사이에 있습니다.","α를 0.01로 줄이면 β가 커짐"],
+ ["검정력","power of test","특정 실제 효과에서 H0를 기각할 확률 1−β입니다. 효과·표본수·검정 설계에 따라 달라집니다.","d = 1, n = 10, α = 0.05이면 약 56%"],
+ ["상충 관계","trade-off","같은 검정·설계·n·실제 효과에서 기각 기준을 엄격하게 하면 일반적으로 α는 줄고 β는 늘어납니다.","α를 0.01로 줄이면 β가 커짐"],
  ["효과크기","effect size","얼마나 큰 효과가 있는지 나타내는 지표로, 평균 비교에서는 d = (μA − μB)/σ를 씁니다.","평균 차이 2, σ = 1이면 d = 2"]
 ];
 var REFS=[
@@ -764,21 +764,29 @@ on("m13-case",function(s){pairBars(s,10,G1,G0,"예 ① (p = 0.018)","*");pairBar
 on("m13-bars3",function(s){
   var Y=linE(110,170,226,40);bxE(s,6,6,408,258);tE(s,22,26,"신약군(예 ①) 7명, 같은 데이터 · 세 가지 오차 막대",{a:"start",fw:800,fs:11.5});
   [120,130,140,150,160].forEach(function(t){el("line",{x1:50,x2:400,y1:Y(t),y2:Y(t),stroke:C.grid},s);tE(s,44,Y(t)+4,t,{a:"end",fs:9.5,c:C.gray2,fw:500});});
-  var K=[["평균 ± SE",G1.se,"평균값의 확률"],["95% 신뢰구간",T6*G1.se,"신뢰구간"],["평균 ± SD",G1.sd,"데이터 퍼짐"]];
+  var K=[["평균 ± SE",G1.se,"평균의 추정 정밀도"],["95% 신뢰구간",T6*G1.se,"신뢰구간"],["평균 ± SD",G1.sd,"데이터 퍼짐"]];
   K.forEach(function(k,i){var cx=110+i*120;el("line",{x1:cx,x2:cx,y1:Y(G1.m+k[1]),y2:Y(G1.m-k[1]),stroke:i===2?C.gray:C.navy,"stroke-width":2.5},s);
     [G1.m+k[1],G1.m-k[1]].forEach(function(v){el("line",{x1:cx-8,x2:cx+8,y1:Y(v),y2:Y(v),stroke:i===2?C.gray:C.navy,"stroke-width":2},s);});
     el("circle",{cx:cx,cy:Y(G1.m),r:6,fill:C.amber},s);tE(s,cx,240,k[0],{fw:800});tE(s,cx,256,"± "+k[1].toFixed(2)+" · "+k[2],{fs:9.5,c:C.gray});});
 });
 
 on("m13-rule",function(s){
-  function panel(x0,title,gapSE,lab){bxE(s,x0,6,200,258);tE(s,x0+100,28,title,{fw:800,fs:12});
-    var Y=linE(0,8,226,50),se=1,ma=5.5,mb=ma-2*se-gapSE*se;
-    [[x0+64,ma],[x0+136,mb]].forEach(function(p){el("line",{x1:p[0],x2:p[0],y1:Y(p[1]+se),y2:Y(p[1]-se),stroke:C.amberInk,"stroke-width":2.5},s);
-      [p[1]+se,p[1]-se].forEach(function(v){el("line",{x1:p[0]-8,x2:p[0]+8,y1:Y(v),y2:Y(v),stroke:C.amberInk,"stroke-width":2},s);});el("circle",{cx:p[0],cy:Y(p[1]),r:6,fill:C.amber},s);});
-    el("line",{x1:x0+100,x2:x0+100,y1:Y(ma-se),y2:Y(mb+se),stroke:"#2B8CC4","stroke-width":2},s);
-    [ma-se,mb+se].forEach(function(v){el("line",{x1:x0+92,x2:x0+108,y1:Y(v),y2:Y(v),stroke:"#2B8CC4","stroke-width":2},s);});
-    tE(s,x0+104,(Y(ma-se)+Y(mb+se))/2+4,lab,{a:"start",fw:800,fs:10.5,c:"#2B8CC4"});tE(s,x0+100,250,"→ p ≈ 0.05",{fw:800,c:"#B42318"});}
-  panel(6,"n = 3일 때",2,"틈 = SE 2개");panel(214,"n ≥ 10일 때",1,"틈 = SE 1개");
+  bxE(s,6,6,200,258);bxE(s,214,6,200,258);
+  tE(s,106,28,"각 평균 95% 구간: 겹침",{fw:800,fs:11.5});
+  var Y=linE(7,16,218,52);
+  [[70,10,"A"],[144,13,"B"]].forEach(function(q){
+    el("line",{x1:q[0],x2:q[0],y1:Y(q[1]+1.96),y2:Y(q[1]-1.96),stroke:C.navy,"stroke-width":2.5},s);
+    [q[1]-1.96,q[1]+1.96].forEach(function(v){el("line",{x1:q[0]-8,x2:q[0]+8,y1:Y(v),y2:Y(v),stroke:C.navy,"stroke-width":2},s);});
+    el("circle",{cx:q[0],cy:Y(q[1]),r:5,fill:C.amber},s);tE(s,q[0],238,q[2]+" 평균 "+q[1],{fs:10.5,fw:800});
+  });
+  tE(s,106,256,"독립 정규 평균 · 알려진 SE=1씩",{fs:9.5,c:C.gray});
+  tE(s,314,28,"차이 B−A의 95% 구간",{fw:800,fs:11.5});
+  var Z=linE(-1,7,218,52),h=1.96*Math.sqrt(2);
+  el("line",{x1:234,x2:398,y1:Z(0),y2:Z(0),stroke:C.gray,"stroke-dasharray":"4 3"},s);tE(s,240,Z(0)-5,"0",{fs:10,c:C.gray});
+  el("line",{x1:314,x2:314,y1:Z(3-h),y2:Z(3+h),stroke:C.ok,"stroke-width":3},s);
+  [3-h,3+h].forEach(function(v){el("line",{x1:304,x2:324,y1:Z(v),y2:Z(v),stroke:C.ok,"stroke-width":2},s);});
+  el("circle",{cx:314,cy:Z(3),r:5,fill:C.amber},s);tE(s,314,238,"0.23~5.77: 0을 제외",{fw:800,fs:10.5,c:C.ok});
+  tE(s,314,256,"양측 z검정 p≈0.034",{fs:10,c:C.gray});
 });
 
 on("m13-stars",function(s){
@@ -792,15 +800,13 @@ on("m13-stars",function(s){
 });
 
 on("m13-grid",function(s){
-  var x0=110,y0=60,cw=150,ch=86;
-  el("rect",{x:x0,y:10,width:cw*2,height:24,rx:6,fill:"#FCF3D9"},s);tE(s,x0+cw,27,"진실 2패턴",{fw:800,c:C.amberInk});
-  tE(s,x0+cw/2,52,"귀무가설이 옳음",{fw:800,fs:11.5});tE(s,x0+cw*1.5,52,"대립가설이 옳음",{fw:800,fs:11.5});
-  el("rect",{x:6,y:y0,width:24,height:ch*2,rx:6,fill:"#FBE4F0"},s);tE(s,18,y0+ch,"판단",{fw:800,fs:11});
-  tE(s,70,y0+ch/2-4,"귀무가설",{fw:700,fs:10.5});tE(s,70,y0+ch/2+12,"기각 안 함",{fw:700,fs:10.5});
-  tE(s,70,y0+ch*1.5-4,"귀무가설 기각",{fw:700,fs:10.5});tE(s,70,y0+ch*1.5+12,"대립가설 채택",{fw:700,fs:10.5});
-  var cells=[[0,0,"올바른 판단","","#E3F1EA",C.ok],[1,0,"제2종 오류","확률 β (위음성)","#FBE4E1","#B42318"],[0,1,"제1종 오류","확률 α (위양성)","#FBE4E1","#B42318"],[1,1,"올바른 판단","확률 1 − β (검정력)","#E3F1EA",C.ok]];
-  cells.forEach(function(c){var x=x0+c[0]*cw,y=y0+c[1]*ch;el("rect",{x:x+2,y:y+2,width:cw-4,height:ch-4,rx:8,fill:c[4]},s);tE(s,x+cw/2,y+ch/2-2,c[2],{fw:800,fs:13,c:c[5]});if(c[3])tE(s,x+cw/2,y+ch/2+18,c[3],{fs:10.5,c:"#22262E"});});
-  tE(s,210,250,"현실에서는 진실을 알 수 없어, 확률로 다룹니다",{fs:10.5,c:C.gray});
+  var x0=110,y0=62,cw=150,ch=84;
+  tE(s,260,24,"판단: H0를 기각하는가?",{fw:800,fs:12});
+  tE(s,185,50,"기각 안 함",{fw:800,fs:12});tE(s,335,50,"기각",{fw:800,fs:12});
+  tE(s,58,102,"실제 H0 참",{fw:800,fs:11});tE(s,58,186,"실제 H0 거짓",{fw:800,fs:11});
+  var cells=[[0,0,"올바른 판단","확률 1−α*",true],[1,0,"제1종 오류","확률 α*",false],[0,1,"제2종 오류","특정 효과에서 β",false],[1,1,"올바른 판단","검정력 1−β",true]];
+  cells.forEach(function(c){var x=x0+c[0]*cw,y=y0+c[1]*ch;bxE(s,x+2,y+2,cw-4,ch-4,c[4]?"#E3F1EA":"#FBE4E1");tE(s,x+cw/2,y+36,c[2],{fw:800,fs:13,c:c[4]?C.ok:"#B42318"});tE(s,x+cw/2,y+58,c[3],{fs:10.5});});
+  tE(s,210,250,"* α를 정확히 달성하는 검정의 예 · 일반적으로 실제 오류율≤α",{fs:9.5,c:C.gray});
 });
 
 on("m13-twenty",function(s){
@@ -811,18 +817,18 @@ on("m13-twenty",function(s){
 
 on("m13-power",function(s){
   bxE(s,6,6,408,258);var X=linE(-4,7,20,400),Y=linE(0,.42,200,40),crit=1.96,mu1=2.5;
-  areaE(s,mu1,1,X,Y,-4,crit,"#F6C6D6",.9);areaE(s,mu1,1,X,Y,crit,7,"#BFD9B0",.9);areaE(s,0,1,X,Y,crit,4,"#B42318",.85);areaE(s,0,1,X,Y,-4,-crit,"#B42318",.85);
+  areaE(s,mu1,1,X,Y,-crit,crit,"#F6C6D6",.9);areaE(s,mu1,1,X,Y,-4,-crit,"#BFD9B0",.9);areaE(s,mu1,1,X,Y,crit,7,"#BFD9B0",.9);areaE(s,0,1,X,Y,crit,4,"#B42318",.85);areaE(s,0,1,X,Y,-4,-crit,"#B42318",.85);
   bellE(s,0,1,X,Y,-4,4,C.navy);bellE(s,mu1,1,X,Y,-1.5,7,"#2B8CC4");el("line",{x1:20,x2:400,y1:200,y2:200,stroke:C.gray2},s);
   el("line",{x1:X(crit),x2:X(crit),y1:30,y2:200,stroke:C.navy,"stroke-dasharray":"4 3"},s);tE(s,X(crit)+4,40,"기각역 경계",{a:"start",fs:10,fw:800});
   tE(s,X(0),30,"귀무가설이 옳을 때",{fw:800,fs:10.5});tE(s,X(mu1)+40,52,"대립가설이 옳을 때",{a:"start",fw:800,fs:10.5,c:"#2B8CC4",halo:true});
   tE(s,X(1.3),186,"β",{fw:800,fs:14,c:"#C2416E"});tE(s,X(3.2),150,"1 − β",{fw:800,fs:13,c:C.ok});tE(s,X(2.6),194,"α/2",{fw:800,fs:10,c:"#fff"});
-  tE(s,210,228,"β: 차이가 있는데 기각역에 못 들어감 · 1 − β: 올바르게 찾음",{fs:10.5,c:"#22262E"});tE(s,210,248,"모양 예시",{fs:9.5,c:C.gray});
+  tE(s,210,228,"β: 차이가 있는데 기각역에 못 들어감 · 1 − β: 올바르게 찾음",{fs:10.5,c:"#22262E"});tE(s,210,248,"정규 z 도식 · 수치 실습은 양측 t검정",{fs:9.5,c:C.gray});
 });
 
 function curveAB(s,X,Y,n,d,col,w){var A=BT.A,B=BT.B[n+"_"+d],p=[];for(var i=0;i<A.length;i++)p.push(X(A[i]).toFixed(1)+" "+Y(B[i]).toFixed(1));el("path",{d:"M"+p.join(" L"),fill:"none",stroke:col,"stroke-width":w||2},s);}
 function axesAB(s,X,Y,x0,x1,y0,y1){[0,.2,.4,.6,.8,1].forEach(function(t){el("line",{x1:x0,x2:x1,y1:Y(t),y2:Y(t),stroke:C.grid},s);tE(s,x0-5,Y(t)+4,t.toFixed(1),{a:"end",fs:9.5,c:C.gray2,fw:500});});
   [0,.1,.2,.3,.4,.5].forEach(function(t){tE(s,X(t),y0+14,t.toFixed(1),{fs:9.5,c:C.gray,fw:500});});
-  tE(s,(x0+x1)/2,y0+28,"제1종 오류 확률 α",{fs:10,c:C.gray});tE(s,x0-30,y1-8,"β",{a:"start",fs:11,fw:800,c:C.gray});
+  tE(s,(x0+x1)/2,y0+28,"제1종 오류 확률 α",{fs:10,c:C.gray});tE(s,x0-30,y1+8,"β",{a:"start",fs:11,fw:800,c:C.gray});
   el("line",{x1:X(.05),x2:X(.05),y1:y1,y2:y0,stroke:"#C2416E","stroke-dasharray":"4 3","stroke-width":1.5},s);tE(s,X(.05)+4,y1+10,"α = 0.05",{a:"start",fs:10,fw:800,c:"#C2416E"});}
 on("m13-tradeoff",function(s){
   bxE(s,6,6,408,258);var X=linE(0,.5,60,400),Y=linE(0,1,214,30);axesAB(s,X,Y,60,400,214,30);
@@ -838,8 +844,8 @@ on("m13-d",function(s){
 });
 
 on("m13-four",function(s){
-  bxE(s,6,6,150,258);tE(s,81,28,"넷 중 셋을 정하면",{fw:800,fs:11});
-  [["α","0.05"],["1 − β","0.8"],["d","미리 설정"],["n","자동으로 정해짐"]].forEach(function(r,i){var y=44+i*50;bxE(s,18,y,126,40,i===3?"#FCF3D9":"#F3F5F9",i===3?"#E0A100":null);tE(s,48,y+25,r[0],{fw:800,fs:14,c:i===3?C.amberInk:C.navy});tE(s,100,y+25,r[1],{fs:10,c:C.gray});});
+  bxE(s,6,6,150,258);tE(s,81,28,"검정·설계를 고정",{fw:800,fs:11});
+  [["α","0.05"],["1 − β","0.8"],["d","미리 설정"],["n","설계에 따라 계산"]].forEach(function(r,i){var y=44+i*50;bxE(s,18,y,126,40,i===3?"#FCF3D9":"#F3F5F9",i===3?"#E0A100":null);tE(s,48,y+25,r[0],{fw:800,fs:14,c:i===3?C.amberInk:C.navy});tE(s,100,y+25,r[1],{fs:10,c:C.gray});});
   bxE(s,164,6,250,258);var X=linE(0,.5,200,404),Y=linE(0,1,214,40);axesAB(s,X,Y,200,404,214,40);
   [[.5,C.navy,"d = 0.5"],[1,"#2B8CC4","d = 1"],[2,C.ok,"d = 2"]].forEach(function(c,i){curveAB(s,X,Y,10,c[0],c[1],2.2);var ly=64+i*18;el("line",{x1:330,x2:350,y1:ly,y2:ly,stroke:c[1],"stroke-width":3},s);tE(s,354,ly+4,c[2],{a:"start",fw:800,fs:10.5,c:c[1]});});
   tE(s,300,28,"n = 10일 때 효과크기별 α–β",{fw:800,fs:11});
@@ -857,11 +863,11 @@ on("m13-four",function(s){
     document.getElementById("m13-av").textContent=al.toFixed(3);document.getElementById("m13-ao").textContent=al.toFixed(3);
     document.getElementById("m13-b").textContent=b.toFixed(3);document.getElementById("m13-pw").textContent=(pw*100).toFixed(0)+"%";
     clear(svg);var X=linE(0,.5,50,456),Y=linE(0,1,150,14);axesAB(svg,X,Y,50,456,150,14);curveAB(svg,X,Y,n,d,"#2B8CC4",2.5);
-    el("circle",{cx:X(al),cy:Y(b),r:7,fill:C.amber,stroke:"#fff","stroke-width":2},svg);tE(svg,X(al)+10,Y(b)-8,"β = "+b.toFixed(2),{a:"start",fw:800,c:C.amberInk,halo:true});
+    el("circle",{cx:X(al),cy:Y(b),r:7,fill:C.amber,stroke:"#fff","stroke-width":2},svg);tE(svg,X(al)+(al>.35?-10:10),Math.max(12,Y(b)-8),"β = "+b.toFixed(2),{a:al>.35?"end":"start",fw:800,c:C.amberInk,halo:true});
     var m=document.getElementById("m13-msg"),ok=Math.abs(al-.05)<1e-9&&pw>=.8;
     m.className="pmsg"+(ok?" ok":"");
     m.textContent=ok?"찾았습니다. α = 0.05에서 n = "+n+", d = "+d+"이면 검정력 "+(pw*100).toFixed(0)+"%로 80% 이상입니다.":
-      "α = "+al.toFixed(3)+", n = "+n+", d = "+d+"이면 β = "+b.toFixed(3)+", 검정력 "+(pw*100).toFixed(0)+"%입니다. α를 줄이면 β가 늘고, n이나 d를 키우면 β가 줄어듭니다.";
+      "α = "+al.toFixed(3)+", n = "+n+", d = "+d+"이면 β = "+b.toFixed(3)+", 검정력 "+(pw*100).toFixed(0)+"%입니다. 다른 조건을 고정해 각각 비교하세요.";
   }
   a.addEventListener("input",upd);upd();
 })();
@@ -885,7 +891,7 @@ on("m13-four",function(s){
   g.addEventListener("input",function(){txt();draw();});
   document.getElementById("m13-check").onclick=function(){checked=true;var nn=NEED[d],gv=+g.value,pw=PC[d][gv-2],m=document.getElementById("m13-msg3");
     document.getElementById("m13-act").textContent=nn+"명";m.className="pmsg "+(Math.abs(gv-nn)<=Math.max(2,nn*.2)?"ok":"ng");
-    m.textContent="d = "+d+"이면 한 집단에 "+nn+"명이 필요합니다. 내 예측 "+gv+"명의 검정력은 "+(pw*100).toFixed(0)+"%입니다. 효과가 작을수록 많은 표본이 필요합니다.";draw();};
+    m.textContent="필요 n="+nn+"명/집단 · 예측한 n의 검정력 "+(pw*100).toFixed(0)+"%";draw();};
   txt();reset();
 })();
 

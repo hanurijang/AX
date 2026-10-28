@@ -223,7 +223,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
       <div class="body split">
         <div class="fig"><svg id="m16-ov" viewBox="0 0 440 260" role="img" aria-label="범주형 데이터에서 범주 2개는 이항검정, 여러 범주는 적합도검정, 변수 2개의 관계는 독립성검정"></svg></div>
         <div class="side">
-          <div class="prevlink"><small>지난 모듈에서는</small>세 집단 이상의 평균값을 분산분석과 다중비교 검정으로 비교했습니다.<small style="margin-top:8px">이번 모듈에서는</small>앞면·뒷면이나 주사위 눈처럼 개수만 셀 수 있는 범주형 데이터에서, 비율에 관한 가설을 검정하는 방법을 배웁니다.</div>
+          <div class="prevlink"><small>지난 모듈에서는</small>세 집단 이상의 평균값을 분산분석과 다중비교 검정으로 비교했습니다.<small style="margin-top:8px">이번 모듈에서는</small>앞면·뒷면이나 주사위 눈처럼 범주별 개수와 전체 수를 기록하는 데이터에서, 비율에 관한 가설을 검정하는 방법을 배웁니다.</div>
           <dl class="meta"><dt>학습 시간</dt><dd>약 35분</dd><dt>본문</dt><dd>소단원 4개</dd><dt>실습</dt><dd>조작형 · 분류형 · 추정형</dd></dl>
         </div>
       </div>
@@ -235,7 +235,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
         <div class="fig"><svg id="m16-case" viewBox="0 0 440 250" role="img" aria-label="동전 30번 앞면 21번, 주사위 60번 눈별 횟수, 나무 종류별 사슴벌레 암수 분할표"></svg></div>
         <div class="side">
           <ul class="key"><li>세 가지 개수 데이터를 끝까지 씁니다.</li></ul>
-          <p class="exp">동전을 30번 던진 결과(앞면 21번), 주사위를 60번 던진 결과, 그리고 굴밤나무와 상수리나무에서 관찰한 사슴벌레의 암수 개체 수입니다. 셋 모두 평균을 구할 수 없고 각 범주의 개수만 셀 수 있는 데이터이며, 범주 수와 변수 수에 따라 알맞은 검정이 달라집니다.</p>
+          <p class="exp">동전을 30번 던진 결과(앞면 21번), 주사위를 60번 던진 결과, 그리고 굴밤나무와 상수리나무에서 관찰한 사슴벌레의 암수 개체 수입니다. 이 모듈에서는 세 예시를 범주별 도수로 분석합니다. 범주 수뿐 아니라 독립성·기대도수·비교 목적에 따라 검정 방법을 정합니다.</p>
         </div>
       </div>
     </section>
@@ -248,7 +248,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
           <div></div><div class="hd">목표</div><div class="hd">확인하는 문항</div><div class="hd">연결 실습</div>
           <div class="gn">1</div><div class="gt"><span>범주가 2개인 데이터에 이항검정을 적용하고 결과를 <b>해석한다</b>.</span></div>
           <div class="ga"><button class="jump" data-jump="q1">문항 1·2</button></div><div class="gp"><button class="jump" data-jump="p1">실습 1 조작</button></div>
-          <div class="gn">2</div><div class="gt"><span>기대도수로 χ²값을 구해 적합도를 <b>계산한다</b>.</span></div>
+          <div class="gn">2</div><div class="gt"><span>비율·%p·기대도수·χ²값을 <b>계산한다</b>.</span></div>
           <div class="ga"><button class="jump" data-jump="q3">문항 3·4</button></div><div class="gp"><button class="jump" data-jump="p2">실습 2 분류</button></div>
           <div class="gn">3</div><div class="gt"><span>분할표의 기대도수로 두 변수의 독립성을 <b>판단한다</b>.</span></div>
           <div class="ga"><button class="jump" data-jump="q5">문항 5·6</button></div><div class="gp"><button class="jump" data-jump="p3">실습 3 추정</button></div>
@@ -266,10 +266,10 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
           <text x="100" y="135" text-anchor="middle" font-size="14" font-weight="800" fill="#1B2A4A">투표함</text>
           <g font-size="13" font-weight="800"><text x="220" y="100" fill="#23704F">찬성 ✓✓✓✓✓✓✓</text><text x="220" y="140" fill="#B42318">반대 ✓✓✓</text></g>
           <g font-size="14" font-weight="800" fill="#1B2A4A"><text x="400" y="100" text-anchor="end">7표</text><text x="400" y="140" text-anchor="end">3표</text></g>
-          <text x="220" y="220" text-anchor="middle" font-size="11.5" fill="#6B7280">‘찬성의 평균’은 없고, 범주별 개수만 셈</text>
+          <text x="220" y="220" text-anchor="middle" font-size="11.5" fill="#6B7280">찬성=1·반대=0의 평균은 찬성 비율</text>
         </svg></div>
         <div class="side">
-          <ul class="key"><li>범주별 개수만 세는 데이터가 있습니다.</li></ul>
+          <ul class="key"><li>범주별 개수·비율 세는 데이터가 있습니다.</li></ul>
           <p class="exp">투표를 하면 찬성과 반대가 각각 몇 표인지 세어 결과를 냅니다. 키나 혈압처럼 평균을 낼 수 있는 값이 아니라, 각 범주에 몇 개가 들어갔는지만 셀 수 있습니다. 이런 데이터에서는 ‘찬성 비율’ 같은 확률이 관심의 대상이 됩니다.</p>
           <p class="next"><span>본문에서</span>4-1 범주형 데이터로 이어집니다.</p>
         </div>
@@ -356,13 +356,24 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
 
     <!-- ④ 본문 ─────────────────────────────── -->
     <section class="slide" data-step="3" id="s-4-1a">
-      <div class="sh"><div class="sec">4-1 범주형 데이터</div><h2><span class="q">Q</span>개수만 셀 수 있는 데이터에서는 무엇을 추정할까요?</h2></div>
+      <div class="sh"><div class="sec">4-1 범주형 데이터</div><h2><span class="q">Q</span>범주별 개수로 어떤 확률을 추정할까요?</h2></div>
       <div class="body split even">
         <div class="fig"><svg id="m16-cat" viewBox="0 0 420 270" role="img" aria-label="양적 데이터는 평균, 범주형 데이터는 각 범주가 나올 확률 P가 모수"></svg></div>
         <div class="side">
-          <ul class="key"><li><b>범주형 데이터</b>: 범주별 개수만 셀 수 있음</li><li>모수는 각 범주가 나올 확률 P입니다.</li></ul>
-          <p class="exp">동전의 앞면과 뒷면, 주사위의 눈, 좋아하는 음식처럼 범주로 나타내는 데이터를 범주형 데이터라 합니다. 동전을 5번 던져 (앞, 뒤, 앞, 앞, 뒤)를 얻었다면 앞면 3번, 뒷면 2번으로 정리할 뿐 평균은 계산할 수 없습니다. 이 모집단의 모수는 앞면이 나올 확률 P(뒷면은 1 − P)이며, P를 추정하거나 P에 관한 가설을 검정합니다.</p>
+          <ul class="key"><li><b>범주형 데이터</b>: 개수와 전체 수를 함께 기록합니다.</li><li>모수는 각 범주가 나올 확률 P입니다.</li></ul>
+          <p class="exp">범주 결과는 범주별 개수와 전체 수를 함께 기록합니다. 앞면 3·뒷면 2라면 전체 5번 중 앞면 비율은 3/5입니다. 범주 이름 자체의 평균은 뜻이 없지만, 앞면=1·뒷면=0인 지시변수의 평균은 앞면 비율이 됩니다. 주사위 눈도 목적에 따라 수량 값 또는 범주로 다룹니다. 이 모듈에서는 범주 확률 P와 관측 비율을 구별합니다.</p>
           <p class="next"><span>다음 질문</span>동전이 치우쳤는지 어떻게 검정할까?</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" data-step="3" id="s-4-1b">
+      <div class="sh"><div class="sec">4-1 범주형 데이터 · 보충</div><h2><span class="q">Q</span>개수·비율·백분율·%p는 어떻게 다를까요?</h2></div>
+      <div class="body split even">
+        <div class="fig"><svg viewBox="0 0 420 270" role="img" aria-label="별도 가상 예: A 70/100, B 90/150: A는 70%, B는 60%: 전체 수가 다릅니다.; A−B의 비율 차이: 0.70−0.60 = 0.10: 백분율 차이는 10%p; B를 기준으로 한 상대 증가: (0.70−0.60)/0.60: 약 16.7% 증가: 10%p와 다른 값"><rect x="8" y="8" width="404" height="76" rx="10" fill="#EEF4FB"/><text x="210" y="37" text-anchor="middle" fill="#1B2A4A" font-size="13" font-weight="800">별도 가상 예: A 70/100, B 90/150</text><text x="210" y="63" text-anchor="middle" fill="#6B7280" font-size="11">A는 70%, B는 60%: 전체 수가 다릅니다.</text><rect x="8" y="94" width="404" height="76" rx="10" fill="#FCF3D9"/><text x="210" y="123" text-anchor="middle" fill="#1B2A4A" font-size="13" font-weight="800">A−B의 비율 차이: 0.70−0.60 = 0.10</text><text x="210" y="149" text-anchor="middle" fill="#6B7280" font-size="11">백분율 차이는 10%p</text><rect x="8" y="180" width="404" height="76" rx="10" fill="#E3F1EA"/><text x="210" y="209" text-anchor="middle" fill="#1B2A4A" font-size="13" font-weight="800">B를 기준으로 한 상대 증가: (0.70−0.60)/0.60</text><text x="210" y="235" text-anchor="middle" fill="#6B7280" font-size="11">약 16.7% 증가: 10%p와 다른 값</text></svg></div>
+        <div class="side"><ul class="key"><li>성공 수와 전체 수를 함께 적습니다.</li><li>0/1 자료의 평균은 관측 비율입니다.</li></ul>
+          <p class="exp">A의 성공 건수 70은 B의 90보다 작지만 성공 비율은 더 큽니다. 건수만으로 성과를 비교하지 않습니다. 두 비율의 차이를 %p로 쓸지, 한쪽을 기준으로 상대 변화를 %로 쓸지 명시합니다. 차이의 불확실성에는 전체 표본수와 표본추출 방식도 영향을 줍니다.</p>
+          <p class="next"><span>다음 질문</span>관측 비율이 가정한 모확률과 다른지 어떻게 판단할까?</p>
         </div>
       </div>
     </section>
@@ -373,7 +384,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
         <div class="fig"><svg id="m16-coin" viewBox="0 0 420 270" role="img" aria-label="앞면 21번, 뒷면 9번. 귀무가설 앞면 확률 1/2, 대립가설 1/2이 아님"></svg></div>
         <div class="side">
           <ul class="key"><li><b>이항검정</b>: 한 범주가 확률 P인지 조사</li><li>귀무가설: 앞면·뒷면이 1/2씩 나온다</li></ul>
-          <p class="exp">앞면 21번, 뒷면 9번은 앞쪽으로 치우친 동전처럼 보이지만, 치우치지 않은 동전이라도 이런 결과가 우연히 나올 수 있습니다. 하나의 범주가 확률 P, 또 하나가 1 − P로 나타나는지를 조사하는 방법이 이항검정입니다. ‘데이터 vs. 모집단’ 가설이라는 점에서 일표본 t검정과 닮았으며, 여기서는 P = 1/2을 귀무가설로 둡니다.</p>
+          <p class="exp">고정한 N번을 서로 독립으로 시행하고 매번 같은 앞면 확률 P를 갖는다고 가정합니다. 그러면 앞면 횟수는 이항분포를 따릅니다. 이항검정은 관측 횟수가 H0:P=1/2와 얼마나 맞지 않는지 조사합니다. 앞면 21/30=70%는 관측 비율이며, 모확률이 정확히 0.7이라는 증명은 아닙니다.</p>
           <p class="next"><span>다음 질문</span>p값은 어떻게 구할까?</p>
         </div>
       </div>
@@ -392,8 +403,8 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
           </div>
         </div>
         <div class="side">
-          <ul class="key"><li>귀무가설에서 앞면 수는 <b>이항분포</b>를 따릅니다.</li><li>p = 0.043 &lt; 0.05 → 치우친 동전</li></ul>
-          <p class="exp">앞면 확률 P인 동전을 N번 던질 때 m번 앞면이 나올 확률은 이항분포를 따릅니다. 앞면 21번이 나올 확률을 구하고, 마찬가지로 22번, 23번, …, 30번과 반대쪽 9번, 8번, …, 0번처럼 더 극단적인 패턴의 확률도 모두 더한 값이 p값입니다. p = 0.043으로 유의수준 0.05에서 유의하므로, 가설검정의 관점에서는 편향된 동전이라고 말할 수 있습니다.</p>
+          <ul class="key"><li>귀무가설에서 앞면 수는 <b>이항분포</b>를 따릅니다.</li><li>p≈0.043 &lt; 0.05 → H0:P=1/2 기각</li></ul>
+          <p class="exp">H0:P=1/2에서는 분포가 대칭입니다. 여기서는 관측 횟수의 확률질량 이하인 결과들을 합하는 양측 정확 p값을 씁니다. 21~30번과 반대쪽 0~9번을 합하면 p≈0.043입니다. α=0.05에서 H0를 기각하지만, 동전의 치우침을 확정하거나 앞면 21번이 불가능하다고 뜻하지는 않습니다. 이항검정의 실제 오류율은 이산성 때문에 α보다 작을 수 있습니다.</p>
           <p class="next"><span>다음 질문</span>범주가 6개인 주사위라면?</p>
         </div>
       </div>
@@ -405,7 +416,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
         <div class="fig"><svg id="m16-dice" viewBox="0 0 420 270" role="img" aria-label="주사위 60번 던진 눈별 관측도수 5, 8, 10, 20, 7, 10과 기대도수 10"></svg></div>
         <div class="side">
           <ul class="key"><li><b>카이제곱검정</b>의 하나인 <b>적합도검정</b></li><li>관측도수가 정한 분포를 따르는지 조사</li></ul>
-          <p class="exp">이항검정은 범주가 2개일 때만 쓸 수 있습니다. 6개의 눈이 있는 주사위처럼 더 일반적인 이산확률분포에 같은 방식을 적용하려면 카이제곱검정(χ²검정)의 일종인 적합도검정을 이용합니다. 귀무가설은 ‘모집단은 상정한 이산확률분포이다’입니다. 어떤 주사위를 60번 던져 1부터 6까지의 눈이 5, 8, 10, 20, 7, 10번 나왔다면, 각 눈이 1/6씩인 정상 주사위에서 얻은 것인지 따져 봅니다.</p>
+          <p class="exp">6개 눈의 전체 확률이 각각 1/6인지 알아보려면 범주별 도수를 한꺼번에 비교하는 적합도검정을 씁니다. 주사위 60번의 관측도수는 5·8·10·20·7·10이며 H0의 기대도수는 각 10입니다. 특정 눈 대 나머지로 미리 이분화하면 이항검정을 할 수 있지만, 그것만으로 여섯 확률 전체를 검정한 것은 아닙니다.</p>
           <p class="next"><span>다음 질문</span>‘벗어난 정도’는 어떻게 하나의 값으로 만들까?</p>
         </div>
       </div>
@@ -425,7 +436,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
         </div>
         <div class="side">
           <ul class="key"><li><b>기대도수</b>: 귀무가설에서 기대되는 개수</li><li>χ²값이 크면 귀무가설과 멀리 떨어진 것</li></ul>
-          <p class="exp">먼저 귀무가설의 확률분포에서 얻을 수 있는 기대도수를 구합니다. 전체 60번 × 1/6이므로 각 눈의 기대도수는 10입니다. 각 눈의 (관측도수 − 기대도수)²/기대도수를 더한 χ²값은 귀무가설이 옳다면 χ²분포를 따르며, 13.8은 p = 0.017에 해당해 올바른 주사위가 아니라고 판단합니다. 균등분포가 아니라 혈액형 A:B:O:AB = 34:27:28:11처럼 임의의 확률분포도 쓸 수 있습니다.</p>
+          <p class="exp">독립 관측의 도수를 사용하며, 충분한 기대도수에서 Pearson χ² 통계량의 귀무분포를 χ²분포로 근사합니다. 여기서는 확률을 사전에 정한 6범주이므로 자유도는 6−1=5, χ²=13.8의 근사 p≈0.017입니다. 같은 자료로 모수를 추정하면 자유도 조정이 필요합니다. 혈액형처럼 균등하지 않은 사전 확률도 비교할 수 있습니다.</p>
           <p class="next"><span>다음 질문</span>범주형 변수 2개의 관계는 어떻게 볼까?</p>
         </div>
       </div>
@@ -437,7 +448,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
         <div class="fig"><svg id="m16-indep" viewBox="0 0 420 270" role="img" aria-label="굴밤나무 수컷 14 암컷 9, 상수리나무 수컷 6 암컷 17 분할표와 독립의 뜻"></svg></div>
         <div class="side">
           <ul class="key"><li><b>독립성검정</b>: 두 범주형 변수가 독립인가</li><li>귀무가설: 2개의 변수는 독립이다</li></ul>
-          <p class="exp">이항검정과 적합도검정은 ‘데이터 vs. 모집단’의 확률분포를 비교했습니다. 범주형 변수에서도 2개 변수의 관계를 조사할 때가 있습니다. 굴밤나무와 상수리나무에서 사슴벌레를 관찰해 개체 수를 암수별로 분할표에 정리했을 때, 한쪽 변수의 범주가 바뀌어도 다른 쪽 변수의 범주 비율이 달라지지 않으면 2개 변수는 독립이라고 말합니다. 이를 조사하는 것이 카이제곱검정의 독립성검정입니다.</p>
+          <p class="exp">두 범주형 변수는 관측값을 분할표의 개수로 정리합니다. 모집단에서 한 변수의 범주를 알아도 다른 변수의 확률이 달라지지 않는 것이 독립입니다. 나무별 표본 암수 비율이 달라 보이는 것만으로 모집단의 의존성이 확정되지는 않습니다. 독립성검정은 독립 관측과 표본추출 조건 아래 이런 차이를 평가합니다. 같은 개체의 반복·대응 자료는 별도 방법이 필요합니다.</p>
           <p class="next"><span>다음 질문</span>독립이라면 몇 마리씩 기대될까?</p>
         </div>
       </div>
@@ -461,8 +472,19 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
         <div class="fig"><svg id="m16-res" viewBox="0 0 420 270" role="img" aria-label="보정 없는 χ² 5.66 p 0.017, 연속성 보정 χ² 4.33 p 0.037, 피셔의 정확검정 p 0.036"></svg></div>
         <div class="side">
           <ul class="key"><li>2 × 2 표에서는 <b>연속성 보정</b>을 하기도 합니다.</li><li><b>피셔의 정확검정</b>으로도 확인합니다.</li></ul>
-          <p class="exp">식을 그대로 쓰면 χ² = 5.66(p = 0.017)이고, 2 × 2 분할표에서 |관측도수 − 기대도수|에서 0.5를 빼는 예이츠의 연속성 보정을 하면 χ² = 4.33(p = 0.037)입니다. 통계 프로그램 R은 2 × 2 표에서 이 보정을 기본으로 적용합니다<span class="cite">[1]</span>. 초기하분포로 모든 경우의 확률을 계산하는 피셔의 정확검정도 p = 0.036이어서, 사슴벌레 암수 비율이 나무 종류에 따라 다르다고 결론 내립니다.</p>
+          <p class="exp">이 표에서는 보정 없는 Pearson χ²≈5.66(p≈0.017), 예이츠 보정 χ²≈4.33(p≈0.037), 양측 Fisher 정확검정 p≈0.036입니다. 방법에 따라 수치가 다르므로 사용한 방법을 명시합니다. Fisher 검정은 행·열 합을 조건으로 초기하분포를 사용합니다. 작은 기대도수에서는 근사 검정의 타당성을 먼저 검토하며, 유의한 방법만 골라 보고하지 않습니다.</p>
           <p class="next"><span>정리</span>세 가지 검정을 나란히 놓아 봅시다.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" data-step="3" id="s-4-4d">
+      <div class="sh"><div class="sec">4-4 검정 조건 · 보충</div><h2><span class="q">Q</span>기대도수가 작으면 어떻게 할까요?</h2></div>
+      <div class="body split even">
+        <div class="fig"><svg viewBox="0 0 420 270" role="img" aria-label="별도 2×2 표: [4,6], [0,10] · 전체 20건: 독립성 아래 기대도수: [2,8], [2,8]; Pearson χ² = 5, 근사 양측 p≈0.025: 작은 기대도수 때문에 근사가 부정확할 수 있음; 주변합을 조건으로 한 양측 Fisher p≈0.087: 방법을 사전에 정하고, 도수·비율·방법을 함께 보고"><rect x="8" y="8" width="404" height="76" rx="10" fill="#EEF4FB"/><text x="210" y="37" text-anchor="middle" fill="#1B2A4A" font-size="13" font-weight="800">별도 2×2 표: [4,6], [0,10] · 전체 20건</text><text x="210" y="63" text-anchor="middle" fill="#6B7280" font-size="11">독립성 아래 기대도수: [2,8], [2,8]</text><rect x="8" y="94" width="404" height="76" rx="10" fill="#FCF3D9"/><text x="210" y="123" text-anchor="middle" fill="#1B2A4A" font-size="13" font-weight="800">Pearson χ² = 5, 근사 양측 p≈0.025</text><text x="210" y="149" text-anchor="middle" fill="#6B7280" font-size="11">작은 기대도수 때문에 근사가 부정확할 수 있음</text><rect x="8" y="180" width="404" height="76" rx="10" fill="#E3F1EA"/><text x="210" y="209" text-anchor="middle" fill="#1B2A4A" font-size="13" font-weight="800">주변합을 조건으로 한 양측 Fisher p≈0.087</text><text x="210" y="235" text-anchor="middle" fill="#6B7280" font-size="11">방법을 사전에 정하고, 도수·비율·방법을 함께 보고</text></svg></div>
+        <div class="side"><ul class="key"><li>관측도수와 기대도수를 구분합니다.</li><li>작은 기대도수에서는 정확법·모의검정을 검토합니다.</li></ul>
+          <p class="exp">흔히 기대도수 5를 점검 기준으로 쓰지만 모든 표에 적용되는 절대 법칙은 아닙니다. 표 크기와 희소성을 함께 봅니다. 2×2에서는 Fisher 정확검정이 한 대안이고, 더 큰 표는 해당 정확법이나 모의검정을 검토합니다. 관측값 0만 보고 자동으로 방법을 고르거나, 작은 p값을 골라 보고하지 않습니다.</p>
+          <p class="next"><span>다음 질문</span>세 검정의 대상과 전제 조건을 정리해 볼까?</p>
         </div>
       </div>
     </section>
@@ -476,7 +498,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
             <tr><td>이항검정</td><td>범주 2개. ‘한 범주의 확률은 P이다’</td><td>동전 30번 앞면 21번 → p = 0.043</td></tr>
             <tr><td>χ² 적합도검정</td><td>범주 여러 개. ‘모집단은 상정한 이산확률분포이다’</td><td>주사위 60번 → χ² = 13.8, p = 0.017</td></tr>
             <tr><td>χ² 독립성검정</td><td>범주형 변수 2개. ‘2개의 변수는 독립이다’</td><td>사슴벌레 → χ² = 4.33(보정), p = 0.037</td></tr>
-            <tr><td>피셔의 정확검정</td><td>독립성을 초기하분포로 정확히 계산</td><td>사슴벌레 → p = 0.036</td></tr>
+            <tr><td>피셔의 정확검정</td><td>2×2 표에서 주변합을 조건으로 정확 p값 계산</td><td>사슴벌레 → p = 0.036</td></tr>
           </tbody>
         </table>
       </div>
@@ -492,13 +514,13 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
         <div class="pcol" style="gap:8px">
           <div class="plabel" style="margin:0">해보기 · 귀무가설 P = 1/2인 동전에서 결과를 바꿔 보세요</div>
           <div class="mbtns" id="m16-n" style="gap:5px"></div>
-          <div class="ctrl">앞면 비율<input type="range" id="m16-r" min="0" max="100" step="5" value="70" aria-label="앞면 비율"><strong id="m16-rv" style="min-width:86px;text-align:right">-</strong></div>
+          <div class="ctrl">비율 설정<input type="range" id="m16-r" min="0" max="100" step="5" value="70" aria-label="앞면 비율 설정, 횟수는 정수로 반올림"><strong id="m16-rv" style="min-width:86px;text-align:right">-</strong></div>
           <div class="fig" style="flex:1"><svg id="m16-p1-svg" viewBox="0 0 470 190" role="img" aria-label="앞면 횟수의 이항분포와 양쪽 꼬리"></svg></div>
         </div>
         <div class="pcol" style="gap:10px;justify-content:center">
           <div class="plabel" style="margin:0">결과 확인</div>
           <div class="stats"><div><small>관측 결과</small><strong id="m16-obs">-</strong></div><div><small>양측 p값</small><strong id="m16-pv">-</strong></div></div>
-          <p class="howto">도전: 앞면 비율 70%를 그대로 두고, 던진 횟수만 바꾸면 결론이 어떻게 달라지는지 확인하세요.</p>
+          <p class="howto">도전: 70%로 설정하고 횟수를 바꿔 보세요. 횟수는 반올림하며 표시 비율은 실제 앞면 수÷전체 수입니다.</p>
           <p class="pmsg" id="m16-msg"></p>
           <div class="think" style="flex-wrap:wrap"><span>생각해보기</span>같은 70%라도 결론이 달라지는 이유는 무엇인가요?<details style="flex-basis:100%;font-weight:600"><summary style="cursor:pointer">예시 답</summary>표본이 작으면 같은 70%도 우연으로 크게 흔들려 결론이 달라집니다.</details></div>
         </div>
@@ -575,21 +597,21 @@ var QUIZ=[
  {goal:1,type:"상황 판단",stem:"동전을 30번 던져 앞면 21번, 뒷면 9번이 나왔고, 이항검정 결과 p = 0.043이었습니다. 유의수준 0.05에서 가장 알맞은 판단은 무엇일까요?",
   opts:["앞면과 뒷면이 1/2씩 나온다는 귀무가설을 기각하고, 치우친 동전이라고 판단한다","앞면이 나올 확률이 정확히 0.7이라고 증명되었다","p값이 0.05에 가까우므로 결론을 낼 수 없다","21번은 우연히 나올 수 없는 값이다"],ans:0,
   exp:"p = 0.043 < 0.05이므로 귀무가설 ‘앞면과 뒷면이 각각 1/2 확률로 나온다’를 기각하고, 가설검정의 관점에서 치우친 동전이라고 말할 수 있습니다. 다만 앞면 확률이 정확히 얼마인지를 증명한 것은 아니며, 치우치지 않은 동전에서도 21번 이상은 드물게 나올 수 있습니다.",back:"s-4-2b",backLabel:"4-2 이항검정의 p값 다시 보기"},
- {goal:1,type:"O/X 오개념",stem:"“이항검정은 주사위처럼 범주가 6개인 데이터에도 그대로 쓸 수 있다.”",
+ {goal:1,type:"O/X 오개념",stem:"“주사위 여섯 눈의 확률이 모두 1/6인지, 한 번의 이항검정으로 확인할 수 있다.”",
   opts:["O","X"],ans:1,ox:true,
-  exp:"이항검정은 앞면·뒷면처럼 범주가 2개일 때만 이용할 수 있습니다. 범주가 3개 이상이면 이항검정의 방식을 일반화한 카이제곱검정의 적합도검정을 씁니다.",back:"s-4-3a",backLabel:"4-3 적합도검정 다시 보기"},
+  exp:"여섯 확률 전체는 적합도검정 등으로 비교합니다. 특정 눈 대 나머지로 미리 묶으면 그 사건의 이항검정은 가능하지만, 나머지 눈 사이의 차이까지 검정하지는 않습니다.",back:"s-4-3a",backLabel:"4-3 적합도검정 다시 보기"},
  {goal:2,type:"계산",stem:"동전을 100번 던져 앞면 60번, 뒷면 40번이 나왔습니다. 귀무가설 ‘앞면 확률 1/2’에서 χ²값은 얼마일까요?",
   opts:["4","0.4","20","2"],ans:0,
   exp:"기대도수는 100 × 1/2 = 50씩입니다. χ² = (60 − 50)²/50 + (40 − 50)²/50 = 2 + 2 = 4입니다. 20은 제곱한 뒤 기대도수로 나누지 않고 (60 − 50)과 (40 − 50)의 절댓값을 더한 값입니다.",back:"s-4-3b",backLabel:"4-3 χ²값 계산 다시 보기"},
- {goal:2,type:"상황 판단",stem:"어떤 지역 주민 200명의 혈액형 개수가 A:B:O:AB = 34:27:28:11이라는 비율을 따르는지 확인하려 합니다. 알맞은 방법은 무엇일까요?",
-  opts:["각 확률을 0.34, 0.27, 0.28, 0.11로 둔 카이제곱 적합도검정","이항검정","카이제곱 독립성검정","이표본 t검정"],ans:0,
-  exp:"관측한 개수가 특정 이산확률분포에서 얻은 것인지 조사하는 것이 적합도검정입니다. 균등분포뿐 아니라 각 혈액형 확률을 0.34, 0.27, 0.28, 0.11로 둔 임의의 확률분포도 귀무가설로 쓸 수 있습니다. 범주가 4개이므로 이항검정은 쓸 수 없습니다.",back:"s-4-3b",backLabel:"4-3 적합도검정 다시 보기"},
+ {goal:2,type:"계산",stem:"A는 100건 중 70건, B는 150건 중 90건 성공했습니다. A의 성공 비율에서 B의 성공 비율을 뺀 값은 얼마일까요?",
+  opts:["10%p","−20%p","약 16.7%p","20%p"],ans:0,
+  exp:"A=70/100=70%, B=90/150=60%이므로 차이는 10%p입니다. B 기준 상대 증가는 약 16.7%이며 %p와 다릅니다. 건수 70과 90만 비교하면 분모 차이를 놓칩니다.",back:"s-4-1b",backLabel:"4-1 비율과 %p 다시 보기"},
  {goal:3,type:"계산",stem:"라인 A 60개, 라인 B 40개를 검사해 전체 100개 중 불량이 20개였습니다. 라인과 불량이 독립이라면, 라인 A의 불량 기대도수는 얼마일까요?",
   opts:["12","10","20","30"],ans:0,
   exp:"기대도수는 행의 합과 열의 합으로 구합니다. 전체 불량 20개를 라인 A와 B의 크기 60 : 40으로 배분하면 라인 A는 20 × 60/100 = 12입니다. 10은 두 라인에 똑같이 나눈 값입니다.",back:"s-4-4b",backLabel:"4-4 기대도수 다시 보기"},
  {goal:3,type:"O/X 오개념",stem:"“독립성검정에서 p ≥ 0.05가 나오면, 두 범주형 변수가 독립이라는 것이 증명된다.”",
   opts:["O","X"],ans:1,ox:true,
-  exp:"독립성검정의 귀무가설은 ‘2개의 변수는 독립이다’입니다. p ≥ 0.05는 귀무가설을 기각할 수 없다는 뜻일 뿐, 독립이라는 증거가 되지 않습니다. 이는 지금까지 배운 모든 가설검정에 공통입니다.",back:"s-4-4a",backLabel:"4-4 독립성검정의 가설 다시 보기"}
+  exp:"독립성검정의 귀무가설은 ‘2개의 변수는 독립이다’입니다. p ≥ 0.05만으로 독립이 증명되지는 않습니다. 표본수·효과·검정 조건에 따라 차이를 검출하지 못했을 수도 있습니다. 이는 지금까지 배운 모든 가설검정에 공통입니다.",back:"s-4-4a",backLabel:"4-4 독립성검정의 가설 다시 보기"}
 ];
 
 var BINS=["이항검정","적합도검정","독립성검정"];
@@ -599,15 +621,15 @@ var CARDS=[["동전 30번 중 앞면 21번, 치우쳤나","이항검정"],["A·B
 var HINT={"이항검정":"범주가 2개이고, 한쪽 확률이 P인지 확인합니다.","적합도검정":"범주가 여러 개인 한 변수가 정해 둔 확률분포를 따르는지 확인합니다.","독립성검정":"범주형 변수 2개 사이에 관계가 있는지 분할표로 확인합니다."};
 
 var GLOSSARY=[
- ["범주형 데이터","categorical data","앞면·뒷면, 주사위 눈처럼 범주로 나타내며 각 범주에 포함된 개수만 셀 수 있는 데이터입니다.","동전 5번: 앞면 3번, 뒷면 2번"],
+ ["범주형 데이터","categorical data","결과의 종류를 범주별 개수·비율로 요약하는 데이터입니다. 0/1 지시변수의 평균은 비율입니다.","동전 5번: 앞면 3번, 뒷면 2번"],
  ["이항검정","binomial test","범주가 2개일 때, 한 범주가 확률 P로 나타나는지 이항분포로 조사하는 가설검정입니다.","동전 30번 중 앞면 21번 → p = 0.043"],
- ["이항분포","binomial distribution","확률 P인 일을 N번 시행할 때 m번 일어날 확률 ₙCₘPᵐ(1 − P)ᴺ⁻ᵐ의 분포입니다.","N = 30, P = 1/2일 때 앞면 횟수의 분포"],
- ["카이제곱검정","chi-squared test","(관측도수 − 기대도수)²/기대도수를 더한 χ²값과 χ²분포로 판단하는 가설검정입니다.","주사위 χ² = 13.8"],
+ ["이항분포","binomial distribution","동일한 확률 P로 서로 독립인 N번 시행에서 성공 m번의 확률 ₙCₘPᵐ(1 − P)ᴺ⁻ᵐ의 분포입니다.","N = 30, P = 1/2일 때 앞면 횟수의 분포"],
+ ["카이제곱검정","chi-squared test","(관측도수 − 기대도수)²/기대도수를 더한 χ²값을 사용하고 충분한 기대도수에서 χ²분포로 근사하는 검정입니다.","주사위 χ² = 13.8"],
  ["적합도검정","goodness of fit test","관측한 개수가 특정 이산확률분포에서 얻어진 것인지 조사하는 검정입니다.","주사위 각 눈이 1/6씩 나오는가"],
  ["기대도수","expected frequency","귀무가설의 확률분포에서 얻을 수 있는 개수로, 전체 개수에 각 확률을 곱한 값입니다.","60번 × 1/6 = 10"],
  ["독립성검정","test of independence","2개의 범주형 변수가 서로 독립인지 분할표로 조사하는 검정입니다.","나무 종류와 사슴벌레 암수 비율"],
- ["연속성 보정","continuity correction","2 × 2 분할표에서 |관측도수 − 기대도수|에서 0.5를 빼고 χ²값을 계산하는 보정입니다(예이츠 보정).","5.66 → 4.33"],
- ["피셔의 정확검정","Fisher's exact test","초기하분포로 모든 경우의 확률을 계산해 독립성을 조사하는 방법입니다.","사슴벌레 분할표 p = 0.036"]
+ ["연속성 보정","continuity correction","2×2 표의 χ² 근사를 위한 예이츠 보정입니다. 편차의 절댓값에서 최대 0.5를 빼 0 미만이 되지 않게 합니다.","5.66 → 4.33"],
+ ["피셔의 정확검정","Fisher's exact test","2×2 표에서 주변합을 조건으로 초기하분포의 확률을 합하는 정확검정입니다.","사슴벌레 분할표 p = 0.036"]
 ];
 var REFS=[
  {n:1,title:"chisq.test: Pearson's Chi-squared Test for Count Data (R Documentation)",org:"The R Project for Statistical Computing",url:"https://search.r-project.org/R/refmans/stats/html/chisq.test.html",date:"2026-10-25 확인"},
@@ -755,7 +777,7 @@ on("m16-cat",function(s){
   tH(s,106,184,"모수",{fs:11,c:C.gray});tH(s,106,214,"모평균 μ",{fw:800,fs:16,c:"#1C6EA4"});
   bxH(s,214,6,200,258,"#FCF3D9");tH(s,314,30,"범주형 데이터",{fw:800,fs:13,c:C.amberInk});
   ["앞","뒤","앞","앞","뒤"].forEach(function(c,i){var x=254+i*30;el("circle",{cx:x,cy:60,r:12,fill:c==="앞"?C.amber:"#9AA0AA"},s);tH(s,x,64,c,{fw:800,fs:10,c:"#fff"});});
-  tH(s,314,96,"↓ 개수를 셈 (평균 없음)",{fs:11,c:C.gray});bxH(s,244,110,140,40,"#fff",C.amber);tH(s,314,136,"앞면 3 · 뒷면 2",{fw:800,fs:13});
+  tH(s,314,96,"↓ 앞면 수 / 전체 수",{fs:11,c:C.gray});bxH(s,244,110,140,40,"#fff",C.amber);tH(s,314,136,"3/5 = 60%",{fw:800,fs:13});
   tH(s,314,184,"모수",{fs:11,c:C.gray});tH(s,314,214,"앞면 확률 P",{fw:800,fs:16,c:C.amberInk});tH(s,314,238,"(뒷면 1 − P)",{fs:11,c:C.gray});
 });
 
@@ -797,9 +819,10 @@ on("m16-indep",function(s){
   bxH(s,6,6,408,140);tH(s,22,28,"관측도수 (분할표)",{a:"start",fw:800,fs:12});
   var cx=[220,300,380];tH(s,cx[0],52,"수컷",{fw:800,fs:11.5});tH(s,cx[1],52,"암컷",{fw:800,fs:11.5});tH(s,cx[2],52,"합",{fw:800,fs:11.5,c:C.gray});
   [["굴밤나무",BEET[0]],["상수리나무",BEET[1]]].forEach(function(r,i){var y=62+i*36;tH(s,100,y+23,r[0],{fw:800,fs:12});r[1].forEach(function(v,j){el("rect",{x:cx[j]-34,y:y,width:68,height:32,fill:"#F3F5F9",stroke:C.navy3},s);tH(s,cx[j],y+22,v,{fw:800,fs:15});});tH(s,cx[2],y+22,r[1][0]+r[1][1],{fw:800,fs:13,c:C.gray});});
+  tH(s,100,142,"합",{fs:10,c:C.gray});[20,26,46].forEach(function(v,j){tH(s,cx[j],142,v,{fs:10,c:C.gray});});
   bxH(s,6,154,408,110,"#FCF3D9");tH(s,22,176,"나무별 수컷 비율",{a:"start",fw:800,fs:12,c:C.amberInk});
-  [["굴밤나무",14/23],["상수리나무",6/23]].forEach(function(r,i){var y=192+i*32,W=250;tH(s,100,y+15,r[0],{fw:700,fs:11});el("rect",{x:150,y:y,width:W,height:20,fill:"#fff"},s);el("rect",{x:150,y:y,width:W*r[1],height:20,fill:"#3A9AD9"},s);tH(s,150+W*r[1]+6,y+15,(r[1]*100).toFixed(0)+"%",{a:"start",fw:800,fs:11});});
-  tH(s,210,258,"독립이라면 두 막대의 비율이 같아야 함",{fs:10,c:C.gray});
+  [["굴밤나무",14/23],["상수리나무",6/23]].forEach(function(r,i){var y=192+i*32,W=250;tH(s,100,y+15,r[0]+" n=23",{fw:700,fs:10});el("rect",{x:150,y:y,width:W,height:20,fill:"#fff"},s);el("rect",{x:150,y:y,width:W*r[1],height:20,fill:"#3A9AD9"},s);tH(s,150+W*r[1]+6,y+15,(r[1]*100).toFixed(0)+"%",{a:"start",fw:800,fs:11});});
+  tH(s,210,258,"독립이면 모집단 비율은 같음 · 표본 비율은 변동",{fs:10,c:C.gray});
 });
 
 on("m16-exp",function(s){
@@ -830,7 +853,7 @@ on("m16-res",function(s){
   function upd(){
     [].forEach.call(nb.children,function(x,i){var on=NS[i]===n;x.classList.toggle("on",on);x.setAttribute("aria-pressed",on);});
     var m=Math.round(n*(+r.value)/100),pm=binomH(n,.5),p=p2H(pm,m),mx=Math.max.apply(null,pm),t=pm[m]*(1+1e-7);
-    document.getElementById("m16-rv").textContent=r.value+"% ("+m+"번)";document.getElementById("m16-obs").textContent="앞 "+m+" · 뒤 "+(n-m);
+    document.getElementById("m16-rv").textContent=(Math.round(1000*m/n)/10)+"% ("+m+"/"+n+")";document.getElementById("m16-obs").textContent="앞 "+m+" · 뒤 "+(n-m);
     document.getElementById("m16-pv").textContent=p<0.001?"< 0.001":p.toFixed(3);
     clear(svg);var X=linH(-0.5,n+0.5,30,456),Y=linH(0,mx*1.1,160,14),bw=Math.max(1,(426/(n+1))-(n>50?0.6:2));
     pm.forEach(function(v,k){el("rect",{x:X(k)-bw/2,y:Y(v),width:bw,height:Y(0)-Y(v),fill:v<=t?"#C2416E":"#BCC6DA"},svg);});
@@ -838,7 +861,7 @@ on("m16-res",function(s){
     var tk=n===10?[0,5,10]:n===30?[0,10,20,30]:[0,25,50,75,100];tk.forEach(function(v){tH(svg,X(v),174,v,{fs:9.5,c:C.gray,fw:500});});tH(svg,456,188,"앞면 횟수",{a:"end",fs:10,c:C.gray});
     el("line",{x1:X(m),x2:X(m),y1:14,y2:160,stroke:C.amber,"stroke-width":2.5},svg);tH(svg,X(m)+(m>n*0.75?-5:5),26,"관측 "+m,{a:m>n*0.75?"end":"start",fw:800,c:C.amberInk,halo:true});
     var msg=document.getElementById("m16-msg");msg.className="pmsg"+(p<.05?" ok":"");
-    msg.textContent=n+"번 중 앞면 "+m+"번: "+(p<0.001?"p < 0.001":"p = "+p.toFixed(3))+(p<.05?" → 귀무가설 P = 1/2을 기각합니다(치우친 동전).":" → 귀무가설을 기각할 수 없습니다.")+" 빨간 막대가 관측값만큼 또는 그보다 드문 결과입니다.";
+    msg.textContent=n+"번 중 앞면 "+m+"번: "+(p<0.001?"p < 0.001":"p = "+p.toFixed(3))+(p<.05?" → 귀무가설 P = 1/2을 기각합니다.":" → 귀무가설을 기각할 수 없습니다.")+" 빨간 막대가 관측값만큼 또는 그보다 드문 결과입니다.";
   }
   r.addEventListener("input",upd);upd();
 })();
@@ -862,7 +885,7 @@ on("m16-res",function(s){
   g.addEventListener("input",txt);
   document.getElementById("m16-check").onclick=function(){checked=true;var e=BEXP[cell[0]][cell[1]],o=BEET[cell[0]][cell[1]],col=cell[1]===0?20:26,gv=+g.value,m=document.getElementById("m16-msg3"),ok=Math.abs(gv-e)<=1;
     document.getElementById("m16-act").textContent=e;m.className="pmsg "+(ok?"ok":"ng");
-    m.textContent=(ok?"맞았습니다. ":"다시 보세요. ")+"23 × "+col+" ÷ 46 = "+e+"입니다. 이 칸은 (관측 "+o+" − 기대 "+e+")² ÷ "+e+" ≈ "+(Math.pow(o-e,2)/e).toFixed(2)+"만큼 χ²값을 키웁니다.";draw();};
+    m.textContent="기대 "+e+" = 23×"+col+"/46 · χ² 기여 "+(Math.pow(o-e,2)/e).toFixed(2);draw();};
   txt();reset();
 })();
 

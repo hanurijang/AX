@@ -387,7 +387,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
         <div class="fig"><svg id="m5-sum" viewBox="0 0 420 270" role="img" aria-label="9명의 점수를 평균 60점과 표준편차 10점으로 요약"></svg></div>
         <div class="side">
           <ul class="key"><li><b>통계량</b>: 데이터로 계산해 얻은 값</li><li><b>기술통계량</b>: 데이터 자체를 요약한 값</li></ul>
-          <p class="exp">히스토그램만으로는 데이터를 객관적이고 정량적으로 기술하기 어렵습니다. 그래서 수집한 데이터로 계산을 해서 특징을 나타내는데, 이 값을 통계량이라 합니다. 데이터 그 자체의 성질을 기술하고 요약하는 통계량을 기술통계량 또는 요약통계량이라 부르며, 평균값이 대표적입니다. 기술통계량은 주로 양적 변수로 계산하고, 범주형 변수는 범주별 개수나 비율로 요약합니다.</p>
+          <p class="exp">자료의 분포는 그래프로 살피고, 중심과 퍼짐은 수치로도 요약합니다. 수집한 자료로 계산한 값을 통계량이라 하며, 자료 자체의 성질을 기술하고 요약하는 것은 기술통계량 또는 요약통계량입니다. 평균값은 양적 변수의 대표적인 요약이고, 범주형 변수는 범주별 개수나 비율로 요약합니다. 그래프와 통계량은 서로 보완합니다.</p>
           <p class="next"><span>다음 질문</span>요약하면 잃는 것은 없을까?</p>
         </div>
       </div>
@@ -461,7 +461,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
         <div class="fig"><svg id="m5-shape" viewBox="0 0 420 270" role="img" aria-label="좌우 대칭이면 세 대푯값이 일치하고, 오른쪽 꼬리가 길면 평균이 가장 오른쪽"></svg></div>
         <div class="side">
           <ul class="key"><li>좌우 대칭이면 세 값이 대체로 일치합니다.</li><li>비대칭이면 세 값이 서로 달라집니다.</li></ul>
-          <p class="exp">분포가 좌우 대칭에 가까운 봉우리 형태라면 평균값, 중앙값, 최빈값은 대체로 일치합니다. 국민소득처럼 오른쪽 꼬리가 긴 분포에서는 극단적으로 높은 소득을 얻는 소수 때문에 평균값이 중앙값보다 오른쪽으로 끌려갑니다. 실제로 가장 많은 사람이 받는 소득인 최빈값은 평균값이나 중앙값보다 낮습니다.</p>
+          <p class="exp">대칭인 단봉 분포에서는 평균·중앙값·최빈값이 대체로 가깝습니다. 그림처럼 오른쪽 꼬리가 긴 소득 분포에서는 높은 소득이 평균을 오른쪽으로 끌어당겨 평균이 중앙값보다 커지는 경우가 흔합니다. 다만 평균·중앙값·최빈값의 순서는 모든 비대칭 분포에 성립하는 법칙이 아니므로 실제 자료와 분포를 확인합니다.</p>
           <p class="next"><span>다음 질문</span>극단적인 값 하나는 대푯값을 얼마나 바꿀까?</p>
         </div>
       </div>
@@ -506,15 +506,26 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
           <div class="fig"><svg id="m5-dev" viewBox="0 0 420 150" role="img" aria-label="9명의 점수가 평균 60에서 떨어진 거리"></svg></div>
           <div class="math">
             <div class="mt">핵심 수학 개념 · 분산과 표준편차</div>
-            <div class="f">s² = (1/n) × Σ(xᵢ − x̄)², &nbsp;s = √s²</div>
+            <div class="f">vₙ = (1/n) × Σ(xᵢ − x̄)², &nbsp;SDₙ = √vₙ</div>
             <div class="r"><span>계산</span><span>(225 + 64 + 64 + 64 + 9 + 36 + 121 + 121 + 196) ÷ 9 = 900 ÷ 9 = 100, √100 = 10점</span></div>
             <div class="r"><span>해석</span><span>점수는 평균 60점에서 대략 10점 안팎으로 흩어져 있습니다.</span></div>
           </div>
         </div>
         <div class="side">
           <ul class="key"><li><b>분산</b>: 평균과의 거리 제곱을 평균한 값</li><li><b>표준편차</b>: 분산의 제곱근</li></ul>
-          <p class="exp">각 값과 평균값의 차이를 제곱해 모두 더한 뒤 n으로 나눈 것이 이 9명 전체를 기술하는 분산입니다. 분산은 0 이상이고, 모든 값이 같으면 0이며, 퍼짐이 클수록 커집니다. 분산은 단위가 원래 단위의 제곱(점²)이 되지만 표준편차는 원래 단위(점)와 같아서 감각적으로 더 알기 쉽습니다. 모집단 분산을 추정할 때는 n−1로 나누며, 그 구분은 M09에서 다룹니다.</p>
+          <p class="exp">각 값과 평균의 차이 제곱합 900을 n=9로 나누면 이 자료 자체의 분산은 100점², 표준편차는 10점입니다. 이 모듈에서는 이를 vₙ과 SDₙ으로 씁니다. 분산의 단위는 점², 표준편차의 단위는 점입니다. 모집단 분산을 불편추정하는 s²는 n−1로 나누므로 값이 다릅니다. 목적과 분모를 함께 확인합니다(M09).</p>
           <p class="next"><span>다음 질문</span>평균이 같으면 분산도 같을까?</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" data-step="3" id="s-4-3c">
+      <div class="sh"><div class="sec">4-3 분산과 표준편차 · 보충</div><h2><span class="q">Q</span>같은 자료인데 왜 분산이 두 값일까요?</h2></div>
+      <div class="body split even">
+        <div class="fig"><svg viewBox="0 0 420 270" role="img" aria-label="같은 9명 · 평균 60점 · 편차 제곱합 900: 분자는 같고, 계산 목적과 분모가 다릅니다.; 자료 자체의 퍼짐: n으로 나눔: vₙ = 900/9 = 100점², SDₙ = 10점; 모분산 불편추정: n−1로 나눔: s² = 900/8 = 112.5점², s ≈ 10.61점"><rect x="8" y="8" width="404" height="76" rx="10" fill="#EEF4FB"/><text x="210" y="37" text-anchor="middle" fill="#1B2A4A" font-size="13" font-weight="800">같은 9명 · 평균 60점 · 편차 제곱합 900</text><text x="210" y="63" text-anchor="middle" fill="#6B7280" font-size="11">분자는 같고, 계산 목적과 분모가 다릅니다.</text><rect x="8" y="94" width="404" height="76" rx="10" fill="#FCF3D9"/><text x="210" y="123" text-anchor="middle" fill="#1B2A4A" font-size="13" font-weight="800">자료 자체의 퍼짐: n으로 나눔</text><text x="210" y="149" text-anchor="middle" fill="#6B7280" font-size="11">vₙ = 900/9 = 100점², SDₙ = 10점</text><rect x="8" y="180" width="404" height="76" rx="10" fill="#E3F1EA"/><text x="210" y="209" text-anchor="middle" fill="#1B2A4A" font-size="13" font-weight="800">모분산 불편추정: n−1로 나눔</text><text x="210" y="235" text-anchor="middle" fill="#6B7280" font-size="11">s² = 900/8 = 112.5점², s ≈ 10.61점</text></svg></div>
+        <div class="side"><ul class="key"><li>관측 자료의 기술과 모집단 추정을 구분합니다.</li><li>분모와 단위를 함께 적습니다.</li></ul>
+          <p class="exp">동일한 분포에서 독립적으로 얻은 표본이고 모분산이 유한할 때, n&gt;1에서 n−1로 나눈 s²가 모분산의 불편추정량입니다. 그 제곱근 s까지 불편추정량인 것은 아닙니다. 두 표준편차 모두 자료의 퍼짐이며, 표본평균의 불확실성을 나타내는 표준오차와 구분합니다.</p>
+          <p class="next"><span>다음 질문</span>퍼짐이 같은지 그림과도 비교해 볼까?</p>
         </div>
       </div>
     </section>
@@ -525,7 +536,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
         <div class="fig"><svg id="m5-four" viewBox="0 0 420 270" role="img" aria-label="평균 50점이 같은 네 시험의 점수 분포와 분산, 표준편차"></svg></div>
         <div class="side">
           <ul class="key"><li>평균에는 퍼짐 정보가 들어 있지 않습니다.</li><li>분포가 넓을수록 분산·표준편차가 커집니다.</li></ul>
-          <p class="exp">1,000명이 본 네 시험은 평균이 모두 50점이지만 분포의 넓이가 다릅니다. 학력 차이를 재려면 0점부터 100점까지 다양한 점수가 나오는 시험(표준편차 21)이 바람직합니다. 모두 같은 점수면 분산과 표준편차가 0이고, 절반이 100점·절반이 0점인 쌍봉형이면 모든 값이 평균에서 멀어 표준편차가 50으로 커집니다.</p>
+          <p class="exp">그림은 평균이 모두 50점인 네 분포의 모양 예시입니다. 표준편차가 작으면 평균 근처에, 크면 더 넓게 퍼져 있습니다. 모두 같은 점수면 표준편차는 0이고, 절반이 0점·절반이 100점이면 50입니다. 표준편차 21처럼 다양한 점수가 나온다는 이유만으로 시험의 타당성이나 평가 품질을 판단할 수는 없습니다.</p>
           <p class="next"><span>다음 질문</span>분포를 한 그림에 요약할 수는 없을까?</p>
         </div>
       </div>
@@ -570,14 +581,14 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
           <div class="fig"><svg id="m5-rule" viewBox="0 0 420 150" role="img" aria-label="평균 60, 표준편차 10일 때 2배 기준과 3배 기준의 이상값 범위"></svg></div>
           <div class="math">
             <div class="mt">핵심 수학 개념 · 표준편차로 정하는 이상값 기준</div>
-            <div class="f">x̄ ± k × s 를 벗어나면 이상값 (k = 2 또는 3)</div>
+            <div class="f">|x − x̄| ≥ k × SDₙ 이면 점검 (여기서는 k = 2)</div>
             <div class="r"><span>계산</span><span>60 ± 2 × 10 → 40점 이하 또는 80점 이상, 3배면 30점 이하 또는 90점 이상</span></div>
             <div class="r"><span>해석</span><span>우리 모둠 9명(45~74점)에는 이상값이 없습니다.</span></div>
           </div>
         </div>
         <div class="side">
           <ul class="key"><li>이상값의 정의는 하나로 정해져 있지 않습니다.</li><li>실제 값인지, 측정·기록 실수인지 판단합니다.</li></ul>
-          <p class="exp">흔히 평균값에서 표준편차의 2배 또는 3배 이상 벗어난 값을 이상값으로 봅니다. 평균 50, 표준편차 15인 시험이라면 2배 기준으로 20점 이하나 80점 이상입니다. 시각화로 이상값을 찾았다면 실제 값인지 측정이나 기록 실수인지 따져 보고, 실수라면 데이터에서 제외해 이후 분석에 쓰이지 않게 합니다.</p>
+          <p class="exp">이 예시의 기준은 평균 60점·기술용 표준편차 10점으로 고정합니다. 여기서는 평균에서 2SD 이상 떨어진 40점 이하·80점 이상을 점검 대상으로 표시합니다. 이는 자료의 오류나 삭제를 결정하는 법칙이 아닙니다. 원자료·단위·입력 과정을 확인해 수정 가능한 오류는 고치고, 실제 극단값은 분석 목적에 따라 처리하며 그 이유를 기록합니다.</p>
           <p class="next"><span>정리</span>배운 개념을 나란히 놓아 봅시다.</p>
         </div>
       </div>
@@ -592,7 +603,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
             <tr><td>대푯값</td><td>분포의 위치. 평균값은 이상값에 끌려가고, 중앙값은 순서만 봅니다.</td><td>평균 60 · 중앙값 57 · 최빈값 52</td></tr>
             <tr><td>분산 · 표준편차</td><td>평균과의 거리로 잰 퍼짐. 표준편차는 원래 단위와 같습니다.</td><td>분산 100 · 표준편차 10점</td></tr>
             <tr><td>상자 수염 그림</td><td>사분위수와 수염으로 분포를 요약합니다. 자세한 모양은 빠집니다.</td><td>상자 52~71 · 수염 45~74</td></tr>
-            <tr><td>이상값</td><td>극단적인 값. 실제 값인지 실수인지 판단한 뒤 처리합니다.</td><td>2배 기준 40 이하 · 80 이상</td></tr>
+            <tr><td>이상값</td><td>극단적인 값. 오류는 확인·수정하고, 실제 극단값은 자동 삭제하지 않습니다.</td><td>2배 기준 40 이하 · 80 이상</td></tr>
           </tbody>
         </table>
       </div>
@@ -612,10 +623,10 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
         </div>
         <div class="pcol" style="gap:10px;justify-content:center">
           <div class="plabel" style="margin:0">결과 확인</div>
-          <div class="stats"><div><small>평균값</small><strong id="m5-mn">-</strong></div><div><small>중앙값</small><strong id="m5-md">-</strong></div><div><small>최빈값</small><strong id="m5-mo">-</strong></div><div><small>표준편차</small><strong id="m5-sd">-</strong></div></div>
-          <p class="howto">도전: 평균값이 중앙값보다 20점 이상 커지는 점수를 찾아보세요. 100점 만점이라면 그 점수는 무엇을 뜻할까요?</p>
+          <div class="stats"><div><small>평균값</small><strong id="m5-mn">-</strong></div><div><small>중앙값</small><strong id="m5-md">-</strong></div><div><small>최빈값</small><strong id="m5-mo">-</strong></div><div><small>기술용 SDₙ</small><strong id="m5-sd">-</strong></div></div>
+          <p class="howto">도전: 평균−중앙값이 20점 이상 되게 하세요. 100점 만점 범위도 확인하세요.</p>
           <p class="pmsg" id="m5-msg"></p>
-          <div class="think" style="flex-wrap:wrap"><span>생각해보기</span>입력 실수 하나가 섞였을 때, 모둠의 ‘보통 점수’로는 어떤 대푯값을 보고하는 것이 좋을까요?<details style="flex-basis:100%;font-weight:600"><summary style="cursor:pointer">예시 답</summary>극단값에 덜 흔들리는 중앙값을 보통 점수로 보고하는 편이 낫습니다.</details></div>
+          <div class="think" style="flex-wrap:wrap"><span>생각해보기</span>입력 오류가 섞이면 어떤 대푯값을 함께 볼까요?<details style="flex-basis:100%;font-weight:600"><summary style="cursor:pointer">예시 답</summary>오류를 확인·수정하고 중앙값도 함께 봅니다.</details></div>
         </div>
       </div>
     </section>
@@ -625,7 +636,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
       <div class="sh"><div class="sec">실습 2 · 분류형</div><h2>목표: 새로 들어온 점수를 이상값 기준으로 판단합니다</h2></div>
       <div class="body split even">
         <div class="pcol">
-          <div class="plabel">해보기 · 기준: 평균 60점, 표준편차 10점, 2배 기준, 100점 만점 시험 (카드를 끌어다 놓거나, 누른 뒤 칸을 누르세요)</div>
+          <div class="plabel">해보기 · 고정 기준: 평균 60점·기술용 SD 10점, 40 이하·80 이상 점검, 100점 만점 (카드를 끌어다 놓거나, 누른 뒤 칸을 누르세요)</div>
           <div class="pool" id="p2-pool"></div>
         </div>
         <div class="pcol" style="gap:8px">
@@ -690,9 +701,9 @@ var QUIZ=[
  {goal:1,type:"상황 판단",stem:"주민 100명인 마을에 연소득 10억 원인 사람이 이사 왔습니다. 이 마을 주민의 ‘보통’ 소득을 나타내기에 가장 알맞은 대푯값은 무엇일까요?",
   opts:["중앙값","평균값","최댓값","평균값과 최댓값의 평균"],ans:0,
   exp:"평균값은 모든 값을 계산에 넣어 10억 원 한 명 때문에 약 6,030만 원으로 끌려 올라갑니다. 중앙값은 순서만 보므로 5,091만 원으로 거의 그대로여서 보통 주민의 소득을 더 잘 나타냅니다.",back:"s-4-2d",backLabel:"4-2 이상값의 영향 다시 보기"},
- {goal:2,type:"계산",stem:"9명의 점수에서 ‘평균과의 차이를 제곱한 값’을 모두 더하면 900입니다. 표준편차는 몇 점일까요?",
+ {goal:2,type:"계산",stem:"9명 점수의 편차 제곱합은 900입니다. 이 자료 자체를 기술하도록 n=9로 나눈 표준편차 SDₙ은 몇 점일까요?",
   opts:["10점","100점","900점","30점"],ans:0,
-  exp:"분산 = 900 ÷ 9 = 100이고, 표준편차 = √100 = 10점입니다. 100은 분산이고, 30은 n으로 나누지 않고 √900을 계산한 값입니다.",back:"s-4-3a",backLabel:"4-3 수학 박스 다시 보기"},
+  exp:"이 문항은 기술용 분산 vₙ = 900 ÷ 9 = 100점²와 표준편차 SDₙ = 10점을 묻습니다. 모분산 불편추정량은 900 ÷ 8 = 112.5점²로 목적과 분모가 다릅니다. 100은 분산이고, 30은 n으로 나누지 않고 √900을 계산한 값입니다.",back:"s-4-3a",backLabel:"4-3 수학 박스 다시 보기"},
  {goal:2,type:"O/X 오개념",stem:"“두 시험의 평균 점수가 같으면 분산도 같다.”",
   opts:["O","X"],ans:1,ox:true,
   exp:"평균값에는 퍼짐 정보가 들어 있지 않습니다. 평균이 모두 50점인 네 시험의 표준편차는 0, 4, 21, 50으로 모두 달랐습니다.",back:"s-4-3b",backLabel:"4-3 네 시험 비교 다시 보기"},
@@ -701,14 +712,14 @@ var QUIZ=[
   exp:"19 × 1.5 = 28.5이므로 52 − 28.5 = 23.5, 71 + 28.5 = 99.5입니다. 이 범위를 벗어난 값이 이상값입니다. 33과 90은 1.5배를 곱하지 않고 상자 길이만 더하고 뺀 값입니다.",back:"s-4-4a",backLabel:"4-4 상자 수염 그림 다시 보기"},
  {goal:3,type:"O/X 오개념",stem:"“이상값은 분석 결과를 흐리므로, 발견하면 항상 데이터에서 지운다.”",
   opts:["O","X"],ans:1,ox:true,
-  exp:"이상값은 실제 값일 수도 있고 측정·기록 실수일 수도 있습니다. 실제 값인지 실수인지 먼저 판단하고, 실수일 때 제외합니다.",back:"s-4-4c",backLabel:"4-4 이상값 처리 다시 보기"}
+  exp:"이상값 표시는 확인할 대상을 찾는 기준입니다. 원자료와 단위를 확인해 고칠 수 있는 오류는 수정하고, 실제 극단값은 자동 삭제하지 않습니다. 제외 등이 필요하면 근거와 처리 내역을 남깁니다.",back:"s-4-4c",backLabel:"4-4 이상값 처리 다시 보기"}
 ];
 
-var BINS=["정상 범위","이상값 · 실제일 수 있음","이상값 · 기록 실수 의심"];
-var CARDS=[["45점","정상 범위"],["74점","정상 범위"],
+var BINS=["2SD 미만","이상값 · 실제일 수 있음","이상값 · 기록 실수 의심"];
+var CARDS=[["45점","2SD 미만"],["74점","2SD 미만"],
            ["85점","이상값 · 실제일 수 있음"],["36점","이상값 · 실제일 수 있음"],
            ["740점","이상값 · 기록 실수 의심"],["−7점","이상값 · 기록 실수 의심"]];
-var HINT={"정상 범위":"40점 초과 80점 미만으로, 평균에서 표준편차 2배 안에 있습니다.","이상값 · 실제일 수 있음":"2배 기준을 벗어나지만 0~100점 사이라 실제 점수일 수 있습니다.","이상값 · 기록 실수 의심":"100점 만점 시험에서 나올 수 없는 점수라 기록 실수를 의심합니다."};
+var HINT={"2SD 미만":"고정 기준에서 40점 초과 80점 미만입니다. 이 범위도 기록 오류가 없다는 보장은 아닙니다.","이상값 · 실제일 수 있음":"2배 기준을 벗어나지만 0~100점 사이라 실제 점수일 수 있습니다.","이상값 · 기록 실수 의심":"0~100점 범위를 벗어나므로 원자료와 단위를 확인합니다. 고칠 수 있는 오류는 수정합니다."};
 
 var GLOSSARY=[
  ["통계량","statistic","수집한 데이터로 계산해 얻은 값입니다.","9명 점수의 최댓값 74점"],
@@ -719,7 +730,7 @@ var GLOSSARY=[
  ["최빈값","mode","데이터 중 가장 자주 나타나는 값입니다.","세 번 나온 52점"],
  ["이상값","outlier","다른 값들에 비해 극단적으로 크거나 작은 값입니다.","마을에 이사 온 연소득 10억 원"],
  ["쌍봉형(이봉형)","bimodal","봉우리가 두 개인 분포 모양입니다.","어린이와 고령자가 많은 공원 이용자 연령"],
- ["분산(기술용)","variance","관측한 자료 전체를 기술할 때, 각 값과 평균의 차이 제곱을 n으로 나눈 값입니다. 모분산 추정은 n−1로 나누며 M09에서 다룹니다.","900 ÷ 9 = 100"],
+ ["분산(기술용)","variance","관측한 자료 전체를 기술할 때, 각 값과 평균의 차이 제곱을 n으로 나눈 값입니다. 모분산의 불편추정량은 n−1로 나누며 M09에서 다룹니다.","900 ÷ 9 = 100"],
  ["표준편차","standard deviation","분산의 제곱근으로, 원래 단위로 나타낸 퍼짐 정도입니다.","√100 = 10점"],
  ["상자 수염 그림","box-and-whisker plot","사분위수로 만든 상자와 수염으로 분포를 요약한 그림입니다.","상자 52~71점, 수염 45~74점"],
  ["사분위수","quartile","정렬한 데이터를 네 등분하는 위치의 값으로, 작은 쪽부터 제1·제2·제3사분위수라 합니다.","제1사분위수 52점, 제3사분위수 71점",1],
@@ -1046,9 +1057,9 @@ on("m5-rule",function(s){
     vline(s,X(md),36,170,C.amberInk,"중앙값 "+fx(md),42,X(md)>X(mn)?"start":"end");
     vline(s,X(mn),64,170,"#B42318","평균 "+fx(mn),72,X(mn)>=X(md)?"start":"end","5 4");
     var m=document.getElementById("m5-msg"),gap=mn-md;
-    if(gap>=20){m.className="pmsg ok";m.textContent="찾았습니다. 평균("+fx(mn)+")이 중앙값("+fx(md)+")보다 "+fx(gap)+"점 큽니다. 100점 만점이므로 "+v+"점은 기록 실수로 생긴 이상값입니다.";}
-    else if(v>100){m.className="pmsg";m.textContent="100점을 넘었습니다. 평균은 "+fx(mn)+"점으로 끌려 올라갔지만 중앙값은 "+fx(md)+"점 그대로입니다.";}
-    else{m.className="pmsg";m.textContent="9번째 점수가 "+v+"점일 때 평균 "+fx(mn)+"점, 중앙값 "+fx(md)+"점, 표준편차 "+fx(sd)+"점입니다. 중앙값은 52와 57 사이에서만 움직입니다.";}
+    if(gap>=20){m.className="pmsg ok";m.textContent="평균−중앙값은 "+fx(gap)+"점입니다. "+v+"점은 만점 초과이므로 원자료를 확인하세요.";}
+    else if(v>100){m.className="pmsg";m.textContent="100점 만점에 "+v+"점은 불가능합니다. 원자료와 단위를 확인해 수정하세요.";}
+    else{m.className="pmsg";m.textContent="기술용 n 적용 · 중앙값 범위 52~57점";}
   }
   r.addEventListener("input",upd);upd();
 })();

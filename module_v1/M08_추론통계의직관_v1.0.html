@@ -235,7 +235,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
         <div class="fig"><svg id="m8-case" viewBox="0 0 440 250" role="img" aria-label="성인 남성 10명의 키 179, 176, 166, 167, 170, 164, 170, 154, 169, 164와 된장국 냄비"></svg></div>
         <div class="side">
           <ul class="key"><li>10명의 키를 끝까지 씁니다.</li></ul>
-          <p class="exp">성인 남성의 평균 키를 알고 싶어 10명을 뽑아 키를 쟀습니다. 이 10명은 표본이고 알고 싶은 것은 성인 남성 전체입니다. 실습에서는 평균 167.6cm, 표준편차 7.0cm인 정규분포를 따르는 가상의 모집단 1,000명을 함께 씁니다. 된장국 맛보기는 추론통계를 직감적으로 이해하는 비유로 씁니다.</p>
+          <p class="exp">성인 남성의 평균 키를 알고 싶어 10명을 뽑아 키를 쟀습니다. 이 10명은 표본이고 알고 싶은 것은 성인 남성 전체입니다. 실습의 1,000명은 정규 모형(μ=167.6cm, σ=7cm)을 참고한 가상 자료입니다. 이 유한 집단의 실제 평균은 167.6cm, 표준편차는 약 6.80cm로 모형의 σ와 다릅니다. 된장국 맛보기는 추론통계를 직감적으로 이해하는 비유로 씁니다.</p>
         </div>
       </div>
     </section>
@@ -248,7 +248,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
           <div></div><div class="hd">목표</div><div class="hd">확인하는 문항</div><div class="hd">연결 실습</div>
           <div class="gn">1</div><div class="gt"><span>모집단·모수·표본의 관계를 확률분포와 실현값으로 <b>설명한다</b>.</span></div>
           <div class="ga"><button class="jump" data-jump="q1">문항 1·2</button></div><div class="gp"><button class="jump" data-jump="p3">실습 3 추정</button></div>
-          <div class="gn">2</div><div class="gt"><span>무작위추출과 편향된 추출을 <b>구분한다</b>.</span></div>
+          <div class="gn">2</div><div class="gt"><span>무작위추출과 편향 위험 추출을 <b>구분한다</b>.</span></div>
           <div class="ga"><button class="jump" data-jump="q3">문항 3·4</button></div><div class="gp"><button class="jump" data-jump="p2">실습 2 분류</button></div>
           <div class="gn">3</div><div class="gt"><span>추출 방법과 표본크기가 추정에 주는 영향과 일반화 범위를 <b>판단한다</b>.</span></div>
           <div class="ga"><button class="jump" data-jump="q5">문항 5·6</button></div><div class="gp"><button class="jump" data-jump="p1">실습 1 조작</button></div>
@@ -364,7 +364,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
         <div class="fig"><svg id="m8-popdist" viewBox="0 0 420 270" role="img" aria-label="성인 남성 전체 키의 모집단분포에서 10명의 표본을 추출"></svg></div>
         <div class="side">
           <ul class="key"><li><b>모집단분포</b>: 모집단 전체 값으로 이룬 분포</li><li>표본은 이 분포에서 일부를 추출한 것입니다.</li></ul>
-          <p class="exp">전수조사는 모든 요소를 조사해 기술통계로 끝나지만, 표본조사는 추론통계로 모집단을 추정해야 합니다. 모집단에서 일부를 표본으로 추출한다는 것은 모집단의 전체 값으로 구성된 분포에서 일부를 꺼내는 것입니다. 한국 성인 남성 전원의 키로 엄청난 개수의 히스토그램을 그렸다고 상상해 보세요. 그것이 모집단분포입니다.</p>
+          <p class="exp">모집단분포는 정해 둔 대상 전체의 값으로 이루어진 분포입니다. 그 유한 모집단을 빠짐없이 정확하게 조사하면 그 집단의 평균 등은 기술할 수 있습니다. 측정·누락 오류나 미래·다른 집단에 대한 불확실성까지 없어지는 것은 아닙니다. 표본조사는 일부 자료로 목표모집단의 성질을 추정하므로 표집 설계와 추정의 불확실성을 함께 확인합니다.</p>
           <p class="next"><span>다음 질문</span>모집단분포를 특징 짓는 값은 무엇이라 부를까?</p>
         </div>
       </div>
@@ -387,8 +387,8 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
       <div class="body split even">
         <div class="fig"><svg id="m8-map" viewBox="0 0 420 270" role="img" aria-label="모집단은 확률분포, 표본은 확률분포를 따르는 실현값으로 대응"></svg></div>
         <div class="side">
-          <ul class="key"><li>모집단 = 확률분포, 표본 = 실현값</li><li>추론은 실현값으로 확률분포를 추정하는 일</li></ul>
-          <p class="exp">모집단 히스토그램의 세로축을 전체 요소 수로 나누면 비율이 되고, 이를 확률로 볼 수 있습니다. 모집단에서 무작위·독립으로 하나씩 추출하는 것은 그 확률분포에서 실현값이 발생하는 일에 해당합니다. 그래서 ‘얻은 표본으로 모집단을 추정한다’는 목표는 ‘얻은 실현값으로 이 값을 발생시킨 확률분포를 추정한다’로 바꿔 말할 수 있으며, 이것이 추론통계의 가장 중요한 사고방식입니다.</p>
+          <ul class="key"><li>모집단을 확률분포로 모형화해 표본을 해석합니다.</li><li>추론은 실현값으로 확률분포를 추정하는 일</li></ul>
+          <p class="exp">유한 모집단에서 한 명을 같은 확률로 뽑으면 각 개인의 확률은 1/N이고, 같은 값을 가진 사람이 여러 명이면 그 확률을 합합니다. 히스토그램의 도수/N은 구간의 상대도수이며, 밀도 높이는 여기에 구간폭도 나눕니다. 이런 경험적 분포나 별도의 수학적 모형으로 모집단을 표현하고, 표본을 그 모형의 실현값으로 해석합니다.</p>
           <p class="next"><span>다음 질문</span>들쭉날쭉한 실제 모집단분포는 어떻게 다룰까?</p>
         </div>
       </div>
@@ -411,8 +411,8 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
       <div class="body split even">
         <div class="fig"><svg id="m8-rand" viewBox="0 0 420 270" role="img" aria-label="단순무작위추출법과 층화추출법"></svg></div>
         <div class="side">
-          <ul class="key"><li><b>무작위추출</b>: 요소를 하나씩 무작위로 선택</li><li>값을 골라 버리거나 몰아서 뽑지 않습니다.</li></ul>
-          <p class="exp">실현값은 확률분포에서 무작위로 발생한 값이어야 하므로, 작은 값이라고 버리거나 큰 값만 채택해서는 안 됩니다. 키를 재다가 주위에 배구 선수가 여럿 있다고 한꺼번에 재는 것처럼 독립적이지 않은 방식도 적절하지 않습니다. 모든 요소의 목록에서 난수로 뽑는 <b>단순무작위추출법</b>이 가장 이상적이지만, 실제로는 몇 개의 층으로 나눠 각 층에서 무작위로 뽑는 <b>층화추출법</b>도 자주 씁니다.</p>
+          <ul class="key"><li>확률표집: 표집틀과 추출 확률을 정합니다.</li><li>값을 골라 버리거나 몰아서 뽑지 않습니다.</li></ul>
+          <p class="exp">목표모집단을 포함하는 표집틀과 각 요소를 선택하는 확률을 먼저 정합니다. 단순무작위 비복원 표본은 뽑힌 요소 사이에 의존성이 있지만 유효한 확률표집입니다. 복원 추출은 매번 독립으로 시행할 수 있습니다. 층화·군집 표집도 가능한 설계이며, 층별 비중·가중치·군집의 의존성을 분석에 반영해야 합니다. 큰 값이 나왔다고 임의로 버리거나 주변의 특정 집단만 모으지 않습니다.</p>
           <p class="next"><span>다음 질문</span>표본이 치우치면 어떻게 될까?</p>
         </div>
       </div>
@@ -423,8 +423,8 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
       <div class="body split even">
         <div class="fig"><svg id="m8-poll" viewBox="0 0 420 270" role="img" aria-label="전화 조사 800명 지지율 28퍼센트와 인터넷 조사 10만 명 80퍼센트 이상 비교"></svg></div>
         <div class="side">
-          <ul class="key"><li><b>편향</b>된 표본으로는 올바른 추정이 어렵습니다.</li><li>표본이 커도 편향은 사라지지 않습니다.</li></ul>
-          <p class="exp">한국인 전체의 소득을 알고 싶은데 서울 거주자만 조사하면, 서울 거주자는 다른 지역보다 소득이 높은 경향이 있어 모집단을 반영하지 못합니다. 2018년 일본의 한 여론조사에서 전화로 약 800명을 조사한 정권 지지율은 28%였지만, 인터넷으로 10만 명을 조사했더니 80%를 넘었다는 기사가 있었습니다. 연령층 등의 편향이 심한 인터넷 조사는 10만 명이라도 모집단을 올바르게 반영하지 못합니다.</p>
+          <ul class="key"><li><b>편향</b>된 표본으로는 올바른 추정이 어렵습니다.</li><li>표본수 증가만으로 편향은 해결되지 않습니다.</li></ul>
+          <p class="exp">한국인 전체의 소득이 목표인데 서울 거주자만 조사하면 다른 지역은 표집틀에서 빠집니다. 서울 안에서 무작위로 뽑거나 n을 늘려도 이 누락이 저절로 해결되지는 않습니다. 교재는 전화 약 800명 28%와 인터넷 10만 명 80% 초과의 과거 사례를 소개합니다. 이 숫자만으로 어느 값이 참인지 정할 수 없으며, 조사 방식 이름보다 표집틀·자발적 참여·무응답·조사 시점 등을 확인해야 합니다.</p>
           <p class="next"><span>다음 질문</span>얻은 결과는 어디까지 일반화할 수 있을까?</p>
         </div>
       </div>
@@ -436,8 +436,19 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
         <div class="fig"><svg id="m8-gen" viewBox="0 0 420 270" role="img" aria-label="한국인 표본의 백신 효과와 한 대학 학생 설문의 일반화 범위"></svg></div>
         <div class="side">
           <ul class="key"><li>일반화의 범위는 분야의 지식에 따라 다릅니다.</li><li>결론의 한계와 제약을 함께 논의합니다.</li></ul>
-          <p class="exp">모집단을 너무 넓게 잡으면 무작위추출이 안 될 때가 있습니다. 백신 효과의 대상은 모든 인종이지만 한국인만 표본으로 삼았다면 모집단을 다시 고려해야 하고, ‘인종별로 효과에 차이가 없다’는 정보가 있다면 다른 인종에도 유효하다고 기대할 수 있습니다. 자기 대학 학생만 설문했다면 학력과 관련된 결론은 대학생 전체로 넓히기 어렵지만, 건강 상태 같은 성질은 일반화할 수 있을지도 모릅니다.</p>
+          <p class="exp">목표모집단은 연구 질문으로 정하고, 실제로 표본을 얻을 수 있는 범위와 구분합니다. 한국인 참가자나 한 대학 학생만 조사했다면 표본에 없는 집단으로 확장할 근거를 검토해야 합니다. 관련 특성의 차이·효과의 이질성·외부 자료·모형 가정이 중요합니다. 건강 같은 주제라고 자동으로 일반화되지는 않으며, 접근한 집단으로 목표를 바꾸는 것은 원래 질문을 해결한 것과 다릅니다.</p>
           <p class="next"><span>다음 질문</span>추론통계를 직감적으로 이해할 수 있을까?</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" data-step="3" id="s-4-3d">
+      <div class="sh"><div class="sec">4-3 표집틀과 편향 · 보충</div><h2><span class="q">Q</span>빠진 집단은 표본수를 늘리면 돌아올까요?</h2></div>
+      <div class="body split even">
+        <div class="fig"><svg viewBox="0 0 420 270" role="img" aria-label="목표: 가상 1,000명 전체 평균 167.6cm: 전원의 값은 143.1~186.6cm; 키 175cm 이상인 149명만 접근: 그 집단 평균은 약 178.1cm; 그 149명을 전부 조사해도 전체와 약 10.5cm 차이: 해당 집단의 전수 조사와 원래 목표 전체의 조사는 다름"><rect x="8" y="8" width="404" height="76" rx="10" fill="#EEF4FB"/><text x="210" y="37" text-anchor="middle" fill="#1B2A4A" font-size="13" font-weight="800">목표: 가상 1,000명 전체 평균 167.6cm</text><text x="210" y="63" text-anchor="middle" fill="#6B7280" font-size="11">전원의 값은 143.1~186.6cm</text><rect x="8" y="94" width="404" height="76" rx="10" fill="#FCF3D9"/><text x="210" y="123" text-anchor="middle" fill="#1B2A4A" font-size="13" font-weight="800">키 175cm 이상인 149명만 접근</text><text x="210" y="149" text-anchor="middle" fill="#6B7280" font-size="11">그 집단 평균은 약 178.1cm</text><rect x="8" y="180" width="404" height="76" rx="10" fill="#E3F1EA"/><text x="210" y="209" text-anchor="middle" fill="#1B2A4A" font-size="13" font-weight="800">그 149명을 전부 조사해도 전체와 약 10.5cm 차이</text><text x="210" y="235" text-anchor="middle" fill="#6B7280" font-size="11">해당 집단의 전수 조사와 원래 목표 전체의 조사는 다름</text></svg></div>
+        <div class="side"><ul class="key"><li>무작위 추출도 어느 범위에서 뽑았는지 확인합니다.</li><li>n 증가는 누락된 집단을 저절로 포함시키지 않습니다.</li></ul>
+          <p class="exp">이 수치는 실습에 저장된 가상 모집단에서 계산했습니다. 149명 안에서 무작위로 뽑으면 그 집단의 평균은 추정할 수 있지만, 나머지 851명은 선택될 기회가 없습니다. 표본수 증가로 그 집단 안의 변동을 줄이는 것과, 원래 목표 1,000명에 대한 편향을 해결하는 것은 다릅니다.</p>
+          <p class="next"><span>다음 질문</span>국 전체의 맛을 알고 싶을 때도 같은 문제가 생길까?</p>
         </div>
       </div>
     </section>
@@ -460,7 +471,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
         <div class="fig"><svg id="m8-ladle" viewBox="0 0 420 270" role="img" aria-label="한 방울, 국자 하나, 한 그릇의 양 비교와 섞지 않고 위쪽만 뜬 경우"></svg></div>
         <div class="side">
           <ul class="key"><li>작은 표본으로도 모집단을 추론할 수 있습니다.</li><li>뜨기 전에 잘 섞듯, 무작위로 추출합니다.</li></ul>
-          <p class="exp">한 방울 정도라면 냄비 전체의 맛을 제대로 반영하지 못하지만, 한 그릇까지 먹지 않아도 국자로 뜬 양만으로 충분히 정확하게 알 수 있습니다. 반면 된장국을 그냥 두면 된장이 가라앉아 위쪽은 맛이 옅어지는데, 위쪽만 떠서 싱겁다고 판단하면 표본이 한쪽으로 치우친 것입니다. 편향된 추출로 얻은 표본은 얼마나 잘못된 결론으로 이어지는지 보여 줍니다.</p>
+          <p class="exp">국을 잘 섞는 비유는 한쪽만 뜨는 치우침을 줄이는 뜻입니다. 작은 표본도 추론에 쓸 수 있지만 항상 원하는 정확도를 주는 것은 아닙니다. 필요한 양은 퍼짐과 목표 정밀도 등에 달려 있습니다. 한 번의 적은 표본은 우연히 치우칠 수 있고, 특정 부분만 뜨는 방식은 양을 늘려도 전체의 맛을 대표하지 못할 수 있습니다.</p>
           <p class="next"><span>정리</span>배운 개념을 나란히 놓아 봅시다.</p>
         </div>
       </div>
@@ -473,9 +484,9 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
           <thead><tr><th>개념</th><th>무엇인가</th><th>이 모듈의 예시</th></tr></thead>
           <tbody>
             <tr><td>모집단분포와 모수</td><td>모집단 전체 값의 분포와, 이를 특징 짓는 모평균·모분산 등의 양입니다.</td><td>성인 남성 전원의 키 분포</td></tr>
-            <tr><td>확률분포와 실현값</td><td>모집단 = 확률분포, 표본 = 실현값. 현실 분포는 수학적 분포로 모형화합니다.</td><td>10명의 키, 표본평균 167.9cm</td></tr>
-            <tr><td>무작위추출과 편향</td><td>요소를 하나씩 무작위로 뽑아야 합니다. 커도 편향된 표본은 쓸 수 없습니다.</td><td>전화 800명 28% vs 인터넷 10만 명 80%</td></tr>
-            <tr><td>추론의 직관</td><td>모집단이 목적이고, 작은 표본도 충분하며, 잘 섞어 무작위로 뜹니다.</td><td>된장국 맛보기</td></tr>
+            <tr><td>확률분포와 실현값</td><td>모집단을 확률분포로 모형화해 표본을 해석합니다.. 현실 분포는 수학적 분포로 모형화합니다.</td><td>10명의 키, 표본평균 167.9cm</td></tr>
+            <tr><td>무작위추출과 편향</td><td>표집 설계와 목표를 확인합니다. n 증가만으로 선택·누락 편향이 해결되지는 않습니다.</td><td>전화 800명 28% vs 인터넷 10만 명 80%</td></tr>
+            <tr><td>추론의 직관</td><td>목표는 모집단입니다. 표본 설계와 필요한 정밀도를 함께 봅니다.</td><td>된장국 맛보기</td></tr>
           </tbody>
         </table>
       </div>
@@ -494,19 +505,19 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
           <div class="ctrl">표본크기 n<input type="range" id="m8-n" min="2" max="100" step="1" value="10" aria-label="표본크기"><strong id="m8-nv" style="min-width:48px;text-align:right">-</strong><button class="btn" id="m8-draw" style="padding:5px 12px">뽑기</button></div>
           <div class="fig" style="flex:1"><svg id="m8-p1-svg" viewBox="0 0 470 190" role="img" aria-label="모집단 1,000명과 뽑힌 표본, 표본평균"></svg></div>
         </div>
-        <div class="pcol" style="gap:10px;justify-content:center">
+        <div class="pcol" style="gap:8px;justify-content:center">
           <div class="plabel" style="margin:0">결과 확인</div>
           <div class="stats three"><div><small>모평균</small><strong>167.6</strong></div><div><small>표본평균</small><strong id="m8-sm">-</strong></div><div><small>차이</small><strong id="m8-df">-</strong></div></div>
-          <p class="howto">도전: 무작위추출과 ‘동호회에서만’ 추출을 각각 여러 번 뽑아, 표본크기를 키우면 차이가 어떻게 되는지 비교해 보세요.</p>
+          <p class="howto">두 방법에서 n을 늘려 반복해 뽑아 보세요. 평균의 변동과 치우침을 비교하세요.</p>
           <p class="pmsg" id="m8-msg"></p>
-          <div class="think" style="flex-wrap:wrap"><span>생각해보기</span>편향된 방법으로 표본크기를 100명까지 늘리면 차이가 0에 가까워지나요?<details style="flex-basis:100%;font-weight:600"><summary style="cursor:pointer">예시 답</summary>편향된 방법은 표본을 늘려도 치우침이 0으로 사라지지 않습니다.</details></div>
+          <div class="think" style="flex-wrap:wrap"><span>생각해보기</span>편향된 방법으로 표본크기를 100명까지 늘리면 차이가 0에 가까워지나요?<details style="flex-basis:100%;font-weight:600"><summary style="cursor:pointer">예시 답</summary>누락된 집단은 n 증가만으로 돌아오지 않습니다.</details></div>
         </div>
       </div>
     </section>
 
     <!-- ⑥ 실습 2 · 분류형 ─────────────────────── -->
     <section class="slide" data-step="5" id="p2">
-      <div class="sh"><div class="sec">실습 2 · 분류형</div><h2>목표: 표본을 얻는 방법을 무작위추출과 편향된 추출로 나눕니다</h2></div>
+      <div class="sh"><div class="sec">실습 2 · 분류형</div><h2>목표: 표본을 얻는 방법을 무작위추출과 편향 위험 추출로 나눕니다</h2></div>
       <div class="body split even">
         <div class="pcol">
           <div class="plabel">해보기 · 카드를 끌어다 칸에 놓으세요 (카드를 누른 뒤 칸을 눌러도 됩니다)</div>
@@ -516,7 +527,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
           <div class="plabel" style="margin:0">결과 확인 · <span id="p2-count">0 / 0</span></div>
           <div class="bins" id="p2-bins" style="grid-template-columns:repeat(2,1fr)"></div>
           <div class="p2row"><p class="pmsg" id="p2-msg"></p><button class="btn ghost" id="p2-reset">다시 하기</button></div>
-          <div class="think" style="flex-wrap:wrap"><span>생각해보기</span>편향된 방법으로 얻은 표본은 모집단을 어떻게 다시 정하면 쓸 수 있을까요?<details style="flex-basis:100%;font-weight:600"><summary style="cursor:pointer">예시 답</summary>그 방법으로 실제로 뽑힐 수 있는 사람들만 모집단으로 다시 정하면, 그 범위 안에서는 쓸 수 있습니다.</details></div>
+          <div class="think" style="flex-wrap:wrap"><span>생각해보기</span>접근 가능한 집단으로 목표를 바꾸면 원래 질문도 해결될까요?<details style="flex-basis:100%;font-weight:600"><summary style="cursor:pointer">예시 답</summary>아니요. 질문 자체가 바뀝니다. 좁힌 집단 안에서도 추출·무응답 조건을 확인해야 합니다.</details></div>
         </div>
       </div>
     </section>
@@ -574,34 +585,34 @@ var QUIZ=[
   opts:["O","X"],ans:1,ox:true,
   exp:"통계학의 모수(파라미터)는 모평균, 모분산처럼 모집단분포를 특징 짓는 양입니다. 일상에서 모집단의 요소 개수를 ‘모수’라 부르기도 하므로 혼동하지 않도록 주의합니다.",back:"s-4-1b",backLabel:"4-1 모수 다시 보기"},
  {goal:2,type:"상황 판단",stem:"한국인 전체의 소득을 알고 싶어 서울 거주자만 무작위로 조사했습니다. 이 표본에 대한 판단으로 가장 알맞은 것은 무엇일까요?",
-  opts:["서울 거주자로 치우쳐 한국인 소득이라는 모집단을 반영하지 못한다","서울 안에서는 무작위로 뽑았으므로 한국인 전체를 대표한다","표본을 더 늘리면 편향이 저절로 사라진다","소득은 지역과 관계없으므로 문제없다"],ans:0,
-  exp:"서울 거주자는 다른 지역 거주자보다 소득이 높은 경향이 있어, 서울 거주자만으로 얻은 표본은 한국인 소득이라는 모집단을 반영하지 못합니다. 서울 안에서 무작위로 뽑았더라도 모집단 전체에서 무작위로 뽑은 것은 아닙니다.",back:"s-4-3b",backLabel:"4-3 편향된 추출 다시 보기"},
+  opts:["서울 거주자로 제한되어 한국인 전체로 일반화할 근거가 부족하다","서울 안에서는 무작위로 뽑았으므로 한국인 전체를 대표한다","표본을 더 늘리면 편향이 저절로 사라진다","소득은 지역과 관계없으므로 문제없다"],ans:0,
+  exp:"다른 지역 거주자의 추출 확률이 0이므로 전국 소득 추정의 근거가 부족합니다. 지역 차이가 없다는 근거 없이 전체로 확장할 수 없습니다. 서울 안에서 무작위로 뽑았더라도 모집단 전체에서 무작위로 뽑은 것은 아닙니다.",back:"s-4-3b",backLabel:"4-3 편향 위험 추출 다시 보기"},
  {goal:2,type:"O/X 오개념",stem:"“인터넷으로 10만 명을 조사했으니, 전화로 800명을 조사한 것보다 언제나 모집단을 더 정확히 반영한다.”",
   opts:["O","X"],ans:1,ox:true,
-  exp:"표본이 커도 편향은 사라지지 않습니다. 연령층 등의 편향이 심한 인터넷 조사는 10만 명이라는 대규모 데이터라도 모집단의 성질을 올바르게 반영하지 못합니다.",back:"s-4-3b",backLabel:"4-3 여론조사 예 다시 보기"},
+  exp:"표본수나 인터넷·전화라는 이름만으로 정확도를 정할 수 없습니다. 표집틀, 자발적 참여와 무응답 등을 확인합니다. 어느 방식이든 선택 편향이 생길 수 있고 표본수 증가만으로 없어지지는 않습니다.",back:"s-4-3b",backLabel:"4-3 여론조사 예 다시 보기"},
  {goal:3,type:"상황 판단",stem:"한 대학의 학생만 설문해 학력과 관련된 결론을 얻었습니다. 이 결론을 다루는 방법으로 가장 알맞은 것은 무엇일까요?",
   opts:["대학마다 학력 수준이 다를 수 있으므로, 대학생 전체로 일반화하는 데 한계가 있음을 논의한다","표본이 대학생이므로 대학생 전체의 결론으로 그대로 쓴다","무작위로 뽑지 않았으니 어떤 결론도 얻을 수 없다","표본크기만 늘리면 대학생 전체로 일반화할 수 있다"],ans:0,
   exp:"각 대학은 학력 수준이 다른 집단일 수 있어, 한 대학의 결과를 대학생 전체로 넓히기는 어렵습니다. 선행 연구를 참고해 결론을 얼마나 일반화할 수 있는지, 그 한계와 제약을 충분히 논의해야 합니다.",back:"s-4-3c",backLabel:"4-3 일반화 다시 보기"},
  {goal:3,type:"O/X 오개념",stem:"“된장국 맛을 제대로 알려면 적어도 한 그릇은 먹어 봐야 한다. 즉, 표본이 작으면 모집단을 추론할 수 없다.”",
   opts:["O","X"],ans:1,ox:true,
-  exp:"한 방울은 너무 적지만, 국자로 뜬 정도의 작은 양만으로도 냄비 안 된장국의 맛을 충분히 정확하게 알 수 있습니다. 잘 섞어 무작위로 뽑는다면 작은 크기의 표본으로도 모집단을 추론할 수 있습니다.",back:"s-4-4b",backLabel:"4-4 국자의 양 다시 보기"}
+  exp:"잘 섞어 얻은 작은 표본도 추론에 쓸 수 있습니다. 다만 국자 하나가 언제나 충분하다는 정량 법칙은 아니며, 필요한 표본수는 변동과 목표 정밀도 등에 달려 있습니다.",back:"s-4-4b",backLabel:"4-4 국자의 양 다시 보기"}
 ];
 
-var BINS=["무작위추출","편향된 추출"];
-var CARDS=[["전체 명부에서 난수로 고른 100명","무작위추출"],["지역별 층으로 나눠 각 층에서 무작위로 고른 사람","무작위추출"],["잘 저은 뒤 국자로 뜬 된장국","무작위추출"],
-           ["한국인 소득을 알려고 서울 거주자만 조사","편향된 추출"],["정권 지지율을 인터넷 응답자 10만 명으로 조사","편향된 추출"],["섞지 않고 위쪽만 뜬 된장국","편향된 추출"]];
-var HINT={"무작위추출":"모집단의 요소가 고르게 뽑힐 기회를 갖습니다.","편향된 추출":"특정한 쪽으로 치우친 요소만 뽑힙니다."};
+var BINS=["무작위추출","편향 위험 추출"];
+var CARDS=[["전체 명부에서 난수로 고른 100명","무작위추출"],["지역별 무작위 추출 후 층별 인구 비중 반영","무작위추출"],["잘 섞은 국 한 국자(무작위추출의 비유)","무작위추출"],
+           ["한국인 소득을 알려고 서울 거주자만 조사","편향 위험 추출"],["전 국민 지지율을 자발적 인터넷 참여자로만 조사","편향 위험 추출"],["섞지 않고 위쪽만 뜬 된장국","편향 위험 추출"]];
+var HINT={"무작위추출":"표집틀과 알려진 추출 확률을 사용합니다. 층별 배분에 따라 가중치도 반영합니다.","편향 위험 추출":"특정한 쪽으로 치우친 요소만 뽑힙니다."};
 
 var GLOSSARY=[
  ["모집단분포","population distribution","모집단에 포함된 전체 값으로 구성된 분포입니다.","한국 성인 남성 전원의 키 분포"],
  ["모수(파라미터)","parameter","모평균, 모분산처럼 모집단분포를 특징 짓는 양입니다. 요소 개수를 뜻하는 일상어와 구분합니다.","성인 남성 키의 모평균"],
  ["모평균","population mean","모집단분포의 평균입니다.","실습에서 가정한 167.6cm"],
- ["모분산","population variance","모집단분포의 분산입니다.","실습에서 가정한 7.0² = 49"],
+ ["모분산","population variance","모집단분포의 분산입니다.","정규 모형 49cm², 가상 1,000명은 약 46.22cm²"],
  ["모형화","modeling","현실의 모집단분포를 수학적으로 다룰 수 있는 확률분포로 근사하는 일입니다.","성인 남성 키를 정규분포로 근사"],
- ["무작위추출","random sampling","모집단에 포함된 요소를 하나씩 무작위로 선택해 표본을 얻는 방식입니다.","잘 저은 뒤 국자로 뜬 된장국"],
+ ["무작위추출","random sampling","무작위 장치로 표본을 고릅니다. 비복원 표본은 서로 의존할 수 있으며 설계에 맞게 분석합니다.","잘 저은 뒤 국자로 뜬 된장국"],
  ["단순무작위추출법","simple random sampling","모든 요소의 목록을 만들고 난수로 표본을 정하는 방법입니다.","전체 명부에서 난수로 고른 100명"],
  ["층화추출법","stratified sampling","모집단을 몇 개의 층으로 나눈 뒤 각 층에서 필요한 수만큼 무작위로 뽑는 방법입니다.","지역별 층에서 각각 무작위로 고르기"],
- ["편향","bias","표본이 모집단의 한쪽으로 치우쳐 모집단을 올바르게 반영하지 못하는 상태입니다.","서울 거주자만으로 한국인 소득 조사"]
+ ["편향","bias","추정 절차가 목표값에서 체계적으로 벗어나는 현상입니다. 표집틀 누락·선택·무응답 등에서 생길 수 있습니다.","서울 거주자만으로 한국인 소득 조사"]
 ];
 var REFS=[
  {n:1,title:"데이터로 배우는 통계학",org:"K-MOOC",url:"https://www.kmooc.kr/view/course/detail/20384",date:"2026-10-28 확인"},
@@ -610,7 +621,7 @@ var REFS=[
  {n:4,title:"국가통계포털 통계목록",org:"통계청, KOSIS",url:"https://kosis.kr/statisticsList/statisticsListIndex.do?menuId=M_01_02&outLink=Y&vwcd=MT_OTITLE",date:"2026-10-28 확인"},
  {n:5,title:"공공데이터포털",org:"행정안전부",url:"https://www.data.go.kr",date:"2026-10-28 확인"}
 ];
-var NEXT={title:"M09 표준오차",line:"표본평균은 뽑을 때마다 조금씩 달라집니다. 다음 모듈에서는 표본평균과 모평균 사이의 오차를 나타내는 표준오차를 배웁니다."};
+var NEXT={title:"M09 표준오차",line:"표본평균은 뽑을 때마다 조금씩 달라집니다. 다음 모듈에서는 표본평균의 반복 표집 변동을 나타내는 표준오차를 배웁니다."};
 
 /* =====================================================================
    아래부터는 공통 엔진입니다. 모듈마다 바꾸지 않습니다.
@@ -762,7 +773,7 @@ on("m8-orange",function(s){
 
 on("m8-popdist",function(s){
   box8(s,6,6,250,258,"#fff");t8(s,131,30,"모집단분포 (전원의 키)",{fw:800,fs:12});
-  var X=lin(145,190,20,244);hist8(s,POPV,145,190,1.5,X,226,170,"#E0C34A");
+  var X=lin(140,195,20,244);hist8(s,POPV,140,195,2.5,X,226,170,"#E0C34A");
   el("line",{x1:20,x2:244,y1:226,y2:226,stroke:C.gray2},s);[150,160,170,180].forEach(function(t){t8(s,X(t),242,t,{fs:10,c:C.gray,fw:500});});
   t8(s,244,258,"키(cm) · 모양 예시",{a:"end",fs:9.5,c:C.gray,fw:500});
   mark8(s,"p8",C.amber);arrow8(s,200,90,282,90,"p8",C.amber,3);t8(s,240,80,"추출",{fw:800,c:C.amberInk});
@@ -771,7 +782,7 @@ on("m8-popdist",function(s){
 });
 
 on("m8-param",function(s){
-  box8(s,6,6,408,140,"#fff");t8(s,22,28,"모집단분포를 특징 짓는 양 = 모수",{a:"start",fw:800,fs:12.5});
+  box8(s,6,6,408,140,"#fff");t8(s,22,28,"정규 모형의 모수 예: μ=167.6, σ=7",{a:"start",fw:800,fs:12.5});
   var X=lin(140,196,40,260),Y=function(v){return 130-v/npdf8(167.6,167.6,7)*84;};var p=[];for(var x=142;x<=194;x+=.5)p.push(X(x).toFixed(1)+" "+Y(npdf8(x,167.6,7)).toFixed(1));
   el("path",{d:"M"+p.join(" L"),fill:"none",stroke:C.navy,"stroke-width":2.2},s);el("line",{x1:40,x2:260,y1:130,y2:130,stroke:C.gray2},s);
   el("line",{x1:X(167.6),x2:X(167.6),y1:46,y2:130,stroke:"#B42318","stroke-dasharray":"4 3"},s);
@@ -790,14 +801,14 @@ on("m8-map",function(s){
   [[56,"모집단","성인 남성 전원의 키","확률분포","N(167.6, 7.0²)"],[150,"표본","179, 176, 166 …","실현값","확률분포에서 발생한 값"]].forEach(function(r){
     box8(s,22,r[0],196,76,"#E4E9F2");t8(s,120,r[0]+30,r[1],{fw:800,fs:14});t8(s,120,r[0]+54,r[2],{fs:11,c:C.gray});
     box8(s,222+0,r[0],0,0);box8(s,232,r[0],166,76,"#FCF3D9","#E0A100");t8(s,315,r[0]+30,r[3],{fw:800,fs:14,c:C.amberInk});t8(s,315,r[0]+54,r[4],{fs:11,c:C.gray});
-    t8(s,225,r[0]+44,"=",{fw:800,fs:18,c:C.amberInk});});
-  t8(s,210,250,"‘모집단 = 확률분포’, ‘표본 = 확률분포를 따르는 실현값’",{fs:11,fw:800});
+    t8(s,225,r[0]+44,"≈",{fw:800,fs:18,c:C.amberInk});});
+  t8(s,210,250,"현실 모집단을 분포로 근사하고 표본을 실현값으로 해석",{fs:10.5,fw:800});
 });
 
 on("m8-model",function(s){
   box8(s,6,6,190,200,"#fff");box8(s,224,6,190,200,"#EEF1F7");
   t8(s,101,28,"현실 세계",{fw:800});t8(s,319,28,"수학 세계",{fw:800,c:C.navy3});
-  var X=lin(145,190,16,186);hist8(s,POPV.slice(0,220),145,190,2.5,X,180,120,C.soft);el("line",{x1:16,x2:186,y1:180,y2:180,stroke:C.gray2},s);
+  var X=lin(140,195,16,186);hist8(s,POPV.slice(0,220),140,195,2.5,X,180,120,C.soft);el("line",{x1:16,x2:186,y1:180,y2:180,stroke:C.gray2},s);
   t8(s,101,198,"약간 들쭉날쭉",{fs:11,c:C.gray});
   bell8(s,236,402,180,120,C.navy,2.5);t8(s,375,80,"μ, σ",{fw:800,fs:15});el("line",{x1:236,x2:402,y1:180,y2:180,stroke:C.gray2},s);
   t8(s,319,198,"정규분포 (모형)",{fs:11,c:C.gray});
@@ -817,26 +828,19 @@ on("m8-rand",function(s){
 });
 
 on("m8-poll",function(s){
-  box8(s,6,6,408,258,"#fff");t8(s,22,28,"정권 지지율 조사 (2018년, 일본의 기사)",{a:"start",fw:800,fs:12});
+  box8(s,6,6,408,258,"#fff");t8(s,22,28,"지지율 사례 (교재 소개, 원 기사 재검증 아님)",{a:"start",fw:800,fs:12});
   var Y=lin(0,100,214,50);el("line",{x1:60,x2:380,y1:214,y2:214,stroke:C.gray2},s);
   [0,50,100].forEach(function(t){el("line",{x1:60,x2:380,y1:Y(t),y2:Y(t),stroke:C.grid},s);t8(s,52,Y(t)+4,t+"%",{a:"end",fs:10,c:C.gray2,fw:500});});
   el("rect",{x:110,y:Y(28),width:70,height:Y(0)-Y(28),fill:C.navy2},s);t8(s,145,Y(28)-6,"28%",{fw:800,fs:13});
   el("rect",{x:260,y:Y(80),width:70,height:Y(0)-Y(80),fill:"#B42318"},s);t8(s,295,Y(80)-6,"80% 넘음",{fw:800,fs:13,c:"#B42318"});
   t8(s,145,232,"전화 약 800명",{fw:700});t8(s,295,232,"인터넷 10만 명",{fw:700});
-  t8(s,210,254,"인터넷 응답자는 연령층 등이 치우침 → 커도 편향",{fs:11,fw:800,c:"#B42318"});
+  t8(s,210,254,"교재의 과거 사례 · 표집틀·참여·무응답 등을 확인",{fs:11,fw:800,c:"#B42318"});
 });
 
 on("m8-gen",function(s){
-  mark8(s,"g8",C.navy3);
-  box8(s,6,6,408,124,"#fff");t8(s,22,28,"백신의 효과",{a:"start",fw:800,fs:12});
-  box8(s,22,44,110,60,"#FCF3D9","#E0A100");t8(s,77,70,"표본",{fw:800,c:C.amberInk});t8(s,77,90,"한국인만",{fs:11,c:C.gray});
-  arrow8(s,136,74,268,74,"g8",C.navy3,2,"5 4");t8(s,202,64,"인종별 차이 없다는",{fs:10,c:C.gray});t8(s,202,94,"정보가 있다면",{fs:10,c:C.gray});
-  box8(s,274,44,124,60,"#E4E9F2");t8(s,336,70,"모든 인종",{fw:800});t8(s,336,90,"유효할 것으로 기대",{fs:11,c:C.gray});
-  box8(s,6,140,408,124,"#fff");t8(s,22,162,"자기 대학 학생만 설문",{a:"start",fw:800,fs:12});
-  box8(s,22,178,110,70,"#FCF3D9","#E0A100");t8(s,77,208,"우리 대학",{fw:800,c:C.amberInk});t8(s,77,228,"학생",{fs:11,c:C.gray});
-  arrow8(s,136,198,268,198,"g8","#B42318",2);t8(s,202,190,"학력 관련 결론",{fs:10.5,fw:800,c:"#B42318"});
-  arrow8(s,136,232,268,232,"g8",C.ok,2,"5 4");t8(s,202,224,"건강 상태라면",{fs:10.5,fw:800,c:C.ok});
-  box8(s,274,178,124,70,"#E4E9F2");t8(s,336,208,"대학생 전체",{fw:800});t8(s,336,228,"일반화 범위 논의",{fs:11,c:C.gray});
+  [[6,"목표모집단: 연구 질문으로 정한 전체","예: 전국 성인 또는 여러 지역의 환자","#E4E9F2"],
+   [94,"실제 표본: 한 지역·한 대학 등에서 참여","표본에 없는 집단과 선택·무응답을 확인","#FCF3D9"],
+   [182,"일반화: 관련 차이와 외부 근거 검토","접근 가능한 집단으로 목표를 바꾸면 질문도 달라짐","#E3F1EA"]].forEach(function(r){box8(s,6,r[0],408,76,r[3]);t8(s,210,r[0]+28,r[1],{fw:800,fs:12});t8(s,210,r[0]+54,r[2],{fs:10.5,c:C.gray});});
 });
 
 on("m8-soup",function(s){
@@ -854,7 +858,7 @@ on("m8-soup",function(s){
 
 on("m8-ladle",function(s){
   box8(s,6,6,408,118,"#fff");t8(s,22,28,"얼마나 뜰까?",{a:"start",fw:800,fs:12});
-  [[80,"한 방울","너무 적음","#B42318",4],[210,"국자 하나","충분","#23704F",14],[340,"한 그릇","필요 없음",C.gray,28]].forEach(function(o){
+  [[80,"한 방울","너무 적음","#B42318",4],[210,"국자 하나","정밀도에 따라","#23704F",14],[340,"한 그릇","늘 많을 필요 없음",C.gray,28]].forEach(function(o){
     el("ellipse",{cx:o[0],cy:72,rx:o[4]*1.6+6,ry:o[4]*.6+3,fill:"#C9A15A"},s);t8(s,o[0],104,o[1],{fw:800});t8(s,o[0],118,o[2],{fs:10.5,fw:800,c:o[3]});});
   box8(s,6,134,408,130,"#fff");t8(s,22,156,"어떻게 뜰까?",{a:"start",fw:800,fs:12});
   var g=el("defs",{},s);g.innerHTML='<linearGradient id="sg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#EBDCB8"/><stop offset="1" stop-color="#8A5A2B"/></linearGradient>';
@@ -867,11 +871,11 @@ on("m8-ladle",function(s){
 /* 실습 1 · 추출 방법과 표본크기(조작형) */
 (function(){
   var nb=document.getElementById("m8-n");if(!nb)return;
-  var mb=document.getElementById("m8-meth"),meth=0,M=["무작위추출","동호회에서만 (키 175cm 이상)"],sample=null,svg=document.getElementById("m8-p1-svg"),BIG=POPV.filter(function(v){return v>=175;});
-  M.forEach(function(t,i){var b=document.createElement("button");b.type="button";b.className="mbtn";b.textContent=t;b.style.padding="4px 9px";b.onclick=function(){meth=i;mark();};mb.appendChild(b);});
+  var mb=document.getElementById("m8-meth"),meth=0,M=["전체에서 무작위","키 175cm 이상에서만"],sample=null,svg=document.getElementById("m8-p1-svg"),BIG=POPV.filter(function(v){return v>=175;});
+  M.forEach(function(t,i){var b=document.createElement("button");b.type="button";b.className="mbtn";b.textContent=t;b.style.padding="4px 9px";b.onclick=function(){meth=i;mark();resetSample();};mb.appendChild(b);});
   function mark(){[].forEach.call(mb.children,function(b,i){b.classList.toggle("on",i===meth);b.setAttribute("aria-pressed",i===meth);});}
   function draw(){
-    clear(svg);var X=lin(145,192,20,456);hist8(svg,POPV,145,192,1,X,120,90,"#E4E9F2");el("line",{x1:20,x2:456,y1:120,y2:120,stroke:C.gray2},svg);
+    clear(svg);var X=lin(140,195,20,456);hist8(svg,POPV,140,195,1,X,120,90,"#E4E9F2");el("line",{x1:20,x2:456,y1:120,y2:120,stroke:C.gray2},svg);
     [150,160,170,180,190].forEach(function(t){t8(svg,X(t),134,t,{fs:10,c:C.gray,fw:500});});
     el("line",{x1:X(167.6),x2:X(167.6),y1:20,y2:120,stroke:C.ok,"stroke-width":2,"stroke-dasharray":"5 4"},svg);t8(svg,X(167.6)-4,16,"모평균 167.6",{a:"end",fw:800,c:C.ok,halo:true});
     t8(svg,24,16,"모집단 1,000명",{a:"start",fs:10.5,c:C.gray});
@@ -879,15 +883,16 @@ on("m8-ladle",function(s){
     sample.forEach(function(v){el("circle",{cx:X(v),cy:158,r:3.5,fill:meth?"#B42318":C.navy2,"fill-opacity":.75},svg);});
     var m=sum(sample)/sample.length;el("line",{x1:X(m),x2:X(m),y1:140,y2:178,stroke:C.amber,"stroke-width":3},svg);t8(svg,X(m)+5,186,"표본평균 "+m.toFixed(1),{a:"start",fw:800,c:C.amberInk,halo:true});
   }
+  function resetSample(){sample=null;document.getElementById("m8-sm").textContent="—";document.getElementById("m8-df").textContent="—";var msg=document.getElementById("m8-msg");msg.className="pmsg";msg.textContent="설정 변경 · 뽑기를 눌러 새 표본을 확인하세요.";draw();}
   function upd(){document.getElementById("m8-nv").textContent=nb.value+"명";}
-  nb.addEventListener("input",upd);
+  nb.addEventListener("input",function(){upd();resetSample();});
   document.getElementById("m8-draw").onclick=function(){
     var src=meth?BIG:POPV,n=Math.min(+nb.value,src.length),used={},idx=[];while(idx.length<n){var k=Math.floor(Math.random()*src.length);if(!used[k]){used[k]=1;idx.push(k);}}
     sample=idx.map(function(k){return src[k];});var m=sum(sample)/n,d=m-167.6;
     document.getElementById("m8-sm").textContent=m.toFixed(1);document.getElementById("m8-df").textContent=(d>0?"+":d<0?"−":"")+Math.abs(d).toFixed(1);
     var msg=document.getElementById("m8-msg");
-    if(meth){msg.className="pmsg ng";msg.textContent="동호회에서만 "+n+"명을 뽑았습니다. 표본평균이 모평균보다 "+d.toFixed(1)+"cm 큽니다. 표본을 늘려도 이 치우침은 사라지지 않습니다.";}
-    else{msg.className="pmsg ok";msg.textContent="무작위로 "+n+"명을 뽑았습니다. 모평균과의 차이는 "+Math.abs(d).toFixed(1)+"cm입니다. 여러 번 뽑아 보고, 표본크기를 바꿔 차이의 크기를 비교해 보세요.";}
+    if(meth){msg.className="pmsg ng";msg.textContent="키≥175cm에서 "+n+"명 추출 · 모평균보다 "+d.toFixed(1)+"cm 큼. 제외된 사람은 n을 늘려도 포함되지 않습니다.";}
+    else{msg.className="pmsg ok";msg.textContent="전체에서 "+n+"명 추출 · 모평균과 차이 "+Math.abs(d).toFixed(1)+"cm. 반복해 평균의 변동을 비교하세요.";}
     draw();};
   mark();upd();draw();
 })();
@@ -897,8 +902,8 @@ on("m8-ladle",function(s){
   var g=document.getElementById("m8-g");if(!g)return;
   var cur=SAMPLE10.slice(),revealed=false,first=true,svg=document.getElementById("m8-p3-svg");
   function draw(){
-    clear(svg);var X=lin(150,185,24,450);el("line",{x1:24,x2:450,y1:150,y2:150,stroke:C.gray2},svg);
-    for(var t=150;t<=185;t+=5)t8(svg,X(t),166,t,{fs:10,c:C.gray,fw:500});t8(svg,450,182,"키(cm)",{a:"end",fs:10,c:C.gray,fw:500});
+    clear(svg);var X=lin(140,195,24,450);el("line",{x1:24,x2:450,y1:150,y2:150,stroke:C.gray2},svg);
+    for(var t=145;t<=190;t+=5)t8(svg,X(t),166,t,{fs:10,c:C.gray,fw:500});t8(svg,450,182,"키(cm)",{a:"end",fs:10,c:C.gray,fw:500});
     var st={};cur.forEach(function(v){var k=Math.round(v);st[k]=(st[k]||0)+1;el("circle",{cx:X(v),cy:142-(st[k]-1)*12,r:5.5,fill:C.navy2,stroke:"#fff"},svg);});
     var m=sum(cur)/cur.length;el("line",{x1:X(m),x2:X(m),y1:60,y2:150,stroke:C.navy,"stroke-width":2,"stroke-dasharray":"5 4"},svg);t8(svg,X(m)+4,58,"표본평균 "+m.toFixed(1),{a:"start",fw:800,halo:true});
     el("path",{d:"M"+X(+g.value)+" 190 l-7 12 h14z",fill:C.amber},svg);t8(svg,X(+g.value),216,"내 추정 "+(+g.value).toFixed(1),{fw:800,c:C.amberInk});
@@ -909,10 +914,10 @@ on("m8-ladle",function(s){
   g.addEventListener("input",function(){stat();draw();});
   document.getElementById("m8-check").onclick=function(){revealed=true;var m=sum(cur)/cur.length,d=Math.abs(+g.value-167.6),msg=document.getElementById("m8-msg3");
     document.getElementById("m8-mu").textContent="167.6";msg.className="pmsg "+(d<=2?"ok":"ng");
-    msg.textContent="가정한 모평균은 167.6cm입니다. 내 추정과의 차이는 "+d.toFixed(1)+"cm, 표본평균("+m.toFixed(1)+")과의 차이는 "+Math.abs(m-167.6).toFixed(1)+"cm입니다.";draw();};
+    msg.textContent="내 오차 "+d.toFixed(1)+"cm · 표본평균 오차 "+Math.abs(m-167.6).toFixed(1)+"cm";draw();};
   document.getElementById("m8-again").onclick=function(){var used={},idx=[];while(idx.length<10){var k=Math.floor(Math.random()*POPV.length);if(!used[k]){used[k]=1;idx.push(k);}}
     cur=idx.map(function(k){return POPV[k];});first=false;revealed=false;document.getElementById("m8-mu").textContent="?";
-    var msg=document.getElementById("m8-msg3");msg.className="pmsg";msg.textContent="같은 모집단에서 10명을 다시 뽑았습니다. 표본평균이 "+(sum(cur)/10).toFixed(1)+"cm로 바뀌었습니다. 다시 추정해 보세요.";stat();draw();};
+    var msg=document.getElementById("m8-msg3");msg.className="pmsg";msg.textContent="새 표본 10명 · 평균 "+(sum(cur)/10).toFixed(1)+"cm. 다시 추정하세요.";stat();draw();};
   stat();draw();
 })();
 

@@ -373,7 +373,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
         <div class="fig"><svg id="m6-rv" viewBox="0 0 420 270" role="img" aria-label="확률변수 X와 실현값, 이산형과 연속형 확률변수의 예"></svg></div>
         <div class="side">
           <ul class="key"><li><b>확률변수</b>: 값마다 확률이 달라지는 변수</li><li><b>실현값</b>: 확률변수가 실제로 취한 값</li></ul>
-          <p class="exp">변수 X = {붉은 구슬, 흰 구슬}이라 하면 P(X = 붉은 구슬) = 4/5처럼 쓸 수 있습니다. 이처럼 확률이 달라지는 변수를 확률변수라 하고, 실제로 꺼낸 ‘붉은 구슬’ 같은 값을 실현값이라 합니다. 범주나 주사위 눈처럼 떨어진 값이면 이산형 확률변수, 키처럼 연속한 값이면 연속형 확률변수입니다.</p>
+          <p class="exp">어떤 결과가 나올지 불확실할 때 그 결과에 따라 정해지는 값을 확률변수라 하고, 실제 관측한 값을 실현값이라 합니다. 구슬 색은 범주 결과로 기록할 수 있고, 붉으면 100원·희면 500원인 금액 X는 수치 확률변수입니다. 기댓값·분산은 이런 수치에 대해 계산합니다. 주사위 눈은 이산형, 키를 연속 범위로 보는 모형은 연속형입니다.</p>
           <p class="next"><span>다음 질문</span>확률변수의 확률은 어떻게 그릴까?</p>
         </div>
       </div>
@@ -385,7 +385,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
         <div class="fig"><svg id="m6-disc" viewBox="0 0 420 270" role="img" aria-label="구슬과 주사위의 이산형 확률분포 막대그래프"></svg></div>
         <div class="side">
           <ul class="key"><li><b>확률분포</b>: 확률변수별 발생 가능성을 그린 분포</li><li>이산형은 세로축이 확률 그 자체입니다.</li></ul>
-          <p class="exp">확률분포는 가로축에 확률변수를, 세로축에 그 확률변수의 발생 가능성을 표시한 분포입니다. 이산형이면 세로축이 확률 그 자체여서, 구슬은 4/5와 1/5 높이의 막대, 주사위는 1/6 높이의 막대 6개로 그립니다. 히스토그램과 마찬가지로 확률변수가 범주일 때는 가로축 순서에 의미가 없습니다.</p>
+          <p class="exp">확률분포는 가로축에 확률변수를, 세로축에 그 확률변수의 발생 가능성을 표시한 분포입니다. 이산형이면 세로축이 확률 그 자체여서, 구슬은 4/5와 1/5 높이의 막대, 주사위는 1/6 높이의 막대 6개로 그립니다. 구슬 색처럼 순서가 없는 명목형 결과는 막대 순서를 바꿔도 색별 확률이 같습니다. 순서형 범주는 단계 순서를 지킵니다.</p>
           <p class="next"><span>다음 질문</span>연속형은 어떻게 다를까?</p>
         </div>
       </div>
@@ -405,7 +405,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
         </div>
         <div class="side">
           <ul class="key"><li><b>확률밀도함수</b>: 연속형 확률분포를 나타내는 함수</li><li>범위 아래의 넓이가 확률입니다.</li></ul>
-          <p class="exp">연속형 확률변수는 소수점 아래 자리가 무한히 이어질 수 있어 하나의 값을 가질 확률은 0입니다. 그래서 값에 범위를 두고 확률을 구하며, 연속변수의 히스토그램과 비슷한 개념입니다. 확률밀도함수를 적분해 x축과 함께 둘러싸인 넓이를 구하면 그것이 확률이고, 정의역 전체를 적분하면 1이 됩니다.</p>
+          <p class="exp">여기서는 확률밀도 f(x)로 나타내는 연속형 모형을 다룹니다. 확률은 곡선 아래 구간의 면적이며, 한 점의 확률은 0입니다. 밀도는 0 이상이고 전체 면적은 1이지만, 높이는 1을 넘을 수 있습니다. 예를 들어 0~0.2에서 균일한 분포의 높이는 5이며 전체 면적은 5×0.2=1입니다. 측정값의 반올림 기록에는 같은 숫자가 반복될 수도 있습니다.</p>
           <p class="next"><span>다음 질문</span>통계학에서 확률분포는 왜 중요할까?</p>
         </div>
       </div>
@@ -437,8 +437,19 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
         </div>
         <div class="side">
           <ul class="key"><li><b>기댓값</b>: 확률변수의 평균적인 값 E(X)</li><li>값 × 그 값의 확률을 모두 더합니다.</li></ul>
-          <p class="exp">양적 확률변수라면 확률분포를 특징 짓는 양을 계산할 수 있습니다. 첫 번째가 변수가 확률적으로 얼마나 발생하기 쉬운지를 평균적인 값으로 나타낸 기댓값이며, 단순히 평균이라 불러도 됩니다. 연속형이면 실현값 x와 확률밀도 f(x)를 곱한 뒤 적분해 E(X) = ∫ x f(x) dx로 구합니다.</p>
+          <p class="exp">기댓값 E(X)는 값에 그 확률을 곱해 더한 확률분포의 평균입니다. 공정한 주사위는 각 눈의 확률이 1/6이므로 E(X)=3.5이지만, 한 번에 3.5가 나오는 것은 아닙니다. 연속형은 E(X)=∫x f(x)dx로 계산합니다. 이런 평균이 유한하게 존재하는 분포를 생각하며, 실제 관측값으로 계산한 유한 표본평균과 구분합니다.</p>
           <p class="next"><span>다음 질문</span>확률분포의 퍼짐은 어떻게 나타낼까?</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" data-step="3" id="s-4-3d">
+      <div class="sh"><div class="sec">4-3 기댓값 · 보충</div><h2><span class="q">Q</span>기댓값과 이번 실험의 평균은 같을까요?</h2></div>
+      <div class="body split even">
+        <div class="fig"><svg viewBox="0 0 420 270" role="img" aria-label="분포의 평균: E(X) = 3.5: 공정한 주사위라는 모형으로 결정; 실현값의 평균: x̄ = (x₁ + … + xₙ)/n: 관측한 결과에 따라 매번 달라짐; 독립 반복에서 평균의 분산 = (35/12)/n: 횟수가 늘면 변동이 작아지지만 매번 더 가까워지지는 않음"><rect x="8" y="8" width="404" height="76" rx="10" fill="#EEF4FB"/><text x="210" y="37" text-anchor="middle" fill="#1B2A4A" font-size="13" font-weight="800">분포의 평균: E(X) = 3.5</text><text x="210" y="63" text-anchor="middle" fill="#6B7280" font-size="11">공정한 주사위라는 모형으로 결정</text><rect x="8" y="94" width="404" height="76" rx="10" fill="#FCF3D9"/><text x="210" y="123" text-anchor="middle" fill="#1B2A4A" font-size="13" font-weight="800">실현값의 평균: x̄ = (x₁ + … + xₙ)/n</text><text x="210" y="149" text-anchor="middle" fill="#6B7280" font-size="11">관측한 결과에 따라 매번 달라짐</text><rect x="8" y="180" width="404" height="76" rx="10" fill="#E3F1EA"/><text x="210" y="209" text-anchor="middle" fill="#1B2A4A" font-size="13" font-weight="800">독립 반복에서 평균의 분산 = (35/12)/n</text><text x="210" y="235" text-anchor="middle" fill="#6B7280" font-size="11">횟수가 늘면 변동이 작아지지만 매번 더 가까워지지는 않음</text></svg></div>
+        <div class="side"><ul class="key"><li>한 번의 결과와 기댓값을 구분합니다.</li><li>유한 표본평균은 기댓값과 다를 수 있습니다.</li></ul>
+          <p class="exp">공정한 주사위를 동일한 조건에서 독립적으로 반복하면 표본평균은 큰 수의 법칙에 따라 3.5에 가까워집니다. 유한한 실험에서 정확히 같거나, 횟수를 늘릴 때마다 오차가 줄어든다는 보장은 없습니다. 실습 3에서는 여러 번 반복해 변동도 관찰합니다.</p>
+          <p class="next"><span>다음 질문</span>한 번의 결과는 기댓값 주위에 얼마나 퍼져 있을까?</p>
         </div>
       </div>
     </section>
@@ -457,7 +468,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
         </div>
         <div class="side">
           <ul class="key"><li>분산 V(X)와 표준편차로 퍼짐을 나타냅니다.</li><li><b>왜도</b>와 <b>첨도</b>는 분포의 모양을 봅니다.</li></ul>
-          <p class="exp">확률분포가 기댓값 주변에 얼마나 퍼졌는지는 분산 V(X)로 나타내며, 그 제곱근이 표준편차입니다. 0 이상이고, 모두 같은 값이면 0이며, 기댓값에서 떨어진 값이 많을수록 커진다는 성질은 데이터로 계산한 분산과 같습니다. 왜도는 좌우대칭에서 벗어난 정도, 첨도는 뾰족한 정도와 꼬리가 차지하는 비율입니다.</p>
+          <p class="exp">분산 V(X)는 기댓값과의 차이 제곱의 평균이며 제곱근이 표준편차입니다. 주사위의 V(X)=35/12≈2.92, 표준편차는 약 1.71입니다. 왜도는 비대칭을, 첨도는 표준화한 4차 적률을 통해 극단값과 꼬리의 영향을 나타냅니다. 첨도를 봉우리의 뾰족함만으로 판단하지 않습니다. 이 계산에는 해당 적률이 유한하게 존재해야 합니다.</p>
           <p class="next"><span>다음 질문</span>확률변수가 2개면 어떻게 될까?</p>
         </div>
       </div>
@@ -477,7 +488,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
         </div>
         <div class="side">
           <ul class="key"><li><b>동시확률분포</b>: 두 확률변수의 확률분포 P(X, Y)</li><li><b>독립</b>이면 각각의 확률을 곱합니다.</li></ul>
-          <p class="exp">주사위 A의 눈을 X, B의 눈을 Y라 하면, A가 1이면서 동시에 B가 2일 확률은 P(X = 1, Y = 2)로 씁니다. X와 Y가 독립이라는 말은 동시확률분포가 각각의 확률의 곱과 같다는 뜻으로, 한쪽이 어떤 값을 취하든 다른 쪽의 발생 확률은 변하지 않는다는 뜻입니다. 결점이 없는 보통의 주사위 두 개는 독립입니다.</p>
+          <p class="exp">주사위 A의 눈을 X, B의 눈을 Y라 하면 동시확률은 P(X=1, Y=2)처럼 씁니다. 두 주사위가 각각 공정하고 서로 독립으로 던져진다고 가정하면 이 확률은 1/6×1/6=1/36입니다. 공정하다는 말은 각 주사위의 주변확률이 같다는 뜻이며, 두 결과의 독립을 자동으로 보장하지 않습니다.</p>
           <p class="next"><span>다음 질문</span>독립이 아닌 경우는 어떤 모습일까?</p>
         </div>
       </div>
@@ -488,7 +499,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
       <div class="body split even">
         <div class="fig"><svg id="m6-outfit" viewBox="0 0 420 270" role="img" aria-label="티셔츠와 바지를 아무렇게나 고를 때 9가지 조합, 맞춰 입을 때 3가지 조합"></svg></div>
         <div class="side">
-          <ul class="key"><li>아무렇게나 고르면 9가지 조합이 각각 1/9입니다.</li><li>맞춰 입으면 관계가 생겨 독립이 아닙니다.</li></ul>
+          <ul class="key"><li>각각 균등하게, 서로 독립으로 고르면 각 조합은 1/9입니다.</li><li>맞춰 입으면 관계가 생겨 독립이 아닙니다.</li></ul>
           <p class="exp">검은색, 흰색, 분홍색 티셔츠를 각각 1/3 확률로 고르고, 이와는 무관하게 파란색, 흰색, 카키색 바지를 각각 1/3 확률로 고르면 둘은 독립이어서 흰 티셔츠와 흰 바지 조합도 1/9입니다. 하지만 카키색 바지에는 검은 티셔츠를 맞추는 식으로 조금이라도 코디를 한다면 상의와 하의에 관계가 생기므로 독립이 아닙니다.</p>
           <p class="next"><span>다음 질문</span>한쪽을 알면 다른 쪽의 확률은 어떻게 바뀔까?</p>
         </div>
@@ -501,7 +512,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
         <div class="fig"><svg id="m6-cond" viewBox="0 0 420 270" role="img" aria-label="바지 색을 알 때 티셔츠 색의 조건부확률 표"></svg></div>
         <div class="side">
           <ul class="key"><li><b>조건부확률</b> P(X | Y): Y를 알 때 X의 확률</li><li>독립이면 P(X | Y) = P(X)입니다.</li></ul>
-          <p class="exp">파이프 문자 | 의 오른쪽에 조건을, 왼쪽에 확률변수를 씁니다. X를 상의, Y를 하의로 하고 반드시 카키색 바지에는 검은 티셔츠를 맞춰 입는 사람이라면 P(X = 검은색 | Y = 카키색) = 1이고 나머지는 0입니다. Y를 알면 X를 알 수 있는 것입니다. 독립이면 Y가 어떤 값이 되든 X가 발생할 확률은 변하지 않습니다.</p>
+          <p class="exp">조건부확률은 P(X=x | Y=y)=P(X=x, Y=y)/P(Y=y)이며 P(Y=y)&gt;0일 때 정의합니다. 정해진 코디에서는 카키색 바지일 때 검은 티셔츠의 확률이 1입니다. 독립이면 가능한 모든 조건 y에서 X의 조건부확률이 원래 확률과 같습니다. 그 확률이 꼭 균등할 필요는 없습니다.</p>
           <p class="next"><span>정리</span>배운 개념을 나란히 놓아 봅시다.</p>
         </div>
       </div>
@@ -516,7 +527,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
             <tr><td>확률과 확률변수</td><td>발생 가능성을 0~1의 숫자로. 값마다 확률이 붙은 변수가 확률변수입니다.</td><td>P(붉은 구슬) = 4/5</td></tr>
             <tr><td>확률분포</td><td>이산형은 막대 높이가, 연속형은 확률밀도함수 아래 넓이가 확률입니다.</td><td>주사위 1/6씩 · 3~5분 넓이 0.2</td></tr>
             <tr><td>기댓값 · 분산</td><td>확률분포의 평균과 퍼짐. 모집단을 확률분포로 가정할 때 씁니다.</td><td>E(X) = 3.5 · V(X) ≈ 2.92</td></tr>
-            <tr><td>독립 · 조건부확률</td><td>독립이면 P(X, Y) = P(X)P(Y), P(X | Y) = P(X)입니다.</td><td>1/6 × 1/6 = 1/36</td></tr>
+            <tr><td>독립 · 조건부확률</td><td>독립이면 동시확률은 주변확률의 곱입니다. 조건의 확률이 양수일 때 P(X | Y) = P(X)입니다.</td><td>1/6 × 1/6 = 1/36</td></tr>
           </tbody>
         </table>
       </div>
@@ -557,7 +568,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
           <div class="plabel" style="margin:0">결과 확인 · <span id="p2-count">0 / 0</span></div>
           <div class="bins" id="p2-bins" style="grid-template-columns:repeat(2,1fr)"></div>
           <div class="p2row"><p class="pmsg" id="p2-msg"></p><button class="btn ghost" id="p2-reset">다시 하기</button></div>
-          <div class="think" style="flex-wrap:wrap"><span>생각해보기</span>꺼낸 구슬을 다시 넣고 두 번 꺼낸다면 독립일까요?<details style="flex-basis:100%;font-weight:600"><summary style="cursor:pointer">예시 답</summary>다시 넣으면 두 번째 뽑기가 첫 결과에 좌우되지 않아 독립입니다.</details></div>
+          <div class="think" style="flex-wrap:wrap"><span>생각해보기</span>꺼낸 구슬을 다시 넣고 두 번 꺼낸다면 독립일까요?<details style="flex-basis:100%;font-weight:600"><summary style="cursor:pointer">예시 답</summary>꺼낸 구슬을 다시 넣고 매번 잘 섞어 각 구슬을 같은 확률로 뽑는다면 독립으로 모형화할 수 있습니다.</details></div>
         </div>
       </div>
     </section>
@@ -575,7 +586,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
           <div class="mbtns" id="m6-n" style="gap:6px"></div>
           <div class="stats three"><div><small>내 예측</small><strong id="m6-mine">-</strong></div><div><small>모의실험 평균</small><strong id="m6-sm">-</strong></div><div><small>기댓값</small><strong id="m6-ex">?</strong></div></div>
           <p class="pmsg" id="m6-msg3"></p>
-          <div class="think" style="flex-wrap:wrap"><span>생각해보기</span>10번과 1,000번 던졌을 때, 어느 쪽 평균이 기댓값 3.5에 더 가까웠나요?<details style="flex-basis:100%;font-weight:600"><summary style="cursor:pointer">예시 답</summary>1,000번 던진 평균이 기댓값 3.5에 더 가깝습니다.</details></div>
+          <div class="think" style="flex-wrap:wrap"><span>생각해보기</span>10번과 1,000번 던졌을 때, 어느 쪽 평균이 기댓값 3.5에 더 가까웠나요?<details style="flex-basis:100%;font-weight:600"><summary style="cursor:pointer">예시 답</summary>평균의 변동은 보통 줄지만, 이번 평균이 반드시 더 가까운 것은 아닙니다.</details></div>
         </div>
       </div>
     </section>
@@ -615,38 +626,38 @@ var QUIZ=[
   exp:"일어날 수 있는 경우는 모두 5가지이고 흰 구슬인 경우는 2가지이므로 2/5입니다. 3/5는 붉은 구슬의 확률, 2/3은 흰 구슬 수를 붉은 구슬 수로 나눈 값, 1/2은 색의 가짓수로만 나눈 값입니다.",back:"s-4-1a",backLabel:"4-1 확률 다시 보기"},
  {goal:1,type:"O/X 오개념",stem:"“키처럼 연속형 확률변수에서 X가 정확히 170.0cm일 확률은 확률밀도함수의 높이 f(170)이다.”",
   opts:["O","X"],ans:1,ox:true,
-  exp:"연속형 확률변수가 하나의 값을 가질 확률은 0입니다. 확률밀도함수의 세로축은 상대적인 발생 가능성일 뿐이고, 확률은 범위를 정해 그 아래 넓이로 구합니다.",back:"s-4-2b",backLabel:"4-2 확률밀도함수 다시 보기"},
+  exp:"연속형 확률변수가 하나의 값을 가질 확률은 0입니다. 확률은 밀도 곡선 아래 구간의 면적입니다. 밀도 높이는 확률이 아니므로 1보다 클 수도 있습니다.",back:"s-4-2b",backLabel:"4-2 확률밀도함수 다시 보기"},
  {goal:2,type:"계산",stem:"붉은 구슬 4개와 흰 구슬 1개가 든 주머니에서 하나를 꺼내, 붉은 구슬이면 100원, 흰 구슬이면 500원을 받습니다. 받을 금액의 기댓값은 얼마일까요?",
   opts:["180원","300원","600원","100원"],ans:0,
-  exp:"E(X) = 100 × 4/5 + 500 × 1/5 = 80 + 100 = 180원입니다. 300원은 확률을 무시하고 두 금액을 단순 평균한 값이고, 600원은 두 금액을 더한 값입니다.",back:"s-4-3b",backLabel:"4-3 기댓값 다시 보기"},
+  exp:"E(X) = 100 × 4/5 + 500 × 1/5 = 80 + 100 = 180원입니다. 180원은 분포의 평균이며 한 번에 받는 금액은 100원 또는 500원입니다. 유한 횟수의 실제 평균도 매번 180원일 필요는 없습니다.",back:"s-4-3b",backLabel:"4-3 기댓값 다시 보기"},
  {goal:2,type:"상황 판단",stem:"추론통계에서 공장 제품 30개의 무게를 재어 얻은 표본 데이터는 어떻게 보고 분석할까요?",
   opts:["모집단을 나타내는 확률분포에서 생성된 실현값","모집단 그 자체","확률과 무관한 고정된 값","확률밀도함수의 세로축 값"],ans:0,
   exp:"추론통계는 현실의 모집단을 수학 세계의 확률분포로 가정하고, 표본 데이터는 그 확률분포에서 생성된 실현값이라고 봅니다. 표본은 모집단의 일부일 뿐 모집단 그 자체가 아닙니다.",back:"s-4-3a",backLabel:"4-3 추론통계와 확률분포 다시 보기"},
- {goal:3,type:"계산",stem:"결점이 없는 주사위 A와 B를 함께 던질 때, A는 1의 눈, B는 2의 눈이 나올 확률은 얼마일까요?",
+ {goal:3,type:"계산",stem:"공정한 주사위 A와 B를 서로 독립으로 던질 때, A는 1의 눈, B는 2의 눈이 나올 확률은 얼마일까요?",
   opts:["1/36","1/3","1/6","1/12"],ans:0,
-  exp:"두 주사위는 독립이므로 P(X = 1, Y = 2) = 1/6 × 1/6 = 1/36입니다. 1/3은 두 확률을 더한 값으로, ‘동시에’ 일어날 확률은 곱해야 합니다.",back:"s-4-4a",backLabel:"4-4 동시확률 다시 보기"},
+  exp:"공정성과 독립을 가정했으므로 P(X = 1, Y = 2) = 1/6 × 1/6 = 1/36입니다. 1/3은 두 확률을 더한 값입니다. 동시확률을 주변확률의 곱으로 구하려면 독립이 필요합니다.",back:"s-4-4a",backLabel:"4-4 동시확률 다시 보기"},
  {goal:3,type:"O/X 오개념",stem:"“X와 Y가 독립이라도, Y의 값을 알게 되면 X가 나올 확률이 달라진다.”",
   opts:["O","X"],ans:1,ox:true,
-  exp:"독립이면 P(X | Y) = P(X)가 성립해, Y가 어떤 값이 되든 X가 발생할 확률은 변하지 않습니다. Y를 알면 X의 확률이 바뀌는 것은 맞춰 입는 옷처럼 독립이 아닐 때입니다.",back:"s-4-4c",backLabel:"4-4 조건부확률 다시 보기"}
+  exp:"독립이면 확률이 양수인 조건에 대해 P(X | Y) = P(X)입니다. X의 원래 확률이 균등하다는 뜻은 아닙니다. Y를 알면 X의 확률이 바뀌는 것은 맞춰 입는 옷처럼 독립이 아닐 때입니다.",back:"s-4-4c",backLabel:"4-4 조건부확률 다시 보기"}
 ];
 
 var BINS=["독립","독립이 아님"];
-var CARDS=[["주사위 A의 눈과 주사위 B의 눈","독립"],["동전을 두 번 던져 나온 앞·뒤","독립"],["손에 잡히는 대로 고른 티셔츠 색과 바지 색","독립"],
-           ["바지 색에 맞춰 고른 티셔츠 색","독립이 아님"],["같은 사람의 키와 몸무게","독립이 아님"],["꺼낸 구슬을 넣지 않고 두 번 꺼낸 구슬 색","독립이 아님"]];
+var CARDS=[["서로 독립으로 던진 두 주사위 눈","독립"],["매번 독립으로 던진 동전 앞·뒤","독립"],["서로 무관하게 무작위로 고른 상의·하의 색","독립"],
+           ["바지 색에 맞춰 고른 티셔츠 색","독립이 아님"],["공정한 주사위 눈 X와 그 값을 그대로 복사한 Y","독립이 아님"],["붉은 4·흰 1개에서 비복원 무작위 추출한 두 색","독립이 아님"]];
 var HINT={"독립":"한쪽이 무엇이든 다른 쪽의 확률은 그대로입니다.","독립이 아님":"한쪽을 알면 다른 쪽의 확률이 달라집니다."};
 
 var GLOSSARY=[
  ["확률","probability","발생 여부가 불확실한 사건의 발생 가능성을 0~1의 숫자로 표현한 것입니다.","P(붉은 구슬) = 4/5"],
- ["확률변수","random variable","값에 따라 확률이 달라지는 변수입니다. 이산형과 연속형이 있습니다.","X = {붉은 구슬, 흰 구슬}"],
+ ["확률변수","random variable","불확실한 결과에 따라 값이 정해지는 변수입니다. 기댓값·분산은 수치 확률변수에 대해 계산합니다.","구슬 색에 따라 받을 금액 X = 100원 또는 500원"],
  ["실현값","realized value","확률변수가 실제로 취한 값입니다.","주머니에서 실제로 꺼낸 ‘붉은 구슬’"],
  ["확률분포","probability distribution","가로축에 확률변수, 세로축에 그 발생 가능성을 표시한 분포입니다.","주사위 눈 1~6이 각각 1/6"],
  ["확률밀도함수","probability density function","연속형 확률분포를 나타내는 함수로, 범위 아래의 넓이가 확률입니다.","0~10분 균일하면 f(x) = 1/10"],
  ["기댓값","expected value","확률변수의 평균적인 값으로, 값과 그 확률을 곱해 모두 더합니다.","주사위 눈의 기댓값 3.5"],
  ["왜도","skewness","분포가 좌우대칭에서 어느 정도 벗어났는지를 나타내는 값입니다.","오른쪽 꼬리가 긴 소득 분포"],
- ["첨도","kurtosis","분포가 얼마나 뾰족한지와 꼬리가 차지하는 비율을 나타내는 값입니다.","가운데가 뾰족하고 꼬리가 두꺼운 분포"],
+ ["첨도","kurtosis","표준화한 4차 적률로, 극단값·꼬리의 영향을 반영합니다. 봉우리 높이만을 뜻하지 않습니다.","정규분포의 첨도 3, 초과첨도 0"],
  ["동시확률분포","joint probability distribution","확률변수 2개를 동시에 생각할 때의 확률분포 P(X, Y)입니다.","P(X = 1, Y = 2) = 1/36"],
- ["독립","independence","동시확률이 각각의 확률의 곱과 같아, 한쪽이 다른 쪽의 확률을 바꾸지 않는 관계입니다.","결점 없는 주사위 A와 B"],
- ["조건부확률","conditional probability","한쪽 확률변수 Y를 알 때 다른 쪽 X의 확률 P(X | Y)입니다.","P(검은 티셔츠 | 카키색 바지) = 1"]
+ ["독립","independence","동시확률이 각각의 확률의 곱과 같아, 한쪽이 다른 쪽의 확률을 바꾸지 않는 관계입니다.","서로 독립으로 던지는 주사위 A와 B"],
+ ["조건부확률","conditional probability","확률이 양수인 조건 Y=y를 알 때의 확률입니다. 동시확률을 조건의 확률로 나눕니다.","P(검은 티셔츠 | 카키색 바지) = 1"]
 ];
 var REFS=[
  {n:1,title:"기초통계학",org:"여인권, 숙명여자대학교, KOCW 공개강의",url:"https://www.kocw.net/home/search/kemView.do?kemId=1052562",date:"2026-10-28 확인"},
@@ -853,8 +864,8 @@ on("m6-disc",function(s){
 
 on("m6-pdf",function(s){
   el("rect",{x:4,y:4,width:250,height:142,rx:10,fill:"#fff"},s);el("rect",{x:262,y:4,width:154,height:142,rx:10,fill:"#fff"},s);
-  var X=lin(-3.2,3.2,20,240),Y=function(v){return 120-v*86;},a=-1.1,b=-.2,pts=[],sh=[];
-  for(var x=-3.2;x<=3.2001;x+=.05){pts.push(X(x).toFixed(1)+" "+Y(bell(x,0,1)).toFixed(1));if(x>=a&&x<=b)sh.push(X(x).toFixed(1)+" "+Y(bell(x,0,1)).toFixed(1));}
+  var X=lin(-3.2,3.2,20,240),Y=function(v){return 120-v*215;},a=-1.1,b=-.2,pts=[],sh=[];
+  for(var x=-3.2;x<=3.2001;x+=.05){pts.push(X(x).toFixed(1)+" "+Y(bell(x,0,1)/Math.sqrt(2*Math.PI)).toFixed(1));if(x>=a&&x<=b)sh.push(X(x).toFixed(1)+" "+Y(bell(x,0,1)/Math.sqrt(2*Math.PI)).toFixed(1));}
   el("path",{d:"M"+X(a)+" 120 L"+sh.join(" L")+" L"+X(b)+" 120z",fill:C.navy3,"fill-opacity":.7},s);
   el("path",{d:"M"+pts.join(" L"),fill:"none",stroke:C.navy,"stroke-width":2},s);
   el("line",{x1:20,x2:240,y1:120,y2:120,stroke:C.gray2},s);
@@ -899,11 +910,13 @@ on("m6-var",function(s){
   el("text",{x:X(3.5),y:18,"text-anchor":"middle","font-size":10.5,"font-weight":800,fill:C.amberInk},s,"3.5 ± 1.71");
   el("text",{x:339,y:22,"text-anchor":"middle","font-size":11,"font-weight":800,fill:C.navy},s,"왜도 · 첨도");
   var p1=[],p2=[],p3=[];for(var i=0;i<=40;i++){var t=i/40;p1.push((272+t*66).toFixed(1)+" "+(84-(t*12*Math.exp(-t*12/2.2))*34).toFixed(1));
-    p2.push((344+t*64).toFixed(1)+" "+(84-bell(t,.5,.08)*44).toFixed(1));p3.push((344+t*64).toFixed(1)+" "+(84-bell(t,.5,.2)*24).toFixed(1));}
+    var z=(t-.5)*8;
+    p2.push((344+t*64).toFixed(1)+" "+(84-Math.exp(-Math.sqrt(2)*Math.abs(z))/Math.sqrt(2)*60).toFixed(1));p3.push((344+t*64).toFixed(1)+" "+(84-bell(z,0,1)/Math.sqrt(2*Math.PI)*60).toFixed(1));}
   el("path",{d:"M"+p1.join(" L"),fill:"none",stroke:C.navy,"stroke-width":2},s);
   el("path",{d:"M"+p2.join(" L"),fill:"none",stroke:C.navy,"stroke-width":2},s);el("path",{d:"M"+p3.join(" L"),fill:"none",stroke:C.navy3,"stroke-width":1.5,"stroke-dasharray":"4 3"},s);
-  el("text",{x:305,y:104,"text-anchor":"middle","font-size":10.5,fill:C.gray},s,"비대칭(왜도)");el("text",{x:376,y:104,"text-anchor":"middle","font-size":10.5,fill:C.gray},s,"뾰족함(첨도)");
-  el("text",{x:339,y:132,"text-anchor":"middle","font-size":10,fill:C.gray},s,"모양 예시");
+  el("text",{x:305,y:104,"text-anchor":"middle","font-size":10.5,fill:C.gray},s,"비대칭(왜도)");el("text",{x:376,y:104,"text-anchor":"middle","font-size":10.5,fill:C.gray},s,"꼬리·극단값");
+  el("text",{x:339,y:122,"text-anchor":"middle","font-size":10,fill:C.gray},s,"정규(점선) 첨도 3");
+  el("text",{x:339,y:138,"text-anchor":"middle","font-size":10,fill:C.gray},s,"라플라스(실선) 첨도 6");
 });
 
 on("m6-grid",function(s){
@@ -994,7 +1007,7 @@ on("m6-cond",function(s){
   function show(){
     document.getElementById("m6-sm").textContent=last.mean.toFixed(2);document.getElementById("m6-ex").textContent="3.5";
     var d=Math.abs(+g.value-3.5),m=document.getElementById("m6-msg3");m.className="pmsg "+(d<=.3?"ok":"ng");
-    m.textContent="기댓값은 (1+2+3+4+5+6) × 1/6 = 3.5입니다. 내 예측과의 차이는 "+d.toFixed(1)+"이고, 이번 "+last.n.toLocaleString("ko-KR")+"번의 평균은 "+last.mean.toFixed(2)+"입니다.";draw();}
+    m.textContent="E(X)=3.5 · "+last.n.toLocaleString("ko-KR")+"번의 평균 "+last.mean.toFixed(2);draw();}
   g.addEventListener("input",function(){document.getElementById("m6-gv").textContent=(+g.value).toFixed(1);document.getElementById("m6-mine").textContent=(+g.value).toFixed(1);if(last)show();else draw();});
   document.getElementById("m6-gv").textContent=(+g.value).toFixed(1);document.getElementById("m6-mine").textContent=(+g.value).toFixed(1);draw();
 })();
