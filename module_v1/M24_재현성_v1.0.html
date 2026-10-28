@@ -246,7 +246,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
       <div class="body full" style="align-content:center">
         <div class="gmap">
           <div></div><div class="hd">목표</div><div class="hd">확인하는 문항</div><div class="hd">연결 실습</div>
-          <div class="gn">1</div><div class="gt"><span>재현성 위기의 근거를 해석하고 재현 실패 원인을 <b>구분한다</b>.</span></div>
+          <div class="gn">1</div><div class="gt"><span>계산 재현·추시와 재현성 지표를 <b>구분한다</b>.</span></div>
           <div class="ga"><button class="jump" data-jump="q1">문항 1·2</button></div><div class="gp"><button class="jump" data-jump="p2">실습 2 분류</button></div>
           <div class="gn">2</div><div class="gt"><span>p-해킹이 제1종 오류 확률을 키우는 정도를 <b>계산한다</b>.</span></div>
           <div class="ga"><button class="jump" data-jump="q3">문항 3·4</button></div><div class="gp"><button class="jump" data-jump="p1">실습 1 조작</button></div>
@@ -363,12 +363,12 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
 
     <!-- ④ 본문 ─────────────────────────────── -->
     <section class="slide" data-step="3" id="s-4-1a">
-      <div class="sh"><div class="sec">4-1 재현성과 재현성 위기</div><h2><span class="q">Q</span>과학의 결과는 왜 다시 해 봐도 같아야 할까요?</h2></div>
+      <div class="sh"><div class="sec">4-1 재현성과 재현성 위기</div><h2><span class="q">Q</span>계산 재현과 새 자료 추시는 어떻게 다를까요?</h2></div>
       <div class="body split even">
         <div class="fig"><svg id="m24-rep" viewBox="0 0 420 270" role="img" aria-label="같은 조건이면 같은 결과가 나와야 재현성이 있음, A공장과 B공장 결과 비교"></svg></div>
         <div class="side">
-          <ul class="key"><li><b>재현성</b>: 조건이 같으면 같은 결과</li><li><b>추시</b>로 재현되지 않으면 <b>재현성 위기</b></li></ul>
-          <p class="exp">과학의 중요한 특징 중 하나가 재현성입니다. 누가 언제 어디서 실험하더라도 조건이 같다면 같은 결과를 얻을 수 있어야 합니다. 새로 개발한 약의 효과를 조사하는 실험에 재현성이 있기 때문에 안심하고 약을 쓸 수 있습니다. 그런데 최근 발표된 논문 내용을 다른 연구자가 같은 방법과 조건으로 추시했을 때 같은 결과를 얻지 못했다는 보고가 여러 분야에서 잇따르고 있으며, 이를 재현성 위기라 합니다. 단, 한 번의 추시로 재현되지 않았다고 원래 주장이 틀렸다고 단정할 수는 없고, ‘잘못되었을 가능성이 있다’고 보아야 합니다.</p>
+          <ul class="key"><li>같은 자료의 계산 확인과 새 자료 추시 구별</li><li>새 표본에서 같은 p값을 요구하지 않음</li></ul>
+          <p class="exp">재현성·반복가능성의 번역과 영어 용어는 분야에 따라 달라 여기서는 같은 데이터·코드의 계산 확인을 계산 재현성, 독립된 새 자료의 연구 반복을 추시(replication)로 구분합니다. 추시에서는 표본오차 때문에 수치나 p값이 완전히 같을 필요가 없습니다. 효과의 방향·크기·불확실성과 설계 차이를 함께 비교합니다. 한 번 유의하지 않았다는 사실만으로 원래 주장이 틀렸다고 확정하지 않으며, 계산이 재현된다고 연구 설계가 타당하다는 보장도 없습니다.</p>
           <p class="next"><span>다음 질문</span>통계학계는 어떻게 반응했을까?</p>
         </div>
       </div>
@@ -393,14 +393,14 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
           <div class="fig"><svg id="m24-waf" viewBox="0 0 420 150" role="img" aria-label="원래 연구 100건 중 97건 유의, 추시 97건 중 35건 유의를 칸 그림으로 표현"></svg></div>
           <div class="math">
             <div class="mt">핵심 수학 개념 · 재현 비율</div>
-            <div class="f">재현 비율 = 추시에서도 유의 ÷ 원래 유의</div>
+            <div class="f">유의성 재검출 비율 = 추시에서도 유의 ÷ 원래 유의</div>
             <div class="r"><span>계산</span><span>35 ÷ 97 ≈ 0.36 → 약 36%</span></div>
             <div class="r"><span>주의</span><span>분모는 100이 아니라 원래 유의했던 97건입니다.</span></div>
           </div>
         </div>
         <div class="side">
-          <ul class="key"><li>원래 97% 유의 → 추시 36%만 유의</li><li>약 1/3 정도만 재현되었습니다.</li></ul>
-          <p class="exp">재현성 위기를 정량적으로 보고한 유명한 연구가 있습니다. 심리학 분야에서 보고된 과거 연구 100건을 재실험해 재현성을 조사한 것입니다<span class="cite">[1]</span>. 원래 연구에서는 97%(97/100)가 통계적으로 유의(p &lt; 0.05)했는데, 추시에서는 그중 36%(35/97)의 연구만 통계적으로 유의한 것으로 나타났습니다. 다시 말해 약 1/3 정도밖에 재현할 수 없었다는 결과입니다. 재현성 위기는 심리학만이 아니라 다양한 분야의 문제입니다.</p>
+          <ul class="key"><li>35/97은 유의성 기준의 한 지표</li><li>모든 재현성 판단을 이 비율로 환원하지 않음</li></ul>
+          <p class="exp">교재가 소개한 심리학 연구 100건의 조사에서 원래 유의했던 97건 중 추시에서도 유의했던 것은 35건으로, 이 기준의 비율은 35/97 ≈ 36%입니다<span class="cite">[1]</span>. 이는 유의성 문턱을 다시 넘었는지 보는 한 지표입니다. 36%를 모든 분야의 재현 확률로 일반화하거나 나머지 연구가 모두 거짓이라고 읽을 수는 없습니다. 효과크기·구간·설계의 차이 등 다른 기준과 함께 해석해야 합니다.</p>
           <p class="next"><span>다음 질문</span>p값과 효과의 크기는 어떻게 달라졌을까?</p>
         </div>
       </div>
@@ -412,7 +412,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
         <div class="fig"><svg id="m24-es" viewBox="0 0 420 270" role="img" aria-label="원래 연구의 p값은 대부분 0.05 아래에 몰렸지만 추시는 넓게 퍼짐, 효과크기는 절반 정도"></svg></div>
         <div class="side">
           <ul class="key"><li>추시의 p값은 0~1에 폭넓게 퍼졌습니다.</li><li><b>효과크기</b>는 원래의 절반 정도</li></ul>
-          <p class="exp">원래 연구의 p값은 거의 모두 0.05 아래에 몰려 있었지만, 추시에서는 p값의 분포가 꽤 폭넓게 퍼졌습니다. 또 평균값의 차이처럼 효과가 얼마나 큰지를 나타내는 효과크기도 추시에서는 원래 연구에서 보고된 값의 절반 정도에 불과했습니다<span class="cite">[1]</span>. 이 모듈의 사례에서도 A공장이 보고한 +12 MPa가 B공장 추시에서는 +4 MPa로 줄었습니다. 발표된 효과가 실제보다 크게 보고되는 경향이 있다는 뜻입니다.</p>
+          <p class="exp">교재가 소개한 조사에서는 추시 p값이 넓게 퍼졌고 평균 효과크기는 원래 보고의 약 절반이었습니다<span class="cite">[1]</span>. 이런 패턴은 선택적 보고나 원연구의 효과 과대추정과 관련될 수 있지만, 모든 추시에서 효과가 절반이 된다는 법칙은 아닙니다. 모듈의 A공장 +12 MPa, B공장 +4 MPa는 별도의 가상 예입니다. 한쪽만 유의하다는 사실은 두 효과가 다르다는 검정이 아닙니다. 추정값과 불확실성을 함께 봅니다.</p>
           <p class="next"><span>다음 질문</span>왜 재현되지 않을까?</p>
         </div>
       </div>
@@ -424,7 +424,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
         <div class="fig"><svg id="m24-cause" viewBox="0 0 420 270" role="img" aria-label="재현되지 않는 원인 두 가지: 실험 조건을 똑같이 만들기 어려움, 검정력이 100%가 아님"></svg></div>
         <div class="side">
           <ul class="key"><li>실험 조건을 똑같이 만들기 어렵습니다.</li><li>검정력이 100%가 아니므로 놓칠 수 있습니다.</li></ul>
-          <p class="exp">낮은 재현성을 일으키는 원인은 다양합니다. 그중 하나는 실험 조건을 동일하게 조성하기 어렵다는 점입니다. 심리학 실험에서 피험자의 성질은 원래 연구와 똑같이 갖추기가 거의 불가능하고, 공장에서도 원료 성분이나 설비 상태를 완전히 같게 맞추기 어렵습니다. 또 가설검정의 검정력은 100%가 아니므로, 원래 결론이 옳더라도 단 한 번의 추시 데이터가 반드시 유의하지는 않습니다. 그러나 이런 요인을 고려하더라도 36%라는 숫자는 낮다고밖에 말할 수 없습니다.</p>
+          <p class="exp">추시의 차이는 표본오차, 대상·측정·처치 조건의 차이, 분석 선택 등 여러 원인으로 생길 수 있습니다. 검정력이 80%인 같은 설계를 반복해도 참인 효과를 매번 검출하지는 못합니다. 10번에 반드시 2번 비유의라는 뜻이 아니라 반복 확률의 설명입니다. 집계 비율 하나만으로 원인을 분리할 수 없으며, 원래 연구와 추시의 설계·표본 수·효과 추정·구간을 함께 검토합니다.</p>
           <p class="next"><span>다음 질문</span>또 하나의 주된 원인은?</p>
         </div>
       </div>
@@ -436,7 +436,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
         <div class="fig"><svg id="m24-hack" viewBox="0 0 420 270" role="img" aria-label="데이터의 p값이 0.05 이상이면 발표할 수 없고 미만이면 발표할 수 있어, p-해킹으로 결과를 밀어 넣으면 재현성이 낮아짐"></svg></div>
         <div class="side">
           <ul class="key"><li>p &lt; 0.05는 연구자에게 천국과 지옥의 경계</li><li><b>p-해킹</b>: p값이 작아지게 분석을 조작</li></ul>
-          <p class="exp">낮은 재현성의 또 하나의 주된 원인은 가설검정의 사용 방법에 있습니다. 과학 논문에서는 p값이 유의수준(보통 0.05)보다 낮으면 ‘통계적으로 유의’하므로 가설이 옳다고 주장할 수 있는 것이 관례입니다. 무사히 p &lt; 0.05라면 논문으로 발표할 수 있고, p ≥ 0.05라면 발표할 수 없게 됩니다. 놀랍게도 가설검정 사용 방법에 따라 p값이 0.05보다 작아지게 조작할 수 있으며, 이런 행위를 p-해킹이라 합니다. p값을 직접 고쳐 쓰는 조작과 달리 의도치 않게 저지를 수 있다는 점이 특히 우려스럽습니다.</p>
+          <p class="exp">p&lt;0.05 여부에 따라 연구가 선택적으로 보고·게재되는 압박이 있을 수 있지만, p≥0.05이면 발표할 수 없다는 보편적 규칙은 없습니다. 유의성은 가설이 참임을 증명하지도 않습니다. 결과를 본 뒤 지표·표본·분석을 바꾸고 그 선택을 무시한 p값을 보고하면 p-해킹이 될 수 있습니다. 검정력에 근거한 사전 설계나 오류율을 관리하는 순차검정, 투명하게 구분한 탐색 분석과는 구별합니다.</p>
           <p class="next"><span>다음 질문</span>p-해킹은 오류 확률을 얼마나 키울까?</p>
         </div>
       </div>
@@ -479,9 +479,20 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
       <div class="body split even">
         <div class="fig"><svg id="m24-pub" viewBox="0 0 420 270" role="img" aria-label="실제 효과 4 MPa인 연구 1,000건 중 p가 0.05 미만인 129건만 게재되면 게재된 결과의 평균은 12.5 MPa"></svg></div>
         <div class="side">
-          <ul class="key"><li><b>출판 편향</b>: p ≥ 0.05인 결과는 묻힘</li><li>실린 결과만 보면 효과가 부풀려집니다.</li></ul>
-          <p class="exp">논문 출판에서는 주요 주장에 대해 통계적으로 유의한 결과(p &lt; 0.05)를 얻지 못하면, 가설을 지지하지 않는다는 이유로 게재가 거절될 때가 흔합니다. 이런 판단은 p ≥ 0.05인 결과가 세상에 나오지 못하게 하여, 출판된 내용에 치우침이 생기는 출판 편향 문제를 일으킵니다. 실제 효과가 +4 MPa인 시험을 1,000번 시뮬레이션해 p &lt; 0.05인 129건만 모으면 평균이 +12.5 MPa로 부풀려집니다. 효과가 없는 약도 효과가 인정된 결과만 보고되어 본연의 효과를 왜곡하는 것과 같은 문제입니다.</p>
+          <ul class="key"><li>공개·게재 가능성이 결과에 따라 달라짐</li><li>실습 조건: 양의 차이 + 양측 p&lt;0.05</li></ul>
+          <p class="exp">출판 편향은 효과의 방향·크기·유의성 등 결과에 따라 공개 가능성이 달라져, 알려진 연구가 전체와 다르게 보이는 현상입니다. 연구자의 미보고와 저널의 선택 모두 관여할 수 있습니다. 이 모듈의 저장 예는 단순히 p&lt;0.05인 결과가 아니라 <b>양의 차이이면서 양측 p&lt;0.05</b>인 결과만 공개합니다. 실제 효과 +4 MPa인 1,000건 중 129건의 평균이 +12.5 MPa인 것은 이 선택 조건의 예입니다. 실제 출판 관행 전체를 그대로 재현한 모형은 아닙니다.</p>
           <p class="next"><span>다음 질문</span>이 모든 것은 어떻게 연결될까?</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" data-step="3" id="s-4-4d">
+      <div class="sh"><div class="sec">4-4 출판 편향</div><h2><span class="q">Q</span>양측 유의 결과만 고르면 평균은 항상 양수가 될까요?</h2></div>
+      <div class="body split even">
+        <div class="fig"><svg viewBox="0 0 420 270" role="img" aria-label="실제 효과 0 · 추정 분포와 검정 규칙이 대칭: 양의 결과와 음의 결과가 모두 존재; 양쪽 유의 결과를 같은 규칙으로 공개: 부호 있는 기대 평균 = 0 / 절대크기는 커질 수 있음; 양의 차이 + 양측 유의 결과만 공개: 양의 꼬리만 남음 / 실습 저장 예 평균 +11.0 MPa"><rect x="8" y="8" width="404" height="76" rx="10" fill="#EEF4FB"/><text x="210" y="37" text-anchor="middle" fill="#1B2A4A" font-size="13" font-weight="800">실제 효과 0 · 추정 분포와 검정 규칙이 대칭</text><text x="210" y="63" text-anchor="middle" fill="#6B7280" font-size="11">양의 결과와 음의 결과가 모두 존재</text><rect x="8" y="94" width="404" height="76" rx="10" fill="#FCF3D9"/><text x="210" y="123" text-anchor="middle" fill="#1B2A4A" font-size="13" font-weight="800">양쪽 유의 결과를 같은 규칙으로 공개</text><text x="210" y="149" text-anchor="middle" fill="#6B7280" font-size="11">부호 있는 기대 평균 = 0 / 절대크기는 커질 수 있음</text><rect x="8" y="180" width="404" height="76" rx="10" fill="#E3F1EA"/><text x="210" y="209" text-anchor="middle" fill="#1B2A4A" font-size="13" font-weight="800">양의 차이 + 양측 유의 결과만 공개</text><text x="210" y="235" text-anchor="middle" fill="#6B7280" font-size="11">양의 꼬리만 남음 / 실습 저장 예 평균 +11.0 MPa</text></svg></div>
+        <div class="side"><ul class="key"><li>유의성 선택과 방향 선택을 구별</li><li>누락된 결과와 선택 규칙을 함께 확인</li></ul>
+          <p class="exp">같은 p값 문턱을 써도 어느 방향의 결과를 공개하느냐에 따라 평균이 달라집니다. 실습은 양의 방향까지 선택한 사례입니다. 실제 출판 편향은 유의성·방향·크기와 미보고 등이 복합적으로 작용할 수 있어 선택 규칙을 명시해야 합니다.</p>
+          <p class="next"><span>다음 질문</span>보고 압박이 선택적 공개에 어떻게 영향을 줄까?</p>
         </div>
       </div>
     </section>
@@ -504,10 +515,10 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
         <table class="sumtbl">
           <thead><tr><th>개념</th><th>핵심</th><th>이 모듈의 예</th></tr></thead>
           <tbody>
-            <tr><td>재현성 위기</td><td>같은 방법으로 추시해도 같은 결과를 얻지 못함</td><td>심리학 재현 비율 35/97 ≈ 36%</td></tr>
+            <tr><td>재현성 위기</td><td>새 자료의 효과·불확실성과 설계 차이를 비교</td><td>심리학 재현 비율 35/97 ≈ 36%</td></tr>
             <tr><td>재현 실패 원인</td><td>조건 차이, 검정력 100% 아님, 가설검정의 잘못된 사용</td><td>A공장 +12 MPa → B공장 +4 MPa</td></tr>
             <tr><td>p-해킹</td><td>p &lt; 0.05가 되도록 분석 조작 → 제1종 오류 확률 &gt; α</td><td>지표 5개 → 약 23%</td></tr>
-            <tr><td>출판 편향</td><td>유의한 결과만 게재 → 효과가 부풀려짐</td><td>실제 +4 → 게재 평균 +12.5 MPa</td></tr>
+            <tr><td>출판 편향</td><td>결과 선택 규칙에 따라 보고된 효과가 치우침</td><td>실제 +4 → 게재 평균 +12.5 MPa</td></tr>
           </tbody>
         </table>
       </div>
@@ -521,13 +532,13 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
       <div class="sh"><div class="sec">실습 1 · 조작형</div><h2>목표: 시도한 분석 수에 따라 ‘틀린 유의’가 얼마나 늘어나는지 확인합니다</h2></div>
       <div class="body split">
         <div class="pcol" style="gap:8px">
-          <div class="plabel" style="margin:0">해보기 · 효과가 없는 첨가제를 시험한 100개 팀이 각자 시도한 분석 수 k를 정하세요</div>
+          <div class="plabel" style="margin:0">해보기 · 각 검정이 독립·위양성 확률 5%인 가상 100팀의 분석 수 k를 정하세요</div>
           <div class="ctrl">분석 수 k<input type="range" id="m24-k" min="1" max="20" step="1" value="1" aria-label="시도한 분석 수"><strong id="m24-kv" style="min-width:40px;text-align:right">1</strong></div>
           <div class="fig" style="flex:1"><svg id="m24-p1-svg" viewBox="0 0 470 190" role="img" aria-label="100개 팀 중 적어도 한 번 p가 0.05 미만이 나온 팀을 빨간 칸으로 표시"></svg></div>
         </div>
         <div class="pcol" style="gap:10px;justify-content:center">
           <div class="plabel" style="margin:0">결과 확인</div>
-          <div class="stats three"><div><small>이론 확률</small><strong id="m24-th">-</strong></div><div><small>‘효과 있음’ 팀</small><strong id="m24-sim">-</strong></div><div><small>목표 α</small><strong>5%</strong></div></div>
+          <div class="stats three"><div><small>이론 확률</small><strong id="m24-th">-</strong></div><div><small>‘효과 있음’ 팀</small><strong id="m24-sim">-</strong></div><div><small>개별 α</small><strong>5%</strong></div></div>
           <p class="howto">도전: ‘효과 있음’ 보고 확률이 50%를 처음 넘는 k를 찾아보세요.</p>
           <p class="pmsg" id="m24-msg"></p>
           <div class="think" style="flex-wrap:wrap"><span>생각해보기</span>분석 계획을 미리 정해 두면 이 문제를 어떻게 막을 수 있을까요?<details style="flex-basis:100%;font-weight:600"><summary style="cursor:pointer">예시 답</summary>가설, 표본크기, 보고할 지표를 미리 정해 두면 유의한 것만 고르기 어렵습니다.</details></div>
@@ -537,36 +548,36 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
 
     <!-- ⑥ 실습 2 · 분류형 ─────────────────────── -->
     <section class="slide" data-step="5" id="p2">
-      <div class="sh"><div class="sec">실습 2 · 분류형</div><h2>목표: B공장에서 재현되지 않은 이유를 원인별로 나눕니다</h2></div>
+      <div class="sh"><div class="sec">실습 2 · 분류형</div><h2>목표: 계산 재현 확인·새 자료 추시·선택 보고를 구분합니다</h2></div>
       <div class="body split even">
         <div class="pcol">
-          <div class="plabel">해보기 · 각 카드가 조건 차이인지, 정직해도 생기는 우연인지, 분석 조작인지 보고 칸에 놓으세요</div>
+          <div class="plabel">해보기 · 같은 자료인지 새 자료인지, 분석 선택을 숨겼는지 보고 나누세요</div>
           <div class="pool" id="p2-pool"></div>
         </div>
         <div class="pcol" style="gap:8px">
           <div class="plabel" style="margin:0">결과 확인 · <span id="p2-count">0 / 0</span></div>
           <div class="bins" id="p2-bins"></div>
           <div class="p2row"><p class="pmsg" id="p2-msg"></p><button class="btn ghost" id="p2-reset">다시 하기</button></div>
-          <div class="think" style="flex-wrap:wrap"><span>생각해보기</span>세 가지 원인 중 분석하는 사람이 직접 막을 수 있는 것은 무엇일까요?<details style="flex-basis:100%;font-weight:600"><summary style="cursor:pointer">예시 답</summary>선택적 보고와 p-해킹은 계획과 공개로 막을 수 있습니다. 학술지 쪽 출판편향은 개인만으로 어렵습니다.</details></div>
+          <div class="think" style="flex-wrap:wrap"><span>생각해보기</span>같은 코드로 결과가 같으면 원래 연구는 타당할까요?<details style="flex-basis:100%;font-weight:600"><summary style="cursor:pointer">예시 답</summary>계산의 일치만으로 표집·측정·분석 가정까지 확인되지는 않습니다.</details></div>
         </div>
       </div>
     </section>
 
     <!-- ⑥ 실습 3 · 추정형 (모듈 전용) ─────────────── -->
     <section class="slide" data-step="5" id="p3">
-      <div class="sh"><div class="sec">실습 3 · 추정형</div><h2>목표: 유의한 결과만 모으면 효과가 얼마나 부풀려지는지 예측합니다</h2></div>
+      <div class="sh"><div class="sec">실습 3 · 추정형</div><h2>목표: 양의 유의한 결과만 모을 때 평균의 변화를 예측합니다</h2></div>
       <div class="body split">
         <div class="pcol">
-          <div class="plabel">해보기 · 첨가제의 실제 효과를 고르고, p &lt; 0.05인 결과만 게재될 때 게재 결과의 평균 효과를 예측하세요</div>
+          <div class="plabel">해보기 · 첨가제의 실제 효과를 고르고, 양의 차이이고 양측 p &lt; 0.05인 결과만 공개할 때 게재 결과의 평균 효과를 예측하세요</div>
           <div class="fig" style="flex:1"><svg id="m24-p3-svg" viewBox="0 0 470 210" role="img" aria-label="시험 1,000건의 효과 분포와 게재된 결과"></svg></div>
         </div>
-        <div class="pcol" style="gap:9px;justify-content:center">
+        <div class="pcol" style="gap:6px;justify-content:center">
           <div class="mbtns" id="m24-qd" style="gap:6px"></div>
           <div class="ctrl">게재 평균 예측<input type="range" id="m24-g" min="-4" max="20" step="0.5" value="6" aria-label="게재된 결과의 평균 효과 예측"><strong id="m24-gv" style="min-width:72px;text-align:right">-</strong></div>
-          <button class="btn" id="m24-check" style="align-self:flex-start">시뮬레이션 결과 보기</button>
+          <button class="btn" id="m24-check" style="align-self:flex-start">저장 예 보기</button>
           <div class="stats three"><div><small>내 예측</small><strong id="m24-mine">-</strong></div><div><small>게재 평균</small><strong id="m24-act">?</strong></div><div><small>게재 건수</small><strong id="m24-cnt">?</strong></div></div>
           <p class="pmsg" id="m24-msg3"></p>
-          <div class="think" style="flex-wrap:wrap"><span>생각해보기</span>A공장의 +12 MPa는 실제 효과가 얼마일 때도 나올 수 있을까요?<details style="flex-basis:100%;font-weight:600"><summary style="cursor:pointer">예시 답</summary>실제 효과가 0이어도 표본 흔들림만으로 +12 MPa가 나올 수 있습니다.</details></div>
+          <div class="think" style="flex-wrap:wrap"><span>생각해보기</span>효과가 0이어도 +12 MPa가 나올까요?<details style="flex-basis:100%;font-weight:600"><summary style="cursor:pointer">예시 답</summary>실제 효과가 0이어도 표본 흔들림만으로 +12 MPa가 나올 수 있습니다.</details></div>
         </div>
       </div>
     </section>
@@ -602,13 +613,13 @@ var PUB={"0":{"np":23,"mp":11.0,"ma":-0.1,"ha":[1,9,55,147,285,281,170,45,7,0,0,
 var PEDGE=-20, PBW=4;
 
 var QUIZ=[
- {goal:1,type:"계산",stem:"원래 연구 100건 중 97건이 통계적으로 유의했고, 이 97건을 추시했더니 35건만 유의했습니다. 유의한 결과가 재현된 비율은 약 얼마일까요?",
+ {goal:1,type:"계산",stem:"원래 연구 100건 중 97건이 통계적으로 유의했고, 이 97건을 추시했더니 35건만 유의했습니다. 원래 유의했던 연구 중 추시에서도 유의한 비율은 약 얼마일까요?",
   opts:["약 36%","35%","97%","약 64%"],ans:0,
-  exp:"재현 비율은 원래 유의했던 97건을 기준으로 35 ÷ 97 ≈ 0.36, 즉 약 36%입니다. 35%는 기준을 100건으로 잘못 잡은 값이고, 약 64%는 재현되지 않은 비율입니다. 약 1/3 정도만 재현할 수 있었다는 뜻입니다.",back:"s-4-2a",backLabel:"4-2 심리학 재현성 조사 다시 보기"},
- {goal:1,type:"O/X 오개념",stem:"“한 번의 추시에서 p < 0.05가 나오지 않았다면, 원래 논문의 주장은 틀린 것이다.”",
-  opts:["O","X"],ans:1,ox:true,
-  exp:"가설검정의 검정력은 100%가 아니므로 원래 결론이 옳아도 추시 데이터가 반드시 유의하지는 않습니다. 실험 조건을 완전히 같게 하기도 어렵습니다. 그래서 재현성이 없다는 것은 원래 주장이 ‘잘못되었을 가능성이 있다’는 뜻으로 받아들여야 합니다.",back:"s-4-1a",backLabel:"4-1 재현성 다시 보기"},
- {goal:2,type:"계산",stem:"효과가 전혀 없는 첨가제로 서로 독립인 품질 지표 5개를 각각 유의수준 0.05로 검정하고, 하나라도 p < 0.05이면 ‘효과 있음’으로 보고합니다. 효과가 있다고 보고할 확률은 약 얼마일까요?",
+  exp:"재현 비율은 원래 유의했던 97건을 기준으로 35 ÷ 97 ≈ 0.36, 즉 약 36%입니다. 35%는 기준을 100건으로 잘못 잡은 값이고, 약 64%는 이 기준에서 유의성을 재검출하지 못한 비율입니다. 효과·구간 등 다른 재현성 지표와 함께 봅니다.",back:"s-4-2a",backLabel:"4-2 심리학 재현성 조사 다시 보기"},
+ {goal:1,type:"상황 판단",stem:"연구팀 B가 A의 원자료와 분석 코드를 받아 같은 수치가 나오는지 확인했습니다. 새 참여자나 시료는 모집하지 않았습니다. 이 모듈의 구분으로 무엇을 확인한 것일까요?",
+  opts:["같은 자료·코드의 계산 재현성", "새 자료를 이용한 독립 추시", "가설이 참임을 증명", "다른 공장으로의 일반화"],ans:0,ox:false,
+  exp:"같은 자료와 코드로 계산 결과를 확인한 것입니다. 새 자료에서 효과가 다시 관찰되는지 보는 추시와 다릅니다. 계산이 일치해도 표집·측정·분석 가정의 타당성까지 보장하지는 않습니다.",back:"s-4-1a",backLabel:"4-1 재현성 다시 보기"},
+ {goal:2,type:"계산",stem:"참인 귀무가설 5개를 서로 독립적으로 검정하고, 각 검정의 실제 위양성 확률은 0.05입니다. 하나라도 유의하면 보고할 때 그 확률은 약 얼마일까요?",
   opts:["약 23%","5%","25%","약 77%"],ans:0,
   exp:"모든 지표가 유의하지 않을 확률은 0.95⁵ ≈ 0.774이므로, 적어도 하나가 유의할 확률은 1 − 0.774 ≈ 0.226, 약 23%입니다. 5%는 검정 한 번일 때, 25%는 0.05 × 5로 단순히 더한 값, 약 77%는 하나도 유의하지 않을 확률입니다.",back:"s-4-3c",backLabel:"4-3 제1종 오류 증가 다시 보기"},
  {goal:2,type:"상황 판단",stem:"다음 중 p-해킹에 해당하는 것은 무엇일까요?",
@@ -617,25 +628,23 @@ var QUIZ=[
  {goal:3,type:"O/X 오개념",stem:"“동료평가를 거쳐 저널에 실린 논문의 결과는 옳다고 보아도 된다.”",
   opts:["O","X"],ans:1,ox:true,
   exp:"논문 게재 여부는 편집자와 평가자 몇 명이 판단할 뿐이므로 논문에도 잘못이 있을 수 있습니다. 또 p < 0.05인 결과가 주로 게재되는 출판 편향 때문에, 실린 결과만 모으면 실제보다 효과가 크게 보이기도 합니다.",back:"s-4-4a",backLabel:"4-4 논문 게재 과정 다시 보기"},
- {goal:3,type:"상황 판단",stem:"실제로는 효과가 없는 첨가제를 여러 공장이 시험했고, p < 0.05가 나온 공장만 보고서를 냈습니다. 보고서에 실린 효과의 평균은 어떻게 보일까요?",
-  opts:["실제(0)보다 크게 부풀려져 보인다","실제 효과와 같게 보인다","실제보다 작게 보인다","보고서가 많을수록 실제 효과에 가까워진다"],ans:0,
-  exp:"유의한 결과만 세상에 나오면 우연히 큰 차이가 난 결과만 모이므로 효과가 부풀려집니다. 이 모듈의 시뮬레이션에서도 실제 효과가 0일 때 게재된 결과의 평균은 +11.0 MPa였습니다. 이것이 출판 편향이며, 보고서가 많아져도 치우침은 사라지지 않습니다.",back:"s-4-4b",backLabel:"4-4 출판 편향 다시 보기"}
+ {goal:3,type:"상황 판단",stem:"실제 효과가 0이고 추정값과 검정 규칙이 0에 대해 대칭입니다. 양의 결과와 음의 결과 모두 양측 p < 0.05이면 공개할 때, 부호 있는 평균은 어떻게 해석할까요?",
+  opts:["평균은 0 부근이어도 효과의 절대크기는 과장될 수 있다", "공개된 결과는 모두 양의 효과다", "표본수가 커지면 선택 편향은 반드시 사라진다", "유의하므로 실제 효과도 0보다 크다"],ans:0,
+  exp:"대칭인 양쪽 꼬리를 같은 규칙으로 선택하면 부호 있는 조건부평균도 0입니다. 절대값은 큰 결과만 남습니다. 실습에서 실제 효과 0인데 공개 평균이 +11.0 MPa인 것은 양의 방향까지 선택했기 때문입니다. 선택 규칙을 먼저 확인해야 합니다.",back:"s-4-4b",backLabel:"4-4 출판 편향 다시 보기"}
 ];
 
-var BINS=["실험 조건 차이","우연한 결과","p-해킹"];
-var CARDS=[["B공장 원료 성분이 A공장과 다름","실험 조건 차이"],["측정 장비와 작업 온도가 다름","실험 조건 차이"],
-           ["효과가 진짜여도 검정력이 80%뿐","우연한 결과"],["효과가 없어도 20번에 1번은 p < 0.05","우연한 결과"],
-           ["지표 5개 중 유의한 것만 골라 보고","p-해킹"],["p < 0.05가 될 때까지 데이터 추가","p-해킹"]];
-var HINT={"실험 조건 차이":"원래 실험과 똑같은 조건을 갖추기 어려워 생기는 차이입니다.","우연한 결과":"검정력과 유의수준 때문에 정직하게 분석해도 생길 수 있는 결과입니다.","p-해킹":"p값이 0.05보다 작아지도록 분석 방법을 조작한 경우입니다."};
+var BINS=["같은 자료 재분석","새 자료 추시","선택 보고·p-해킹"];
+var CARDS=[["원자료·코드로 같은 표를 다시 계산","같은 자료 재분석"],["같은 파일과 분석 설정으로 결과 확인","같은 자료 재분석"],["새 참여자에게 원래 처치를 반복","새 자료 추시"],["새 시험편을 모아 효과와 구간 비교","새 자료 추시"],["유의한 지표만 골라 사전 가설처럼 보고","선택 보고·p-해킹"],["무보정 검정을 유의할 때까지 반복","선택 보고·p-해킹"]];
+var HINT={"같은 자료 재분석":"계산 재현성을 확인합니다. 설계의 타당성이나 새 표본의 결과까지 보장하지 않습니다.","새 자료 추시":"독립된 새 자료의 효과·불확실성과 실험 조건을 비교합니다.","선택 보고·p-해킹":"시도와 선택을 숨긴 채 유리한 결과만 확증적 근거로 보고하는 경우입니다."};
 
 var GLOSSARY=[
- ["재현성","reproducibility, replication","누가 언제 어디서 실험하더라도 조건이 같다면 같은 결과를 얻을 수 있어야 한다는 성질입니다.","A공장의 개선 효과가 B공장에서도 나오는가"],
- ["추시","replication study","다른 사람이 실험한 결과를 같은 방법과 조건으로 그대로 따라 해 확인하는 것입니다.","B공장이 같은 조건으로 첨가제 X를 시험"],
+ ["재현성","reproducibility, replication","용례는 분야마다 다릅니다. 여기서는 계산 재현성(같은 자료·코드)과 추시(독립된 새 자료)를 구분합니다.","계산 일치와 새 자료의 효과 확인은 다른 질문"],
+ ["추시","replication study","독립된 새 자료로 원래 연구와 비교하는 연구입니다. 수치나 p값의 완전 일치보다 효과·불확실성·조건을 함께 봅니다.","B공장이 같은 조건으로 첨가제 X를 시험"],
  ["재현성 위기","reproducibility crisis","발표된 결과를 같은 방법으로 추시해도 같은 결과를 얻지 못했다는 보고가 잇따르는 문제입니다.","심리학 연구의 재현 비율 약 36%"],
  ["효과크기","effect size","평균값의 차이처럼 효과가 얼마나 큰지를 나타내는 값입니다.","A공장 +12 MPa, B공장 +4 MPa"],
  ["p-해킹","p-hacking","자신에게 유리하도록 p값이 0.05보다 작아지게 분석 방법을 조작하는 행위입니다.","지표 5개 중 유의한 것만 보고"],
  ["동료평가","peer review","투고된 논문을 가까운 분야 연구자 2~3명이 확인해 게재 판단을 돕는 과정입니다.","저널 편집자가 평가자에게 평가 의뢰"],
- ["출판 편향","publication bias","p < 0.05인 결과만 주로 출판되어 세상에 알려진 내용이 한쪽으로 치우치는 문제입니다.","효과 0인 첨가제도 게재 결과는 +11.0 MPa"]
+ ["출판 편향","publication bias","결과에 따라 공개·게재 가능성이 달라져 알려진 연구가 치우치는 문제입니다. 방향 선택 여부도 확인합니다.","실습은 양의 차이·양측 p<.05만 공개"]
 ];
 var REFS=[
  {n:1,title:"Estimating the reproducibility of psychological science",org:"Open Science Collaboration, Science 349(6251), aac4716, 2015",url:"https://doi.org/10.1126/science.aac4716",date:"2026-10-27 확인"},
@@ -776,14 +785,8 @@ on("m24-case",function(s){
 });
 
 on("m24-rep",function(s){
-  mkR(s,"rR",C.navy3);
-  bxR(s,6,6,408,96,"#F3F5F9");tR(s,20,28,"재현성: 조건이 같으면 같은 결과",{a:"start",fw:800,fs:12});
-  bxR(s,20,42,110,46,"#fff",C.navy3);tR(s,75,62,"원래 실험",{fw:800,fs:11});tR(s,75,79,"A공장",{fs:10,c:C.gray});
-  bxR(s,160,42,110,46,"#fff",C.navy3);tR(s,215,62,"추시",{fw:800,fs:11});tR(s,215,79,"같은 방법·조건",{fs:10,c:C.gray});
-  arR(s,132,65,156,65,"rR");arR(s,272,65,296,65,"rR");
-  bxR(s,300,42,104,46,"#E3F1EA");tR(s,352,62,"같은 결과",{fw:800,fs:11,c:GRN});tR(s,352,79,"→ 믿고 적용",{fs:10,c:"#22262E"});
-  caseR(s,46,118,340);
-  tR(s,210,266,"한 번의 추시 실패 ≠ 원래 주장 오류, ‘잘못되었을 가능성’",{fw:800,fs:10.5,c:C.amberInk});
+  var R=[["같은 데이터·코드 → 계산 재현 확인","계산 일치 ≠ 표집·측정·설계의 타당성"],["독립된 새 자료 → 추시","효과크기·구간·설계 조건을 비교"],["다른 결과가 나왔다면","표본오차·조건 차이·선택·오류 등을 검토"]];
+  R.forEach(function(r,i){var y=8+i*86;bxR(s,8,y,404,76,["#EEF4FB","#FCF3D9","#E3F1EA"][i]);tR(s,210,y+28,r[0],{fw:800,fs:12.5});tR(s,210,y+54,r[1],{fs:10.5,c:C.gray});});
 });
 
 on("m24-time",function(s){
@@ -821,15 +824,15 @@ on("m24-cause",function(s){
     r.forEach(function(v,i){tR(s,cx[i],y,v,{fw:j===0||i===0?800:600,fs:10.5,c:j===0?C.navy3:C.navy});});if(j>0)tR(s,270,y,"≠",{fw:800,fs:12,c:RED});});
   bxR(s,6,140,408,124,"#FCF3D9");tR(s,20,162,"② 검정력이 100%가 아님 (예: 검정력 80%)",{a:"start",fw:800,fs:12,c:C.amberInk});
   for(var i=0;i<10;i++){var x=40+i*36;el("rect",{x:x,y:178,width:26,height:30,rx:5,fill:i<8?GRN:RED},s);tR(s,x+13,198,i<8?"○":"×",{fw:800,fs:13,c:"#fff"});}
-  tR(s,210,232,"효과가 진짜여도 추시 10번 중 2번은 p ≥ 0.05",{fw:800,fs:11});tR(s,210,251,"그래도 36%는 이것만으로 설명하기에 너무 낮음",{fs:10.5,c:C.gray,fw:700});
+  tR(s,210,232,"검정력 80%: 비유의 확률 20% (횟수 보장 아님)",{fw:800,fs:11});tR(s,210,251,"집계 비율만으로 원인을 분리할 수 없음",{fs:10.5,c:C.gray,fw:700});
 });
 
 on("m24-hack",function(s){
   mkR(s,"hR",C.navy3);
   bxR(s,6,100,90,44,"#FCF3D9",C.amber);tR(s,51,127,"실험·관찰",{fw:800,fs:11.5});
   bxR(s,120,100,76,44,"#EEF4FB",BLU);tR(s,158,127,"데이터",{fw:800,fs:11.5});arR(s,98,122,116,122,"hR");
-  bxR(s,250,14,164,64,"#fff",GRN);tR(s,262,36,"p ≥ 0.05",{a:"start",fw:800,fs:12,c:GRN});tR(s,262,54,"가설을 지지하지 않음",{a:"start",fs:10.5});tR(s,262,70,"논문으로 발표할 수 없음",{a:"start",fs:10.5});
-  bxR(s,250,160,164,64,"#fff",RED);tR(s,262,182,"p < 0.05",{a:"start",fw:800,fs:12,c:RED});tR(s,262,200,"가설을 지지함",{a:"start",fs:10.5});tR(s,262,216,"논문으로 발표할 수 있음",{a:"start",fs:10.5});
+  bxR(s,250,14,164,64,"#fff",GRN);tR(s,262,36,"p ≥ 0.05",{a:"start",fw:800,fs:12,c:GRN});tR(s,262,54,"해당 검정에서 비기각",{a:"start",fs:10.5});tR(s,262,70,"선택적으로 누락될 위험",{a:"start",fs:10.5});
+  bxR(s,250,160,164,64,"#fff",RED);tR(s,262,182,"p < 0.05",{a:"start",fw:800,fs:12,c:RED});tR(s,262,200,"가설의 참을 증명하지 않음",{a:"start",fs:10.5});tR(s,262,216,"선호되어 공개될 수 있음",{a:"start",fs:10.5});
   el("path",{d:"M198 114 C226 100 226 60 246 50",fill:"none",stroke:C.navy3,"stroke-width":2,"marker-end":"url(#hR)"},s);
   el("path",{d:"M198 130 C226 146 226 182 246 190",fill:"none",stroke:C.navy3,"stroke-width":2,"marker-end":"url(#hR)"},s);
   el("path",{d:"M300 82 C300 120 300 130 300 154",fill:"none",stroke:RED,"stroke-width":3,"stroke-dasharray":"7 4","marker-end":"url(#hR)"},s);
@@ -874,7 +877,7 @@ on("m24-pub",function(s){
   tR(s,404,236,"시험 결과의 효과(MPa)",{a:"end",fs:10,c:C.gray,fw:700});tR(s,14,24,"시험 1,000건 (실제 효과 +4 MPa)",{a:"start",fs:10.5,fw:800});
   [[4,"실제 +4",C.navy],[12.5,"게재 평균 +12.5",RED]].forEach(function(m,i){el("line",{x1:X(m[0]),x2:X(m[0]),y1:40,y2:206,stroke:m[2],"stroke-width":2,"stroke-dasharray":"5 3"},s);tR(s,X(m[0])+(i?6:-6),56+i*18,m[1],{a:i?"start":"end",fw:800,fs:11,c:m[2],halo:true});});
   el("rect",{x:40,y:246,width:12,height:10,fill:"#C9CED6"},s);tR(s,56,255,"전체 1,000건",{a:"start",fs:10,fw:700});
-  el("rect",{x:150,y:246,width:12,height:10,fill:C.amber},s);tR(s,166,255,"p < 0.05로 게재된 129건",{a:"start",fs:10,fw:700});
+  el("rect",{x:150,y:246,width:12,height:10,fill:C.amber},s);tR(s,166,255,"양의 차이·양측 유의 129건",{a:"start",fs:10,fw:700});
 });
 
 on("m24-cycle",function(s){
@@ -906,7 +909,7 @@ on("m24-cycle",function(s){
     document.getElementById("m24-th").textContent=(th*100).toFixed(1)+"%";document.getElementById("m24-sim").textContent=n+"팀";
     var m=document.getElementById("m24-msg");m.className="pmsg"+(k===14?" ok":"");
     m.textContent=k===1?"분석을 한 번만 하면 ‘효과 있음’ 확률은 5%로 유의수준과 같습니다. 효과가 없는데도 100팀 중 "+n+"팀이 우연히 유의한 결과를 얻었습니다.":
-      k===14?"찾았습니다. k = 14에서 1 − 0.95¹⁴ ≈ 0.512로 처음 50%를 넘습니다(k = 13은 0.487). 효과가 없는데도 절반 넘는 팀이 ‘효과 있음’을 보고하게 됩니다.":
+      k===14?"찾았습니다. k = 14에서 1 − 0.95¹⁴ ≈ 0.512로 처음 50%를 넘습니다(k = 13은 0.487). 이론 확률이 50%를 넘습니다. 100팀의 실현 비율과는 다를 수 있습니다.":
       "k = "+k+"이면 1 − 0.95"+supR(k)+" ≈ "+th.toFixed(3)+"입니다. 목표한 유의수준 5%의 약 "+(th/.05).toFixed(1)+"배이며, 시뮬레이션에서는 100팀 중 "+n+"팀이 ‘효과 있음’을 보고했습니다.";
   }
   ks.addEventListener("input",upd);upd();
@@ -925,11 +928,11 @@ on("m24-cycle",function(s){
   function txt(){var v=+g.value;document.getElementById("m24-gv").textContent=(v>0?"+":"")+v.toFixed(1)+" MPa";document.getElementById("m24-mine").textContent=(v>0?"+":"")+v.toFixed(1);}
   function reset(){[].forEach.call(qb.children,function(x,i){var on=DS[i]===cur;x.classList.toggle("on",on);x.setAttribute("aria-pressed",on);});
     document.getElementById("m24-act").textContent=seen[cur]?"+"+PUB[cur].mp.toFixed(1):"?";document.getElementById("m24-cnt").textContent=seen[cur]?PUB[cur].np+"건":"?";
-    var m=document.getElementById("m24-msg3");m.className="pmsg";m.textContent="실제 효과가 "+(cur==="0"?"0":"+"+cur)+" MPa인 시험 1,000건 중 p < 0.05인 결과만 게재된다면, 게재 결과의 평균은 얼마일지 예측한 뒤 「시뮬레이션 결과 보기」를 누르세요.";draw();}
+    var m=document.getElementById("m24-msg3");m.className="pmsg";m.textContent="양의 유의 결과의 공개 평균을 예측하세요.";draw();}
   g.addEventListener("input",function(){txt();draw();});
   document.getElementById("m24-check").onclick=function(){seen[cur]=true;var D=PUB[cur],gv=+g.value,ok=Math.abs(gv-D.mp)<=2,m=document.getElementById("m24-msg3");
     document.getElementById("m24-act").textContent="+"+D.mp.toFixed(1);document.getElementById("m24-cnt").textContent=D.np+"건";m.className="pmsg "+(ok?"ok":"ng");
-    m.textContent=(ok?"가깝게 예측했습니다. ":"차이가 있습니다. ")+"실제 효과 "+(cur==="0"?"0":"+"+cur)+" MPa에서 1,000건 중 "+D.np+"건만 게재되고, 게재 평균은 +"+D.mp.toFixed(1)+" MPa입니다. 실제 효과가 0~8 MPa여도 게재 결과는 +11~14 MPa로 부풀려집니다.";draw();};
+    m.textContent="양의 차이·양측 유의만 선택한 저장 예입니다.";draw();};
   txt();reset();
 })();
 

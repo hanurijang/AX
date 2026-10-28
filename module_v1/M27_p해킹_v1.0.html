@@ -365,8 +365,8 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
       <div class="body split even">
         <div class="fig"><svg id="m27-def" viewBox="0 0 420 270" role="img" aria-label="p-해킹의 세 가지 예: p가 0.05 미만이 될 때까지 표본 늘리기, 0.07이어서 10개 추가, 여러 요인 중 유의한 것만 보고"></svg></div>
         <div class="side">
-          <ul class="key"><li><b>p-해킹</b>: p &lt; 0.05가 되도록 설계·해석</li><li>의도하지 않아도 저지를 수 있습니다.</li></ul>
-          <p class="exp">지금까지는 가설검정 자체의 문제점을 알아보았습니다. 이제 가설검정을 사용하는 쪽의 문제인 p-해킹을 살펴봅니다. p-해킹이란 의도하든 의도하지 않든 p값을 원하는 방향(유의수준 0.05 미만)으로 조작하는 행위입니다. 수치를 고치는 것이 아니라 p값이 0.05 미만이 되도록 실험을 설계하거나 해석하는 것을 말합니다. 이로 인해 실제로는 귀무가설이 옳음에도 대립가설이 옳다는 오판이 초래되고, 그 결과 재현성이 낮아집니다. ‘의도하지 않았는데 눈치채 보니 p-해킹’인 상황이 될 수 있다는 점이 무섭습니다.</p>
+          <ul class="key"><li>선택·중단을 숨긴 채 통상 p값으로 보고</li><li>검정력을 고려한 사전 설계와 구분</li></ul>
+          <p class="exp">p-해킹은 결과를 본 뒤 표본 수·변수·모형·제외 기준 등을 바꾸거나 유리한 결과만 선택해, 그 선택을 무시한 p값을 확증적 근거로 제시하는 행위입니다. 의도하지 않아도 일어날 수 있으며 숫자 변조와 구별됩니다. 사전에 효과크기와 검정력을 고려해 충분한 표본을 설계하는 일 자체는 p-해킹이 아닙니다. 핵심은 선택과 중단 규칙을 포함한 전체 절차의 오류율과 투명성입니다.</p>
           <p class="next"><span>다음 질문</span>표본을 늘려 가며 보면 왜 안 될까?</p>
         </div>
       </div>
@@ -378,7 +378,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
         <div class="fig"><svg id="m27-seq" viewBox="0 0 420 270" role="img" aria-label="귀무가설이 옳을 때 표본을 1장씩 늘리며 검정한 p값의 경로 세 개, 27장째, 45장째, 78장째에 0.05 아래로 내려감"></svg></div>
         <div class="side">
           <ul class="key"><li>1장씩 늘리며 보면 위양성 약 30%</li><li>p = 0.07이라 10장 추가해도 약 6%</li></ul>
-          <p class="exp">두 집단이 동일해 귀무가설이 옳은 상황에서 각 10장으로 시작해 1장씩 늘리며 t검정을 하고, p &lt; 0.05가 되면 멈추는 시뮬레이션을 해 보았습니다. 최대 100장까지 4,000번 반복하자 29.4%가 어딘가에서 p &lt; 0.05에 도달했습니다. 유의수준이 0.05이니 위양성은 5%여야 하는데, 표본을 늘려 가다 보면 적어도 한 번은 p &lt; 0.05가 될 확률이 커지기 때문입니다. 각 30장일 때 0.05 ≤ p &lt; 0.1이면 10장씩 추가해 다시 검정하는 방식도 4만 번 시뮬레이션에서 약 6%로, 설정한 유의수준을 벗어납니다.</p>
+          <p class="exp">고정 표본용 t검정의 0.05 기준을 반복 적용하며 유의하면 멈추면, 전체 절차의 위양성 확률이 5%를 넘을 수 있습니다. 저장된 예에서 각 10장부터 최대 100장까지 1장마다 확인한 비율은 29.4%입니다. 30장에서 0.05 ≤ p &lt; 0.1일 때 10장을 더 모은 별도 예는 약 6.2%입니다. 이 값은 설정별 유한 모의실험의 예이며 모든 연구의 보편적 수치가 아닙니다. 중간 확인을 고려해 설계한 순차검정은 별도로 구분합니다.</p>
           <p class="next"><span>다음 질문</span>여러 요인 중 유의한 것만 보고하면?</p>
         </div>
       </div>
@@ -391,14 +391,14 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
           <div class="fig"><svg id="m27-hark" viewBox="0 0 420 150" role="img" aria-label="첨가제 A부터 T까지 20종을 시험해 G만 p 0.04, 이를 처음부터의 가설로 보고하면 HARKing"></svg></div>
           <div class="math">
             <div class="mt">핵심 수학 개념 · 효과 없는 후보 k개를 검정할 때</div>
-            <div class="f">평균 kα개,  P(1개 이상 유의) = 1 − (1 − α)<sup>k</sup></div>
+            <div class="f">기대 개수 kα / 독립일 때 P(1개 이상) = 1 − (1 − α)<sup>k</sup></div>
             <div class="r"><span>계산</span><span>k = 20: 20 × 0.05 = 1종, 1 − 0.95²⁰ ≈ 0.64</span></div>
             <div class="r"><span>대책</span><span>예비 실험 → 가설 → 새 데이터로 본 실험, 또는 모두 보고</span></div>
           </div>
         </div>
         <div class="side">
-          <ul class="key"><li><b>HARKing</b>: 결과를 보고 나서 가설 만들기</li><li><b>체리 피킹</b>·<b>다중성 문제</b>와 같은 뿌리</li></ul>
-          <p class="exp">첨가제 A, B, C…를 차례로 시험해 7번째인 G에서 p &lt; 0.05를 얻고 ‘G에 효과가 있다는 가설을 세우고 검증했다’고 쓰면, p-해킹의 연관 개념인 HARKing의 예입니다. 더 넓게는 편리한 근거만 골라 자기 이론을 뒷받침하는 것을 체리 피킹이라 합니다. 전혀 효과가 없는 첨가제 20종을 각각 유의수준 0.05로 검정해도 평균 1종이 유의해지고, 적어도 1종이 유의할 확률은 64%입니다. 이는 검정을 반복할 때 나타나는 다중성 문제와 같습니다. 버린 결과는 논문에 실리지 않으니 독자는 그 존재조차 알 수 없어 HARKing을 눈치채기 어렵습니다<span class="cite">[1]</span>.</p>
+          <ul class="key"><li><b>HARKing</b>: 사후 가설을 사전 가설인 양 보고</li><li><b>체리 피킹</b>·<b>다중성 문제</b>와 같은 뿌리</li></ul>
+          <p class="exp">결과를 보고 얻은 가설을 처음부터 세운 것처럼 보고하면 HARKing입니다. 유의한 결과만 골라 보고하는 선택 보고와 관련되지만 완전히 같은 개념은 아닙니다. 참인 귀무가설 20개를 실제 위양성 확률 0.05로 검정하면 기대 유의 개수는 1입니다. 여기에 검정 결과가 독립이라는 조건을 더해야 적어도 하나 유의할 확률이 1 − 0.95²⁰ ≈ 64%가 됩니다. 같은 대조군·자료를 쓰는 검정은 종속될 수 있습니다<span class="cite">[1]</span>.</p>
           <p class="next"><span>다음 질문</span>p-해킹은 어떻게 예방할까?</p>
         </div>
       </div>
@@ -410,7 +410,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
         <div class="fig"><svg id="m27-two" viewBox="0 0 420 270" role="img" aria-label="탐색형 예비 실험으로 가설을 세우고, 범위를 좁혀 새 데이터로 가설검증형 본 실험을 수행"></svg></div>
         <div class="side">
           <ul class="key"><li><b>탐색형 연구</b>로 가설을 찾고</li><li><b>가설검증형 연구</b>로 새 데이터에서 확인</li></ul>
-          <p class="exp">HARKing이 발생하지 않도록 하려면 첨가제 A, B, C…처럼 여러 가지를 시험해 보는 것은 예비 실험으로 수행하고, 여기서 얻은 결과를 바탕으로 가설을 세워 본 실험에서 범위를 좁혀 다시 실험하는 것이 바람직합니다. 단, 본 실험에서 얻은 새로운 데이터는 독립적으로 해석해야 하며, 예비 실험 데이터와 섞으면 유의한 결과가 되기 쉬운 편향이 생겨 위양성 확률이 유의수준보다 커집니다. 이렇게 전체를 탐색적으로 해석하는 연구를 탐색형 연구, 가설을 세우고 검증하는 연구를 가설검증형 연구라 합니다.</p>
+          <p class="exp">다양한 후보를 탐색해 가설을 만드는 연구도 가치가 있습니다. 시도한 변수·분석·선택 기준과 사후에 만든 가설을 투명하게 밝히고, 확증적 검정과 구분합니다. 선택한 가설을 검증할 때는 독립된 새 자료나 미리 분리해 둔 검증 자료를 사용할 수 있습니다. 탐색에 쓴 자료를 합친 뒤 선택을 무시한 보통의 p값을 보고하면 문제가 됩니다. 자료를 합치는 모든 분석이 금지된다는 뜻은 아닙니다.</p>
           <p class="next"><span>다음 질문</span>탐색형 연구밖에 할 수 없다면?</p>
         </div>
       </div>
@@ -423,14 +423,14 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
           <div class="fig"><svg id="m27-pairs" viewBox="0 0 420 150" role="img" aria-label="변수 100개에서 4,950쌍, 상관이 없어도 평균 247.5쌍이 유의, 본페로니 기준 0.00001"></svg></div>
           <div class="math">
             <div class="mt">핵심 수학 개념 · 본페로니 교정</div>
-            <div class="f">각 검정의 기준 = α ÷ 검정 횟수</div>
+            <div class="f">각 기준 = α ÷ 비교 수 (전체 위양성 ≤ α)</div>
             <div class="r"><span>기호</span><span><sub>100</sub>C<sub>2</sub> = 100 × 99 ÷ 2 = 4,950쌍</span></div>
             <div class="r"><span>계산</span><span>0.05 ÷ 4,950 ≈ 0.0000101 (보정 없으면 247.5쌍 유의)</span></div>
           </div>
         </div>
         <div class="side">
-          <ul class="key"><li><b>본페로니 교정</b>: α를 검정 횟수로 나눔</li><li>탐색형 연구에서 다중성을 놓치기 쉽습니다.</li></ul>
-          <p class="exp">가설검증형 연구에 따라 올바르게 가설검정을 사용하는 것이 이상적입니다. 탐색형 연구밖에 할 수 없는 상황이라면 실험이나 해석에 사용한 변수를 모두 보고하고, 검정을 반복한 횟수로 유의수준 α를 나누는 본페로니 교정으로 이를 보정해야 합니다. 분산분석 등 여러 집단 간 비교에서 다중비교 보정은 잘 알려졌으나, 탐색형 연구에서는 검정의 다중성을 놓치기 쉽습니다. 예를 들어 압연 설비 센서 변수 100개 사이의 상관계수를 모두 검정하면 4,950쌍이 생기며, 모두 독립이라도 α = 0.05라면 유의한 상관이 평균 약 250쌍 나타납니다.</p>
+          <ul class="key"><li>본페로니: 유효한 p값·비교 집합 확인</li><li>전체 위양성 확률 ≤ α, 독립성 불필요</li></ul>
+          <p class="exp">본페로니는 미리 정한 비교 집합 m개에 각 α/m을 적용해, 하나 이상 위양성이 생길 확률을 α 이하로 제어합니다. 각 귀무가설의 p값이 유효하면 검정 사이 독립성은 필요하지 않습니다. 센서 100개의 모든 쌍은 4,950개로 기준은 약 0.0000101입니다. 모두 무상관이고 각 검정의 실제 위양성 확률이 0.05이면 기대 유의 쌍은 247.5이며, 이 기댓값 계산에도 독립성은 필요 없습니다. 목적에 따라 Holm이나 FDR 제어 등 다른 방법도 검토합니다.</p>
           <p class="next"><span>다음 질문</span>결과를 본 뒤 가설을 바꾸지 못하게 하려면?</p>
         </div>
       </div>
@@ -441,9 +441,20 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
       <div class="body split even">
         <div class="fig"><svg id="m27-prereg" viewBox="0 0 420 270" role="img" aria-label="사전 등록은 계획 등록 후 데이터 수집과 분석, HARKing은 데이터를 본 뒤 가설을 만듦"></svg></div>
         <div class="side">
-          <ul class="key"><li><b>사전 등록</b>: 연구 전에 계획을 등록</li><li>결과와 관계없이 채택하는 제도도 늘고 있음</li></ul>
-          <p class="exp">얻은 데이터를 주물러 가설을 끌어내고 마치 처음부터 그렇게 생각한 것처럼 보고하는 문제를 예방하고자, 최근에는 사전 등록이라는 제도를 널리 사용합니다. 사전 등록이란 연구를 실시하기 전에 가설과 실험 설계, 분석 방법 등의 연구 계획을 등록하는 것입니다. 등록한 내용에 따라 연구를 진행하므로 데이터를 얻은 다음 가설을 세우는 HARKing을 막을 수 있습니다<span class="cite">[2]</span>. 결과가 p &lt; 0.05가 아닐 때를 고민하는 연구자를 위해, 사전에 심사를 완료해 결과가 어떻든 채택하는 방식이나 부정적인 데이터를 게재하는 저널도 늘어나는 추세입니다.</p>
+          <ul class="key"><li>사전등록은 계획과 변경을 구분하는 장치</li><li>등록만으로 모든 편향이 사라지지는 않음</li></ul>
+          <p class="exp">사전등록은 가설·주요 결과변수·표본 수 또는 중단 규칙·제외 기준·분석 방법을 결과를 보기 전에 기록하는 제도입니다. 이후의 탐색이나 계획 변경도 가능하지만 변경 시점과 이유를 밝히고 원래 계획과 구분합니다. 등록만으로 표집·측정 편향이나 모형 오류가 사라지지는 않습니다. 사전 심사를 거쳐 결과와 무관하게 출판을 원칙적으로 승인하는 Registered Reports는 단순 사전등록과 다른 절차이며, 승인 조건 준수 등도 확인합니다<span class="cite">[2]</span>.</p>
           <p class="next"><span>다음 질문</span>p값 문제를 어떻게 정리할까?</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" data-step="3" id="s-4-2d">
+      <div class="sh"><div class="sec">4-2 p-해킹 예방</div><h2><span class="q">Q</span>“유의하면 멈춘다”를 미리 쓰면 충분할까요?</h2></div>
+      <div class="body split even">
+        <div class="fig"><svg viewBox="0 0 420 270" role="img" aria-label="고정 n: 마지막에 한 번 검정: 해당 검정의 가정 아래 오류율 관리; 중간마다 p &lt; 0.05면 중단: 미리 적어도 통상 0.05 반복 기준만으로는 불충분; 설계한 순차검정: 중간 확인·중단 경계를 포함해 전체 α를 제어"><rect x="8" y="8" width="404" height="76" rx="10" fill="#EEF4FB"/><text x="210" y="37" text-anchor="middle" fill="#1B2A4A" font-size="13" font-weight="800">고정 n: 마지막에 한 번 검정</text><text x="210" y="63" text-anchor="middle" fill="#6B7280" font-size="11">해당 검정의 가정 아래 오류율 관리</text><rect x="8" y="94" width="404" height="76" rx="10" fill="#FCF3D9"/><text x="210" y="123" text-anchor="middle" fill="#1B2A4A" font-size="13" font-weight="800">중간마다 p &lt; 0.05면 중단</text><text x="210" y="149" text-anchor="middle" fill="#6B7280" font-size="11">미리 적어도 통상 0.05 반복 기준만으로는 불충분</text><rect x="8" y="180" width="404" height="76" rx="10" fill="#E3F1EA"/><text x="210" y="209" text-anchor="middle" fill="#1B2A4A" font-size="13" font-weight="800">설계한 순차검정</text><text x="210" y="235" text-anchor="middle" fill="#6B7280" font-size="11">중간 확인·중단 경계를 포함해 전체 α를 제어</text></svg></div>
+        <div class="side"><ul class="key"><li>중단 규칙을 적는 것과 오류율 제어는 다름</li><li>사전등록은 설계·분석의 타당성을 대신하지 않음</li></ul>
+          <p class="exp">순차분석은 중간 확인을 고려한 경계나 유의수준 배분 등을 설계해 전체 절차의 오류율을 관리합니다. 단순히 최대 표본 수를 정하거나 “p<0.05이면 중단”을 등록했다고 고정 표본용 p값이 유효해지지는 않습니다. 탐색 결과는 투명하게 밝히고 새 자료의 검증과 구분합니다.</p>
+          <p class="next"><span>다음 질문</span>p값을 읽을 때 또 무엇을 확인할까?</p>
         </div>
       </div>
     </section>
@@ -473,13 +484,13 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
     </section>
 
     <section class="slide" data-step="3" id="s-4-sum">
-      <div class="sh"><div class="sec">4-4 정리</div><h2>계획을 먼저 정하고, 모두 보고하고, 검정 횟수만큼 보정합니다</h2></div>
+      <div class="sh"><div class="sec">4-4 정리</div><h2>계획과 변경을 공개하고, 전체 분석 절차의 오류율을 관리합니다</h2></div>
       <div class="body full" style="align-content:center">
         <table class="sumtbl">
           <thead><tr><th>구분</th><th>핵심</th><th>이 모듈의 예</th></tr></thead>
           <tbody>
-            <tr><td>표본 늘리기</td><td>결과를 보며 n을 늘리면 위양성 &gt; α</td><td>1장씩 최대 100장 → 29.4%</td></tr>
-            <tr><td>HARKing</td><td>결과를 보고 가설을 만듦, 다중성 문제와 같음</td><td>효과 없는 20종 → 적어도 1종 유의 64%</td></tr>
+            <tr><td>표본 늘리기</td><td>고정 표본용 검정의 무보정 반복은 오류율을 키울 수 있음</td><td>1장씩 최대 100장 → 29.4%</td></tr>
+            <tr><td>HARKing</td><td>사후 가설을 사전 가설인 양 보고. 탐색 자체와 구별</td><td>독립인 20검정·각 5% → 약 64%</td></tr>
             <tr><td>예방 노력</td><td>탐색형과 가설검증형 분리, 본페로니 교정, 사전 등록</td><td>4,950쌍 → 기준 0.05 ÷ 4,950</td></tr>
             <tr><td>바른 읽기</td><td>p값 ≠ 귀무가설이 옳을 확률, p ≥ 0.05 ≠ 효과 없음</td><td>p는 정확한 값으로 기재</td></tr>
           </tbody>
@@ -501,11 +512,11 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
           <div class="fig" style="flex:1"><svg id="m27-p1-svg" viewBox="0 0 470 170" role="img" aria-label="최대 표본크기에 따른 위양성 비율 곡선"></svg></div>
         </div>
         <div class="pcol" style="gap:10px;justify-content:center">
-          <div class="plabel" style="margin:0">결과 확인 (4,000번 시뮬레이션)</div>
+          <div class="plabel" style="margin:0">결과 확인 (설정별 모의실험 저장 예)</div>
           <div class="stats three"><div><small>위양성 비율</small><strong id="m27-fp">-</strong></div><div><small>목표 α</small><strong>5%</strong></div><div><small>α의 몇 배</small><strong id="m27-x">-</strong></div></div>
           <p class="howto">도전: 위양성을 목표 5% 근처로 유지하는 설정을 찾아보세요.</p>
           <p class="pmsg" id="m27-msg"></p>
-          <div class="think" style="flex-wrap:wrap"><span>생각해보기</span>표본크기를 미리 정해 두는 것이 왜 가장 확실한 예방책일까요?<details style="flex-basis:100%;font-weight:600"><summary style="cursor:pointer">예시 답</summary>끝날 때까지 표본을 더 모으는 일을 막기 때문입니다.</details></div>
+          <div class="think" style="flex-wrap:wrap"><span>생각해보기</span>고정 표본용 검정에서 n을 미리 정하는 이유는?<details style="flex-basis:100%;font-weight:600"><summary style="cursor:pointer">예시 답</summary>결과에 따라 표본을 더 모아 재검정하는 선택을 막습니다. 순차검정은 별도 설계가 필요합니다.</details></div>
         </div>
       </div>
     </section>
@@ -581,39 +592,39 @@ var TR=[[0.755,0.867,0.415,0.318,0.223,0.192,0.253,0.2,0.156,0.093,0.118,0.054,0
 var QUIZ=[
  {goal:1,type:"상황 판단",stem:"개선팀이 냉각 첨가제 A~G를 차례로 시험했더니 G만 p < 0.05였습니다. 보고서에 ‘첨가제 G가 강도를 높인다는 가설을 세우고 검증했다’고 썼다면, 이것은 무엇에 해당할까요?",
   opts:["HARKing (결과를 보고 가설 만들기)","가설검증형 연구","사전 등록","본페로니 교정"],ans:0,
-  exp:"HARKing은 ‘Hypothesizing After the Results are Known’의 약자로, 데이터를 얻어 결과를 보고 나서 가설을 만드는 행위입니다. 많은 실험을 반복하거나 여러 변수를 만져서 의미 있어 보이는 결과만 골라, 처음에 세운 가설인 양 보고하는 것을 말하며 p-해킹과 마찬가지로 재현성 저하로 이어집니다.",back:"s-4-1c",backLabel:"4-1 HARKing 다시 보기"},
+  exp:"HARKing은 ‘Hypothesizing After the Results are Known’의 약자로, 데이터를 얻어 결과를 보고 나서 가설을 만드는 행위입니다. 많은 실험을 반복하거나 여러 변수를 만져서 의미 있어 보이는 결과만 골라, 처음에 세운 가설인 양 보고하는 것을 말하며 선택을 숨기면 재현성 저하로 이어질 수 있습니다.",back:"s-4-1c",backLabel:"4-1 HARKing 다시 보기"},
  {goal:1,type:"O/X 오개념",stem:"“측정값이나 p값 숫자를 직접 고치지 않았다면 p-해킹이 아니다.”",
   opts:["O","X"],ans:1,ox:true,
-  exp:"p-해킹은 수치를 고치는 것이 아니라, p값이 0.05 미만이 되도록 실험을 설계하거나 해석하는 행위입니다. 결과를 보며 표본을 늘리거나, 여러 요인 중 p < 0.05인 것만 보고하는 것이 해당합니다. ‘의도하지 않았는데 눈치채 보니 p-해킹’인 상황이 될 수 있다는 점이 무섭습니다.",back:"s-4-1a",backLabel:"4-1 p-해킹의 정의 다시 보기"},
- {goal:2,type:"계산",stem:"실제로는 효과가 없는 냉각 첨가제 20종을 각각 유의수준 0.05로 검정합니다. 적어도 1종이 ‘유의’하게 나올 확률은 약 얼마일까요?",
+  exp:"결과를 보고 표본·분석을 바꾸거나 유리한 결과만 선택하면서 그 과정을 무시하면 숫자를 직접 고치지 않아도 p-해킹이 될 수 있습니다. 사전에 검정력과 표본 수를 설계하는 것은 그 자체로 p-해킹이 아닙니다.",back:"s-4-1a",backLabel:"4-1 p-해킹의 정의 다시 보기"},
+ {goal:2,type:"계산",stem:"효과 없는 첨가제 20종을 독립적으로 검정하며, 각 검정의 실제 위양성 확률은 0.05입니다. 적어도 1종이 ‘유의’하게 나올 확률은 약 얼마일까요?",
   opts:["약 64%","5%","100%","약 36%"],ans:0,
-  exp:"20종 모두 유의하지 않을 확률은 0.95²⁰ ≈ 0.36이므로, 적어도 1종이 유의할 확률은 1 − 0.36 ≈ 0.64입니다. 평균적으로는 20 × 0.05 = 1종이 유의해집니다. 100%는 0.05 × 20을 확률로 잘못 계산한 값이고, 약 36%는 하나도 유의하지 않을 확률입니다. 이것이 검정을 반복할 때 나타나는 다중성 문제입니다.",back:"s-4-1c",backLabel:"4-1 다중성 문제 다시 보기"},
+  exp:"각 검정의 실제 위양성 확률이 0.05이고 결과가 독립이라는 조건에서 1 − 0.95²⁰ ≈ 0.6415입니다. 기대 유의 개수 20×0.05 = 1은 독립성이 없어도 성립합니다. 공유 자료로 종속된 검정에 64%를 그대로 적용해서는 안 됩니다.",back:"s-4-1c",backLabel:"4-1 다중성 문제 다시 보기"},
  {goal:2,type:"계산",stem:"압연 설비의 센서 변수 100개 사이의 상관계수를 모두 검정하려 합니다(4,950쌍). 본페로니 교정으로 전체 유의수준을 0.05로 유지하려면 각 검정의 기준은 얼마로 해야 할까요?",
   opts:["0.05 ÷ 4,950 ≈ 0.00001","0.05","0.05 ÷ 100 = 0.0005","0.05 × 4,950"],ans:0,
-  exp:"본페로니 교정은 유의수준 α를 검정을 반복한 횟수로 나눕니다. 4,950쌍이 모두 독립이라도 α = 0.05라면 상관이 없어도 평균 4,950 × 0.05 ≈ 247.5쌍이 유의해지므로, 0.05 ÷ 4,950 ≈ 0.0000101을 기준으로 써서 위양성을 줄입니다. 변수 개수(100)가 아니라 검정 횟수(4,950)로 나눕니다.",back:"s-4-2b",backLabel:"4-2 본페로니 교정 다시 보기"},
+  exp:"미리 정한 4,950개 비교에 각 0.05/4,950 ≈ 0.0000101을 적용하면 유효한 p값 아래 전체 위양성 확률을 5% 이하로 제어합니다. 검정 사이 독립성은 필요하지 않으며, 센서 개수 100이 아니라 비교 개수로 나눕니다.",back:"s-4-2b",backLabel:"4-2 본페로니 교정 다시 보기"},
  {goal:3,type:"상황 판단",stem:"각 30장으로 검정했더니 p = 0.07이 나와, 10장씩 더 측정해 40장으로 다시 검정했더니 p = 0.04였습니다. 이 결과를 어떻게 보아야 할까요?",
-  opts:["결과를 보고 표본을 늘렸으므로 위양성 확률이 설정한 5%보다 커져 있다","최종 p < 0.05이므로 유의수준 5%로 검정한 것과 같다","표본이 늘었으므로 결과가 더 믿을 만하다","처음 30장의 결과는 버려야 한다"],ans:0,
-  exp:"결과를 보고 데이터를 조금 더 추가하면 p < 0.05가 될지 모른다는 기대로 표본을 늘리는 것은 p-해킹입니다. 귀무가설이 옳은 상황에서 이 방식을 시뮬레이션하면 전체에서 p < 0.05가 될 확률이 약 6%로, 설정한 유의수준 5%를 벗어납니다. 표본크기는 데이터를 얻기 전에 정해야 합니다.",back:"s-4-1b",backLabel:"4-1 표본 늘리기 다시 보기"},
+  opts:["보정 없는 선택·재검정이므로 최종 p를 통상적인 5% 검정처럼 읽을 수 없다","최종 p < 0.05이므로 유의수준 5%로 검정한 것과 같다","표본이 늘었으므로 결과가 더 믿을 만하다","처음 30장의 결과는 버려야 한다"],ans:0,
+  exp:"고정 표본용 검정을 보정 없이 반복한 예에서는 선택한 최종 p값을 통상적인 5% 검정처럼 읽을 수 없습니다. 저장된 특정 조건의 전체 위양성 비율은 약 6.2%입니다. 표본 수를 고정하거나, 중간 확인과 중단을 고려한 순차 절차를 사전에 설계해야 합니다.",back:"s-4-1b",backLabel:"4-1 표본 늘리기 다시 보기"},
  {goal:3,type:"상황 판단",stem:"데이터를 얻은 뒤 가설을 바꾸는 일을 막기 위해, 연구를 실시하기 전에 가설과 실험 설계, 분석 방법을 미리 등록해 두는 제도는 무엇일까요?",
   opts:["사전 등록","동료평가","메타 분석","체리 피킹"],ans:0,
-  exp:"사전 등록은 연구를 실시하기 전에 가설과 실험 설계, 분석 방법 등의 연구 계획을 등록하는 것입니다. 등록한 내용에 따라 연구를 진행하므로 데이터를 얻은 다음 가설을 세우는 HARKing을 막을 수 있습니다. 결과와 관계없이 채택하는 사전 심사 포함 사전 등록도 늘고 있습니다.",back:"s-4-2c",backLabel:"4-2 사전 등록 다시 보기"}
+  exp:"사전등록은 결과를 보기 전 계획을 기록해 사후 변경을 드러내는 데 도움을 줍니다. 등록만으로 HARKing이나 다른 편향을 모두 막지는 못합니다. Registered Reports는 사전 심사와 원칙적 출판 승인이 포함되는 별도 절차입니다.",back:"s-4-2c",backLabel:"4-2 사전 등록 다시 보기"}
 ];
 
-var BINS=["표본 늘리기","HARKing","예방법"];
-var CARDS=[["p = 0.07이라 10장 더 측정해 재검정","표본 늘리기"],["p < 0.05가 될 때까지 1장씩 추가","표본 늘리기"],
-           ["유의한 첨가제를 처음부터 가설이었다고 보고","HARKing"],["지표 여러 개 중 유의한 것만 골라 보고","HARKing"],
+var BINS=["보정 없는 재검정","선택 보고·HARKing","예방법"];
+var CARDS=[["p = 0.07이라 10장 더 측정해 재검정","보정 없는 재검정"],["p < 0.05가 될 때까지 1장씩 추가","보정 없는 재검정"],
+           ["유의한 첨가제를 처음부터 가설이었다고 보고","선택 보고·HARKing"],["지표 여러 개 중 유의한 것만 골라 보고","선택 보고·HARKing"],
            ["가설과 분석 방법을 실험 전에 등록","예방법"],["예비 실험 뒤 새 데이터로 본 실험","예방법"]];
-var HINT={"표본 늘리기":"p값을 확인하면서 표본크기를 바꾸는 행위입니다.","HARKing":"결과를 본 뒤 유리한 것만 골라 가설인 양 보고하는 행위입니다.","예방법":"계획을 미리 정하거나 탐색과 검증을 나누는 방법입니다."};
+var HINT={"보정 없는 재검정":"고정 표본용 검정을 보정 없이 반복하며 결과에 따라 표본을 추가하는 경우입니다.","선택 보고·HARKing":"선택 보고는 유리한 결과만 공개, HARKing은 사후 가설을 사전 가설처럼 공개하는 경우입니다.","예방법":"계획을 미리 정하거나 탐색과 검증을 나누는 방법입니다."};
 
 var GLOSSARY=[
- ["p-해킹","p-hacking","의도하든 의도하지 않든 p값을 원하는 방향(0.05 미만)이 되도록 실험을 설계하거나 해석하는 행위입니다.","p < 0.05가 될 때까지 시험편 추가"],
+ ["p-해킹","p-hacking","결과에 맞춘 분석·표본·중단 선택을 무시한 채 통상 p값을 확증적 근거로 제시하는 행위입니다.","p < 0.05가 될 때까지 시험편 추가"],
  ["HARKing","Hypothesizing After the Results are Known","데이터를 얻어 결과를 보고 나서 가설을 만들어, 처음에 세운 가설인 양 보고하는 행위입니다.","유의했던 첨가제 G만 가설로 보고"],
  ["체리 피킹","cherry picking","편리한 근거만 골라 자신의 이론을 뒷받침하는 것으로, HARKing보다 넓은 의미입니다.","유리한 지표만 골라 보고"],
- ["다중성 문제","multiplicity problem","검정을 여러 번 반복하면 그중 어느 하나가 우연히 유의해질 확률이 유의수준보다 커지는 문제입니다.","효과 없는 20종 중 적어도 1종 유의 64%"],
+ ["다중성 문제","multiplicity problem","여러 검정에서 하나 이상 위양성을 낼 확률은 개별 유의수준과 다를 수 있습니다. 계산에는 검정 사이 의존성도 고려합니다.","독립·각 크기 .05인 20검정: 약 64%"],
  ["탐색형 연구","exploratory research","다양한 요인을 시험하며 전체를 탐색적으로 해석하는 연구입니다.","첨가제 20종을 넓게 시험하는 예비 실험"],
  ["가설검증형 연구","confirmatory research","가설을 먼저 세우고 이를 검증하는 연구로, 새로 얻은 데이터를 독립적으로 해석해야 합니다.","후보를 좁혀 새 시험편으로 본 실험"],
- ["본페로니 교정","Bonferroni correction","유의수준 α를 검정을 반복한 횟수로 나눈 값을 각 검정의 기준으로 써서 위양성을 줄이는 방법입니다.","0.05 ÷ 4,950 ≈ 0.00001"],
- ["사전 등록","preregistration","연구를 실시하기 전에 가설과 실험 설계, 분석 방법 등의 연구 계획을 등록하는 제도입니다.","시험 전 분석 계획서를 등록"]
+ ["본페로니 교정","Bonferroni correction","정한 m개 비교에 각 α/m을 적용해 전체 위양성 확률을 α 이하로 제어합니다. 유효한 p값이 필요하며 독립성은 필요 없습니다.","0.05 ÷ 4,950 ≈ 0.00001"],
+ ["사전 등록","preregistration","결과를 보기 전에 계획을 기록하는 제도입니다. 변경·탐색은 구분해 공개하며, 모든 편향을 없애는 보장은 아닙니다.","시험 전 분석 계획서를 등록"]
 ];
 var REFS=[
  {n:1,title:"HARKing: Hypothesizing After the Results are Known",org:"N. L. Kerr, Personality and Social Psychology Review 2(3), 196–217, 1998",url:"https://doi.org/10.1207/s15327957pspr0203_4",date:"2026-10-27 확인"},
@@ -740,7 +751,7 @@ on("m27-ov",function(s){
 });
 
 on("m27-case",function(s){
-  var B=[["① 시험편 늘리기","유의하지 않으면","몇 장씩 더 측정","→ 위양성 약 30%"],["② 첨가제 20종","차례로 시험해","유의한 것만 보고","→ 적어도 1종 64%"],["③ 센서 변수 100개","모든 쌍의 상관","4,950쌍 검정","→ 평균 247.5쌍 유의"]];
+  var B=[["① 시험편 늘리기","유의하지 않으면","몇 장씩 더 측정","→ 위양성 약 30%"],["② 첨가제 20종","차례로 시험해","유의한 것만 보고","→ 독립 검정이면 약 64%"],["③ 센서 변수 100개","모든 쌍의 상관","4,950쌍 검정","→ 평균 247.5쌍 유의"]];
   B.forEach(function(b,i){var x=6+i*146;bxU(s,x,20,138,196,"#FBE4E1");tU(s,x+69,50,b[0],{fw:800,fs:12,c:RED});tU(s,x+69,96,b[1],{fw:700,fs:11.5});tU(s,x+69,120,b[2],{fw:700,fs:11.5});tU(s,x+69,170,b[3],{fw:800,fs:11.5,c:RED});});
   tU(s,220,240,"모두 효과가 전혀 없는 상황의 시뮬레이션·계산 결과",{fw:700,fs:10.5,c:C.gray});
 });
@@ -783,8 +794,8 @@ on("m27-two",function(s){
   bxU(s,282,8,134,150,"#E3F1EA",GRN);tU(s,349,32,"본 실험",{fw:800,fs:12.5,c:GRN});tU(s,349,50,"가설검증형 연구",{fw:700,fs:10.5,c:C.gray});
   tU(s,349,84,"후보를 좁혀",{fw:700,fs:10.5});tU(s,349,104,"새 시험편으로",{fw:700,fs:10.5});tU(s,349,124,"독립적으로 해석",{fw:800,fs:10.5,c:GRN});
   arU(s,136,83,144,83,"wU");arU(s,270,83,278,83,"wU");
-  bxU(s,4,172,412,94,"#FBE4E1");tU(s,210,196,"✕ 예비 실험 데이터와 본 실험 데이터를 섞어 해석",{fw:800,fs:11.5,c:RED});
-  tU(s,210,220,"이미 유의하게 나온 데이터가 섞여 유의한 결과가 되기 쉬운 편향",{fw:700,fs:10.5});tU(s,210,242,"→ 위양성 확률이 설정한 유의수준 α보다 커짐",{fw:800,fs:10.5,c:RED});
+  bxU(s,4,172,412,94,"#FBE4E1");tU(s,210,196,"✕ 탐색 자료를 합친 뒤 선택을 무시한 통상 p값 보고",{fw:800,fs:11.5,c:RED});
+  tU(s,210,220,"이미 유의하게 나온 데이터가 섞여 유의한 결과가 되기 쉬운 편향",{fw:700,fs:10.5});tU(s,210,242,"→ 선택을 고려한 추론 또는 독립된 검증 자료 필요",{fw:800,fs:10.5,c:RED});
 });
 
 on("m27-pairs",function(s){
@@ -800,8 +811,8 @@ on("m27-prereg",function(s){
   bxU(s,4,4,412,104,"#E3F1EA");tU(s,14,24,"사전 등록 ✓",{a:"start",fw:800,fs:12,c:GRN});
   ["가설·설계·분석 등록","데이터 수집","등록대로 분석","결과 보고"].forEach(function(t,i){var x=14+i*101;bxU(s,x,40,90,48,"#fff",GRN);tU(s,x+45,68,t,{fw:800,fs:i===0?9.5:10.5});if(i<3)arU(s,x+91,64,x+99,64,"pU",GRN);});
   bxU(s,4,118,412,104,"#FBE4E1");tU(s,14,138,"HARKing ✕",{a:"start",fw:800,fs:12,c:RED});
-  ["데이터 수집","여러 가지 분석","유의한 것 선택","가설 작성·보고"].forEach(function(t,i){var x=14+i*101;bxU(s,x,154,90,48,"#fff",RED);tU(s,x+45,182,t,{fw:800,fs:10.5});if(i<3)arU(s,x+91,178,x+99,178,"pU2",RED);});
-  bxU(s,4,230,412,36,"#FCF3D9");tU(s,210,253,"사전 심사 포함 사전 등록: 결과가 어떻든 채택 · 부정적 데이터 게재 저널 증가",{fw:800,fs:10,c:C.amberInk});
+  ["데이터 수집","여러 가지 분석","유의한 것 선택","사전 가설인 양 보고"].forEach(function(t,i){var x=14+i*101;bxU(s,x,154,90,48,"#fff",RED);tU(s,x+45,182,t,{fw:800,fs:10.5});if(i<3)arU(s,x+91,178,x+99,178,"pU2",RED);});
+  bxU(s,4,230,412,36,"#FCF3D9");tU(s,210,253,"사전등록과 Registered Reports는 구분 · 변경·탐색도 공개",{fw:800,fs:10,c:C.amberInk});
 });
 
 on("m27-list",function(s){
@@ -829,8 +840,8 @@ on("m27-myth",function(s){
       tU(svg,X(100)-4,Y(FP[sv][9])-6,sv+"장마다",{a:"end",fs:9,fw:800,c:j===cur?RED:C.gray2,halo:true});});
     el("circle",{cx:X(M),cy:Y(f),r:6,fill:RED,stroke:"#fff","stroke-width":2},svg);
     var m=document.getElementById("m27-msg"),ok=M===10;m.className="pmsg"+(ok?" ok":"");
-    m.textContent=ok?"맞습니다. 최대 표본이 처음 정한 10장이면 중간 확인이 없어 위양성이 "+(f*100).toFixed(1)+"%로 목표 5% 근처입니다. 표본크기를 미리 정하고 그대로 검정하는 것이 가장 확실합니다.":
-      SS[cur]+"장마다 확인하며 최대 "+M+"장까지 늘리면 위양성이 "+(f*100).toFixed(1)+"%로 목표의 "+(f/.05).toFixed(1)+"배입니다. 자주 확인할수록, 오래 늘릴수록 커집니다.";}
+    m.textContent=ok?"맞습니다. 최대 표본이 처음 정한 10장이면 중간 확인이 없어 위양성이 "+(f*100).toFixed(1)+"%로 목표 5% 근처입니다. 이 실습은 고정 표본용 검정을 반복한 예입니다.":
+      SS[cur]+"장마다 확인하며 최대 "+M+"장까지 늘리면 위양성이 "+(f*100).toFixed(1)+"%로 목표의 "+(f/.05).toFixed(1)+"배입니다. 저장 비율에는 모의실험 오차가 있습니다.";}
   mx.addEventListener("input",upd);upd();
 })();
 
@@ -845,7 +856,7 @@ on("m27-myth",function(s){
     var cells=Math.min(P,400),cols=40,sz=10;for(var i=0;i<cells;i++){var r=Math.floor(i/cols),c=i%cols;el("rect",{x:10+c*11.3,y:34+r*11.3,width:sz,height:sz,rx:2,fill:"#D1D5DB"},svg);}
     if(P>400)tU(svg,460,34+10*11.3+14,"(400칸까지만 표시, 1칸 = 1쌍)",{a:"end",fs:9.5,c:C.gray,fw:700});
     if(seen[cur]){var k=Math.round(Math.min(E,400*.05)),step=Math.floor(cells/Math.max(1,k));for(var j=0;j<k;j++){var i2=j*step+Math.floor(step/2),r2=Math.floor(i2/cols),c2=i2%cols;el("rect",{x:10+c2*11.3,y:34+r2*11.3,width:sz,height:sz,rx:2,fill:RED},svg);}
-      tU(svg,10,196,"빨강: 상관이 없는데도 α = 0.05에서 우연히 유의해지는 쌍(평균 "+fmt(E)+"쌍)",{a:"start",fw:800,fs:10,c:RED});}}
+      tU(svg,10,196,"빨강은 기대 비율의 도식이며 새 난수 결과 아님(전체 기대 "+fmt(E)+"쌍)",{a:"start",fw:800,fs:10,c:RED});}}
   function txt(){document.getElementById("m27-gv").textContent=(+g.value)+"쌍";document.getElementById("m27-mine").textContent=(+g.value)+"쌍";}
   function reset(){[].forEach.call(qm.children,function(x,i){x.classList.toggle("on",i===cur);x.setAttribute("aria-pressed",i===cur);});var P=pr(MS[cur]);
     document.getElementById("m27-act").textContent=seen[cur]?fmt(P*.05)+"쌍":"?";document.getElementById("m27-bf").textContent=seen[cur]?(.05/P).toPrecision(3):"?";
@@ -853,7 +864,7 @@ on("m27-myth",function(s){
   g.addEventListener("input",txt);
   document.getElementById("m27-check").onclick=function(){seen[cur]=true;var P=pr(MS[cur]),E=P*.05,gv=+g.value,ok=Math.abs(gv-E)<=Math.max(2,.25*E),m=document.getElementById("m27-msg3");
     document.getElementById("m27-act").textContent=fmt(E)+"쌍";document.getElementById("m27-bf").textContent=(.05/P).toPrecision(3);m.className="pmsg "+(ok?"ok":"ng");
-    m.textContent=(ok?"가깝게 예측했습니다. ":"차이가 있습니다. ")+P.toLocaleString()+"쌍 × 0.05 = 평균 "+fmt(E)+"쌍입니다. 본페로니 기준은 0.05 ÷ "+P.toLocaleString()+" ≈ "+(.05/P).toPrecision(3)+"입니다.";draw();};
+    m.textContent=(ok?"가까운 예측입니다. ":"차이가 있습니다. ")+"기댓값은 반복 평균입니다.";draw();};
   txt();reset();
 })();
 

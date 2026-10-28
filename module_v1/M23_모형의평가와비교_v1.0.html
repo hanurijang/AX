@@ -366,7 +366,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
         </div>
         <div class="side">
           <ul class="key"><li><b>왈드 통계량</b>: 추정값 ÷ 표준오차</li><li>표본크기가 작으면 신뢰도가 떨어집니다.</li></ul>
-          <p class="exp">일반적인 선형회귀모형과 마찬가지로 일반화선형모형에서도 추정한 회귀계수를 대상으로 귀무가설 ‘회귀계수 = 0’, 대립가설 ‘회귀계수 ≠ 0’으로 가설검정을 할 수 있습니다. 최대가능도 방법으로 얻은 추정값 ÷ 표준오차를 왈드 통계량이라 하며, 최대가능도 추정량이 정규분포를 따른다고 가정하면 신뢰구간이나 p값을 얻을 수 있습니다. 이 방법이 왈드 검정입니다. 단, 표본크기가 크지 않을 때는 정규분포라는 가정이 미심쩍어, 다음의 가능도비 검정 쪽이 신뢰도가 높다고 합니다.</p>
+          <p class="exp">귀무값 θ₀에 대한 왈드 통계량은 (θ̂ − θ₀) ÷ SE(θ̂)입니다. θ₀ = 0이면 추정값 ÷ 표준오차가 됩니다. 식별 가능성 등 정칙조건 아래 최대가능도 추정량의 큰 표본 근사로 p값과 구간을 계산합니다. 작은 표본이나 완전분리·경계 파라미터에서는 이 근사가 나쁠 수 있습니다. 가능도비 검정도 모든 경우에 안전한 것은 아니므로 자료 구조와 가정을 먼저 확인합니다.</p>
           <p class="next"><span>다음 질문</span>모형 전체는 어떻게 비교할까?</p>
         </div>
       </div>
@@ -386,7 +386,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
         </div>
         <div class="side">
           <ul class="key"><li><b>가능도비 검정</b>: 내포 관계인 두 모형 비교</li><li>ΔD가 크면 대립가설 모형이 더 잘 맞음</li></ul>
-          <p class="exp">최대가능도 방법으로 얻은 모형을 비교하는 방법으로, 모형이 데이터에 잘 맞도록 개선되었는지 확인하는 가능도비 검정이 있습니다. 비교할 2개 모형 중 어느 한쪽이 다른 쪽을 포함해야(내포 관계) 하며, y = a는 y = a + bx에 내포됩니다. 각 모형의 최대가능도 비율에 로그를 취해 −2를 곱한 ΔD를 검정통계량으로 합니다. M1과 M2는 ΔD = 152.9로 크게 개선되었지만, M2에 x²항을 더한 M3는 ΔD = 0.16으로 개선되었다고 말할 수 없습니다.</p>
+          <p class="exp">같은 관측·반응변수·가능도 정의로 적합한 내포 모형을 비교합니다. 제한 모형에 항을 더한 모형의 최대 로그 가능도는 더 작아지지 않아 ΔD = 2(log L큰* − log L작은*) ≥ 0입니다. 내부 파라미터·식별 가능성 등 정칙조건 아래 귀무분포는 추가 파라미터 수를 자유도로 하는 카이제곱분포로 근사합니다. M2와 M3의 ΔD ≈ 0.16은 이차항의 개선 증거가 약하다는 뜻이며, 계수가 정확히 0이라는 증명은 아닙니다.</p>
           <p class="next"><span>다음 질문</span>ΔD가 큰지는 무엇과 비교할까?</p>
         </div>
       </div>
@@ -397,8 +397,8 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
       <div class="body split even">
         <div class="fig"><svg id="m23-boot" viewBox="0 0 420 270" role="img" aria-label="귀무가설 모형에서 1,000번 데이터를 만들어 얻은 ΔD 히스토그램과 상위 5% 경계 3.82, 관찰값 0.16"></svg></div>
         <div class="side">
-          <ul class="key"><li>귀무가설이 옳을 때의 ΔD 분포와 비교</li><li><b>부트스트랩 방법</b>이나 카이제곱분포로</li></ul>
-          <p class="exp">일반적으로 복잡한 모형일수록 잘 들어맞으므로, 귀무가설에서 얻은 데이터라도 파라미터가 많은 모형 쪽이 더 잘 들어맞게 됩니다. 그래서 귀무가설(M2)이 옳다고 가정하고 같은 표본크기의 무작위 데이터를 생성해 두 모형의 최대가능도를 추정하고 ΔD를 계산하는 일을 반복하면, 귀무가설이 옳을 때의 ΔD 분포를 얻을 수 있습니다. 이렇게 어떤 가정에서 데이터를 생성해 성질을 조사하는 방법을 부트스트랩 방법이라 합니다. 1,000번 반복한 상위 5% 경계는 3.82로, 간편한 근사인 카이제곱분포의 3.84와 거의 같았습니다.</p>
+          <ul class="key"><li>귀무가설이 옳을 때의 ΔD 분포와 비교</li><li><b>모수적 부트스트랩</b>이나 카이제곱 근사로</li></ul>
+          <p class="exp">이 예는 모수적 부트스트랩입니다. 제한 모형 M2를 적합한 뒤 설명변수 x를 고정하고 추정된 귀무모형에서 반응을 생성합니다. 반복마다 M2와 M3를 모두 다시 적합해 ΔD를 계산합니다. 저장된 1,000회 예의 상위 5% 경계는 약 3.82로, 정칙조건 아래 카이제곱 근사의 3.84와 비슷합니다. 관측 행을 재표집하는 비모수 부트스트랩과 구분하며, 귀무모형 자체가 부적절하면 이 보정도 신뢰하기 어렵습니다.</p>
           <p class="next"><span>다음 질문</span>내포 관계가 아니면 어떻게 비교할까?</p>
         </div>
       </div>
@@ -418,7 +418,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
         </div>
         <div class="side">
           <ul class="key"><li><b>AIC</b>: 새 데이터 예측 관점의 정보기준</li><li>후보 중 AIC가 최소인 모형을 고릅니다.</li></ul>
-          <p class="exp">통계 모형을 비교하는 또 다른 방법으로 정보량에 근거한 모형 선택이 있으며, 잘 알려진 것이 AIC(아카이케 정보기준)입니다. AIC는 새롭게 얻을 데이터를 얼마나 잘 예측할 수 있는지를 바탕으로 모형의 좋음을 정하는 지표로, 우변 첫째 항은 가능도가 클수록, 둘째 항은 파라미터 개수가 적을수록 작아집니다. 즉 ‘적합도’와 ‘복잡함’을 모두 고려합니다. 꽃 데이터에서 M1 219.1, M2 68.3, M3 70.1로 M2를 고르며, 가능도비 검정과 달리 내포 관계가 아니어도 적용할 수 있습니다.</p>
+          <p class="exp">AIC = −2 log L* + 2k는 기대 예측 로그 손실을 기준으로 적합도와 복잡함을 함께 평가합니다. k는 추정한 모든 자유 파라미터 수로, 정규 회귀에서는 오차분산도 포함합니다. 내포 관계는 필요 없지만 같은 관측·반응변수에 대해 가능도의 척도와 상수항을 맞춰 비교해야 합니다. 꽃 자료의 후보 중 M2가 최소입니다. AIC 자체가 실제 모형의 확률이나 별도 검증 자료의 평균제곱오차는 아닙니다.</p>
           <p class="next"><span>다음 질문</span>파라미터가 많으면 왜 벌점을 줄까?</p>
         </div>
       </div>
@@ -430,7 +430,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
         <div class="fig"><svg id="m23-ovf" viewBox="0 0 420 270" role="img" aria-label="실제 모형은 직선인데 점 9개를 지나는 7차식은 새 데이터를 크게 빗나감, 차수별 잔차제곱합과 새 데이터 오차"></svg></div>
         <div class="side">
           <ul class="key"><li><b>과대적합</b>: 지금 데이터에만 무리하게 맞춤</li><li>잔차는 작아도 새 데이터 예측이 나빠짐</li></ul>
-          <p class="exp">파라미터 개수 k가 많은 모형일수록 실제 데이터에 잘 들어맞는 성질이 있습니다. 실제 모형이 y = 20 + 0.6x인 데이터 9개에 7차식을 적용하면 대부분의 점을 지나 잔차제곱합이 140.8에서 20.3으로 줄지만, 새로 얻은 데이터를 예측한 오차는 18.9에서 67.5로 크게 어긋납니다. 이처럼 무리하게 맞추는 바람에 새 데이터를 제대로 나타내지 못하는 상태가 과대적합입니다. AIC는 예측 분포와 실제 분포의 차이를 최소화하는 관점에서 도출되어 파라미터 개수 항이 나타납니다. 다만 이 예처럼 파라미터 수가 표본크기에 가까우면 AIC로도 막지 못하므로 보정한 기준을 씁니다.</p>
+          <p class="exp">9개 점에서 7차식은 잔차제곱합을 140.8에서 20.3으로 줄이지만, 저장된 새 데이터 평가 예의 오차는 18.9에서 67.5로 커집니다. 학습 자료에 더 잘 맞는 것만으로 예측이 좋아지지는 않습니다. 이 예는 분산까지 세면 k = 9로 n = 9에 가까워 AIC 근사의 한계를 보입니다. AICc도 적용 조건을 확인해야 하며, 분모가 0 이하이면 해결책이 되지 않습니다. 더 단순한 후보와 적절한 검증을 검토합니다.</p>
           <p class="next"><span>다음 질문</span>AIC를 쓸 때 주의할 점은?</p>
         </div>
       </div>
@@ -439,10 +439,10 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
     <section class="slide" data-step="3" id="s-4-2c">
       <div class="sh"><div class="sec">4-2 AIC</div><h2><span class="q">Q</span>AIC가 최소인 모형이 곧 실제 모형일까요?</h2></div>
       <div class="body split even">
-        <div class="fig"><svg id="m23-caution" viewBox="0 0 420 270" role="img" aria-label="AIC의 두 가지 주의점: 실제 모형이라는 보장 없음, 가설검정과 섞어 쓰지 않음"></svg></div>
+        <div class="fig"><svg id="m23-caution" viewBox="0 0 420 270" role="img" aria-label="AIC 최소는 참모형 보장이 아니며, 선택 후 검정에는 선택 과정 고려가 필요"></svg></div>
         <div class="side">
-          <ul class="key"><li>AIC 최소 ≠ 실제 모형(데이터를 만든 분포)</li><li>AIC 선택과 p값 해석을 섞지 않습니다.</li></ul>
-          <p class="exp">AIC는 새로 얻을 데이터의 예측도를 높이는 모형을 고르는 것이 목적이므로, AIC를 최소화한다고 해서 그것이 반드시 실제 모형이지는 않습니다. 후보 중에 실제 모형이 있어도 표본크기를 아무리 키워 AIC로 실제 모형을 고를 확률은 1이 되지 않으며, 표본크기가 클 때는 실제보다 파라미터가 많은 모형을 고르기도 합니다. 또 AIC로 모형을 고른 뒤 가설검정으로 p값을 구하는 분석은 서로 다른 방식의 해석이 섞여 부적절할 수 있습니다. 어느 쪽이 더 바람직하다는 뜻은 아니며, 분석 목적에 맞게 가려 씁니다.</p>
+          <ul class="key"><li>AIC 최소 ≠ 실제 모형</li><li>선택 후 추론에는 선택 과정도 반영</li></ul>
+          <p class="exp">AIC 최소 모형이 참이라는 보장은 없으며, AIC는 일반적으로 모형 선택의 일치성을 보장하지 않습니다. 또한 같은 자료에서 여러 후보를 골라 놓고 선택 과정을 무시한 보통의 p값을 보고하면, 명목 유의수준이나 구간의 포함률이 유지되지 않을 수 있습니다. 검정과 예측을 함께 다룰 수는 있지만 사전 분석 계획, 자료 분할·독립 검증, 선택을 고려한 추론 등으로 선택의 영향을 다뤄야 합니다.</p>
           <p class="next"><span>다음 질문</span>실제 모형을 고르는 기준은?</p>
         </div>
       </div>
@@ -461,8 +461,8 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
           </div>
         </div>
         <div class="side">
-          <ul class="key"><li><b>BIC</b>: n이 클수록 파라미터 벌점이 커짐</li><li>BIC에는 <b>일치성</b>이 있습니다.</li></ul>
-          <p class="exp">자주 쓰는 또 다른 정보기준으로 BIC(베이즈 정보기준)가 있으며, 값을 최소화하는 것이 좋은 모형입니다. AIC와 다른 점은 표본크기 n에 따라 달라져 n이 클수록 파라미터 개수 k의 벌점이 커진다는 것입니다. BIC는 후보 중 실제 모형일 확률이 높은 것을 고르는 관점입니다. 후보 안에 실제 모형이 있을 때 n을 무한대로 하면 그것을 고를 확률이 1이 되는 일치성이 있지만, 유한한 표본에서 한 번 고른 결과가 실제 모형이라는 보장은 아닙니다. 1,000번 시뮬레이션에서 실제 모형을 고른 비율은 n = 1,000일 때 AIC 0.75, BIC 0.99였습니다.</p>
+          <ul class="key"><li>BIC: 정칙조건 아래 주변가능도 근사</li><li>일치성에는 후보 구성 등 조건이 필요</li></ul>
+          <p class="exp">BIC = −2 log L* + k log n은 정칙조건에서 베이즈 주변가능도를 근사하는 기준이며, 값 자체가 사후확률은 아닙니다. 고정된 유한 후보에 참모형이 포함되고, 식별 가능성 등 정칙조건과 적절한 사전분포 조건을 만족하면 모형 선택의 일치성을 가집니다. 유한 표본에서 참모형을 보장하지는 않습니다. 저장된 1,000회 예에서 n = 1,000일 때 선택 비율은 AIC 약 0.75, BIC 약 0.99였습니다.</p>
           <p class="next"><span>다음 질문</span>AIC와 BIC는 어떻게 가려 쓸까?</p>
         </div>
       </div>
@@ -473,8 +473,8 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
       <div class="body split even">
         <div class="fig"><svg id="m23-vs" viewBox="0 0 420 270" role="img" aria-label="AIC와 BIC의 관점, 벌점, 성질, 쓰는 상황 비교표"></svg></div>
         <div class="side">
-          <ul class="key"><li>복잡한 현상 · 예측 중시 → AIC</li><li>간단한 현상 · 올바른 하나 선택 → BIC</li></ul>
-          <p class="exp">BIC라는 이름은 베이즈 통계 개념에서 출발해 붙었지만, 최종적으로는 보듯이 최대가능도를 이용하는 덕택에 쉽게 계산할 수 있습니다. AIC와 BIC를 가려 쓰기는 쉽지 않지만, 복잡한 현상에 대해 여러 개의 후보 중 실제 모형이 있다고 상정할 수 없는 경우에는 AIC를, 비교적 간단한 현상에 대해 몇 개의 후보 중 올바른 것으로 보이는 한 가지를 선택하는 경우에는 BIC를 사용하는 경향이 있습니다<span class="cite">[1]</span>. 꽃 데이터에서는 두 기준 모두 M2를 골랐습니다.</p>
+          <ul class="key"><li>예측 분포의 성능 → AIC의 관점</li><li>후보 모형의 증거 → BIC의 관점</li></ul>
+          <p class="exp">새 자료의 예측 분포를 중시하는지, 정해 둔 후보 사이의 모형 증거를 비교하는지에 따라 기준을 정합니다. 현상이 단순하면 BIC, 복잡하면 AIC라는 구분은 경향을 설명하는 직관일 뿐 규칙이 아닙니다<span class="cite">[1]</span>. 후보 구성과 각 기준의 가정, 검증 자료의 예측 성능을 함께 봅니다. 꽃 자료에서는 두 기준이 모두 M2를 골랐지만, 그 선택만으로 참모형이나 인과관계를 확인한 것은 아닙니다.</p>
           <p class="next"><span>다음 질문</span>그 밖의 정보기준은?</p>
         </div>
       </div>
@@ -483,11 +483,22 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
     <section class="slide" data-step="3" id="s-4-4a">
       <div class="sh"><div class="sec">4-4 그 밖의 정보기준</div><h2><span class="q">Q</span>AIC와 BIC를 쓰기 어려운 경우에는 무엇을 쓸까요?</h2></div>
       <div class="body split even">
-        <div class="fig"><svg id="m23-other" viewBox="0 0 420 270" role="img" aria-label="표본이 작을 때 AICc, 베이즈 추정 모형에 DIC, 계층적 베이지안 모형에 WAIC와 WBIC"></svg></div>
+        <div class="fig"><svg id="m23-other" viewBox="0 0 420 270" role="img" aria-label="AICc의 적용 조건, DIC의 주의점, WAIC의 예측 평가와 WBIC의 모형 증거 비교"></svg></div>
         <div class="side">
-          <ul class="key"><li>표본크기가 작을 때 <b>AICc</b></li><li>복잡한 베이즈 모형에는 <b>WAIC</b>, WBIC</li></ul>
-          <p class="exp">AIC를 보정해 표본크기가 작을 때 사용하는 AICc, 최대가능도 방법이 아닌 베이즈 추정으로 얻은 모형을 대상으로 한 편차정보기준 DIC 등 보다 개량된 정보기준도 있습니다. 또한 AIC나 BIC는 파라미터 추정량분포를 정규분포로 근사할 수 있는 단순한 모형일 때 사용하는 방법입니다. 그렇지 않은 계층적 베이지안 모형이나 관찰할 수 없는 변수를 포함하는 모형일 때는 WAIC나 WBIC를 사용할 수 있으며, 이는 베이즈 통계를 다루는 과정에서 다시 만납니다.</p>
+          <ul class="key"><li>AICc: 모형·표본 크기 조건 확인</li><li>WAIC는 예측, WBIC는 모형 증거</li></ul>
+          <p class="exp">정보기준은 계산 방법뿐 아니라 목표도 다릅니다. AICc는 특정 모형에서 AIC의 소표본 편향을 보정하며 적용 조건이 있습니다. DIC는 사후분포의 편차를 이용하지만 비식별·다봉 분포 등에서 주의가 필요합니다. WAIC는 관측 단위별 사후 예측 로그밀도를 바탕으로 예측 성능을 평가합니다. WBIC는 주변가능도에 대응하는 자유에너지를 근사해 모형 증거를 비교합니다. WAIC와 WBIC를 같은 목적의 대체품으로 취급하지 않습니다.</p>
           <p class="next"><span>정리</span>모형의 평가와 비교를 정리해 봅시다.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" data-step="3" id="s-4-4b">
+      <div class="sh"><div class="sec">4-4 그 밖의 정보기준</div><h2><span class="q">Q</span>표본이 작으면 AICc로 항상 해결될까요?</h2></div>
+      <div class="body split even">
+        <div class="fig"><svg viewBox="0 0 420 270" role="img" aria-label="정규회귀의 표준 AICc: AICc = AIC + 2k(k+1) ÷ (n−k−1); 적용 조건: n &gt; k + 1: k = 회귀계수 수 + 오차분산 1개; n = 9: 1차식 k = 3 / 7차식 k = 9: 1차식 AICc ≈ 61.1 / 7차식은 정의되지 않음"><rect x="8" y="8" width="404" height="76" rx="10" fill="#EEF4FB"/><text x="210" y="37" text-anchor="middle" fill="#1B2A4A" font-size="13" font-weight="800">정규회귀의 표준 AICc</text><text x="210" y="63" text-anchor="middle" fill="#6B7280" font-size="11">AICc = AIC + 2k(k+1) ÷ (n−k−1)</text><rect x="8" y="94" width="404" height="76" rx="10" fill="#FCF3D9"/><text x="210" y="123" text-anchor="middle" fill="#1B2A4A" font-size="13" font-weight="800">적용 조건: n &gt; k + 1</text><text x="210" y="149" text-anchor="middle" fill="#6B7280" font-size="11">k = 회귀계수 수 + 오차분산 1개</text><rect x="8" y="180" width="404" height="76" rx="10" fill="#E3F1EA"/><text x="210" y="209" text-anchor="middle" fill="#1B2A4A" font-size="13" font-weight="800">n = 9: 1차식 k = 3 / 7차식 k = 9</text><text x="210" y="235" text-anchor="middle" fill="#6B7280" font-size="11">1차식 AICc ≈ 61.1 / 7차식은 정의되지 않음</text></svg></div>
+        <div class="side"><ul class="key"><li>분모가 0 이하이면 표준식을 쓰지 않음</li><li>모든 GLM에 같은 보정식을 쓰지는 않음</li></ul>
+          <p class="exp">정규·등분산 오차의 최대가능도 회귀에 쓰는 표준식입니다. n = 9인 예에서 1차식은 AIC 56.29에 4.8을 더합니다. 6차식(k = 8)은 분모 0, 7차식(k = 9)은 분모 −1이므로 이 AICc를 적용할 수 없습니다. 음수 분모로 계산해 작은 값을 얻었다고 좋은 모형으로 선택하면 안 됩니다.</p>
+          <p class="next"><span>다음 질문</span>검정과 정보기준의 차이를 정리해 볼까?</p>
         </div>
       </div>
     </section>
@@ -500,8 +511,8 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
           <tbody>
             <tr><td>왈드 검정</td><td>추정값 ÷ 표준오차. 표본이 작으면 신뢰도가 떨어짐</td><td>b의 z = 9.41</td></tr>
             <tr><td>가능도비 검정</td><td>내포 관계인 두 모형, ΔD = −2(log L₁ − log L₂)</td><td>M2 vs M3 ΔD = 0.16, p = 0.69</td></tr>
-            <tr><td>AIC</td><td>−2 log L + 2k. 예측 관점, 내포 관계 불필요, 일치성 없음</td><td>M1 219.1 · M2 68.3 · M3 70.1</td></tr>
-            <tr><td>BIC</td><td>−2 log L + k log n. 실제 모형 선택 관점, 일치성 있음</td><td>M1 220.1 · M2 70.3 · M3 73.1</td></tr>
+            <tr><td>AIC</td><td>−2 log L + 2k. 예측 로그 손실 관점, 비교 가능한 가능도 필요</td><td>M1 219.1 · M2 68.3 · M3 70.1</td></tr>
+            <tr><td>BIC</td><td>−2 log L + k log n. 주변가능도 근사, 조건부 일치성</td><td>M1 220.1 · M2 70.3 · M3 73.1</td></tr>
           </tbody>
         </table>
       </div>
@@ -512,7 +523,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
 
     <!-- ⑥ 실습 1 · 조작형 (모듈 전용) ─────────────── -->
     <section class="slide" data-step="5" id="p1">
-      <div class="sh"><div class="sec">실습 1 · 조작형</div><h2>목표: 다항식 차수를 바꾸며 잔차, AIC, 새 데이터 오차를 비교합니다</h2></div>
+      <div class="sh"><div class="sec">실습 1 · 조작형</div><h2>목표: 다항식 차수를 바꾸며 잔차, AIC, 저장된 새 데이터 오차를 비교합니다</h2></div>
       <div class="body split">
         <div class="pcol" style="gap:8px">
           <div class="plabel" style="margin:0">해보기 · 실제 모형이 직선인 점 9개에 적용할 차수를 고르세요</div>
@@ -521,10 +532,10 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
         </div>
         <div class="pcol" style="gap:10px;justify-content:center">
           <div class="plabel" style="margin:0">결과 확인</div>
-          <div class="stats three"><div><small>잔차제곱합</small><strong id="m23-rss">-</strong></div><div><small>AIC</small><strong id="m23-aicv">-</strong></div><div><small>새 데이터 오차</small><strong id="m23-mse">-</strong></div></div>
+          <div class="stats three"><div><small>잔차제곱합</small><strong id="m23-rss">-</strong></div><div><small>AIC</small><strong id="m23-aicv">-</strong></div><div><small>새 데이터 오차(저장 예)</small><strong id="m23-mse">-</strong></div></div>
           <p class="howto">도전: 잔차제곱합이 가장 작은 차수와 새 데이터 오차가 가장 작은 차수가 같은지 확인하세요.</p>
           <p class="pmsg" id="m23-msg"></p>
-          <div class="think" style="flex-wrap:wrap"><span>생각해보기</span>7차식에서 AIC가 오히려 작아진 이유는 무엇일까요?<details style="flex-basis:100%;font-weight:600"><summary style="cursor:pointer">예시 답</summary>파라미터 수가 표본 크기에 가까워, AIC의 벌점이 과대적합을 막지 못했기 때문입니다.</details></div>
+          <div class="think" style="flex-wrap:wrap"><span>생각해보기</span>7차식에서 AIC가 오히려 작아진 이유는 무엇일까요?<details style="flex-basis:100%;font-weight:600"><summary style="cursor:pointer">예시 답</summary>표본 대비 파라미터가 많아 AIC 근사가 부정확할 수 있습니다. 이 예의 6·7차식은 표준 AICc도 정의되지 않습니다.</details></div>
         </div>
       </div>
     </section>
@@ -548,19 +559,19 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
 
     <!-- ⑥ 실습 3 · 추정형 (모듈 전용) ─────────────── -->
     <section class="slide" data-step="5" id="p3">
-      <div class="sh"><div class="sec">실습 3 · 추정형</div><h2>목표: 표본크기에 따라 정보기준이 실제 모형을 고를 확률을 예측합니다</h2></div>
+      <div class="sh"><div class="sec">실습 3 · 추정형</div><h2>목표: 표본크기에 따라 정보기준의 실제 모형 선택 비율을 예측합니다</h2></div>
       <div class="body split">
         <div class="pcol">
           <div class="plabel">해보기 · 실제 모형이 1차식이고 후보가 1~4차식일 때, 1,000번 중 실제 모형을 고르는 비율은?</div>
           <div class="fig" style="flex:1"><svg id="m23-p3-svg" viewBox="0 0 470 210" role="img" aria-label="표본크기별 AIC, BIC의 실제 모형 선택 비율"></svg></div>
         </div>
-        <div class="pcol" style="gap:9px;justify-content:center">
+        <div class="pcol" style="gap:6px;justify-content:center">
           <div class="mbtns" id="m23-qn" style="gap:6px"></div>
           <div class="ctrl">BIC 예측<input type="range" id="m23-g" min="0" max="100" step="1" value="70" aria-label="BIC가 실제 모형을 고를 비율 예측"><strong id="m23-gv" style="min-width:56px;text-align:right">-</strong></div>
-          <button class="btn" id="m23-check" style="align-self:flex-start">시뮬레이션 결과 보기</button>
-          <div class="stats three"><div><small>내 예측(BIC)</small><strong id="m23-mine">-</strong></div><div><small>BIC 실제</small><strong id="m23-act">?</strong></div><div><small>AIC 실제</small><strong id="m23-aact">?</strong></div></div>
+          <button class="btn" id="m23-check" style="align-self:flex-start">저장 결과 보기</button>
+          <div class="stats three"><div><small>내 예측(BIC)</small><strong id="m23-mine">-</strong></div><div><small>BIC 선택비율</small><strong id="m23-act">?</strong></div><div><small>AIC 선택비율</small><strong id="m23-aact">?</strong></div></div>
           <p class="pmsg" id="m23-msg3"></p>
-          <div class="think" style="flex-wrap:wrap"><span>생각해보기</span>n이 커져도 AIC의 비율이 1에 다가가지 않는 이유는 무엇일까요?<details style="flex-basis:100%;font-weight:600"><summary style="cursor:pointer">예시 답</summary>AIC의 벌점 2k는 n이 커져도 그대로라, 더 복잡한 모형을 고르는 일이 남습니다.</details></div>
+          <div class="think" style="flex-wrap:wrap"><span>생각해보기</span>AIC의 선택 비율이 1로 가지 않는 이유는?<details style="flex-basis:100%;font-weight:600"><summary style="cursor:pointer">예시 답</summary>벌점 2k는 n과 무관해 더 복잡한 후보를 선택할 가능성이 남습니다.</details></div>
         </div>
       </div>
     </section>
@@ -604,39 +615,40 @@ var QUIZ=[
  {goal:1,type:"계산",stem:"모형 M2(a + bx)의 최대 로그 가능도는 −32.15, 모형 M3(a + bx + cx²)는 −32.07입니다. 가능도비 검정의 검정통계량 ΔD는 약 얼마일까요?",
   opts:["약 0.16","약 −0.16","약 0.08","약 64.2"],ans:0,
   exp:"ΔD = −2 × (log L₁ − log L₂) = −2 × (−32.15 − (−32.07)) = −2 × (−0.08) = 0.16입니다. 카이제곱분포(자유도 1)의 상위 5% 경계 3.84보다 훨씬 작아 p = 0.69이므로, x²항을 넣어도 데이터에 잘 맞도록 개선되었다고 말할 수 없습니다.",back:"s-4-1b",backLabel:"4-1 가능도비 검정 다시 보기"},
- {goal:1,type:"O/X 오개념",stem:"“가능도비 검정은 y = a + bx와 y = a + cx²처럼 서로 포함하지 않는 두 모형도 비교할 수 있다.”",
+ {goal:1,type:"O/X 오개념",stem:"“가능도비 검정은 log λ = a + bx와 log λ = a + cx²처럼 서로 포함하지 않는 두 모형도 비교할 수 있다.”",
   opts:["O","X"],ans:1,ox:true,
-  exp:"가능도비 검정을 하려면 비교할 2개 모형 중 한쪽이 다른 쪽을 포함하는 관계(내포 관계)여야 합니다. y = a는 y = a + bx에 내포되지만, a + bx와 a + cx²는 서로를 포함하지 않습니다. 내포 관계가 아니어도 비교할 수 있는 것은 AIC입니다.",back:"s-4-1b",backLabel:"4-1 내포 관계 다시 보기"},
+  exp:"가능도비 검정을 하려면 비교할 2개 모형 중 한쪽이 다른 쪽을 포함하는 관계(내포 관계)여야 합니다. log λ = a는 log λ = a + bx에 내포되지만, a + bx와 a + cx²는 서로를 포함하지 않습니다. 내포 관계가 아니어도 비교할 수 있는 것은 AIC입니다.",back:"s-4-1b",backLabel:"4-1 내포 관계 다시 보기"},
  {goal:2,type:"계산",stem:"최대 로그 가능도가 −32.15이고 파라미터가 2개인 모형의 AIC는 얼마일까요?",
   opts:["68.3","64.3","−60.3","36.15"],ans:0,
   exp:"AIC = −2 log L* + 2k = −2 × (−32.15) + 2 × 2 = 64.3 + 4 = 68.3입니다. 64.3은 파라미터 수에 따른 둘째 항을 빠뜨린 값입니다. AIC가 작을수록 좋은 모형이며, 후보 M1·M2·M3 중 M2의 AIC가 가장 작습니다.",back:"s-4-2a",backLabel:"4-2 AIC 계산 다시 보기"},
  {goal:2,type:"상황 판단",stem:"점 9개에 7차 다항식을 적용했더니 잔차제곱합이 1차식의 140.8에서 20.3으로 줄었습니다. 가장 알맞은 판단은 무엇일까요?",
   opts:["과대적합일 수 있으므로 새 데이터에 대한 예측 성능이나 정보기준으로 평가한다","잔차가 작으므로 7차식이 가장 좋은 모형이다","파라미터가 많을수록 항상 실제 모형에 가깝다","잔차제곱합은 모형 평가와 관계없다"],ans:0,
-  exp:"파라미터가 많은 모형일수록 데이터에 잘 들어맞는 성질이 있어, 데이터에 무리하게 맞춘 나머지 새로 얻은 데이터는 제대로 나타내지 못하는 과대적합이 생깁니다. 이 예에서 새 데이터의 오차는 18.9에서 67.5로 커졌습니다. 파라미터 수가 표본크기에 가까우면 AIC도 이를 막지 못해 AICc 등을 씁니다.",back:"s-4-2b",backLabel:"4-2 과대적합 다시 보기"},
- {goal:3,type:"O/X 오개념",stem:"“후보 중에 실제 모형이 있다면, 표본크기를 아주 크게 할수록 AIC 최소화로 실제 모형을 고를 확률은 1에 가까워진다.”",
+  exp:"학습 잔차는 차수가 커질수록 줄어도 새 자료에서 오차가 커질 수 있습니다. 이 예의 저장된 새 데이터 오차는 18.9에서 67.5로 커졌습니다. n = 9, 7차식은 분산 포함 k = 9이므로 표준 정규회귀 AICc도 정의되지 않습니다. 단순한 후보와 적절한 검증을 검토합니다.",back:"s-4-2b",backLabel:"4-2 과대적합 다시 보기"},
+ {goal:3,type:"O/X 오개념",stem:"“AIC는 후보 중 참모형이 있을 때 일반적으로 모형 선택의 일치성을 보장한다.”",
   opts:["O","X"],ans:1,ox:true,
-  exp:"AIC에는 일치성이 없어, 표본크기 n을 아무리 크게 해도 실제 모형을 고를 확률이 1이 되지 않으며 n이 클 때는 실제보다 파라미터가 많은 모형을 고르는 일이 벌어집니다. 이 모듈의 시뮬레이션에서도 n = 1,000에서 AIC는 0.75, BIC는 0.99였습니다.",back:"s-4-3a",backLabel:"4-3 일치성 다시 보기"},
+  exp:"AIC는 일반적으로 모형 선택의 일치성을 보장하지 않으며, 참모형을 포함하는 내포 후보에서 더 복잡한 모형을 계속 선택할 수 있습니다. 이 모듈의 저장된 예에서 n = 1,000의 선택 비율은 AIC 약 0.75, BIC 약 0.99입니다. 모든 후보 구성에서 AIC가 반드시 불일치한다는 뜻은 아닙니다.",back:"s-4-3a",backLabel:"4-3 일치성 다시 보기"},
  {goal:3,type:"상황 판단",stem:"단순한 현상에 대해 후보 모형 몇 개 중 올바른 하나를 고르는 것이 목적이고, 표본크기는 500입니다. 어느 정보기준이 목적에 더 맞을까요?",
   opts:["BIC","AIC","결정계수 R²","정보기준은 쓰지 않는다"],ans:0,
-  exp:"BIC는 후보 중 실제 모형일 확률이 높은 것을 고르는 관점입니다. 후보 안에 실제 모형이 있을 때 n을 무한대로 하면 그것을 고를 확률이 1이 되는 일치성이 있지만, 유한한 표본의 한 번 선택이 실제 모형이라는 보장은 아닙니다. 비교적 간단한 현상에 몇 개의 후보 중 올바른 하나를 선택할 때는 BIC를, 복잡한 현상에서 예측을 중시할 때는 AIC를 쓰는 경향이 있습니다.",back:"s-4-3b",backLabel:"4-3 AIC와 BIC 가려 쓰기 다시 보기"}
+  exp:"정해 둔 후보의 모형 증거를 중시한다면 BIC가 목적에 맞습니다. 일치성에는 고정된 유한 후보에 참모형이 포함되고 식별 가능성 등 정칙조건을 만족한다는 가정이 필요합니다. n = 500이라는 숫자만으로 참모형 선택이 보장되지는 않습니다.",back:"s-4-3b",backLabel:"4-3 AIC와 BIC 가려 쓰기 다시 보기"}
 ];
 
 var BINS=["가능도비 검정","AIC","BIC"];
-var CARDS=[["y = a와 y = a + bx를 검정으로 비교","가능도비 검정"],["x² 항 추가가 유의한 개선인지","가능도비 검정"],
+var CARDS=[["log λ = a와 a + bx를 검정으로 비교","가능도비 검정"],["x² 항 추가가 유의한 개선인지","가능도비 검정"],
            ["내포 관계가 아닌 모형끼리 예측 비교","AIC"],["새 데이터 예측을 가장 중시","AIC"],
            ["후보 중 실제 모형을 고르고 싶음","BIC"],["n이 클수록 파라미터 벌점을 키움","BIC"]];
-var HINT={"가능도비 검정":"내포 관계인 두 모형을 가설검정으로 비교합니다.","AIC":"예측 성능 관점의 정보기준이며 내포 관계가 아니어도 됩니다.","BIC":"실제 모형일 확률 관점이며 k log n으로 n이 클수록 벌점이 커집니다."};
+var HINT={"가능도비 검정":"같은 관측·가능도로 적합한 내포 모형을 정칙조건 아래 비교합니다.","AIC":"예측 성능 관점의 정보기준이며 내포 관계가 아니어도 됩니다.","BIC":"정칙조건 아래 주변가능도 근사와 연결되며 k log n의 벌점을 씁니다."};
 
 var GLOSSARY=[
- ["왈드 통계량","Wald statistic","최대가능도 방법으로 얻은 추정값을 표준오차로 나눈 값으로, 이를 이용한 검정이 왈드 검정입니다.","b의 z = 0.577 ÷ 0.061 = 9.41"],
+ ["왈드 통계량","Wald statistic","(추정값 − 귀무값) ÷ 표준오차입니다. 정칙조건 아래 큰 표본에서 표준정규 근사를 이용합니다.","b의 z = 0.577 ÷ 0.061 = 9.41"],
  ["가능도비 검정","likelihood ratio test","내포 관계인 두 모형의 최대가능도 비에 로그를 취해 −2를 곱한 ΔD로, 모형이 개선되었는지 조사하는 검정입니다.","M2 vs M3 ΔD = 0.16, p = 0.69"],
- ["부트스트랩 방법","bootstrap method","어떤 가정에서 무작위로 데이터를 반복 생성해 추정량의 성질을 조사하는 방법입니다.","1,000회 반복한 ΔD의 상위 5% = 3.82"],
+ ["부트스트랩 방법","bootstrap method","이 예의 모수적 부트스트랩은 적합한 귀무모형에서 반응을 생성하고 매번 두 모형을 재적합합니다. 관측 행을 재표집하는 비모수 방법과 구분합니다.","1,000회 반복한 ΔD의 상위 5% = 3.82"],
  ["AIC","Akaike information criterion","−2 log L* + 2k로, 새로 얻을 데이터를 얼마나 잘 예측할 수 있는지를 기준으로 모형의 좋음을 정하는 지표입니다.","M2의 AIC 68.3"],
  ["과대적합","overfitting","실제 데이터에 무리하게 맞추는 바람에 새로 얻은 데이터는 제대로 나타내지 못하는 상태입니다.","7차식: 새 데이터 오차 67.5"],
- ["BIC","Bayesian information criterion","−2 log L* + k log n으로, 후보 중 실제 모형일 확률이 높은 것을 고르는 정보기준입니다. 유한 표본의 보장은 아닙니다.","M2의 BIC 70.3"],
- ["일치성","consistency","후보 안에 실제 모형이 있을 때 표본크기를 무한대로 하면 그것을 고를 확률이 1이 되는 성질입니다. BIC에는 있고 AIC에는 없습니다.","n = 1,000에서 BIC 0.99"],
- ["AICc","corrected AIC","표본크기가 작을 때 AIC를 보정한 정보기준입니다.","점 9개에 파라미터 9개인 모형"],
- ["WAIC","widely applicable information criterion","계층적 베이지안 모형 등에도 쓸 수 있는 정보기준으로, 비슷한 것으로 WBIC가 있습니다.","관찰할 수 없는 변수를 포함한 모형"]
+ ["BIC","Bayesian information criterion","−2 log L* + k log n. 정칙조건 아래 베이즈 주변가능도 근사와 연결되며, 값 자체가 모형의 사후확률은 아닙니다.","M2의 BIC 70.3"],
+ ["일치성","consistency","표본 크기를 늘리면 참모형 선택 확률이 1로 가는 성질입니다. BIC의 일치성은 참모형을 포함한 고정 유한 후보와 정칙조건 등에 의존합니다.","n = 1,000에서 BIC 0.99"],
+ ["AICc","corrected AIC","정규회귀의 표준식은 AIC + 2k(k+1)/(n−k−1)이며 n > k+1이 필요합니다. k에 오차분산을 포함합니다.","n = 9, 7차식 k = 9: 정의되지 않음"],
+ ["WBIC","widely applicable Bayesian information criterion","주변가능도에 대응하는 자유에너지를 근사하는 기준입니다. WAIC의 예측 평가와 목적이 다릅니다.","모형 증거 비교"],
+ ["WAIC","widely applicable information criterion","관측 단위별 사후 예측 로그밀도로 예측 성능을 평가하는 베이즈 정보기준입니다. 관측 단위와 사후 계산의 적절성을 확인합니다.","예측 성능 평가"]
 ];
 var REFS=[
  {n:1,title:"Model selection for ecologists: the worldviews of AIC and BIC",org:"K. Aho, D. Derryberry, T. Peterson, Ecology 95(3), 631–636, 2014",url:"https://doi.org/10.1890/13-1452.1",date:"2026-10-27 확인"},
@@ -791,7 +803,7 @@ on("m23-lr",function(s){
   bxQ(s,14,30,176,94,"#EEF4FB","#2B8CC4");tQ(s,24,48,"M2: a + bx",{a:"start",fw:800,fs:10.5,c:"#1C6EA4"});
   bxQ(s,24,56,120,58,"#F3F5F9","#9AA0AA");tQ(s,84,80,"M1: a",{fw:800,fs:11});tQ(s,84,98,"log L* −108.57",{fs:9.5,c:C.gray});
   tQ(s,168,100,"−32.15",{fs:9.5,c:"#1C6EA4",fw:700});tQ(s,102,138,"log L* −32.07",{fs:9.5,c:"#C2416E",fw:700});
-  var R=[[20,"M1 → M2","ΔD = 152.9","p < 0.001","개선됨",C.ok,"#E3F1EA"],[84,"M2 → M3","ΔD = 0.16","p = 0.69","개선 아님","#B42318","#FBE4E1"]];
+  var R=[[20,"M1 → M2","ΔD = 152.9","p < 0.001","개선됨",C.ok,"#E3F1EA"],[84,"M2 → M3","ΔD = 0.16","p = 0.69","증거 약함","#B42318","#FBE4E1"]];
   R.forEach(function(r){bxQ(s,214,r[0],202,54,r[6]);tQ(s,226,r[0]+22,r[1],{a:"start",fw:800,fs:11.5});tQ(s,404,r[0]+22,r[4],{a:"end",fw:800,fs:11.5,c:r[5]});
     tQ(s,226,r[0]+42,r[2]+"  ·  "+r[3],{a:"start",fs:10.5,fw:700,c:"#22262E"});});
 });
@@ -839,15 +851,15 @@ on("m23-ovf",function(s){
 
 on("m23-caution",function(s){
   bxQ(s,6,6,408,118,"#F3F5F9");tQ(s,20,30,"① AIC 최소 ≠ 실제 모형",{a:"start",fw:800,fs:12.5});
-  tQ(s,20,52,"후보에 실제 모형이 있어도, n을 키워 고를 확률이 1이 되지 않음",{a:"start",fs:10.5,c:"#22262E"});
+  tQ(s,20,52,"AIC는 일반적으로 참모형 선택의 일치성을 보장하지 않음",{a:"start",fs:10.5,c:"#22262E"});
   var X=linQ(0,1,120,380);el("rect",{x:X(0),y:68,width:X(1)-X(0),height:18,rx:4,fill:"#E5E7EB"},s);el("rect",{x:X(0),y:68,width:X(.751)-X(0),height:18,rx:4,fill:"#2B8CC4"},s);
   tQ(s,20,82,"n = 1,000 AIC",{a:"start",fs:10.5,fw:800});tQ(s,X(.751)-6,82,"0.75",{a:"end",fs:10.5,fw:800,c:"#fff"});tQ(s,X(1)+6,82,"1",{a:"start",fs:10,c:C.gray});
   tQ(s,20,110,"나머지는 대부분 실제보다 파라미터가 많은 모형을 고름",{a:"start",fs:10.5,c:C.gray,fw:700});
-  bxQ(s,6,134,408,96,"#FCF3D9");tQ(s,20,158,"② 정보기준과 가설검정을 섞지 않기",{a:"start",fw:800,fs:12.5,c:C.amberInk});
+  bxQ(s,6,134,408,96,"#FCF3D9");tQ(s,20,158,"② 선택 후 p값에는 선택 과정을 고려",{a:"start",fw:800,fs:12.5,c:C.amberInk});
   bxQ(s,24,170,150,44,"#fff");tQ(s,99,191,"AIC로 모형 선택",{fw:800,fs:11});tQ(s,99,206,"예측 관점",{fs:9.5,c:C.gray});
-  bxQ(s,246,170,150,44,"#fff");tQ(s,321,191,"그 모형으로 p값 해석",{fw:800,fs:11});tQ(s,321,206,"기각 여부 관점",{fs:9.5,c:C.gray});
+  bxQ(s,246,170,150,44,"#fff");tQ(s,321,191,"선택을 무시한 p값",{fw:800,fs:11});tQ(s,321,206,"명목 오류율이 달라질 수 있음",{fs:9.5,c:C.gray});
   tQ(s,210,198,"+",{fw:800,fs:20,c:C.gray});el("path",{d:"M196 178 L224 206 M224 178 L196 206",stroke:"#B42318","stroke-width":3},s);
-  tQ(s,210,256,"어느 쪽이 더 좋다는 뜻이 아니라, 목적에 맞게 가려 씁니다",{fw:800,fs:11,c:C.navy});
+  tQ(s,210,256,"자료 분할·독립 검증·선택을 반영한 추론 등을 검토",{fw:800,fs:11,c:C.navy});
 });
 
 on("m23-bic",function(s){
@@ -862,22 +874,21 @@ on("m23-bic",function(s){
 
 on("m23-vs",function(s){
   var cx=[66,196,336];el("rect",{x:4,y:6,width:412,height:30,rx:6,fill:C.navy},s);["","AIC","BIC"].forEach(function(h,i){tQ(s,cx[i],26,h,{fw:800,fs:12.5,c:"#fff"});});
-  var R=[["둘째 항(벌점)","2k","k log n"],["관점","새 데이터 예측","실제 모형일 확률"],["n이 커지면","벌점 그대로","벌점이 커짐"],["일치성","없음","있음"],["주로 쓰는 경우","복잡한 현상, 예측 중시","간단한 현상, 하나 선택"],["꽃 데이터 선택","M2 (68.3)","M2 (70.3)"]];
+  var R=[["둘째 항(벌점)","2k","k log n"],["관점","예측 로그 손실","주변가능도 근사"],["n이 커지면","벌점 그대로","벌점이 커짐"],["일치성","일반적 보장 없음","정칙조건 아래"],["주요 목적","예측 분포 비교","후보 모형 증거 비교"],["꽃 데이터 선택","M2 (68.3)","M2 (70.3)"]];
   R.forEach(function(r,j){var y=60+j*35;el("rect",{x:4,y:y-20,width:412,height:31,rx:4,fill:j===4?"#FCF3D9":j%2?"#F8F9FB":"#fff"},s);
     r.forEach(function(v,i){tQ(s,cx[i],y,v,{fw:i===0?800:700,fs:i===0?10.5:11,c:i===1?"#1C6EA4":i===2?C.amberInk:C.navy});});});
 });
 
 on("m23-other",function(s){
-  var R=[["AICc","표본크기가 작을 때","AIC를 보정한 기준","#EEF4FB","#1C6EA4"],["DIC","베이즈 추정으로 얻은 모형","편차정보기준","#FCF3D9",C.amberInk],["WAIC · WBIC","계층적 베이지안 모형","관찰할 수 없는 변수 포함 모형","#E3F1EA",C.ok]];
-  R.forEach(function(r,i){var y=8+i*64;bxQ(s,6,y,408,56,r[3]);tQ(s,22,y+34,r[0],{a:"start",fw:800,fs:14,c:r[4]});tQ(s,150,y+24,r[1],{a:"start",fw:800,fs:11.5});tQ(s,150,y+42,r[2],{a:"start",fs:10.5,c:C.gray,fw:600});});
-  bxQ(s,6,206,408,58,C.navy);tQ(s,210,230,"AIC · BIC: 추정량분포를 정규분포로",{fw:800,fs:12,c:"#fff"});tQ(s,210,250,"근사할 수 있는 단순한 모형일 때 사용",{fw:800,fs:12,c:"#fff"});
+  var R=[["AICc","AIC의 소표본 편향 보정","모형별 식과 n > k+1 등 조건 확인","#EEF4FB","#1C6EA4"],["DIC","사후분포의 편차 이용","비식별·다봉 분포 등에 주의","#FCF3D9",C.amberInk],["WAIC","사후 예측 성능 평가","관측 단위별 로그 예측밀도","#E3F1EA",C.ok],["WBIC","모형 증거 비교","주변가능도에 대응하는 자유에너지 근사","#F3F5F9",C.navy]];
+  R.forEach(function(r,i){var y=8+i*64;bxQ(s,6,y,408,56,r[3]);tQ(s,22,y+34,r[0],{a:"start",fw:800,fs:14,c:r[4]});tQ(s,115,y+24,r[1],{a:"start",fw:800,fs:11.5});tQ(s,115,y+42,r[2],{a:"start",fs:10.5,c:C.gray,fw:600});});
 });
 
 /* 실습 1 · 다항식 차수(조작형) */
 (function(){
   var box=document.getElementById("m23-d");if(!box)return;var svg=document.getElementById("m23-p1-svg"),cur=1;
   for(var d=1;d<=7;d++)(function(d){var b=document.createElement("button");b.type="button";b.className="mbtn";b.textContent=d+"차";b.style.padding="3px 10px";b.onclick=function(){cur=d;upd();};box.appendChild(b);})(d);
-  var AICC={1:61.1,2:68.2,3:79.8,4:103.4,5:175.2};
+  // 정규회귀의 표준 AICc: 분산 포함 k = 차수 + 2, n > k + 1일 때만 정의
   function upd(){
     [].forEach.call(box.children,function(x,i){var on=i+1===cur;x.classList.toggle("on",on);x.setAttribute("aria-pressed",on);});
     var o=OF[cur-1];document.getElementById("m23-rss").textContent=o.rss.toFixed(1);document.getElementById("m23-aicv").textContent=o.aic.toFixed(1);document.getElementById("m23-mse").textContent=o.mse.toFixed(1);
@@ -892,10 +903,10 @@ on("m23-other",function(s){
     tQ(svg,48,24,cur+"차식 · 파라미터 "+(cur+2)+"개 (점 9개)",{a:"start",fw:800,fs:11,c:cur===1?"#1C6EA4":"#B42318",halo:true});
     tQ(svg,456,160,"점선: 실제 직선",{a:"end",fs:10,fw:700,c:C.gray,halo:true});
     var m=document.getElementById("m23-msg");m.className="pmsg"+(cur===1?" ok":"");
-    m.textContent=cur===1?"1차식은 잔차제곱합 140.8로 가장 크지만, AIC 56.3과 새 데이터 오차 18.9는 가장 작습니다. 실제 모형이 직선이기 때문입니다.":
-      cur<=5?cur+"차식에서는 잔차제곱합이 "+o.rss.toFixed(1)+"까지 줄었지만 AIC는 "+o.aic.toFixed(1)+", 새 데이터 오차는 "+o.mse.toFixed(1)+"로 1차식보다 커졌습니다. AICc는 "+AICC[cur]+"입니다.":
-      cur===6?"6차식은 잔차제곱합 94.8로 줄었지만 새 데이터 오차는 28.9로 커졌습니다. AIC 62.7은 5차식보다 작아지기 시작합니다.":
-      "7차식은 잔차제곱합 20.3, AIC 50.9로 가장 작지만 새 데이터 오차는 67.5로 가장 큽니다. 파라미터 9개가 점 9개와 같아 AIC도 과대적합을 막지 못합니다. 이럴 때 AICc를 씁니다.";
+    var k=cur+2,n=OX.length,den=n-k-1;
+    var aicc=den>0?(o.aic+2*k*(k+1)/den).toFixed(1):"정의 안 됨(n ≤ k+1)";
+    m.textContent="k = "+k+" · AICc = "+aicc+". "+(cur===1?"1차식은 이 예의 기준 모형입니다.":cur>=6?"표준 AICc의 적용 조건을 만족하지 않습니다. 더 단순한 후보와 검증을 검토하세요.":"학습 잔차가 줄어도 예측이 좋아지는 것은 아닙니다.");
+
   }
   upd();
 })();
@@ -916,11 +927,11 @@ on("m23-other",function(s){
   function txt(){document.getElementById("m23-gv").textContent=(+g.value/100).toFixed(2);document.getElementById("m23-mine").textContent=(+g.value/100).toFixed(2);}
   function reset(){[].forEach.call(qb.children,function(x,i){var on=NS[i]===cur;x.classList.toggle("on",on);x.setAttribute("aria-pressed",on);});
     document.getElementById("m23-act").textContent=seen[cur]?SEL[cur][1].toFixed(2):"?";document.getElementById("m23-aact").textContent=seen[cur]?SEL[cur][0].toFixed(2):"?";
-    var m=document.getElementById("m23-msg3");m.className="pmsg";m.textContent="n = "+(+cur).toLocaleString()+"일 때 BIC가 실제 모형(1차식)을 고를 비율을 예측한 뒤 「시뮬레이션 결과 보기」를 누르세요.";draw();}
+    var m=document.getElementById("m23-msg3");m.className="pmsg";m.textContent="n = "+(+cur).toLocaleString()+"일 때 BIC가 실제 모형(1차식)을 고를 비율을 예측한 뒤 「저장 결과 보기」를 누르세요.";draw();}
   g.addEventListener("input",function(){txt();draw();});
   document.getElementById("m23-check").onclick=function(){seen[cur]=true;var a=SEL[cur],gv=+g.value/100,ok=Math.abs(gv-a[1])<=0.1,m=document.getElementById("m23-msg3");
     document.getElementById("m23-act").textContent=a[1].toFixed(2);document.getElementById("m23-aact").textContent=a[0].toFixed(2);m.className="pmsg "+(ok?"ok":"ng");
-    m.textContent=(ok?"가깝게 예측했습니다. ":"차이가 있습니다. ")+"n = "+(+cur).toLocaleString()+"에서 BIC "+a[1].toFixed(2)+", AIC "+a[0].toFixed(2)+"입니다. n이 커질수록 BIC는 1에 다가가지만(일치성) AIC는 0.75 근처에 머뭅니다.";draw();};
+    m.textContent="저장 비율: BIC "+a[1].toFixed(2)+", AIC "+a[0].toFixed(2)+". 한 번의 선택은 보장되지 않습니다.";draw();};
   txt();reset();
 })();
 

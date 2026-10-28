@@ -219,7 +219,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
     <!-- ① 학습개요 ─────────────────────────────── -->
     <section class="slide" data-step="0">
       <div class="sh"><div class="sec">학습개요</div>
-        <h2 class="big">평균과 표준편차 두 숫자로 분포를 그리고, 위치를 비교합니다</h2></div>
+        <h2 class="big">정규분포를 평균·표준편차로 그리고, 표준화로 위치를 비교합니다</h2></div>
       <div class="body split">
         <div class="fig"><svg id="m7-ov" viewBox="0 0 440 260" role="img" aria-label="파라미터 μ와 σ로 정규분포를 정하고, 표준화로 위치를 비교하는 흐름"></svg></div>
         <div class="side">
@@ -363,7 +363,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
         <div class="fig"><svg id="m7-param" viewBox="0 0 420 270" role="img" aria-label="정규분포라는 틀에 μ와 σ 두 파라미터를 넣으면 분포 형태가 정해짐"></svg></div>
         <div class="side">
           <ul class="key"><li>이론적인 확률분포는 수식으로 표현됩니다.</li><li><b>파라미터</b>를 알면 분포의 형태를 압니다.</li></ul>
-          <p class="exp">통계학에서 자주 쓰는 이론적인 확률분포는 수식으로 표현되며, 분포의 형태를 정하는 숫자인 파라미터(모수)를 가집니다. 데이터 분석의 목적은 모집단의 성질을 아는 것이므로, 모집단을 ‘○○라는 파라미터를 가진 □□라는 확률분포’로 나타낼(근사할) 수 있다면 모집단의 성질을 아는 것이 됩니다.</p>
+          <p class="exp">분포의 종류와 파라미터를 함께 정하면 하나의 이론 모형을 지정할 수 있습니다. 정규분포라면 평균 μ와 표준편차 σ가 모양을 정합니다. 그러나 평균과 표준편차가 같다는 사실만으로 어떤 분포인지 알 수는 없습니다. 모집단을 특정 분포로 근사하는 것은 가정이며, 자료의 모양·범위·생성 과정에 맞는지도 확인해야 합니다.</p>
           <p class="next"><span>다음 질문</span>가장 자주 쓰는 확률분포는 무엇일까?</p>
         </div>
       </div>
@@ -375,7 +375,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
         <div class="fig"><svg id="m7-norm" viewBox="0 0 420 270" role="img" aria-label="평균 167.6, 표준편차 7.0인 정규분포의 확률밀도함수와 수식"></svg></div>
         <div class="side">
           <ul class="key"><li><b>정규분포</b>: 평균 μ와 표준편차 σ로 정해짐</li><li>N(0, 1)을 <b>표준정규분포</b>라 합니다.</li></ul>
-          <p class="exp">정규분포는 가우스 분포라고도 하며, 연속형 확률변수에 대해 정의됩니다. 수식은 복잡해 보이지만 중요한 것은 평균 μ와 표준편차 σ라는 2개의 파라미터로 정해진다는 점입니다. N(μ, σ²)으로 표기하며, μ를 중심으로 한 좌우대칭의 종 모양이고 μ에서 멀어질수록 값이 적어집니다. 키나 몸무게처럼 정규분포로 근사할 수 있는 현상이 많습니다.</p>
+          <p class="exp">정규분포 N(μ, σ²)는 평균 μ와 양의 표준편차 σ로 정해지는 연속형 분포입니다. 곡선 높이는 확률밀도이고, 구간 아래 넓이가 그 구간의 확률입니다. μ를 중심으로 대칭이며 양쪽 끝은 무한히 이어집니다. 키 같은 자료는 특정 집단에서 정규분포로 근사할 수 있지만, 여러 집단의 혼합이나 치우친 자료를 자동으로 정규분포로 보지는 않습니다.</p>
           <p class="next"><span>다음 질문</span>μ와 σ를 바꾸면 어떻게 될까?</p>
         </div>
       </div>
@@ -387,7 +387,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
         <div class="fig"><svg id="m7-four" viewBox="0 0 420 270" role="img" aria-label="μ와 σ를 바꾼 네 개의 정규분포 곡선"></svg></div>
         <div class="side">
           <ul class="key"><li>μ는 분포의 위치를 정합니다.</li><li>σ는 분포의 너비를 정합니다.</li></ul>
-          <p class="exp">μ = 0, σ = 1인 곡선에서 μ만 2로 바꾸면 모양은 그대로이고 오른쪽으로 옮겨 갑니다. σ를 2나 3으로 키우면 곡선은 낮고 넓게 퍼집니다. 넓이의 합은 언제나 1이므로, 넓게 퍼질수록 봉우리는 낮아집니다. 평균과 표준편차 두 숫자만 알면 분포 전체의 모양을 그릴 수 있습니다.</p>
+          <p class="exp">정규분포에서 μ만 바꾸면 모양을 유지한 채 좌우로 이동합니다. σ를 키우면 곡선은 낮고 넓어지고 전체 면적은 1로 유지됩니다. 이처럼 μ와 σ만으로 전체 모양이 정해지는 것은 정규분포라는 종류를 이미 정했기 때문입니다. 다른 종류의 분포와 같은 평균·표준편차를 가져도 꼬리 확률은 다를 수 있습니다.</p>
           <p class="next"><span>다음 질문</span>값은 어느 범위에 얼마나 들어갈까?</p>
         </div>
       </div>
@@ -422,12 +422,12 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
             <div class="mt">핵심 수학 개념 · 표준화</div>
             <div class="f">z = (x − μ) ÷ σ &nbsp;(σ의 몇 배 떨어졌나)</div>
             <div class="r"><span>계산</span><span>남성 (180 − 167.6) ÷ 7.0 ≈ 1.77, 여성 (170 − 154.1) ÷ 6.9 ≈ 2.30</span></div>
-            <div class="r"><span>해석</span><span>z가 더 큰 170cm 여성이 자기 분포에서 더 드뭅니다.</span></div>
+            <div class="r"><span>해석</span><span>두 집단의 정규 모형에서 170cm 여성의 상측 꼬리가 더 작습니다.</span></div>
           </div>
         </div>
         <div class="side">
           <ul class="key"><li><b>표준화</b>: 평균 0, 표준편차 1로 바꾸기</li><li>바꾼 값을 <b>z값</b>이라 합니다.</li></ul>
-          <p class="exp">확률변수나 데이터에서 평균을 빼고 표준편차로 나누면 평균 0, 표준편차 1로 바뀝니다. z값은 평균과의 거리가 표준편차의 몇 배인지를 나타내므로, 본래의 μ나 σ와 상관없이 분포 안 어디에 있는지 알 수 있습니다. 본래 값이 정규분포를 따른다면 z값이 곧 ‘○σ’의 ○에 해당합니다.</p>
+          <p class="exp">분산이 유한하고 σ > 0인 확률변수는 z = (x − μ) ÷ σ로 바꾸면 평균 0·표준편차 1이 됩니다. 표본 자체를 표준화할 때는 그 표본의 평균과 표준편차를 쓰며, 분모 n 또는 n−1 중 같은 기준을 유지합니다. 표준화는 위치와 척도를 바꿀 뿐 비대칭을 없애거나 정규분포로 만들지 않습니다. 원래 정규분포라면 z가 표준정규분포를 따릅니다. 모든 값이 같아 표준편차가 0이면 이 변환은 정의되지 않습니다.</p>
           <p class="next"><span>다음 질문</span>시험 점수에서는 표준화를 어떻게 쓸까?</p>
         </div>
       </div>
@@ -449,6 +449,17 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
           <ul class="key"><li><b>T점수</b>는 10z + 50입니다.</li><li>실제 수능 표준점수와 그대로 같지 않습니다.</li></ul>
           <p class="exp">z점수는 목적에 따라 다른 평균·표준편차의 척도로 바꿀 수 있습니다. 예를 들어 T점수는 T = 50 + 10z입니다. 실제 대학수학능력시험의 표준점수는 영역과 연도에 따라 환산이 달라 이 T점수와 그대로 같지 않습니다<span class="cite">[3]</span>. 평균 50, 표준편차 15인 점수 분포에서 80점을 얻으면 T점수는 70이고, 평균 30, 표준편차 10인 분포에서는 50점만으로도 T점수 70이 됩니다. 평균과 표준편차를 기준으로 나열하면 분포 속 위치로 평가할 수 있습니다.</p>
           <p class="next"><span>다음 질문</span>정규분포 말고 어떤 확률분포가 있을까?</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" data-step="3" id="s-4-3c">
+      <div class="sh"><div class="sec">4-3 표준화</div><h2><span class="q">Q</span>표준화하면 어떤 자료든 정규분포가 될까요?</h2></div>
+      <div class="body split even">
+        <div class="fig"><svg viewBox="0 0 420 270" role="img" aria-label="표준화: z = (x − μ) ÷ σ: 위치와 척도 변환 / 유한 분산·σ &gt; 0 필요; 평균 0·분산 1인 균등분포도 있음: 구간 [−√3, √3] / 표준화해도 균등분포; 같은 평균·분산이어도 꼬리 확률은 다름: |z| ≤ 2: 위 균등분포 100% / 정규분포 약 95.45%"><rect x="8" y="8" width="404" height="76" rx="10" fill="#EEF4FB"/><text x="210" y="37" text-anchor="middle" fill="#1B2A4A" font-size="13" font-weight="800">표준화: z = (x − μ) ÷ σ</text><text x="210" y="63" text-anchor="middle" fill="#6B7280" font-size="11">위치와 척도 변환 / 유한 분산·σ &gt; 0 필요</text><rect x="8" y="94" width="404" height="76" rx="10" fill="#FCF3D9"/><text x="210" y="123" text-anchor="middle" fill="#1B2A4A" font-size="13" font-weight="800">평균 0·분산 1인 균등분포도 있음</text><text x="210" y="149" text-anchor="middle" fill="#6B7280" font-size="11">구간 [−√3, √3] / 표준화해도 균등분포</text><rect x="8" y="180" width="404" height="76" rx="10" fill="#E3F1EA"/><text x="210" y="209" text-anchor="middle" fill="#1B2A4A" font-size="13" font-weight="800">같은 평균·분산이어도 꼬리 확률은 다름</text><text x="210" y="235" text-anchor="middle" fill="#6B7280" font-size="11">|z| ≤ 2: 위 균등분포 100% / 정규분포 약 95.45%</text></svg></div>
+        <div class="side"><ul class="key"><li>평균 0·분산 1 ≠ 표준정규분포</li><li>z값을 확률로 바꾸려면 분포 가정 확인</li></ul>
+          <p class="exp">정규분포를 표준화하면 N(0,1)이 되지만, 균등분포를 표준화해도 평평한 모양은 남습니다. z는 평균에서 떨어진 거리를 표준편차 단위로 표현한 값입니다. 이 값으로 백분위나 드문 정도를 계산하려면 원래 분포의 모양도 알아야 합니다.</p>
+          <p class="next"><span>다음 질문</span>분포의 종류와 자료의 범위를 함께 살펴볼까?</p>
         </div>
       </div>
     </section>
@@ -577,15 +588,15 @@ var QUIZ=[
  {goal:2,type:"계산",stem:"성인 남성의 키 분포(평균 167.6cm, 표준편차 7.0cm)에서 181.6cm인 사람의 z값은 얼마일까요?",
   opts:["2.0","14.0","0.5","1.08"],ans:0,
   exp:"z = (181.6 − 167.6) ÷ 7.0 = 14 ÷ 7 = 2.0입니다. 14.0은 표준편차로 나누지 않은 평균과의 차이이고, 1.08은 181.6을 평균으로 나눈 값입니다.",back:"s-4-3a",backLabel:"4-3 표준화 다시 보기"},
- {goal:2,type:"상황 판단",stem:"키 180cm인 남성(z ≈ 1.77)과 키 170cm인 여성(z ≈ 2.30)이 있습니다. 자기 분포 안에서 더 드문 사람은 누구일까요?",
+ {goal:2,type:"상황 판단",stem:"각 집단의 키가 정규분포를 따른다고 가정합니다. 180cm 남성(z ≈ 1.77)과 170cm 여성(z ≈ 2.30)이 있습니다. 자기 분포 안에서 더 드문 사람은 누구일까요?",
   opts:["170cm인 여성","180cm인 남성","두 사람이 똑같이 드물다","분포가 달라 비교할 수 없다"],ans:0,
-  exp:"z값은 평균과의 거리가 표준편차의 몇 배인지를 나타내므로 분포가 달라도 비교할 수 있습니다. z가 더 큰 170cm 여성이 자기 분포에서 더 드뭅니다. 키 자체가 크다고 더 드문 것은 아닙니다.",back:"s-4-3a",backLabel:"4-3 남성과 여성 비교 다시 보기"},
+  exp:"두 집단이 각각 정규분포라는 가정에서 상측 확률을 비교합니다. 남성 z≈1.77의 상측은 약 3.82%, 여성 z≈2.30의 상측은 약 1.06%여서 여성이 더 드뭅니다. 모양이 다른 임의의 분포에서는 z 크기만으로 꼬리 확률을 비교할 수 없습니다.",back:"s-4-3a",backLabel:"4-3 남성과 여성 비교 다시 보기"},
  {goal:3,type:"O/X 오개념",stem:"“정규분포는 평균 μ와 표준편차 σ, 두 파라미터만 알면 분포의 형태가 정해진다.”",
   opts:["O","X"],ans:0,ox:true,
   exp:"맞습니다. 이론적인 확률분포는 파라미터로 형태가 정해지며, 정규분포의 파라미터는 μ와 σ 두 개입니다. 그래서 N(μ, σ²)으로 표기합니다.",back:"s-4-1a",backLabel:"4-1 파라미터 다시 보기"},
  {goal:3,type:"상황 판단",stem:"다음 중 이산형 확률분포는 무엇일까요?",
   opts:["푸아송분포","정규분포","지수분포","t분포"],ans:0,
-  exp:"푸아송분포는 이산형입니다. 정규분포(가우스 분포)와 지수분포는 연속형이고, t분포는 검정통계량이 따르는 연속형 분포입니다.",back:"s-4-4a",backLabel:"4-4 다양한 확률분포 다시 보기"}
+  exp:"푸아송분포는 이산형입니다. 정규분포와 지수분포는 연속형입니다. t분포는 적절한 가정 아래 표준화한 검정통계량의 연속형 분포입니다.",back:"s-4-4a",backLabel:"4-4 다양한 확률분포 다시 보기"}
 ];
 
 var BINS=["이산형","연속형","둘 다 있음"];
@@ -596,12 +607,12 @@ var HINT={"이산형":"띄엄띄엄 떨어진 값(개수 등)에 대한 분포�
 var GLOSSARY=[
  ["파라미터(모수)","parameter","이론적인 확률분포의 형태를 정하는 숫자입니다.","정규분포의 평균 μ와 표준편차 σ"],
  ["정규분포(가우스 분포)","normal distribution","평균 μ와 표준편차 σ로 정해지는 좌우대칭의 종 모양 연속형 확률분포입니다.","성인 남성 키 N(167.6, 7.0²)"],
- ["표준정규분포","standard normal distribution","평균 0, 표준편차 1인 정규분포 N(0, 1)입니다.","남성 키를 표준화한 분포"],
- ["표준화","standardizing","평균을 빼고 표준편차로 나눠 평균 0, 표준편차 1로 바꾸는 일입니다.","(180 − 167.6) ÷ 7.0"],
+ ["표준정규분포","standard normal distribution","평균 0·분산 1인 정규분포 N(0,1)입니다. 모든 표준화 자료가 이 분포를 따르는 것은 아닙니다.","정규 모형의 키를 표준화한 경우"],
+ ["표준화","standardizing","평균을 빼고 양의 표준편차로 나누는 변환입니다. 분포 모양을 정규분포로 만들지는 않으며, 표준편차 0이면 정의되지 않습니다.","(180 − 167.6) ÷ 7.0"],
  ["z값","z-score","표준화한 값으로, 평균과의 거리가 표준편차의 몇 배인지 나타냅니다.","170cm 여성의 z ≈ 2.30"],
  ["T점수","T score","z값을 평균 50, 표준편차 10으로 바꾼 값(10z + 50)입니다. 실제 수능 표준점수는 영역·연도별 환산이 달라 이 값과 그대로 같지 않습니다.","z = 2이면 T점수 70"],
  ["검정통계량","test statistic","추론통계의 검정 계산에 쓰는 통계량으로, t분포 등의 확률분포를 따릅니다.","t분포, F분포, χ²분포를 따르는 통계량"],
- ["균등분포","uniform distribution","모든 값이 같은 가능성으로 나오는 분포로, 연속형과 이산형이 있습니다.","주사위 눈 1~6이 각각 1/6"],
+ ["균등분포","uniform distribution","이산형은 가능한 값의 확률이 같고, 연속형은 정해진 구간의 밀도가 일정합니다. 연속형 한 점의 확률은 0입니다.","주사위 눈 1~6이 각각 1/6"],
  ["이항분포","binomial distribution","성공·실패 같은 결과를 여러 번 반복할 때 성공 횟수에 대한 이산형 분포입니다.","동전 10번 중 앞면이 나온 횟수",2],
  ["푸아송분포","Poisson distribution","일정한 시간 동안 일이 몇 번 일어나는지에 대한 이산형 분포입니다.","하루에 받은 문자 개수",1],
  ["지수분포","exponential distribution","다음 일이 일어날 때까지 걸리는 시간에 대한 연속형 분포입니다.","버스를 기다린 시간",1]
@@ -854,14 +865,14 @@ on("m7-zoo",function(s){
     [].forEach.call(kb.children,function(bt,i){bt.classList.toggle("on",i+1===k);bt.setAttribute("aria-pressed",i+1===k);});
     document.getElementById("m7-muv").textContent=g1(m)+"cm";document.getElementById("m7-sdv").textContent=g1(s)+"cm";
     document.getElementById("m7-rg").textContent=g1(a)+" ~ "+g1(b);document.getElementById("m7-pr").textContent=P[k];
-    var svg=document.getElementById("m7-p1-svg");clear(svg);var X=lin(100,230,10,460),Y=lin(0,npdf(0,0,5)*1.05,146,8);
-    shade(svg,m,s,X,Y,Math.max(100,a),Math.min(230,b),"#7FB8E6",.8);curve(svg,m,s,X,Y,100,230,{w:2.2});
+    var svg=document.getElementById("m7-p1-svg");clear(svg);var xmin=Math.min(100,m-3.6*s),xmax=Math.max(230,m+3.6*s),X=lin(xmin,xmax,10,460),Y=lin(0,npdf(0,0,5)*1.05,146,28);
+    shade(svg,m,s,X,Y,a,b,"#7FB8E6",.8);curve(svg,m,s,X,Y,xmin,xmax,{w:2.2});
     el("line",{x1:10,x2:460,y1:146,y2:146,stroke:C.gray2},svg);
-    for(var t=100;t<=230;t+=10)if(t%20===0)t7(svg,X(t),160,t,{fs:9.5,c:C.gray,fw:500});
+    for(var t=Math.ceil(xmin/20)*20;t<=xmax;t+=20)t7(svg,X(t),160,t,{fs:9.5,c:C.gray,fw:500});
     el("line",{x1:X(m),x2:X(m),y1:Y(npdf(m,m,s)),y2:146,stroke:"#B42318","stroke-dasharray":"3 3"},svg);
     t7(svg,X(m),Y(npdf(m,m,s))-6,"μ "+g1(m),{fw:800,c:"#B42318",halo:true});
     var msg=document.getElementById("m7-msg"),hit=Math.abs(m-167.6)<.05&&Math.abs(s-7)<.05;
-    if(hit&&k===2){msg.className="pmsg ok";msg.textContent="찾았습니다. 성인 남성의 약 95%가 153.6 ~ 181.6cm에 들어갑니다. 이 범위 밖은 약 5%입니다.";}
+    if(hit&&k===2){msg.className="pmsg ok";msg.textContent="찾았습니다. 이 정규 모형에서 약 95%가 153.6 ~ 181.6cm에 들어갑니다. 이 범위 밖은 약 5%입니다.";}
     else if(hit){msg.className="pmsg";msg.textContent="성인 남성의 키 분포입니다. μ ± "+k+"σ = "+g1(a)+" ~ "+g1(b)+"cm에 "+P[k]+"가 들어갑니다. 95% 범위는 2σ를 고르세요.";}
     else{msg.className="pmsg";msg.textContent="μ ± "+k+"σ = "+g1(a)+" ~ "+g1(b)+"cm에 "+P[k]+"가 들어갑니다. μ와 σ가 달라져도 이 비율은 그대로입니다.";}
   }
@@ -880,7 +891,7 @@ on("m7-zoo",function(s){
     for(var k=-3;k<=3;k++){var v=D.mu+k*D.sd;el("line",{x1:X(v),x2:X(v),y1:150,y2:154,stroke:C.gray2},svg);t7(svg,X(v),166,g1(v),{fs:9.5,c:C.gray,fw:500});
       if(checked)t7(svg,X(v),182,(k>0?"+":"")+k+"σ",{fs:9.5,c:C.navy3,fw:700});}
     el("line",{x1:X(c.x),x2:X(c.x),y1:24,y2:150,stroke:C.amber,"stroke-width":2.5},svg);t7(svg,X(c.x),20,c.x+"cm",{fw:800,c:C.amberInk,halo:true});
-    var gx=D.mu+(+g.value)*D.sd;el("path",{d:"M"+X(gx)+" 194 l-7 12 h14z",fill:C.navy},svg);t7(svg,X(gx),218,"내 예측 z = "+(+g.value).toFixed(1),{fs:10.5,fw:800});
+    var gx=D.mu+(+g.value)*D.sd;el("path",{d:"M"+X(gx)+" 194 l-7 12 h14z",fill:C.navy},svg);t7(svg,Math.max(90,Math.min(380,X(gx))),214,"내 예측 z = "+(+g.value).toFixed(1),{fs:10.5,fw:800});
     t7(svg,24,30,c.who+" 키 N("+D.mu+", "+D.sd.toFixed(1)+"²)",{a:"start",fw:800,c:col});
   }
   function load(){var c=cur();checked=false;document.getElementById("m7-qt").textContent="문제 "+(qi+1)+"/"+ZQ.length+" · "+c.who+" "+c.x+"cm (평균 "+c.D.mu+", 표준편차 "+c.D.sd.toFixed(1)+")";

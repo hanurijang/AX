@@ -246,7 +246,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
       <div class="body full" style="align-content:center">
         <div class="gmap">
           <div></div><div class="hd">목표</div><div class="hd">확인하는 문항</div><div class="hd">연결 실습</div>
-          <div class="gn">1</div><div class="gt"><span>통계·기계학습·수리 모형의 특징을 <b>구분한다</b>.</span></div>
+          <div class="gn">1</div><div class="gt"><span>세 모형의 중첩과 구축·검증 절차를 <b>구분한다</b>.</span></div>
           <div class="ga"><button class="jump" data-jump="q1">문항 1·2</button></div><div class="gp"><button class="jump" data-jump="p2">실습 2 분류</button></div>
           <div class="gn">2</div><div class="gt"><span>모형의 가정과 예측 범위의 한계를 <b>판단한다</b>.</span></div>
           <div class="ga"><button class="jump" data-jump="q3">문항 3·4</button></div><div class="gp"><button class="jump" data-jump="p3">실습 3 추정</button></div>
@@ -368,8 +368,8 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
       <div class="body split even">
         <div class="fig"><svg id="m35-three" viewBox="0 0 420 270" role="img" aria-label="통계 모형과 기계학습 모형은 데이터에서 출발하는 귀납적 방법, 수리 모형은 메커니즘에서 출발하는 연역적 방법인 세 원 그림"></svg></div>
         <div class="side">
-          <ul class="key"><li><b>수리 모형</b>: 메커니즘을 가정해 움직임을 조사</li><li><b>귀납적 방법</b>과 <b>연역적 방법</b></li></ul>
-          <p class="exp">통계 모형은 확률적 모형이고, 기계학습도 하나의 모형으로 볼 수 있어 기계학습 모형이라 부릅니다. 또 하나의 중요한 모형인 수리 모형은 현상의 프로세스나 메커니즘을 가정하고 그 움직임을 조사하며, 뉴턴의 운동 방정식이나 감염병 전파 모형이 그 예입니다. 통계·기계학습 모형은 데이터에서 출발해 파라미터를 추정하고 법칙성을 끌어내는 귀납적 방법이고, 수리 모형은 메커니즘을 수학으로 나타낸 데서 출발해 논리적으로 무엇이 일어나는가를 조사하는 연역적 방법입니다.</p>
+          <ul class="key"><li>세 접근은 겹치며 함께 사용할 수 있음</li><li>가정에서 도출 + 자료로 적합 + 검증</li></ul>
+          <p class="exp">넓은 뜻의 수리 모형은 통계·기계학습 모형도 포함합니다. 이 모듈에서는 교재의 구분에 따라 메커니즘을 식으로 나타내는 접근을 수리 모형이라 부릅니다. 통계와 기계학습 모두 단순·복잡한 구조를 쓰며 자료량이나 해석 가능성만으로 나뉘지 않습니다. 가정에서 결과를 도출하는 연역과 자료로 파라미터를 적합하는 귀납은 하나의 연구에서도 함께 쓰입니다.</p>
           <p class="next"><span>다음 질문</span>코일 냉각에서는 어떤 차이가 날까?</p>
         </div>
       </div>
@@ -380,9 +380,20 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
       <div class="body split even">
         <div class="fig"><svg id="m35-extra" viewBox="0 0 420 270" role="img" aria-label="0~12시간 측정값에 맞춘 직선은 48시간에 영하 292℃를 가리키지만, 냉각 원리를 가정한 수리 모형은 109℃로 나중 측정값 112℃에 가까움"></svg></div>
         <div class="side">
-          <ul class="key"><li>데이터 범위 밖에서는 직선 연장이 크게 빗나감</li><li>메커니즘 기반 모형은 범위 밖도 예측 가능</li></ul>
-          <p class="exp">0~12시간 측정값 7개에 직선을 맞추면 시간당 약 18.4℃씩 내려가므로, 48시간 뒤를 −292℃로 예측합니다. 주변 온도보다 낮아질 수 없으니 터무니없는 값입니다. 반면 ‘온도차에 비례해 열을 잃는다’는 메커니즘으로 세운 수리 모형은 109℃를 예측하며, 나중에 잰 값 112℃에 가깝습니다(예시값). 이처럼 수리 모형은 메커니즘에 기반을 두므로 데이터로 경험하지 못한 범위라도 예측이나 통제가 가능할 때가 있습니다.</p>
+          <ul class="key"><li>범위 밖 예측에는 가정 유지 여부 확인</li><li>기전이 있는 모형도 새 자료로 검증</li></ul>
+          <p class="exp">0~12시간의 가상 온도 7개에 맞춘 직선은 48시간에 약 −292℃를 냅니다. 이 수동 냉각 조건에서 주변보다 계속 낮아지는 외삽은 부적절합니다. 뉴턴 냉각 모형의 약 109℃는 뒤에 주어진 가상 관측 112℃와 가깝지만, 이것만으로 모든 코일의 예측이 검증되지는 않습니다. 어느 접근이든 자료 범위 밖에서는 가정의 유지와 새로운 검증 자료를 확인해야 합니다. 메커니즘이 있다는 이유만으로 외삽이 보장되지는 않습니다.</p>
           <p class="next"><span>다음 질문</span>모형이란 결국 무엇일까?</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" data-step="3" id="s-4-1c">
+      <div class="sh"><div class="sec">4-1 세 모형의 연결</div><h2><span class="q">Q</span>냉각식을 자료에 맞추면 어떤 모형일까요?</h2></div>
+      <div class="body split even">
+        <div class="fig"><svg viewBox="0 0 420 270" role="img" aria-label="메커니즘에서 도출: μ(t;k) = Ta + (T₀−Ta) exp(−kt); 관측 오차의 통계 모형 결합: Yᵢ = μ(tᵢ;k) + εᵢ / 예: 독립 정규 오차; 자료로 k를 적합하고 새 관측으로 검증: 메커니즘 + 통계 추정 + 예측 평가를 함께 사용"><rect x="8" y="8" width="404" height="76" rx="10" fill="#EEF4FB"/><text x="210" y="37" text-anchor="middle" fill="#1B2A4A" font-size="13" font-weight="800">메커니즘에서 도출</text><text x="210" y="63" text-anchor="middle" fill="#6B7280" font-size="11">μ(t;k) = Ta + (T₀−Ta) exp(−kt)</text><rect x="8" y="94" width="404" height="76" rx="10" fill="#FCF3D9"/><text x="210" y="123" text-anchor="middle" fill="#1B2A4A" font-size="13" font-weight="800">관측 오차의 통계 모형 결합</text><text x="210" y="149" text-anchor="middle" fill="#6B7280" font-size="11">Yᵢ = μ(tᵢ;k) + εᵢ / 예: 독립 정규 오차</text><rect x="8" y="180" width="404" height="76" rx="10" fill="#E3F1EA"/><text x="210" y="209" text-anchor="middle" fill="#1B2A4A" font-size="13" font-weight="800">자료로 k를 적합하고 새 관측으로 검증</text><text x="210" y="235" text-anchor="middle" fill="#6B7280" font-size="11">메커니즘 + 통계 추정 + 예측 평가를 함께 사용</text></svg></div>
+        <div class="side"><ul class="key"><li>세 접근의 경계는 배타적이지 않음</li><li>적합 오차와 새 자료 예측 오차를 구별</li></ul>
+          <p class="exp">같은 냉각식에 독립·등분산 정규 측정오차를 가정하면 최소제곱으로 k를 적합하는 것은 최대가능도 추정과 연결됩니다. 가정한 기전이 맞는지, 오차가 독립인지, 예측할 조건에서도 같은 k가 유효한지는 따로 점검합니다.</p>
+          <p class="next"><span>다음 질문</span>무엇을 남기고 무엇을 단순화할까?</p>
         </div>
       </div>
     </section>
@@ -393,7 +404,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
         <div class="fig"><svg id="m35-simp" viewBox="0 0 420 270" role="img" aria-label="복잡한 실제 코일 냉각 현상에서 중요한 요소만 남겨 간략화한 모형으로 가는 그림, 남긴 것과 버린 것"></svg></div>
         <div class="side">
           <ul class="key"><li>모형: 이해할 수 있도록 간략화하는 방법</li><li><b>모형화</b>: 간략화로 본질을 끌어냄</li></ul>
-          <p class="exp">모형이란 현상을 잘 기술해 이해할 수 있도록 간략화하는 방법이며, 현상의 본질을 유지하면서 간략화하는 것이 중요합니다. 통계 모형은 정규분포나 푸아송 분포 같은 확률분포에서 데이터를 얻었다는 가정에 기반하고, 기계학습 모형은 대량의 데이터를 투입해 자동으로 중요한 부분에 초점을 맞춥니다. 운동 방정식 F = ma에서 질량은 중요하지만 공기 저항을 무시한다면 재질이나 모양은 상관없습니다. 코일 냉각에서도 온도차와 냉각 속도만 남기고 바닥 재질이나 바람은 덜어 냈습니다.</p>
+          <p class="exp">모형은 목적에 필요한 관계를 남기는 단순화입니다. 가정, 자료로 정할 파라미터, 측정 오차와 구조적 오차를 구별합니다. 통계·기계학습도 자료가 많다는 이유만으로 중요한 관계나 인과를 자동으로 찾지는 못합니다. 코일에서는 내부 온도가 균일하고 주변 온도가 일정하다고 가정하지만, 바람·형상·복사 등 생략한 요인이 결과에 중요하면 모형을 보완해야 합니다.</p>
           <p class="next"><span>다음 질문</span>간략화한 모형은 틀린 것일까?</p>
         </div>
       </div>
@@ -407,7 +418,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
           <div class="math">
             <div class="mt">핵심 수학 개념 · 기체의 상태 방정식</div>
             <div class="f">PV = nRT</div>
-            <div class="r"><span>기호</span><span>P 압력, V 부피, n 물질량, R 기체 상수, T 온도</span></div>
+            <div class="r"><span>기호</span><span>P 압력, V 부피, n 물질량, R 기체 상수, T 절대온도[K]</span></div>
             <div class="r"><span>가정</span><span>분자 부피와 분자 사이 인력이 없는 이상기체</span></div>
           </div>
         </div>
@@ -415,6 +426,17 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
           <ul class="key"><li>완벽한 모형은 없다</li><li>현상을 적절히 기술하면 이해·예측에 도움</li></ul>
           <p class="exp">통계학자 조지 박스는 1979년 “모든 모형은 잘못되어 있지만 그중 몇 가지는 도움이 된다”는 말을 남겼습니다<span class="cite">[1]</span>. 현실은 복잡하고 관련 요소를 모두 상정할 수 없어 완벽한 모형화는 불가능합니다. 실제 기체는 이상기체가 아니지만 이 가정에서 크게 벗어나지 않으면 PV = nRT를 따릅니다. 코일 냉각 모형도 고온에서는 복사 열손실 때문에 근사가 거칠어집니다<span class="cite">[2]</span>.</p>
           <p class="next"><span>다음 질문</span>수리 모형은 어떻게 만들까?</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" data-step="3" id="s-4-2c">
+      <div class="sh"><div class="sec">4-2 모형의 평가와 환류</div><h2><span class="q">Q</span>예측과 관측이 다르면 곧바로 폐기할까요?</h2></div>
+      <div class="body split even">
+        <div class="fig"><svg viewBox="0 0 420 270" role="img" aria-label="목적·적용 범위와 가정 정하기: 초기 온도 · 주변 온도 · 일정한 냉각 계수; 관측과 예측 비교: 적합 자료의 잔차 + 새 자료의 예측 오차; 차이의 원인 점검 → 보완 → 다시 검증: 측정 문제 · 파라미터 오차 · 생략한 메커니즘"><rect x="8" y="8" width="404" height="76" rx="10" fill="#EEF4FB"/><text x="210" y="37" text-anchor="middle" fill="#1B2A4A" font-size="13" font-weight="800">목적·적용 범위와 가정 정하기</text><text x="210" y="63" text-anchor="middle" fill="#6B7280" font-size="11">초기 온도 · 주변 온도 · 일정한 냉각 계수</text><rect x="8" y="94" width="404" height="76" rx="10" fill="#FCF3D9"/><text x="210" y="123" text-anchor="middle" fill="#1B2A4A" font-size="13" font-weight="800">관측과 예측 비교</text><text x="210" y="149" text-anchor="middle" fill="#6B7280" font-size="11">적합 자료의 잔차 + 새 자료의 예측 오차</text><rect x="8" y="180" width="404" height="76" rx="10" fill="#E3F1EA"/><text x="210" y="209" text-anchor="middle" fill="#1B2A4A" font-size="13" font-weight="800">차이의 원인 점검 → 보완 → 다시 검증</text><text x="210" y="235" text-anchor="middle" fill="#6B7280" font-size="11">측정 문제 · 파라미터 오차 · 생략한 메커니즘</text></svg></div>
+        <div class="side"><ul class="key"><li>같은 자료의 좋은 적합만으로 충분하지 않음</li><li>필요한 범위에서 가정과 예측을 재검토</li></ul>
+          <p class="exp">잔차가 체계적으로 휘면 일정한 k나 균일한 내부 온도 등의 가정을 의심할 수 있습니다. 새 자료를 보고 식을 바꿨다면 그 자료는 이제 개발에도 쓰였으므로, 최종 성능을 평가할 추가 자료가 필요할 수 있습니다. 불일치를 숨기지 않고 개선에 활용합니다.</p>
+          <p class="next"><span>다음 질문</span>이 냉각 규칙을 시간 단위와 함께 쓰면?</p>
         </div>
       </div>
     </section>
@@ -427,13 +449,13 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
           <div class="math">
             <div class="mt">핵심 수학 개념 · 냉각의 미분 방정식</div>
             <div class="f">dT/dt = −k(T − Ta) → T(t) = Ta + (T₀ − Ta)e<sup>−kt</sup></div>
-            <div class="r"><span>기호</span><span>dT/dt 시간당 온도 변화, k 냉각 계수, Ta 주변 온도</span></div>
+            <div class="r"><span>기호</span><span>t[h], dT/dt[℃/h], k[h⁻¹], Ta[℃]</span></div>
             <div class="r"><span>계산</span><span>T(48) = 25 + 575 × e<sup>−1.92</sup> ≈ 25 + 575 × 0.147 ≈ 109℃</span></div>
           </div>
         </div>
         <div class="side">
           <ul class="key"><li>가상 세계에 규칙을 적용해 결과를 조사</li><li><b>미분 방정식</b>: 변수의 움직임을 정하는 규칙</li></ul>
-          <p class="exp">수리 모형은 물리적 실체가 없어도 되므로 유행 확산이나 주가 변동까지 다루며, 가상의 세계를 상정하고 규칙을 적용했을 때 무엇이 일어나는가를 조사합니다. 미분 방정식 dx/dt = f(x)는 x가 시간에 따라 어떻게 변하는지 정합니다. 코일에서는 ‘온도차에 비례해 식는다’는 규칙이며, k = 0.04이면 48시간 뒤 약 109℃입니다.</p>
+          <p class="exp">t는 경과 시간[h], T·Ta·T₀는 온도[℃], k는 냉각 계수[h⁻¹]입니다. dT/dt의 단위는 ℃/h이고 kt는 무차원입니다. T₀=600℃, Ta=25℃, k=0.04h⁻¹이면 48시간에 약 109.3℃입니다. 일정한 Ta와 양의 k에서 T₀>Ta이면 Ta로 단조롭게 접근합니다. 이 가정에서는 유한 시간에 Ta 아래로 내려가지 않습니다. 실제 고온 코일에 대한 정확한 물리 법칙으로 단정하지 않고 단순화한 가상 예로 씁니다.</p>
           <p class="next"><span>다음 질문</span>수리 모형에는 어떤 종류가 있을까?</p>
         </div>
       </div>
@@ -445,7 +467,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
         <div class="fig"><svg id="m35-kind" viewBox="0 0 420 270" role="img" aria-label="결정론 모형은 같은 시작에서 하나의 곡선, 확률 모형은 같은 시작에서 여러 갈래의 경로"></svg></div>
         <div class="side">
           <ul class="key"><li><b>결정론 모형</b>: 미분·차분·편미분 방정식</li><li><b>확률 모형</b>: 무작위 행보, 마르코프 연쇄</li></ul>
-          <p class="exp">결정론이란 특정 시각의 상태가 정해지면 다음 시각의 상태가 단 하나로 정해지는 성질, 즉 확률적인 성질이 없다는 뜻입니다. 특정 방향과 속도로 던진 공이 어디에 떨어질지 반드시 예측할 수 있는 운동 방정식이 그 예로, 결정론적 성질이 현상의 본질일 때는 결정론 모형을 씁니다. 반면 도박에서 이기고 지기를 반복할 때처럼 확률적인 변동이 중요한 현상에는 확률 모형을 적용하며, 둘을 조합한 확률 미분 방정식도 있습니다. 같은 600℃에서 시작한 코일은 결정론 모형에서 늘 같은 냉각 곡선을 그립니다.</p>
+          <p class="exp">결정론 모형은 규칙·파라미터·초기조건이 정해지고 해가 유일하면 한 궤적을 정합니다. 그러나 초기값이나 파라미터를 모르거나 모형이 틀리면 현실을 정확히 예측할 수는 없습니다. 확률 모형은 조건이 같아도 가능한 결과의 분포를 정하며, 무작위 행보와 마르코프 연쇄가 그 예입니다. 측정 오차나 불확실한 파라미터를 결정론적 냉각식에 결합할 수도 있습니다.</p>
           <p class="next"><span>다음 질문</span>수리 모형은 어떻게 풀까?</p>
         </div>
       </div>
@@ -457,7 +479,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
         <div class="fig"><svg id="m35-solve" viewBox="0 0 420 270" role="img" aria-label="해석적으로 풀기, 수치 계산, 시뮬레이션 순으로 모형은 복잡해지고 이해는 어려워지는 상충 관계"></svg></div>
         <div class="side">
           <ul class="key"><li><b>해석적 풀이</b>·<b>수치 계산</b>·<b>시뮬레이션</b></li><li>모형의 복잡함과 이해의 쉬움은 상충</li></ul>
-          <p class="exp">모형이 단순하면 연필과 종이로 직접 계산해 해석적으로 풀 수 있고, 그 답은 무엇이 일어나는지 넓게 둘러볼 수 있어 이해하기 쉽습니다. 비선형이고 변수가 많아지면 컴퓨터로 수치 계산을 하며, 파라미터를 다양하게 바꿔 가며 계산해야 합니다. 수식으로 나타내기 어려운 복잡한 현상은 시뮬레이션을 이용하지만, 특정 규칙에 따른 한 가지 결과만 출력하므로 왜 그런지 이해하기는 쉽지 않습니다. 코일 하나는 해석적으로 풀리지만, 야적장 코일 수백 개가 서로 열을 주고받으면 시뮬레이션이 필요합니다.</p>
+          <p class="exp">해석해가 있으면 식으로, 어렵다면 수치해나 시뮬레이션으로 결과를 조사합니다. 시뮬레이션도 방정식이나 명시한 규칙에 기반하며 수식과 대립하는 방법은 아닙니다. 한 번의 실행은 한 설정의 결과이므로 파라미터·초기값·난수 시드를 바꿔 민감도와 불확실성을 살핍니다. 시간 간격에 따른 수치오차와 현실을 단순화한 모형오차도 구별합니다. 모형 종류만으로 이해·예측 성능을 보장하지 않습니다.</p>
           <p class="next"><span>정리</span>모형이란 무엇인지 정리해 봅시다.</p>
         </div>
       </div>
@@ -469,9 +491,9 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
         <table class="sumtbl">
           <thead><tr><th>개념</th><th>핵심</th><th>이 모듈의 예</th></tr></thead>
           <tbody>
-            <tr><td>세 가지 모형</td><td>통계·기계학습(데이터 출발, 귀납) vs 수리(메커니즘 출발, 연역)</td><td>직선 연장 −292℃ vs 수리 모형 109℃</td></tr>
+            <tr><td>세 가지 모형</td><td>자료 적합·가정에서 도출·검증은 세 접근에서 함께 사용</td><td>직선 연장 −292℃ vs 수리 모형 109℃</td></tr>
             <tr><td>모형과 현상</td><td>본질을 유지한 간략화, 완벽한 모형은 없음</td><td>내부 온도 균일·주변 온도 일정 가정</td></tr>
-            <tr><td>수리 모형</td><td>가상 세계에 규칙(미분 방정식)을 적용해 결과 조사</td><td>dT/dt = −0.04(T − 25)</td></tr>
+            <tr><td>수리 모형</td><td>가상 세계에 규칙(미분 방정식)을 적용해 결과 조사</td><td>t[h], k=0.04h⁻¹, Ta=25℃</td></tr>
             <tr><td>종류와 분석</td><td>결정론·확률 모형 / 해석적 풀이·수치 계산·시뮬레이션</td><td>코일 1개는 해석적, 수백 개는 시뮬레이션</td></tr>
           </tbody>
         </table>
@@ -486,26 +508,26 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
       <div class="sh"><div class="sec">실습 1 · 조작형</div><h2>목표: 냉각 계수와 주변 온도를 바꾸며 수리 모형의 결과를 확인합니다</h2></div>
       <div class="body split">
         <div class="pcol" style="gap:8px">
-          <div class="plabel" style="margin:0">해보기 · 두 파라미터를 움직이면 냉각 곡선과 100℃ 도달 시간이 바로 바뀝니다 (점 = 0~12시간 측정값)</div>
+          <div class="plabel" style="margin:0">해보기 · 두 파라미터를 움직이면 냉각 곡선과 100℃ 도달 시간이 바로 바뀝니다 (점 = 가상 관측, 0~12시간)</div>
           <div class="fig" style="flex:1"><svg id="m35-p1-svg" viewBox="0 0 470 200" role="img" aria-label="수리 모형 냉각 곡선과 측정값"></svg></div>
         </div>
-        <div class="pcol" style="gap:10px;justify-content:center">
-          <div class="ctrl">냉각 계수 k<input type="range" id="m35-k" min="0.02" max="0.07" step="0.005" value="0.03" aria-label="냉각 계수 k"><strong id="m35-kv" style="min-width:52px;text-align:right">-</strong></div>
+        <div class="pcol" style="gap:7px;justify-content:center">
+          <div class="ctrl">냉각 계수 k (h⁻¹)<input type="range" id="m35-k" min="0.02" max="0.07" step="0.005" value="0.03" aria-label="냉각 계수 k"><strong id="m35-kv" style="min-width:52px;text-align:right">-</strong></div>
           <div class="ctrl">주변 온도 Ta<input type="range" id="m35-ta" min="0" max="40" step="5" value="25" aria-label="주변 온도"><strong id="m35-tav" style="min-width:52px;text-align:right">-</strong></div>
-          <div class="stats three"><div><small>48시간 뒤</small><strong id="m35-t48">-</strong></div><div><small>100℃ 도달</small><strong id="m35-t100">-</strong></div><div><small>측정값과 오차²합</small><strong id="m35-sse">-</strong></div></div>
-          <p class="howto">도전: 오차 제곱합이 가장 작은 k를 찾고, 주변 온도 0℃와 35℃의 100℃ 도달 시간을 비교하세요.</p>
+          <div class="stats three"><div><small>48시간 뒤</small><strong id="m35-t48">-</strong></div><div><small>100℃ 도달</small><strong id="m35-t100" style="font-size:22px">-</strong></div><div><small>오차²합 (℃²)</small><strong id="m35-sse">-</strong></div></div>
+          <p class="howto">도전: Ta=25℃에서 k를 맞춘 뒤, k를 고정하고 Ta를 바꿔 보세요.</p>
           <p class="pmsg" id="m35-msg"></p>
-          <div class="think" style="flex-wrap:wrap"><span>생각해보기</span>우리 공장 모형에서 데이터로 정해야 할 파라미터는 무엇일까요?<details style="flex-basis:100%;font-weight:600"><summary style="cursor:pointer">예시 답</summary>식의 계수, 예를 들어 증가율이나 포화 한계처럼 데이터로 맞출 값입니다.</details></div>
+          <div class="think" style="flex-wrap:wrap"><span>생각해보기</span>이 냉각식에서 자료로 정할 값은?<details style="flex-basis:100%;font-weight:600"><summary style="cursor:pointer">예시 답</summary>주변 조건을 정한 뒤 냉각 계수 k를 자료로 추정합니다.</details></div>
         </div>
       </div>
     </section>
 
     <!-- ⑥ 실습 2 · 분류형 ─────────────────────── -->
     <section class="slide" data-step="5" id="p2">
-      <div class="sh"><div class="sec">실습 2 · 분류형</div><h2>목표: 특징을 보고 통계·기계학습·수리 모형으로 나눕니다</h2></div>
+      <div class="sh"><div class="sec">실습 2 · 분류형</div><h2>목표: 모형 구축·계산·검증의 행동을 구분합니다</h2></div>
       <div class="body split even">
         <div class="pcol">
-          <div class="plabel">해보기 · 데이터에서 출발하는지, 메커니즘에서 출발하는지 보고 칸에 놓으세요</div>
+          <div class="plabel">해보기 · 한 냉각 연구에서도 자료 적합·결과 도출·검증을 함께 수행합니다</div>
           <div class="pool" id="p2-pool"></div>
         </div>
         <div class="pcol" style="gap:8px">
@@ -519,7 +541,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
 
     <!-- ⑥ 실습 3 · 추정형 (모듈 전용) ─────────────── -->
     <section class="slide" data-step="5" id="p3">
-      <div class="sh"><div class="sec">실습 3 · 추정형</div><h2>목표: 측정하지 않은 시점의 코일 온도를 예측하고 실제와 비교합니다</h2></div>
+      <div class="sh"><div class="sec">실습 3 · 추정형</div><h2>목표: 후기 시점의 온도를 예측하고 가상 관측과 비교합니다</h2></div>
       <div class="body split">
         <div class="pcol">
           <div class="plabel">해보기 · 시점을 고르고 0~12시간 측정값만 보고 온도를 예측하세요 (예시값)</div>
@@ -528,8 +550,8 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
         <div class="pcol" style="gap:9px;justify-content:center">
           <div class="mbtns" id="m35-tb" style="gap:5px"></div>
           <div class="ctrl">온도 예측<input type="range" id="m35-g" min="0" max="400" step="10" value="200" aria-label="온도 예측"><strong id="m35-gv" style="min-width:52px;text-align:right">-</strong></div>
-          <button class="btn" id="m35-check" style="align-self:flex-start">재 보고 확인</button>
-          <div class="stats three"><div><small>내 예측</small><strong id="m35-mine">-</strong></div><div><small>실제 측정</small><strong id="m35-act">?</strong></div><div><small>수리 모형</small><strong id="m35-mod">?</strong></div></div>
+          <button class="btn" id="m35-check" style="align-self:flex-start">가상 관측 확인</button>
+          <div class="stats three"><div><small>내 예측</small><strong id="m35-mine">-</strong></div><div><small>가상 관측</small><strong id="m35-act">?</strong></div><div><small>수리 모형</small><strong id="m35-mod">?</strong></div></div>
           <p class="pmsg" id="m35-msg3"></p>
           <div class="think" style="flex-wrap:wrap"><span>생각해보기</span>데이터 범위 밖을 예측할 때 무엇을 먼저 확인해야 할까요?<details style="flex-basis:100%;font-weight:600"><summary style="cursor:pointer">예시 답</summary>예측하려는 값이 배운 범위 안인지, 그때의 가정이 그대로인지를 먼저 확인합니다.</details></div>
         </div>
@@ -573,17 +595,17 @@ var CK=0.04, CTA=25, CT0=600, LINA=592.29, LINB=-18.43;
 var QUIZ=[
  {goal:1,type:"상황 판단",stem:"코일이 식는 원리(열손실은 주변과의 온도차에 비례)를 가정해 식을 세우고, 그 식으로 지금까지 재 본 적 없는 72시간 뒤 온도를 예측했습니다. 이 접근은 어떤 모형에 가장 가깝습니까?",
   opts:["수리 모형","통계 모형","기계학습 모형","모형 없이 실측만 한 것"],ans:0,
-  exp:"수리 모형은 현상의 프로세스나 메커니즘을 가정하고, 그 규칙에 따르면 무엇이 일어나는가를 조사하는 모형입니다. 메커니즘에 기반을 두기 때문에 데이터로 경험하지 못한 범위라도 예측이나 통제가 가능할 때가 있으며, 이는 데이터에 적용하는 통계 모형이나 기계학습 모형에는 없는 특징입니다.",back:"s-4-1b",backLabel:"4-1 세 모형으로 본 코일 냉각 다시 보기"},
- {goal:1,type:"O/X 오개념",stem:"“수리 모형은 데이터에서 출발해 파라미터를 추정하므로 귀납적인 방법이다.”",
-  opts:["O","X"],ans:1,ox:true,
-  exp:"데이터에서 출발해 파라미터를 추정하고 전체의 법칙성을 끌어내는 것은 통계 모형과 기계학습 모형으로, 귀납적인 방법입니다. 수리 모형은 메커니즘을 수학적으로 나타내는 것에서 출발해 논리적으로 무엇이 일어나는가를 조사하므로 연역적인 방법입니다. 물론 수리 모형도 파라미터를 데이터로 추정하고 현상과 비교할 수 있습니다.",back:"s-4-1a",backLabel:"4-1 세 가지 모형 다시 보기"},
+  exp:"냉각 메커니즘을 식으로 나타내고 그 식에서 결과를 도출하는 접근입니다. 같은 식의 계수를 자료로 추정하거나 관측 오차의 확률 모형을 결합할 수도 있습니다. 외삽 능력은 접근의 이름이 아니라 가정과 검증 근거에 달려 있습니다.",back:"s-4-1b",backLabel:"4-1 세 모형으로 본 코일 냉각 다시 보기"},
+ {goal:1,type:"O/X 오개념",stem:"“메커니즘을 식으로 세운 수리 모형도 파라미터를 자료로 추정하고 새 자료로 검증할 수 있다.”",
+  opts:["O","X"],ans:0,ox:true,
+  exp:"가정한 규칙에서 결과를 도출하는 연역과 관측 자료로 파라미터를 추정하는 귀납은 함께 쓰입니다. 통계·기계학습·수리 모형은 서로 배타적인 분류가 아닙니다.",back:"s-4-1a",backLabel:"4-1 세 가지 모형 다시 보기"},
  {goal:2,type:"상황 판단",stem:"코일 냉각 모형을 만들면서 ‘코일 내부 온도는 어디나 같다’, ‘주변 온도는 일정하다’고 가정했습니다. 이 모형에 대한 판단으로 가장 알맞은 것은?",
-  opts:["본질을 유지하며 간략화했다면 이해·예측에 쓸모가 있다","현실과 다른 가정이 있으므로 쓸 수 없다","가정을 모두 없애야 좋은 모형이 된다","가정이 많을수록 현실과 똑같아진다"],ans:0,
-  exp:"모형이란 현상을 잘 기술해 이해할 수 있도록 간략화하는 방법이며, 현상의 본질을 유지하면서 간략화하는 것이 중요합니다. 이상기체를 가정한 PV = nRT처럼, 실제 모형이 아니더라도 현상을 적절하게 기술할 수 있다면 이해에 도움이 되고 예측이나 통제라는 목적도 달성할 수 있습니다.",back:"s-4-2b",backLabel:"4-2 완벽한 모형은 없다 다시 보기"},
+  opts:["목적과 적용 범위에서 가정을 점검하고 새 자료로 검증한다", "현실과 다른 가정이 하나라도 있으면 쓸 수 없다", "가정을 모두 없애야 좋은 모형이 된다", "적합 오차가 작으면 모든 시간의 예측이 보장된다"],ans:0,
+  exp:"단순화한 가정이 목적과 적용 범위에서 적절한지 확인합니다. 잔차를 살피고 적합에 쓰지 않은 자료로 검증하며, 차이가 크면 측정·파라미터·구조적 가정을 점검해 보완합니다. 적합 자료에 잘 맞는 것만으로 외삽이 보장되지는 않습니다.",back:"s-4-2b",backLabel:"4-2 완벽한 모형은 없다 다시 보기"},
  {goal:2,type:"O/X 오개념",stem:"“좋은 모형이라면 현상에 관련된 모든 요소를 빠짐없이 넣어 현상을 완벽하게 재현해야 한다.”",
   opts:["O","X"],ans:1,ox:true,
   exp:"실제 현상은 상상 이상으로 복잡하고 관련된 요소를 모두 상정할 수도 없으므로, 현상을 완벽하게 모형화하는 것은 불가능합니다. 모형은 어디까지나 현상을 이해하는 데 도움이 되는 근사 도구로, 실제 현상과 모형은 다르다는 사실을 명심하고 얻은 모형이 얼마나 좋은지 확인하는 것이 중요합니다.",back:"s-4-2b",backLabel:"4-2 완벽한 모형은 없다 다시 보기"},
- {goal:3,type:"계산",stem:"코일 냉각 수리 모형 T(t) = 25 + 575 × e^(−0.04t)에서 24시간 뒤 온도는 약 몇 ℃일까요? (e^(−0.96) ≈ 0.383)",
+ {goal:3,type:"계산",stem:"시간 t[h], k=0.04h⁻¹인 가상 냉각식 T(t) = 25 + 575 × e^(−0.04t)에서 24시간 뒤 온도는 약 몇 ℃일까요? (e^(−0.96) ≈ 0.383)",
   opts:["약 245℃","약 150℃","약 220℃","약 383℃"],ans:0,
   exp:"t = 24를 넣으면 지수는 −0.04 × 24 = −0.96이고, 25 + 575 × 0.383 ≈ 245℃입니다. 220℃는 주변 온도 25를 더하지 않은 값, 150℃는 0~12시간 측정값에 직선을 맞춰 24시간까지 늘인 값입니다. 나중에 잰 24시간 온도는 248℃(예시값)로 수리 모형과 가깝습니다.",back:"s-4-3a",backLabel:"4-3 수리 모형이란 다시 보기"},
  {goal:3,type:"상황 판단",stem:"압연 설비의 하루 고장 건수처럼 같은 조건에서도 매번 결과가 달라지는 확률적 변동이 본질인 현상을 다루려 합니다. 알맞은 모형은?",
@@ -591,23 +613,21 @@ var QUIZ=[
   exp:"결정론이란 특정 시각의 상태가 정해지면 다음 시각의 상태가 단 하나로 정해지는 성질로, 이런 현상에는 미분 방정식 같은 결정론 모형을 씁니다. 도박에서 이기고 지기를 반복할 때처럼 확률적인 변동이 중요한 요소인 현상에는 무작위 행보, 마르코프 연쇄 같은 확률 모형을 적용할 수 있습니다.",back:"s-4-4a",backLabel:"4-4 수리 모형의 종류 다시 보기"}
 ];
 
-var BINS=["통계 모형","기계학습 모형","수리 모형"];
-var CARDS=[["정규분포를 가정해 평균 차이 검정","통계 모형"],["적은 데이터, 단순한 구조로 해석","통계 모형"],
-           ["대량 데이터로 예측에 특화","기계학습 모형"],["복잡한 구조라 해석이 어려움","기계학습 모형"],
-           ["냉각 원리를 가정해 미분 방정식 세움","수리 모형"],["경험 못 한 범위도 예측·통제","수리 모형"]];
-var HINT={"통계 모형":"데이터에서 출발하며, 단순한 구조로 해석하기 쉽습니다.","기계학습 모형":"대량의 데이터로 예측에 특화되어 있습니다.","수리 모형":"메커니즘을 가정하고 무엇이 일어나는가를 조사합니다."};
+var BINS=["자료로 적합","가정에서 도출","검증·환류"];
+var CARDS=[["초기 측정값으로 냉각 계수 k 추정","자료로 적합"],["관측 오차 제곱합이 작은 계수 찾기","자료로 적합"],["냉각 미분 방정식을 풀어 T(t) 구하기","가정에서 도출"],["주어진 k·Ta로 100℃ 도달 시간 계산","가정에서 도출"],["적합에 쓰지 않은 후기 온도와 비교","검증·환류"],["잔차 패턴을 보고 일정한 k 가정 점검","검증·환류"]];
+var HINT={"자료로 적합":"가정한 모형의 파라미터를 자료로 추정하는 단계입니다. 메커니즘 모형도 가능합니다.","가정에서 도출":"주어진 규칙과 파라미터로 결과를 계산합니다. 현실의 정확성을 보장하지는 않습니다.","검증·환류":"잔차와 새 자료를 비교해 가정·측정·파라미터를 재검토합니다."};
 
 var GLOSSARY=[
- ["수리 모형","mathematical model","현상의 프로세스나 메커니즘을 가정하고 그 움직임을 조사하는 모형입니다.","코일 냉각을 dT/dt = −k(T − Ta)로 표현"],
+ ["수리 모형","mathematical model","넓게는 수학에 기반한 모형 전체입니다. 여기서는 현상의 메커니즘을 식으로 나타내고 조사하는 접근을 뜻합니다.","코일 냉각을 dT/dt = −k(T − Ta)로 표현"],
  ["귀납적 방법","inductive method","데이터에서 출발해 파라미터를 추정하고 전체를 지배하는 법칙성을 끌어내는 방법입니다.","측정값 7개로 직선 회귀"],
  ["연역적 방법","deductive method","메커니즘을 수학적으로 나타낸 것에서 출발해 논리적으로 무엇이 일어나는가를 조사하는 방법입니다.","냉각 원리로 72시간 뒤 온도 계산"],
  ["모형화","modeling","간략화를 통해 사물의 본질을 끌어내는 일입니다.","코일 내부 온도를 하나로 봄"],
  ["미분 방정식","differential equation","시간에 따라 변하는 변수와 변하지 않는 파라미터로 이루어져, 변수의 움직임을 결정하는 규칙입니다.","dT/dt = −0.04(T − 25)"],
- ["결정론 모형","deterministic model","특정 시각의 상태가 정해지면 다음 시각의 상태가 단 하나로 정해지는 모형입니다.","같은 600℃에서 시작하면 같은 냉각 곡선"],
+ ["결정론 모형","deterministic model","규칙·파라미터·초기조건이 정해지고 해가 유일하면 한 궤적을 정합니다. 현실의 정확한 예측을 보장하지는 않습니다.","같은 600℃에서 시작하면 같은 냉각 곡선"],
  ["확률 모형","stochastic model","확률적인 움직임이 본질인 현상을 다루는 모형으로, 무작위 행보와 마르코프 연쇄가 있습니다.","하루 고장 건수의 변동"],
  ["해석적 풀이","analytical solution","단순한 모형을 연필과 종이로 직접 계산해 답을 식으로 구하는 것입니다.","T(t) = 25 + 575e^(−0.04t)"],
  ["수치 계산","numerical computation","식으로 풀기 어려운 모형을 컴퓨터로 파라미터를 바꿔 가며 계산하는 것입니다.","주변 온도가 시간에 따라 변할 때"],
- ["시뮬레이션","simulation","수식으로 나타내기 어려운 복잡한 현상을 규칙에 따라 컴퓨터로 재현하는 것입니다.","야적장 코일 수백 개의 배치별 냉각"]
+ ["시뮬레이션","simulation","방정식이나 규칙을 실행해 모형의 결과를 조사합니다. 여러 설정·난수 실행의 민감도와 불확실성을 함께 살핍니다.","야적장 코일 수백 개의 배치별 냉각"]
 ];
 var REFS=[
  {n:1,title:"Robustness in the Strategy of Scientific Model Building",org:"G. E. P. Box, Robustness in Statistics, Academic Press, 201–236, 1979",url:"https://www.gwern.net/doc/statistics/decision/1979-box.pdf",date:"2026-10-27 확인"},
@@ -750,9 +770,9 @@ on("m35-three",function(s){
   el("circle",{cx:210,cy:88,r:80,fill:"#F4B6CF","fill-opacity":.55},s);el("circle",{cx:140,cy:178,r:80,fill:"#A9D8B8","fill-opacity":.55},s);el("circle",{cx:280,cy:178,r:80,fill:"#F6D58F","fill-opacity":.55},s);
   tF(s,210,40,"수리 모형",{fw:800,fs:12.5,c:PNKF});tF(s,210,58,"이해 · 예측 · 제어",{fs:9.5,fw:700});tF(s,210,78,"메커니즘을 가정",{fs:9.5});tF(s,210,92,"파라미터 바꾸면 무슨 일이?",{fs:9.5});
   bxF(s,186,100,48,18,"#fff",PNKF,4);tF(s,210,113,"연역적",{fs:9.5,fw:800,c:PNKF});
-  tF(s,112,178,"통계 모형",{fw:800,fs:12.5,c:GRNF});tF(s,112,196,"이해 · 예측 · 제어",{fs:9.5,fw:700});tF(s,108,214,"적은 데이터",{fs:9.5});tF(s,108,228,"단순, 해석 쉬움",{fs:9.5});
+  tF(s,112,178,"통계 모형",{fw:800,fs:12.5,c:GRNF});tF(s,112,196,"이해 · 예측 · 제어",{fs:9.5,fw:700});tF(s,108,214,"불확실성 평가",{fs:9.5});tF(s,108,228,"단순·복잡 구조 모두",{fs:9.5});
   bxF(s,86,236,48,18,"#fff",GRNF,4);tF(s,110,249,"귀납적",{fs:9.5,fw:800,c:GRNF});
-  tF(s,308,178,"기계학습 모형",{fw:800,fs:12.5,c:C.amberInk});tF(s,308,196,"예측에 특화",{fs:9.5,fw:700});tF(s,312,214,"대량 데이터",{fs:9.5});tF(s,312,228,"복잡, 해석 어려움",{fs:9.5});
+  tF(s,308,178,"기계학습 모형",{fw:800,fs:12.5,c:C.amberInk});tF(s,308,196,"예측에 특화",{fs:9.5,fw:700});tF(s,312,214,"예측 오차 검증",{fs:9.5});tF(s,312,228,"단순·복잡 구조 모두",{fs:9.5});
   bxF(s,288,236,48,18,"#fff",C.amberInk,4);tF(s,312,249,"귀납적",{fs:9.5,fw:800,c:C.amberInk});
 });
 
@@ -791,9 +811,9 @@ on("m35-ode",function(s){
   var A=axF(s,40,250,10,126,72,24,0,600,200),X=A[0],Y=A[1];tF(s,250,146,"시간",{a:"end",fs:9,c:C.gray,fw:700});
   el("line",{x1:40,x2:250,y1:Y(25),y2:Y(25),stroke:GRNF,"stroke-width":1.2,"stroke-dasharray":"3 3"},s);
   el("path",{d:pathF(function(t){return coolF(t,CK,CTA);},0,72,X,Y,72),fill:"none",stroke:PNKF,"stroke-width":2.6},s);
-  [0,24,48].forEach(function(t){var v=coolF(t,CK,CTA);el("circle",{cx:X(t),cy:Y(v),r:4,fill:PNKF},s);tF(s,X(t)+6,Y(v)-5,Math.round(v)+"℃",{a:"start",fs:9.5,fw:800,halo:true});});
-  bxF(s,266,10,150,124,"#F3F5F9");tF(s,341,32,"규칙(1시간마다)",{fw:800,fs:10.5});
-  tF(s,341,58,"식는 양 = k × 온도차",{fs:10,fw:700});tF(s,341,82,"600℃: 0.04 × 575 ≈ 23℃",{fs:9.5,fw:700,c:PNKF});tF(s,341,104,"100℃: 0.04 × 75 = 3℃",{fs:9.5,fw:700,c:PNKF});tF(s,341,124,"뜨거울수록 빨리 식음",{fs:9.5,fw:800,c:C.gray});
+  [0,24,48].forEach(function(t){var v=coolF(t,CK,CTA);el("circle",{cx:X(t),cy:Y(v),r:4,fill:PNKF},s);tF(s,X(t)+6,Math.max(18,Y(v)-5),Math.round(v)+"℃",{a:"start",fs:9.5,fw:800,halo:true});});
+  bxF(s,266,10,150,124,"#F3F5F9");tF(s,341,32,"규칙: 순간 변화율",{fw:800,fs:10.5});
+  tF(s,341,58,"dT/dt = −k × 온도차",{fs:10,fw:700});tF(s,341,82,"T=600℃: −23℃/h",{fs:9.5,fw:700,c:PNKF});tF(s,341,104,"T=100℃: −3℃/h",{fs:9.5,fw:700,c:PNKF});tF(s,341,124,"뜨거울수록 빨리 식음",{fs:9.5,fw:800,c:C.gray});
 });
 
 on("m35-kind",function(s){
@@ -826,13 +846,12 @@ on("m35-solve",function(s){
     CT.forEach(function(t,i){el("circle",{cx:X(t),cy:Y(CY[i]),r:3.6,fill:C.navy},svg);});
     var t100=Math.log((CT0-a)/(100-a))/k,t48=coolF(48,k,a),e=sse(k,a);
     if(t100<=72){el("circle",{cx:X(t100),cy:Y(100),r:5,fill:GRNF},svg);}
-    bxF(svg,316,10,150,180,"#F3F5F9");tF(svg,391,34,"dT/dt = −k(T − Ta)",{fw:800,fs:10.5});tF(svg,391,62,"k = "+k.toFixed(3),{fw:800,fs:13,c:PNKF});tF(svg,391,86,"Ta = "+a+"℃",{fw:800,fs:13,c:PNKF});
+    bxF(svg,316,10,150,180,"#F3F5F9");tF(svg,391,34,"dT/dt = −k(T − Ta)",{fw:800,fs:10.5});tF(svg,391,62,"k = "+k.toFixed(3)+" h⁻¹",{fw:800,fs:13,c:PNKF});tF(svg,391,86,"Ta = "+a+"℃",{fw:800,fs:13,c:PNKF});
     tF(svg,391,118,"100℃ 도달",{fs:10,fw:700,c:C.gray});tF(svg,391,142,t100.toFixed(1)+"시간",{fw:800,fs:15});tF(svg,391,176,"점선 = k 0.04, Ta 25",{fs:9,fw:700,c:C.gray});
     document.getElementById("m35-kv").textContent=k.toFixed(3);document.getElementById("m35-tav").textContent=a+"℃";document.getElementById("m35-t48").textContent=Math.round(t48)+"℃";
     document.getElementById("m35-t100").textContent=t100.toFixed(1)+"시간";document.getElementById("m35-sse").textContent=Math.round(e).toLocaleString();
     var m=document.getElementById("m35-msg"),ok=e<200;m.className="pmsg"+(ok?" ok":"");
-    m.textContent=ok?"측정값과 잘 맞습니다(오차 제곱합 "+Math.round(e)+"). 100℃까지 "+t100.toFixed(1)+"시간 걸립니다. 주변 온도만 바꿔 계절 차이를 보세요.":
-      (k<CK?"천천히":k>CK?"빨리":"주변 온도 탓에")+" 식어 곡선이 측정값에서 벗어납니다(오차 제곱합 "+Math.round(e).toLocaleString()+"). 파라미터를 바꾸며 결과를 조사해 보세요.";}
+    m.textContent=ok?"적합 오차가 작습니다. 새 자료 검증도 필요합니다.":"측정값과 차이가 있습니다. 가정과 계수를 점검하세요.";}
   kk.addEventListener("input",draw);ta.addEventListener("input",draw);draw();
 })();
 
@@ -852,11 +871,11 @@ on("m35-solve",function(s){
   function txt(){document.getElementById("m35-gv").textContent=g.value+"℃";document.getElementById("m35-mine").textContent=g.value+"℃";draw();}
   function reset(){[].forEach.call(tb.children,function(x,i){x.classList.toggle("on",i===cur);x.setAttribute("aria-pressed",i===cur);});var t=TS[cur];
     document.getElementById("m35-act").textContent=seen[cur]?LATE[t]+"℃":"?";document.getElementById("m35-mod").textContent=seen[cur]?Math.round(coolF(t,CK,CTA))+"℃":"?";
-    var ms=document.getElementById("m35-msg3");ms.className="pmsg";ms.textContent=t+"시간 뒤 코일 온도를 예측해 슬라이더로 정한 뒤 「재 보고 확인」을 누르세요. 측정은 12시간까지만 했습니다.";txt();}
+    var ms=document.getElementById("m35-msg3");ms.className="pmsg";ms.textContent=t+"시간 뒤의 가상 관측을 예측하세요.";txt();}
   g.addEventListener("input",txt);
   document.getElementById("m35-check").onclick=function(){seen[cur]=true;var t=TS[cur],v=LATE[t],md=Math.round(coolF(t,CK,CTA)),ln=Math.round(LINA+LINB*t),gv=+g.value,ok=Math.abs(gv-v)<=30,ms=document.getElementById("m35-msg3");
     document.getElementById("m35-act").textContent=v+"℃";document.getElementById("m35-mod").textContent=md+"℃";ms.className="pmsg "+(ok?"ok":"ng");
-    ms.textContent=(ok?"근접했습니다. ":"차이가 있습니다. ")+t+"시간 뒤 실측은 "+v+"℃(예시값)입니다. 수리 모형은 "+md+"℃, 측정값에 맞춘 직선을 늘이면 "+fmF(ln)+"℃로 크게 빗나갑니다.";draw();};
+    ms.textContent="직선 외삽: "+fmF(ln)+"℃. 가정을 점검하세요.";draw();};
   reset();
 })();
 
