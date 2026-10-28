@@ -272,7 +272,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
       <div class="body full" style="align-content:center">
         <div class="gmap">
           <div></div><div class="hd">목표</div><div class="hd">확인하는 문항</div><div class="hd">연결 실습</div>
-          <div class="gn">1</div><div class="gt"><span>분석 목적에 맞는 모집단을 설정하고, 유한·무한모집단을 <b>구분한다</b>.</span></div>
+          <div class="gn">1</div><div class="gt"><span>목표와 실제 조사 범위를 구별하고, 유한·무한모집단을 <b>구분한다</b>.</span></div>
           <div class="ga"><button class="jump" data-jump="q1">문항 1·2</button></div><div class="gp"><button class="jump" data-jump="p2">실습 2 분류</button></div>
           <div class="gn">2</div><div class="gt"><span>전수조사의 비용과 시간을 <b>계산해</b>, 전수조사가 현실적인지 판단한다.</span></div>
           <div class="ga"><button class="jump" data-jump="q3">문항 3·4</button></div><div class="gp"><button class="jump" data-jump="p1">실습 1 계산</button></div>
@@ -439,19 +439,21 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
     <section class="slide" data-step="3" id="s-4-2a">
       <div class="sh"><div class="sec">4-2 모집단</div><h2><span class="q">Q</span>알고자 하는 대상 전체를 무엇이라 할까요?</h2></div>
       <div class="body split even">
-        <div class="fig"><svg viewBox="0 0 420 270" role="img" aria-label="모집단의 예: 한국인 성인 남성, 어떤 주사위, 신약 복용자, 위약 복용자">
-          <g font-size="12.5" font-weight="800" fill="#1B2A4A" text-anchor="middle">
-            <circle cx="105" cy="74" r="62" fill="#fff" stroke="#2C4170" stroke-width="2.5"/><text x="105" y="70">한국인</text><text x="105" y="88">성인 남성</text>
-            <circle cx="315" cy="74" r="62" fill="#fff" stroke="#2C4170" stroke-width="2.5"/><text x="315" y="64">주사위를 무한히</text><text x="315" y="82">던졌을 때</text><text x="315" y="100">나오는 눈</text>
-            <circle cx="105" cy="200" r="62" fill="#FCF3D9" stroke="#E0A100" stroke-width="2.5"/><text x="105" y="196">신약</text><text x="105" y="214">복용자</text>
-            <circle cx="315" cy="200" r="62" fill="#E4E9F2" stroke="#5B6E97" stroke-width="2.5"/><text x="315" y="196">위약</text><text x="315" y="214">복용자</text>
+        <div class="fig"><svg viewBox="0 0 420 270" role="img" aria-label="여성 자료가 없는 경우: 목표모집단은 모든 고혈압 환자, 조사가능집단은 남성 환자, 실제 표본은 조사한 일부 남성 환자">
+          <rect x="12" y="8" width="396" height="66" rx="10" fill="#E4E9F2"/>
+          <rect x="30" y="96" width="360" height="58" rx="10" fill="#FCF3D9"/>
+          <rect x="66" y="176" width="288" height="54" rx="10" fill="#fff" stroke="#2C4170" stroke-width="2"/>
+          <g fill="#1B2A4A" text-anchor="middle" font-size="13" font-weight="800">
+            <text x="210" y="34">목표：모든 고혈압 환자</text><text x="210" y="58" font-size="11" font-weight="600">여성 자료가 없는 경우의 예시</text>
+            <text x="210" y="120">조사 가능：남성 환자</text><text x="210" y="142" font-size="11" font-weight="600">자료를 얻을 수 있는 범위</text>
+            <text x="210" y="199">표본：실제 조사한 일부 남성</text><text x="210" y="218" font-size="11" font-weight="600">n이 커져도 빠진 집단의 근거는 별도</text>
           </g>
-          <text x="210" y="205" text-anchor="middle" font-size="11.5" font-weight="700" fill="#6B7280">비교</text>
-          <line x1="170" y1="200" x2="250" y2="200" stroke="#9AA0AA" stroke-width="1.5" stroke-dasharray="4 3"/>
+          <g stroke="#5B6E97" stroke-width="2"><path d="M210 77 V91 M205 86 L210 91 L215 86" fill="none"/><path d="M210 157 V171 M205 166 L210 171 L215 166" fill="none"/></g>
+          <text x="210" y="255" text-anchor="middle" fill="#6B7280" font-size="11">연구 목적을 제한했다면 그 변경과 결론 범위를 명시합니다</text>
         </svg></div>
         <div class="side">
           <ul class="key"><li><b>모집단</b>: 알고자 하는 대상 전체</li><li>목적과 대상에 맞춰 직접 설정합니다.</li></ul>
-          <p class="exp">한국인 성인 남성의 키가 궁금하면 성인 남성 전원이 모집단입니다. 신약은 복용 여부에 따른 차이를 알고 싶으므로 신약 복용자와 위약 복용자, 모집단 2개를 둡니다. 여성 환자 데이터가 없다고 해서 알고 싶은 대상을 남성으로 바꾸지는 않습니다. 목표 모집단과 실제로 조사한 집단을 구분하고, 그 밖으로 일반화할 수 있는지는 따로 봅니다.</p>
+          <p class="exp">한국인 성인 남성의 키가 목적이면 성인 남성 전체가 모집단입니다. 신약 예에서는 같은 대상 집단에서 신약·위약 조건을 비교합니다. 여성 자료가 없다면, 원래 알고 싶은 목표모집단과 자료를 얻을 수 있는 조사가능집단을 구별합니다. 실제 표본은 그중 조사한 일부입니다. 결론을 남성으로 제한할 수는 있지만 연구 목적·적용 범위의 변경을 밝혀야 합니다. 목표를 전체 환자로 유지한다면 여성까지 일반화할 근거를 따로 확인합니다.</p>
           <p class="next"><span>다음 질문</span>모집단은 얼마나 클까?</p>
         </div>
       </div>
@@ -465,9 +467,9 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
           <text x="22" y="32" font-size="13.5" font-weight="800" fill="#1B2A4A">유한모집단</text><text x="110" y="32" font-size="11.5" fill="#6B7280">요소의 수가 정해져 있음</text>
           <g font-size="12" font-weight="700" fill="#22262E" text-anchor="middle">
             <circle cx="70" cy="94" r="22" fill="#FCF3D9" stroke="#E0A100" stroke-width="2"/><text x="70" y="99">80명</text><text x="70" y="140" font-size="11.5" fill="#6B7280">1·2반 학생</text>
-            <circle cx="250" cy="94" r="46" fill="#E4E9F2" stroke="#2C4170" stroke-width="2"/><text x="250" y="90">5,183만</text><text x="250" y="106">명</text><text x="250" y="152" font-size="11.5" fill="#6B7280">한국인(2020년 기준)</text>
+            <circle cx="250" cy="94" r="46" fill="#E4E9F2" stroke="#2C4170" stroke-width="2"/><text x="250" y="90">5,183만</text><text x="250" y="106">명</text><text x="250" y="152" font-size="11.5" fill="#6B7280">한국인(교재의 2020년 예시)</text>
           </g>
-          <text x="380" y="98" text-anchor="end" font-size="11" fill="#B42318">출생·사망으로</text><text x="380" y="114" text-anchor="end" font-size="11" fill="#B42318">계속 바뀜</text>
+          <text x="380" y="98" text-anchor="end" font-size="11" fill="#B42318">시점이 달라도</text><text x="380" y="114" text-anchor="end" font-size="11" fill="#B42318">각 시점은 유한</text>
           <rect x="6" y="166" width="408" height="98" rx="12" fill="#fff"/>
           <text x="22" y="192" font-size="13.5" font-weight="800" fill="#1B2A4A">무한모집단</text><text x="110" y="192" font-size="11.5" fill="#6B7280">요소의 수에 제한이 없음</text>
           <g font-size="12" font-weight="700" fill="#22262E"><text x="40" y="226">· 앞으로 신약을 먹을 미래의 환자까지</text><text x="40" y="250">· 주사위를 몇 번이든 던져 나오는 눈</text></g>
@@ -475,7 +477,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
         </svg></div>
         <div class="side">
           <ul class="key"><li><b>모집단 크기</b>: 모집단 속 <b>요소</b>의 수</li><li><b>유한모집단</b>과 <b>무한모집단</b>이 있습니다.</li></ul>
-          <p class="exp">1반·2반 80명은 예외적으로 작은 유한모집단이고, 실제 분석에서는 훨씬 큰 모집단을 다룹니다. 한국인은 2020년 기준 5,183만 명인 유한모집단이지만 출생과 사망으로 수가 바뀌어 엄밀히 유한이라 하기 어렵습니다. 미래의 환자나 주사위의 눈은 무한모집단이어서 전부 조사하는 것이 원칙적으로 불가능합니다.</p>
+          <p class="exp">두 반 80명처럼 기준시점에 요소 수가 정해진 집단은 유한모집단입니다. 교재의 2020년 인구 예시도 그 시점을 정하면 유한합니다. 출생·사망으로 변한다는 사실이 곧 무한을 뜻하지는 않습니다. 한편 주사위를 제한 없이 반복하거나 미래 환자가 계속 생기는 과정을 상정하면, 가능한 관측값의 집합을 무한모집단으로 모형화할 수 있습니다. 유한한 실제 대상과 반복 가능한 생성과정을 구별합니다.</p>
           <p class="next"><span>다음 질문</span>모집단을 알면 무엇을 할 수 있을까?</p>
         </div>
       </div>
@@ -544,7 +546,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
         </svg></div>
         <div class="side">
           <ul class="key"><li><b>표본</b>: 조사하는 모집단의 일부</li><li><b>표본조사</b>로 모집단을 추정합니다.</li></ul>
-          <p class="exp">모집단에서 표본을 뽑는 것을 <b>표본추출</b>이라 하고, 표본으로 모집단의 성질을 조사하는 것을 표본조사라 합니다. 선거 출구조사는 일부 표만으로 당선 여부를 알고, TV 시청률은 일부 세대만 살펴 전체를 추정합니다. 다만 추론이므로 모집단의 성질을 100% 맞힐 수는 없고, 어느 정도 불확실성을 염두에 둡니다.</p>
+          <p class="exp">모집단에서 표본을 뽑는 것을 <b>표본추출</b>이라 하고, 표본으로 모집단의 성질을 조사하는 것을 표본조사라 합니다. 선거 출구조사는 일부 표만으로 당선 여부를 알고, TV 시청률은 일부 세대만 살펴 전체를 추정합니다. 다만 표본이 목표 집단을 잘 대표하는지 확인해야 합니다. 특정 집단이 빠진 편향은 n만 늘려도 사라지지 않습니다. 표집에 따른 불확실성도 함께 평가합니다.</p>
           <p class="next"><span>다음 질문</span>표본은 몇 명으로 이루어질까?</p>
         </div>
       </div>
@@ -579,7 +581,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
         <table class="sumtbl">
           <thead><tr><th>개념</th><th>무엇인가</th><th>이 모듈의 예시</th></tr></thead>
           <tbody>
-            <tr><td>모집단</td><td>알고자 하는 대상 전체. 목적에 맞춰 직접 정하며 유한과 무한이 있습니다.</td><td>모든 고혈압 환자 / 1·2반 80명</td></tr>
+            <tr><td>모집단</td><td>목표로 삼은 전체와 실제 조사 범위를 구별합니다. 유한·무한 여부는 시점과 생성과정도 봅니다.</td><td>모든 고혈압 환자 / 1·2반 80명</td></tr>
             <tr><td>전수조사</td><td>모든 요소를 조사합니다. 대부분 비용·시간 때문에 어렵습니다.</td><td>5천만 명 × 100원 = 50억 원</td></tr>
             <tr><td>표본조사</td><td>모집단의 일부(표본)로 모집단의 성질을 추정합니다.</td><td>출구조사, TV 시청률</td></tr>
             <tr><td>표본크기</td><td>표본 속 요소의 개수 n. 샘플 수(표본의 개수)와 다릅니다.</td><td>30명이면 n = 30</td></tr>
@@ -680,9 +682,9 @@ var QUIZ=[
  {goal:1,type:"상황 판단",stem:"한 학교의 3학년 1반과 2반(각 40명)이 영어 시험 평균 점수로 반 대항을 합니다. 이 분석에서 알고자 하는 대상(모집단)은 무엇일까요?",
   opts:["1반과 2반 학생 80명","전국 고등학교 3학년 학생","이 학교 전체 학생","내년 3학년 1반과 2반 학생"],ans:0,
   exp:"목적은 두 반 중 어느 반의 평균이 높은지 아는 것이므로 대상은 두 반 학생 80명뿐입니다. 다른 학교나 내년 학생에게는 관심이 없으므로, 80명의 점수를 조사하면 목적이 달성됩니다.",back:"s-4-1b",backLabel:"4-1 두 개의 80명 다시 보기"},
- {goal:1,type:"O/X 오개념",stem:"“신약 실험에 참가한 고혈압 환자 80명이 곧 이 분석의 모집단이다.”",
+ {goal:1,type:"O/X 오개념",stem:"“모든 고혈압 환자가 목표인데 여성 자료를 얻지 못했다면, 목표모집단은 자동으로 남성 환자로 바뀐다.”",
   opts:["O","X"],ans:1,ox:true,
-  exp:"실제로 약을 먹을 사람은 실험에 참가하지 않은 수많은 고혈압 환자입니다. 그래서 모집단은 모든 고혈압 환자이고, 실험 참가자 80명은 그 일부입니다.",back:"s-4-1b",backLabel:"4-1 두 개의 80명 다시 보기"},
+  exp:"자료의 부재가 연구 목적을 자동으로 바꾸지는 않습니다. 남성만 조사했다면 여성에게도 결론이 적용되는지 별도 근거가 필요합니다. 목적 자체를 남성 환자로 제한할 수도 있지만, 이때는 대상 변경과 결론 범위를 명시해야 합니다.",back:"s-4-2a",backLabel:"4-2 목표와 실제 조사 범위 다시 보기"},
  {goal:2,type:"계산",stem:"한 사람의 키를 재는 데 100원이 듭니다. 약 5천만 명 전원의 키를 재는 전수조사 비용은 얼마일까요?",
   opts:["50억 원","5억 원","500억 원","10만 원"],ans:0,
   exp:"50,000,000명 × 100원 = 5,000,000,000원, 곧 50억 원입니다. 10만 원은 1,000명을 쟀을 때의 비용입니다. 0의 개수를 하나씩 세며 확인하세요.",back:"s-4-3b",backLabel:"4-3 수학 박스 다시 보기"},
@@ -700,15 +702,15 @@ var QUIZ=[
 var BINS=["전수조사 가능","전수조사 어려움","무한모집단"];
 var CARDS=[["3학년 1반·2반 학생 80명의 영어 점수","전수조사 가능"],["우리 팀 직원 12명의 출근 시간","전수조사 가능"],
            ["한국인 성인 남성 전원의 키","전수조사 어려움"],["졸업논문을 위한 10만 명 설문","전수조사 어려움"],
-           ["앞으로 신약을 먹을 미래의 환자","무한모집단"],["주사위를 무한히 던져 나오는 눈","무한모집단"]];
+           ["끝없이 이어질 환자 발생과정의 관측값","무한모집단"],["주사위를 무한히 던져 나오는 눈","무한모집단"]];
 var HINT={"전수조사 가능":"작은 유한모집단이라 모두 조사할 수 있습니다.","전수조사 어려움":"유한하지만 비용·시간 부담이 막대한 모집단입니다.","무한모집단":"요소의 수에 제한이 없어 전부 조사할 수 없습니다."};
 
 var GLOSSARY=[
- ["모집단","population","알고자 하는 대상 전체입니다.","모든 고혈압 환자, 1·2반 학생 80명"],
+ ["모집단","population","분석에서 알고자 하는 대상 전체입니다. 목표로 정한 집단과 실제 자료를 얻은 범위를 구별해야 합니다.","모든 고혈압 환자, 1·2반 학생 80명"],
  ["모집단 크기","population size","모집단에 포함된 요소의 수입니다(이를 모수라 부르기도 하지만, 통계학에서 모수는 평균값 같은 모집단의 특성치를 뜻합니다).","한국인 5,183만 명(2020년 기준)"],
  ["요소","element","모집단을 이루는 하나하나의 대상입니다.","한국인 성인 남성 한 사람"],
- ["유한모집단","finite population","포함된 요소의 수가 정해진 모집단입니다.","1·2반 학생 80명"],
- ["무한모집단","infinite population","포함된 요소의 수에 제한이 없는 모집단입니다.","앞으로 신약을 먹을 미래의 환자까지"],
+ ["유한모집단","finite population","기준시점·대상 범위를 정했을 때 요소 수가 유한한 모집단입니다. 인구가 변해도 특정 시점의 집단은 유한합니다.","1·2반 학생 80명"],
+ ["무한모집단","infinite population","포함된 요소의 수에 제한이 없는 모집단입니다.","제한 없이 반복되는 환자 발생과정"],
  ["모집단의 성질","population characteristic","모집단에 포함된 요소를 특징짓는 값입니다.","한국인 남성의 평균 키 172.5cm"],
  ["전수조사","census","모집단에 포함된 모든 요소를 조사하는 방법입니다.","인구주택총조사"],
  ["표본","sample","모집단의 성질을 알려고 조사하는 모집단의 일부입니다.","출구조사에 응한 일부 유권자"],

@@ -288,10 +288,10 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
           <path d="M100 70 L340 190" stroke="#E0A100" stroke-width="2" stroke-dasharray="6 4"/>
           <rect x="350" y="40" width="70" height="40" rx="8" fill="#23704F"/><text x="385" y="65" text-anchor="middle" font-size="11" font-weight="800" fill="#fff">정면 ○</text>
           <rect x="350" y="190" width="70" height="40" rx="8" fill="#B42318"/><text x="385" y="215" text-anchor="middle" font-size="11" font-weight="800" fill="#fff">옆 ✕</text>
-          <text x="60" y="228" font-size="12" font-weight="700" fill="#1B2A4A">사람들이 가장 넓게 퍼져 보이는 방향 = 정보가 많은 방향</text>
+          <text x="60" y="228" font-size="12" font-weight="700" fill="#1B2A4A">사람들이 넓게 퍼져 보이는 방향 = 분산이 큰 방향</text>
         </svg></div>
         <div class="side">
-          <ul class="key"><li>가장 넓게 퍼져 보이는 방향에 정보가 많습니다.</li></ul>
+          <ul class="key"><li>넓게 퍼진 방향이 자료의 분산을 많이 담습니다.</li></ul>
           <p class="exp">비스듬히 줄지어 선 사람들을 줄의 끝에서 찍으면 앞사람에게 가려 몇 명만 보이지만, 줄이 길게 펼쳐지는 방향에서 찍으면 모두가 구분되어 보입니다. 같은 장면이라도 사람들이 가장 넓게 퍼져 보이는 방향을 고르면 사진 한 장에 정보를 가장 많이 담을 수 있습니다. 데이터에도 퍼짐이 가장 큰 방향을 찾는 방법이 있습니다.</p>
           <p class="next"><span>본문에서</span>4-2 주성분분석으로 이어집니다.</p>
         </div>
@@ -332,7 +332,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
           <text x="333" y="156" text-anchor="middle" font-size="11" fill="#C9D3E6">차원 축소</text>
         </svg></div>
         <div class="side">
-          <p class="exp">세 장면은 많은 정보를 적은 말로 요약하는 습성, 정보가 가장 많이 보이는 방향을 고르는 방법, 보이는 값 뒤에 공통된 원인을 가정하는 관점으로 이어집니다. 강판 검사 항목이 수십 개로 늘어나면 시편 품질을 한눈에 보기 어려운데, 이때 몇 개의 축으로 요약하면 이상한 시편을 빨리 찾고 분석도 안정적으로 할 수 있습니다.</p>
+          <p class="exp">세 장면은 많은 정보를 적은 말로 요약하는 습성, 분산을 많이 담는 방향을 고르는 방법, 보이는 값 뒤에 공통된 원인을 가정하는 관점으로 이어집니다. 강판 검사 항목이 수십 개로 늘어나면 시편 품질을 한눈에 보기 어려운데, 이때 몇 개의 축으로 요약하면 이상한 시편을 빨리 찾고 분석도 안정적으로 할 수 있습니다.</p>
           <p class="next"><span>다음 질문</span>변수가 많으면 무엇이 문제일까?</p>
         </div>
       </div>
@@ -357,7 +357,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
         <div class="fig"><svg id="m32-why" viewBox="0 0 420 270" role="img" aria-label="변수의 수를 줄이는 세 가지 이유: 고차원 해석의 어려움, 다중공선성, 차원의 저주"></svg></div>
         <div class="side">
           <ul class="key"><li><b>다중공선성</b>: 상관 강한 설명변수 → 불안정</li><li><b>차원의 저주</b>: 변수에 비해 표본 부족</li></ul>
-          <p class="exp">변수의 수를 줄이는 것은 단순히 쓸데없는 데이터가 많기 때문만은 아닙니다. 첫 번째로 고차원 데이터는 해석이 어렵습니다. 차원을 축소해 2개의 합성 변수로 변환하면 2차원 평면에 시편을 플롯해 시각화하므로 해석이 쉬워집니다. 또 다중회귀분석에서는 설명변수끼리 강한 상관이 있는 다중공선성이 있으면 회귀계수 추정이 불안정해지며, 변수의 수가 많을수록 그런 쌍이 늘어납니다. 상관이 있는 변수가 없어지도록 차원을 축소한 뒤 다중회귀분석을 하는 것이 좋습니다. 그 밖에 변수가 많아 파라미터 수가 늘면서 표본크기가 충분하지 않으면 회귀계수를 올바르게 추정할 수 없는 차원의 저주가 있습니다.</p>
+          <p class="exp">변수의 수를 줄이는 것은 단순히 쓸데없는 데이터가 많기 때문만은 아닙니다. 첫 번째로 고차원 데이터는 해석이 어렵습니다. 차원을 축소해 2개의 합성 변수로 변환하면 2차원 평면에 시편을 플롯해 시각화하므로 해석이 쉬워집니다. 또 다중회귀분석에서는 설명변수끼리 강한 상관이 있는 다중공선성이 있으면 회귀계수 추정이 불안정해지며, 변수의 수가 많을수록 그런 쌍이 늘어납니다. PCA로 직교한 축을 만든 뒤 회귀하는 방법도 있으나, 버린 축에 예측 정보가 있을 수 있어 성능을 따로 검증합니다. 그 밖에 변수가 많아 파라미터 수가 늘면서 표본크기가 충분하지 않으면 회귀계수를 올바르게 추정할 수 없는 차원의 저주가 있습니다.</p>
           <p class="next"><span>다음 질문</span>가장 기본적인 차원 축소 방법은?</p>
         </div>
       </div>
@@ -388,8 +388,8 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
           </div>
         </div>
         <div class="side">
-          <ul class="key"><li><b>기여율</b>: 각 주성분이 가진 정보의 비율</li><li><b>누적기여율</b>: 제k주성분까지의 합</li></ul>
-          <p class="exp">주성분 Z<sub>1</sub>은 원래 변수에 계수를 곱해 더한 값이며, Z<sub>1</sub>의 분산이 최대가 되도록 계수를 구합니다. PC2 이후는 그때까지 얻은 주성분과 직교하도록 설정하므로 새로운 축의 변수와는 무상관이 됩니다. 단위가 다르면 표준화한 상관행렬의 고윳값과 고유 벡터를 구하며, 계수는 고유 벡터, 각 고윳값을 고윳값 총합으로 나눈 것은 기여율에 대응합니다. 변수의 수를 M이라 하면 제M주성분까지 만들 수 있고, ‘제1부터 제k주성분까지 전체 정보의 몇 %가 포함되는지’를 누적기여율이라 합니다. 검사 5항목에서는 PC1 53.1%, PC2 35.2%로 제2주성분까지 88.3%를 가지므로 2개로 줄여도 충분하다고 볼 수 있습니다.</p>
+          <ul class="key"><li><b>기여율</b>: 각 주성분이 설명하는 분산의 비율</li><li><b>누적기여율</b>: 제k주성분까지의 합</li></ul>
+          <p class="exp">주성분은 중심화하거나 표준화한 변수를 계수로 합친 값입니다. 계수 벡터의 길이를 1로 제한해 분산이 최대가 되는 축을 찾고, 이후 축은 앞선 축과 직교하도록 정합니다. 공분산행렬은 원래 척도의 분산을, 상관행렬은 표준화한 변수의 분산을 사용합니다. 이 모듈은 단위가 다른 검사 5항목을 표준화했습니다. PC1 53.1%, PC2 35.2%로 둘이 설명하는 분산은 88.3%입니다. 두 축으로 충분한지는 별도 목적에 따라 판단하며 예측 중요도가 보장되지는 않습니다.</p>
           <p class="next"><span>다음 질문</span>각 주성분은 무엇을 뜻할까?</p>
         </div>
       </div>
@@ -407,13 +407,24 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
       </div>
     </section>
 
+    <section class="slide" data-step="3" id="s-4-2d">
+      <div class="sh"><div class="sec">4-2 주성분분석 · 척도 보충</div><h2><span class="q">Q</span>단위를 바꾸면 같은 자료의 주성분도 달라질까요?</h2></div>
+      <div class="body split even">
+        <div class="fig"><svg viewBox="0 0 420 270" role="img" aria-label="원래 척도의 공분산행렬: 무상관 두 변수의 분산이 100, 1이면 PC1 약 99%; 표준화한 상관행렬: 같은 두 변수의 분산을 1, 1로 맞추면 PC1 50%; 분산을 설명하는 비율 ≠ 예측 중요도: 원하는 목적에 맞는 척도와 남길 축을 선택"><rect x="8" y="8" width="404" height="76" rx="10" fill="#EEF4FB"/><text x="210" y="37" text-anchor="middle" fill="#1B2A4A" font-size="13" font-weight="800">원래 척도의 공분산행렬</text><text x="210" y="63" text-anchor="middle" fill="#6B7280" font-size="11">무상관 두 변수의 분산이 100, 1이면 PC1 약 99%</text><rect x="8" y="94" width="404" height="76" rx="10" fill="#FCF3D9"/><text x="210" y="123" text-anchor="middle" fill="#1B2A4A" font-size="13" font-weight="800">표준화한 상관행렬</text><text x="210" y="149" text-anchor="middle" fill="#6B7280" font-size="11">같은 두 변수의 분산을 1, 1로 맞추면 PC1 50%</text><rect x="8" y="180" width="404" height="76" rx="10" fill="#E3F1EA"/><text x="210" y="209" text-anchor="middle" fill="#1B2A4A" font-size="13" font-weight="800">분산을 설명하는 비율 ≠ 예측 중요도</text><text x="210" y="235" text-anchor="middle" fill="#6B7280" font-size="11">원하는 목적에 맞는 척도와 남길 축을 선택</text></svg></div>
+        <div class="side"><ul class="key"><li>이 모듈의 5항목 PCA는 표준화 후 계산</li><li>같은 단위여도 표준화 여부는 분석 목적에 따라 선택</li></ul>
+          <p class="exp">교재의 공분산행렬·상관행렬 선택을 풀어 쓴 보충입니다. 무상관이라도 두 분산이 100과 1이면 큰 분산 축이 전체 분산의 100/101을 담습니다. 표준화하면 둘 다 분산 1이 되어 한 축이 50%를 담습니다. 따라서 무상관이면 언제나 차원 축소가 불가능하다고 단정할 수 없습니다. 큰 분산이 잡음일 수도 있고, 작은 분산 축에 예측에 필요한 정보가 있을 수도 있습니다. 예측에 PCA를 쓰면 학습 자료에서만 변환을 정하고 새 자료에는 같은 변환을 적용합니다.</p>
+          <p class="next"><span>다음 질문</span>인자분석은 주성분분석과 무엇이 다를까?</p>
+        </div>
+      </div>
+    </section>
+
     <section class="slide" data-step="3" id="s-4-3a">
       <div class="sh"><div class="sec">4-3 인자분석 · 추가 읽기</div><h2><span class="q">Q</span>검사 항목 뒤에 보이지 않는 공통 요인이 있다면?</h2></div>
       <div class="body split even">
         <div class="fig"><svg id="m32-fa" viewBox="0 0 420 270" role="img" aria-label="공통인자 강도와 인성이 다섯 검사 항목을 만들고, 각 항목에 독립인자가 작용하는 인자분석 구조"></svg></div>
         <div class="side">
-          <ul class="key"><li><b>인자분석</b>: 소수의 <b>공통인자</b>가 원인</li><li>각 변수에는 <b>독립인자</b>(오차)가 작용</li></ul>
-          <p class="exp">원래 각 변수에는 소수의 공통인자가 있으며, 이것이 원인이 되어 데이터의 각 변수가 구성된다는 아이디어에 기반한 방법이 인자분석입니다. 공통인자와 독립인자는 모두 관측 불가능한 잠재적인 인자이며, 특히 독립인자는 각 변수에 독립적으로 작용하는 인자로 보통 오차로 취급됩니다. 인자분석이라면 ‘소재의 강도’와 ‘소재의 인성’이라는 잠재 인자와 각 항목의 독립 요인이 어떻게 합쳐져 측정값이 되는지 조사합니다. 인자분석에서는 미리 공통인자 개수를 설정하며, 도메인 지식으로 인과구조를 가정할 수 있을 때 사용합니다. 분석 자체는 상관관계에 기반하므로 데이터에서 인과관계를 발견할 수는 없습니다.</p>
+          <ul class="key"><li><b>인자분석</b>: <b>공통인자</b>로 공분산 구조 설명</li><li>각 변수에는 <b>독립인자</b>(고유 요인)가 작용</li></ul>
+          <p class="exp">인자분석은 소수의 잠재 공통인자와 변수별 고유 요인으로 관측 변수 사이의 공분산 구조를 설명하는 모형입니다. 공통인자와 고유 요인(교재의 독립인자)은 직접 관측하지 않으며, 고유 요인에는 측정오차 외의 변수별 변동도 포함될 수 있습니다. 인자분석이라면 ‘소재의 강도’와 ‘소재의 인성’이라는 잠재 인자와 각 항목의 독립 요인이 어떻게 합쳐져 측정값이 되는지 조사합니다. 공통인자 수와 모형 구조를 정한 뒤 적합도와 해석 가능성을 확인합니다. 분석은 상관관계에 기반하며, 인자의 이름이나 도식만으로 인과를 확정할 수 없습니다. 인과 해석에는 도메인 지식 등 별도 근거가 필요합니다.</p>
           <p class="next"><span>정리</span>주성분분석과 인자분석을 정리해 봅시다.</p>
         </div>
       </div>
@@ -428,7 +439,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
             <tr><td>차원 축소</td><td>특징을 유지하며 변수 수를 줄임 · 해석·다중공선성·차원의 저주 대응</td><td>검사 5항목 → 2개 축</td></tr>
             <tr><td>주성분분석</td><td>퍼짐이 가장 큰 방향으로 새 축, 기여율·누적기여율로 개수 판단</td><td>PC1 53.1%, PC2까지 88.3%</td></tr>
             <tr><td>부하량 · 점수</td><td>주성분과 변수의 상관으로 축을 해석, 점수로 각 시편 표현</td><td>PC1 강도, PC2 인성 · 시편 49 (3.26, −1.31)</td></tr>
-            <tr><td>인자분석</td><td>잠재 공통인자 + 독립인자가 변수를 구성, 인과는 도메인 지식으로 가정</td><td>소재의 강도·인성</td></tr>
+            <tr><td>인자분석</td><td>잠재 공통인자 + 고유 요인으로 공분산 설명, 인과는 별도 근거 필요</td><td>소재의 강도·인성</td></tr>
           </tbody>
         </table>
       </div>
@@ -448,10 +459,10 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
         </div>
         <div class="pcol" style="gap:10px;justify-content:center">
           <div class="plabel" style="margin:0">결과 확인</div>
-          <div class="stats three"><div><small>PC1 기여율</small><strong id="m32-c1">-</strong></div><div><small>PC2 기여율</small><strong id="m32-c2">-</strong></div><div><small>1개로 요약</small><strong id="m32-j" style="font-size:15px">-</strong></div></div>
-          <p class="howto">도전: PC1 하나로 정보의 90% 이상을 담으려면 |r|이 얼마 이상이어야 하는지 찾아보세요.</p>
+          <div class="stats three"><div><small>PC1 기여율</small><strong id="m32-c1">-</strong></div><div><small>PC2 기여율</small><strong id="m32-c2">-</strong></div><div><small>PC1 분산 구간</small><strong id="m32-j" style="font-size:15px">-</strong></div></div>
+          <p class="howto">도전: 두 변수의 분산이 1일 때 PC1으로 분산의 90% 이상을 담으려면 |r|이 얼마 이상이어야 하는지 찾아보세요.</p>
           <p class="pmsg" id="m32-msg"></p>
-          <div class="think" style="flex-wrap:wrap"><span>생각해보기</span>r = 0이면 왜 차원 축소가 잘 안 될까요?<details style="flex-basis:100%;font-weight:600"><summary style="cursor:pointer">예시 답</summary>변수들이 함께 움직이지 않으면 한 축으로 모을 정보가 적기 때문입니다.</details></div>
+          <div class="think" style="flex-wrap:wrap"><span>생각해보기</span>r = 0이면 왜 차원 축소가 잘 안 될까요?<details style="flex-basis:100%;font-weight:600"><summary style="cursor:pointer">예시 답</summary>이 실습은 두 변수의 분산을 1로 가정해 r=0이면 고윳값이 1, 1이고 한 축이 분산의 50%만 담기 때문입니다.</details></div>
         </div>
       </div>
     </section>
@@ -537,7 +548,7 @@ var QUIZ=[
   exp:"두 변수는 ‘두께’라는 같은 특징을 다른 단위로 나타냈을 뿐이라 완전한 상관(상관계수 r = 1)입니다. 한쪽만 쓰는 경우에 비해 정보가 늘지 않았으므로 어느 한쪽만 있으면 충분합니다. 이처럼 변수의 수를 줄이는 것을 차원 축소라 합니다.",back:"s-4-1a",backLabel:"4-1 변수의 차원 다시 보기"},
  {goal:2,type:"계산",stem:"검사 5항목의 상관행렬로 주성분분석을 했더니 고윳값이 2.66, 1.76, 0.27, 0.20, 0.11(합 5)이었습니다. 제2주성분까지의 누적기여율은 약 얼마일까요?",
   opts:["약 88%","약 53%","약 35%","100%"],ans:0,
-  exp:"기여율은 고윳값을 고윳값 총합으로 나눈 것이므로 PC1 = 2.66 ÷ 5 ≈ 0.53, PC2 = 1.76 ÷ 5 ≈ 0.35이고, 누적기여율은 (2.66 + 1.76) ÷ 5 ≈ 0.88입니다. 절대적인 기준은 없지만, 제2주성분까지 전체 정보의 약 88%를 가지므로 2개로 줄여도 충분하다고 볼 수 있습니다.",back:"s-4-2b",backLabel:"4-2 기여율과 누적기여율 다시 보기"},
+  exp:"기여율은 고윳값을 고윳값 총합으로 나눈 것이므로 PC1 = 2.66 ÷ 5 ≈ 0.53, PC2 = 1.76 ÷ 5 ≈ 0.35이고, 누적기여율은 (2.66 + 1.76) ÷ 5 ≈ 0.88입니다. 이는 선택한 척도에서 분산의 약 88%를 설명한다는 뜻입니다. 예측 성능의 88%나 인과 정보의 88%라는 뜻은 아니며 두 축으로 충분한지는 목적별로 평가합니다.",back:"s-4-2b",backLabel:"4-2 기여율과 누적기여율 다시 보기"},
  {goal:2,type:"상황 판단",stem:"주성분부하량이 PC1은 인장강도 0.95·항복강도 0.93·경도 0.92·연신율 −0.16·충격에너지 −0.10이었습니다. PC1은 어떤 축으로 해석할 수 있을까요?",
   opts:["강도 성분(단단하고 강한 정도)","인성 성분(잘 늘어나고 충격에 강한 정도)","측정 오차","시편 번호 순서"],ans:0,
   exp:"주성분부하량은 각 주성분의 값과 원래 각 변수의 상관계수입니다. PC1은 인장강도, 항복강도, 경도와 강한 양의 상관을 보이고 연신율과 충격에너지와는 거의 상관이 없으므로 ‘강도 성분’이라 해석할 수 있습니다. PC2는 연신율(0.92)과 충격에너지(0.93)와 상관이 강해 ‘인성 성분’입니다.",back:"s-4-2c",backLabel:"4-2 주성분부하량 다시 보기"},
@@ -546,14 +557,14 @@ var QUIZ=[
   exp:"주성분점수는 원래 데이터를 새로운 변수(주성분)로 나타낸 값입니다. PC1(강도 성분)이 크게 양수이고 PC2(인성 성분)가 음수이므로, 강도는 매우 높지만 연신율이나 충격에너지는 평균보다 낮은 시편입니다. 시편 49의 실제 값도 인장강도 583.7 MPa, 연신율 21.2%, 충격에너지 47.9 J입니다.",back:"s-4-2c",backLabel:"4-2 주성분점수 다시 보기"},
  {goal:3,type:"O/X 오개념",stem:"“인자분석을 하면 측정한 데이터만으로 공통인자와 변수 사이의 인과관계를 발견할 수 있다.”",
   opts:["O","X"],ans:1,ox:true,
-  exp:"인자분석은 공통인자의 존재와 공통인자와 관측한 변수 사이의 인과구조를 도메인 지식에 근거해 가정할 수 있을 때 사용하는 방법입니다. 분석 자체는 관측한 변수 사이의 상관관계에 기반을 두므로, 데이터에서 인과관계를 발견할 수는 없다는 점에 주의해야 합니다.",back:"s-4-3a",backLabel:"4-3 인자분석 다시 보기"}
+  exp:"인자분석은 잠재 공통인자와 고유 요인으로 관측 변수의 공분산 구조를 설명합니다. 적합도가 좋거나 인자의 이름을 붙였다는 사실만으로 인과관계가 증명되지는 않습니다. 인과 해석에는 도메인 지식과 연구 설계 등 별도 근거가 필요합니다.",back:"s-4-3a",backLabel:"4-3 인자분석 다시 보기"}
 ];
 
 var BINS=["차원 축소의 이유","주성분분석","인자분석"];
 var CARDS=[["설명변수끼리 상관이 강해 회귀계수가 불안정","차원 축소의 이유"],["표본에 비해 변수가 너무 많음","차원 축소의 이유"],
            ["데이터 퍼짐이 가장 큰 방향으로 새 축","주성분분석"],["누적기여율로 남길 축의 개수 판단","주성분분석"],
-           ["잠재적인 공통인자가 변수를 구성한다고 가정","인자분석"],["각 변수에 독립인자(오차)가 작용","인자분석"]];
-var HINT={"차원 축소의 이유":"변수가 많아 생기는 분석상의 문제입니다.","주성분분석":"원래 변수를 새로운 축으로 요약하는 방법입니다.","인자분석":"관측 불가능한 잠재 인자가 원인이라는 구조를 가정합니다."};
+           ["잠재적인 공통인자가 변수를 구성한다고 가정","인자분석"],["각 변수에 독립인자(고유 요인)가 작용","인자분석"]];
+var HINT={"차원 축소의 이유":"변수가 많아 생기는 분석상의 문제입니다.","주성분분석":"원래 변수를 새로운 축으로 요약하는 방법입니다.","인자분석":"잠재 공통인자와 고유 요인으로 공분산 구조를 설명합니다. 인과는 별도 근거가 필요합니다."};
 
 var GLOSSARY=[
  ["차원","dimension","데이터의 변수 개수로, 검사 항목이 늘어나는 만큼 차원도 늘어납니다.","검사 5항목 → 5차원"],
@@ -562,13 +573,13 @@ var GLOSSARY=[
  ["차원의 저주","curse of dimensionality","변수가 많아 파라미터 수가 늘면서, 표본크기가 충분하지 않으면 회귀계수를 올바르게 추정할 수 없는 문제입니다.","시편 30개에 항목 40개"],
  ["주성분분석","principal component analysis, PCA","데이터 퍼짐이 가장 커지는 방향으로 새로운 축을 설정해, 상관이 있는 변수를 소수의 변수로 정리하는 방법입니다.","검사 5항목의 상관행렬로 분석"],
  ["제1주성분","first principal component, PC1","데이터 퍼짐이 가장 커지는 방향으로 설정한 첫 번째 새로운 축입니다.","강도 성분"],
- ["기여율","proportion of variance","각 주성분이 가진 정보(분산)의 비율입니다.","PC1 53.1%"],
- ["누적기여율","cumulative proportion","제1부터 제k주성분까지 전체 정보의 몇 %가 포함되는지 나타낸 값입니다.","PC2까지 88.3%"],
+ ["기여율","proportion of variance","선택한 척도에서 전체 분산 중 해당 주성분의 분산이 차지하는 비율입니다. 예측 중요도와는 다릅니다.","PC1 53.1%"],
+ ["누적기여율","cumulative proportion","제1부터 제k주성분까지 설명하는 분산의 비율 합입니다. 공분산/상관행렬 선택에 따라 달라집니다.","PC2까지 88.3%"],
  ["주성분부하량","principal component loading","각 주성분의 값과 원래 각 변수의 상관계수로, 인자부하량이라고도 합니다.","PC1과 인장강도 0.95"],
  ["주성분점수","principal component score","원래 데이터를 새로운 변수(주성분)로 나타낸 값입니다.","시편 49 (3.26, −1.31)"],
- ["인자분석","factor analysis","각 변수에는 소수의 공통인자가 있고, 이것이 원인이 되어 각 변수가 구성된다는 아이디어에 기반한 방법입니다.","‘강도’, ‘인성’이라는 잠재 인자"],
+ ["인자분석","factor analysis","잠재 공통인자와 변수별 고유 요인으로 공분산 구조를 설명하는 모형입니다. 인자의 이름이나 도식이 인과를 증명하지는 않습니다.","‘강도’, ‘인성’이라는 잠재 인자"],
  ["공통인자","common factor","여러 변수에 공통으로 작용하는 관측 불가능한 잠재적인 인자입니다.","소재의 ‘강도’"],
- ["독립인자","unique factor","각 변수에 독립적으로 작용하는 인자로, 보통은 오차로 취급합니다.","경도 측정만의 오차"]
+ ["독립인자","unique factor","변수에 고유한 잠재 성분으로 측정오차뿐 아니라 그 변수만의 변동을 포함할 수 있습니다.","경도 측정만의 오차"]
 ];
 var REFS=[
  {n:1,title:"On lines and planes of closest fit to systems of points in space",org:"K. Pearson, The London, Edinburgh, and Dublin Philosophical Magazine and Journal of Science 2(11), 559–572, 1901",url:"https://doi.org/10.1080/14786440109462720",date:"2026-10-27 확인"},
@@ -576,7 +587,7 @@ var REFS=[
  {n:3,title:"AI-Hub 소개",org:"한국지능정보사회진흥원, AI-Hub",url:"https://www.aihub.or.kr/intrcn/intrcn.do",date:"2026-10-28 확인"},
  {n:4,title:"AI 학습데이터 구축 안내서",org:"한국지능정보사회진흥원",url:"https://nia.or.kr/site/nia_kor/ex/bbs/View.do?bcIdx=28714&cbIdx=26537&parentSeq=28714",date:"2026-10-28 확인"}
 ];
-var NEXT={title:"M33 기계학습과 비지도 학습",line:"다음 모듈에서는 기계학습이 무엇인지, 통계학과 기계학습은 어떻게 다른지, 정답 없이 데이터의 구조를 찾는 비지도 학습을 살펴봅니다."};
+var NEXT={title:"M33 기계학습과 비지도 학습",line:"다음 모듈에서는 통계학과 기계학습의 공통점과 강조점 차이, 정답 없이 데이터의 구조를 찾는 비지도 학습을 살펴봅니다."};
 
 /* =====================================================================
    아래부터는 공통 엔진입니다. 모듈마다 바꾸지 않습니다.
@@ -775,7 +786,7 @@ on("m32-fa",function(s){
   var U=[],V=[];for(var i=0;i<80;i++){U.push(gn());V.push(gn());}
   function upd(){var r=+rs.value,c1=(1+Math.abs(r))/2,c2=1-c1;document.getElementById("m32-rv").textContent=fmZ(r,2);
     document.getElementById("m32-c1").textContent=(c1*100).toFixed(1)+"%";document.getElementById("m32-c2").textContent=(c2*100).toFixed(1)+"%";
-    var J=c1>=0.9?["충분",GRN]:c1>=0.75?["대체로",C.amberInk]:["부족",RED],je=document.getElementById("m32-j");je.textContent=J[0];je.style.color=J[1];
+    var J=c1>=0.9?["90% 이상",GRN]:c1>=0.75?["75~90%",C.amberInk]:["75% 미만",RED],je=document.getElementById("m32-j");je.textContent=J[0];je.style.color=J[1];
     clear(svg);var X=linZ(-3.2,3.2,14,200),Y=linZ(-3.2,3.2,184,6);el("rect",{x:10,y:4,width:194,height:182,rx:8,fill:"#F8F9FB"},svg);
     for(var i=0;i<80;i++){var x=U[i],y=r*U[i]+Math.sqrt(Math.max(0,1-r*r))*V[i];el("circle",{cx:X(Math.max(-3,Math.min(3,x))),cy:Y(Math.max(-3,Math.min(3,y))),r:3,fill:BLU,"fill-opacity":.75},svg);}
     var sg=r>=0?1:-1;el("line",{x1:X(-3),y1:Y(-3*sg),x2:X(3),y2:Y(3*sg),stroke:RED,"stroke-width":2.4},svg);el("line",{x1:X(-1.5),y1:Y(1.5*sg),x2:X(1.5),y2:Y(-1.5*sg),stroke:GRN,"stroke-width":2},svg);
@@ -783,10 +794,10 @@ on("m32-fa",function(s){
     var bx=240,bw=210;tZ(svg,bx,24,"기여율",{a:"start",fw:800,fs:11});el("rect",{x:bx,y:36,width:bw*c1,height:30,fill:RED,"fill-opacity":.85},svg);el("rect",{x:bx+bw*c1,y:36,width:bw*c2,height:30,fill:GRN,"fill-opacity":.85},svg);
     if(c1>0.15)tZ(svg,bx+bw*c1/2,56,"PC1",{fw:800,fs:10,c:"#fff"});if(c2>0.12)tZ(svg,bx+bw*c1+bw*c2/2,56,"PC2",{fw:800,fs:10,c:"#fff"});
     el("line",{x1:bx+bw*0.9,x2:bx+bw*0.9,y1:30,y2:72,stroke:C.navy,"stroke-dasharray":"3 3"},svg);tZ(svg,bx+bw*0.9,84,"90%",{fs:9.5,fw:800});
-    tZ(svg,bx,120,"두 변수일 때",{a:"start",fw:700,fs:10.5,c:C.gray});tZ(svg,bx,142,"PC1 기여율 = (1 + |r|) ÷ 2",{a:"start",fw:800,fs:11});tZ(svg,bx,164,"= (1 + "+Math.abs(r).toFixed(2)+") ÷ 2 = "+c1.toFixed(3),{a:"start",fw:800,fs:11,c:RED});
+    tZ(svg,bx,120,"두 변수 모두 분산 1일 때",{a:"start",fw:700,fs:10.5,c:C.gray});tZ(svg,bx,142,"PC1 기여율 = (1 + |r|) ÷ 2",{a:"start",fw:800,fs:11});tZ(svg,bx,164,"= (1 + "+Math.abs(r).toFixed(2)+") ÷ 2 = "+c1.toFixed(3),{a:"start",fw:800,fs:11,c:RED});
     var m=document.getElementById("m32-msg"),ok=Math.abs(Math.abs(r)-0.8)<0.001;m.className="pmsg"+(ok?" ok":"");
-    m.textContent=ok?"찾았습니다. |r| = 0.8이면 PC1 기여율이 정확히 90%입니다. 상관이 강할수록 하나의 축으로 더 많은 정보를 담을 수 있습니다.":
-      Math.abs(r)<0.05?"r이 0에 가까우면 두 축의 기여율이 50%씩으로 비슷해, 하나로 줄이면 정보의 절반을 잃습니다. 무상관이면 차원 축소가 잘 진행되지 않습니다.":
+    m.textContent=ok?"찾았습니다. |r| = 0.8이면 PC1 기여율이 정확히 90%입니다. 이는 두 변수의 분산이 1인 이론적 모형의 결과이며, 예측 성능의 충분함을 뜻하지는 않습니다.":
+      Math.abs(r)<0.05?"r이 0에 가까우면 두 축의 기여율이 50%씩으로 비슷해, 하나로 줄이면 정보의 절반을 잃습니다. 두 변수 모두 분산 1인 이 예에서는 무상관이면 한 축으로 줄일 때 분산 절반을 잃습니다.":
       "r = "+fmZ(r,2)+"이면 PC1 기여율은 "+(c1*100).toFixed(1)+"%입니다. "+(r<0?"음의 상관이어도 |r|이 크면 PC1 하나로 잘 요약됩니다.":"|r|이 클수록 PC1 하나에 더 많은 정보가 모입니다.");}
   rs.addEventListener("input",upd);upd();
 })();

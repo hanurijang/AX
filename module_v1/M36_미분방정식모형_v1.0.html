@@ -422,7 +422,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
         <div class="fig"><svg id="m36-logi" viewBox="0 0 420 270" role="img" aria-label="지수적 증가는 직원 수를 넘어 계속 커지지만, 로지스틱 방정식은 K = 1,000에 가까워지며 포화하는 S자 곡선"></svg></div>
         <div class="side">
           <ul class="key"><li><b>밀도 효과</b>: 늘수록 증가율이 줄어듦</li><li><b>로지스틱 방정식</b>: K에서 포화</li></ul>
-          <p class="exp">x(t+1) = 2x(t)나 dx/dt = ax는 모두 x 자신의 정수배로 나타낸 선형 방정식이고, 지수적 증가와 감소는 그 전형적인 움직임입니다. 그러나 지수적 증가가 언제까지나 계속되는 것은 현실적이지 않으므로, x가 늘어날수록 증가율이 줄어드는 밀도 효과를 넣는 것이 자연스럽습니다. 흔히 쓰는 로지스틱 방정식 dx/dt = ax(1 − x/K)는 x가 환경 수용력 K에 가까울수록 증가율을 0에 가깝게 합니다. 회복을 생각하지 않으면 누적 감염자는 이 식을 따르며 K = 직원 1,000명에서 포화합니다.</p>
+          <p class="exp">x(t+1) = 2x(t)나 dx/dt = ax는 모두 x의 상수배로 나타낸 선형 방정식이고, 지수적 증가와 감소는 그 전형적인 움직임입니다. 그러나 지수적 증가가 언제까지나 계속되는 것은 현실적이지 않으므로, x가 늘어날수록 증가율이 줄어드는 밀도 효과를 넣는 것이 자연스럽습니다. 흔히 쓰는 로지스틱 방정식 dx/dt = ax(1 − x/K)는 x가 환경 수용력 K에 가까울수록 증가율을 0에 가깝게 합니다. 닫힌 집단에서 회복 없이 무작위 접촉으로 전파되는 단순 SI 모형이라면 누적 감염자를 로지스틱 식으로 나타낼 수 있습니다. 이때 K = 직원 1,000명입니다. 실제 누적 감염이 항상 이 식을 따르는 것은 아닙니다.</p>
           <p class="next"><span>다음 질문</span>K에 도달하면 무슨 일이 생길까?</p>
         </div>
       </div>
@@ -434,7 +434,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
         <div class="fig"><svg id="m36-eq" viewBox="0 0 420 270" role="img" aria-label="로지스틱 방정식의 변화율 그래프와 평형점, x = 0은 불안정평형점, x = K는 안정평형점이며 화살표가 K로 모임"></svg></div>
         <div class="side">
           <ul class="key"><li>x = K는 <b>안정평형점</b>, x = 0은 <b>불안정평형점</b></li><li><b>비선형 방정식</b>은 상태에 따라 규칙이 변함</li></ul>
-          <p class="exp">dx/dt = 0을 만족하는 x가 평형점입니다. x가 K보다 크면 dx/dt &lt; 0, 작으면 dx/dt &gt; 0이 되어 x = K로 되돌아가므로 안정평형점입니다. x = 0에서는 조금만 커져도 늘어나기 시작하므로 불안정평형점입니다. 로지스틱 방정식은 x × x의 곱이 있는 비선형 방정식이지만, dx/dt = ax(1 − x/K)는 x(t) = K / (1 + (K/x₀ − 1)e^(−at))로 풀립니다. SIR처럼 식으로 풀기 어려운 모형은 수치 계산으로 조사합니다.</p>
+          <p class="exp">여기서는 a > 0, K > 0을 가정합니다. dx/dt = 0을 만족하는 x가 평형점입니다. x가 K보다 크면 dx/dt &lt; 0, 작으면 dx/dt &gt; 0이 되어 x = K로 되돌아가므로 안정평형점입니다. x = 0에서는 조금만 커져도 늘어나기 시작하므로 불안정평형점입니다. 로지스틱 방정식은 x × x의 곱이 있는 비선형 방정식이지만, dx/dt = ax(1 − x/K)는 초기값 x(0) = x₀ > 0일 때 x(t) = K / (1 + (K/x₀ − 1)e^(−at))라는 해석해가 있습니다. SIR처럼 식으로 풀기 어려운 모형은 수치 계산으로 조사합니다.</p>
           <p class="next"><span>다음 질문</span>감염병은 어떻게 모형으로 만들까?</p>
         </div>
       </div>
@@ -448,13 +448,13 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
           <div class="math">
             <div class="mt">핵심 수학 개념 · SIR 모형</div>
             <div class="f">dS/dt = −βSI/N, dI/dt = βSI/N − γI, dR/dt = γI</div>
-            <div class="r"><span>기호</span><span>β 감염률, γ 회복률, N = S + I + R = 1,000명</span></div>
+            <div class="r"><span>기호</span><span>t: 일, β: 전파율(/일), γ: 감염 상태 이탈률(/일)<br>N = S + I + R = 1,000명 (닫힌 집단)</span></div>
             <div class="r"><span>계산</span><span>β 0.34, γ 0.2 → 정점 약 100명, 최종 약 692명</span></div>
           </div>
         </div>
         <div class="side">
           <ul class="key"><li><b>SIR 모형</b>: S → I → R의 이동</li><li>S × I 항이 있어 비선형 미분 방정식</li></ul>
-          <p class="exp">감수성 보유자 S는 감염자와 접촉하면 감염률 β로 감염자 I가 되고, 감염자는 일정 비율 γ로 회복자 R이 됩니다<span class="cite">[1]</span>. 감수성이 감염자 수에 비례하므로 S와 I가 곱해집니다. 감염자는 처음에 지수적으로 늘다가 S가 줄면서 감소하고, 모두가 걸리기 전에 유행이 끝납니다.</p>
+          <p class="exp">이 모형에서 β는 접촉과 감염 가능성을 합친 전파율(/일)입니다. 감수성 보유자 한 명의 감염 위험률은 βI/N이고, 감염자는 이탈률 γ(/일)로 R로 옮겨갑니다. R은 회복·격리 등으로 더 이상 전파하지 않는 집단입니다<span class="cite">[1]</span>. 새 감염은 S와 I의 무작위 접촉에 비례한다고 가정하므로 βSI/N 항을 씁니다. 출생·유입·유출이 없어 S + I + R은 일정합니다. 감염자는 처음에 지수적으로 늘다가 S가 줄면서 감소하고, 모두가 걸리기 전에 유행이 끝납니다.</p>
           <p class="next"><span>다음 질문</span>유행이 시작될지는 무엇이 정할까?</p>
         </div>
       </div>
@@ -503,7 +503,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
           <thead><tr><th>개념</th><th>핵심</th><th>이 모듈의 예</th></tr></thead>
           <tbody>
             <tr><td>차분 방정식</td><td>x(t+1) = r·x(t), r = 1이 증가·감소의 경계</td><td>5일마다 2배 → 50일 1,024명</td></tr>
-            <tr><td>미분 방정식·밀도 효과</td><td>dx/dt = ax(1 − x/K): K는 안정, 0은 불안정 평형점</td><td>누적 감염자가 1,000명에서 포화</td></tr>
+            <tr><td>미분 방정식·밀도 효과</td><td>dx/dt = ax(1 − x/K): K는 안정, 0은 불안정 평형점</td><td>회복 없는 SI 가정에서 K = 1,000명</td></tr>
             <tr><td>SIR 모형</td><td>S → I → R, R₀ = β/γ. 초기 S(0)/N ≈ 1이고 R₀ &gt; 1이면 유행</td><td>R₀ 1.7, 정점 약 100명, 최종 약 692명</td></tr>
             <tr><td>예측과 통제</td><td>Rₜ를 1 아래로, 규칙이 같다는 전제의 예측</td><td>접촉 절반 → Rₜ 0.74, 최종 236명</td></tr>
           </tbody>
@@ -523,12 +523,12 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
           <div class="fig" style="flex:1"><svg id="m36-p1-svg" viewBox="0 0 470 200" role="img" aria-label="SIR 모형의 감수성 보유자, 감염자, 회복자 곡선"></svg></div>
         </div>
         <div class="pcol" style="gap:10px;justify-content:center">
-          <div class="ctrl">감염률 β<input type="range" id="m36-b" min="0.1" max="0.6" step="0.02" value="0.34" aria-label="감염률 베타"><strong id="m36-bv" style="min-width:48px;text-align:right">-</strong></div>
-          <div class="ctrl">회복률 γ<input type="range" id="m36-g1" min="0.1" max="0.5" step="0.02" value="0.2" aria-label="회복률 감마"><strong id="m36-gv1" style="min-width:48px;text-align:right">-</strong></div>
+          <div class="ctrl">전파율 β (/일)<input type="range" id="m36-b" min="0.1" max="0.6" step="0.02" value="0.34" aria-label="전파율 베타, 일의 역수"><strong id="m36-bv" style="min-width:48px;text-align:right">-</strong></div>
+          <div class="ctrl">이탈률 γ (/일)<input type="range" id="m36-g1" min="0.1" max="0.5" step="0.02" value="0.2" aria-label="감염 상태 이탈률 감마, 일의 역수"><strong id="m36-gv1" style="min-width:48px;text-align:right">-</strong></div>
           <div class="stats three"><div><small>R₀</small><strong id="m36-rr">-</strong></div><div><small>감염자 정점</small><strong id="m36-pk">-</strong></div><div><small>최종 누적 감염</small><strong id="m36-fin">-</strong></div></div>
-          <p class="howto">도전: R₀가 1 근처를 넘나들도록 β나 γ를 움직여 최종 누적 감염이 어떻게 달라지는지 보세요.</p>
+          <p class="howto">도전: R₀를 1 위아래로 바꾸며 최종 감염 규모를 비교하세요.</p>
           <p class="pmsg" id="m36-msg"></p>
-          <div class="think" style="flex-wrap:wrap"><span>생각해보기</span>우리 사업장에서 β를 줄이는 대책과 γ를 키우는 대책은 각각 무엇일까요?<details style="flex-basis:100%;font-weight:600"><summary style="cursor:pointer">예시 답</summary>β를 줄이려면 접촉을 줄이는 교대·휴게 분산, γ를 키우려면 조기 격리입니다.</details></div>
+          <div class="think" style="flex-wrap:wrap"><span>생각해보기</span>β를 줄이거나 γ를 키우는 대책은 무엇일까요?<details style="flex-basis:100%;font-weight:600"><summary style="cursor:pointer">예시 답</summary>β를 줄이려면 접촉을 줄이는 교대·휴게 분산, γ를 키우려면 조기 격리입니다.</details></div>
         </div>
       </div>
     </section>
@@ -610,11 +610,11 @@ var QUIZ=[
   exp:"r이 1보다 크면 지수적으로 늘어나고, r이 딱 1이면 변하지 않으며, r이 1보다 작으면 지수적으로 감소해 0까지 줄어듭니다. 분기 다이어그램에서 보듯 r = 1을 경계로 움직임이 질적으로 달라지며, 중간의 다른 값에서 멈추지는 않습니다.",back:"s-4-1b",backLabel:"4-1 파라미터 r과 분기 다이어그램 다시 보기"},
  {goal:2,type:"상황 판단",stem:"로지스틱 방정식 dx/dt = ax(1 − x/K)에서 K = 1,000입니다. x가 1,200으로 K보다 커졌다면 이후 x는 어떻게 될까요?",
   opts:["줄어들어 1,000으로 돌아간다","계속 지수적으로 늘어난다","1,200에서 그대로 멈춘다","0까지 줄어든다"],ans:0,
-  exp:"x가 K보다 크면 (1 − x/K)가 음수가 되어 dx/dt < 0이므로 x가 줄어들고, K보다 작으면 dx/dt > 0이 되어 늘어납니다. 그래서 x는 K로 되돌아가며, 이렇게 벗어나도 되돌아오는 평형점을 안정평형점이라 합니다.",back:"s-4-2c",backLabel:"4-2 평형점의 안정성 다시 보기"},
- {goal:2,type:"O/X 오개념",stem:"“로지스틱 방정식의 평형점 x = 0은, x가 0에서 조금 벗어나도 다시 0으로 되돌아오는 안정평형점이다.”",
+  exp:"x가 K보다 크면 (1 − x/K)가 음수가 되어 dx/dt < 0이므로 x가 줄어들고, 0 < x < K이면 dx/dt > 0이 되어 늘어납니다. 그래서 x는 K로 되돌아가며, 이렇게 벗어나도 되돌아오는 평형점을 안정평형점이라 합니다.",back:"s-4-2c",backLabel:"4-2 평형점의 안정성 다시 보기"},
+ {goal:2,type:"O/X 오개념",stem:"“a > 0, K > 0인 로지스틱 방정식의 평형점 x = 0은, x가 0에서 조금 벗어나도 다시 0으로 되돌아오는 안정평형점이다.”",
   opts:["O","X"],ans:1,ox:true,
   exp:"x = 0에서는 x가 0보다 조금이라도 커지면 dx/dt > 0이 되어 x가 늘어나기 시작하고, 자연적으로 0으로 되돌아가는 일은 없습니다. 이런 평형점을 불안정평형점이라 합니다. 반면 x = K는 벗어나도 되돌아오는 안정평형점입니다.",back:"s-4-2c",backLabel:"4-2 평형점의 안정성 다시 보기"},
- {goal:3,type:"계산",stem:"사업장 SIR 모형에서 감염률 β = 0.34/일, 회복률 γ = 0.2/일이고, 처음에는 거의 모두 감수성 보유자(S(0)/N ≈ 1)입니다. 기초감염재생산수 R₀는?",
+ {goal:3,type:"계산",stem:"사업장 SIR 모형에서 전파율 β = 0.34/일, 이탈률 γ = 0.2/일이고, 처음에는 거의 모두 감수성 보유자(S(0)/N ≈ 1)입니다. 기초감염재생산수 R₀는?",
   opts:["약 1.7","약 0.14","약 0.59","약 0.068"],ans:0,
   exp:"R₀ = β ÷ γ = 0.34 ÷ 0.2 = 1.7입니다. 처음 S(0)/N ≈ 1이라 (β/γ)×S(0)/N도 1.7과 같습니다. 1보다 크므로 유행이 확산됩니다. 유행이 진행된 뒤의 값은 Rₜ = (β/γ)×S(t)/N입니다. 0.14는 β − γ, 0.59는 γ ÷ β, 0.068은 β × γ입니다.",back:"s-4-3b",backLabel:"4-3 기초감염재생산수 다시 보기"},
  {goal:3,type:"상황 판단",stem:"30일째 감염자 48명, 실질감염재생산수 Rₜ ≈ 1.48입니다(β 0.34, γ 0.2). 다음 대책 중 Rₜ를 1 미만으로 낮춰 감염자 수를 줄어들게 하는 것은?",
@@ -623,9 +623,9 @@ var QUIZ=[
 ];
 
 var BINS=["선형 방정식","비선형 방정식"];
-var CARDS=[["x(t+1) = 2x(t)","선형 방정식"],["dx/dt = ax","선형 방정식"],["x가 어떤 값이든 규칙이 같음","선형 방정식"],["대부분 해를 식으로 구할 수 있음","선형 방정식"],
-           ["dx/dt = ax(1 − x/K)","비선형 방정식"],["S × I 항이 있는 SIR 모형","비선형 방정식"],["x의 값에 따라 규칙이 달라짐","비선형 방정식"],["대부분 수치 계산으로 조사","비선형 방정식"]];
-var HINT={"선형 방정식":"변수의 정수배와 합으로만 쓰며, 규칙이 항상 같습니다.","비선형 방정식":"x × x나 S × I 같은 곱이 있어 상태에 따라 규칙이 달라집니다."};
+var CARDS=[["x(t+1) = 2x(t)","선형 방정식"],["dx/dt = ax","선형 방정식"],["x가 어떤 값이든 규칙이 같음","선형 방정식"],["dx/dt = ax의 해는 x(0)e^(at)","선형 방정식"],
+           ["dx/dt = ax(1 − x/K)","비선형 방정식"],["S × I 항이 있는 SIR 모형","비선형 방정식"],["x의 값에 따라 규칙이 달라짐","비선형 방정식"],["로지스틱은 해석해, SIR은 수치 계산","비선형 방정식"]];
+var HINT={"선형 방정식":"상태변수의 상수배와 합으로 쓰는 선형 방정식입니다. 상수계수 예에서는 지수함수 해를 구할 수 있습니다.","비선형 방정식":"x × x나 S × I 같은 곱이 있어 상태에 따라 규칙이 달라집니다."};
 
 var GLOSSARY=[
  ["차분 방정식","difference equation","시간이 0, 1, 2…처럼 띄엄띄엄 흐를 때, 다음 시각의 값을 지금 값으로 나타낸 증가 규칙입니다.","x(t+1) = 2x(t)"],
@@ -633,11 +633,11 @@ var GLOSSARY=[
  ["분기 다이어그램","bifurcation diagram","파라미터를 가로축, 충분한 시간이 흐른 뒤의 값을 세로축으로 그려 움직임이 질적으로 바뀌는 경계를 보여 주는 그림입니다.","r = 1을 경계로 증식·소멸"],
  ["미분 방정식","differential equation","아주 짧은 시간의 변화율로 나타낸 연속 시간 모형입니다.","dx/dt = 0.139x"],
  ["밀도 효과","density effect","x가 늘어날수록 그 증가율이 줄어드는 효과입니다.","감수성 직원이 줄수록 감염 증가 둔화"],
- ["로지스틱 방정식","logistic equation","dx/dt = ax(1 − x/K)로, x가 K에 가까울수록 증가율이 0에 가까워져 K에서 포화합니다.","K = 직원 1,000명"],
+ ["로지스틱 방정식","logistic equation","dx/dt = ax(1 − x/K)입니다. a > 0, K > 0, x(0) > 0에서 K로 접근하며 해석해가 있습니다. 실제 누적 감염이 항상 이 식을 따르지는 않습니다.","K = 직원 1,000명"],
  ["안정평형점","stable equilibrium","벗어나더라도 다시 되돌아오는 평형점입니다.","로지스틱의 x = K"],
  ["불안정평형점","unstable equilibrium","조금만 벗어나도 되돌아오지 않고 멀어지는 평형점입니다.","로지스틱의 x = 0"],
  ["비선형 방정식","nonlinear equation","x × x 같은 곱이 들어 규칙이 값에 따라 달라지는 방정식입니다. 로지스틱 방정식은 해석해가 있고, SIR은 수치 계산으로 풉니다.","로지스틱 방정식, SIR 모형"],
- ["SIR 모형","SIR model","감수성 보유자 S, 감염자 I, 회복자 R의 수 변화를 미분 방정식으로 나타낸 감염병의 기본 모형입니다.","직원 1,000명, β 0.34, γ 0.2"],
+ ["SIR 모형","SIR model","감수성 보유자 S, 감염자 I, 회복·격리 등으로 전파에서 이탈한 R의 수 변화를 나타낸 모형입니다. 닫힌 집단에서 S+I+R=N이며 β·γ의 단위는 /일입니다.","직원 1,000명, β 0.34/일, γ 0.2/일"],
  ["기초감염재생산수","basic reproduction number, R₀","거의 모두가 감수성 보유자일 때 감염자 1명이 감염시키는 사람 수의 평균 R₀ = β/γ입니다. 진행 중 값은 Rₜ = (β/γ)×S(t)/N입니다.","0.34 ÷ 0.2 = 1.7"],
  ["실질감염재생산수","effective reproduction number, Rₜ","유행이 시작된 뒤 면역이나 대책을 반영해 감염자 1명이 감염시키는 사람 수의 평균입니다.","접촉 절반 → 1.48에서 0.74로"]
 ];
@@ -827,7 +827,7 @@ on("m36-logi",function(s){
   el("path",{d:plG(fnG(logiG,0,100,100),X,Y),fill:"none",stroke:BLUG,"stroke-width":2.6},s);
   tG(s,X(50),Y(1300),"지수적 증가",{a:"end",fs:10.5,fw:800,c:REDG,halo:true});tG(s,X(74),Y(780),"로지스틱 방정식",{fs:10.5,fw:800,c:"#1C6EA4",halo:true});
   [[40,204],[50,506],[70,942]].forEach(function(p){el("circle",{cx:X(p[0]),cy:Y(p[1]),r:3.5,fill:BLUG},s);tG(s,X(p[0])+6,Y(p[1])+12,p[1]+"명",{a:"start",fs:9.5,fw:800,c:"#1C6EA4",halo:true});});
-  tG(s,56,14,"누적 감염자 (명) · 회복 미고려",{a:"start",fs:9.5,c:C.gray,fw:700});
+  tG(s,56,14,"누적 감염자 (명) · 회복 없는 SI 가정",{a:"start",fs:9.5,c:C.gray,fw:700});
 });
 
 on("m36-eq",function(s){
