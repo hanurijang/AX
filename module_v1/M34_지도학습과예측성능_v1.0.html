@@ -195,7 +195,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
 .gi .d{font-size:14px;line-height:1.5}
 .gi .e{font-size:12.5px;line-height:1.45;color:var(--gray)}
 .gi .e strong{color:var(--navy3)}
-.refs{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:8px;font-size:13.5px;line-height:1.5}
+.refs{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:8px;font-size:13.5px;line-height:1.5;overflow-y:auto;flex:1 1 auto;min-height:0}
 .refs li{display:grid;grid-template-columns:30px 1fr;gap:4px}
 .refs li span{font-weight:800;color:var(--navy3)}
 .refs a{color:var(--navy2);word-break:break-all}
@@ -384,7 +384,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
         <div class="fig"><svg id="m34-cv" viewBox="0 0 420 270" role="img" aria-label="코일 200개를 5묶음으로 나눠 매번 한 묶음 40개를 검증, 나머지 160개를 학습에 쓰고 5번 반복해 성능을 평균하는 5-분할 교차검증"></svg></div>
         <div class="side">
           <ul class="key"><li>예측: 미지의 데이터에 대해 y를 맞힘</li><li><b>교차검증</b>: 학습용과 검증용으로 나눠 평가</li></ul>
-          <p class="exp">예측이란 학습에 쓴 데이터를 설명하는 것이 아니라, 동일 조건에서 얻을 수 있는 미지의 데이터(검증 데이터)에 대해 x로 y를 맞히는 것입니다. 학습 데이터를 아무리 잘 맞혀도 새 데이터를 맞히지 못하면 의미가 없습니다. 그래서 데이터를 둘로 나눠 한쪽으로 학습하고 다른 쪽으로 평가합니다. K-분할 교차검증은 K개로 나눠 K−1개로 학습하고 1개로 검증하기를 K번 반복해 평균하며, K가 데이터 수와 같으면 Leave-one-out 교차검증입니다.</p>
+          <p class="exp">예측이란 학습에 쓴 데이터를 설명하는 것이 아니라, 동일 조건에서 얻을 수 있는 미지의 데이터(검증 데이터)에 대해 x로 y를 맞히는 것입니다. 학습 데이터를 아무리 잘 맞혀도 새 데이터를 맞히지 못하면 의미가 없습니다. 그래서 데이터를 둘로 나눠 한쪽으로 학습하고 다른 쪽으로 평가합니다. 정답에서 만든 변수나 미래 시점의 행이 학습에 들어가면 검증 점수는 실제 예측 성능이 아닙니다. K-분할 교차검증은 K개로 나눠 K−1개로 학습하고 1개로 검증하기를 K번 반복해 평균하며, K가 데이터 수와 같으면 Leave-one-out 교차검증입니다.</p>
           <p class="next"><span>다음 질문</span>학습 성능만 높으면 왜 문제일까?</p>
         </div>
       </div>
@@ -416,7 +416,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
         </div>
         <div class="side">
           <ul class="key"><li>판정 결과는 진양성·위양성·위음성·진음성</li><li><b>민감도</b>와 <b>특이도</b>는 서로 상충</li></ul>
-          <p class="exp">결함(양성)과 정상(음성)을 나누는 이진 클래스 분류에서는 실제 클래스와 예측 클래스로 4패턴을 셉니다. 민감도는 양성을 양성이라, 특이도는 음성을 음성이라 올바르게 판정할 비율입니다. 양성 적중률(32 ÷ 48 ≈ 0.67)은 양성이라 판정한 것 중 실제 양성의 비율입니다. 일반적으로 민감도가 높을수록 특이도는 낮아지는 상충 관계가 있습니다.</p>
+          <p class="exp">결함(양성)과 정상(음성)을 나누는 이진 클래스 분류에서는 실제 클래스와 예측 클래스로 4패턴을 셉니다. 민감도는 양성을 양성이라, 특이도는 음성을 음성이라 올바르게 판정할 비율입니다. 양성 적중률(32 ÷ 48 ≈ 0.67)은 양성이라 판정한 것 중 실제 양성의 비율입니다. 일반적으로 민감도가 높을수록 특이도는 낮아지는 상충 관계가 있습니다. 결함이 드물면 정답률만 높아도 결함을 거의 놓칠 수 있습니다.</p>
           <p class="next"><span>다음 질문</span>두 지표를 한 번에 보려면?</p>
         </div>
       </div>
@@ -509,7 +509,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
           <div class="stats three"><div><small>민감도</small><strong id="m34-se">-</strong></div><div><small>특이도</small><strong id="m34-sp">-</strong></div><div><small>정답률</small><strong id="m34-acc">-</strong></div></div>
           <p class="howto">도전: 결함을 36개 이상 잡으면서 정상 코일을 잘못 막는 수를 가장 적게 하는 역치를 찾아보세요.</p>
           <p class="pmsg" id="m34-msg"></p>
-          <div class="think"><span>생각해보기</span>결함을 놓치는 손해와 정상을 잘못 막는 손해 중 어느 쪽이 더 클까요?</div>
+          <div class="think" style="flex-wrap:wrap"><span>생각해보기</span>결함을 놓치는 손해와 정상을 잘못 막는 손해 중 어느 쪽이 더 클까요?<details style="flex-basis:100%;font-weight:600"><summary style="cursor:pointer">예시 답</summary>불량을 흘리는 손해가 더 크면 결함을 놓치지 않는 쪽을 우선합니다.</details></div>
         </div>
       </div>
     </section>
@@ -526,7 +526,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
           <div class="plabel" style="margin:0">결과 확인 · <span id="p2-count">0 / 0</span></div>
           <div class="bins" id="p2-bins" style="grid-template-columns:repeat(2,1fr)"></div>
           <div class="p2row"><p class="pmsg" id="p2-msg"></p><button class="btn ghost" id="p2-reset">다시 하기</button></div>
-          <div class="think"><span>생각해보기</span>판정 이유를 설명하기 쉬운 방법은 무엇일까요?</div>
+          <div class="think" style="flex-wrap:wrap"><span>생각해보기</span>판정 이유를 설명하기 쉬운 방법은 무엇일까요?<details style="flex-basis:100%;font-weight:600"><summary style="cursor:pointer">예시 답</summary>규칙이 보이는 나무 모형이나, 계수를 읽을 수 있는 회귀가 이유를 설명하기 쉽습니다.</details></div>
         </div>
       </div>
     </section>
@@ -545,7 +545,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
           <button class="btn" id="m34-check" style="align-self:flex-start">검증해서 확인</button>
           <div class="stats three"><div><small>학습 정답률</small><strong id="m34-tr">-</strong></div><div><small>내 예측</small><strong id="m34-mine">-</strong></div><div><small>검증 정답률</small><strong id="m34-act">?</strong></div></div>
           <p class="pmsg" id="m34-msg3"></p>
-          <div class="think"><span>생각해보기</span>현장 모형을 고를 때 학습 정답률만 보고 판단하면 어떤 일이 생길까요?</div>
+          <div class="think" style="flex-wrap:wrap"><span>생각해보기</span>현장 모형을 고를 때 학습 정답률만 보고 판단하면 어떤 일이 생길까요?<details style="flex-basis:100%;font-weight:600"><summary style="cursor:pointer">예시 답</summary>학습 데이터에만 맞고, 새 데이터에서는 성능이 떨어질 수 있습니다.</details></div>
         </div>
       </div>
     </section>
@@ -635,7 +635,11 @@ var GLOSSARY=[
 ];
 var REFS=[
  {n:1,title:"An introduction to ROC analysis",org:"T. Fawcett, Pattern Recognition Letters 27(8), 861–874, 2006",url:"https://doi.org/10.1016/j.patrec.2005.10.010",date:"2026-10-27 확인"},
- {n:2,title:"Random Forests",org:"L. Breiman, Machine Learning 45, 5–32, 2001",url:"https://doi.org/10.1023/A:1010933404324",date:"2026-10-27 확인"}
+ {n:2,title:"Random Forests",org:"L. Breiman, Machine Learning 45, 5–32, 2001",url:"https://doi.org/10.1023/A:1010933404324",date:"2026-10-27 확인"},
+ {n:3,title:"R을 활용한 통계학개론",org:"K-MOOC, KOCW 공개강의",url:"https://www.kocw.net/home/search/kemView.do?kemId=1517479",date:"2026-10-28 확인"},
+ {n:4,title:"공공데이터포털",org:"행정안전부",url:"https://www.data.go.kr",date:"2026-10-28 확인"},
+ {n:5,title:"AI-Hub 소개",org:"한국지능정보사회진흥원, AI-Hub",url:"https://www.aihub.or.kr/intrcn/intrcn.do",date:"2026-10-28 확인"},
+ {n:6,title:"AI 학습데이터 구축 안내서",org:"한국지능정보사회진흥원",url:"https://nia.or.kr/site/nia_kor/ex/bbs/View.do?bcIdx=28714&cbIdx=26537&parentSeq=28714",date:"2026-10-28 확인"}
 ];
 var NEXT={title:"M35 모형이란",line:"다음 모듈에서는 통계 모형, 기계학습 모형, 수리 모형을 나란히 놓고 현상을 이해하는 도구로서 모형의 역할을 살펴봅니다."};
 
@@ -952,9 +956,9 @@ for(var gi=0;gi<GLOSSARY.length;gi+=6){
 }
 (function(){
   var s=document.createElement("section");s.className="slide";s.dataset.step="6";s.id="end";
-  var refs=REFS.length?'<div class="pcol" style="gap:10px"><div class="plabel" style="margin:0">참고자료</div><ol class="refs">'+REFS.map(function(r){return '<li><span>['+r.n+']</span><div>'+r.title+', '+r.org+'. <a href="'+r.url+'" target="_blank" rel="noopener">'+r.url+'</a> ('+r.date+')</div></li>';}).join("")+'</ol></div>':'';
+  var refs=REFS.length?'<div class="pcol" style="gap:10px;min-height:0;overflow:hidden"><div class="plabel" style="margin:0">참고자료</div><ol class="refs">'+REFS.map(function(r){return '<li><span>['+r.n+']</span><div>'+r.title+', '+r.org+'. <a href="'+r.url+'" target="_blank" rel="noopener">'+r.url+'</a> ('+r.date+')</div></li>';}).join("")+'</ol></div>':'';
   s.innerHTML='<div class="sh"><div class="sec">마무리</div><h2>'+(REFS.length?"참고자료와 다음 모듈":"다음 모듈")+'</h2></div>'+
-    '<div class="body '+(REFS.length?'split even':'full')+'" style="align-content:center">'+refs+
+    '<div class="body '+(REFS.length?'split even':'full')+'" style="'+(REFS.length?'grid-template-rows:minmax(0,1fr)':'align-content:center')+'">'+refs+
     '<div class="pcol" style="justify-content:center"><div class="nextmod"><small>다음 모듈 · '+NEXT.title+'</small><strong>'+NEXT.line+'</strong></div></div></div>'+
     '<p class="foot">학습 상태는 저장되지 않습니다.</p>';
   vp.appendChild(s);

@@ -195,7 +195,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
 .gi .d{font-size:14px;line-height:1.5}
 .gi .e{font-size:12.5px;line-height:1.45;color:var(--gray)}
 .gi .e strong{color:var(--navy3)}
-.refs{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:8px;font-size:13.5px;line-height:1.5}
+.refs{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:8px;font-size:13.5px;line-height:1.5;overflow-y:auto;flex:1 1 auto;min-height:0}
 .refs li{display:grid;grid-template-columns:30px 1fr;gap:4px}
 .refs li span{font-weight:800;color:var(--navy3)}
 .refs a{color:var(--navy2);word-break:break-all}
@@ -221,7 +221,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
       <div class="sh"><div class="sec">학습개요</div>
         <h2 class="big">데이터의 유형과 성질을 확인하고, 두 집단 비교에 알맞은 검정을 고릅니다</h2></div>
       <div class="body split">
-        <div class="fig"><svg id="m14-ov" viewBox="0 0 440 260" role="img" aria-label="데이터 유형, 표본의 수, 정규성을 확인한 뒤 일표본·이표본·대응 있는 t검정이나 윌콕슨 순위합 검정을 고르는 흐름"></svg></div>
+        <div class="fig"><svg id="m14-ov" viewBox="0 0 440 260" role="img" aria-label="독립·대응과 분포의 모양을 확인한 뒤 일표본·이표본·대응 t검정이나 윌콕슨 순위합 검정을 고릅니다. 정규성 p값만으로 고르지 않습니다"></svg></div>
         <div class="side">
           <div class="prevlink"><small>지난 모듈에서는</small>검정 결과를 오차 막대와 별표로 읽고, 판단에 따르는 제1종·제2종 오류와 검정력을 배웠습니다.<small style="margin-top:8px">이번 모듈에서는</small>가설검정 방법을 데이터에 맞게 고르는 기준과, 두 집단의 평균값(대푯값)을 비교하는 여러 검정을 배웁니다.</div>
           <dl class="meta"><dt>학습 시간</dt><dd>약 40분</dd><dt>본문</dt><dd>소단원 5개</dd><dt>실습</dt><dd>조작형 · 분류형 · 추정형</dd></dl>
@@ -246,7 +246,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
       <div class="body full" style="align-content:center">
         <div class="gmap">
           <div></div><div class="hd">목표</div><div class="hd">확인하는 문항</div><div class="hd">연결 실습</div>
-          <div class="gn">1</div><div class="gt"><span>데이터 유형, 표본의 수, 정규성을 보고 알맞은 검정을 <b>구분한다</b>.</span></div>
+          <div class="gn">1</div><div class="gt"><span>독립·대응, 분포의 모양과 이상치를 보고 알맞은 검정을 <b>구분한다</b>.</span></div>
           <div class="ga"><button class="jump" data-jump="q1">문항 1·2</button></div><div class="gp"><button class="jump" data-jump="p2">실습 2 분류</button></div>
           <div class="gn">2</div><div class="gt"><span>대응 관계에 따라 t검정을 고르고 t값을 <b>계산한다</b>.</span></div>
           <div class="ga"><button class="jump" data-jump="q3">문항 3·4</button></div><div class="gp"><button class="jump" data-jump="p1">실습 1 조작</button></div>
@@ -441,7 +441,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
         <div class="fig"><svg id="m14-trap" viewBox="0 0 420 270" role="img" aria-label="정규성 검정의 세 가지 주의점: 증거가 아님, 검정 반복, 표본이 크면 작은 차이에도 기각"></svg></div>
         <div class="side">
           <ul class="key"><li>p &gt; 0.05는 정규분포라는 증거가 아닙니다.</li><li>정규성 검정 결과만으로 정하지 않습니다.</li></ul>
-          <p class="exp">p ≥ 0.05면 정규성이 있다고 판단하는 경우가 많지만, 귀무가설을 기각할 수 없다는 뜻일 뿐 귀무가설이 옳다는 증거는 아닙니다. 또 정규성 검정을 한 뒤 t검정을 하면 가설검정을 반복하는 검정 다중성 문제가 생기고, 표본이 크면 정규분포에서 아주 조금만 벗어나도 p &lt; 0.05가 됩니다. 그래서 정규성을 판단하는 완벽한 방법은 없다고 보는 편이 좋습니다.</p>
+          <p class="exp">p ≥ 0.05면 정규성이 있다고 판단하는 경우가 많지만, 귀무가설을 기각할 수 없다는 뜻일 뿐 귀무가설이 옳다는 증거는 아닙니다. 정규성 검정의 p값만 보고 t검정을 자동으로 고르면 절차가 데이터에 의존해 최종 추론이 달라질 수 있습니다. 이것은 여러 쌍을 비교할 때의 검정 다중성과는 다른 문제입니다. 먼저 자료가 독립인지 대응되는지, 심한 이상치나 왜도가 있는지를 보고, 독립 집단에서 등분산이 확실하지 않으면 웰치의 t검정을 우선 검토합니다. 표본이 크면 정규분포에서 아주 조금만 벗어나도 p &lt; 0.05가 됩니다.</p>
           <p class="next"><span>다음 질문</span>두 집단의 분산이 같은지도 확인해야 할까?</p>
         </div>
       </div>
@@ -591,7 +591,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
           <div class="stats"><div><small>대응 없는 t검정 p</small><strong id="m14-pu">-</strong></div><div><small>대응 있는 t검정 p</small><strong id="m14-pp">-</strong></div></div>
           <p class="howto">도전: 대응 있는 검정은 유의(p &lt; 0.05)하지만 대응 없는 검정은 유의하지 않은 조건을 찾아보세요.</p>
           <p class="pmsg" id="m14-msg"></p>
-          <div class="think"><span>생각해보기</span>변화의 흔들림을 키우면 대응 있는 검정의 장점은 어떻게 되나요?</div>
+          <div class="think" style="flex-wrap:wrap"><span>생각해보기</span>변화의 흔들림을 키우면 대응 있는 검정의 장점은 어떻게 되나요?<details style="flex-basis:100%;font-weight:600"><summary style="cursor:pointer">예시 답</summary>개인 차이를 빼는 이득이 줄어 대응의 장점이 약해집니다.</details></div>
         </div>
       </div>
     </section>
@@ -608,7 +608,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
           <div class="plabel" style="margin:0">결과 확인 · <span id="p2-count">0 / 0</span></div>
           <div class="bins" id="p2-bins" style="grid-template-columns:repeat(2,1fr)"></div>
           <div class="p2row"><p class="pmsg" id="p2-msg"></p><button class="btn ghost" id="p2-reset">다시 하기</button></div>
-          <div class="think"><span>생각해보기</span>같은 설비를 정비 전후로 쟀는데 대응 없는 검정을 쓰면 무엇을 잃나요?</div>
+          <div class="think" style="flex-wrap:wrap"><span>생각해보기</span>같은 설비를 정비 전후로 쟀는데 대응 없는 검정을 쓰면 무엇을 잃나요?<details style="flex-basis:100%;font-weight:600"><summary style="cursor:pointer">예시 답</summary>같은 설비의 전후 짝을 무시해, 설비마다의 차이가 오차에 섞입니다.</details></div>
         </div>
       </div>
     </section>
@@ -627,7 +627,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
           <button class="btn" id="m14-check" style="align-self:flex-start">순위를 매겨 확인</button>
           <div class="stats"><div><small>내 예측</small><strong id="m14-mine">-</strong></div><div><small>실제 순위합</small><strong id="m14-act">?</strong></div></div>
           <p class="pmsg" id="m14-msg3"></p>
-          <div class="think"><span>생각해보기</span>위약군에서 가장 높은 155가 255였다면 순위합은 바뀌나요?</div>
+          <div class="think" style="flex-wrap:wrap"><span>생각해보기</span>위약군에서 가장 높은 155가 255였다면 순위합은 바뀌나요?<details style="flex-basis:100%;font-weight:600"><summary style="cursor:pointer">예시 답</summary>255도 여전히 가장 높은 값이면 순위가 그대로라 순위합은 바뀌지 않습니다.</details></div>
         </div>
       </div>
     </section>
@@ -707,7 +707,10 @@ var GLOSSARY=[
 ];
 var REFS=[
  {n:1,title:"Hypertension (Fact sheet)",org:"World Health Organization, 2025-09-25",url:"https://www.who.int/news-room/fact-sheets/detail/hypertension",date:"2026-10-25 확인"},
- {n:2,title:"Why Psychologists Should by Default Use Welch's t-test Instead of Student's t-test",org:"M. Delacre, D. Lakens, C. Leys, International Review of Social Psychology 30(1), 92–101, 2017",url:"https://doi.org/10.5334/irsp.82",date:"2026-10-25 확인"}
+ {n:2,title:"Why Psychologists Should by Default Use Welch's t-test Instead of Student's t-test",org:"M. Delacre, D. Lakens, C. Leys, International Review of Social Psychology 30(1), 92–101, 2017",url:"https://doi.org/10.5334/irsp.82",date:"2026-10-25 확인"},
+ {n:3,title:"데이터로 배우는 통계학",org:"K-MOOC",url:"https://www.kmooc.kr/view/course/detail/20384",date:"2026-10-28 확인"},
+ {n:4,title:"기초통계학Ⅱ",org:"여인권, 숙명여자대학교, KOCW 공개강의",url:"https://www.kocw.net/home/search/kemView.do?kemId=1080231",date:"2026-10-28 확인"},
+ {n:5,title:"R을 활용한 통계학개론",org:"K-MOOC, KOCW 공개강의",url:"https://www.kocw.net/home/search/kemView.do?kemId=1517479",date:"2026-10-28 확인"}
 ];
 var NEXT={title:"M15 세 집단 이상 비교",line:"비교할 집단이 3개 이상이면 t검정을 여러 번 반복해서는 안 됩니다. 다음 모듈에서는 분산분석과 다중비교 검정을 배웁니다."};
 
@@ -912,7 +915,7 @@ on("m14-qq",function(s){
 });
 
 on("m14-trap",function(s){
-  var R=[["①","p ≥ 0.05는 증거가 아님","기각하지 못했을 뿐, 정규분포라는 뜻이 아님"],["②","검정을 두 번 하는 셈","정규성 검정 → t검정 = 검정 다중성 문제"],["③","표본이 크면 너무 예민함","조금만 벗어나도 p < 0.05가 됨"]];
+  var R=[["①","p ≥ 0.05는 증거가 아님","기각하지 못했을 뿐, 정규분포라는 뜻이 아님"],["②","p만으로 방법을 고르지 않음","다중비교와는 다른 문제입니다"],["③","표본이 크면 너무 예민함","조금만 벗어나도 p < 0.05가 됨"]];
   R.forEach(function(r,i){var y=8+i*86;bxF(s,6,y,408,76,i===0?"#FCF3D9":"#F3F5F9",i===0?C.amber:null);el("circle",{cx:38,cy:y+38,r:16,fill:i===0?C.amber:C.navy3},s);tF(s,38,y+43,r[0],{fw:800,fs:13,c:"#fff"});
     tF(s,66,y+32,r[1],{a:"start",fw:800,fs:13.5});tF(s,66,y+54,r[2],{a:"start",fs:11,c:"#22262E"});});
 });
@@ -1065,9 +1068,9 @@ for(var gi=0;gi<GLOSSARY.length;gi+=6){
 }
 (function(){
   var s=document.createElement("section");s.className="slide";s.dataset.step="6";s.id="end";
-  var refs=REFS.length?'<div class="pcol" style="gap:10px"><div class="plabel" style="margin:0">참고자료</div><ol class="refs">'+REFS.map(function(r){return '<li><span>['+r.n+']</span><div>'+r.title+', '+r.org+'. <a href="'+r.url+'" target="_blank" rel="noopener">'+r.url+'</a> ('+r.date+')</div></li>';}).join("")+'</ol></div>':'';
+  var refs=REFS.length?'<div class="pcol" style="gap:10px;min-height:0;overflow:hidden"><div class="plabel" style="margin:0">참고자료</div><ol class="refs">'+REFS.map(function(r){return '<li><span>['+r.n+']</span><div>'+r.title+', '+r.org+'. <a href="'+r.url+'" target="_blank" rel="noopener">'+r.url+'</a> ('+r.date+')</div></li>';}).join("")+'</ol></div>':'';
   s.innerHTML='<div class="sh"><div class="sec">마무리</div><h2>'+(REFS.length?"참고자료와 다음 모듈":"다음 모듈")+'</h2></div>'+
-    '<div class="body '+(REFS.length?'split even':'full')+'" style="align-content:center">'+refs+
+    '<div class="body '+(REFS.length?'split even':'full')+'" style="'+(REFS.length?'grid-template-rows:minmax(0,1fr)':'align-content:center')+'">'+refs+
     '<div class="pcol" style="justify-content:center"><div class="nextmod"><small>다음 모듈 · '+NEXT.title+'</small><strong>'+NEXT.line+'</strong></div></div></div>'+
     '<p class="foot">학습 상태는 저장되지 않습니다.</p>';
   vp.appendChild(s);

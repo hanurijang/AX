@@ -195,7 +195,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
 .gi .d{font-size:14px;line-height:1.5}
 .gi .e{font-size:12.5px;line-height:1.45;color:var(--gray)}
 .gi .e strong{color:var(--navy3)}
-.refs{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:8px;font-size:13.5px;line-height:1.5}
+.refs{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:8px;font-size:13.5px;line-height:1.5;overflow-y:auto;flex:1 1 auto;min-height:0}
 .refs li{display:grid;grid-template-columns:30px 1fr;gap:4px}
 .refs li span{font-weight:800;color:var(--navy3)}
 .refs a{color:var(--navy2);word-break:break-all}
@@ -223,7 +223,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
       <div class="body split">
         <div class="fig"><svg id="m35-ov" viewBox="0 0 440 260" role="img" aria-label="복잡한 실제 현상을 간략화해 모형을 만들고, 통계·기계학습 모형은 데이터에서, 수리 모형은 메커니즘에서 출발하는 흐름"></svg></div>
         <div class="side">
-          <div class="prevlink"><small>지난 모듈에서는</small>정답 데이터로 관계를 학습하는 지도 학습에서 교차검증, 분류와 회귀의 성능 지표, 여러 분류 방법을 배웠습니다.<small style="margin-top:8px">이번 모듈에서는</small>통계 모형, 기계학습 모형과 함께 새로운 수리 모형을 나란히 놓고, 모형이 현상을 이해하는 도구라는 의미와 수리 모형의 종류·분석 방법을 살펴봅니다.</div>
+          <div class="prevlink"><small>지난 모듈에서는</small>정답 데이터로 관계를 학습하는 지도 학습에서 교차검증, 분류와 회귀의 성능 지표, 여러 분류 방법을 배웠습니다. 그 예측 모형도 현실을 단순화한 모형입니다.<small style="margin-top:8px">이번 모듈에서는</small>통계 모형, 기계학습 모형과 함께 새로운 수리 모형을 나란히 놓고, 모형이 현상을 이해하는 도구라는 의미와 수리 모형의 종류·분석 방법을 살펴봅니다.</div>
           <dl class="meta"><dt>학습 시간</dt><dd>약 35분</dd><dt>본문</dt><dd>소단원 4개</dd><dt>실습</dt><dd>조작형 · 분류형 · 추정형</dd></dl>
         </div>
       </div>
@@ -495,7 +495,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
           <div class="stats three"><div><small>48시간 뒤</small><strong id="m35-t48">-</strong></div><div><small>100℃ 도달</small><strong id="m35-t100">-</strong></div><div><small>측정값과 오차²합</small><strong id="m35-sse">-</strong></div></div>
           <p class="howto">도전: 오차 제곱합이 가장 작은 k를 찾고, 주변 온도 0℃와 35℃의 100℃ 도달 시간을 비교하세요.</p>
           <p class="pmsg" id="m35-msg"></p>
-          <div class="think"><span>생각해보기</span>우리 공장 모형에서 데이터로 정해야 할 파라미터는 무엇일까요?</div>
+          <div class="think" style="flex-wrap:wrap"><span>생각해보기</span>우리 공장 모형에서 데이터로 정해야 할 파라미터는 무엇일까요?<details style="flex-basis:100%;font-weight:600"><summary style="cursor:pointer">예시 답</summary>식의 계수, 예를 들어 증가율이나 포화 한계처럼 데이터로 맞출 값입니다.</details></div>
         </div>
       </div>
     </section>
@@ -512,7 +512,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
           <div class="plabel" style="margin:0">결과 확인 · <span id="p2-count">0 / 0</span></div>
           <div class="bins" id="p2-bins"></div>
           <div class="p2row"><p class="pmsg" id="p2-msg"></p><button class="btn ghost" id="p2-reset">다시 하기</button></div>
-          <div class="think"><span>생각해보기</span>우리 공정에서 원리를 식으로 쓸 수 있는 현상은 무엇일까요?</div>
+          <div class="think" style="flex-wrap:wrap"><span>생각해보기</span>우리 공정에서 원리를 식으로 쓸 수 있는 현상은 무엇일까요?<details style="flex-basis:100%;font-weight:600"><summary style="cursor:pointer">예시 답</summary>온도에 따른 반응이나 보존 관계처럼 메커니즘을 식으로 쓸 수 있는 현상입니다.</details></div>
         </div>
       </div>
     </section>
@@ -531,7 +531,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
           <button class="btn" id="m35-check" style="align-self:flex-start">재 보고 확인</button>
           <div class="stats three"><div><small>내 예측</small><strong id="m35-mine">-</strong></div><div><small>실제 측정</small><strong id="m35-act">?</strong></div><div><small>수리 모형</small><strong id="m35-mod">?</strong></div></div>
           <p class="pmsg" id="m35-msg3"></p>
-          <div class="think"><span>생각해보기</span>데이터 범위 밖을 예측할 때 무엇을 먼저 확인해야 할까요?</div>
+          <div class="think" style="flex-wrap:wrap"><span>생각해보기</span>데이터 범위 밖을 예측할 때 무엇을 먼저 확인해야 할까요?<details style="flex-basis:100%;font-weight:600"><summary style="cursor:pointer">예시 답</summary>예측하려는 값이 배운 범위 안인지, 그때의 가정이 그대로인지를 먼저 확인합니다.</details></div>
         </div>
       </div>
     </section>
@@ -611,7 +611,9 @@ var GLOSSARY=[
 ];
 var REFS=[
  {n:1,title:"Robustness in the Strategy of Scientific Model Building",org:"G. E. P. Box, Robustness in Statistics, Academic Press, 201–236, 1979",url:"https://www.gwern.net/doc/statistics/decision/1979-box.pdf",date:"2026-10-27 확인"},
- {n:2,title:"Newton's law of cooling revisited",org:"M. Vollmer, European Journal of Physics 30(5), 1063–1084, 2009",url:"https://doi.org/10.1088/0143-0807/30/5/014",date:"2026-10-27 확인"}
+ {n:2,title:"Newton's law of cooling revisited",org:"M. Vollmer, European Journal of Physics 30(5), 1063–1084, 2009",url:"https://doi.org/10.1088/0143-0807/30/5/014",date:"2026-10-27 확인"},
+ {n:3,title:"R을 활용한 통계학개론",org:"K-MOOC, KOCW 공개강의",url:"https://www.kocw.net/home/search/kemView.do?kemId=1517479",date:"2026-10-28 확인"},
+ {n:4,title:"데이터로 배우는 통계학",org:"K-MOOC",url:"https://www.kmooc.kr/view/course/detail/20384",date:"2026-10-28 확인"}
 ];
 var NEXT={title:"M36 미분 방정식 모형",line:"다음 모듈에서는 대표적인 결정론 모형인 미분 방정식과 차분 방정식으로 수의 변화와 감염병 확산을 모형으로 만들어 봅니다."};
 
@@ -894,9 +896,9 @@ for(var gi=0;gi<GLOSSARY.length;gi+=6){
 }
 (function(){
   var s=document.createElement("section");s.className="slide";s.dataset.step="6";s.id="end";
-  var refs=REFS.length?'<div class="pcol" style="gap:10px"><div class="plabel" style="margin:0">참고자료</div><ol class="refs">'+REFS.map(function(r){return '<li><span>['+r.n+']</span><div>'+r.title+', '+r.org+'. <a href="'+r.url+'" target="_blank" rel="noopener">'+r.url+'</a> ('+r.date+')</div></li>';}).join("")+'</ol></div>':'';
+  var refs=REFS.length?'<div class="pcol" style="gap:10px;min-height:0;overflow:hidden"><div class="plabel" style="margin:0">참고자료</div><ol class="refs">'+REFS.map(function(r){return '<li><span>['+r.n+']</span><div>'+r.title+', '+r.org+'. <a href="'+r.url+'" target="_blank" rel="noopener">'+r.url+'</a> ('+r.date+')</div></li>';}).join("")+'</ol></div>':'';
   s.innerHTML='<div class="sh"><div class="sec">마무리</div><h2>'+(REFS.length?"참고자료와 다음 모듈":"다음 모듈")+'</h2></div>'+
-    '<div class="body '+(REFS.length?'split even':'full')+'" style="align-content:center">'+refs+
+    '<div class="body '+(REFS.length?'split even':'full')+'" style="'+(REFS.length?'grid-template-rows:minmax(0,1fr)':'align-content:center')+'">'+refs+
     '<div class="pcol" style="justify-content:center"><div class="nextmod"><small>다음 모듈 · '+NEXT.title+'</small><strong>'+NEXT.line+'</strong></div></div></div>'+
     '<p class="foot">학습 상태는 저장되지 않습니다.</p>';
   vp.appendChild(s);

@@ -195,7 +195,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
 .gi .d{font-size:14px;line-height:1.5}
 .gi .e{font-size:12.5px;line-height:1.45;color:var(--gray)}
 .gi .e strong{color:var(--navy3)}
-.refs{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:8px;font-size:13.5px;line-height:1.5}
+.refs{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:8px;font-size:13.5px;line-height:1.5;overflow-y:auto;flex:1 1 auto;min-height:0}
 .refs li{display:grid;grid-template-columns:30px 1fr;gap:4px}
 .refs li span{font-weight:800;color:var(--navy3)}
 .refs a{color:var(--navy2);word-break:break-all}
@@ -453,8 +453,8 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
           </div>
         </div>
         <div class="side">
-          <ul class="key"><li><b>Cohen's d</b>: 평균 차이 ÷ 표준편차</li><li>불편표준편차를 쓰면 <b>Hedges' g</b></li></ul>
-          <p class="exp">p &lt; 0.05를 얻어 유의한 차이가 있음을 알았다 해도, 이는 귀무가설이 옳다고 생각하기 어려움을 나타낼 뿐 평균값에 얼마나 차이가 있는지는 말해 주지 않습니다. 그러므로 얼마만큼의 효과가 있는지 나타내는 효과크기도 함께 표기하는 것이 바람직합니다. 2개 집단 평균값 차이의 효과크기로는 모집단의 분산을 기준으로 두 평균이 얼마나 떨어져 있는지 나타내는 Cohen's d가 있습니다. 불편표준편차를 이용해 n<sub>A</sub>, n<sub>B</sub>를 n<sub>A</sub> − 1, n<sub>B</sub> − 1로 하면 Hedges' g가 되며, 이 예에서는 9.0 ÷ 10.21 ≈ 0.88입니다.</p>
+          <ul class="key"><li><b>Cohen's d</b>: 평균 차이 ÷ 표준편차</li><li>Hedges' g는 d에 소표본 보정 <b>J</b>를 곱함</li></ul>
+          <p class="exp">p &lt; 0.05를 얻어 유의한 차이가 있음을 알았다 해도, 이는 귀무가설이 옳다고 생각하기 어려움을 나타낼 뿐 평균값에 얼마나 차이가 있는지는 말해 주지 않습니다. 그러므로 얼마만큼의 효과가 있는지 나타내는 효과크기도 함께 표기하는 것이 바람직합니다. 2개 집단 평균값 차이의 효과크기로는 모집단의 분산을 기준으로 두 평균이 얼마나 떨어져 있는지 나타내는 Cohen's d가 있습니다. 교재는 n<sub>A</sub>, n<sub>B</sub> 대신 n<sub>A</sub> − 1, n<sub>B</sub> − 1을 쓴 결과를 Hedges' g로 두며, 이 예에서는 9.0 ÷ 10.21 ≈ 0.88입니다. g의 표준 정의는 그 분모 교정이 아니라 d에 소표본 보정 J를 곱하는 것입니다. df = n<sub>A</sub> + n<sub>B</sub> − 2일 때 J ≈ 1 − 3/(4df − 1)이고, 이 예의 d ≈ 0.91에 곱하면 약 0.89입니다.</p>
           <p class="next"><span>다음 질문</span>왜 표준편차로 나눌까?</p>
         </div>
       </div>
@@ -517,7 +517,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
           <div class="stats three"><div><small>효과크기 d</small><strong id="m25-dv">-</strong></div><div><small>검정력</small><strong id="m25-pw">-</strong></div><div><small>평균 p값</small><strong id="m25-mp">-</strong></div></div>
           <p class="howto">도전: 차이 10 MPa(d = 1)에서 검정력이 처음 0.8을 넘는 n을 찾아보세요.</p>
           <p class="pmsg" id="m25-msg"></p>
-          <div class="think"><span>생각해보기</span>n을 늘려도 d가 변하지 않는 이유는 무엇일까요?</div>
+          <div class="think" style="flex-wrap:wrap"><span>생각해보기</span>n을 늘려도 d가 변하지 않는 이유는 무엇일까요?<details style="flex-basis:100%;font-weight:600"><summary style="cursor:pointer">예시 답</summary>d는 평균 차이를 표준편차로 나눈 값이라 식에 n이 없기 때문입니다.</details></div>
         </div>
       </div>
     </section>
@@ -534,7 +534,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
           <div class="plabel" style="margin:0">결과 확인 · <span id="p2-count">0 / 0</span></div>
           <div class="bins" id="p2-bins" style="grid-template-columns:repeat(2,1fr)"></div>
           <div class="p2row"><p class="pmsg" id="p2-msg"></p><button class="btn ghost" id="p2-reset">다시 하기</button></div>
-          <div class="think"><span>생각해보기</span>관찰 데이터처럼 n이 이미 정해진 경우에는 어떻게 보고하면 좋을까요?</div>
+          <div class="think" style="flex-wrap:wrap"><span>생각해보기</span>관찰 데이터처럼 n이 이미 정해진 경우에는 어떻게 보고하면 좋을까요?<details style="flex-basis:100%;font-weight:600"><summary style="cursor:pointer">예시 답</summary>p와 함께 효과크기와 신뢰구간을 보고합니다.</details></div>
         </div>
       </div>
     </section>
@@ -553,7 +553,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
           <button class="btn" id="m25-check" style="align-self:flex-start">계산해서 확인</button>
           <div class="stats three"><div><small>내 예측</small><strong id="m25-mine">-</strong></div><div><small>실제 d</small><strong id="m25-act">?</strong></div><div><small>크기</small><strong id="m25-lv">?</strong></div></div>
           <p class="pmsg" id="m25-msg3"></p>
-          <div class="think"><span>생각해보기</span>평균 차이가 같은데 d가 달라지는 상황은 무엇이었나요?</div>
+          <div class="think" style="flex-wrap:wrap"><span>생각해보기</span>평균 차이가 같은데 d가 달라지는 상황은 무엇이었나요?<details style="flex-basis:100%;font-weight:600"><summary style="cursor:pointer">예시 답</summary>평균 차이는 같은데 표준편차가 다르면 d가 달라집니다.</details></div>
         </div>
       </div>
     </section>
@@ -623,7 +623,7 @@ var GLOSSARY=[
  ["피셔류 검정","Fisher's significance test","귀무가설이 옳을 때의 p값을 계산해 귀무가설과 데이터의 괴리 정도, 즉 증거의 강력함을 평가하는 검정입니다.","p = 0.015를 그대로 기재"],
  ["네이만-피어슨류 검정","Neyman–Pearson hypothesis test","대립가설을 세우고 제1종·제2종 오류를 고려해, p값이 α 미만인지로 기각/채택을 결정하는 검정입니다.","d = 1, α 0.05, 검정력 0.8 → n = 17"],
  ["Cohen's d","Cohen's d","두 집단 평균값의 차이를 표준편차로 나누어, 차이가 표준편차의 몇 배인지 나타낸 효과크기입니다.","(509.0 − 500.0) ÷ 9.90 ≈ 0.91"],
- ["Hedges' g","Hedges' g","Cohen's d를 계산할 때 불편표준편차를 사용해 작은 표본에서의 치우침을 줄인 효과크기입니다.","9.0 ÷ 10.21 ≈ 0.88"],
+ ["Hedges' g","Hedges' g","소표본에서 d의 치우침을 줄이려고 g = J × d로 보정한 효과크기입니다. J ≈ 1 − 3/(4df − 1), df = nA + nB − 2입니다. 교재는 n−1 표준편차로 나눈 값을 g로 두기도 합니다.","d ≈ 0.91에 J를 곱하면 약 0.89"],
  ["메타 분석","meta-analysis","어떤 현상을 보고한 여러 논문을 통합해 결과를 종합적으로 평가하는 방법입니다.","여러 공장의 열처리 시험 결과를 d로 모아 평가"],
  ["에타제곱","eta squared, η²","분산분석에서 어떤 요인의 제곱합이 전체 제곱합에서 차지하는 비율로, 분산 설명률이라고도 합니다.","소 0.01 · 중 0.06 · 대 0.14"],
  ["Cramér's V","Cramér's V","2×2 이외의 분할표에서 행과 열이 관련된 정도를 0~1로 나타내는 효과크기로, 연관계수라고도 합니다.","열처리 조건 3가지 × 등급 3가지 분할표"]
@@ -631,7 +631,8 @@ var GLOSSARY=[
 var REFS=[
  {n:1,title:"The ASA Statement on p-Values: Context, Process, and Purpose",org:"R. L. Wasserstein, N. A. Lazar, The American Statistician 70(2), 129–133, 2016",url:"https://doi.org/10.1080/00031305.2016.1154108",date:"2026-10-27 확인"},
  {n:2,title:"Redefine statistical significance",org:"D. J. Benjamin 외, Nature Human Behaviour 2, 6–10, 2018",url:"https://doi.org/10.1038/s41562-017-0189-z",date:"2026-10-27 확인"},
- {n:3,title:"Statistical Power Analysis for the Behavioral Sciences (2nd ed.)",org:"J. Cohen, Lawrence Erlbaum Associates, 1988",url:"https://www.routledge.com/9780805802832",date:"2026-10-27 확인"}
+ {n:3,title:"Statistical Power Analysis for the Behavioral Sciences (2nd ed.)",org:"J. Cohen, Lawrence Erlbaum Associates, 1988",url:"https://www.routledge.com/9780805802832",date:"2026-10-27 확인"},
+ {n:4,title:"데이터로 배우는 통계학",org:"K-MOOC",url:"https://www.kmooc.kr/view/course/detail/20384",date:"2026-10-28 확인"}
 ];
 var NEXT={title:"M26 베이즈 인수와 좋은 가설",line:"다음 모듈에서는 p값 대신 쓸 수 있는 베이즈 인수, 논문의 결론이 옳지 않을 확률, 좋은 가설을 세우는 법을 살펴봅니다."};
 
@@ -934,9 +935,9 @@ for(var gi=0;gi<GLOSSARY.length;gi+=6){
 }
 (function(){
   var s=document.createElement("section");s.className="slide";s.dataset.step="6";s.id="end";
-  var refs=REFS.length?'<div class="pcol" style="gap:10px"><div class="plabel" style="margin:0">참고자료</div><ol class="refs">'+REFS.map(function(r){return '<li><span>['+r.n+']</span><div>'+r.title+', '+r.org+'. <a href="'+r.url+'" target="_blank" rel="noopener">'+r.url+'</a> ('+r.date+')</div></li>';}).join("")+'</ol></div>':'';
+  var refs=REFS.length?'<div class="pcol" style="gap:10px;min-height:0;overflow:hidden"><div class="plabel" style="margin:0">참고자료</div><ol class="refs">'+REFS.map(function(r){return '<li><span>['+r.n+']</span><div>'+r.title+', '+r.org+'. <a href="'+r.url+'" target="_blank" rel="noopener">'+r.url+'</a> ('+r.date+')</div></li>';}).join("")+'</ol></div>':'';
   s.innerHTML='<div class="sh"><div class="sec">마무리</div><h2>'+(REFS.length?"참고자료와 다음 모듈":"다음 모듈")+'</h2></div>'+
-    '<div class="body '+(REFS.length?'split even':'full')+'" style="align-content:center">'+refs+
+    '<div class="body '+(REFS.length?'split even':'full')+'" style="'+(REFS.length?'grid-template-rows:minmax(0,1fr)':'align-content:center')+'">'+refs+
     '<div class="pcol" style="justify-content:center"><div class="nextmod"><small>다음 모듈 · '+NEXT.title+'</small><strong>'+NEXT.line+'</strong></div></div></div>'+
     '<p class="foot">학습 상태는 저장되지 않습니다.</p>';
   vp.appendChild(s);

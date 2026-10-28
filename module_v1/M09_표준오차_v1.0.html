@@ -195,7 +195,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
 .gi .d{font-size:14px;line-height:1.5}
 .gi .e{font-size:12.5px;line-height:1.45;color:var(--gray)}
 .gi .e strong{color:var(--navy3)}
-.refs{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:8px;font-size:13.5px;line-height:1.5}
+.refs{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:8px;font-size:13.5px;line-height:1.5;overflow-y:auto;flex:1 1 auto;min-height:0}
 .refs li{display:grid;grid-template-columns:30px 1fr;gap:4px}
 .refs li span{font-weight:800;color:var(--navy3)}
 .refs a{color:var(--navy2);word-break:break-all}
@@ -433,15 +433,15 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
         <div class="figcol">
           <div class="fig"><svg id="m9-n1" viewBox="0 0 420 150" role="img" aria-label="10명의 편차 제곱합 426.9를 9로 나눌 때와 10으로 나눌 때"></svg></div>
           <div class="math">
-            <div class="mt">핵심 수학 개념 · 비편향표준편차</div>
+            <div class="mt">핵심 수학 개념 · 표본분산과 표본표준편차</div>
             <div class="f">s = √( Σ(xᵢ − x̄)² ÷ (n − 1) )</div>
             <div class="r"><span>계산</span><span>10명: 편차 제곱합 426.9 → √(426.9 ÷ 9) ≈ 6.9cm (n으로 나누면 6.5cm)</span></div>
-            <div class="r"><span>해석</span><span>n으로 나누면 σ를 과소평가하므로 n−1로 보정합니다.</span></div>
+            <div class="r"><span>해석</span><span>n−1로 나눈 s²이 모분산의 비편향추정량입니다. s 자체는 일반적으로 σ의 비편향추정량이 아닙니다.</span></div>
           </div>
         </div>
         <div class="side">
-          <ul class="key"><li><b>비편향표준편차</b> s: n−1로 나눈 표준편차</li><li>s²은 비편향분산이라 합니다.</li></ul>
-          <p class="exp">원래는 각 값이 μ에서 얼마나 떨어졌는지 (xᵢ − μ)²로 재야 하지만 μ를 모르므로 (xᵢ − x̄)²로 바꿔 계산합니다. 각 값은 μ보다 x̄에 더 가까이 있을 것이므로 (xᵢ − x̄)²의 합은 (xᵢ − μ)²의 합보다 작아집니다. 그래서 n으로 나누면 σ를 과소평가하게 되고, n−1로 나눠 보정합니다. 데이터의 퍼짐을 기술할 때는 n으로 나눠도 문제없습니다.</p>
+          <ul class="key"><li><b>표본표준편차</b> s: n−1로 나눈 뒤의 제곱근</li><li>비편향인 것은 s²입니다.</li></ul>
+          <p class="exp">원래는 각 값이 μ에서 얼마나 떨어졌는지 (xᵢ − μ)²로 재야 하지만 μ를 모르므로 (xᵢ − x̄)²로 바꿔 계산합니다. 각 값은 μ보다 x̄에 더 가까이 있을 것이므로 (xᵢ − x̄)²의 합은 (xᵢ − μ)²의 합보다 작아집니다. 그래서 n으로 나누면 모분산을 과소평가하게 되고, n−1로 나눈 s²이 모분산 σ²의 비편향추정량이 됩니다. 그 제곱근 s는 표본표준편차이며, 엄밀히 말해 일반적으로 σ의 비편향추정량은 아닙니다. 관측값의 퍼짐을 기술할 때는 n으로 나눠도 됩니다.</p>
           <p class="next"><span>다음 질문</span>표본으로 표준오차를 어떻게 구할까?</p>
         </div>
       </div>
@@ -461,7 +461,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
         </div>
         <div class="side">
           <ul class="key"><li><b>표준오차</b>: 표본오차 분포의 표준편차</li><li>실제로는 s/√n으로 계산합니다.</li></ul>
-          <p class="exp">표본평균 분포의 평균이 μ이므로, 분포 전체를 μ만큼 옮긴 표본오차 x̄ − μ의 분포는 평균 0, 표준편차 σ/√n입니다. 이 σ/√n을 표준오차라 합니다. σ는 보통 알 수 없는 미지의 값이어서, 표본에서 추정한 비편향표준편차 s를 대신 쓴 s/√n을 표준오차로 삼습니다. 이때의 표본오차는 정확히는 정규분포와 매우 닮은 t분포를 따릅니다.</p>
+          <p class="exp">표본평균 분포의 평균이 μ이므로, 분포 전체를 μ만큼 옮긴 표본오차 x̄ − μ의 분포는 평균 0, 표준편차 σ/√n입니다. 이 σ/√n을 표준오차라 합니다. σ는 보통 알 수 없는 미지의 값이어서, 표본표준편차 s를 대신 쓴 s/√n을 표준오차로 삼습니다. 이때의 표본오차는 정확히는 정규분포와 매우 닮은 t분포를 따릅니다.</p>
           <p class="next"><span>정리</span>배운 개념을 나란히 놓아 봅시다.</p>
         </div>
       </div>
@@ -500,7 +500,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
           <div class="stats three"><div><small>모평균</small><strong id="m9-mu">-</strong></div><div><small>표본평균</small><strong id="m9-xb">-</strong></div><div><small>표본오차</small><strong id="m9-er">-</strong></div></div>
           <div style="display:flex;gap:8px"><button class="btn ghost" id="m9-redo">새로 뽑기</button></div>
           <p class="pmsg" id="m9-msg"></p>
-          <div class="think"><span>생각해보기</span>「새로 뽑기」를 여러 번 누르면 n = 10과 n = 5,000 중 어느 쪽 표본오차가 더 크게 흔들리나요?</div>
+          <div class="think" style="flex-wrap:wrap"><span>생각해보기</span>「새로 뽑기」를 여러 번 누르면 n = 10과 n = 5,000 중 어느 쪽 표본오차가 더 크게 흔들리나요?<details style="flex-basis:100%;font-weight:600"><summary style="cursor:pointer">예시 답</summary>n = 10 쪽이 더 크게 흔들립니다.</details></div>
         </div>
       </div>
     </section>
@@ -517,7 +517,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
           <div class="plabel" style="margin:0">결과 확인 · <span id="p2-count">0 / 0</span></div>
           <div class="bins" id="p2-bins" style="grid-template-columns:repeat(2,1fr)"></div>
           <div class="p2row"><p class="pmsg" id="p2-msg"></p><button class="btn ghost" id="p2-reset">다시 하기</button></div>
-          <div class="think"><span>생각해보기</span>표본마다 변하는 값의 퍼짐 정도를 나타낸 것이 무엇이었나요?</div>
+          <div class="think" style="flex-wrap:wrap"><span>생각해보기</span>표본마다 변하는 값의 퍼짐 정도를 나타낸 것이 무엇이었나요?<details style="flex-basis:100%;font-weight:600"><summary style="cursor:pointer">예시 답</summary>표준오차입니다.</details></div>
         </div>
       </div>
     </section>
@@ -536,7 +536,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
           <button class="btn" id="m9-sim" style="align-self:flex-start">1,000번 모의실험</button>
           <div class="stats three"><div><small>내 예측</small><strong id="m9-mine">-</strong></div><div><small>σ/√n</small><strong id="m9-th">?</strong></div><div><small>모의실험</small><strong id="m9-ob">-</strong></div></div>
           <p class="pmsg" id="m9-msg3"></p>
-          <div class="think"><span>생각해보기</span>n을 4에서 100으로 25배 늘리면 퍼짐은 몇 분의 1이 되나요?</div>
+          <div class="think" style="flex-wrap:wrap"><span>생각해보기</span>n을 4에서 100으로 25배 늘리면 퍼짐은 몇 분의 1이 되나요?<details style="flex-basis:100%;font-weight:600"><summary style="cursor:pointer">예시 답</summary>√25 = 5이므로 퍼짐은 약 5분의 1이 됩니다.</details></div>
         </div>
       </div>
     </section>
@@ -583,17 +583,17 @@ var QUIZ=[
  {goal:2,type:"O/X 오개념",stem:"“표본크기를 4배로 늘리면 표본평균의 퍼짐(σ/√n)은 1/4로 줄어든다.”",
   opts:["O","X"],ans:1,ox:true,
   exp:"퍼짐은 √n에 반비례하므로 n이 4배가 되면 √4 = 2배로 나눠져 1/2로 줄어듭니다. 1/4로 줄이려면 표본크기를 16배로 늘려야 합니다.",back:"s-4-3b",backLabel:"4-3 σ/√n 다시 보기"},
- {goal:3,type:"계산",stem:"성인 남성 10명의 키로 구한 비편향표준편차가 s ≈ 6.9cm입니다. 이 표본으로 구한 표준오차는 대략 얼마일까요?",
+ {goal:3,type:"계산",stem:"성인 남성 10명의 키로 구한 표본표준편차가 s ≈ 6.9cm입니다. 이 표본으로 구한 표준오차는 대략 얼마일까요?",
   opts:["약 2.2cm","약 0.69cm","약 6.9cm","약 21.8cm"],ans:0,
   exp:"표준오차 = s ÷ √n = 6.9 ÷ √10 ≈ 6.9 ÷ 3.16 ≈ 2.2cm입니다. 0.69cm는 √ 없이 10으로 나눈 값이고, 21.8cm는 √10을 곱한 값입니다.",back:"s-4-4c",backLabel:"4-4 표준오차 다시 보기"},
  {goal:3,type:"상황 판단",stem:"표본으로 모집단의 표준편차 σ를 추정하려 합니다. 편차 제곱합을 무엇으로 나누어 제곱근을 구해야 σ를 과소평가하지 않을까요?",
   opts:["n − 1","n","n + 1","√n"],ans:0,
-  exp:"μ 대신 x̄를 써서 계산한 편차 제곱합은 실제보다 작아지므로, n으로 나누면 σ를 과소평가합니다. n − 1로 나눈 비편향표준편차가 σ의 비편향추정량입니다.",back:"s-4-4b",backLabel:"4-4 n−1 다시 보기"}
+  exp:"μ 대신 x̄를 써서 계산한 편차 제곱합은 실제보다 작아지므로, n으로 나누면 모분산을 과소평가합니다. n − 1로 나눈 s²이 σ²의 비편향추정량이고, 그 제곱근 s는 표본표준편차입니다. s 자체는 일반적으로 σ의 비편향추정량이 아닙니다.",back:"s-4-4b",backLabel:"4-4 n−1 다시 보기"}
 ];
 
 var BINS=["고정된 값","표본마다 변하는 값(확률변수)"];
 var CARDS=[["모평균 μ","고정된 값"],["모집단 표준편차 σ","고정된 값"],["조사 전에 정한 표본크기 n","고정된 값"],
-           ["표본평균 x̄","표본마다 변하는 값(확률변수)"],["표본오차 x̄ − μ","표본마다 변하는 값(확률변수)"],["비편향표준편차 s","표본마다 변하는 값(확률변수)"]];
+           ["표본평균 x̄","표본마다 변하는 값(확률변수)"],["표본오차 x̄ − μ","표본마다 변하는 값(확률변수)"],["표본표준편차 s","표본마다 변하는 값(확률변수)"]];
 var HINT={"고정된 값":"모집단의 성질이거나 미리 정한 값이라 표본이 바뀌어도 그대로입니다.","표본마다 변하는 값(확률변수)":"표본으로 계산하므로 표본을 새로 뽑을 때마다 달라집니다."};
 
 var GLOSSARY=[
@@ -603,11 +603,16 @@ var GLOSSARY=[
  ["추정량","estimator","모집단의 성질을 추정하는 데 쓰는 통계량으로, 확률변수입니다.","표본평균 x̄"],
  ["비편향추정량","unbiased estimator","추정량의 평균값(기댓값)이 모집단의 성질과 일치하는 추정량입니다.","모평균을 추정하는 표본평균"],
  ["일치추정량","consistent estimator","표본크기를 무한대로 했을 때 모집단의 성질과 일치하는 추정량입니다.","표본평균"],
- ["비편향표준편차","unbiased standard deviation","편차 제곱합을 n − 1로 나눠 제곱근을 취한 값입니다. 제곱하기 전 값은 비편향분산이라 합니다.","10명의 키 √(426.9 ÷ 9) ≈ 6.9cm"],
+ ["표본표준편차","sample standard deviation","편차 제곱합을 n − 1로 나눈 뒤 제곱근을 취한 값 s입니다. 비편향추정량인 것은 제곱하기 전의 s²입니다.","10명의 키 √(426.9 ÷ 9) ≈ 6.9cm"],
  ["표준오차","standard error","표본오차 분포의 표준편차 σ/√n이며, 실제로는 s/√n으로 구합니다.","6.9 ÷ √10 ≈ 2.2cm"]
 ];
-var REFS=[];
-var NEXT={title:"M10 신뢰구간",line:"표본오차의 분포를 알았으니, 오차의 크기를 범위로 나타낼 수 있습니다. 다음 모듈에서는 모평균이 들어 있을 범위인 신뢰구간을 배웁니다."};
+var REFS=[
+ {n:1,title:"기초통계학",org:"여인권, 숙명여자대학교, KOCW 공개강의",url:"https://www.kocw.net/home/search/kemView.do?kemId=1052562",date:"2026-10-28 확인"},
+ {n:2,title:"데이터로 배우는 통계학",org:"K-MOOC",url:"https://www.kmooc.kr/view/course/detail/20384",date:"2026-10-28 확인"},
+ {n:3,title:"R을 활용한 통계학개론",org:"K-MOOC, KOCW 공개강의",url:"https://www.kocw.net/home/search/kemView.do?kemId=1517479",date:"2026-10-28 확인"},
+ {n:4,title:"공공데이터포털",org:"행정안전부",url:"https://www.data.go.kr",date:"2026-10-28 확인"}
+];
+var NEXT={title:"M10 신뢰구간",line:"표본오차의 분포를 알았으니, 오차의 크기를 범위로 나타낼 수 있습니다. 다음 모듈에서는 표준오차로 신뢰구간을 만들고, 그 구간을 반복 포함률로 읽는 법을 배웁니다."};
 
 /* =====================================================================
    아래부터는 공통 엔진입니다. 모듈마다 바꾸지 않습니다.
@@ -933,9 +938,9 @@ for(var gi=0;gi<GLOSSARY.length;gi+=6){
 }
 (function(){
   var s=document.createElement("section");s.className="slide";s.dataset.step="6";s.id="end";
-  var refs=REFS.length?'<div class="pcol" style="gap:10px"><div class="plabel" style="margin:0">참고자료</div><ol class="refs">'+REFS.map(function(r){return '<li><span>['+r.n+']</span><div>'+r.title+', '+r.org+'. <a href="'+r.url+'" target="_blank" rel="noopener">'+r.url+'</a> ('+r.date+')</div></li>';}).join("")+'</ol></div>':'';
+  var refs=REFS.length?'<div class="pcol" style="gap:10px;min-height:0;overflow:hidden"><div class="plabel" style="margin:0">참고자료</div><ol class="refs">'+REFS.map(function(r){return '<li><span>['+r.n+']</span><div>'+r.title+', '+r.org+'. <a href="'+r.url+'" target="_blank" rel="noopener">'+r.url+'</a> ('+r.date+')</div></li>';}).join("")+'</ol></div>':'';
   s.innerHTML='<div class="sh"><div class="sec">마무리</div><h2>'+(REFS.length?"참고자료와 다음 모듈":"다음 모듈")+'</h2></div>'+
-    '<div class="body '+(REFS.length?'split even':'full')+'" style="align-content:center">'+refs+
+    '<div class="body '+(REFS.length?'split even':'full')+'" style="'+(REFS.length?'grid-template-rows:minmax(0,1fr)':'align-content:center')+'">'+refs+
     '<div class="pcol" style="justify-content:center"><div class="nextmod"><small>다음 모듈 · '+NEXT.title+'</small><strong>'+NEXT.line+'</strong></div></div></div>'+
     '<p class="foot">학습 상태는 저장되지 않습니다.</p>';
   vp.appendChild(s);

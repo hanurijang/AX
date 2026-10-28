@@ -195,7 +195,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
 .gi .d{font-size:14px;line-height:1.5}
 .gi .e{font-size:12.5px;line-height:1.45;color:var(--gray)}
 .gi .e strong{color:var(--navy3)}
-.refs{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:8px;font-size:13.5px;line-height:1.5}
+.refs{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:8px;font-size:13.5px;line-height:1.5;overflow-y:auto;flex:1 1 auto;min-height:0}
 .refs li{display:grid;grid-template-columns:30px 1fr;gap:4px}
 .refs li span{font-weight:800;color:var(--navy3)}
 .refs a{color:var(--navy2);word-break:break-all}
@@ -500,7 +500,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
           <div class="stats"><div><small>관측 결과</small><strong id="m16-obs">-</strong></div><div><small>양측 p값</small><strong id="m16-pv">-</strong></div></div>
           <p class="howto">도전: 앞면 비율 70%를 그대로 두고, 던진 횟수만 바꾸면 결론이 어떻게 달라지는지 확인하세요.</p>
           <p class="pmsg" id="m16-msg"></p>
-          <div class="think"><span>생각해보기</span>같은 70%라도 결론이 달라지는 이유는 무엇인가요?</div>
+          <div class="think" style="flex-wrap:wrap"><span>생각해보기</span>같은 70%라도 결론이 달라지는 이유는 무엇인가요?<details style="flex-basis:100%;font-weight:600"><summary style="cursor:pointer">예시 답</summary>표본이 작으면 같은 70%도 우연으로 크게 흔들려 결론이 달라집니다.</details></div>
         </div>
       </div>
     </section>
@@ -517,7 +517,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
           <div class="plabel" style="margin:0">결과 확인 · <span id="p2-count">0 / 0</span></div>
           <div class="bins" id="p2-bins"></div>
           <div class="p2row"><p class="pmsg" id="p2-msg"></p><button class="btn ghost" id="p2-reset">다시 하기</button></div>
-          <div class="think"><span>생각해보기</span>A·B 둘 중 고르기 설문에 적합도검정을 쓸 수도 있을까요?</div>
+          <div class="think" style="flex-wrap:wrap"><span>생각해보기</span>A·B 둘 중 고르기 설문에 적합도검정을 쓸 수도 있을까요?<details style="flex-basis:100%;font-weight:600"><summary style="cursor:pointer">예시 답</summary>미리 정한 한 비율과 같은지만 볼 때는 적합도검정을 쓸 수 있습니다.</details></div>
         </div>
       </div>
     </section>
@@ -536,7 +536,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
           <button class="btn" id="m16-check" style="align-self:flex-start">계산해서 확인</button>
           <div class="stats"><div><small>내 예측</small><strong id="m16-mine">-</strong></div><div><small>기대도수</small><strong id="m16-act">?</strong></div></div>
           <p class="pmsg" id="m16-msg3"></p>
-          <div class="think"><span>생각해보기</span>관측도수가 기대도수에서 멀어질수록 χ²값은 어떻게 되나요?</div>
+          <div class="think" style="flex-wrap:wrap"><span>생각해보기</span>관측도수가 기대도수에서 멀어질수록 χ²값은 어떻게 되나요?<details style="flex-basis:100%;font-weight:600"><summary style="cursor:pointer">예시 답</summary>관측과 기대가 멀어질수록 χ²값은 커집니다.</details></div>
         </div>
       </div>
     </section>
@@ -610,7 +610,11 @@ var GLOSSARY=[
  ["피셔의 정확검정","Fisher's exact test","초기하분포로 모든 경우의 확률을 계산해 독립성을 조사하는 방법입니다.","사슴벌레 분할표 p = 0.036"]
 ];
 var REFS=[
- {n:1,title:"chisq.test: Pearson's Chi-squared Test for Count Data (R Documentation)",org:"The R Project for Statistical Computing",url:"https://search.r-project.org/R/refmans/stats/html/chisq.test.html",date:"2026-10-25 확인"}
+ {n:1,title:"chisq.test: Pearson's Chi-squared Test for Count Data (R Documentation)",org:"The R Project for Statistical Computing",url:"https://search.r-project.org/R/refmans/stats/html/chisq.test.html",date:"2026-10-25 확인"},
+ {n:2,title:"공공데이터포털",org:"행정안전부",url:"https://www.data.go.kr",date:"2026-10-28 확인"},
+ {n:3,title:"데이터로 배우는 통계학",org:"K-MOOC",url:"https://www.kmooc.kr/view/course/detail/20384",date:"2026-10-28 확인"},
+ {n:4,title:"기초통계학Ⅱ",org:"여인권, 숙명여자대학교, KOCW 공개강의",url:"https://www.kocw.net/home/search/kemView.do?kemId=1080231",date:"2026-10-28 확인"},
+ {n:5,title:"R을 활용한 통계학개론",org:"K-MOOC, KOCW 공개강의",url:"https://www.kocw.net/home/search/kemView.do?kemId=1517479",date:"2026-10-28 확인"}
 ];
 var NEXT={title:"M17 산점도와 상관",line:"지금까지는 집단을 비교하거나 범주형 변수의 관계를 검정했습니다. 다음 모듈에서는 두 양적 변수 사이의 관계를 산점도와 상관계수로 살펴봅니다."};
 
@@ -898,9 +902,9 @@ for(var gi=0;gi<GLOSSARY.length;gi+=6){
 }
 (function(){
   var s=document.createElement("section");s.className="slide";s.dataset.step="6";s.id="end";
-  var refs=REFS.length?'<div class="pcol" style="gap:10px"><div class="plabel" style="margin:0">참고자료</div><ol class="refs">'+REFS.map(function(r){return '<li><span>['+r.n+']</span><div>'+r.title+', '+r.org+'. <a href="'+r.url+'" target="_blank" rel="noopener">'+r.url+'</a> ('+r.date+')</div></li>';}).join("")+'</ol></div>':'';
+  var refs=REFS.length?'<div class="pcol" style="gap:10px;min-height:0;overflow:hidden"><div class="plabel" style="margin:0">참고자료</div><ol class="refs">'+REFS.map(function(r){return '<li><span>['+r.n+']</span><div>'+r.title+', '+r.org+'. <a href="'+r.url+'" target="_blank" rel="noopener">'+r.url+'</a> ('+r.date+')</div></li>';}).join("")+'</ol></div>':'';
   s.innerHTML='<div class="sh"><div class="sec">마무리</div><h2>'+(REFS.length?"참고자료와 다음 모듈":"다음 모듈")+'</h2></div>'+
-    '<div class="body '+(REFS.length?'split even':'full')+'" style="align-content:center">'+refs+
+    '<div class="body '+(REFS.length?'split even':'full')+'" style="'+(REFS.length?'grid-template-rows:minmax(0,1fr)':'align-content:center')+'">'+refs+
     '<div class="pcol" style="justify-content:center"><div class="nextmod"><small>다음 모듈 · '+NEXT.title+'</small><strong>'+NEXT.line+'</strong></div></div></div>'+
     '<p class="foot">학습 상태는 저장되지 않습니다.</p>';
   vp.appendChild(s);

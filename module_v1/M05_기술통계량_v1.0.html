@@ -195,7 +195,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
 .gi .d{font-size:14px;line-height:1.5}
 .gi .e{font-size:12.5px;line-height:1.45;color:var(--gray)}
 .gi .e strong{color:var(--navy3)}
-.refs{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:8px;font-size:13.5px;line-height:1.5}
+.refs{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:8px;font-size:13.5px;line-height:1.5;overflow-y:auto;flex:1 1 auto;min-height:0}
 .refs li{display:grid;grid-template-columns:30px 1fr;gap:4px}
 .refs li span{font-weight:800;color:var(--navy3)}
 .refs a{color:var(--navy2);word-break:break-all}
@@ -513,7 +513,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
         </div>
         <div class="side">
           <ul class="key"><li><b>분산</b>: 평균과의 거리 제곱을 평균한 값</li><li><b>표준편차</b>: 분산의 제곱근</li></ul>
-          <p class="exp">각 값과 평균값의 차이를 제곱해 모두 더한 뒤 n으로 나눈 것이 표본분산입니다. 분산은 0 이상이고, 모든 값이 같으면 0이며, 퍼짐이 클수록 커집니다. 분산은 단위가 원래 단위의 제곱(점²)이 되지만 표준편차는 원래 단위(점)와 같아서 감각적으로 더 알기 쉽습니다. n−1로 나누는 분산은 추론통계에서 다룹니다.</p>
+          <p class="exp">각 값과 평균값의 차이를 제곱해 모두 더한 뒤 n으로 나눈 것이 이 9명 전체를 기술하는 분산입니다. 분산은 0 이상이고, 모든 값이 같으면 0이며, 퍼짐이 클수록 커집니다. 분산은 단위가 원래 단위의 제곱(점²)이 되지만 표준편차는 원래 단위(점)와 같아서 감각적으로 더 알기 쉽습니다. 모집단 분산을 추정할 때는 n−1로 나누며, 그 구분은 M09에서 다룹니다.</p>
           <p class="next"><span>다음 질문</span>평균이 같으면 분산도 같을까?</p>
         </div>
       </div>
@@ -615,7 +615,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
           <div class="stats"><div><small>평균값</small><strong id="m5-mn">-</strong></div><div><small>중앙값</small><strong id="m5-md">-</strong></div><div><small>최빈값</small><strong id="m5-mo">-</strong></div><div><small>표준편차</small><strong id="m5-sd">-</strong></div></div>
           <p class="howto">도전: 평균값이 중앙값보다 20점 이상 커지는 점수를 찾아보세요. 100점 만점이라면 그 점수는 무엇을 뜻할까요?</p>
           <p class="pmsg" id="m5-msg"></p>
-          <div class="think"><span>생각해보기</span>입력 실수 하나가 섞였을 때, 모둠의 ‘보통 점수’로는 어떤 대푯값을 보고하는 것이 좋을까요?</div>
+          <div class="think" style="flex-wrap:wrap"><span>생각해보기</span>입력 실수 하나가 섞였을 때, 모둠의 ‘보통 점수’로는 어떤 대푯값을 보고하는 것이 좋을까요?<details style="flex-basis:100%;font-weight:600"><summary style="cursor:pointer">예시 답</summary>극단값에 덜 흔들리는 중앙값을 보통 점수로 보고하는 편이 낫습니다.</details></div>
         </div>
       </div>
     </section>
@@ -632,7 +632,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
           <div class="plabel" style="margin:0">결과 확인 · <span id="p2-count">0 / 0</span></div>
           <div class="bins" id="p2-bins"></div>
           <div class="p2row"><p class="pmsg" id="p2-msg"></p><button class="btn ghost" id="p2-reset">다시 하기</button></div>
-          <div class="think"><span>생각해보기</span>‘실제일 수 있는’ 이상값은 지워도 될까요? 지우면 무엇을 잃을까요?</div>
+          <div class="think" style="flex-wrap:wrap"><span>생각해보기</span>‘실제일 수 있는’ 이상값은 지워도 될까요? 지우면 무엇을 잃을까요?<details style="flex-basis:100%;font-weight:600"><summary style="cursor:pointer">예시 답</summary>실제일 수 있는 이상값은 지우지 않고 표시합니다. 지우면 드문 사건을 잃습니다.</details></div>
         </div>
       </div>
     </section>
@@ -650,7 +650,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
           <button class="btn" id="m5-check" style="align-self:flex-start">계산해서 확인</button>
           <div class="stats"><div><small>내 예측</small><strong id="m5-mine">-</strong></div><div><small>실제 표준편차</small><strong id="m5-act">?</strong></div></div>
           <p class="pmsg" id="m5-msg3"></p>
-          <div class="think"><span>생각해보기</span>74점이 94점으로 바뀌면 표준편차는 커질까요, 작아질까요?</div>
+          <div class="think" style="flex-wrap:wrap"><span>생각해보기</span>74점이 94점으로 바뀌면 표준편차는 커질까요, 작아질까요?<details style="flex-basis:100%;font-weight:600"><summary style="cursor:pointer">예시 답</summary>평균에서 더 멀어지므로 표준편차는 커집니다.</details></div>
         </div>
       </div>
     </section>
@@ -719,7 +719,7 @@ var GLOSSARY=[
  ["최빈값","mode","데이터 중 가장 자주 나타나는 값입니다.","세 번 나온 52점"],
  ["이상값","outlier","다른 값들에 비해 극단적으로 크거나 작은 값입니다.","마을에 이사 온 연소득 10억 원"],
  ["쌍봉형(이봉형)","bimodal","봉우리가 두 개인 분포 모양입니다.","어린이와 고령자가 많은 공원 이용자 연령"],
- ["분산(표본분산)","variance","각 값과 평균의 차이를 제곱해 평균한 값으로, 퍼짐 정도를 나타냅니다.","900 ÷ 9 = 100"],
+ ["분산(기술용)","variance","관측한 자료 전체를 기술할 때, 각 값과 평균의 차이 제곱을 n으로 나눈 값입니다. 모분산 추정은 n−1로 나누며 M09에서 다룹니다.","900 ÷ 9 = 100"],
  ["표준편차","standard deviation","분산의 제곱근으로, 원래 단위로 나타낸 퍼짐 정도입니다.","√100 = 10점"],
  ["상자 수염 그림","box-and-whisker plot","사분위수로 만든 상자와 수염으로 분포를 요약한 그림입니다.","상자 52~71점, 수염 45~74점"],
  ["사분위수","quartile","정렬한 데이터를 네 등분하는 위치의 값으로, 작은 쪽부터 제1·제2·제3사분위수라 합니다.","제1사분위수 52점, 제3사분위수 71점",1],
@@ -728,7 +728,12 @@ var GLOSSARY=[
  ["스웜 플롯","swarm plot","값이 겹치지 않도록 점을 하나씩 찍어 분포를 보여 주는 그림입니다.","52점 세 명이 옆으로 나란히 찍힘"]
 ];
 var REFS=[
- {n:1,title:"Box and Whisker Plots",org:"mathcentre / statstutor, 2003",url:"https://www.statstutor.ac.uk/resources/uploaded/boxandwhiskerplots.pdf",date:"2026-10-24 확인"}
+ {n:1,title:"Box and Whisker Plots",org:"mathcentre / statstutor, 2003",url:"https://www.statstutor.ac.uk/resources/uploaded/boxandwhiskerplots.pdf",date:"2026-10-24 확인"},
+ {n:2,title:"국가통계포털 통계목록",org:"통계청, KOSIS",url:"https://kosis.kr/statisticsList/statisticsListIndex.do?menuId=M_01_02&outLink=Y&vwcd=MT_OTITLE",date:"2026-10-28 확인"},
+ {n:3,title:"데이터로 배우는 통계학",org:"K-MOOC",url:"https://www.kmooc.kr/view/course/detail/20384",date:"2026-10-28 확인"},
+ {n:4,title:"기초통계학",org:"여인권, 숙명여자대학교, KOCW 공개강의",url:"https://www.kocw.net/home/search/kemView.do?kemId=1052562",date:"2026-10-28 확인"},
+ {n:5,title:"R을 활용한 통계학개론",org:"K-MOOC, KOCW 공개강의",url:"https://www.kocw.net/home/search/kemView.do?kemId=1517479",date:"2026-10-28 확인"},
+ {n:6,title:"공공데이터포털",org:"행정안전부",url:"https://www.data.go.kr",date:"2026-10-28 확인"}
 ];
 var NEXT={title:"M06 확률과 확률분포",line:"추론통계는 데이터를 확률적으로 생긴 값으로 다룹니다. 다음 모듈에서는 그 바탕이 되는 확률과 확률분포를 배웁니다."};
 
@@ -1110,9 +1115,9 @@ for(var gi=0;gi<GLOSSARY.length;gi+=6){
 }
 (function(){
   var s=document.createElement("section");s.className="slide";s.dataset.step="6";s.id="end";
-  var refs=REFS.length?'<div class="pcol" style="gap:10px"><div class="plabel" style="margin:0">참고자료</div><ol class="refs">'+REFS.map(function(r){return '<li><span>['+r.n+']</span><div>'+r.title+', '+r.org+'. <a href="'+r.url+'" target="_blank" rel="noopener">'+r.url+'</a> ('+r.date+')</div></li>';}).join("")+'</ol></div>':'';
+  var refs=REFS.length?'<div class="pcol" style="gap:10px;min-height:0;overflow:hidden"><div class="plabel" style="margin:0">참고자료</div><ol class="refs">'+REFS.map(function(r){return '<li><span>['+r.n+']</span><div>'+r.title+', '+r.org+'. <a href="'+r.url+'" target="_blank" rel="noopener">'+r.url+'</a> ('+r.date+')</div></li>';}).join("")+'</ol></div>':'';
   s.innerHTML='<div class="sh"><div class="sec">마무리</div><h2>'+(REFS.length?"참고자료와 다음 모듈":"다음 모듈")+'</h2></div>'+
-    '<div class="body '+(REFS.length?'split even':'full')+'" style="align-content:center">'+refs+
+    '<div class="body '+(REFS.length?'split even':'full')+'" style="'+(REFS.length?'grid-template-rows:minmax(0,1fr)':'align-content:center')+'">'+refs+
     '<div class="pcol" style="justify-content:center"><div class="nextmod"><small>다음 모듈 · '+NEXT.title+'</small><strong>'+NEXT.line+'</strong></div></div></div>'+
     '<p class="foot">학습 상태는 저장되지 않습니다.</p>';
   vp.appendChild(s);

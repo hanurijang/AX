@@ -195,7 +195,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
 .gi .d{font-size:14px;line-height:1.5}
 .gi .e{font-size:12.5px;line-height:1.45;color:var(--gray)}
 .gi .e strong{color:var(--navy3)}
-.refs{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:8px;font-size:13.5px;line-height:1.5}
+.refs{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:8px;font-size:13.5px;line-height:1.5;overflow-y:auto;flex:1 1 auto;min-height:0}
 .refs li{display:grid;grid-template-columns:30px 1fr;gap:4px}
 .refs li span{font-weight:800;color:var(--navy3)}
 .refs a{color:var(--navy2);word-break:break-all}
@@ -223,7 +223,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
       <div class="body split">
         <div class="fig"><svg id="m12-ov" viewBox="0 0 440 260" role="img" aria-label="데이터에서 t값을 계산하고 t분포에서 p값을 구해 판정하며, 신뢰구간과 같은 결론에 이르는 흐름"></svg></div>
         <div class="side">
-          <div class="prevlink"><small>지난 모듈에서는</small>귀무가설이 옳은 세계를 상상하고, 현실의 차이가 그 세계에서 얼마나 드문지를 p값으로 판단하는 원리를 배웠습니다.<small style="margin-top:8px">이번 모듈에서는</small>같은 혈압 데이터로 이표본 t검정을 직접 계산해 p값을 구하고, 신뢰구간과의 관계까지 확인합니다.</div>
+          <div class="prevlink"><small>지난 모듈에서는</small>라벨을 다시 나누어 센 비율로 p값을 구했습니다. 그 값과 이번 t검정의 p는 귀무분포를 만드는 방법이 달라 숫자가 똑같지는 않고, 판단의 방향은 같습니다.<small style="margin-top:8px">이번 모듈에서는</small>같은 혈압 데이터로 이표본 t검정을 직접 계산해 p값을 구하고, 신뢰구간과의 관계까지 확인합니다.</div>
           <dl class="meta"><dt>학습 시간</dt><dd>약 40분</dd><dt>본문</dt><dd>소단원 4개</dd><dt>실습</dt><dd>조작형 · 분류형 · 추정형</dd></dl>
         </div>
       </div>
@@ -382,8 +382,8 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
           </div>
         </div>
         <div class="side">
-          <ul class="key"><li>s는 두 집단을 함께 고려한 비편향표준편차입니다.</li><li>예 ①: s ≈ 7.44, t ≈ −2.73</li></ul>
-          <p class="exp">2개 집단이므로 비편향표준편차의 계산 방법이 조금 다릅니다. A군과 B군의 비편향표준편차를 sA, sB라 하면 s = √( ((nA − 1)sA² + (nB − 1)sB²) ÷ (nA + nB − 2) )입니다. 예 ①에서는 sA ≈ 7.03, sB ≈ 7.83이므로 s ≈ 7.44가 됩니다. 조금 복잡해 보이지만 실제로 데이터를 분석할 때는 소프트웨어가 계산하므로 특별히 신경 쓰지 않아도 됩니다.</p>
+          <ul class="key"><li>s는 두 집단을 함께 고려한 표본표준편차입니다.</li><li>예 ①: s ≈ 7.44, t ≈ −2.73</li></ul>
+          <p class="exp">2개 집단이므로 표본표준편차의 계산 방법이 조금 다릅니다. A군과 B군의 표본표준편차를 sA, sB라 하면 s = √( ((nA − 1)sA² + (nB − 1)sB²) ÷ (nA + nB − 2) )입니다. 예 ①에서는 sA ≈ 7.03, sB ≈ 7.83이므로 s ≈ 7.44가 됩니다. 조금 복잡해 보이지만 실제로 데이터를 분석할 때는 소프트웨어가 계산하므로 특별히 신경 쓰지 않아도 됩니다.</p>
           <p class="next"><span>다음 질문</span>t = −2.73은 드문 값일까?</p>
         </div>
       </div>
@@ -489,7 +489,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
           <div class="stats"><div><small>표본평균의 차이</small><strong id="m12-d">-</strong></div><div><small>t값</small><strong id="m12-t">-</strong></div><div><small>p값</small><strong id="m12-p">-</strong></div><div><small>판정 (α = 0.05)</small><strong id="m12-j">-</strong></div></div>
           <p class="howto">도전: p값이 처음으로 0.05를 넘는 값을 찾고, 그때 신뢰구간이 0을 포함하는지 확인해 보세요.</p>
           <p class="pmsg" id="m12-msg"></p>
-          <div class="think"><span>생각해보기</span>s는 그대로인데 왜 차이만 줄어도 p값이 커질까요?</div>
+          <div class="think" style="flex-wrap:wrap"><span>생각해보기</span>s는 그대로인데 왜 차이만 줄어도 p값이 커질까요?<details style="flex-basis:100%;font-weight:600"><summary style="cursor:pointer">예시 답</summary>차이가 작아지면 t = 차이/표준오차가 작아지고, 작은 t는 귀무가설 아래에서 흔해 p가 커집니다.</details></div>
         </div>
       </div>
     </section>
@@ -506,7 +506,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
           <div class="plabel" style="margin:0">결과 확인 · <span id="p2-count">0 / 0</span></div>
           <div class="bins" id="p2-bins" style="grid-template-columns:repeat(2,1fr)"></div>
           <div class="p2row"><p class="pmsg" id="p2-msg"></p><button class="btn ghost" id="p2-reset">다시 하기</button></div>
-          <div class="think"><span>생각해보기</span>p값, t값, 신뢰구간 중 하나만 알아도 판정할 수 있는 까닭은 무엇일까요?</div>
+          <div class="think" style="flex-wrap:wrap"><span>생각해보기</span>p값, t값, 신뢰구간 중 하나만 알아도 판정할 수 있는 까닭은 무엇일까요?<details style="flex-basis:100%;font-weight:600"><summary style="cursor:pointer">예시 답</summary>같은 t분포에서 p, t, 신뢰구간이 서로 대응하기 때문입니다.</details></div>
         </div>
       </div>
     </section>
@@ -525,7 +525,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
           <div style="display:flex;gap:8px"><button class="btn" id="m12-check">넓이로 확인</button><button class="btn ghost" id="m12-nextq">다음 t값</button></div>
           <div class="stats"><div><small>내 예측</small><strong id="m12-mine">-</strong></div><div><small>실제 p값</small><strong id="m12-act">?</strong></div></div>
           <p class="pmsg" id="m12-msg3"></p>
-          <div class="think"><span>생각해보기</span>|t|가 2.18보다 크면 p값은 0.05보다 클까요, 작을까요?</div>
+          <div class="think" style="flex-wrap:wrap"><span>생각해보기</span>|t|가 2.18보다 크면 p값은 0.05보다 클까요, 작을까요?<details style="flex-basis:100%;font-weight:600"><summary style="cursor:pointer">예시 답</summary>|t|가 2.18보다 크면 p는 0.05보다 작습니다.</details></div>
         </div>
       </div>
     </section>
@@ -591,7 +591,12 @@ var GLOSSARY=[
  ["양측검정","two-sided test","양수와 음수 양쪽 꼬리를 모두 고려해 p값을 구하는 가설검정 방법입니다.","t ≤ −2.73과 t ≥ +2.73의 넓이 합 0.018"],
  ["단측검정","one-sided test","어느 한쪽 꼬리만 고려해 넓이를 계산하는 가설검정 방법입니다.","t ≤ −2.73인 넓이 0.009만 보기"]
 ];
-var REFS=[];
+var REFS=[
+ {n:1,title:"기초통계학Ⅱ",org:"여인권, 숙명여자대학교, KOCW 공개강의",url:"https://www.kocw.net/home/search/kemView.do?kemId=1080231",date:"2026-10-28 확인"},
+ {n:2,title:"데이터로 배우는 통계학",org:"K-MOOC",url:"https://www.kmooc.kr/view/course/detail/20384",date:"2026-10-28 확인"},
+ {n:3,title:"기초통계학",org:"여인권, 숙명여자대학교, KOCW 공개강의",url:"https://www.kocw.net/home/search/kemView.do?kemId=1052562",date:"2026-10-28 확인"},
+ {n:4,title:"R을 활용한 통계학개론",org:"K-MOOC, KOCW 공개강의",url:"https://www.kocw.net/home/search/kemView.do?kemId=1517479",date:"2026-10-28 확인"}
+];
 var NEXT={title:"M13 검정 결과 읽기와 두 가지 오류",line:"가설검정 결과는 그래프와 함께 보고합니다. 다음 모듈에서는 오차 막대를 읽는 법과, 가설검정에서 생길 수 있는 두 가지 오류를 배웁니다."};
 
 /* =====================================================================
@@ -742,7 +747,7 @@ on("m12-std",function(s){
 });
 
 on("m12-calc",function(s){
-  var steps=[["sA ≈ 7.03, sB ≈ 7.83","각 군의 비편향표준편차"],["s ≈ 7.44","두 군을 함께 고려"],["7.44 × √(2/7) ≈ 3.98","표준오차"],["−10.9 ÷ 3.98 ≈ −2.73","t값"]];
+  var steps=[["sA ≈ 7.03, sB ≈ 7.83","각 군의 표본표준편차"],["s ≈ 7.44","두 군을 함께 고려"],["7.44 × √(2/7) ≈ 3.98","표준오차"],["−10.9 ÷ 3.98 ≈ −2.73","t값"]];
   steps.forEach(function(st,i){var x=6+i*104;bxD(s,x,20,98,96,i===3?"#FCF3D9":"#F3F5F9",i===3?"#E0A100":null);
     tD(s,x+49,50,(i+1)+"단계",{fs:10,c:C.gray});tD(s,x+49,76,st[0],{fw:800,fs:i===2?9.5:10.5,c:i===3?C.amberInk:C.navy});tD(s,x+49,102,st[1],{fs:9.5,c:C.gray});});
   tD(s,210,140,"계산 순서 (소프트웨어가 대신 계산)",{fs:10.5,c:C.gray});
@@ -872,9 +877,9 @@ for(var gi=0;gi<GLOSSARY.length;gi+=6){
 }
 (function(){
   var s=document.createElement("section");s.className="slide";s.dataset.step="6";s.id="end";
-  var refs=REFS.length?'<div class="pcol" style="gap:10px"><div class="plabel" style="margin:0">참고자료</div><ol class="refs">'+REFS.map(function(r){return '<li><span>['+r.n+']</span><div>'+r.title+', '+r.org+'. <a href="'+r.url+'" target="_blank" rel="noopener">'+r.url+'</a> ('+r.date+')</div></li>';}).join("")+'</ol></div>':'';
+  var refs=REFS.length?'<div class="pcol" style="gap:10px;min-height:0;overflow:hidden"><div class="plabel" style="margin:0">참고자료</div><ol class="refs">'+REFS.map(function(r){return '<li><span>['+r.n+']</span><div>'+r.title+', '+r.org+'. <a href="'+r.url+'" target="_blank" rel="noopener">'+r.url+'</a> ('+r.date+')</div></li>';}).join("")+'</ol></div>':'';
   s.innerHTML='<div class="sh"><div class="sec">마무리</div><h2>'+(REFS.length?"참고자료와 다음 모듈":"다음 모듈")+'</h2></div>'+
-    '<div class="body '+(REFS.length?'split even':'full')+'" style="align-content:center">'+refs+
+    '<div class="body '+(REFS.length?'split even':'full')+'" style="'+(REFS.length?'grid-template-rows:minmax(0,1fr)':'align-content:center')+'">'+refs+
     '<div class="pcol" style="justify-content:center"><div class="nextmod"><small>다음 모듈 · '+NEXT.title+'</small><strong>'+NEXT.line+'</strong></div></div></div>'+
     '<p class="foot">학습 상태는 저장되지 않습니다.</p>';
   vp.appendChild(s);

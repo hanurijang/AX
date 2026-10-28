@@ -195,7 +195,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
 .gi .d{font-size:14px;line-height:1.5}
 .gi .e{font-size:12.5px;line-height:1.45;color:var(--gray)}
 .gi .e strong{color:var(--navy3)}
-.refs{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:8px;font-size:13.5px;line-height:1.5}
+.refs{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:8px;font-size:13.5px;line-height:1.5;overflow-y:auto;flex:1 1 auto;min-height:0}
 .refs li{display:grid;grid-template-columns:30px 1fr;gap:4px}
 .refs li span{font-weight:800;color:var(--navy3)}
 .refs a{color:var(--navy2);word-break:break-all}
@@ -254,7 +254,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
           <div class="ga"><button class="jump" data-jump="q5">문항 5·6</button></div><div class="gp"><button class="jump" data-jump="p2">실습 2 분류</button></div>
         </div>
       </div>
-      <p class="foot">버튼을 누르면 해당 문항이나 실습 화면으로 바로 이동합니다.</p>
+      <p class="foot">4-1·4-2는 기초, 4-3부터는 추가 읽기입니다. 버튼을 누르면 해당 문항이나 실습으로 이동합니다.</p>
     </section>
 
     <!-- ③ 일상의 예시 ─────────────────────────────── -->
@@ -360,7 +360,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
 
     <!-- ④ 본문 ─────────────────────────────── -->
     <section class="slide" data-step="3" id="s-4-1a">
-      <div class="sh"><div class="sec">4-1 MCMC 방법</div><h2><span class="q">Q</span>난수만으로 원주율을 구할 수 있을까요?</h2></div>
+      <div class="sh"><div class="sec">4-1 MCMC 방법 · 기초</div><h2><span class="q">Q</span>난수만으로 원주율을 구할 수 있을까요?</h2></div>
       <div class="body split even">
         <div class="figcol">
           <div class="fig"><svg id="m31-pi" viewBox="0 0 420 150" role="img" aria-label="정사각형 안 균등 난수 1,000개 중 원 안에 든 점의 비율로 원주율 근사"></svg></div>
@@ -380,7 +380,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
     </section>
 
     <section class="slide" data-step="3" id="s-4-1b">
-      <div class="sh"><div class="sec">4-1 MCMC 방법</div><h2><span class="q">Q</span>내일의 상태가 오늘에만 달려 있다면 어떻게 될까요?</h2></div>
+      <div class="sh"><div class="sec">4-1 MCMC 방법 · 기초</div><h2><span class="q">Q</span>내일의 상태가 오늘에만 달려 있다면 어떻게 될까요?</h2></div>
       <div class="body split even">
         <div class="fig"><svg id="m31-mk" viewBox="0 0 420 270" role="img" aria-label="설비 상태 정상과 고장의 전이 확률, 오래 지나면 정상 비율이 0.857로 수렴"></svg></div>
         <div class="side">
@@ -392,7 +392,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
     </section>
 
     <section class="slide" data-step="3" id="s-4-1c">
-      <div class="sh"><div class="sec">4-1 MCMC 방법</div><h2><span class="q">Q</span>처음 뽑은 값들도 사후분포로 써도 될까요?</h2></div>
+      <div class="sh"><div class="sec">4-1 MCMC 방법 · 기초</div><h2><span class="q">Q</span>처음 뽑은 값들도 사후분포로 써도 될까요?</h2></div>
       <div class="body split even">
         <div class="fig"><svg id="m31-gibbs" viewBox="0 0 420 270" role="img" aria-label="상관계수 0.7인 2차원 정규분포에서 초기 상태 (5, 5)부터 깁스 표집이 가로·세로로 번갈아 움직이며 중앙으로 모여 듦"></svg></div>
         <div class="side">
@@ -404,19 +404,19 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
     </section>
 
     <section class="slide" data-step="3" id="s-4-2a">
-      <div class="sh"><div class="sec">4-2 이표본 평균값 비교</div><h2><span class="q">Q</span>MCMC로 두 조건의 평균을 추정하면 어떻게 움직일까요?</h2></div>
+      <div class="sh"><div class="sec">4-2 이표본 평균값 비교 · 기초</div><h2><span class="q">Q</span>MCMC로 두 조건의 평균을 추정하면 어떻게 움직일까요?</h2></div>
       <div class="body split even">
         <div class="fig"><svg id="m31-trace" viewBox="0 0 420 270" role="img" aria-label="5개 체인의 μA, μB 추정치가 초기에는 크게 흔들리다 단계를 거듭할수록 550과 565 주변에서만 움직임"></svg></div>
         <div class="side">
           <ul class="key"><li>사전분포: 0~1000 MPa 균등분포</li><li>번인 1,000단계 후 5개 <b>체인</b> 사용</li></ul>
-          <p class="exp">두 냉각 조건의 인장강도 데이터를 베이즈 통계로 해석합니다. 두 모집단을 각각 정규분포로 두고, 평균값 파라미터 μA, μB의 사전분포로 최솟값 0, 최댓값 1000 MPa인 균등분포를 설정합니다. 그리고 MCMC 방법의 최초 1,000단계는 번인으로 간주해 버리고, 1,001~6,000단계를 사용합니다. 이 과정을 하나의 체인으로 삼아 초기값을 바꿔 5체인을 독립 실행했습니다. 단계에 따라 μA, μB의 값을 표시하면, 처음에는 큰 값을 얻을 때도 있으나 단계를 거듭할수록 특정 값 주변에서만 움직이고 있음을 알 수 있습니다. 5개 체인이 같은 곳으로 모이면 수렴했다고 판단하는 근거가 됩니다.</p>
+          <p class="exp">두 냉각 조건의 인장강도 데이터를 베이즈 통계로 해석합니다. 두 모집단을 각각 정규분포로 두고, 평균값 파라미터 μA, μB의 사전분포로 최솟값 0, 최댓값 1000 MPa인 균등분포를 설정합니다. 그리고 MCMC 방법의 최초 1,000단계는 번인으로 간주해 버리고, 1,001~6,000단계를 사용합니다. 이 과정을 하나의 체인으로 삼아 초기값을 바꿔 5체인을 독립 실행했습니다. 단계에 따라 μA, μB의 값을 표시하면, 처음에는 큰 값을 얻을 때도 있으나 단계를 거듭할수록 특정 값 주변에서만 움직이고 있음을 알 수 있습니다. 5개 체인이 같은 곳으로 모이면 수렴의 근거가 됩니다. 이웃한 표집은 서로 독립이 아니므로 자기상관과 유효표본크기도 봅니다.</p>
           <p class="next"><span>다음 질문</span>얻은 분포는 어떻게 요약할까?</p>
         </div>
       </div>
     </section>
 
     <section class="slide" data-step="3" id="s-4-2b">
-      <div class="sh"><div class="sec">4-2 이표본 평균값 비교</div><h2><span class="q">Q</span>평균값 차이의 사후분포는 어떻게 요약할까요?</h2></div>
+      <div class="sh"><div class="sec">4-2 이표본 평균값 비교 · 기초</div><h2><span class="q">Q</span>평균값 차이의 사후분포는 어떻게 요약할까요?</h2></div>
       <div class="body split even">
         <div class="figcol">
           <div class="fig"><svg id="m31-diff" viewBox="0 0 420 150" role="img" aria-label="차이 μB − μA의 사후분포 히스토그램, EAP 14.9, 95% 확신구간 4.8~25.5"></svg></div>
@@ -436,7 +436,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
     </section>
 
     <section class="slide" data-step="3" id="s-4-3a">
-      <div class="sh"><div class="sec">4-3 푸아송 회귀의 예</div><h2><span class="q">Q</span>회귀계수도 분포로 얻을 수 있을까요?</h2></div>
+      <div class="sh"><div class="sec">4-3 푸아송 회귀의 예 · 추가 읽기</div><h2><span class="q">Q</span>회귀계수도 분포로 얻을 수 있을까요?</h2></div>
       <div class="body split even">
         <div class="fig"><svg id="m31-pois" viewBox="0 0 420 270" role="img" aria-label="꽃 20그루 데이터와 푸아송 회귀의 절편 a, 기울기 b의 사후분포, a EAP −2.65, b EAP 0.589"></svg></div>
         <div class="side">
@@ -448,7 +448,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
     </section>
 
     <section class="slide" data-step="3" id="s-4-4a">
-      <div class="sh"><div class="sec">4-4 계층적 베이지안 모형</div><h2><span class="q">Q</span>개체 차이의 퍼짐까지 추정하려면 어떻게 할까요?</h2></div>
+      <div class="sh"><div class="sec">4-4 계층적 베이지안 모형 · 추가 읽기</div><h2><span class="q">Q</span>개체 차이의 퍼짐까지 추정하려면 어떻게 할까요?</h2></div>
       <div class="body split even">
         <div class="fig"><svg id="m31-hier" viewBox="0 0 420 270" role="img" aria-label="초사전분포 p(s), 계층적 사전분포 p(ri|s), 라인별 차이 ri, 데이터로 이어지는 계층 구조"></svg></div>
         <div class="side">
@@ -492,7 +492,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
           <p class="howto">도전: 실제 원주율 3.1416과의 차이가 0.01보다 작아지는 점 개수를 찾아보세요. 「다시 뿌리기」로 결과가 달라지는지도 확인하세요.</p>
           <button class="btn ghost" id="m31-re" style="align-self:flex-start">다시 뿌리기</button>
           <p class="pmsg" id="m31-msg"></p>
-          <div class="think"><span>생각해보기</span>MCMC로 얻은 사후분포가 실행할 때마다 조금씩 다른 이유는?</div>
+          <div class="think" style="flex-wrap:wrap"><span>생각해보기</span>MCMC로 얻은 사후분포가 실행할 때마다 조금씩 다른 이유는?<details style="flex-basis:100%;font-weight:600"><summary style="cursor:pointer">예시 답</summary>난수로 표집하므로 실행마다 표본이 조금씩 다릅니다.</details></div>
         </div>
       </div>
     </section>
@@ -509,7 +509,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
           <div class="plabel" style="margin:0">결과 확인 · <span id="p2-count">0 / 0</span></div>
           <div class="bins" id="p2-bins"></div>
           <div class="p2row"><p class="pmsg" id="p2-msg"></p><button class="btn ghost" id="p2-reset">다시 하기</button></div>
-          <div class="think"><span>생각해보기</span>여러 라인의 품질 데이터를 분석할 때 계층 모형이 왜 유용할까요?</div>
+          <div class="think" style="flex-wrap:wrap"><span>생각해보기</span>여러 라인의 품질 데이터를 분석할 때 계층 모형이 왜 유용할까요?<details style="flex-basis:100%;font-weight:600"><summary style="cursor:pointer">예시 답</summary>라인마다 수준은 다르되, 공통된 경향을 서로 빌릴 수 있기 때문입니다.</details></div>
         </div>
       </div>
     </section>
@@ -528,7 +528,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
           <button class="btn" id="m31-check" style="align-self:flex-start">표집값으로 계산</button>
           <div class="stats three"><div><small>내 예측</small><strong id="m31-mine">-</strong></div><div><small>사후확률</small><strong id="m31-act">?</strong></div><div><small>EAP · 95% 구간</small><strong style="font-size:13px">14.9 · [4.8, 25.5]</strong></div></div>
           <p class="pmsg" id="m31-msg3"></p>
-          <div class="think"><span>생각해보기</span>p = 0.0056이라는 결과와 비교해 어떤 정보가 더 생겼나요?</div>
+          <div class="think" style="flex-wrap:wrap"><span>생각해보기</span>p = 0.0056이라는 결과와 비교해 어떤 정보가 더 생겼나요?<details style="flex-basis:100%;font-weight:600"><summary style="cursor:pointer">예시 답</summary>p값 하나 대신 파라미터의 분포와, 그 값이 어떤 범위에 있을 확률이 생깁니다.</details></div>
         </div>
       </div>
     </section>
@@ -615,9 +615,11 @@ var GLOSSARY=[
 ];
 var REFS=[
  {n:1,title:"Stochastic Relaxation, Gibbs Distributions, and the Bayesian Restoration of Images",org:"S. Geman, D. Geman, IEEE Transactions on Pattern Analysis and Machine Intelligence 6(6), 721–741, 1984",url:"https://doi.org/10.1109/TPAMI.1984.4767596",date:"2026-10-27 확인"},
- {n:2,title:"Stan: A Probabilistic Programming Language",org:"B. Carpenter 외, Journal of Statistical Software 76(1), 2017",url:"https://doi.org/10.18637/jss.v076.i01",date:"2026-10-27 확인"}
+ {n:2,title:"Stan: A Probabilistic Programming Language",org:"B. Carpenter 외, Journal of Statistical Software 76(1), 2017",url:"https://doi.org/10.18637/jss.v076.i01",date:"2026-10-27 확인"},
+ {n:3,title:"데이터로 배우는 통계학",org:"K-MOOC",url:"https://www.kmooc.kr/view/course/detail/20384",date:"2026-10-28 확인"},
+ {n:4,title:"R을 활용한 통계학개론",org:"K-MOOC, KOCW 공개강의",url:"https://www.kocw.net/home/search/kemView.do?kemId=1517479",date:"2026-10-28 확인"}
 ];
-var NEXT={title:"M32 주성분분석과 인자분석",line:"다음 모듈에서는 변수가 많은 다변량 데이터에서 변수의 수를 줄이는 차원 축소 방법인 주성분분석과 인자분석을 살펴봅니다."};
+var NEXT={title:"M32 주성분분석과 인자분석",line:"다음 모듈은 MCMC의 이어짐이 아니라 주제가 바뀝니다. 변수가 많은 다변량 데이터에서 변수의 수를 줄이는 주성분분석과 인자분석을 살펴봅니다."};
 
 /* =====================================================================
    아래부터는 공통 엔진입니다. 모듈마다 바꾸지 않습니다.
@@ -897,9 +899,9 @@ for(var gi=0;gi<GLOSSARY.length;gi+=6){
 }
 (function(){
   var s=document.createElement("section");s.className="slide";s.dataset.step="6";s.id="end";
-  var refs=REFS.length?'<div class="pcol" style="gap:10px"><div class="plabel" style="margin:0">참고자료</div><ol class="refs">'+REFS.map(function(r){return '<li><span>['+r.n+']</span><div>'+r.title+', '+r.org+'. <a href="'+r.url+'" target="_blank" rel="noopener">'+r.url+'</a> ('+r.date+')</div></li>';}).join("")+'</ol></div>':'';
+  var refs=REFS.length?'<div class="pcol" style="gap:10px;min-height:0;overflow:hidden"><div class="plabel" style="margin:0">참고자료</div><ol class="refs">'+REFS.map(function(r){return '<li><span>['+r.n+']</span><div>'+r.title+', '+r.org+'. <a href="'+r.url+'" target="_blank" rel="noopener">'+r.url+'</a> ('+r.date+')</div></li>';}).join("")+'</ol></div>':'';
   s.innerHTML='<div class="sh"><div class="sec">마무리</div><h2>'+(REFS.length?"참고자료와 다음 모듈":"다음 모듈")+'</h2></div>'+
-    '<div class="body '+(REFS.length?'split even':'full')+'" style="align-content:center">'+refs+
+    '<div class="body '+(REFS.length?'split even':'full')+'" style="'+(REFS.length?'grid-template-rows:minmax(0,1fr)':'align-content:center')+'">'+refs+
     '<div class="pcol" style="justify-content:center"><div class="nextmod"><small>다음 모듈 · '+NEXT.title+'</small><strong>'+NEXT.line+'</strong></div></div></div>'+
     '<p class="foot">학습 상태는 저장되지 않습니다.</p>';
   vp.appendChild(s);

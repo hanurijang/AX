@@ -195,7 +195,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
 .gi .d{font-size:14px;line-height:1.5}
 .gi .e{font-size:12.5px;line-height:1.45;color:var(--gray)}
 .gi .e strong{color:var(--navy3)}
-.refs{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:8px;font-size:13.5px;line-height:1.5}
+.refs{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:8px;font-size:13.5px;line-height:1.5;overflow-y:auto;flex:1 1 auto;min-height:0}
 .refs li{display:grid;grid-template-columns:30px 1fr;gap:4px}
 .refs li span{font-weight:800;color:var(--navy3)}
 .refs a{color:var(--navy2);word-break:break-all}
@@ -378,8 +378,8 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
       <div class="body split even">
         <div class="fig"><svg id="m37-state" viewBox="0 0 420 270" role="img" aria-label="설비 상태 정상, 주의, 고장 세 원 사이의 전이확률 화살표, 정상 유지 0.90, 정상에서 고장 0.02, 주의에서 고장 0.15"></svg></div>
         <div class="side">
-          <ul class="key"><li><b>마르코프 과정</b>: 현재 상태로 다음이 정해짐</li><li><b>마르코프 성질</b>: 과거와는 상관없음</li></ul>
-          <p class="exp">무작위 행보를 일반화한 확률 과정으로 마르코프 과정이 있습니다. 과거 상태와는 상관없이 현재 상태에 따라 다음 상태가 결정되며, 이 성질을 마르코프 성질이라 합니다. 상태와 시간이 모두 띄엄띄엄한 마르코프 과정은 흔히 마르코프 연쇄라 부릅니다. 설비 상태를 정상·주의·고장으로 나누면, 오늘 정상일 때 내일 정상 0.90, 주의 0.08, 고장 0.02 같은 전이확률을 생각할 수 있습니다. 이 성질과 확률 값은 가정이며, 며칠 전 상태의 영향을 받는다면 현재 상태에 과거 며칠을 포함하도록 개선할 수 있습니다.</p>
+          <ul class="key"><li><b>마르코프 과정</b>: 현재 상태로 다음이 정해짐</li><li><b>마르코프 성질</b>: 현재를 알면 과거는 추가 정보가 아님</li></ul>
+          <p class="exp">무작위 행보를 일반화한 확률 과정으로 마르코프 과정이 있습니다. 현재 상태를 조건으로 하면 그보다 앞선 과거는 다음 상태에 더 정보를 주지 않으며, 이 성질을 마르코프 성질이라 합니다. 상태와 시간이 모두 띄엄띄엄한 마르코프 과정은 흔히 마르코프 연쇄라 부릅니다. 설비 상태를 정상·주의·고장으로 나누면, 오늘 정상일 때 내일 정상 0.90, 주의 0.08, 고장 0.02 같은 전이확률을 생각할 수 있습니다. 이 성질과 확률 값은 가정이며, 며칠 전 상태의 영향을 받는다면 현재 상태에 과거 며칠을 포함하도록 개선할 수 있습니다.</p>
           <p class="next"><span>다음 질문</span>모레의 확률은 어떻게 구할까?</p>
         </div>
       </div>
@@ -411,7 +411,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
         <div class="fig"><svg id="m37-stat" viewBox="0 0 420 270" role="img" aria-label="오늘 정상에서 시작하든 고장에서 시작하든 며칠 뒤 고장 확률이 0.038로 수렴하는 그래프와 정상 상태 막대"></svg></div>
         <div class="side">
           <ul class="key"><li><b>정상 상태</b>: π = πQ, 곱해도 변하지 않음</li><li>전이확률은 데이터로 추정할 수도 있음</li></ul>
-          <p class="exp">시간이 충분히 지나면 Q를 곱해도 상태 확률분포가 변하지 않는 정상 상태 π에 이를 때가 있으며, π = πQ를 풀어 얻습니다. 설비 예에서는 오늘 정상이든 고장이든 며칠만 지나면 (정상 0.846, 주의 0.116, 고장 0.038)에 가까워집니다. 즉 장기적으로 하루가 고장일 확률은 약 3.8%로, 1년에 약 13.9일이 고장일 것으로 예상합니다. 지금까지는 확률을 가정하고 움직임을 조사했지만, 설비 일지 같은 데이터에서 최대가능도 방법 등으로 전이확률을 추정할 수도 있습니다.</p>
+          <p class="exp">시간이 충분히 지나면 Q를 곱해도 상태 확률분포가 변하지 않는 정상 상태 π에 이를 때가 있습니다. 상태가 서로 오갈 수 있어야 하는 등 추가 조건이 필요하며, 모든 연쇄가 그렇지는 않습니다. π = πQ를 풀어 얻습니다. 설비 예에서는 오늘 정상이든 고장이든 며칠만 지나면 (정상 0.846, 주의 0.116, 고장 0.038)에 가까워집니다. 즉 장기적으로 하루가 고장일 확률은 약 3.8%로, 1년에 약 13.9일이 고장일 것으로 예상합니다. 지금까지는 확률을 가정하고 움직임을 조사했지만, 설비 일지 같은 데이터에서 최대가능도 방법 등으로 전이확률을 추정할 수도 있습니다.</p>
           <p class="next"><span>다음 질문</span>수리 모형은 결국 무엇을 해 줄까?</p>
         </div>
       </div>
@@ -461,7 +461,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
           <div class="stats three"><div><small>n일 뒤 고장 확률</small><strong id="m37-pn">-</strong></div><div><small>정상 상태 고장</small><strong id="m37-ps">-</strong></div><div><small>연간 고장일</small><strong id="m37-yd">-</strong></div></div>
           <p class="howto">도전: 연간 고장일이 13일보다 적어지는 가장 작은 예방 정비율을 찾아보세요.</p>
           <p class="pmsg" id="m37-msg"></p>
-          <div class="think"><span>생각해보기</span>우리 설비의 전이확률은 어떤 기록으로 추정할 수 있을까요?</div>
+          <div class="think" style="flex-wrap:wrap"><span>생각해보기</span>우리 설비의 전이확률은 어떤 기록으로 추정할 수 있을까요?<details style="flex-basis:100%;font-weight:600"><summary style="cursor:pointer">예시 답</summary>정상에서 고장으로 바뀐 횟수와, 각 상태에 머문 시간 기록으로 추정합니다.</details></div>
         </div>
       </div>
     </section>
@@ -478,7 +478,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
           <div class="plabel" style="margin:0">결과 확인 · <span id="p2-count">0 / 0</span></div>
           <div class="bins" id="p2-bins"></div>
           <div class="p2row"><p class="pmsg" id="p2-msg"></p><button class="btn ghost" id="p2-reset">다시 하기</button></div>
-          <div class="think"><span>생각해보기</span>두 성질을 조합해야 하는 현장 현상은 무엇일까요?</div>
+          <div class="think" style="flex-wrap:wrap"><span>생각해보기</span>두 성질을 조합해야 하는 현장 현상은 무엇일까요?<details style="flex-basis:100%;font-weight:600"><summary style="cursor:pointer">예시 답</summary>우연한 도착과 정해진 가공시간처럼 확률과 수리가 함께 있는 대기·버퍼입니다.</details></div>
         </div>
       </div>
     </section>
@@ -497,7 +497,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
           <button class="btn" id="m37-check" style="align-self:flex-start">500번 시뮬레이션</button>
           <div class="stats three"><div><small>내 예측</small><strong id="m37-mine">-</strong></div><div><small>σ√t</small><strong id="m37-th">?</strong></div><div><small>시뮬레이션</small><strong id="m37-sim">?</strong></div></div>
           <p class="pmsg" id="m37-msg3"></p>
-          <div class="think"><span>생각해보기</span>버퍼 용량을 정할 때 이 퍼짐을 어떻게 쓸 수 있을까요?</div>
+          <div class="think" style="flex-wrap:wrap"><span>생각해보기</span>버퍼 용량을 정할 때 이 퍼짐을 어떻게 쓸 수 있을까요?<details style="flex-basis:100%;font-weight:600"><summary style="cursor:pointer">예시 답</summary>평균만이 아니라 퍼짐의 상위 쪽을 보고, 넘치지 않을 용량을 정합니다.</details></div>
         </div>
       </div>
     </section>
@@ -545,7 +545,7 @@ var QUIZ=[
   exp:"t번 뒤 분포의 표준편차는 σ√t = 1 × √400 = 20개입니다. 표준편차는 t가 아니라 √t에 비례해 커지므로, 시간이 4배가 되면 퍼짐은 2배가 됩니다. 0개는 기댓값만 보고 퍼짐을 무시한 답입니다. 정규분포로 근사하면 약 95%가 100 ± 40개(60~140개) 안에 들어옵니다.",back:"s-4-1b",backLabel:"4-1 무작위 행보의 퍼짐 다시 보기"},
  {goal:2,type:"상황 판단",stem:"설비 상태(정상·주의·고장)를 마르코프 과정으로 모형화했습니다. 이 모형이 두고 있는 가정은 무엇일까요?",
   opts:["내일 상태는 오늘 상태만으로 확률이 정해진다","내일 상태는 지난 일주일 상태로 정해진다","설비는 반드시 정상 → 주의 → 고장 순서로만 바뀐다","내일 상태는 확률 없이 하나로 정해진다"],ans:0,
-  exp:"마르코프 과정은 과거 상태와는 상관없이 현재 상태에 따라 다음 상태가 결정되는 확률 과정이며, 이 성질을 마르코프 성질이라 합니다. 이는 가정에 지나지 않으며, 며칠 전 상태의 영향을 받는다면 현재 상태에 과거 며칠의 상태를 포함하도록 개선해 마르코프 과정으로 표현할 수 있습니다.",back:"s-4-2a",backLabel:"4-2 마르코프 과정 다시 보기"},
+  exp:"마르코프 과정은 현재 상태를 조건으로 하면 그보다 앞선 과거가 다음 상태에 더 정보를 주지 않는 확률 과정이며, 이 성질을 마르코프 성질이라 합니다. 이는 가정에 지나지 않으며, 며칠 전 상태의 영향을 받는다면 현재 상태에 과거 며칠의 상태를 포함하도록 개선해 마르코프 과정으로 표현할 수 있습니다.",back:"s-4-2a",backLabel:"4-2 마르코프 과정 다시 보기"},
  {goal:2,type:"계산",stem:"오늘 설비가 정상입니다. 전이행렬의 첫 행이 (정상 0.90, 주의 0.08, 고장 0.02)이고, 주의 → 고장은 0.15, 고장 → 고장은 0.10입니다. 모레 고장일 확률은?",
   opts:["0.032","0.02","0.0004","0.04"],ans:0,
   exp:"내일의 확률분포는 π₁ = (0.90, 0.08, 0.02)입니다. 모레 고장 확률은 각 상태에서 고장으로 갈 확률을 더해 0.90 × 0.02 + 0.08 × 0.15 + 0.02 × 0.10 = 0.018 + 0.012 + 0.002 = 0.032입니다. 즉 π₂ = π₁Q = π₀Q²로 계산합니다.",back:"s-4-2b",backLabel:"4-2 전이행렬 다시 보기"},
@@ -565,14 +565,17 @@ var HINT={"결정론 모형":"현재 상태가 정해지면 다음 상태가 단
 var GLOSSARY=[
  ["무작위 행보","random walk","각 시각마다 확률적으로 +1이나 −1처럼 움직이는 가장 간단한 확률 모형입니다.","버퍼 재고가 입출고마다 ±1"],
  ["확률 과정","stochastic process","확률적으로 시간 변동하는 현상을 기술하는 수리 모형입니다.","재고 수량, 설비 상태의 변화"],
- ["마르코프 과정","Markov process","과거 상태와는 상관없이 현재 상태에 따라 다음 상태가 결정되는 확률 과정입니다.","오늘 설비 상태로 내일 상태 확률을 정함"],
- ["마르코프 성질","Markov property","과거와 상관없이 현재 상태에 따라 미래가 정해지는 성질입니다.","어제가 고장이었는지는 내일에 영향 없음"],
+ ["마르코프 과정","Markov process","현재 상태를 조건으로 하면 그보다 앞선 과거가 다음 상태에 더 정보를 주지 않는 확률 과정입니다.","오늘 설비 상태로 내일 상태 확률을 정함"],
+ ["마르코프 성질","Markov property","현재 상태를 조건으로 하면 과거가 다음 상태에 추가 정보를 주지 않는 성질입니다.","어제가 고장이었는지는 내일에 영향 없음"],
  ["전이행렬","transition matrix","상태 i에서 상태 j로 바뀔 확률 pᵢⱼ를 나열한 행렬입니다.","정상 → 고장 0.02"],
  ["정상 상태","stationary distribution","시간이 충분히 지나 전이행렬을 곱해도 변하지 않는 상태 확률분포로, π = πQ를 풀어 얻습니다.","정상 0.846 · 주의 0.116 · 고장 0.038"],
  ["사고 실험","thought experiment","‘만약 이렇게 되면 어떤 일이 일어날까?’를 머릿속이나 모형 위에서 따져 보는 것입니다.","예방 정비를 늘리면 고장일은?"]
 ];
 var REFS=[
- {n:1,title:"The Problem of the Random Walk",org:"K. Pearson, Nature 72, 294, 1905",url:"https://doi.org/10.1038/072294b0",date:"2026-10-27 확인"}
+ {n:1,title:"The Problem of the Random Walk",org:"K. Pearson, Nature 72, 294, 1905",url:"https://doi.org/10.1038/072294b0",date:"2026-10-27 확인"},
+ {n:2,title:"R을 활용한 통계학개론",org:"K-MOOC, KOCW 공개강의",url:"https://www.kocw.net/home/search/kemView.do?kemId=1517479",date:"2026-10-28 확인"},
+ {n:3,title:"공공데이터포털",org:"행정안전부",url:"https://www.data.go.kr",date:"2026-10-28 확인"},
+ {n:4,title:"데이터로 배우는 통계학",org:"K-MOOC",url:"https://www.kmooc.kr/view/course/detail/20384",date:"2026-10-28 확인"}
 ];
 var NEXT={title:"과정 마무리 · 다음 단계",line:"이 모듈로 통계 기초부터 베이즈·기계학습·수리 모형까지의 과정을 마칩니다. 다음 단계로 R이나 Python으로 우리 현장 데이터를 직접 분석해 보기를 권합니다."};
 
@@ -852,9 +855,9 @@ for(var gi=0;gi<GLOSSARY.length;gi+=6){
 }
 (function(){
   var s=document.createElement("section");s.className="slide";s.dataset.step="6";s.id="end";
-  var refs=REFS.length?'<div class="pcol" style="gap:10px"><div class="plabel" style="margin:0">참고자료</div><ol class="refs">'+REFS.map(function(r){return '<li><span>['+r.n+']</span><div>'+r.title+', '+r.org+'. <a href="'+r.url+'" target="_blank" rel="noopener">'+r.url+'</a> ('+r.date+')</div></li>';}).join("")+'</ol></div>':'';
+  var refs=REFS.length?'<div class="pcol" style="gap:10px;min-height:0;overflow:hidden"><div class="plabel" style="margin:0">참고자료</div><ol class="refs">'+REFS.map(function(r){return '<li><span>['+r.n+']</span><div>'+r.title+', '+r.org+'. <a href="'+r.url+'" target="_blank" rel="noopener">'+r.url+'</a> ('+r.date+')</div></li>';}).join("")+'</ol></div>':'';
   s.innerHTML='<div class="sh"><div class="sec">마무리</div><h2>'+(REFS.length?"참고자료와 다음 단계":"다음 모듈")+'</h2></div>'+
-    '<div class="body '+(REFS.length?'split even':'full')+'" style="align-content:center">'+refs+
+    '<div class="body '+(REFS.length?'split even':'full')+'" style="'+(REFS.length?'grid-template-rows:minmax(0,1fr)':'align-content:center')+'">'+refs+
     '<div class="pcol" style="justify-content:center"><div class="nextmod"><small>'+NEXT.title+'</small><strong>'+NEXT.line+'</strong></div></div></div>'+
     '<p class="foot">학습 상태는 저장되지 않습니다.</p>';
   vp.appendChild(s);

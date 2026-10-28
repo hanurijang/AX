@@ -195,7 +195,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
 .gi .d{font-size:14px;line-height:1.5}
 .gi .e{font-size:12.5px;line-height:1.45;color:var(--gray)}
 .gi .e strong{color:var(--navy3)}
-.refs{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:8px;font-size:13.5px;line-height:1.5}
+.refs{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:8px;font-size:13.5px;line-height:1.5;overflow-y:auto;flex:1 1 auto;min-height:0}
 .refs li{display:grid;grid-template-columns:30px 1fr;gap:4px}
 .refs li span{font-weight:800;color:var(--navy3)}
 .refs a{color:var(--navy2);word-break:break-all}
@@ -434,8 +434,8 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
           </div>
         </div>
         <div class="side">
-          <ul class="key"><li><b>로지스틱 함수</b>: 값을 0~1로 바꾸는 S자</li><li>a는 가로 이동, b는 변화의 정도</li></ul>
-          <p class="exp">가장 간단한 1차식 a + bx는 로지스틱 함수를 거쳐 확률 p로 변환됩니다. 로지스틱 함수는 정의역이 (−∞, +∞)이고 치역이 [0, 1]이므로 이항분포의 파라미터 p를 나타내기에 적합합니다. a는 곡선을 가로로 평행이동하고, b는 변화의 정도로 절댓값이 클수록 급격하게 변하며 부호는 증가인지 감소인지를 결정합니다. 0 또는 1인 데이터 실현값과 달리 회귀식의 반응변수는 연속값인 확률 p이며, b가 0이면 x가 바뀌어도 p는 달라지지 않습니다.</p>
+          <ul class="key"><li>관측값 Y는 0 또는 1, 모형은 확률 p</li><li>로지스틱 함수의 값은 (0, 1) 사이</li></ul>
+          <p class="exp">관측되는 반응변수 Y는 0 또는 1입니다. 모형이 추정하는 것은 Y가 1일 조건부확률 p(x) = P(Y=1 | X=x)입니다. 로지스틱 함수 p = 1 ÷ (1 + exp(−(a + bx)))는 정의역이 (−∞, +∞)이고, 값이 정확히 0이나 1이 되지 않아 치역은 (0, 1)입니다. a는 곡선을 가로로 평행이동하고, b는 변화의 정도로 절댓값이 클수록 급격하게 변하며 부호는 증가인지 감소인지를 결정합니다. b가 0이면 x가 바뀌어도 p는 달라지지 않습니다.</p>
           <p class="next"><span>다음 질문</span>일반화선형모형의 구조로 보면?</p>
         </div>
       </div>
@@ -467,7 +467,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
         </div>
         <div class="side">
           <ul class="key"><li><b>오즈</b>: p ÷ (1 − p), 0 ~ ∞</li><li><b>오즈비</b>: 두 오즈의 비, 1보다 크면 p 쪽이 쉬움</li></ul>
-          <p class="exp">어떤 사건이 일어날 확률 p와 일어나지 않을 확률 1 − p의 비율을 오즈라 하며, p = 0.8이면 오즈는 4입니다. 확률 p와 q에 대한 2개의 오즈 비율이 오즈비이며, 1보다 크면 p가 q보다 일어나기 쉽고 1보다 작으면 q가 더 쉽습니다. 감기약을 먹은 사람이 3일 안에 나을 확률 0.8, 먹지 않은 사람 0.4라면 오즈비는 6입니다. 다만 오즈비가 2라고 해서 말 그대로 2배 쉽다는 뜻은 아니므로 해석에 주의합니다.</p>
+          <p class="exp">어떤 사건이 일어날 확률 p와 일어나지 않을 확률 1 − p의 비율을 오즈라 하며, p = 0.8이면 오즈는 4입니다. 확률 p와 q에 대한 2개의 오즈 비율이 오즈비이며, 1보다 크면 p가 q보다 일어나기 쉽고 1보다 작으면 q가 더 쉽습니다. 감기약을 먹은 사람이 3일 안에 나을 확률 0.8, 먹지 않은 사람 0.4라면 오즈비는 6입니다. x가 1 늘 때의 오즈비 exp(b)는 오즈가 몇 배가 되는지를 뜻하며, 확률 자체의 배수와는 다릅니다.</p>
           <p class="next"><span>다음 질문</span>오즈비는 왜 자주 쓰일까?</p>
         </div>
       </div>
@@ -505,7 +505,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
           <tbody>
             <tr><td>일반화선형모형</td><td>오차분포를 이항·푸아송 등으로 지정하고 최대가능도로 추정합니다.</td><td>사망 여부 → 이항분포</td></tr>
             <tr><td>최대가능도 방법</td><td>데이터가 가장 나타나기 쉬운 θ를 고릅니다. 정규 오차면 최소제곱법과 같습니다.</td><td>최대 로그 가능도 −9.11</td></tr>
-            <tr><td>로지스틱 회귀</td><td>p = 1 ÷ (1 + exp(−(a + bx))). 연결함수는 로짓 함수입니다.</td><td>a = −4.48, b = 0.877, 50% 농도 5.1</td></tr>
+            <tr><td>로지스틱 회귀</td><td>관측 Y는 0·1, p = 1 ÷ (1 + exp(−(a + bx)))는 (0, 1). 연결함수는 로짓.</td><td>a = −4.48, b = 0.877, 50% 농도 5.1</td></tr>
             <tr><td>오즈비</td><td>exp(b). 95% 신뢰구간에 1이 없으면 유의. 사례-대조 연구에 적합합니다.</td><td>2.40 (1.33 ~ 4.34)</td></tr>
           </tbody>
         </table>
@@ -530,7 +530,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
           <div class="stats"><div><small>내 곡선의 로그 가능도</small><strong id="m21-ll">-</strong></div><div><small>최댓값 (최대가능도)</small><strong>−9.11</strong></div></div>
           <p class="howto">도전: 로그 가능도를 −9.5보다 크게 만들어 보세요. 0에 가까울수록 데이터가 나타나기 쉬운 곡선입니다.</p>
           <p class="pmsg" id="m21-msg"></p>
-          <div class="think"><span>생각해보기</span>b를 아주 크게 하면 왜 오히려 로그 가능도가 나빠질까요?</div>
+          <div class="think" style="flex-wrap:wrap"><span>생각해보기</span>b를 아주 크게 하면 왜 오히려 로그 가능도가 나빠질까요?<details style="flex-basis:100%;font-weight:600"><summary style="cursor:pointer">예시 답</summary>확률이 0과 1에 바짝 붙어, 맞지 않는 관측의 가능도가 급히 나빠지기 때문입니다.</details></div>
         </div>
       </div>
     </section>
@@ -547,7 +547,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
           <div class="plabel" style="margin:0">결과 확인 · <span id="p2-count">0 / 0</span></div>
           <div class="bins" id="p2-bins"></div>
           <div class="p2row"><p class="pmsg" id="p2-msg"></p><button class="btn ghost" id="p2-reset">다시 하기</button></div>
-          <div class="think"><span>생각해보기</span>‘불량률(%)’을 반응변수로 하면 어느 칸에 가까울까요?</div>
+          <div class="think" style="flex-wrap:wrap"><span>생각해보기</span>‘불량률(%)’을 반응변수로 하면 어느 칸에 가까울까요?<details style="flex-basis:100%;font-weight:600"><summary style="cursor:pointer">예시 답</summary>0과 1의 로지스틱보다는, 비율이나 건수를 노출로 나눈 모형에 가깝습니다.</details></div>
         </div>
       </div>
     </section>
@@ -566,7 +566,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
           <button class="btn" id="m21-check" style="align-self:flex-start">계산해서 확인</button>
           <div class="stats three"><div><small>내 예측</small><strong id="m21-mine">-</strong></div><div><small>회귀식 p</small><strong id="m21-act">?</strong></div><div><small>오즈 p ÷ (1 − p)</small><strong id="m21-od">?</strong></div></div>
           <p class="pmsg" id="m21-msg3"></p>
-          <div class="think"><span>생각해보기</span>농도가 1 오를 때마다 오즈는 몇 배가 되나요?</div>
+          <div class="think" style="flex-wrap:wrap"><span>생각해보기</span>농도가 1 오를 때마다 오즈는 몇 배가 되나요?<details style="flex-basis:100%;font-weight:600"><summary style="cursor:pointer">예시 답</summary>오즈는 exp(0.877) ≈ 2.40배가 됩니다.</details></div>
         </div>
       </div>
     </section>
@@ -612,10 +612,10 @@ var QUIZ=[
   exp:"가능도는 얻은 데이터 x가 파라미터 θ인 확률분포에서 얼마나 나타나기 쉬운가를 θ의 함수로 본 것입니다. 가능도를 최대화하는 θ를 추정값으로 삼으면 얻은 데이터에 가장 잘 들어맞는 파라미터가 되며, 이것이 최대가능도 방법입니다.",back:"s-4-2a",backLabel:"4-2 가능도 다시 보기"},
  {goal:2,type:"계산",stem:"로지스틱 회귀로 a = −4.48, b = 0.877을 얻었습니다. 살충제 농도 x = 5.1일 때 사망 확률 p는 약 얼마일까요?",
   opts:["약 0.5","약 0.88","약 0","약 4.47"],ans:0,
-  exp:"a + bx = −4.48 + 0.877 × 5.1 ≈ 0이므로 p = 1 ÷ (1 + exp(0)) = 1 ÷ 2 = 0.5입니다. 로지스틱 함수는 a + bx가 0일 때 0.5, 클수록 1에, 작을수록 0에 가까워지며 언제나 0~1 사이의 값을 냅니다.",back:"s-4-3b",backLabel:"4-3 로지스틱 함수 다시 보기"},
+  exp:"a + bx = −4.48 + 0.877 × 5.1 ≈ 0이므로 p = 1 ÷ (1 + exp(0)) = 0.5입니다. a + bx가 커질수록 1에, 작아질수록 0에 가까워지지만 정확히 0이나 1은 되지 않습니다.",back:"s-4-3b",backLabel:"4-3 로지스틱 함수 다시 보기"},
  {goal:2,type:"O/X 오개념",stem:"“로지스틱 회귀에서 반응변수의 회귀식 값은 0 또는 1 둘 중 하나로만 나온다.”",
   opts:["O","X"],ans:1,ox:true,
-  exp:"데이터 실현값은 0 또는 1이지만, 회귀식이 나타내는 반응변수는 0부터 1까지의 연속값인 확률 p입니다. 예를 들어 농도 2에서는 사망 확률 0.06, 농도 8에서는 0.93처럼 나옵니다.",back:"s-4-3a",backLabel:"4-3 로지스틱 회귀 다시 보기"},
+  exp:"관측값 Y는 0 또는 1이지만, 회귀식이 내는 것은 조건부확률 p입니다. p는 (0, 1) 사이이고 정확히 0이나 1이 되지 않습니다. 농도 2에서는 약 0.06, 농도 8에서는 약 0.93입니다.",back:"s-4-3a",backLabel:"4-3 로지스틱 회귀 다시 보기"},
  {goal:3,type:"계산",stem:"감기약을 먹은 사람이 3일 안에 나을 확률 p = 0.8, 먹지 않은 사람이 3일 안에 나을 확률 q = 0.4입니다. 오즈비는 얼마일까요?",
   opts:["6","2","0.5","3"],ans:0,
   exp:"오즈비 = (p ÷ (1 − p)) ÷ (q ÷ (1 − q)) = (0.8 ÷ 0.2) ÷ (0.4 ÷ 0.6) = 4 ÷ 0.667 = 6입니다. 2는 확률의 비 p ÷ q(위험비)이므로, 오즈비가 6이라고 ‘6배 낫기 쉽다’고 해석하면 안 됩니다.",back:"s-4-4a",backLabel:"4-4 오즈와 오즈비 다시 보기"},
@@ -635,16 +635,21 @@ var GLOSSARY=[
  ["일반화선형모형","generalized linear model, GLM","오차분포를 정규분포 이외(이항분포, 푸아송 분포 등)로 지정하고 최대가능도 방법으로 추정하는 회귀모형입니다.","로지스틱 회귀"],
  ["가능도","likelihood","얻은 데이터 x가 파라미터 θ인 확률분포에서 나타날 확률 P(x | θ)를 θ의 함수 L(θ | x)로 본 것입니다.","μ = 50일 때 log L = −379.2"],
  ["최대가능도 방법","maximum likelihood method","가능도(또는 로그 가능도)를 최대화하는 θ를 추정값으로 삼는 방법으로, 최대가능도 추정이라고도 합니다.","μ̂ = 49.4"],
- ["로지스틱 회귀","logistic regression","반응변수가 값이 2개인 범주형 변수일 때, 한 범주가 일어날 확률 p를 로지스틱 함수로 나타내는 회귀입니다.","살충제 농도 → 사망 확률"],
+ ["로지스틱 회귀","logistic regression","관측값 Y는 0 또는 1이고, 모형은 P(Y=1|x)를 (0, 1) 안의 확률로 추정합니다.","살충제 농도 → 사망 확률"],
  ["이항분포","binomial distribution","확률 p인 일을 N번 독립 시행할 때 x번 일어날 확률의 분포 B(N, p)로, 평균 Np, 분산 Np(1 − p)입니다.","벌레 1마리의 사망(N = 1)"],
- ["로지스틱 함수","logistic function","p = 1 ÷ (1 + exp(−(a + bx)))로, 정의역 전체를 0~1 범위로 바꾸는 S자 함수입니다.","a + bx = 0이면 p = 0.5"],
+ ["로지스틱 함수","logistic function","p = 1 ÷ (1 + exp(−(a + bx)))인 S자 함수입니다. 값은 (0, 1) 사이이고 0이나 1이 되지 않습니다.","a + bx = 0이면 p = 0.5"],
  ["로짓 함수","logit function","로지스틱 함수를 변형한 log(p ÷ (1 − p))로, 로지스틱 회귀의 연결함수입니다.","log(p ÷ (1 − p)) = a + bx"],
  ["선형예측변수","linear predictor","일반화선형모형에서 a + bx처럼 설명변수의 1차식으로 된 부분입니다.","−4.48 + 0.877x"],
  ["연결함수","link function","선형예측변수와 반응변수의 확률분포 파라미터를 잇는 함수입니다.","로지스틱 회귀의 로짓 함수"],
  ["오즈","odds","어떤 사건이 일어날 확률 p와 일어나지 않을 확률 1 − p의 비 p ÷ (1 − p)입니다.","p = 0.8이면 오즈 4"],
- ["오즈비","odds ratio, OR","2개 확률 p, q에 대한 2개 오즈의 비로, 어느 쪽이 더 일어나기 쉬운지 나타냅니다.","농도 1당 OR = 2.40"]
+ ["오즈비","odds ratio, OR","두 오즈의 비입니다. x가 1 늘 때의 exp(b)는 오즈의 배수이고, 확률의 배수와는 다릅니다.","농도 1당 OR = 2.40"]
 ];
-var REFS=[];
+var REFS=[
+ {n:1,title:"기초통계학Ⅱ",org:"여인권, 숙명여자대학교, KOCW 공개강의",url:"https://www.kocw.net/home/search/kemView.do?kemId=1080231",date:"2026-10-28 확인"},
+ {n:2,title:"R을 활용한 통계학개론",org:"K-MOOC, KOCW 공개강의",url:"https://www.kocw.net/home/search/kemView.do?kemId=1517479",date:"2026-10-28 확인"},
+ {n:3,title:"공공데이터포털",org:"행정안전부",url:"https://www.data.go.kr",date:"2026-10-28 확인"},
+ {n:4,title:"데이터로 배우는 통계학",org:"K-MOOC",url:"https://www.kmooc.kr/view/course/detail/20384",date:"2026-10-28 확인"}
+];
 var NEXT={title:"M22 푸아송 회귀와 다양한 일반화선형모형",line:"반응변수가 개수일 때는 푸아송 분포를 씁니다. 다음 모듈에서는 푸아송 회귀와 함께 여러 가지 일반화선형모형을 정리합니다."};
 
 /* =====================================================================
@@ -952,9 +957,9 @@ for(var gi=0;gi<GLOSSARY.length;gi+=6){
 }
 (function(){
   var s=document.createElement("section");s.className="slide";s.dataset.step="6";s.id="end";
-  var refs=REFS.length?'<div class="pcol" style="gap:10px"><div class="plabel" style="margin:0">참고자료</div><ol class="refs">'+REFS.map(function(r){return '<li><span>['+r.n+']</span><div>'+r.title+', '+r.org+'. <a href="'+r.url+'" target="_blank" rel="noopener">'+r.url+'</a> ('+r.date+')</div></li>';}).join("")+'</ol></div>':'';
+  var refs=REFS.length?'<div class="pcol" style="gap:10px;min-height:0;overflow:hidden"><div class="plabel" style="margin:0">참고자료</div><ol class="refs">'+REFS.map(function(r){return '<li><span>['+r.n+']</span><div>'+r.title+', '+r.org+'. <a href="'+r.url+'" target="_blank" rel="noopener">'+r.url+'</a> ('+r.date+')</div></li>';}).join("")+'</ol></div>':'';
   s.innerHTML='<div class="sh"><div class="sec">마무리</div><h2>'+(REFS.length?"참고자료와 다음 모듈":"다음 모듈")+'</h2></div>'+
-    '<div class="body '+(REFS.length?'split even':'full')+'" style="align-content:center">'+refs+
+    '<div class="body '+(REFS.length?'split even':'full')+'" style="'+(REFS.length?'grid-template-rows:minmax(0,1fr)':'align-content:center')+'">'+refs+
     '<div class="pcol" style="justify-content:center"><div class="nextmod"><small>다음 모듈 · '+NEXT.title+'</small><strong>'+NEXT.line+'</strong></div></div></div>'+
     '<p class="foot">학습 상태는 저장되지 않습니다.</p>';
   vp.appendChild(s);

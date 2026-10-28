@@ -195,7 +195,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
 .gi .d{font-size:14px;line-height:1.5}
 .gi .e{font-size:12.5px;line-height:1.45;color:var(--gray)}
 .gi .e strong{color:var(--navy3)}
-.refs{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:8px;font-size:13.5px;line-height:1.5}
+.refs{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:8px;font-size:13.5px;line-height:1.5;overflow-y:auto;flex:1 1 auto;min-height:0}
 .refs li{display:grid;grid-template-columns:30px 1fr;gap:4px}
 .refs li span{font-weight:800;color:var(--navy3)}
 .refs a{color:var(--navy2);word-break:break-all}
@@ -223,7 +223,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
       <div class="body split">
         <div class="fig"><svg id="m32-ov" viewBox="0 0 440 260" role="img" aria-label="검사 5항목을 주성분분석으로 강도·인성 2개 축으로 요약하고, 인자분석은 잠재 인자가 변수를 만든다고 가정하는 흐름"></svg></div>
         <div class="side">
-          <div class="prevlink"><small>지난 모듈에서는</small>MCMC 방법으로 사후분포를 구하고, 이표본 비교·푸아송 회귀·계층적 베이지안 모형에 베이즈 통계를 적용했습니다.<small style="margin-top:8px">이번 모듈에서는</small>변수가 많은 다변량 데이터에서 변수의 수를 줄이는 차원 축소와, 그 대표 방법인 주성분분석과 인자분석을 배웁니다.</div>
+          <div class="prevlink"><small>지난 모듈에서는</small>MCMC 방법으로 사후분포를 구하고, 이표본 비교·푸아송 회귀·계층적 베이지안 모형에 베이즈 통계를 적용했습니다. 그 계산의 다음 단계가 아니라 주제가 바뀝니다.<small style="margin-top:8px">이번 모듈에서는</small>변수가 많은 다변량 데이터에서 변수의 수를 줄이는 차원 축소와, 그 대표 방법인 주성분분석과 인자분석을 배웁니다.</div>
           <dl class="meta"><dt>학습 시간</dt><dd>약 35분</dd><dt>본문</dt><dd>소단원 3개</dd><dt>실습</dt><dd>조작형 · 분류형 · 추정형</dd></dl>
         </div>
       </div>
@@ -254,7 +254,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
           <div class="ga"><button class="jump" data-jump="q5">문항 5·6</button></div><div class="gp"><button class="jump" data-jump="p3">실습 3 추정</button></div>
         </div>
       </div>
-      <p class="foot">버튼을 누르면 해당 문항이나 실습 화면으로 바로 이동합니다.</p>
+      <p class="foot">4-1·4-2는 기초, 4-3 인자분석은 추가 읽기입니다. 버튼을 누르면 해당 문항이나 실습으로 이동합니다.</p>
     </section>
 
     <!-- ③ 일상의 예시 ─────────────────────────────── -->
@@ -340,7 +340,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
 
     <!-- ④ 본문 ─────────────────────────────── -->
     <section class="slide" data-step="3" id="s-4-1a">
-      <div class="sh"><div class="sec">4-1 변수의 차원</div><h2><span class="q">Q</span>변수가 많으면 정보도 그만큼 많을까요?</h2></div>
+      <div class="sh"><div class="sec">4-1 변수의 차원 · 기초</div><h2><span class="q">Q</span>변수가 많으면 정보도 그만큼 많을까요?</h2></div>
       <div class="body split even">
         <div class="fig"><svg id="m32-dim" viewBox="0 0 420 270" role="img" aria-label="두께 mm와 μm는 완전 상관이라 하나로 충분, 인장강도와 항복강도는 강한 상관이라 강도 하나로 요약 가능"></svg></div>
         <div class="side">
@@ -352,7 +352,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
     </section>
 
     <section class="slide" data-step="3" id="s-4-1b">
-      <div class="sh"><div class="sec">4-1 변수의 차원</div><h2><span class="q">Q</span>변수가 많으면 분석에서 어떤 문제가 생길까요?</h2></div>
+      <div class="sh"><div class="sec">4-1 변수의 차원 · 기초</div><h2><span class="q">Q</span>변수가 많으면 분석에서 어떤 문제가 생길까요?</h2></div>
       <div class="body split even">
         <div class="fig"><svg id="m32-why" viewBox="0 0 420 270" role="img" aria-label="변수의 수를 줄이는 세 가지 이유: 고차원 해석의 어려움, 다중공선성, 차원의 저주"></svg></div>
         <div class="side">
@@ -364,19 +364,19 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
     </section>
 
     <section class="slide" data-step="3" id="s-4-2a">
-      <div class="sh"><div class="sec">4-2 주성분분석</div><h2><span class="q">Q</span>새로운 축은 어느 방향으로 잡아야 할까요?</h2></div>
+      <div class="sh"><div class="sec">4-2 주성분분석 · 기초</div><h2><span class="q">Q</span>새로운 축은 어느 방향으로 잡아야 할까요?</h2></div>
       <div class="body split even">
         <div class="fig"><svg id="m32-axis" viewBox="0 0 420 270" role="img" aria-label="표준화한 인장강도와 경도의 산점도에 데이터 퍼짐이 가장 큰 방향 PC1과 수직인 PC2를 그림, 분산이 PC1에 몰림"></svg></div>
         <div class="side">
-          <ul class="key"><li><b>주성분분석</b>: 퍼짐이 가장 큰 방향으로 새 축</li><li><b>제1주성분</b>(PC1)에 정보를 압축합니다.</li></ul>
-          <p class="exp">차원 축소에 사용하는 가장 기본적인 방법이 주성분분석(PCA)입니다<span class="cite">[1]</span>. 상관이 있는 변수끼리는 하나로 정리될 수 있다는 아이디어에 기반을 두며, 새로운 축을 설정해 그 축 위의 값으로 데이터를 새롭게 바라봅니다. 인장강도와 경도처럼 강한 상관이 있을 때, 새로운 축은 데이터 퍼짐이 가장 커지는 방향으로 설정하며 이를 PC1(제1주성분)이라 합니다. 그리고 PC1과 수직이고 퍼짐이 가장 커지는 방향으로 두 번째 축 PC2를 설정합니다. 각 값의 위치 정보는 평균으로부터의 거리, 즉 퍼짐으로 나타나므로 PC1 방향의 퍼짐이 크다는 것은 PC1에 많은 정보가 있다는 뜻입니다. 원래 각 축에 있던 정보를 PC1으로 압축해 넣는 느낌입니다.</p>
+          <ul class="key"><li><b>주성분분석</b>: 퍼짐이 가장 큰 방향으로 새 축</li><li><b>제1주성분</b>(PC1)에 흩어짐이 많이 담깁니다.</li></ul>
+          <p class="exp">차원 축소에 사용하는 가장 기본적인 방법이 주성분분석(PCA)입니다<span class="cite">[1]</span>. 상관이 있는 변수끼리는 하나로 정리될 수 있다는 아이디어에 기반을 두며, 새로운 축을 설정해 그 축 위의 값으로 데이터를 새롭게 바라봅니다. 인장강도와 경도처럼 강한 상관이 있을 때, 새로운 축은 데이터 퍼짐이 가장 커지는 방향으로 설정하며 이를 PC1(제1주성분)이라 합니다. 그리고 PC1과 수직이고 퍼짐이 가장 커지는 방향으로 두 번째 축 PC2를 설정합니다. PC1 방향의 퍼짐이 크다는 것은 그 축이 원래 변수의 흩어짐을 많이 담는다는 뜻이지, 예측에 더 중요하다는 뜻은 아닙니다. 원래 각 축에 있던 정보를 PC1으로 압축해 넣는 느낌입니다.</p>
           <p class="next"><span>다음 질문</span>몇 개의 축이면 충분할까?</p>
         </div>
       </div>
     </section>
 
     <section class="slide" data-step="3" id="s-4-2b">
-      <div class="sh"><div class="sec">4-2 주성분분석</div><h2><span class="q">Q</span>주성분 몇 개로 정보를 얼마나 담을 수 있을까요?</h2></div>
+      <div class="sh"><div class="sec">4-2 주성분분석 · 기초</div><h2><span class="q">Q</span>주성분 몇 개로 정보를 얼마나 담을 수 있을까요?</h2></div>
       <div class="body split even">
         <div class="figcol">
           <div class="fig"><svg id="m32-cont" viewBox="0 0 420 150" role="img" aria-label="검사 5항목 주성분분석의 기여율 막대와 누적기여율 선, PC2까지 88.3%"></svg></div>
@@ -389,26 +389,26 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
         </div>
         <div class="side">
           <ul class="key"><li><b>기여율</b>: 각 주성분이 가진 정보의 비율</li><li><b>누적기여율</b>: 제k주성분까지의 합</li></ul>
-          <p class="exp">주성분 Z<sub>1</sub>은 원래 변수에 계수를 곱해 더한 값이며, Z<sub>1</sub>의 분산이 최대가 되도록 계수를 구합니다. PC2 이후는 그때까지 얻은 주성분과 직교하도록 설정하므로 새로운 축의 변수와는 무상관이 됩니다. 구체적으로는 원래 데이터의 상관행렬(변수 단위나 척도가 다를 때)의 고윳값과 고유 벡터를 구하며, 계수는 고유 벡터, 각 고윳값을 고윳값 총합으로 나눈 것은 기여율에 대응합니다. 변수의 수를 M이라 하면 제M주성분까지 만들 수 있고, ‘제1부터 제k주성분까지 전체 정보의 몇 %가 포함되는지’를 누적기여율이라 합니다. 검사 5항목에서는 PC1 53.1%, PC2 35.2%로 제2주성분까지 88.3%를 가지므로 2개로 줄여도 충분하다고 볼 수 있습니다.</p>
+          <p class="exp">주성분 Z<sub>1</sub>은 원래 변수에 계수를 곱해 더한 값이며, Z<sub>1</sub>의 분산이 최대가 되도록 계수를 구합니다. PC2 이후는 그때까지 얻은 주성분과 직교하도록 설정하므로 새로운 축의 변수와는 무상관이 됩니다. 단위가 다르면 표준화한 상관행렬의 고윳값과 고유 벡터를 구하며, 계수는 고유 벡터, 각 고윳값을 고윳값 총합으로 나눈 것은 기여율에 대응합니다. 변수의 수를 M이라 하면 제M주성분까지 만들 수 있고, ‘제1부터 제k주성분까지 전체 정보의 몇 %가 포함되는지’를 누적기여율이라 합니다. 검사 5항목에서는 PC1 53.1%, PC2 35.2%로 제2주성분까지 88.3%를 가지므로 2개로 줄여도 충분하다고 볼 수 있습니다.</p>
           <p class="next"><span>다음 질문</span>각 주성분은 무엇을 뜻할까?</p>
         </div>
       </div>
     </section>
 
     <section class="slide" data-step="3" id="s-4-2c">
-      <div class="sh"><div class="sec">4-2 주성분분석</div><h2><span class="q">Q</span>PC1과 PC2는 각각 어떤 축일까요?</h2></div>
+      <div class="sh"><div class="sec">4-2 주성분분석 · 기초</div><h2><span class="q">Q</span>PC1과 PC2는 각각 어떤 축일까요?</h2></div>
       <div class="body split even">
         <div class="fig"><svg id="m32-load" viewBox="0 0 420 270" role="img" aria-label="주성분부하량 표와 시편 50개의 주성분점수 산점도, PC1은 강도, PC2는 인성"></svg></div>
         <div class="side">
           <ul class="key"><li><b>주성분부하량</b>: 주성분과 원래 변수의 상관</li><li><b>주성분점수</b>: 시편을 새 축으로 나타낸 값</li></ul>
           <p class="exp">각 주성분의 값과 원래 각 변수의 상관계수를 주성분부하량(인자부하량)이라 합니다. PC1은 인장강도(0.95), 항복강도(0.93), 경도(0.92)와 강한 양의 상관을 나타내므로 ‘강도 성분’, PC2는 연신율(0.92)과 충격에너지(0.93)와 상관이 강하므로 ‘인성 성분’이라 해석할 수 있습니다. 원래 데이터를 새로운 변수로 나타낸 것을 주성분점수라 하며, 시편 49는 PC1이 크고 PC2가 작아 강도는 높지만 인성은 낮고, 시편 40은 둘 다 커서 양쪽 모두 우수한 시편임을 알 수 있습니다. 변수끼리 무상관이면 차원 축소가 잘 진행되지 않습니다<span class="cite">[2]</span>.</p>
-          <p class="next"><span>다음 질문</span>변수 뒤의 원인을 가정한다면?</p>
+          <p class="next"><span>다음 질문</span>변수 뒤의 공통 요인을 가정한다면?</p>
         </div>
       </div>
     </section>
 
     <section class="slide" data-step="3" id="s-4-3a">
-      <div class="sh"><div class="sec">4-3 인자분석</div><h2><span class="q">Q</span>검사 항목 뒤에 보이지 않는 원인이 있다면?</h2></div>
+      <div class="sh"><div class="sec">4-3 인자분석 · 추가 읽기</div><h2><span class="q">Q</span>검사 항목 뒤에 보이지 않는 공통 요인이 있다면?</h2></div>
       <div class="body split even">
         <div class="fig"><svg id="m32-fa" viewBox="0 0 420 270" role="img" aria-label="공통인자 강도와 인성이 다섯 검사 항목을 만들고, 각 항목에 독립인자가 작용하는 인자분석 구조"></svg></div>
         <div class="side">
@@ -451,7 +451,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
           <div class="stats three"><div><small>PC1 기여율</small><strong id="m32-c1">-</strong></div><div><small>PC2 기여율</small><strong id="m32-c2">-</strong></div><div><small>1개로 요약</small><strong id="m32-j" style="font-size:15px">-</strong></div></div>
           <p class="howto">도전: PC1 하나로 정보의 90% 이상을 담으려면 |r|이 얼마 이상이어야 하는지 찾아보세요.</p>
           <p class="pmsg" id="m32-msg"></p>
-          <div class="think"><span>생각해보기</span>r = 0이면 왜 차원 축소가 잘 안 될까요?</div>
+          <div class="think" style="flex-wrap:wrap"><span>생각해보기</span>r = 0이면 왜 차원 축소가 잘 안 될까요?<details style="flex-basis:100%;font-weight:600"><summary style="cursor:pointer">예시 답</summary>변수들이 함께 움직이지 않으면 한 축으로 모을 정보가 적기 때문입니다.</details></div>
         </div>
       </div>
     </section>
@@ -468,7 +468,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
           <div class="plabel" style="margin:0">결과 확인 · <span id="p2-count">0 / 0</span></div>
           <div class="bins" id="p2-bins"></div>
           <div class="p2row"><p class="pmsg" id="p2-msg"></p><button class="btn ghost" id="p2-reset">다시 하기</button></div>
-          <div class="think"><span>생각해보기</span>우리 공정 데이터에서 함께 움직이는 변수 묶음은 무엇일까요?</div>
+          <div class="think" style="flex-wrap:wrap"><span>생각해보기</span>우리 공정 데이터에서 함께 움직이는 변수 묶음은 무엇일까요?<details style="flex-basis:100%;font-weight:600"><summary style="cursor:pointer">예시 답</summary>같이 오르내리는 온도, 하중처럼 한 덩어리로 움직이는 변수들입니다.</details></div>
         </div>
       </div>
     </section>
@@ -487,7 +487,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
           <button class="btn" id="m32-check" style="align-self:flex-start">점수 계산</button>
           <div class="stats three"><div><small>내 예측</small><strong id="m32-mine">-</strong></div><div><small>실제 PC1</small><strong id="m32-act">?</strong></div><div><small>실제 PC2</small><strong id="m32-act2">?</strong></div></div>
           <p class="pmsg" id="m32-msg3"></p>
-          <div class="think"><span>생각해보기</span>연신율이 PC1 점수에 거의 영향을 주지 않는 이유는?</div>
+          <div class="think" style="flex-wrap:wrap"><span>생각해보기</span>연신율이 PC1 점수에 거의 영향을 주지 않는 이유는?<details style="flex-basis:100%;font-weight:600"><summary style="cursor:pointer">예시 답</summary>다른 변수와 거의 같이 움직이지 않으면 PC1의 가중치가 작기 때문입니다.</details></div>
         </div>
       </div>
     </section>
@@ -572,7 +572,9 @@ var GLOSSARY=[
 ];
 var REFS=[
  {n:1,title:"On lines and planes of closest fit to systems of points in space",org:"K. Pearson, The London, Edinburgh, and Dublin Philosophical Magazine and Journal of Science 2(11), 559–572, 1901",url:"https://doi.org/10.1080/14786440109462720",date:"2026-10-27 확인"},
- {n:2,title:"Principal component analysis: a review and recent developments",org:"I. T. Jolliffe, J. Cadima, Philosophical Transactions of the Royal Society A 374, 20150202, 2016",url:"https://doi.org/10.1098/rsta.2015.0202",date:"2026-10-27 확인"}
+ {n:2,title:"Principal component analysis: a review and recent developments",org:"I. T. Jolliffe, J. Cadima, Philosophical Transactions of the Royal Society A 374, 20150202, 2016",url:"https://doi.org/10.1098/rsta.2015.0202",date:"2026-10-27 확인"},
+ {n:3,title:"AI-Hub 소개",org:"한국지능정보사회진흥원, AI-Hub",url:"https://www.aihub.or.kr/intrcn/intrcn.do",date:"2026-10-28 확인"},
+ {n:4,title:"AI 학습데이터 구축 안내서",org:"한국지능정보사회진흥원",url:"https://nia.or.kr/site/nia_kor/ex/bbs/View.do?bcIdx=28714&cbIdx=26537&parentSeq=28714",date:"2026-10-28 확인"}
 ];
 var NEXT={title:"M33 기계학습과 비지도 학습",line:"다음 모듈에서는 기계학습이 무엇인지, 통계학과 기계학습은 어떻게 다른지, 정답 없이 데이터의 구조를 찾는 비지도 학습을 살펴봅니다."};
 
@@ -847,9 +849,9 @@ for(var gi=0;gi<GLOSSARY.length;gi+=6){
 }
 (function(){
   var s=document.createElement("section");s.className="slide";s.dataset.step="6";s.id="end";
-  var refs=REFS.length?'<div class="pcol" style="gap:10px"><div class="plabel" style="margin:0">참고자료</div><ol class="refs">'+REFS.map(function(r){return '<li><span>['+r.n+']</span><div>'+r.title+', '+r.org+'. <a href="'+r.url+'" target="_blank" rel="noopener">'+r.url+'</a> ('+r.date+')</div></li>';}).join("")+'</ol></div>':'';
+  var refs=REFS.length?'<div class="pcol" style="gap:10px;min-height:0;overflow:hidden"><div class="plabel" style="margin:0">참고자료</div><ol class="refs">'+REFS.map(function(r){return '<li><span>['+r.n+']</span><div>'+r.title+', '+r.org+'. <a href="'+r.url+'" target="_blank" rel="noopener">'+r.url+'</a> ('+r.date+')</div></li>';}).join("")+'</ol></div>':'';
   s.innerHTML='<div class="sh"><div class="sec">마무리</div><h2>'+(REFS.length?"참고자료와 다음 모듈":"다음 모듈")+'</h2></div>'+
-    '<div class="body '+(REFS.length?'split even':'full')+'" style="align-content:center">'+refs+
+    '<div class="body '+(REFS.length?'split even':'full')+'" style="'+(REFS.length?'grid-template-rows:minmax(0,1fr)':'align-content:center')+'">'+refs+
     '<div class="pcol" style="justify-content:center"><div class="nextmod"><small>다음 모듈 · '+NEXT.title+'</small><strong>'+NEXT.line+'</strong></div></div></div>'+
     '<p class="foot">학습 상태는 저장되지 않습니다.</p>';
   vp.appendChild(s);

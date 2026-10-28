@@ -195,7 +195,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
 .gi .d{font-size:14px;line-height:1.5}
 .gi .e{font-size:12.5px;line-height:1.45;color:var(--gray)}
 .gi .e strong{color:var(--navy3)}
-.refs{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:8px;font-size:13.5px;line-height:1.5}
+.refs{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:8px;font-size:13.5px;line-height:1.5;overflow-y:auto;flex:1 1 auto;min-height:0}
 .refs li{display:grid;grid-template-columns:30px 1fr;gap:4px}
 .refs li span{font-weight:800;color:var(--navy3)}
 .refs a{color:var(--navy2);word-break:break-all}
@@ -223,7 +223,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
       <div class="body split">
         <div class="fig"><svg id="m23-ov" viewBox="0 0 440 260" role="img" aria-label="후보 모형들을 왈드 검정, 가능도비 검정, AIC, BIC로 비교하는 흐름"></svg></div>
         <div class="side">
-          <div class="prevlink"><small>지난 모듈에서는</small>개수 데이터를 다루는 푸아송 회귀와 여러 가지 일반화선형모형, 과분산, 일반화선형혼합모형을 배웠습니다.<small style="margin-top:8px">이번 모듈에서는</small>최대가능도 방법으로 얻은 모형을 평가하고 비교하는 방법으로 왈드 검정, 가능도비 검정, AIC와 BIC 같은 정보기준을 배웁니다.</div>
+          <div class="prevlink"><small>지난 모듈에서는</small>개수 데이터를 다루는 푸아송 회귀와 여러 가지 일반화선형모형, 과분산, 일반화선형혼합모형을 배웠습니다. M20의 잔차 그림은 지금 데이터의 모양을 보고, 이번 모듈은 새 데이터 예측과 모형 비교를 봅니다.<small style="margin-top:8px">이번 모듈에서는</small>최대가능도 방법으로 얻은 모형을 평가하고 비교하는 방법으로 왈드 검정, 가능도비 검정, AIC와 BIC 같은 정보기준을 배웁니다.</div>
           <dl class="meta"><dt>학습 시간</dt><dd>약 40분</dd><dt>본문</dt><dd>소단원 4개</dd><dt>실습</dt><dd>조작형 · 분류형 · 추정형</dd></dl>
         </div>
       </div>
@@ -462,7 +462,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
         </div>
         <div class="side">
           <ul class="key"><li><b>BIC</b>: n이 클수록 파라미터 벌점이 커짐</li><li>BIC에는 <b>일치성</b>이 있습니다.</li></ul>
-          <p class="exp">자주 쓰는 또 다른 정보기준으로 BIC(베이즈 정보기준)가 있으며, 값을 최소화하는 것이 좋은 모형입니다. AIC와 다른 점은 표본크기 n에 따라 달라져 n이 클수록 파라미터 개수 k의 벌점이 커진다는 것입니다. BIC는 후보 중 실제 모형일 확률이 높은 것을 고르는 관점을 취하며, 표본크기 n을 무한대로 하면 실제 모형을 고를 확률이 1이 되는 일치성이 있습니다. 1,000번 시뮬레이션에서 실제 모형을 고른 비율은 n = 1,000일 때 AIC 0.75, BIC 0.99였습니다.</p>
+          <p class="exp">자주 쓰는 또 다른 정보기준으로 BIC(베이즈 정보기준)가 있으며, 값을 최소화하는 것이 좋은 모형입니다. AIC와 다른 점은 표본크기 n에 따라 달라져 n이 클수록 파라미터 개수 k의 벌점이 커진다는 것입니다. BIC는 후보 중 실제 모형일 확률이 높은 것을 고르는 관점입니다. 후보 안에 실제 모형이 있을 때 n을 무한대로 하면 그것을 고를 확률이 1이 되는 일치성이 있지만, 유한한 표본에서 한 번 고른 결과가 실제 모형이라는 보장은 아닙니다. 1,000번 시뮬레이션에서 실제 모형을 고른 비율은 n = 1,000일 때 AIC 0.75, BIC 0.99였습니다.</p>
           <p class="next"><span>다음 질문</span>AIC와 BIC는 어떻게 가려 쓸까?</p>
         </div>
       </div>
@@ -524,7 +524,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
           <div class="stats three"><div><small>잔차제곱합</small><strong id="m23-rss">-</strong></div><div><small>AIC</small><strong id="m23-aicv">-</strong></div><div><small>새 데이터 오차</small><strong id="m23-mse">-</strong></div></div>
           <p class="howto">도전: 잔차제곱합이 가장 작은 차수와 새 데이터 오차가 가장 작은 차수가 같은지 확인하세요.</p>
           <p class="pmsg" id="m23-msg"></p>
-          <div class="think"><span>생각해보기</span>7차식에서 AIC가 오히려 작아진 이유는 무엇일까요?</div>
+          <div class="think" style="flex-wrap:wrap"><span>생각해보기</span>7차식에서 AIC가 오히려 작아진 이유는 무엇일까요?<details style="flex-basis:100%;font-weight:600"><summary style="cursor:pointer">예시 답</summary>파라미터 수가 표본 크기에 가까워, AIC의 벌점이 과대적합을 막지 못했기 때문입니다.</details></div>
         </div>
       </div>
     </section>
@@ -541,7 +541,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
           <div class="plabel" style="margin:0">결과 확인 · <span id="p2-count">0 / 0</span></div>
           <div class="bins" id="p2-bins"></div>
           <div class="p2row"><p class="pmsg" id="p2-msg"></p><button class="btn ghost" id="p2-reset">다시 하기</button></div>
-          <div class="think"><span>생각해보기</span>내포 관계인 모형이라면 AIC도 함께 쓸 수 있을까요?</div>
+          <div class="think" style="flex-wrap:wrap"><span>생각해보기</span>내포 관계인 모형이라면 AIC도 함께 쓸 수 있을까요?<details style="flex-basis:100%;font-weight:600"><summary style="cursor:pointer">예시 답</summary>내포된 모형은 가능도비 검정과 AIC를 함께 볼 수 있습니다.</details></div>
         </div>
       </div>
     </section>
@@ -560,7 +560,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
           <button class="btn" id="m23-check" style="align-self:flex-start">시뮬레이션 결과 보기</button>
           <div class="stats three"><div><small>내 예측(BIC)</small><strong id="m23-mine">-</strong></div><div><small>BIC 실제</small><strong id="m23-act">?</strong></div><div><small>AIC 실제</small><strong id="m23-aact">?</strong></div></div>
           <p class="pmsg" id="m23-msg3"></p>
-          <div class="think"><span>생각해보기</span>n이 커져도 AIC의 비율이 1에 다가가지 않는 이유는 무엇일까요?</div>
+          <div class="think" style="flex-wrap:wrap"><span>생각해보기</span>n이 커져도 AIC의 비율이 1에 다가가지 않는 이유는 무엇일까요?<details style="flex-basis:100%;font-weight:600"><summary style="cursor:pointer">예시 답</summary>AIC의 벌점 2k는 n이 커져도 그대로라, 더 복잡한 모형을 고르는 일이 남습니다.</details></div>
         </div>
       </div>
     </section>
@@ -618,7 +618,7 @@ var QUIZ=[
   exp:"AIC에는 일치성이 없어, 표본크기 n을 아무리 크게 해도 실제 모형을 고를 확률이 1이 되지 않으며 n이 클 때는 실제보다 파라미터가 많은 모형을 고르는 일이 벌어집니다. 이 모듈의 시뮬레이션에서도 n = 1,000에서 AIC는 0.75, BIC는 0.99였습니다.",back:"s-4-3a",backLabel:"4-3 일치성 다시 보기"},
  {goal:3,type:"상황 판단",stem:"단순한 현상에 대해 후보 모형 몇 개 중 올바른 하나를 고르는 것이 목적이고, 표본크기는 500입니다. 어느 정보기준이 목적에 더 맞을까요?",
   opts:["BIC","AIC","결정계수 R²","정보기준은 쓰지 않는다"],ans:0,
-  exp:"BIC는 후보 중 실제 모형일 확률이 높은 것을 고르는 관점이며, 표본크기 n을 무한대로 하면 실제 모형을 고를 확률이 1이 되는 일치성이 있습니다. 비교적 간단한 현상에 몇 개의 후보 중 올바른 하나를 선택할 때는 BIC를, 복잡한 현상에서 예측을 중시할 때는 AIC를 쓰는 경향이 있습니다.",back:"s-4-3b",backLabel:"4-3 AIC와 BIC 가려 쓰기 다시 보기"}
+  exp:"BIC는 후보 중 실제 모형일 확률이 높은 것을 고르는 관점입니다. 후보 안에 실제 모형이 있을 때 n을 무한대로 하면 그것을 고를 확률이 1이 되는 일치성이 있지만, 유한한 표본의 한 번 선택이 실제 모형이라는 보장은 아닙니다. 비교적 간단한 현상에 몇 개의 후보 중 올바른 하나를 선택할 때는 BIC를, 복잡한 현상에서 예측을 중시할 때는 AIC를 쓰는 경향이 있습니다.",back:"s-4-3b",backLabel:"4-3 AIC와 BIC 가려 쓰기 다시 보기"}
 ];
 
 var BINS=["가능도비 검정","AIC","BIC"];
@@ -633,13 +633,16 @@ var GLOSSARY=[
  ["부트스트랩 방법","bootstrap method","어떤 가정에서 무작위로 데이터를 반복 생성해 추정량의 성질을 조사하는 방법입니다.","1,000회 반복한 ΔD의 상위 5% = 3.82"],
  ["AIC","Akaike information criterion","−2 log L* + 2k로, 새로 얻을 데이터를 얼마나 잘 예측할 수 있는지를 기준으로 모형의 좋음을 정하는 지표입니다.","M2의 AIC 68.3"],
  ["과대적합","overfitting","실제 데이터에 무리하게 맞추는 바람에 새로 얻은 데이터는 제대로 나타내지 못하는 상태입니다.","7차식: 새 데이터 오차 67.5"],
- ["BIC","Bayesian information criterion","−2 log L* + k log n으로, 후보 중 실제 모형일 확률이 높은 것을 고르는 정보기준입니다.","M2의 BIC 70.3"],
- ["일치성","consistency","표본크기를 무한대로 하면 실제 모형을 고를 확률이 1이 되는 성질로, BIC에는 있고 AIC에는 없습니다.","n = 1,000에서 BIC 0.99"],
+ ["BIC","Bayesian information criterion","−2 log L* + k log n으로, 후보 중 실제 모형일 확률이 높은 것을 고르는 정보기준입니다. 유한 표본의 보장은 아닙니다.","M2의 BIC 70.3"],
+ ["일치성","consistency","후보 안에 실제 모형이 있을 때 표본크기를 무한대로 하면 그것을 고를 확률이 1이 되는 성질입니다. BIC에는 있고 AIC에는 없습니다.","n = 1,000에서 BIC 0.99"],
  ["AICc","corrected AIC","표본크기가 작을 때 AIC를 보정한 정보기준입니다.","점 9개에 파라미터 9개인 모형"],
  ["WAIC","widely applicable information criterion","계층적 베이지안 모형 등에도 쓸 수 있는 정보기준으로, 비슷한 것으로 WBIC가 있습니다.","관찰할 수 없는 변수를 포함한 모형"]
 ];
 var REFS=[
- {n:1,title:"Model selection for ecologists: the worldviews of AIC and BIC",org:"K. Aho, D. Derryberry, T. Peterson, Ecology 95(3), 631–636, 2014",url:"https://doi.org/10.1890/13-1452.1",date:"2026-10-27 확인"}
+ {n:1,title:"Model selection for ecologists: the worldviews of AIC and BIC",org:"K. Aho, D. Derryberry, T. Peterson, Ecology 95(3), 631–636, 2014",url:"https://doi.org/10.1890/13-1452.1",date:"2026-10-27 확인"},
+ {n:2,title:"기초통계학Ⅱ",org:"여인권, 숙명여자대학교, KOCW 공개강의",url:"https://www.kocw.net/home/search/kemView.do?kemId=1080231",date:"2026-10-28 확인"},
+ {n:3,title:"R을 활용한 통계학개론",org:"K-MOOC, KOCW 공개강의",url:"https://www.kocw.net/home/search/kemView.do?kemId=1517479",date:"2026-10-28 확인"},
+ {n:4,title:"데이터로 배우는 통계학",org:"K-MOOC",url:"https://www.kmooc.kr/view/course/detail/20384",date:"2026-10-28 확인"}
 ];
 var NEXT={title:"M24 재현성",line:"이제 네 번째 과정 ‘결과 해석과 인과’를 시작합니다. 다음 모듈에서는 과학계의 재현성 위기와 그 원인, 가설검정을 올바르게 쓰는 법을 살펴봅니다."};
 
@@ -957,9 +960,9 @@ for(var gi=0;gi<GLOSSARY.length;gi+=6){
 }
 (function(){
   var s=document.createElement("section");s.className="slide";s.dataset.step="6";s.id="end";
-  var refs=REFS.length?'<div class="pcol" style="gap:10px"><div class="plabel" style="margin:0">참고자료</div><ol class="refs">'+REFS.map(function(r){return '<li><span>['+r.n+']</span><div>'+r.title+', '+r.org+'. <a href="'+r.url+'" target="_blank" rel="noopener">'+r.url+'</a> ('+r.date+')</div></li>';}).join("")+'</ol></div>':'';
+  var refs=REFS.length?'<div class="pcol" style="gap:10px;min-height:0;overflow:hidden"><div class="plabel" style="margin:0">참고자료</div><ol class="refs">'+REFS.map(function(r){return '<li><span>['+r.n+']</span><div>'+r.title+', '+r.org+'. <a href="'+r.url+'" target="_blank" rel="noopener">'+r.url+'</a> ('+r.date+')</div></li>';}).join("")+'</ol></div>':'';
   s.innerHTML='<div class="sh"><div class="sec">마무리</div><h2>'+(REFS.length?"참고자료와 다음 모듈":"다음 모듈")+'</h2></div>'+
-    '<div class="body '+(REFS.length?'split even':'full')+'" style="align-content:center">'+refs+
+    '<div class="body '+(REFS.length?'split even':'full')+'" style="'+(REFS.length?'grid-template-rows:minmax(0,1fr)':'align-content:center')+'">'+refs+
     '<div class="pcol" style="justify-content:center"><div class="nextmod"><small>다음 모듈 · '+NEXT.title+'</small><strong>'+NEXT.line+'</strong></div></div></div>'+
     '<p class="foot">학습 상태는 저장되지 않습니다.</p>';
   vp.appendChild(s);

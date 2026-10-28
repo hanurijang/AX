@@ -195,7 +195,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
 .gi .d{font-size:14px;line-height:1.5}
 .gi .e{font-size:12.5px;line-height:1.45;color:var(--gray)}
 .gi .e strong{color:var(--navy3)}
-.refs{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:8px;font-size:13.5px;line-height:1.5}
+.refs{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:8px;font-size:13.5px;line-height:1.5;overflow-y:auto;flex:1 1 auto;min-height:0}
 .refs li{display:grid;grid-template-columns:30px 1fr;gap:4px}
 .refs li span{font-weight:800;color:var(--navy3)}
 .refs a{color:var(--navy2);word-break:break-all}
@@ -499,7 +499,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
           <div class="stats three"><div><small>모평균</small><strong>167.6</strong></div><div><small>표본평균</small><strong id="m8-sm">-</strong></div><div><small>차이</small><strong id="m8-df">-</strong></div></div>
           <p class="howto">도전: 무작위추출과 ‘동호회에서만’ 추출을 각각 여러 번 뽑아, 표본크기를 키우면 차이가 어떻게 되는지 비교해 보세요.</p>
           <p class="pmsg" id="m8-msg"></p>
-          <div class="think"><span>생각해보기</span>편향된 방법으로 표본크기를 100명까지 늘리면 차이가 0에 가까워지나요?</div>
+          <div class="think" style="flex-wrap:wrap"><span>생각해보기</span>편향된 방법으로 표본크기를 100명까지 늘리면 차이가 0에 가까워지나요?<details style="flex-basis:100%;font-weight:600"><summary style="cursor:pointer">예시 답</summary>편향된 방법은 표본을 늘려도 치우침이 0으로 사라지지 않습니다.</details></div>
         </div>
       </div>
     </section>
@@ -516,7 +516,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
           <div class="plabel" style="margin:0">결과 확인 · <span id="p2-count">0 / 0</span></div>
           <div class="bins" id="p2-bins" style="grid-template-columns:repeat(2,1fr)"></div>
           <div class="p2row"><p class="pmsg" id="p2-msg"></p><button class="btn ghost" id="p2-reset">다시 하기</button></div>
-          <div class="think"><span>생각해보기</span>편향된 방법으로 얻은 표본은 모집단을 어떻게 다시 정하면 쓸 수 있을까요?</div>
+          <div class="think" style="flex-wrap:wrap"><span>생각해보기</span>편향된 방법으로 얻은 표본은 모집단을 어떻게 다시 정하면 쓸 수 있을까요?<details style="flex-basis:100%;font-weight:600"><summary style="cursor:pointer">예시 답</summary>그 방법으로 실제로 뽑힐 수 있는 사람들만 모집단으로 다시 정하면, 그 범위 안에서는 쓸 수 있습니다.</details></div>
         </div>
       </div>
     </section>
@@ -534,7 +534,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
           <div style="display:flex;gap:8px"><button class="btn" id="m8-check">모평균 확인</button><button class="btn ghost" id="m8-again">10명 다시 뽑기</button></div>
           <div class="stats three"><div><small>표본평균</small><strong id="m8-xbar">-</strong></div><div><small>내 추정</small><strong id="m8-mine">-</strong></div><div><small>모평균 <span class="tag-v">가정</span></small><strong id="m8-mu">?</strong></div></div>
           <p class="pmsg" id="m8-msg3"></p>
-          <div class="think"><span>생각해보기</span>10명을 다시 뽑을 때마다 표본평균이 조금씩 달라집니다. 그 차이는 얼마나 클까요?</div>
+          <div class="think" style="flex-wrap:wrap"><span>생각해보기</span>10명을 다시 뽑을 때마다 표본평균이 조금씩 달라집니다. 그 차이는 얼마나 클까요?<details style="flex-basis:100%;font-weight:600"><summary style="cursor:pointer">예시 답</summary>표준오차만큼, 곧 모표준편차를 √10으로 나눈 크기 정도로 흔들립니다.</details></div>
         </div>
       </div>
     </section>
@@ -603,7 +603,13 @@ var GLOSSARY=[
  ["층화추출법","stratified sampling","모집단을 몇 개의 층으로 나눈 뒤 각 층에서 필요한 수만큼 무작위로 뽑는 방법입니다.","지역별 층에서 각각 무작위로 고르기"],
  ["편향","bias","표본이 모집단의 한쪽으로 치우쳐 모집단을 올바르게 반영하지 못하는 상태입니다.","서울 거주자만으로 한국인 소득 조사"]
 ];
-var REFS=[];
+var REFS=[
+ {n:1,title:"데이터로 배우는 통계학",org:"K-MOOC",url:"https://www.kmooc.kr/view/course/detail/20384",date:"2026-10-28 확인"},
+ {n:2,title:"기초통계학",org:"여인권, 숙명여자대학교, KOCW 공개강의",url:"https://www.kocw.net/home/search/kemView.do?kemId=1052562",date:"2026-10-28 확인"},
+ {n:3,title:"R을 활용한 통계학개론",org:"K-MOOC, KOCW 공개강의",url:"https://www.kocw.net/home/search/kemView.do?kemId=1517479",date:"2026-10-28 확인"},
+ {n:4,title:"국가통계포털 통계목록",org:"통계청, KOSIS",url:"https://kosis.kr/statisticsList/statisticsListIndex.do?menuId=M_01_02&outLink=Y&vwcd=MT_OTITLE",date:"2026-10-28 확인"},
+ {n:5,title:"공공데이터포털",org:"행정안전부",url:"https://www.data.go.kr",date:"2026-10-28 확인"}
+];
 var NEXT={title:"M09 표준오차",line:"표본평균은 뽑을 때마다 조금씩 달라집니다. 다음 모듈에서는 표본평균과 모평균 사이의 오차를 나타내는 표준오차를 배웁니다."};
 
 /* =====================================================================
@@ -946,9 +952,9 @@ for(var gi=0;gi<GLOSSARY.length;gi+=6){
 }
 (function(){
   var s=document.createElement("section");s.className="slide";s.dataset.step="6";s.id="end";
-  var refs=REFS.length?'<div class="pcol" style="gap:10px"><div class="plabel" style="margin:0">참고자료</div><ol class="refs">'+REFS.map(function(r){return '<li><span>['+r.n+']</span><div>'+r.title+', '+r.org+'. <a href="'+r.url+'" target="_blank" rel="noopener">'+r.url+'</a> ('+r.date+')</div></li>';}).join("")+'</ol></div>':'';
+  var refs=REFS.length?'<div class="pcol" style="gap:10px;min-height:0;overflow:hidden"><div class="plabel" style="margin:0">참고자료</div><ol class="refs">'+REFS.map(function(r){return '<li><span>['+r.n+']</span><div>'+r.title+', '+r.org+'. <a href="'+r.url+'" target="_blank" rel="noopener">'+r.url+'</a> ('+r.date+')</div></li>';}).join("")+'</ol></div>':'';
   s.innerHTML='<div class="sh"><div class="sec">마무리</div><h2>'+(REFS.length?"참고자료와 다음 모듈":"다음 모듈")+'</h2></div>'+
-    '<div class="body '+(REFS.length?'split even':'full')+'" style="align-content:center">'+refs+
+    '<div class="body '+(REFS.length?'split even':'full')+'" style="'+(REFS.length?'grid-template-rows:minmax(0,1fr)':'align-content:center')+'">'+refs+
     '<div class="pcol" style="justify-content:center"><div class="nextmod"><small>다음 모듈 · '+NEXT.title+'</small><strong>'+NEXT.line+'</strong></div></div></div>'+
     '<p class="foot">학습 상태는 저장되지 않습니다.</p>';
   vp.appendChild(s);

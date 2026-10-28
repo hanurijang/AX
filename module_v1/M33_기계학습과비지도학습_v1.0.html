@@ -195,7 +195,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
 .gi .d{font-size:14px;line-height:1.5}
 .gi .e{font-size:12.5px;line-height:1.45;color:var(--gray)}
 .gi .e strong{color:var(--navy3)}
-.refs{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:8px;font-size:13.5px;line-height:1.5}
+.refs{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:8px;font-size:13.5px;line-height:1.5;overflow-y:auto;flex:1 1 auto;min-height:0}
 .refs li{display:grid;grid-template-columns:30px 1fr;gap:4px}
 .refs li span{font-weight:800;color:var(--navy3)}
 .refs a{color:var(--navy2);word-break:break-all}
@@ -372,10 +372,10 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
     <section class="slide" data-step="3" id="s-4-2a">
       <div class="sh"><div class="sec">4-2 통계학과 기계학습의 차이</div><h2><span class="q">Q</span>통계학과 기계학습은 무엇을 더 중시할까요?</h2></div>
       <div class="body split even">
-        <div class="fig"><svg id="m33-vs" viewBox="0 0 420 270" role="img" aria-label="통계학은 작은 표본·단순 모형·설명과 해석, 기계학습은 대량 데이터·복잡 모형·예측을 중시"></svg></div>
+        <div class="fig"><svg id="m33-vs" viewBox="0 0 420 270" role="img" aria-label="통계학은 추론과 해석을, 기계학습은 예측 성능을 더 강조하는 경향. 둘은 배타적이지 않음"></svg></div>
         <div class="side">
-          <ul class="key"><li>통계학: 작은 표본, 설명·해석 중시</li><li>기계학습: 대량 데이터, 예측 중시</li></ul>
-          <p class="exp">통계학은 작은 표본크기의 데이터로 설명이나 해석을 중시하는 경향이 있고, 기계학습(지도 학습)은 대량의 데이터로 예측을 중시하는 경향이 있습니다. 선형회귀는 절편과 기울기를 가진 단순한 모형이라 기울기로 쉽게 해석할 수 있습니다. 기계학습 모형은 비선형이고 파라미터가 많아 대개 해석하기 어렵지만, 표현력이 강해 복잡한 현상에 대한 예측 성능이 높다고 할 수 있습니다. 최근에는 ‘어느 변수가 중요한가’를 평가하는 등 해석 가능성을 갖추려는 시도도 있습니다.</p>
+          <ul class="key"><li>둘 다 데이터로 규칙과 불확실성을 다룹니다.</li><li>강조점이 다를 뿐 배타적이지 않습니다.</li></ul>
+          <p class="exp">통계학과 기계학습은 모두 데이터를 바탕으로 규칙을 배우고 불확실성을 다룹니다. 통계학은 추론과 효과 해석을, 기계학습은 새 데이터에서의 예측 성능을 강조하는 경우가 많습니다. 선형회귀처럼 단순한 모형은 기울기로 해석하기 쉽고, 파라미터가 많은 모형은 예측에 강한 경우가 많습니다. 그래도 회귀분석은 기계학습의 예측에도 쓰이고, 기계학습 모형도 설명과 추론의 대상이 됩니다.</p>
           <p class="next"><span>다음 질문</span>정답 없이 무리를 나누려면?</p>
         </div>
       </div>
@@ -424,7 +424,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
           <thead><tr><th>개념</th><th>핵심</th><th>이 모듈의 예</th></tr></thead>
           <tbody>
             <tr><td>기계학습 3종류</td><td>비지도(정답 없음) · 지도(정답 y) · 강화(보상과 상태)</td><td>운전 기록 묶기 · 불량 판정 · 로봇 제어</td></tr>
-            <tr><td>통계학 vs 기계학습</td><td>작은 표본·설명 중시 vs 대량 데이터·예측 중시</td><td>선형회귀 기울기 해석 vs 복잡 모형 예측</td></tr>
+            <tr><td>통계학 · 기계학습</td><td>추론·해석과 예측 성능은 강조점의 차이. 서로 배타적이지 않음</td><td>회귀도 예측에 쓰이고, 예측 모형도 설명 대상</td></tr>
             <tr><td>군집분석</td><td>k평균(k 지정, 초기값 영향) · 계층적 군집화(덴드로그램)</td><td>k = 3 → 정상·고하중·과열 의심</td></tr>
             <tr><td>비선형 차원 축소</td><td>PCA는 선형 기반, t-SNE·UMAP은 비선형에 적용</td><td>784차원 숫자 이미지 → 2차원</td></tr>
           </tbody>
@@ -449,7 +449,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
           <div class="stats three"><div><small>진행 단계</small><strong id="m33-it">-</strong></div><div><small>바뀐 할당</small><strong id="m33-ch">-</strong></div><div><small>군집 내 제곱합</small><strong id="m33-wss">-</strong></div></div>
           <p class="howto">도전: 할당이 더 바뀌지 않을 때까지 진행하고, k = 2·3·4의 군집 내 제곱합을 비교해 보세요.</p>
           <p class="pmsg" id="m33-msg"></p>
-          <div class="think"><span>생각해보기</span>k를 계속 늘리면 군집 내 제곱합은 어떻게 될까요?</div>
+          <div class="think" style="flex-wrap:wrap"><span>생각해보기</span>k를 계속 늘리면 군집 내 제곱합은 어떻게 될까요?<details style="flex-basis:100%;font-weight:600"><summary style="cursor:pointer">예시 답</summary>군집이 잘게 나뉘어 군집 내 제곱합은 계속 줄고, 점마다 한 군집이면 0이 됩니다.</details></div>
         </div>
       </div>
     </section>
@@ -466,7 +466,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
           <div class="plabel" style="margin:0">결과 확인 · <span id="p2-count">0 / 0</span></div>
           <div class="bins" id="p2-bins"></div>
           <div class="p2row"><p class="pmsg" id="p2-msg"></p><button class="btn ghost" id="p2-reset">다시 하기</button></div>
-          <div class="think"><span>생각해보기</span>우리 공장에서 라벨 없이 쌓여 있는 데이터는 무엇일까요?</div>
+          <div class="think" style="flex-wrap:wrap"><span>생각해보기</span>우리 공장에서 라벨 없이 쌓여 있는 데이터는 무엇일까요?<details style="flex-basis:100%;font-weight:600"><summary style="cursor:pointer">예시 답</summary>라벨이 붙지 않은 센서 기록이나 조업 로그가 있습니다.</details></div>
         </div>
       </div>
     </section>
@@ -485,7 +485,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
           <button class="btn" id="m33-check" style="align-self:flex-start">잘라서 확인</button>
           <div class="stats three"><div><small>내 예측</small><strong id="m33-mine">-</strong></div><div><small>실제 군집 수</small><strong id="m33-act">?</strong></div><div><small>그 아래 결합</small><strong id="m33-mg">?</strong></div></div>
           <p class="pmsg" id="m33-msg3"></p>
-          <div class="think"><span>생각해보기</span>현장에서는 어느 높이로 자를지를 무엇으로 정할 수 있을까요?</div>
+          <div class="think" style="flex-wrap:wrap"><span>생각해보기</span>현장에서는 어느 높이로 자를지를 무엇으로 정할 수 있을까요?<details style="flex-basis:100%;font-weight:600"><summary style="cursor:pointer">예시 답</summary>몇 개 집단이 필요한지와, 제곱합이 꺾이는 높이를 현장 지식과 함께 보고 정합니다.</details></div>
         </div>
       </div>
     </section>
@@ -528,7 +528,7 @@ var QUIZ=[
   exp:"기계학습은 비지도 학습, 지도 학습, 강화학습 3가지로 크게 분류하며, 비지도 학습과 지도 학습의 차이는 정답 데이터의 유무에 있습니다. 정답 없이 데이터를 비슷한 집단으로 정리하는 군집분석은 비지도 학습의 대표적인 방법입니다. 정답 y와 함께 x와 y의 관계를 학습하는 것이 지도 학습입니다.",back:"s-4-1a",backLabel:"4-1 기계학습의 세 종류 다시 보기"},
  {goal:1,type:"O/X 오개념",stem:"“기계학습 모형은 통계학의 선형회귀보다 모형을 해석하기가 쉽다.”",
   opts:["O","X"],ans:1,ox:true,
-  exp:"통계학의 선형회귀는 절편과 기울기를 가진 단순한 모형이라 기울기로 쉽게 해석할 수 있습니다. 반면 기계학습 모형은 비선형이고 파라미터가 많아 대개 해석하기 어렵습니다. 대신 표현력이 강해 복잡한 현상에 대한 예측 성능이 높다고 할 수 있습니다.",back:"s-4-2a",backLabel:"4-2 통계학과 기계학습의 차이 다시 보기"},
+  exp:"절편과 기울기만 있는 선형회귀는 해석하기 쉽고, 파라미터가 많은 모형은 해석이 어려운 경우가 많습니다. 그래도 둘은 배타적이지 않습니다. 회귀도 예측에 쓰이고, 기계학습 모형도 설명의 대상이 됩니다.",back:"s-4-2a",backLabel:"4-2 통계학과 기계학습의 차이 다시 보기"},
  {goal:2,type:"상황 판단",stem:"k평균으로 운전 기록을 군집화하려 합니다. 분석을 시작할 때 분석자가 먼저 정해야 하는 것은?",
   opts:["군집 개수 k","각 데이터의 정답 군집","덴드로그램을 자를 높이","군집별 중심 위치"],ans:0,
   exp:"k평균은 분석자가 데이터를 몇 개의 군집으로 나눌 것인가, 즉 군집 개수 k를 정하며 시작합니다. 그런 뒤 각 데이터에 무작위로 군집을 할당하고, 각 군집의 중심 위치(데이터의 평균)를 구한 다음, 데이터마다 가장 근접한 군집을 할당하고 중심 위치를 다시 계산하는 과정을 반복합니다.",back:"s-4-3a",backLabel:"4-3 k평균 다시 보기"},
@@ -550,7 +550,7 @@ var CARDS=[["라벨 없는 운전 기록을 패턴별로 묶기","비지도 학�
 var HINT={"비지도 학습":"정답 데이터 없이 구조를 찾습니다.","지도 학습":"입력 x와 정답 y의 관계를 학습합니다.","강화학습":"행동에 따른 보상과 상태로 행동을 갱신합니다."};
 
 var GLOSSARY=[
- ["기계학습","machine learning","데이터로부터 규칙이나 관계를 학습해 데이터 요약이나 예측을 하는 방법으로, 대량의 데이터와 예측을 중시하는 경향이 있습니다.","운전 기록으로 이상 패턴 탐지"],
+ ["기계학습","machine learning","데이터로 규칙과 불확실성을 다루는 방법입니다. 예측 성능을 강조하는 경우가 많지만 통계학과 배타적이지 않습니다.","운전 기록으로 이상 패턴 탐지"],
  ["비지도 학습","unsupervised learning","정답 데이터 없이 데이터의 배후에 있는 구조를 추출하는 학습으로, 교사 없는 학습이라고도 합니다.","라벨 없는 운전 기록 군집화"],
  ["지도 학습","supervised learning","입력 데이터 x와 정답 데이터 y의 관계를 학습하는 방법으로, 통계학의 회귀가 발전한 형태입니다.","불량 여부를 정답으로 판정 모형 학습"],
  ["강화학습","reinforcement learning","정답 데이터는 주어지지 않고, 에이전트가 환경에 행동한 뒤 보상과 상태를 통해 행동을 갱신하는 학습입니다.","로봇 팔 제어"],
@@ -563,7 +563,9 @@ var GLOSSARY=[
 ];
 var REFS=[
  {n:1,title:"Visualizing Data using t-SNE",org:"L. van der Maaten, G. Hinton, Journal of Machine Learning Research 9, 2579–2605, 2008",url:"https://jmlr.org/papers/v9/vandermaaten08a.html",date:"2026-10-27 확인"},
- {n:2,title:"UMAP: Uniform Manifold Approximation and Projection for Dimension Reduction",org:"L. McInnes, J. Healy, J. Melville, arXiv:1802.03426, 2018",url:"https://arxiv.org/abs/1802.03426",date:"2026-10-27 확인"}
+ {n:2,title:"UMAP: Uniform Manifold Approximation and Projection for Dimension Reduction",org:"L. McInnes, J. Healy, J. Melville, arXiv:1802.03426, 2018",url:"https://arxiv.org/abs/1802.03426",date:"2026-10-27 확인"},
+ {n:3,title:"AI-Hub 소개",org:"한국지능정보사회진흥원, AI-Hub",url:"https://www.aihub.or.kr/intrcn/intrcn.do",date:"2026-10-28 확인"},
+ {n:4,title:"AI 학습데이터 구축 안내서",org:"한국지능정보사회진흥원",url:"https://nia.or.kr/site/nia_kor/ex/bbs/View.do?bcIdx=28714&cbIdx=26537&parentSeq=28714",date:"2026-10-28 확인"}
 ];
 var NEXT={title:"M34 지도 학습과 예측 성능",line:"다음 모듈에서는 정답 데이터로 관계를 학습하는 지도 학습과, 이진 분류와 회귀의 예측 성능을 평가하는 방법을 살펴봅니다."};
 
@@ -707,7 +709,7 @@ on("m33-types",function(s){
 
 on("m33-vs",function(s){
   var cx=[70,190,330];el("rect",{x:4,y:6,width:412,height:30,rx:6,fill:C.navy},s);["","통계학","기계학습(지도)"].forEach(function(h,i){tB(s,cx[i],26,h,{fw:800,fs:12,c:"#fff"});});
-  var R=[["데이터","작은 표본크기","대량의 데이터"],["중시","설명·해석","예측"],["모형","단순(절편·기울기)","복잡(비선형, 파라미터 많음)"],["해석","쉬움 (기울기)","어려움"],["예측 성능","단순한 현상에 적합","복잡한 현상에 강함"]];
+  var R=[["강조","추론·효과 해석","새 데이터의 예측"],["모형 예","선형회귀의 기울기","파라미터가 많은 모형"],["해석","기울기로 읽기 쉬움","읽기 어려운 경우가 많음"],["관계","회귀도 예측에 쓰임","예측 모형도 설명 대상"],["구분","배타적이지 않음","배타적이지 않음"]];
   R.forEach(function(r,j){var y=62+j*36;el("rect",{x:4,y:y-20,width:412,height:32,rx:4,fill:j%2?"#F8F9FB":"#fff"},s);r.forEach(function(v,i){tB(s,cx[i],y,v,{fw:i===0?800:700,fs:i===0?11:10.5,c:i===1?"#1C6EA4":i===2?C.amberInk:C.navy});});});
   bxB(s,4,236,412,30,"#FCF3D9");tB(s,210,256,"최근: 변수 중요도 등으로 기계학습 모형의 해석 가능성을 높이려는 시도",{fw:700,fs:10,c:C.amberInk});
 });
@@ -822,9 +824,9 @@ for(var gi=0;gi<GLOSSARY.length;gi+=6){
 }
 (function(){
   var s=document.createElement("section");s.className="slide";s.dataset.step="6";s.id="end";
-  var refs=REFS.length?'<div class="pcol" style="gap:10px"><div class="plabel" style="margin:0">참고자료</div><ol class="refs">'+REFS.map(function(r){return '<li><span>['+r.n+']</span><div>'+r.title+', '+r.org+'. <a href="'+r.url+'" target="_blank" rel="noopener">'+r.url+'</a> ('+r.date+')</div></li>';}).join("")+'</ol></div>':'';
+  var refs=REFS.length?'<div class="pcol" style="gap:10px;min-height:0;overflow:hidden"><div class="plabel" style="margin:0">참고자료</div><ol class="refs">'+REFS.map(function(r){return '<li><span>['+r.n+']</span><div>'+r.title+', '+r.org+'. <a href="'+r.url+'" target="_blank" rel="noopener">'+r.url+'</a> ('+r.date+')</div></li>';}).join("")+'</ol></div>':'';
   s.innerHTML='<div class="sh"><div class="sec">마무리</div><h2>'+(REFS.length?"참고자료와 다음 모듈":"다음 모듈")+'</h2></div>'+
-    '<div class="body '+(REFS.length?'split even':'full')+'" style="align-content:center">'+refs+
+    '<div class="body '+(REFS.length?'split even':'full')+'" style="'+(REFS.length?'grid-template-rows:minmax(0,1fr)':'align-content:center')+'">'+refs+
     '<div class="pcol" style="justify-content:center"><div class="nextmod"><small>다음 모듈 · '+NEXT.title+'</small><strong>'+NEXT.line+'</strong></div></div></div>'+
     '<p class="foot">학습 상태는 저장되지 않습니다.</p>';
   vp.appendChild(s);

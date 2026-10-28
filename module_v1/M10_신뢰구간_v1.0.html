@@ -195,7 +195,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
 .gi .d{font-size:14px;line-height:1.5}
 .gi .e{font-size:12.5px;line-height:1.45;color:var(--gray)}
 .gi .e strong{color:var(--navy3)}
-.refs{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:8px;font-size:13.5px;line-height:1.5}
+.refs{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:8px;font-size:13.5px;line-height:1.5;overflow-y:auto;flex:1 1 auto;min-height:0}
 .refs li{display:grid;grid-template-columns:30px 1fr;gap:4px}
 .refs li span{font-weight:800;color:var(--navy3)}
 .refs a{color:var(--navy2);word-break:break-all}
@@ -219,11 +219,11 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
     <!-- ① 학습개요 ─────────────────────────────── -->
     <section class="slide" data-step="0">
       <div class="sh"><div class="sec">학습개요</div>
-        <h2 class="big">표준오차로 모평균이 있을 범위를 신뢰구간으로 나타냅니다</h2></div>
+        <h2 class="big">표준오차로 신뢰구간을 구하고, 반복 포함률로 읽습니다</h2></div>
       <div class="body split">
         <div class="fig"><svg id="m10-ov" viewBox="0 0 440 260" role="img" aria-label="표본에서 표준오차를 구하고 신뢰구간을 계산해 해석하는 흐름"></svg></div>
         <div class="side">
-          <div class="prevlink"><small>지난 모듈에서는</small>표본오차가 평균 0, 표준편차 σ/√n인 분포를 따르고, 표본으로 표준오차 s/√n을 구한다는 것을 배웠습니다.<small style="margin-top:8px">이번 모듈에서는</small>표준오차를 이용해 모평균이 들어 있을 범위인 신뢰구간을 구하고, 그 뜻을 올바르게 해석합니다.</div>
+          <div class="prevlink"><small>지난 모듈에서는</small>표본오차가 평균 0, 표준편차 σ/√n인 분포를 따르고, 표본으로 표준오차 s/√n을 구한다는 것을 배웠습니다. 성인 남성 10명의 키(표본평균 167.9cm)를 이어서 씁니다.<small style="margin-top:8px">이번 모듈에서는</small>그 표준오차로 신뢰구간을 구하고, 한 구간이 모평균을 담을 확률이 아니라 반복 포함률로 해석합니다.</div>
           <dl class="meta"><dt>학습 시간</dt><dd>약 40분</dd><dt>본문</dt><dd>소단원 4개</dd><dt>실습</dt><dd>조작형 · 분류형 · 추정형</dd></dl>
         </div>
       </div>
@@ -232,10 +232,10 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
     <section class="slide" data-step="0">
       <div class="sh"><div class="sec">학습개요 · 이 모듈의 예시</div><h2>같은 성인 남성 10명의 키로 신뢰구간을 구합니다</h2></div>
       <div class="body split">
-        <div class="fig"><svg id="m10-case" viewBox="0 0 440 250" role="img" aria-label="10명의 키, 표본평균 167.9, 비편향표준편차 6.89, 표준오차 2.18"></svg></div>
+        <div class="fig"><svg id="m10-case" viewBox="0 0 440 250" role="img" aria-label="10명의 키, 표본평균 167.9, 표본표준편차 6.89, 표준오차 2.18"></svg></div>
         <div class="side">
           <ul class="key"><li>10명의 키를 끝까지 씁니다.</li></ul>
-          <p class="exp">앞의 두 모듈에서 쓴 성인 남성 10명의 키로 표본평균 167.9cm, 비편향표준편차 6.89cm, 표준오차 2.18cm를 이미 구했습니다. 이번에는 이 값으로 모평균이 있을 범위를 구합니다. 실습에서는 평균 167.6cm, 표준편차 7.0cm인 정규분포를 모집단으로 가정해 신뢰구간을 여러 번 그려 봅니다.</p>
+          <p class="exp">앞의 두 모듈에서 쓴 성인 남성 10명의 키로 표본평균 167.9cm, 표본표준편차 6.89cm, 표준오차 2.18cm를 이미 구했습니다. 이번에는 이 값으로 신뢰구간을 구합니다. 이미 만든 한 구간이 모평균을 담을 확률로 읽지는 않습니다. 실습에서는 평균 167.6cm, 표준편차 7.0cm인 정규분포를 모집단으로 가정해 신뢰구간을 여러 번 그려 봅니다.</p>
         </div>
       </div>
     </section>
@@ -385,7 +385,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
         </div>
         <div class="side">
           <ul class="key"><li>표본으로 x̄, s, 표준오차를 구합니다.</li><li>x̄ ± 2 × 표준오차가 약 95% 신뢰구간입니다.</li></ul>
-          <p class="exp">10명의 키로 표본평균 167.9cm, 비편향표준편차 6.89cm, 표준오차 6.89 ÷ √10 ≈ 2.18cm를 얻었습니다. 그러면 정규분포의 성질에서 모평균 μ는 167.9 ± 2 × 2.18, 곧 163.54cm부터 172.26cm까지의 범위에 약 95%의 확률로 있게 된다고 할 수 있습니다. 실습의 가정처럼 모평균이 167.6cm라면 이 구간은 μ를 포함합니다.</p>
+          <p class="exp">10명의 키로 표본평균 167.9cm, 표본표준편차 6.89cm, 표준오차 6.89 ÷ √10 ≈ 2.18cm를 얻었습니다. 정규분포의 성질에서 167.9 ± 2 × 2.18, 곧 163.54cm부터 172.26cm가 약 95% 신뢰구간입니다. 이 구간이 모평균을 95% 확률로 담는다는 뜻은 아닙니다. 같은 방법으로 구간을 반복해서 만들면 장기적으로 약 95%가 모평균을 포함합니다. 실습의 가정처럼 모평균이 167.6cm라면 이번 구간은 μ를 포함합니다.</p>
           <p class="next"><span>다음 질문</span>‘95%’는 정확히 무슨 뜻일까?</p>
         </div>
       </div>
@@ -397,7 +397,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
         <div class="fig"><svg id="m10-twenty" viewBox="0 0 420 270" role="img" aria-label="같은 모집단에서 10명씩 20번 뽑아 그린 95퍼센트 신뢰구간, 1개가 모평균을 포함하지 않음"></svg></div>
         <div class="side">
           <ul class="key"><li>확률적으로 변하는 것은 μ가 아니라 구간입니다.</li><li>100번 구하면 평균 95번 μ를 포함합니다.</li></ul>
-          <p class="exp">95% 신뢰구간은 ‘95%의 확률로 이 구간에 모평균 μ가 있다’고 해석하지만, 확률변수는 μ가 아니라 표본평균과 신뢰구간입니다. μ가 변해 구간에 들어가는 것이 아니라, 표본을 뽑아 신뢰구간을 구하는 작업을 100번 반복하면 평균적으로 95번 구간에 μ가 포함된다는 뜻입니다. 하나의 표본에서 얻은 신뢰구간은 μ를 포함하거나 포함하지 않거나 둘 중 하나입니다.</p>
+          <p class="exp">확률변수는 모평균 μ가 아니라 표본마다 달라지는 신뢰구간입니다. μ가 움직여 구간에 들어가는 것이 아니라, 표본을 뽑아 95% 신뢰구간을 구하는 작업을 100번 반복하면 평균적으로 95번 구간에 μ가 포함됩니다. 이미 구한 하나의 구간은 μ를 포함하거나 포함하지 않거나 둘 중 하나입니다.</p>
           <p class="next"><span>다음 질문</span>신뢰구간의 폭은 무엇을 알려 줄까?</p>
         </div>
       </div>
@@ -511,7 +511,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
           <div class="stats three"><div><small>μ 포함</small><strong id="m10-in">-</strong></div><div><small>평균 구간 폭</small><strong id="m10-w">-</strong></div><div><small>누적 포함률</small><strong id="m10-rate">-</strong></div></div>
           <div style="display:flex;gap:8px"><button class="btn" id="m10-redo">새로 20번 뽑기</button></div>
           <p class="pmsg" id="m10-msg"></p>
-          <div class="think"><span>생각해보기</span>n을 10에서 1,000으로 늘리면 구간은 좁아지는데, 포함하는 비율도 줄어들까요?</div>
+          <div class="think" style="flex-wrap:wrap"><span>생각해보기</span>n을 10에서 1,000으로 늘리면 구간은 좁아지는데, 포함하는 비율도 줄어들까요?<details style="flex-basis:100%;font-weight:600"><summary style="cursor:pointer">예시 답</summary>포함하는 비율은 약 95%로 유지되고, 구간만 좁아집니다.</details></div>
         </div>
       </div>
     </section>
@@ -528,7 +528,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
           <div class="plabel" style="margin:0">결과 확인 · <span id="p2-count">0 / 0</span></div>
           <div class="bins" id="p2-bins" style="grid-template-columns:repeat(2,1fr)"></div>
           <div class="p2row"><p class="pmsg" id="p2-msg"></p><button class="btn ghost" id="p2-reset">다시 하기</button></div>
-          <div class="think"><span>생각해보기</span>링 던지기에서 움직이는 것은 막대와 고리 중 어느 쪽이었나요?</div>
+          <div class="think" style="flex-wrap:wrap"><span>생각해보기</span>링 던지기에서 움직이는 것은 막대와 고리 중 어느 쪽이었나요?<details style="flex-basis:100%;font-weight:600"><summary style="cursor:pointer">예시 답</summary>움직이는 것은 고리, 곧 표본마다 달라지는 구간입니다. 막대인 모평균은 고정입니다.</details></div>
         </div>
       </div>
     </section>
@@ -546,7 +546,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
           <button class="btn" id="m10-check" style="align-self:flex-start">t분포로 계산</button>
           <div class="stats"><div><small>내 예측 구간</small><strong id="m10-mine">-</strong></div><div><small>95% 신뢰구간</small><strong id="m10-act">?</strong></div></div>
           <p class="pmsg" id="m10-msg3"></p>
-          <div class="think"><span>생각해보기</span>표본표준편차 6.89cm를 그대로 ±로 쓰면 왜 구간이 너무 넓어질까요?</div>
+          <div class="think" style="flex-wrap:wrap"><span>생각해보기</span>표본표준편차 6.89cm를 그대로 ±로 쓰면 왜 구간이 너무 넓어질까요?<details style="flex-basis:100%;font-weight:600"><summary style="cursor:pointer">예시 답</summary>6.89cm는 한 사람의 키 퍼짐이고, 평균의 흔들림은 더 작은 s/√n이기 때문입니다.</details></div>
         </div>
       </div>
     </section>
@@ -606,11 +606,16 @@ var CARDS=[["100번 구하면 평균 95번 μ를 포함","올바른 해석"],["�
 var HINT={"올바른 해석":"고정된 μ를, 매번 달라지는 구간이 얼마나 자주 포함하는지로 말합니다.","잘못된 해석":"μ를 움직이는 값으로 보거나, 데이터의 퍼짐이나 확실성으로 오해합니다."};
 
 var GLOSSARY=[
- ["신뢰구간","confidence interval","표본으로 구한, 모평균 같은 모집단의 성질이 있을 범위입니다.","10명의 키로 구한 162.97 ~ 172.83cm"],
+ ["신뢰구간","confidence interval","같은 방법으로 구간을 반복하면 그중 정해진 비율이 모평균을 포함하도록 만든 구간입니다.","10명의 키로 구한 162.97 ~ 172.83cm"],
  ["t분포","t-distribution","모집단이 정규분포라는 가정에서 표본오차를 표준오차로 나눈 값이 따르는 분포로, 작은 표본의 신뢰구간에 씁니다.","n = 10이면 가운데 95%의 경계가 ±2.26"],
  ["가설검정","statistical test","세운 가설이 데이터와 맞는지 판단하는 추론통계 방법으로, 신뢰구간과 동전의 양면 관계입니다.","다음 모듈부터 배움"]
 ];
-var REFS=[];
+var REFS=[
+ {n:1,title:"기초통계학",org:"여인권, 숙명여자대학교, KOCW 공개강의",url:"https://www.kocw.net/home/search/kemView.do?kemId=1052562",date:"2026-10-28 확인"},
+ {n:2,title:"데이터로 배우는 통계학",org:"K-MOOC",url:"https://www.kmooc.kr/view/course/detail/20384",date:"2026-10-28 확인"},
+ {n:3,title:"R을 활용한 통계학개론",org:"K-MOOC, KOCW 공개강의",url:"https://www.kocw.net/home/search/kemView.do?kemId=1517479",date:"2026-10-28 확인"},
+ {n:4,title:"공공데이터포털",org:"행정안전부",url:"https://www.data.go.kr",date:"2026-10-28 확인"}
+];
 var NEXT={title:"M11 가설검정의 원리와 p값",line:"신뢰구간과 동전의 양면인 또 하나의 추론통계 방법이 있습니다. 다음 모듈에서는 가설검정의 원리와 p값을 배웁니다."};
 
 /* =====================================================================
@@ -736,13 +741,13 @@ on("m10-ov",function(s){
     tA(s,b[0]+60,b[1]+30,b[2],{fw:800,fs:13.5,c:d?"#fff":C.navy});tA(s,b[0]+60,b[1]+52,b[3],{fs:11,c:d?"#FCF3D9":C.gray});});
   [[132,65,158,65],[282,65,308,65]].forEach(function(l){el("line",{x1:l[0],y1:l[1],x2:l[2],y2:l[3],stroke:C.navy3,"stroke-width":2,"marker-end":"url(#oA)"},s);});
   el("path",{d:"M370 102 C370 150 310 190 284 194",fill:"none",stroke:C.navy3,"stroke-width":2,"marker-end":"url(#oA)"},s);
-  tA(s,220,252,"모평균이 들어 있을 범위를 표본으로 말하기",{fs:11.5,c:C.gray});
+  tA(s,220,252,"반복하면 약 95%의 구간이 모평균을 포함",{fs:11.5,c:C.gray});
 });
 
 on("m10-case",function(s){
   bxA(s,10,10,420,230);tA(s,220,34,"성인 남성 10명의 키 (cm)",{fw:800,fs:12.5});
   SAMPLE10.forEach(function(v,i){var x=58+i*36;el("rect",{x:x-16,y:48,width:32,height:28,rx:6,fill:"#E4E9F2"},s);tA(s,x,67,v,{fw:800,fs:11.5});});
-  [["표본평균 x̄","167.9cm"],["비편향표준편차 s","6.89cm"],["표준오차 s/√n","2.18cm"]].forEach(function(r,i){var x=30+i*132;bxA(s,x,96,124,62,i===2?"#FCF3D9":"#F3F5F9",i===2?"#E0A100":null);
+  [["표본평균 x̄","167.9cm"],["표본표준편차 s","6.89cm"],["표준오차 s/√n","2.18cm"]].forEach(function(r,i){var x=30+i*132;bxA(s,x,96,124,62,i===2?"#FCF3D9":"#F3F5F9",i===2?"#E0A100":null);
     tA(s,x+62,120,r[0],{fs:11,c:C.gray});tA(s,x+62,146,r[1],{fw:800,fs:15,c:i===2?C.amberInk:C.navy});});
   tA(s,220,190,"→ 모평균 μ는 어느 범위에 있을까?",{fw:800,fs:13});tA(s,220,216,"실습 모집단 가정: N(167.6, 7.0²)",{fs:11,c:C.gray});
 });
@@ -919,9 +924,9 @@ for(var gi=0;gi<GLOSSARY.length;gi+=6){
 }
 (function(){
   var s=document.createElement("section");s.className="slide";s.dataset.step="6";s.id="end";
-  var refs=REFS.length?'<div class="pcol" style="gap:10px"><div class="plabel" style="margin:0">참고자료</div><ol class="refs">'+REFS.map(function(r){return '<li><span>['+r.n+']</span><div>'+r.title+', '+r.org+'. <a href="'+r.url+'" target="_blank" rel="noopener">'+r.url+'</a> ('+r.date+')</div></li>';}).join("")+'</ol></div>':'';
+  var refs=REFS.length?'<div class="pcol" style="gap:10px;min-height:0;overflow:hidden"><div class="plabel" style="margin:0">참고자료</div><ol class="refs">'+REFS.map(function(r){return '<li><span>['+r.n+']</span><div>'+r.title+', '+r.org+'. <a href="'+r.url+'" target="_blank" rel="noopener">'+r.url+'</a> ('+r.date+')</div></li>';}).join("")+'</ol></div>':'';
   s.innerHTML='<div class="sh"><div class="sec">마무리</div><h2>'+(REFS.length?"참고자료와 다음 모듈":"다음 모듈")+'</h2></div>'+
-    '<div class="body '+(REFS.length?'split even':'full')+'" style="align-content:center">'+refs+
+    '<div class="body '+(REFS.length?'split even':'full')+'" style="'+(REFS.length?'grid-template-rows:minmax(0,1fr)':'align-content:center')+'">'+refs+
     '<div class="pcol" style="justify-content:center"><div class="nextmod"><small>다음 모듈 · '+NEXT.title+'</small><strong>'+NEXT.line+'</strong></div></div></div>'+
     '<p class="foot">학습 상태는 저장되지 않습니다.</p>';
   vp.appendChild(s);

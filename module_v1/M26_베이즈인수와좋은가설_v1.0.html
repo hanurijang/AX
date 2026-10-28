@@ -195,7 +195,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
 .gi .d{font-size:14px;line-height:1.5}
 .gi .e{font-size:12.5px;line-height:1.45;color:var(--gray)}
 .gi .e strong{color:var(--navy3)}
-.refs{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:8px;font-size:13.5px;line-height:1.5}
+.refs{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:8px;font-size:13.5px;line-height:1.5;overflow-y:auto;flex:1 1 auto;min-height:0}
 .refs li{display:grid;grid-template-columns:30px 1fr;gap:4px}
 .refs li span{font-weight:800;color:var(--navy3)}
 .refs a{color:var(--navy2);word-break:break-all}
@@ -354,7 +354,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
         </div>
         <div class="side">
           <ul class="key"><li><b>베이즈 인수</b>: 두 모형의 <b>주변 가능도</b> 비율</li><li>모형 = 확률분포 + 파라미터의 <b>사전분포</b></li></ul>
-          <p class="exp">가설검정에서는 p &lt; 0.05일 때 귀무가설을 기각하지만, p ≥ 0.05일 때는 귀무가설을 채택하는 것이 아니라 판단을 보류합니다. 귀무가설과 대립가설이 대등하지 않아 귀무가설을 지지할 수는 없기 때문입니다. 이 문제의 해결책 중 하나가 베이즈 인수입니다. 가설을 수학적으로 나타낸 모형 M은 데이터를 생성하는 확률분포와 파라미터 θ의 사전분포로 구성되며, θ를 사전분포로 평균한 모형의 예측력이 주변 가능도(에비던스)입니다. 베이즈 인수는 두 모형의 주변 가능도 비율이며, 1보다 크면 분자의 M<sub>1</sub>이 데이터를 더 잘 설명합니다.</p>
+          <p class="exp">가설검정에서는 p &lt; 0.05일 때 귀무가설을 기각하지만, p ≥ 0.05일 때는 귀무가설을 채택하는 것이 아니라 판단을 보류합니다. 귀무가설과 대립가설이 대등하지 않아 귀무가설을 지지할 수는 없기 때문입니다. 이 문제의 해결책 중 하나가 베이즈 인수입니다. 가설을 수학적으로 나타낸 모형 M은 데이터를 생성하는 확률분포와 파라미터 θ의 사전분포로 구성되며, θ를 사전분포로 평균한 모형의 예측력이 주변 가능도(에비던스)입니다. 베이즈 인수는 두 모형의 주변 가능도 비율이며, 1보다 크면 분자의 M<sub>1</sub>이 데이터를 더 잘 설명합니다. 사전 오즈에 이 인수를 곱하면 사후 오즈가 됩니다. 인수 자체는 가설이 참일 확률이 아니며, 그 확률은 M30의 사후분포에서 다룹니다.</p>
           <p class="next"><span>다음 질문</span>베이즈 인수가 얼마면 충분할까?</p>
         </div>
       </div>
@@ -366,7 +366,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
         <div class="fig"><svg id="m26-scale" viewBox="0 0 420 270" role="img" aria-label="베이즈 인수 해석 기준 눈금과 실험 2.8, 추시 차이 없음 지지 8.9의 위치, 유의수준 0.05와 0.005에 대응하는 범위"></svg></div>
         <div class="side">
           <ul class="key"><li>1~3.2 약함 · 3.2 초과 실질적 · 10 초과 강함</li><li>α = 0.05는 베이즈 인수 약 2.5~3.4에 대응</li></ul>
-          <p class="exp">값의 크기를 해석할 때는 주의해야 합니다. 제프리스는 베이즈 인수가 1보다 크고 3.2 미만이면 지지하는 경향이 있더라도 실질적인 의미가 있다고 보기 어렵고, 3.2보다 크면 실질적인 의미가 있으며, 10보다 크면 강하게 지지한다는 기준을 제안했습니다. 이를 수정한 카스와 래프터리의 기준을 비롯해 몇 가지 기준이 있습니다<span class="cite">[1]</span>. α = 0.05는 약 2.5~3.4(약한 증거), α = 0.005는 약 14~26(강한 증거)의 베이즈 인수에 대응하므로, 기준을 0.005로 바꾸면 허위발견율을 줄일 수 있다고 합니다<span class="cite">[2]</span>. 실험의 2.8은 p = 0.027이어도 약한 증거입니다.</p>
+          <p class="exp">값의 크기를 해석할 때는 주의해야 합니다. 제프리스는 베이즈 인수가 1보다 크고 3.2 미만이면 지지하는 경향이 있더라도 실질적인 의미가 있다고 보기 어렵고, 3.2보다 크면 실질적인 의미가 있으며, 10보다 크면 강하게 지지한다는 기준을 제안했습니다. 이 숫자 경계는 증명된 컷이 아니라 해석용 관례입니다. 이를 수정한 카스와 래프터리의 기준을 비롯해 몇 가지 기준이 있습니다<span class="cite">[1]</span>. α = 0.05는 약 2.5~3.4(약한 증거), α = 0.005는 약 14~26(강한 증거)의 베이즈 인수에 대응하므로, 기준을 0.005로 바꾸면 허위발견율을 줄일 수 있다고 합니다<span class="cite">[2]</span>. 실험의 2.8은 p = 0.027이어도 약한 증거입니다.</p>
           <p class="next"><span>다음 질문</span>베이즈 인수의 장점과 주의점은?</p>
         </div>
       </div>
@@ -473,7 +473,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
           <div class="stats three"><div><small>p값</small><strong id="m26-p">-</strong></div><div><small>B = M1 ÷ M0</small><strong id="m26-b">-</strong></div><div><small>판정</small><strong id="m26-j" style="font-size:13px">-</strong></div></div>
           <p class="howto">도전: p ≥ 0.05이면서 ‘차이 없음(M0)’을 실질적으로 지지(1 ÷ B &gt; 3.2)하는 조건을 찾아보세요.</p>
           <p class="pmsg" id="m26-msg"></p>
-          <div class="think"><span>생각해보기</span>같은 D에서 n이 커지면 베이즈 인수는 어느 방향으로 움직이나요?</div>
+          <div class="think" style="flex-wrap:wrap"><span>생각해보기</span>같은 D에서 n이 커지면 베이즈 인수는 어느 방향으로 움직이나요?<details style="flex-basis:100%;font-weight:600"><summary style="cursor:pointer">예시 답</summary>데이터가 더 잘 지지하는 가설 쪽으로 베이즈 인수가 더 움직입니다.</details></div>
         </div>
       </div>
     </section>
@@ -490,7 +490,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
           <div class="plabel" style="margin:0">결과 확인 · <span id="p2-count">0 / 0</span></div>
           <div class="bins" id="p2-bins" style="grid-template-columns:repeat(2,1fr)"></div>
           <div class="p2row"><p class="pmsg" id="p2-msg"></p><button class="btn ghost" id="p2-reset">다시 하기</button></div>
-          <div class="think"><span>생각해보기</span>보고서에 두 지표를 함께 쓴다면 각각 무엇을 알려 줄까요?</div>
+          <div class="think" style="flex-wrap:wrap"><span>생각해보기</span>보고서에 두 지표를 함께 쓴다면 각각 무엇을 알려 줄까요?<details style="flex-basis:100%;font-weight:600"><summary style="cursor:pointer">예시 답</summary>p값은 귀무가설 아래에서 이 데이터가 얼마나 드문지, 베이즈 인수는 두 가설의 예측력 비율을 알려 줍니다.</details></div>
         </div>
       </div>
     </section>
@@ -510,7 +510,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
           <button class="btn" id="m26-check" style="align-self:flex-start">계산해서 확인</button>
           <div class="stats three"><div><small>내 예측</small><strong id="m26-mine">-</strong></div><div><small>실제 FDR</small><strong id="m26-act">?</strong></div><div><small>유의한 건수</small><strong id="m26-cnt">?</strong></div></div>
           <p class="pmsg" id="m26-msg3"></p>
-          <div class="think"><span>생각해보기</span>Q를 높이는 것과 α를 낮추는 것 중 현장에서 더 하기 쉬운 것은?</div>
+          <div class="think" style="flex-wrap:wrap"><span>생각해보기</span>Q를 높이는 것과 α를 낮추는 것 중 현장에서 더 하기 쉬운 것은?<details style="flex-basis:100%;font-weight:600"><summary style="cursor:pointer">예시 답</summary>근거 있는 가설을 고르는 일이, 유의수준만 낮추느라 표본을 크게 늘리는 일보다 먼저 손대기 쉽습니다.</details></div>
         </div>
       </div>
     </section>
@@ -585,7 +585,8 @@ var GLOSSARY=[
 var REFS=[
  {n:1,title:"Bayes Factors",org:"R. E. Kass, A. E. Raftery, Journal of the American Statistical Association 90(430), 773–795, 1995",url:"https://doi.org/10.1080/01621459.1995.10476572",date:"2026-10-27 확인"},
  {n:2,title:"Redefine statistical significance",org:"D. J. Benjamin 외, Nature Human Behaviour 2, 6–10, 2018",url:"https://doi.org/10.1038/s41562-017-0189-z",date:"2026-10-27 확인"},
- {n:3,title:"Why Most Published Research Findings Are False",org:"J. P. A. Ioannidis, PLoS Medicine 2(8), e124, 2005",url:"https://doi.org/10.1371/journal.pmed.0020124",date:"2026-10-27 확인"}
+ {n:3,title:"Why Most Published Research Findings Are False",org:"J. P. A. Ioannidis, PLoS Medicine 2(8), e124, 2005",url:"https://doi.org/10.1371/journal.pmed.0020124",date:"2026-10-27 확인"},
+ {n:4,title:"데이터로 배우는 통계학",org:"K-MOOC",url:"https://www.kmooc.kr/view/course/detail/20384",date:"2026-10-28 확인"}
 ];
 var NEXT={title:"M27 p-해킹",line:"다음 모듈에서는 p-해킹의 구체적인 예와 이를 예방하기 위한 노력, 가설검정 결과를 읽을 때 확인할 항목을 살펴봅니다."};
 
@@ -877,9 +878,9 @@ for(var gi=0;gi<GLOSSARY.length;gi+=6){
 }
 (function(){
   var s=document.createElement("section");s.className="slide";s.dataset.step="6";s.id="end";
-  var refs=REFS.length?'<div class="pcol" style="gap:10px"><div class="plabel" style="margin:0">참고자료</div><ol class="refs">'+REFS.map(function(r){return '<li><span>['+r.n+']</span><div>'+r.title+', '+r.org+'. <a href="'+r.url+'" target="_blank" rel="noopener">'+r.url+'</a> ('+r.date+')</div></li>';}).join("")+'</ol></div>':'';
+  var refs=REFS.length?'<div class="pcol" style="gap:10px;min-height:0;overflow:hidden"><div class="plabel" style="margin:0">참고자료</div><ol class="refs">'+REFS.map(function(r){return '<li><span>['+r.n+']</span><div>'+r.title+', '+r.org+'. <a href="'+r.url+'" target="_blank" rel="noopener">'+r.url+'</a> ('+r.date+')</div></li>';}).join("")+'</ol></div>':'';
   s.innerHTML='<div class="sh"><div class="sec">마무리</div><h2>'+(REFS.length?"참고자료와 다음 모듈":"다음 모듈")+'</h2></div>'+
-    '<div class="body '+(REFS.length?'split even':'full')+'" style="align-content:center">'+refs+
+    '<div class="body '+(REFS.length?'split even':'full')+'" style="'+(REFS.length?'grid-template-rows:minmax(0,1fr)':'align-content:center')+'">'+refs+
     '<div class="pcol" style="justify-content:center"><div class="nextmod"><small>다음 모듈 · '+NEXT.title+'</small><strong>'+NEXT.line+'</strong></div></div></div>'+
     '<p class="foot">학습 상태는 저장되지 않습니다.</p>';
   vp.appendChild(s);

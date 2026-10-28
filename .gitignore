@@ -1,6 +1,9 @@
 # 로컬 세션 메타데이터 (PC별로 달라지는 파일)
 .llm/
 
+# 로컬 참고자료
+/ref/
+
 # OS/에디터 잡파일
 .DS_Store
 Thumbs.db

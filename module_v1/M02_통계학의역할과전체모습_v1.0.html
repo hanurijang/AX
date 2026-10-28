@@ -195,7 +195,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
 .gi .d{font-size:14px;line-height:1.5}
 .gi .e{font-size:12.5px;line-height:1.45;color:var(--gray)}
 .gi .e strong{color:var(--navy3)}
-.refs{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:8px;font-size:13.5px;line-height:1.5}
+.refs{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:8px;font-size:13.5px;line-height:1.5;overflow-y:auto;flex:1 1 auto;min-height:0}
 .refs li{display:grid;grid-template-columns:30px 1fr;gap:4px}
 .refs li span{font-weight:800;color:var(--navy3)}
 .refs a{color:var(--navy2);word-break:break-all}
@@ -653,7 +653,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
           <div class="stats three"><div><small>신약 범위</small><strong id="m2-r1" style="font-size:17px">-</strong></div><div><small>위약 범위</small><strong id="m2-r2" style="font-size:17px">-</strong></div><div><small>평균 차이</small><strong>25</strong></div></div>
           <p class="howto">도전: 두 집단의 값이 막 겹치기 시작하는 퍼짐 크기를 찾아보세요.</p>
           <p class="pmsg" id="m2-msg"></p>
-          <div class="think"><span>생각해보기</span>평균 차이는 늘 25인데, 퍼짐이 커지면 판단이 어려워지는 까닭은 무엇일까요?</div>
+          <div class="think" style="flex-wrap:wrap"><span>생각해보기</span>평균 차이는 늘 25인데, 퍼짐이 커지면 판단이 어려워지는 까닭은 무엇일까요?<details style="flex-basis:100%;font-weight:600"><summary style="cursor:pointer">예시 답</summary>퍼짐이 크면 25라는 차이가 우연한 흔들림 안에 묻히기 때문입니다.</details></div>
         </div>
       </div>
     </section>
@@ -670,7 +670,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
           <div class="plabel" style="margin:0">결과 확인 · <span id="p2-count">0 / 0</span></div>
           <div class="bins" id="p2-bins"></div>
           <div class="p2row"><p class="pmsg" id="p2-msg"></p><button class="btn ghost" id="p2-reset">다시 하기</button></div>
-          <div class="think"><span>생각해보기</span>통계적 추론과 가설검정은 둘 다 추론통계입니다. 무엇이 다를까요?</div>
+          <div class="think" style="flex-wrap:wrap"><span>생각해보기</span>통계적 추론과 가설검정은 둘 다 추론통계입니다. 무엇이 다를까요?<details style="flex-basis:100%;font-weight:600"><summary style="cursor:pointer">예시 답</summary>추론은 모집단 값을 추정하고, 가설검정은 그 가설을 기각할지 판단합니다.</details></div>
         </div>
       </div>
     </section>
@@ -687,7 +687,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
           <div style="display:flex;gap:8px"><button class="btn" id="m2-check">확률 모형으로 확인</button><button class="btn ghost" id="m2-sim">100번 던져 보기</button></div>
           <div class="stats three"><div><small>내 추정</small><strong id="m2-mine">-</strong></div><div><small>기대 횟수</small><strong id="m2-exp">-</strong></div><div><small>모의실험 1의 눈</small><strong id="m2-simv">-</strong></div></div>
           <p class="pmsg" id="m2-msg3"></p>
-          <div class="think"><span>생각해보기</span>1의 눈이 50번 나온 주사위라면 어떤 가설을 새로 세워야 할까요?</div>
+          <div class="think" style="flex-wrap:wrap"><span>생각해보기</span>1의 눈이 50번 나온 주사위라면 어떤 가설을 새로 세워야 할까요?<details style="flex-basis:100%;font-weight:600"><summary style="cursor:pointer">예시 답</summary>주사위가 공정하지 않아 1이 더 잘 나온다는 가설을 세워 볼 수 있습니다.</details></div>
         </div>
       </div>
     </section>
@@ -759,7 +759,12 @@ var GLOSSARY=[
  ["양적 변수(수치형 변수)","quantitative variable","키처럼 수치로 다루는 변수입니다.","키, 혈압"],
  ["변수","variable","특정 속성에 관한 데이터의 모음입니다.","키만 있으면 1변수, 키와 몸무게면 2변수"]
 ];
-var REFS=[];
+var REFS=[
+ {n:1,title:"데이터로 배우는 통계학",org:"K-MOOC",url:"https://www.kmooc.kr/view/course/detail/20384",date:"2026-10-28 확인"},
+ {n:2,title:"국가통계포털 통계목록",org:"통계청, KOSIS",url:"https://kosis.kr/statisticsList/statisticsListIndex.do?menuId=M_01_02&outLink=Y&vwcd=MT_OTITLE",date:"2026-10-28 확인"},
+ {n:3,title:"공공데이터포털",org:"행정안전부",url:"https://www.data.go.kr",date:"2026-10-28 확인"},
+ {n:4,title:"기초통계학",org:"여인권, 숙명여자대학교, KOCW 공개강의",url:"https://www.kocw.net/home/search/kemView.do?kemId=1052562",date:"2026-10-28 확인"}
+];
 var NEXT={title:"M03 모집단과 표본",line:"데이터를 얻는다는 것은 무엇일까요? 다음 모듈에서는 알고 싶은 대상 전체와 실제로 얻은 데이터를 구분해 봅니다."};
 
 /* =====================================================================
@@ -981,9 +986,9 @@ for(var gi=0;gi<GLOSSARY.length;gi+=6){
 }
 (function(){
   var s=document.createElement("section");s.className="slide";s.dataset.step="6";s.id="end";
-  var refs=REFS.length?'<div class="pcol" style="gap:10px"><div class="plabel" style="margin:0">참고자료</div><ol class="refs">'+REFS.map(function(r){return '<li><span>['+r.n+']</span><div>'+r.title+', '+r.org+'. <a href="'+r.url+'" target="_blank" rel="noopener">'+r.url+'</a> ('+r.date+')</div></li>';}).join("")+'</ol></div>':'';
+  var refs=REFS.length?'<div class="pcol" style="gap:10px;min-height:0;overflow:hidden"><div class="plabel" style="margin:0">참고자료</div><ol class="refs">'+REFS.map(function(r){return '<li><span>['+r.n+']</span><div>'+r.title+', '+r.org+'. <a href="'+r.url+'" target="_blank" rel="noopener">'+r.url+'</a> ('+r.date+')</div></li>';}).join("")+'</ol></div>':'';
   s.innerHTML='<div class="sh"><div class="sec">마무리</div><h2>'+(REFS.length?"참고자료와 다음 모듈":"다음 모듈")+'</h2></div>'+
-    '<div class="body '+(REFS.length?'split even':'full')+'" style="align-content:center">'+refs+
+    '<div class="body '+(REFS.length?'split even':'full')+'" style="'+(REFS.length?'grid-template-rows:minmax(0,1fr)':'align-content:center')+'">'+refs+
     '<div class="pcol" style="justify-content:center"><div class="nextmod"><small>다음 모듈 · '+NEXT.title+'</small><strong>'+NEXT.line+'</strong></div></div></div>'+
     '<p class="foot">학습 상태는 저장되지 않습니다.</p>';
   vp.appendChild(s);

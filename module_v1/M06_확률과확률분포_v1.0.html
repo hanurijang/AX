@@ -195,7 +195,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
 .gi .d{font-size:14px;line-height:1.5}
 .gi .e{font-size:12.5px;line-height:1.45;color:var(--gray)}
 .gi .e strong{color:var(--navy3)}
-.refs{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:8px;font-size:13.5px;line-height:1.5}
+.refs{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:8px;font-size:13.5px;line-height:1.5;overflow-y:auto;flex:1 1 auto;min-height:0}
 .refs li{display:grid;grid-template-columns:30px 1fr;gap:4px}
 .refs li span{font-weight:800;color:var(--navy3)}
 .refs a{color:var(--navy2);word-break:break-all}
@@ -540,7 +540,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
           <div class="stats three"><div><small>P(붉은)</small><strong id="m6-pr">-</strong></div><div><small>P(흰)</small><strong id="m6-pw">-</strong></div><div><small>기댓값</small><strong id="m6-e">-</strong></div></div>
           <p class="howto">도전: 받을 금액의 기댓값이 정확히 200원이 되는 구슬 개수를 찾아보세요.</p>
           <p class="pmsg" id="m6-msg"></p>
-          <div class="think"><span>생각해보기</span>구슬 개수를 두 배로 늘려도(붉은 8·흰 2) 확률과 기댓값이 그대로인 까닭은 무엇일까요?</div>
+          <div class="think" style="flex-wrap:wrap"><span>생각해보기</span>구슬 개수를 두 배로 늘려도(붉은 8·흰 2) 확률과 기댓값이 그대로인 까닭은 무엇일까요?<details style="flex-basis:100%;font-weight:600"><summary style="cursor:pointer">예시 답</summary>붉은 구슬의 비율이 같아서 확률과 기댓값이 같습니다.</details></div>
         </div>
       </div>
     </section>
@@ -557,7 +557,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
           <div class="plabel" style="margin:0">결과 확인 · <span id="p2-count">0 / 0</span></div>
           <div class="bins" id="p2-bins" style="grid-template-columns:repeat(2,1fr)"></div>
           <div class="p2row"><p class="pmsg" id="p2-msg"></p><button class="btn ghost" id="p2-reset">다시 하기</button></div>
-          <div class="think"><span>생각해보기</span>꺼낸 구슬을 다시 넣고 두 번 꺼낸다면 독립일까요?</div>
+          <div class="think" style="flex-wrap:wrap"><span>생각해보기</span>꺼낸 구슬을 다시 넣고 두 번 꺼낸다면 독립일까요?<details style="flex-basis:100%;font-weight:600"><summary style="cursor:pointer">예시 답</summary>다시 넣으면 두 번째 뽑기가 첫 결과에 좌우되지 않아 독립입니다.</details></div>
         </div>
       </div>
     </section>
@@ -575,7 +575,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
           <div class="mbtns" id="m6-n" style="gap:6px"></div>
           <div class="stats three"><div><small>내 예측</small><strong id="m6-mine">-</strong></div><div><small>모의실험 평균</small><strong id="m6-sm">-</strong></div><div><small>기댓값</small><strong id="m6-ex">?</strong></div></div>
           <p class="pmsg" id="m6-msg3"></p>
-          <div class="think"><span>생각해보기</span>10번과 1,000번 던졌을 때, 어느 쪽 평균이 기댓값 3.5에 더 가까웠나요?</div>
+          <div class="think" style="flex-wrap:wrap"><span>생각해보기</span>10번과 1,000번 던졌을 때, 어느 쪽 평균이 기댓값 3.5에 더 가까웠나요?<details style="flex-basis:100%;font-weight:600"><summary style="cursor:pointer">예시 답</summary>1,000번 던진 평균이 기댓값 3.5에 더 가깝습니다.</details></div>
         </div>
       </div>
     </section>
@@ -648,7 +648,12 @@ var GLOSSARY=[
  ["독립","independence","동시확률이 각각의 확률의 곱과 같아, 한쪽이 다른 쪽의 확률을 바꾸지 않는 관계입니다.","결점 없는 주사위 A와 B"],
  ["조건부확률","conditional probability","한쪽 확률변수 Y를 알 때 다른 쪽 X의 확률 P(X | Y)입니다.","P(검은 티셔츠 | 카키색 바지) = 1"]
 ];
-var REFS=[];
+var REFS=[
+ {n:1,title:"기초통계학",org:"여인권, 숙명여자대학교, KOCW 공개강의",url:"https://www.kocw.net/home/search/kemView.do?kemId=1052562",date:"2026-10-28 확인"},
+ {n:2,title:"데이터로 배우는 통계학",org:"K-MOOC",url:"https://www.kmooc.kr/view/course/detail/20384",date:"2026-10-28 확인"},
+ {n:3,title:"R을 활용한 통계학개론",org:"K-MOOC, KOCW 공개강의",url:"https://www.kocw.net/home/search/kemView.do?kemId=1517479",date:"2026-10-28 확인"},
+ {n:4,title:"공공데이터포털",org:"행정안전부",url:"https://www.data.go.kr",date:"2026-10-28 확인"}
+];
 var NEXT={title:"M07 정규분포와 표준화",line:"확률분포는 수식과 파라미터로 나타낼 수 있습니다. 다음 모듈에서는 통계학에서 가장 자주 쓰는 정규분포와 표준화를 배웁니다."};
 
 /* =====================================================================
@@ -1030,9 +1035,9 @@ for(var gi=0;gi<GLOSSARY.length;gi+=6){
 }
 (function(){
   var s=document.createElement("section");s.className="slide";s.dataset.step="6";s.id="end";
-  var refs=REFS.length?'<div class="pcol" style="gap:10px"><div class="plabel" style="margin:0">참고자료</div><ol class="refs">'+REFS.map(function(r){return '<li><span>['+r.n+']</span><div>'+r.title+', '+r.org+'. <a href="'+r.url+'" target="_blank" rel="noopener">'+r.url+'</a> ('+r.date+')</div></li>';}).join("")+'</ol></div>':'';
+  var refs=REFS.length?'<div class="pcol" style="gap:10px;min-height:0;overflow:hidden"><div class="plabel" style="margin:0">참고자료</div><ol class="refs">'+REFS.map(function(r){return '<li><span>['+r.n+']</span><div>'+r.title+', '+r.org+'. <a href="'+r.url+'" target="_blank" rel="noopener">'+r.url+'</a> ('+r.date+')</div></li>';}).join("")+'</ol></div>':'';
   s.innerHTML='<div class="sh"><div class="sec">마무리</div><h2>'+(REFS.length?"참고자료와 다음 모듈":"다음 모듈")+'</h2></div>'+
-    '<div class="body '+(REFS.length?'split even':'full')+'" style="align-content:center">'+refs+
+    '<div class="body '+(REFS.length?'split even':'full')+'" style="'+(REFS.length?'grid-template-rows:minmax(0,1fr)':'align-content:center')+'">'+refs+
     '<div class="pcol" style="justify-content:center"><div class="nextmod"><small>다음 모듈 · '+NEXT.title+'</small><strong>'+NEXT.line+'</strong></div></div></div>'+
     '<p class="foot">학습 상태는 저장되지 않습니다.</p>';
   vp.appendChild(s);

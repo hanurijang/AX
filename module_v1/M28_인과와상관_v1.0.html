@@ -195,7 +195,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
 .gi .d{font-size:14px;line-height:1.5}
 .gi .e{font-size:12.5px;line-height:1.45;color:var(--gray)}
 .gi .e strong{color:var(--navy3)}
-.refs{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:8px;font-size:13.5px;line-height:1.5}
+.refs{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:8px;font-size:13.5px;line-height:1.5;overflow-y:auto;flex:1 1 auto;min-height:0}
 .refs li{display:grid;grid-template-columns:30px 1fr;gap:4px}
 .refs li span{font-weight:800;color:var(--navy3)}
 .refs a{color:var(--navy2);word-break:break-all}
@@ -393,8 +393,8 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
       <div class="body split even">
         <div class="fig"><svg id="m28-obs" viewBox="0 0 420 270" role="img" aria-label="관찰 데이터 산점도를 근속연수로 색칠하면 근속이 교육과 불량률 모두에 영향을 주는 것이 보임"></svg></div>
         <div class="side">
-          <ul class="key"><li><b>관찰 연구</b>로는 상관만 알 수 있습니다.</li><li>근속연수가 <b>중첩요인</b>일 수 있습니다.</li></ul>
-          <p class="exp">작업자 기록은 실험 없이 현재 상태를 관찰한 관찰 연구로 얻은 데이터입니다. 회귀분석으로 교육 시간의 회귀계수가 유의하게 음수로 나와 교육이 불량률을 낮추는 것처럼 보여도, 알 수 있는 것은 상관관계가 있다는 것뿐입니다. 근속연수가 긴 작업자일수록 교육을 많이 받았고(r = 0.89), 불량률도 낮았습니다(r = −0.90). 이처럼 두 변수에 관련된 외부 변수를 중첩요인이라 하며, 근속연수를 함께 넣어 분석하자 교육 시간의 계수는 거의 0(p = 1.00)이었습니다. 또 불량률이 낮은 작업자가 교육 대상으로 뽑히는 역방향 관계로도 비슷한 패턴이 생길 수 있습니다.</p>
+          <ul class="key"><li>관찰 연구만으로 인과를 <b>확정</b>할 수는 없습니다.</li><li>근속연수가 <b>중첩요인</b>일 수 있습니다.</li></ul>
+          <p class="exp">작업자 기록은 실험 없이 현재 상태를 관찰한 관찰 연구로 얻은 데이터입니다. 회귀분석으로 교육 시간의 회귀계수가 유의하게 음수로 나와도, 그것만으로 교육이 불량률을 낮춘다고 확정할 수는 없습니다. 다만 관찰 자료에서는 상관만 알 수 있다는 뜻은 아닙니다. 측정한 중첩요인을 함께 넣으면 조건부 연관을 볼 수 있고, 그 가정이 맞을 때의 인과 추정은 다음 모듈에서 다룹니다. 근속연수가 긴 작업자일수록 교육을 많이 받았고(r = 0.89), 불량률도 낮았습니다(r = −0.90). 근속연수를 함께 넣어 분석하자 교육 시간의 계수는 거의 0(p = 1.00)이었습니다. 또 불량률이 낮은 작업자가 교육 대상으로 뽑히는 역방향 관계로도 비슷한 패턴이 생길 수 있습니다.</p>
           <p class="next"><span>다음 질문</span>인과를 주장하려면 어떤 데이터가 필요할까?</p>
         </div>
       </div>
@@ -513,7 +513,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
           <div class="stats three"><div><small>X–Y 상관계수 r</small><strong id="m28-r">-</strong></div><div><small>X → Y 실제 효과</small><strong>0</strong></div><div><small>판정</small><strong id="m28-j" style="font-size:14px">-</strong></div></div>
           <p class="howto">도전: 인과관계가 없는데도 |r| &gt; 0.5가 되는 조건을 찾고, a = 0(무작위 배정)이면 어떻게 되는지 확인하세요.</p>
           <p class="pmsg" id="m28-msg"></p>
-          <div class="think"><span>생각해보기</span>a를 0으로 만드는 것이 왜 무작위 배정과 같을까요?</div>
+          <div class="think" style="flex-wrap:wrap"><span>생각해보기</span>a를 0으로 만드는 것이 왜 무작위 배정과 같을까요?<details style="flex-basis:100%;font-weight:600"><summary style="cursor:pointer">예시 답</summary>a = 0이면 교육과 근속이 무관해져, 무작위 배정처럼 중첩이 빠집니다.</details></div>
         </div>
       </div>
     </section>
@@ -530,7 +530,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
           <div class="plabel" style="margin:0">결과 확인 · <span id="p2-count">0 / 0</span></div>
           <div class="bins" id="p2-bins"></div>
           <div class="p2row"><p class="pmsg" id="p2-msg"></p><button class="btn ghost" id="p2-reset">다시 하기</button></div>
-          <div class="think"><span>생각해보기</span>중첩요인 사례로 예측은 할 수 있을까요, 개입은 할 수 있을까요?</div>
+          <div class="think" style="flex-wrap:wrap"><span>생각해보기</span>중첩요인 사례로 예측은 할 수 있을까요, 개입은 할 수 있을까요?<details style="flex-basis:100%;font-weight:600"><summary style="cursor:pointer">예시 답</summary>예측은 할 수 있어도, 교육만 바꿔 불량률이 낮아진다고 개입할 수는 없습니다.</details></div>
         </div>
       </div>
     </section>
@@ -549,7 +549,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
           <button class="btn" id="m28-check" style="align-self:flex-start">무작위 배정 결과 보기</button>
           <div class="stats three"><div><small>관찰 기울기 × 10</small><strong id="m28-ob">-</strong></div><div><small>내 예측</small><strong id="m28-mine">-</strong></div><div><small>실제 개입 효과</small><strong id="m28-act">?</strong></div></div>
           <p class="pmsg" id="m28-msg3"></p>
-          <div class="think"><span>생각해보기</span>관찰 기울기와 개입 효과의 차이는 무엇 때문에 생기나요?</div>
+          <div class="think" style="flex-wrap:wrap"><span>생각해보기</span>관찰 기울기와 개입 효과의 차이는 무엇 때문에 생기나요?<details style="flex-basis:100%;font-weight:600"><summary style="cursor:pointer">예시 답</summary>근속 같은 중첩요인이 관찰된 기울기에 섞여 있기 때문입니다.</details></div>
         </div>
       </div>
     </section>
@@ -589,7 +589,7 @@ var RZ=[18.0, 2.3, 11.4, 7.2, 1.6, 12.0, 2.1, 20.0, 14.9, 16.0, 13.9, 8.4, 14.6,
 var QUIZ=[
  {goal:1,type:"상황 판단",stem:"작업자 40명의 기록에서 연간 교육 시간이 많을수록 불량률이 낮았습니다(r = −0.80, p < 0.001). 그런데 근속연수가 긴 작업자일수록 교육을 많이 받고 불량률도 낮았습니다. 가장 알맞은 판단은 무엇일까요?",
   opts:["근속연수가 중첩요인일 수 있어 교육 → 불량률 감소라는 인과관계를 주장할 수 없다","p < 0.001이므로 교육이 불량률을 낮춘다고 결론 낸다","상관계수가 음수이므로 인과관계도 없다","근속연수는 관계없으므로 무시한다"],ans:0,
-  exp:"실험 없이 현재 상태를 관찰한 관찰 연구 데이터에서 알 수 있는 것은 상관관계가 있다는 것뿐입니다. 근속연수처럼 두 변수 모두에 영향을 주는 중첩요인이 있으면 인과관계가 없어도 같은 패턴이 나타날 수 있습니다. 실제로 근속연수를 함께 넣어 회귀분석하면 교육 계수는 거의 0(p = 1.00)이었습니다.",back:"s-4-2a",backLabel:"4-2 관찰 데이터와 중첩요인 다시 보기"},
+  exp:"실험 없이 모은 관찰 자료만으로 교육이 불량률을 낮춘다고 확정할 수는 없습니다. 그렇다고 상관만 알 수 있다는 뜻은 아닙니다. 근속연수처럼 두 변수 모두에 영향을 주는 중첩요인이 있으면 인과가 없어도 같은 패턴이 나타날 수 있고, 그 요인을 함께 넣은 회귀에서는 교육 계수가 거의 0(p = 1.00)이었습니다. 가정이 맞을 때의 인과 추정은 다음 모듈에서 다룹니다.",back:"s-4-2a",backLabel:"4-2 관찰 데이터와 중첩요인 다시 보기"},
  {goal:1,type:"O/X 오개념",stem:"“두 변수 사이에 상관관계가 없으면 인과관계도 없다.”",
   opts:["O","X"],ans:1,ox:true,
   exp:"인과관계가 있으면 상관관계도 있을 거라 생각하기 쉽지만, 상관관계가 없을 때도 있습니다. 중첩요인이 효과를 상쇄하거나 합류점 편향이 있을 때, X → Z → Y처럼 중간 변수가 있을 때, 그 밖에도 선형이 아닌 관계일 때가 그렇습니다. 상관 – 인과 벤 다이어그램에서 인과관계 원이 상관관계 원 밖으로 조금 벗어나는 이유입니다.",back:"s-4-2c",backLabel:"4-2 허위상관과 벤 다이어그램 다시 보기"},
@@ -617,7 +617,7 @@ var GLOSSARY=[
  ["인과 그래프","causal graph","원인과 결과를 원과 화살표로 나타낸 그림으로, 화살표 꼬리가 원인, 머리가 결과입니다.","근속 → 교육, 근속 → 불량률"],
  ["인과관계","causation","원인을 바꾸면 결과가 달라지는 관계로, 원인 → 결과라는 방향성이 특징입니다.","냉각 속도를 바꾸면 강도가 바뀜"],
  ["상관관계","association, correlation","데이터에서 보이는 관련성으로, 확률변수 사이가 독립이 아니라는 것을 뜻합니다.","교육 시간과 불량률 r = −0.80"],
- ["관찰 연구","observational study","실험 없이 현재 상태를 관찰해 데이터를 얻는 연구입니다.","작업자 기록에서 교육 시간과 불량률 수집"],
+ ["관찰 연구","observational study","실험 없이 현재 상태를 관찰해 데이터를 얻는 연구입니다. 그 자료만으로 인과를 확정할 수는 없지만, 측정한 중첩요인을 조정하면 조건부 연관을 볼 수 있습니다.","작업자 기록에서 교육 시간과 불량률 수집"],
  ["중첩요인","confounder","두 변수 모두에 관련되어 영향을 주는 외부 변수로, 중첩변수라고도 합니다.","근속연수"],
  ["실험 연구","experimental study","조건을 무작위로 할당하는 개입 실험을 수행해 데이터를 얻는 연구입니다.","교육 시간을 무작위로 배정"],
  ["무작위 통제 실험","randomized controlled trial, RCT","조건을 무작위로 할당해 중첩요인 등 여타 요인의 영향을 제거하고 인과관계를 확인하는 실험입니다.","무작위 배정 후 r = −0.18, p = 0.27"],
@@ -625,7 +625,10 @@ var GLOSSARY=[
  ["개입","intervention","원인 변수를 변화시켜 결과 변수를 바꾸는 것입니다.","교육 시간을 10시간 늘리기"]
 ];
 var REFS=[
- {n:1,title:"Chocolate Consumption, Cognitive Function, and Nobel Laureates",org:"F. H. Messerli, The New England Journal of Medicine 367(16), 1562–1564, 2012",url:"https://doi.org/10.1056/NEJMon1211064",date:"2026-10-27 확인"}
+ {n:1,title:"Chocolate Consumption, Cognitive Function, and Nobel Laureates",org:"F. H. Messerli, The New England Journal of Medicine 367(16), 1562–1564, 2012",url:"https://doi.org/10.1056/NEJMon1211064",date:"2026-10-27 확인"},
+ {n:2,title:"데이터로 배우는 통계학",org:"K-MOOC",url:"https://www.kmooc.kr/view/course/detail/20384",date:"2026-10-28 확인"},
+ {n:3,title:"공공데이터포털",org:"행정안전부",url:"https://www.data.go.kr",date:"2026-10-28 확인"},
+ {n:4,title:"R을 활용한 통계학개론",org:"K-MOOC, KOCW 공개강의",url:"https://www.kocw.net/home/search/kemView.do?kemId=1517479",date:"2026-10-28 확인"}
 ];
 var NEXT={title:"M29 인과를 밝히는 방법",line:"다음 모듈에서는 인과관계를 밝히기 위한 무작위 통제 실험과, 관찰 데이터로 인과를 추론하는 통계적 인과 추론 방법을 살펴봅니다."};
 
@@ -934,9 +937,9 @@ for(var gi=0;gi<GLOSSARY.length;gi+=6){
 }
 (function(){
   var s=document.createElement("section");s.className="slide";s.dataset.step="6";s.id="end";
-  var refs=REFS.length?'<div class="pcol" style="gap:10px"><div class="plabel" style="margin:0">참고자료</div><ol class="refs">'+REFS.map(function(r){return '<li><span>['+r.n+']</span><div>'+r.title+', '+r.org+'. <a href="'+r.url+'" target="_blank" rel="noopener">'+r.url+'</a> ('+r.date+')</div></li>';}).join("")+'</ol></div>':'';
+  var refs=REFS.length?'<div class="pcol" style="gap:10px;min-height:0;overflow:hidden"><div class="plabel" style="margin:0">참고자료</div><ol class="refs">'+REFS.map(function(r){return '<li><span>['+r.n+']</span><div>'+r.title+', '+r.org+'. <a href="'+r.url+'" target="_blank" rel="noopener">'+r.url+'</a> ('+r.date+')</div></li>';}).join("")+'</ol></div>':'';
   s.innerHTML='<div class="sh"><div class="sec">마무리</div><h2>'+(REFS.length?"참고자료와 다음 모듈":"다음 모듈")+'</h2></div>'+
-    '<div class="body '+(REFS.length?'split even':'full')+'" style="align-content:center">'+refs+
+    '<div class="body '+(REFS.length?'split even':'full')+'" style="'+(REFS.length?'grid-template-rows:minmax(0,1fr)':'align-content:center')+'">'+refs+
     '<div class="pcol" style="justify-content:center"><div class="nextmod"><small>다음 모듈 · '+NEXT.title+'</small><strong>'+NEXT.line+'</strong></div></div></div>'+
     '<p class="foot">학습 상태는 저장되지 않습니다.</p>';
   vp.appendChild(s);

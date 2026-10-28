@@ -195,7 +195,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
 .gi .d{font-size:14px;line-height:1.5}
 .gi .e{font-size:12.5px;line-height:1.45;color:var(--gray)}
 .gi .e strong{color:var(--navy3)}
-.refs{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:8px;font-size:13.5px;line-height:1.5}
+.refs{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:8px;font-size:13.5px;line-height:1.5;overflow-y:auto;flex:1 1 auto;min-height:0}
 .refs li{display:grid;grid-template-columns:30px 1fr;gap:4px}
 .refs li span{font-weight:800;color:var(--navy3)}
 .refs a{color:var(--navy2);word-break:break-all}
@@ -361,7 +361,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
         <div class="fig"><svg id="m20-dim" viewBox="0 0 420 270" role="img" aria-label="1차원 점 5개, 2차원 25개, 3차원 125개와 같은 데이터 10개의 듬성듬성함"></svg></div>
         <div class="side">
           <ul class="key"><li>차원이 늘면 필요한 데이터가 폭발적으로 증가</li><li>이를 <b>차원의 저주</b>라 합니다.</li></ul>
-          <p class="exp">원리상 회귀모형에는 설명변수를 몇 개든 추가할 수 있지만, 설명변수의 개수(차원)가 많은 고차원 데이터에는 주의할 점이 있습니다. 먼저 차원이 늘어날수록 파라미터 추정에 필요한 데이터 양이 폭발적으로 증가하는데, 이를 차원의 저주라 합니다. 같은 간격으로 공간을 채우려면 1차원에 점 5개, 2차원에 25개, 3차원에 125개가 필요하듯 공간의 체적이 거듭제곱으로 변하기 때문에, 표본크기를 n = 10으로 두면 차원이 올라갈수록 데이터가 듬성듬성해집니다.</p>
+          <p class="exp">원리상 회귀모형에는 설명변수를 몇 개든 추가할 수 있지만, 설명변수의 개수(차원)가 많은 고차원 데이터에는 주의할 점이 있습니다. 먼저 차원이 늘어날수록 파라미터 추정에 필요한 데이터 양이 폭발적으로 증가하는데, 이를 차원의 저주라 합니다. 같은 간격으로 공간을 채우려면 1차원에 점 5개, 2차원에 25개, 3차원에 125개가 필요하듯 공간의 체적이 거듭제곱으로 변하기 때문에, 표본크기를 n = 10으로 두면 차원이 올라갈수록 데이터가 듬성듬성해집니다. 이 격자 그림은 공간을 빈칸 없이 채우는 문제에 가깝습니다. 선형회귀에서는 계수가 차원만큼 늘고, 다중공선성과 변수 수 대비 표본 수가 더 직접적인 문제입니다.</p>
           <p class="next"><span>다음 질문</span>설명변수끼리 상관이 강하면 어떻게 될까?</p>
         </div>
       </div>
@@ -393,7 +393,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
         </div>
         <div class="side">
           <ul class="key"><li><b>분산팽창인수</b> VIF &gt; 10은 강한 상관</li><li>변수를 줄이거나 차원 축소로 대처</li></ul>
-          <p class="exp">다중공선성의 정도는 각 설명변수마다 분산팽창인수 VIF로 잽니다. xᵢ를 반응변수로 두고 나머지 설명변수로 회귀한 결정계수 Rᵢ²를 써서 계산하며, VIF = 10을 상관계수로 나타내면 0.95 정도에 해당합니다. VIF &gt; 10이라면 두 변수를 모두 포함한 회귀모형의 해석은 피하고, 상관이 있는 2개 변수 중 하나를 없애거나 주성분분석 등 차원 축소로 설명변수를 줄입니다. 단, 예측이 목적이라면 다중공선성이 문제되지 않을 때도 흔합니다.</p>
+          <p class="exp">다중공선성의 정도는 각 설명변수마다 분산팽창인수 VIF로 잽니다. xᵢ를 반응변수로 두고 나머지 설명변수로 회귀한 결정계수 Rᵢ²를 써서 계산하며, VIF = 10을 상관계수로 나타내면 0.95 정도에 해당합니다. VIF &gt; 10은 경험적 기준입니다. 이 기준을 넘으면 두 변수를 모두 포함한 회귀모형의 해석은 피하고, 상관이 있는 2개 변수 중 하나를 없애거나 주성분분석 등 차원 축소로 설명변수를 줄입니다. 단, 예측이 목적이라면 다중공선성이 문제되지 않을 때도 흔합니다.</p>
           <p class="next"><span>다음 질문</span>설명변수가 서로의 효과를 바꾼다면?</p>
         </div>
       </div>
@@ -412,8 +412,8 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
           </div>
         </div>
         <div class="side">
-          <ul class="key"><li><b>상호작용</b>: 설명변수 간의 상승효과</li><li>곱셈항 c·x₁x₂로 모형에 넣습니다.</li></ul>
-          <p class="exp">지금까지의 선형회귀모형은 설명변수 xᵢ가 다른 설명변수와 독립적으로 1 증가할 때마다 bᵢ만큼 반응변수가 변한다고 가정했습니다. 그러나 현실에서는 xᵢ의 효과가 다른 설명변수의 영향을 받을 수도 있으며, 이러한 설명변수 간의 상승효과를 상호작용이라 합니다. 곱셈항 c·x₁x₂를 넣으면 x₂의 기울기가 b₂에서 b₂ + c·x₁로 바뀌어, x₁ 값에 따라 x₂의 효과가 달라지는 것을 나타낼 수 있습니다.</p>
+          <ul class="key"><li><b>상호작용</b>: 한 변수의 효과가 다른 변수에 따라 달라짐</li><li>곱셈항 c·x₁x₂로 모형에 넣습니다.</li></ul>
+          <p class="exp">지금까지의 선형회귀모형은 설명변수 xᵢ가 다른 설명변수와 독립적으로 1 증가할 때마다 bᵢ만큼 반응변수가 변한다고 가정했습니다. 그러나 현실에서는 xᵢ의 효과가 다른 설명변수의 영향을 받을 수도 있습니다. 효과가 커지거나 줄거나, 방향이 뒤집히는 것을 상호작용이라 하며, 두 일이 함께 일어난다는 뜻은 아닙니다. 곱셈항 c·x₁x₂를 넣으면 x₂의 기울기가 b₂에서 b₂ + c·x₁로 바뀌어, x₁ 값에 따라 x₂의 효과가 달라지는 것을 나타낼 수 있습니다.</p>
           <p class="next"><span>다음 질문</span>상호작용항은 늘 넣는 것이 좋을까?</p>
         </div>
       </div>
@@ -436,7 +436,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
       <div class="body split even">
         <div class="fig"><svg id="m20-two" viewBox="0 0 420 270" role="img" aria-label="비료 유무와 온도 조합 네 칸의 줄기 길이와 평균, 비료 없음에서 온도 효과가 큼"></svg></div>
         <div class="side">
-          <ul class="key"><li><b>이원배치 분산분석</b>: 요인 2개를 동시에</li><li>상호작용항으로 상승효과를 검토합니다.</li></ul>
+          <ul class="key"><li><b>이원배치 분산분석</b>: 요인 2개를 동시에</li><li>상호작용항으로 효과가 달라지는지 검토합니다.</li></ul>
           <p class="exp">집단의 차이만 보는 분산분석은 하나의 요인만 다루므로 일원배치 분산분석이라 합니다. 다중회귀처럼 분산분석에서도 여러 요인을 동시에 고려할 수 있으며, 요인 2개면 이원배치 분산분석입니다. 비료 유무(x₁)와 온도(x₂)를 가변수로 두면 상호작용이 없는 모형은 [줄기] = 절편 + b₁x₁ + b₂x₂ + ε로, 비료 효과가 온도와 상관없습니다. 그러나 이 데이터에서는 비료가 없을 때 고온이 저온보다 17cm, 있을 때는 3cm 길어 상호작용 c₁x₁x₂를 추가해 분석합니다.</p>
           <p class="next"><span>다음 질문</span>결과는 어떤 순서로 해석할까?</p>
         </div>
@@ -527,7 +527,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
           <div class="stats three"><div><small>VIF</small><strong id="m20-vv">-</strong></div><div><small>b̂₁ 흔들림(SD)</small><strong id="m20-s1">-</strong></div><div><small>b̂₂ 흔들림(SD)</small><strong id="m20-s2">-</strong></div></div>
           <p class="howto">도전: r = 0.99일 때 b̂₁이 음수로 추정된 경우도 있는지 찾아보세요.</p>
           <p class="pmsg" id="m20-msg"></p>
-          <div class="think"><span>생각해보기</span>점들이 비스듬한 띠 모양이 되는 이유는 무엇일까요?</div>
+          <div class="think" style="flex-wrap:wrap"><span>생각해보기</span>점들이 비스듬한 띠 모양이 되는 이유는 무엇일까요?<details style="flex-basis:100%;font-weight:600"><summary style="cursor:pointer">예시 답</summary>두 설명변수가 함께 움직여 추정값이 서로 맞바뀌기 때문입니다.</details></div>
         </div>
       </div>
     </section>
@@ -544,7 +544,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
           <div class="plabel" style="margin:0">결과 확인 · <span id="p2-count">0 / 0</span></div>
           <div class="bins" id="p2-bins" style="grid-template-columns:repeat(2,1fr)"></div>
           <div class="p2row"><p class="pmsg" id="p2-msg"></p><button class="btn ghost" id="p2-reset">다시 하기</button></div>
-          <div class="think"><span>생각해보기</span>y = a·e^(bx)의 양변에 로그를 취하면 어떤 모형이 될까요?</div>
+          <div class="think" style="flex-wrap:wrap"><span>생각해보기</span>y = a·e^(bx)의 양변에 로그를 취하면 어떤 모형이 될까요?<details style="flex-basis:100%;font-weight:600"><summary style="cursor:pointer">예시 답</summary>log y = log a + bx인 직선 모형이 됩니다.</details></div>
         </div>
       </div>
     </section>
@@ -562,7 +562,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
           <button class="btn" id="m20-check" style="align-self:flex-start">실제와 비교</button>
           <div class="stats three"><div><small>내 예측</small><strong id="m20-mine">-</strong></div><div><small>상호작용 없을 때</small><strong id="m20-add">?</strong></div><div><small>실제 평균</small><strong id="m20-act">?</strong></div></div>
           <p class="pmsg" id="m20-msg3"></p>
-          <div class="think"><span>생각해보기</span>예측과 실제의 차이 14cm는 회귀식의 어느 계수와 같나요?</div>
+          <div class="think" style="flex-wrap:wrap"><span>생각해보기</span>예측과 실제의 차이 14cm는 회귀식의 어느 계수와 같나요?<details style="flex-basis:100%;font-weight:600"><summary style="cursor:pointer">예시 답</summary>그 14cm는 상호작용의 크기입니다. 평행이라고 본 16cm와 실제 30cm의 차이입니다.</details></div>
         </div>
       </div>
     </section>
@@ -602,7 +602,7 @@ var MM={"x": [5.0, 10.0, 20.0, 35.0, 50.0, 75.0, 100.0, 150.0, 200.0], "y": [0.8
 var QUIZ=[
  {goal:1,type:"계산",stem:"설명변수 x₁을 나머지 설명변수로 회귀했더니 결정계수가 R₁² = 0.9였습니다. x₁의 분산팽창인수 VIF는 얼마일까요?",
   opts:["10","0.1","1.9","0.9"],ans:0,
-  exp:"VIF₁ = 1 ÷ (1 − R₁²) = 1 ÷ (1 − 0.9) = 1 ÷ 0.1 = 10입니다. VIF > 10이면 2개 변수 사이의 상관이 아주 강한 것으로 보며, 상관계수로는 0.95 정도에 해당합니다.",back:"s-4-1c",backLabel:"4-1 분산팽창인수 다시 보기"},
+  exp:"VIF₁ = 1 ÷ (1 − R₁²) = 1 ÷ (1 − 0.9) = 1 ÷ 0.1 = 10입니다. VIF > 10은 상관이 아주 강하다는 경험적 기준이며, 상관계수로는 0.95 정도에 해당합니다.",back:"s-4-1c",backLabel:"4-1 분산팽창인수 다시 보기"},
  {goal:1,type:"상황 판단",stem:"압연 공정 데이터로 다중회귀를 했더니 ‘롤 온도’와 ‘가열로 온도’의 VIF가 각각 25였고, 두 편회귀계수의 부호가 예상과 반대였습니다. 가장 알맞은 대처는 무엇일까요?",
   opts:["강하게 상관한 두 변수 중 하나를 빼거나 차원 축소로 설명변수를 줄인다","부호가 마음에 들 때까지 데이터를 다시 모은다","VIF는 예측과 관계없으므로 계수를 그대로 해석한다","두 변수를 모두 그대로 두고 표본크기만 늘리면 반드시 해결된다"],ans:0,
   exp:"VIF가 크면 다중공선성 때문에 회귀계수의 추정오차가 커져 계수를 해석하기 어렵습니다. 서로 상관이 있는 2개 변수 중 하나를 없애거나 주성분분석 같은 차원 축소로 설명변수 개수를 줄이면 안정된 모형을 얻을 수 있습니다. 예측만이 목적이라면 문제되지 않을 때도 있습니다.",back:"s-4-1c",backLabel:"4-1 다중공선성 대처 다시 보기"},
@@ -626,15 +626,20 @@ var CARDS=[["y = a + bx + cx² + ε","선형모형"],["y = a + b₁x₁ + b₂x�
 var HINT={"선형모형":"파라미터(a, b, c …)에 관해 1차식입니다. x에 관해서는 곡선이어도 됩니다.","비선형모형":"파라미터가 분모, 지수 등에 들어가 파라미터에 관해 1차식이 아닙니다."};
 
 var GLOSSARY=[
- ["차원의 저주","curse of dimensionality","차원(설명변수 개수)이 늘수록 파라미터 추정에 필요한 데이터 양이 폭발적으로 늘어나는 문제입니다.","점 5개 간격이면 1차원 5개, 3차원 125개"],
+ ["차원의 저주","curse of dimensionality","차원이 늘수록 공간을 채우는 데 필요한 점이 거듭제곱으로 늘어나는 문제입니다. 선형회귀에서는 계수 개수, 다중공선성, 변수 대비 표본 수가 더 직접적입니다.","점 5개 간격이면 1차원 5개, 3차원 125개"],
  ["다중공선성","multicollinearity","다중회귀에서 설명변수 사이에 강한 상관이 있어 회귀계수의 추정오차가 커지는 상태입니다.","r = 0.99면 b̂₁의 흔들림이 7배"],
- ["분산팽창인수","VIF, variance inflation factor","한 설명변수를 나머지로 회귀한 결정계수 Rᵢ²로 1 ÷ (1 − Rᵢ²)를 계산한 다중공선성 지표입니다.","VIF > 10이면 상관이 아주 강함"],
- ["상호작용","interaction","설명변수 간의 상승효과로, 한 변수의 효과가 다른 변수 값에 따라 달라지는 것입니다.","온도 효과가 비료 유무에 따라 다름"],
+ ["분산팽창인수","VIF, variance inflation factor","한 설명변수를 나머지로 회귀한 결정계수 Rᵢ²로 1 ÷ (1 − Rᵢ²)를 계산한 다중공선성 지표입니다. VIF > 10은 경험적 기준입니다.","VIF > 10이면 상관이 아주 강함"],
+ ["상호작용","interaction","한 변수의 효과가 다른 변수 값에 따라 커지거나 줄거나 방향이 바뀌는 것입니다. 함께 발생한다는 뜻이 아닙니다.","온도 효과가 비료 유무에 따라 다름"],
  ["이원배치 분산분석","two-way ANOVA","2개의 요인을 동시에 고려하는 분산분석으로, 상호작용도 검토할 수 있습니다.","비료 × 온도"],
  ["주효과","main effect","1개 요인으로 좁힌 효과로, 상호작용이 없을 때 그대로 평가합니다.","비료의 효과, 온도의 효과"],
  ["미하엘리스-멘텐 식","Michaelis-Menten equation","효소 반응에서 기질농도 x와 반응속도 y의 관계를 y = Vmax·x ÷ (Km + x)로 나타낸 식입니다.","Vmax = 9.87, Km = 46.4"]
 ];
-var REFS=[];
+var REFS=[
+ {n:1,title:"기초통계학Ⅱ",org:"여인권, 숙명여자대학교, KOCW 공개강의",url:"https://www.kocw.net/home/search/kemView.do?kemId=1080231",date:"2026-10-28 확인"},
+ {n:2,title:"R을 활용한 통계학개론",org:"K-MOOC, KOCW 공개강의",url:"https://www.kocw.net/home/search/kemView.do?kemId=1517479",date:"2026-10-28 확인"},
+ {n:3,title:"국가통계포털 통계목록",org:"통계청, KOSIS",url:"https://kosis.kr/statisticsList/statisticsListIndex.do?menuId=M_01_02&outLink=Y&vwcd=MT_OTITLE",date:"2026-10-28 확인"},
+ {n:4,title:"데이터로 배우는 통계학",org:"K-MOOC",url:"https://www.kmooc.kr/view/course/detail/20384",date:"2026-10-28 확인"}
+];
 var NEXT={title:"M21 일반화선형모형과 로지스틱 회귀",line:"반응변수가 예/아니요나 개수일 때는 정규분포 대신 다른 확률분포를 씁니다. 다음 모듈에서는 가능도와 최대가능도 방법, 로지스틱 회귀를 배웁니다."};
 
 /* =====================================================================
@@ -935,9 +940,9 @@ for(var gi=0;gi<GLOSSARY.length;gi+=6){
 }
 (function(){
   var s=document.createElement("section");s.className="slide";s.dataset.step="6";s.id="end";
-  var refs=REFS.length?'<div class="pcol" style="gap:10px"><div class="plabel" style="margin:0">참고자료</div><ol class="refs">'+REFS.map(function(r){return '<li><span>['+r.n+']</span><div>'+r.title+', '+r.org+'. <a href="'+r.url+'" target="_blank" rel="noopener">'+r.url+'</a> ('+r.date+')</div></li>';}).join("")+'</ol></div>':'';
+  var refs=REFS.length?'<div class="pcol" style="gap:10px;min-height:0;overflow:hidden"><div class="plabel" style="margin:0">참고자료</div><ol class="refs">'+REFS.map(function(r){return '<li><span>['+r.n+']</span><div>'+r.title+', '+r.org+'. <a href="'+r.url+'" target="_blank" rel="noopener">'+r.url+'</a> ('+r.date+')</div></li>';}).join("")+'</ol></div>':'';
   s.innerHTML='<div class="sh"><div class="sec">마무리</div><h2>'+(REFS.length?"참고자료와 다음 모듈":"다음 모듈")+'</h2></div>'+
-    '<div class="body '+(REFS.length?'split even':'full')+'" style="align-content:center">'+refs+
+    '<div class="body '+(REFS.length?'split even':'full')+'" style="'+(REFS.length?'grid-template-rows:minmax(0,1fr)':'align-content:center')+'">'+refs+
     '<div class="pcol" style="justify-content:center"><div class="nextmod"><small>다음 모듈 · '+NEXT.title+'</small><strong>'+NEXT.line+'</strong></div></div></div>'+
     '<p class="foot">학습 상태는 저장되지 않습니다.</p>';
   vp.appendChild(s);

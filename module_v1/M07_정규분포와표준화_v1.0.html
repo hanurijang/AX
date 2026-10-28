@@ -195,7 +195,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
 .gi .d{font-size:14px;line-height:1.5}
 .gi .e{font-size:12.5px;line-height:1.45;color:var(--gray)}
 .gi .e strong{color:var(--navy3)}
-.refs{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:8px;font-size:13.5px;line-height:1.5}
+.refs{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:8px;font-size:13.5px;line-height:1.5;overflow-y:auto;flex:1 1 auto;min-height:0}
 .refs li{display:grid;grid-template-columns:30px 1fr;gap:4px}
 .refs li span{font-weight:800;color:var(--navy3)}
 .refs a{color:var(--navy2);word-break:break-all}
@@ -248,7 +248,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
           <div></div><div class="hd">목표</div><div class="hd">확인하는 문항</div><div class="hd">연결 실습</div>
           <div class="gn">1</div><div class="gt"><span>정규분포의 μ와 σ로 값이 들어갈 범위와 확률을 <b>계산한다</b>.</span></div>
           <div class="ga"><button class="jump" data-jump="q1">문항 1·2</button></div><div class="gp"><button class="jump" data-jump="p1">실습 1 조작</button></div>
-          <div class="gn">2</div><div class="gt"><span>z값과 표준점수로 서로 다른 분포 속 위치를 <b>비교한다</b>.</span></div>
+          <div class="gn">2</div><div class="gt"><span>z값과 T점수로 서로 다른 분포 속 위치를 <b>비교한다</b>.</span></div>
           <div class="ga"><button class="jump" data-jump="q3">문항 3·4</button></div><div class="gp"><button class="jump" data-jump="p3">실습 3 추정</button></div>
           <div class="gn">3</div><div class="gt"><span>이론적인 확률분포를 파라미터와 이산형·연속형으로 <b>구분한다</b>.</span></div>
           <div class="ga"><button class="jump" data-jump="q5">문항 5·6</button></div><div class="gp"><button class="jump" data-jump="p2">실습 2 분류</button></div>
@@ -437,17 +437,17 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
       <div class="sh"><div class="sec">4-3 표준화</div><h2><span class="q">Q</span>시험 점수에서는 표준화를 어떻게 쓸까요?</h2></div>
       <div class="body split even">
         <div class="figcol">
-          <div class="fig"><svg id="m7-tscore" viewBox="0 0 420 150" role="img" aria-label="평균 50 표준편차 15에서 80점과 평균 30 표준편차 10에서 50점이 모두 표준점수 70"></svg></div>
+          <div class="fig"><svg id="m7-tscore" viewBox="0 0 420 150" role="img" aria-label="가상 시험의 T점수. 평균 50 표준편차 15에서 80점과 평균 30 표준편차 10에서 50점이 모두 T점수 70"></svg></div>
           <div class="math">
-            <div class="mt">핵심 수학 개념 · 표준점수</div>
-            <div class="f">표준점수 = 10z + 50 &nbsp;(평균 50, 표준편차 10)</div>
+            <div class="mt">핵심 수학 개념 · T점수</div>
+            <div class="f">T = 10z + 50 &nbsp;(평균 50, 표준편차 10)</div>
             <div class="r"><span>계산</span><span>(80 − 50) ÷ 15 = 2 → 70,&nbsp; (50 − 30) ÷ 10 = 2 → 70</span></div>
             <div class="r"><span>해석</span><span>원점수는 80점과 50점으로 달라도 분포 속 위치는 같습니다.</span></div>
           </div>
         </div>
         <div class="side">
-          <ul class="key"><li><b>표준점수</b>는 z값을 다시 바꾼 값입니다.</li><li>점수 자체가 아닌 분포 속 위치로 평가합니다.</li></ul>
-          <p class="exp">대학수학능력시험에 나오는 표준점수는 평균을 50으로, 표준편차를 10으로 바꾼 값(10z + 50)입니다. 평균 50, 표준편차 15인 점수 분포에서 80점을 얻으면 표준점수는 70이고, 평균 30, 표준편차 10인 분포에서는 50점만으로도 표준점수 70이 됩니다. 평균과 표준편차를 기준으로 나열하면 분포 속 위치로 평가할 수 있습니다.</p>
+          <ul class="key"><li><b>T점수</b>는 10z + 50입니다.</li><li>실제 수능 표준점수와 그대로 같지 않습니다.</li></ul>
+          <p class="exp">z점수는 목적에 따라 다른 평균·표준편차의 척도로 바꿀 수 있습니다. 예를 들어 T점수는 T = 50 + 10z입니다. 실제 대학수학능력시험의 표준점수는 영역과 연도에 따라 환산이 달라 이 T점수와 그대로 같지 않습니다<span class="cite">[3]</span>. 평균 50, 표준편차 15인 점수 분포에서 80점을 얻으면 T점수는 70이고, 평균 30, 표준편차 10인 분포에서는 50점만으로도 T점수 70이 됩니다. 평균과 표준편차를 기준으로 나열하면 분포 속 위치로 평가할 수 있습니다.</p>
           <p class="next"><span>다음 질문</span>정규분포 말고 어떤 확률분포가 있을까?</p>
         </div>
       </div>
@@ -499,7 +499,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
           <div class="stats"><div><small>범위 μ ± kσ</small><strong id="m7-rg">-</strong></div><div><small>들어갈 확률</small><strong id="m7-pr">-</strong></div></div>
           <p class="howto">도전: 성인 남성의 키 분포(μ = 167.6, σ = 7.0)로 맞추고, 약 95%가 들어가는 범위를 확인해 보세요.</p>
           <p class="pmsg" id="m7-msg"></p>
-          <div class="think"><span>생각해보기</span>σ를 키우면 같은 95% 범위가 왜 넓어질까요?</div>
+          <div class="think" style="flex-wrap:wrap"><span>생각해보기</span>σ를 키우면 같은 95% 범위가 왜 넓어질까요?<details style="flex-basis:100%;font-weight:600"><summary style="cursor:pointer">예시 답</summary>σ가 크면 같은 확률을 담으려면 평균에서 더 멀리까지 포함해야 합니다.</details></div>
         </div>
       </div>
     </section>
@@ -516,7 +516,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
           <div class="plabel" style="margin:0">결과 확인 · <span id="p2-count">0 / 0</span></div>
           <div class="bins" id="p2-bins"></div>
           <div class="p2row"><p class="pmsg" id="p2-msg"></p><button class="btn ghost" id="p2-reset">다시 하기</button></div>
-          <div class="think"><span>생각해보기</span>하루에 받는 문자 개수와 버스를 기다린 시간은 각각 어느 칸의 분포가 어울릴까요?</div>
+          <div class="think" style="flex-wrap:wrap"><span>생각해보기</span>하루에 받는 문자 개수와 버스를 기다린 시간은 각각 어느 칸의 분포가 어울릴까요?<details style="flex-basis:100%;font-weight:600"><summary style="cursor:pointer">예시 답</summary>문자 개수는 이산형, 기다린 시간은 연속형 분포가 어울립니다.</details></div>
         </div>
       </div>
     </section>
@@ -535,7 +535,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
           <div style="display:flex;gap:8px"><button class="btn" id="m7-check">계산해서 확인</button><button class="btn ghost" id="m7-nextq">다음 사람</button></div>
           <div class="stats"><div><small>내 예측</small><strong id="m7-mine">-</strong></div><div><small>실제 z값</small><strong id="m7-act">?</strong></div></div>
           <p class="pmsg" id="m7-msg3"></p>
-          <div class="think"><span>생각해보기</span>z값이 같은 두 사람은 원래 키가 달라도 무엇이 같을까요?</div>
+          <div class="think" style="flex-wrap:wrap"><span>생각해보기</span>z값이 같은 두 사람은 원래 키가 달라도 무엇이 같을까요?<details style="flex-basis:100%;font-weight:600"><summary style="cursor:pointer">예시 답</summary>각자 분포 안에서 평균으로부터 표준편차의 같은 배수만큼 떨어져 있습니다.</details></div>
         </div>
       </div>
     </section>
@@ -599,7 +599,7 @@ var GLOSSARY=[
  ["표준정규분포","standard normal distribution","평균 0, 표준편차 1인 정규분포 N(0, 1)입니다.","남성 키를 표준화한 분포"],
  ["표준화","standardizing","평균을 빼고 표준편차로 나눠 평균 0, 표준편차 1로 바꾸는 일입니다.","(180 − 167.6) ÷ 7.0"],
  ["z값","z-score","표준화한 값으로, 평균과의 거리가 표준편차의 몇 배인지 나타냅니다.","170cm 여성의 z ≈ 2.30"],
- ["표준점수","standard score","z값을 평균 50, 표준편차 10으로 바꾼 값(10z + 50)입니다.","z = 2이면 표준점수 70"],
+ ["T점수","T score","z값을 평균 50, 표준편차 10으로 바꾼 값(10z + 50)입니다. 실제 수능 표준점수는 영역·연도별 환산이 달라 이 값과 그대로 같지 않습니다.","z = 2이면 T점수 70"],
  ["검정통계량","test statistic","추론통계의 검정 계산에 쓰는 통계량으로, t분포 등의 확률분포를 따릅니다.","t분포, F분포, χ²분포를 따르는 통계량"],
  ["균등분포","uniform distribution","모든 값이 같은 가능성으로 나오는 분포로, 연속형과 이산형이 있습니다.","주사위 눈 1~6이 각각 1/6"],
  ["이항분포","binomial distribution","성공·실패 같은 결과를 여러 번 반복할 때 성공 횟수에 대한 이산형 분포입니다.","동전 10번 중 앞면이 나온 횟수",2],
@@ -608,7 +608,11 @@ var GLOSSARY=[
 ];
 var REFS=[
  {n:1,title:"Notes on the Poisson and Exponential Distributions",org:"Kellogg School of Management, Northwestern University (DECS-430 강의 자료)",url:"https://www.kellogg.northwestern.edu/faculty/weber/decs-430/Notes%20on%20the%20Poisson%20and%20exponential%20distributions.pdf",date:"2026-10-24 확인"},
- {n:2,title:"STAT 270 Chapter 4 강의 노트(Binomial·Poisson)",org:"Simon Fraser University",url:"https://www.sfu.ca/science/stat/weldon/270-070207-ch4-4.pdf",date:"2026-10-24 확인"}
+ {n:2,title:"STAT 270 Chapter 4 강의 노트(Binomial·Poisson)",org:"Simon Fraser University",url:"https://www.sfu.ca/science/stat/weldon/270-070207-ch4-4.pdf",date:"2026-10-24 확인"},
+ {n:3,title:"2020학년도 대학수학능력시험 채점 결과",org:"교육부",url:"https://www.moe.go.kr/boardCnts/view.do?boardID=294&boardSeq=79182&lev=0&m=020402&opType=N&page=1&s=moe&searchType=null",date:"2026-10-28 확인"},
+ {n:4,title:"데이터로 배우는 통계학",org:"K-MOOC",url:"https://www.kmooc.kr/view/course/detail/20384",date:"2026-10-28 확인"},
+ {n:5,title:"기초통계학",org:"여인권, 숙명여자대학교, KOCW 공개강의",url:"https://www.kocw.net/home/search/kemView.do?kemId=1052562",date:"2026-10-28 확인"},
+ {n:6,title:"R을 활용한 통계학개론",org:"K-MOOC, KOCW 공개강의",url:"https://www.kocw.net/home/search/kemView.do?kemId=1517479",date:"2026-10-28 확인"}
 ];
 var NEXT={title:"M08 추론통계의 직관",line:"이제 모집단을 확률분포로, 데이터를 그 실현값으로 볼 준비가 되었습니다. 다음 과정에서는 표본으로 모집단을 추정하는 추론통계를 직관적으로 이해합니다."};
 
@@ -824,7 +828,7 @@ on("m7-tscore",function(s){
     el("line",{x1:X(v),x2:X(v),y1:40,y2:96,stroke:C.amber,"stroke-width":2.5},s);t7(s,X(v),34,v+"점",{fw:800,c:C.amberInk});
     t7(s,x0+75,112,lab,{fs:10.5,c:C.gray,fw:600});t7(s,x0+75,128,"z = 2",{fs:11,fw:800});}
   mini(8,50,15,80,"평균 50 · 표준편차 15");mini(178,30,10,50,"평균 30 · 표준편차 10");
-  el("rect",{x:338,y:36,width:76,height:72,rx:10,fill:C.navy},s);t7(s,376,60,"표준점수",{fs:11,c:"#C9D3E6"});t7(s,376,90,"70",{fs:24,fw:800,c:"#fff"});
+  el("rect",{x:338,y:36,width:76,height:72,rx:10,fill:C.navy},s);t7(s,376,60,"T점수",{fs:11,c:"#C9D3E6"});t7(s,376,90,"70",{fs:24,fw:800,c:"#fff"});
   t7(s,376,128,"10 × 2 + 50",{fs:10.5,c:C.gray,fw:600});
 });
 
@@ -927,9 +931,9 @@ for(var gi=0;gi<GLOSSARY.length;gi+=6){
 }
 (function(){
   var s=document.createElement("section");s.className="slide";s.dataset.step="6";s.id="end";
-  var refs=REFS.length?'<div class="pcol" style="gap:10px"><div class="plabel" style="margin:0">참고자료</div><ol class="refs">'+REFS.map(function(r){return '<li><span>['+r.n+']</span><div>'+r.title+', '+r.org+'. <a href="'+r.url+'" target="_blank" rel="noopener">'+r.url+'</a> ('+r.date+')</div></li>';}).join("")+'</ol></div>':'';
+  var refs=REFS.length?'<div class="pcol" style="gap:10px;min-height:0;overflow:hidden"><div class="plabel" style="margin:0">참고자료</div><ol class="refs">'+REFS.map(function(r){return '<li><span>['+r.n+']</span><div>'+r.title+', '+r.org+'. <a href="'+r.url+'" target="_blank" rel="noopener">'+r.url+'</a> ('+r.date+')</div></li>';}).join("")+'</ol></div>':'';
   s.innerHTML='<div class="sh"><div class="sec">마무리</div><h2>'+(REFS.length?"참고자료와 다음 모듈":"다음 모듈")+'</h2></div>'+
-    '<div class="body '+(REFS.length?'split even':'full')+'" style="align-content:center">'+refs+
+    '<div class="body '+(REFS.length?'split even':'full')+'" style="'+(REFS.length?'grid-template-rows:minmax(0,1fr)':'align-content:center')+'">'+refs+
     '<div class="pcol" style="justify-content:center"><div class="nextmod"><small>다음 모듈 · '+NEXT.title+'</small><strong>'+NEXT.line+'</strong></div></div></div>'+
     '<p class="foot">학습 상태는 저장되지 않습니다.</p>';
   vp.appendChild(s);

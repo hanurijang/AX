@@ -195,7 +195,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
 .gi .d{font-size:14px;line-height:1.5}
 .gi .e{font-size:12.5px;line-height:1.45;color:var(--gray)}
 .gi .e strong{color:var(--navy3)}
-.refs{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:8px;font-size:13.5px;line-height:1.5}
+.refs{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:8px;font-size:13.5px;line-height:1.5;overflow-y:auto;flex:1 1 auto;min-height:0}
 .refs li{display:grid;grid-template-columns:30px 1fr;gap:4px}
 .refs li span{font-weight:800;color:var(--navy3)}
 .refs a{color:var(--navy2);word-break:break-all}
@@ -223,7 +223,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
       <div class="body split">
         <div class="fig"><svg id="m11-ov" viewBox="0 0 440 260" role="img" aria-label="가설을 세우고, 귀무가설이 옳은 세계를 상상하고, p값을 계산해 판단하는 흐름"></svg></div>
         <div class="side">
-          <div class="prevlink"><small>지난 모듈에서는</small>표준오차를 이용해 모평균이 들어 있을 범위인 신뢰구간을 구하고 해석했습니다.<small style="margin-top:8px">이번 모듈에서는</small>신뢰구간과 동전의 양면인 또 하나의 추론통계 방법, 가설검정의 원리와 p값을 배웁니다.</div>
+          <div class="prevlink"><small>지난 모듈에서는</small>같은 표본 자료로 모평균의 신뢰구간을 구하고 해석했습니다.<small style="margin-top:8px">이번 모듈에서는</small>그 불확실성을 ‘이 차이가 우연인가’로 바꾸는 가설검정의 원리와 p값을 배웁니다.</div>
           <dl class="meta"><dt>학습 시간</dt><dd>약 40분</dd><dt>본문</dt><dd>소단원 4개</dd><dt>실습</dt><dd>조작형 · 분류형 · 추정형</dd></dl>
         </div>
       </div>
@@ -515,7 +515,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
           <div class="stats three"><div><small>극단적인 경우</small><strong id="m11-c">-</strong></div><div><small>p값</small><strong id="m11-pv">-</strong></div><div><small>판정 (α = 0.05)</small><strong id="m11-j">-</strong></div></div>
           <p class="howto">도전: p값이 처음으로 0.05 이하가 되는 차이의 크기를 찾아보세요. 실제 관찰값 −10.9도 확인해 보세요.</p>
           <p class="pmsg" id="m11-msg"></p>
-          <div class="think"><span>생각해보기</span>p = 0.06이 나왔다면 ‘신약에 효과가 없다’고 결론 내려도 될까요?</div>
+          <div class="think" style="flex-wrap:wrap"><span>생각해보기</span>p = 0.06이 나왔다면 ‘신약에 효과가 없다’고 결론 내려도 될까요?<details style="flex-basis:100%;font-weight:600"><summary style="cursor:pointer">예시 답</summary>효과가 없다고 결론내리지 않습니다. p = 0.06이면 판단을 보류합니다.</details></div>
         </div>
       </div>
     </section>
@@ -532,7 +532,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
           <div class="plabel" style="margin:0">결과 확인 · <span id="p2-count">0 / 0</span></div>
           <div class="bins" id="p2-bins" style="grid-template-columns:repeat(2,1fr)"></div>
           <div class="p2row"><p class="pmsg" id="p2-msg"></p><button class="btn ghost" id="p2-reset">다시 하기</button></div>
-          <div class="think"><span>생각해보기</span>귀무가설 칸의 카드는 모두 어떤 표현으로 끝나나요?</div>
+          <div class="think" style="flex-wrap:wrap"><span>생각해보기</span>귀무가설 칸의 카드는 모두 어떤 표현으로 끝나나요?<details style="flex-basis:100%;font-weight:600"><summary style="cursor:pointer">예시 답</summary>‘차이가 없다’ 또는 ‘같다’처럼 차이가 없다는 말로 끝납니다.</details></div>
         </div>
       </div>
     </section>
@@ -550,7 +550,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
           <div style="display:flex;gap:8px"><button class="btn" id="m11-sim">무작위로 1,000번 나누기</button></div>
           <div class="stats three"><div><small>내 예측</small><strong id="m11-mine">-</strong></div><div><small>1,000번 결과</small><strong id="m11-ob">-</strong></div><div><small>3,432가지 전체</small><strong id="m11-ex">?</strong></div></div>
           <p class="pmsg" id="m11-msg3"></p>
-          <div class="think"><span>생각해보기</span>여러 번 눌러 보면 1,000번 결과가 매번 조금씩 다릅니다. 어느 값 근처에서 움직이나요?</div>
+          <div class="think" style="flex-wrap:wrap"><span>생각해보기</span>여러 번 눌러 보면 1,000번 결과가 매번 조금씩 다릅니다. 어느 값 근처에서 움직이나요?<details style="flex-basis:100%;font-weight:600"><summary style="cursor:pointer">예시 답</summary>전체 3,432가지 중 70가지, 약 2% 근처에서 움직입니다.</details></div>
         </div>
       </div>
     </section>
@@ -619,7 +619,12 @@ var GLOSSARY=[
  ["유의수준","significance level","귀무가설을 기각할지 정하는 판단 경계 α로, 보통 0.05를 씁니다.","p ≈ 0.02 < 0.05 → 기각"],
  ["통계적으로 유의","statistically significant","p값이 유의수준 이하여서 귀무가설을 기각했다는 뜻입니다.","신약군과 위약군에 통계적으로 유의한 차이가 있다"]
 ];
-var REFS=[];
+var REFS=[
+ {n:1,title:"기초통계학Ⅱ",org:"여인권, 숙명여자대학교, KOCW 공개강의",url:"https://www.kocw.net/home/search/kemView.do?kemId=1080231",date:"2026-10-28 확인"},
+ {n:2,title:"데이터로 배우는 통계학",org:"K-MOOC",url:"https://www.kmooc.kr/view/course/detail/20384",date:"2026-10-28 확인"},
+ {n:3,title:"기초통계학",org:"여인권, 숙명여자대학교, KOCW 공개강의",url:"https://www.kocw.net/home/search/kemView.do?kemId=1052562",date:"2026-10-28 확인"},
+ {n:4,title:"R을 활용한 통계학개론",org:"K-MOOC, KOCW 공개강의",url:"https://www.kocw.net/home/search/kemView.do?kemId=1517479",date:"2026-10-28 확인"}
+];
 var NEXT={title:"M12 가설검정 해 보기",line:"p값을 실제로는 어떻게 계산할까요? 다음 모듈에서는 t분포를 이용한 이표본 t검정으로 가설검정을 직접 해 봅니다."};
 
 /* =====================================================================
@@ -929,9 +934,9 @@ for(var gi=0;gi<GLOSSARY.length;gi+=6){
 }
 (function(){
   var s=document.createElement("section");s.className="slide";s.dataset.step="6";s.id="end";
-  var refs=REFS.length?'<div class="pcol" style="gap:10px"><div class="plabel" style="margin:0">참고자료</div><ol class="refs">'+REFS.map(function(r){return '<li><span>['+r.n+']</span><div>'+r.title+', '+r.org+'. <a href="'+r.url+'" target="_blank" rel="noopener">'+r.url+'</a> ('+r.date+')</div></li>';}).join("")+'</ol></div>':'';
+  var refs=REFS.length?'<div class="pcol" style="gap:10px;min-height:0;overflow:hidden"><div class="plabel" style="margin:0">참고자료</div><ol class="refs">'+REFS.map(function(r){return '<li><span>['+r.n+']</span><div>'+r.title+', '+r.org+'. <a href="'+r.url+'" target="_blank" rel="noopener">'+r.url+'</a> ('+r.date+')</div></li>';}).join("")+'</ol></div>':'';
   s.innerHTML='<div class="sh"><div class="sec">마무리</div><h2>'+(REFS.length?"참고자료와 다음 모듈":"다음 모듈")+'</h2></div>'+
-    '<div class="body '+(REFS.length?'split even':'full')+'" style="align-content:center">'+refs+
+    '<div class="body '+(REFS.length?'split even':'full')+'" style="'+(REFS.length?'grid-template-rows:minmax(0,1fr)':'align-content:center')+'">'+refs+
     '<div class="pcol" style="justify-content:center"><div class="nextmod"><small>다음 모듈 · '+NEXT.title+'</small><strong>'+NEXT.line+'</strong></div></div></div>'+
     '<p class="foot">학습 상태는 저장되지 않습니다.</p>';
   vp.appendChild(s);

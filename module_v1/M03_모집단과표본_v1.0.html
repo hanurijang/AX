@@ -195,7 +195,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
 .gi .d{font-size:14px;line-height:1.5}
 .gi .e{font-size:12.5px;line-height:1.45;color:var(--gray)}
 .gi .e strong{color:var(--navy3)}
-.refs{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:8px;font-size:13.5px;line-height:1.5}
+.refs{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:8px;font-size:13.5px;line-height:1.5;overflow-y:auto;flex:1 1 auto;min-height:0}
 .refs li{display:grid;grid-template-columns:30px 1fr;gap:4px}
 .refs li span{font-weight:800;color:var(--navy3)}
 .refs a{color:var(--navy2);word-break:break-all}
@@ -451,7 +451,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
         </svg></div>
         <div class="side">
           <ul class="key"><li><b>모집단</b>: 알고자 하는 대상 전체</li><li>목적과 대상에 맞춰 직접 설정합니다.</li></ul>
-          <p class="exp">한국인 성인 남성의 키가 궁금하면 성인 남성 전원이 모집단입니다. 신약은 복용 여부에 따른 차이를 알고 싶으므로 신약 복용자와 위약 복용자, 모집단 2개를 둡니다. 다만 여성 환자의 데이터를 얻을 수 없다면 고혈압 남성 환자를 모집단으로 해야 하며, 이는 분석 결과의 일반화와 관련된 중요한 점입니다.</p>
+          <p class="exp">한국인 성인 남성의 키가 궁금하면 성인 남성 전원이 모집단입니다. 신약은 복용 여부에 따른 차이를 알고 싶으므로 신약 복용자와 위약 복용자, 모집단 2개를 둡니다. 여성 환자 데이터가 없다고 해서 알고 싶은 대상을 남성으로 바꾸지는 않습니다. 목표 모집단과 실제로 조사한 집단을 구분하고, 그 밖으로 일반화할 수 있는지는 따로 봅니다.</p>
           <p class="next"><span>다음 질문</span>모집단은 얼마나 클까?</p>
         </div>
       </div>
@@ -607,7 +607,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
           <div class="stats"><div><small>전수조사 비용</small><strong id="m3-cost-v">-</strong></div><div><small>걸리는 기간</small><strong id="m3-days-v">-</strong></div></div>
           <p class="howto">도전: 졸업논문 10만 명을 하루 100명씩 조사하면 며칠이 걸리는지 확인해 보세요.</p>
           <p class="pmsg" id="m3-msg"></p>
-          <div class="think"><span>생각해보기</span>이 비용과 시간을 들일 가치가 있는지는 무엇에 따라 달라질까요?</div>
+          <div class="think" style="flex-wrap:wrap"><span>생각해보기</span>이 비용과 시간을 들일 가치가 있는지는 무엇에 따라 달라질까요?<details style="flex-basis:100%;font-weight:600"><summary style="cursor:pointer">예시 답</summary>잘못 알면 생기는 손해와, 조사로 줄일 수 있는 불확실성에 따라 달라집니다.</details></div>
         </div>
       </div>
     </section>
@@ -624,7 +624,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
           <div class="plabel" style="margin:0">결과 확인 · <span id="p2-count">0 / 0</span></div>
           <div class="bins" id="p2-bins"></div>
           <div class="p2row"><p class="pmsg" id="p2-msg"></p><button class="btn ghost" id="p2-reset">다시 하기</button></div>
-          <div class="think"><span>생각해보기</span>전수조사가 어려운 모집단의 성질은 어떻게 알아낼 수 있을까요?</div>
+          <div class="think" style="flex-wrap:wrap"><span>생각해보기</span>전수조사가 어려운 모집단의 성질은 어떻게 알아낼 수 있을까요?<details style="flex-basis:100%;font-weight:600"><summary style="cursor:pointer">예시 답</summary>모집단에서 표본을 뽑아 그 성질을 추정합니다.</details></div>
         </div>
       </div>
     </section>
@@ -644,7 +644,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
           <button class="btn ghost" id="m3-reveal" style="align-self:flex-start">모집단 평균 확인</button>
           <div class="stats three"><div><small>표본 평균</small><strong id="m3-sm">-</strong></div><div><small>내 추정</small><strong id="m3-mine">-</strong></div><div><small>모집단 평균 <span class="tag-v">가상</span></small><strong id="m3-pm">?</strong></div></div>
           <p class="pmsg" id="m3-msg3"></p>
-          <div class="think"><span>생각해보기</span>표본크기를 5와 100으로 바꿔 여러 번 뽑아 보세요. 어느 쪽 표본 평균이 더 안정적인가요?</div>
+          <div class="think" style="flex-wrap:wrap"><span>생각해보기</span>표본크기를 5와 100으로 바꿔 여러 번 뽑아 보세요. 어느 쪽 표본 평균이 더 안정적인가요?<details style="flex-basis:100%;font-weight:600"><summary style="cursor:pointer">예시 답</summary>n = 100 쪽 표본평균이 더 안정적입니다.</details></div>
         </div>
       </div>
     </section>
@@ -717,7 +717,12 @@ var GLOSSARY=[
  ["표본크기","sample size","표본에 포함된 요소의 개수로, 보통 n으로 나타냅니다.","30명을 뽑았다면 n = 30"],
  ["샘플 수","number of samples","표본의 개수입니다. 표본크기와 혼동하기 쉽습니다.","표본 A(20명)와 B(30명)가 있으면 2"]
 ];
-var REFS=[];
+var REFS=[
+ {n:1,title:"기초통계학",org:"여인권, 숙명여자대학교, KOCW 공개강의",url:"https://www.kocw.net/home/search/kemView.do?kemId=1052562",date:"2026-10-28 확인"},
+ {n:2,title:"데이터로 배우는 통계학",org:"K-MOOC",url:"https://www.kmooc.kr/view/course/detail/20384",date:"2026-10-28 확인"},
+ {n:3,title:"국가통계포털 통계목록",org:"통계청, KOSIS",url:"https://kosis.kr/statisticsList/statisticsListIndex.do?menuId=M_01_02&outLink=Y&vwcd=MT_OTITLE",date:"2026-10-28 확인"},
+ {n:4,title:"공공데이터포털",org:"행정안전부",url:"https://www.data.go.kr",date:"2026-10-28 확인"}
+];
 var NEXT={title:"M04 데이터 유형과 분포",line:"표본으로 얻은 데이터는 어떤 모습일까요? 다음 모듈에서는 데이터의 유형과, 데이터를 그림으로 나타낸 분포를 살펴봅니다."};
 
 /* =====================================================================
@@ -944,9 +949,9 @@ for(var gi=0;gi<GLOSSARY.length;gi+=6){
 }
 (function(){
   var s=document.createElement("section");s.className="slide";s.dataset.step="6";s.id="end";
-  var refs=REFS.length?'<div class="pcol" style="gap:10px"><div class="plabel" style="margin:0">참고자료</div><ol class="refs">'+REFS.map(function(r){return '<li><span>['+r.n+']</span><div>'+r.title+', '+r.org+'. <a href="'+r.url+'" target="_blank" rel="noopener">'+r.url+'</a> ('+r.date+')</div></li>';}).join("")+'</ol></div>':'';
+  var refs=REFS.length?'<div class="pcol" style="gap:10px;min-height:0;overflow:hidden"><div class="plabel" style="margin:0">참고자료</div><ol class="refs">'+REFS.map(function(r){return '<li><span>['+r.n+']</span><div>'+r.title+', '+r.org+'. <a href="'+r.url+'" target="_blank" rel="noopener">'+r.url+'</a> ('+r.date+')</div></li>';}).join("")+'</ol></div>':'';
   s.innerHTML='<div class="sh"><div class="sec">마무리</div><h2>'+(REFS.length?"참고자료와 다음 모듈":"다음 모듈")+'</h2></div>'+
-    '<div class="body '+(REFS.length?'split even':'full')+'" style="align-content:center">'+refs+
+    '<div class="body '+(REFS.length?'split even':'full')+'" style="'+(REFS.length?'grid-template-rows:minmax(0,1fr)':'align-content:center')+'">'+refs+
     '<div class="pcol" style="justify-content:center"><div class="nextmod"><small>다음 모듈 · '+NEXT.title+'</small><strong>'+NEXT.line+'</strong></div></div></div>'+
     '<p class="foot">학습 상태는 저장되지 않습니다.</p>';
   vp.appendChild(s);

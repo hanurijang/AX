@@ -195,7 +195,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
 .gi .d{font-size:14px;line-height:1.5}
 .gi .e{font-size:12.5px;line-height:1.45;color:var(--gray)}
 .gi .e strong{color:var(--navy3)}
-.refs{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:8px;font-size:13.5px;line-height:1.5}
+.refs{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:8px;font-size:13.5px;line-height:1.5;overflow-y:auto;flex:1 1 auto;min-height:0}
 .refs li{display:grid;grid-template-columns:30px 1fr;gap:4px}
 .refs li span{font-weight:800;color:var(--navy3)}
 .refs a{color:var(--navy2);word-break:break-all}
@@ -430,13 +430,13 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
           <div class="math">
             <div class="mt">핵심 수학 개념 · 결정계수</div>
             <div class="f">R² = 1 − Σ(yᵢ − ŷᵢ)² ÷ Σ(yⱼ − ȳ)²</div>
-            <div class="r"><span>계산</span><span>1 − 162.4 ÷ 1156.5 ≈ 0.86 (= r² = 0.927²)</span></div>
+            <div class="r"><span>계산</span><span>1 − 162.4 ÷ 1156.5 ≈ 0.86. 절편 있는 단순회귀에서 r² = 0.927²</span></div>
             <div class="r"><span>해석</span><span>과학 점수 흩어짐의 약 86%를 수학 점수로 설명합니다.</span></div>
           </div>
         </div>
         <div class="side">
           <ul class="key"><li><b>결정계수</b> R²: 데이터로 설명된 비율</li><li>1에 가까울수록 잘 들어맞습니다.</li></ul>
-          <p class="exp">최소제곱법으로 구한 회귀식이라도 데이터가 꼭 들어맞지는 않으므로, 회귀식이 잘 들어맞는지 평가하는 지표로 결정계수 R²를 씁니다. 분모는 반응변수 전체의 흩어짐, 분자는 최소제곱법에서 보았던 잔차제곱합 E이므로, 둘의 비는 설명되지 않고 남은 비율이고 1에서 뺀 R²는 설명된 비율입니다. 단순선형회귀에서 R²는 x와 y의 피어슨 상관계수 r을 제곱한 값과 같습니다.</p>
+          <p class="exp">최소제곱법으로 구한 회귀식이라도 데이터가 꼭 들어맞지는 않으므로, 회귀식이 잘 들어맞는지 평가하는 지표로 결정계수 R²를 씁니다. 분모는 반응변수 전체의 흩어짐, 분자는 최소제곱법에서 보았던 잔차제곱합 E이므로, 둘의 비는 설명되지 않고 남은 비율이고 1에서 뺀 R²는 설명된 비율입니다. 절편이 있는 단순최소제곱에서는 R²가 x와 y의 피어슨 상관계수 r의 제곱과 같습니다. 절편이 없거나 설명변수가 여러 개면 이 등식은 일반적으로 성립하지 않습니다.</p>
           <p class="next"><span>다음 질문</span>설명변수를 늘리면 R²는 어떻게 될까?</p>
         </div>
       </div>
@@ -535,7 +535,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
           <div class="stats"><div><small>내 직선의 E(a, b)</small><strong id="m18-e">-</strong></div><div><small>최소값 (최소제곱법)</small><strong>162.4</strong></div></div>
           <p class="howto">도전: E를 170 아래로 내려 보세요. 최소제곱 직선은 a = 16.1, b = 0.729입니다.</p>
           <p class="pmsg" id="m18-msg"></p>
-          <div class="think"><span>생각해보기</span>a를 크게 하면 b는 어느 쪽으로 움직여야 E가 작아지나요?</div>
+          <div class="think" style="flex-wrap:wrap"><span>생각해보기</span>a를 크게 하면 b는 어느 쪽으로 움직여야 E가 작아지나요?<details style="flex-basis:100%;font-weight:600"><summary style="cursor:pointer">예시 답</summary>절편이 커지면 점과의 오차제곱을 줄이려고 기울기 b는 작아지는 쪽으로 움직입니다.</details></div>
         </div>
       </div>
     </section>
@@ -552,7 +552,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
           <div class="plabel" style="margin:0">결과 확인 · <span id="p2-count">0 / 0</span></div>
           <div class="bins" id="p2-bins"></div>
           <div class="p2row"><p class="pmsg" id="p2-msg"></p><button class="btn ghost" id="p2-reset">다시 하기</button></div>
-          <div class="think"><span>생각해보기</span>R²가 높으면 예측구간도 좁아질까요?</div>
+          <div class="think" style="flex-wrap:wrap"><span>생각해보기</span>R²가 높으면 예측구간도 좁아질까요?<details style="flex-basis:100%;font-weight:600"><summary style="cursor:pointer">예시 답</summary>R²가 높다고 예측구간이 자동으로 좁아지지는 않습니다. 잔차와 x의 위치도 봅니다.</details></div>
         </div>
       </div>
     </section>
@@ -571,7 +571,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
           <button class="btn" id="m18-check" style="align-self:flex-start">계산해서 확인</button>
           <div class="stats"><div><small>내 예측</small><strong id="m18-mine">-</strong></div><div><small>회귀식 예측 (95% 예측구간)</small><strong id="m18-act" style="font-size:18px">?</strong></div></div>
           <p class="pmsg" id="m18-msg3"></p>
-          <div class="think"><span>생각해보기</span>수학 100점처럼 데이터 범위 밖일 때 구간은 어떻게 되나요?</div>
+          <div class="think" style="flex-wrap:wrap"><span>생각해보기</span>수학 100점처럼 데이터 범위 밖일 때 구간은 어떻게 되나요?<details style="flex-basis:100%;font-weight:600"><summary style="cursor:pointer">예시 답</summary>데이터 범위 밖은 구간이 넓어지고, 직선이 그대로라는 가정도 약해집니다.</details></div>
         </div>
       </div>
     </section>
@@ -622,7 +622,7 @@ var QUIZ=[
   exp:"p < 0.05이면 b가 0이 아니라고 주장할 수 있으며, x에 대해 기울기 b인 선형관계라는 것을 알 수 있습니다. 하지만 이 결과만으로 x와 y 사이에 인과관계가 있다고 할 수는 없습니다. 절편 a는 설명변수와 관계없어 보통 관심 대상이 아닙니다.",back:"s-4-1c",backLabel:"4-1 회귀계수의 가설검정 다시 보기"},
  {goal:2,type:"계산",stem:"학생 10명의 회귀에서 잔차제곱합은 162.4, 과학 점수의 (yⱼ − ȳ)² 합은 1156.5입니다. 결정계수 R²는 약 얼마일까요?",
   opts:["약 0.86","약 0.14","약 7.1","약 0.93"],ans:0,
-  exp:"R² = 1 − 잔차제곱합 ÷ 전체 제곱합 = 1 − 162.4 ÷ 1156.5 ≈ 1 − 0.14 = 0.86입니다. 0.14는 설명되지 않고 남은 비율이며, 0.93은 상관계수 r입니다. 단순선형회귀에서는 R² = r²(0.93² ≈ 0.86)입니다.",back:"s-4-2a",backLabel:"4-2 결정계수 다시 보기"},
+  exp:"R² = 1 − 잔차제곱합 ÷ 전체 제곱합 = 1 − 162.4 ÷ 1156.5 ≈ 1 − 0.14 = 0.86입니다. 0.14는 설명되지 않고 남은 비율이며, 0.93은 상관계수 r입니다. 절편이 있는 단순최소제곱에서는 R² = r²(0.93² ≈ 0.86)입니다. 절편이 없거나 설명변수가 여러 개면 일반적으로 그렇지 않습니다.",back:"s-4-2a",backLabel:"4-2 결정계수 다시 보기"},
  {goal:3,type:"O/X 오개념",stem:"“단순선형회귀로 가설검정을 하려면 반응변수 y 자체가 정규분포를 따라야 한다.”",
   opts:["O","X"],ans:1,ox:true,
   exp:"가정하는 것은 오차항 ε가 평균 0, 분산 σ²인 정규분포를 따른다는 것입니다. 설명변수 x나 반응변수 y 자체가 정규분포일 필요는 없으며, 오차항의 정규성은 데이터와 모형의 차이인 잔차로 확인합니다.",back:"s-4-3a",backLabel:"4-3 오차의 가정 다시 보기"},
@@ -645,11 +645,16 @@ var GLOSSARY=[
  ["회귀계수","regression coefficient","회귀식의 형태를 결정하는 파라미터로, 단순선형회귀에서는 절편 a와 기울기 b입니다.","절편 16.1, 기울기 0.729"],
  ["최량선형비편향추정량","best linear unbiased estimator","오차의 평균이 0이고 분산이 일정할 때, 최소제곱 추정량은 비편향추정량 중 분산이 가장 작다는 성질입니다(가우스–마르코프 정리).","최소제곱법으로 얻은 a, b"],
  ["예측구간","prediction interval","추정한 회귀모형으로 새로 얻을 데이터가 95% 확률로 들어갈 범위입니다.","수학 80점 → 과학 63.2 ~ 85.8"],
- ["결정계수","coefficient of determination, R²","1 − 잔차제곱합 ÷ 전체 제곱합으로, 데이터에 의해 설명된 비율을 나타냅니다.","R² = 0.86"],
+ ["결정계수","coefficient of determination, R²","1 − 잔차제곱합 ÷ 전체 제곱합으로, 데이터에 의해 설명된 비율을 나타냅니다. 절편이 있는 단순최소제곱에서만 r²과 같습니다.","R² = 0.86"],
  ["조정 결정계수","adjusted R²","설명변수 개수 k로 조정해, 의미 없는 변수를 넣으면 오히려 줄어들 수 있게 한 결정계수입니다.","0.842"],
  ["브루쉬-페이건 검정","Breusch-Pagan test","x에 따라 잔차의 분산이 달라지는지 조사해 오차의 등분산성을 확인하는 검정입니다.","학생 10명 잔차 p = 0.39"]
 ];
-var REFS=[];
+var REFS=[
+ {n:1,title:"기초통계학Ⅱ",org:"여인권, 숙명여자대학교, KOCW 공개강의",url:"https://www.kocw.net/home/search/kemView.do?kemId=1080231",date:"2026-10-28 확인"},
+ {n:2,title:"데이터로 배우는 통계학",org:"K-MOOC",url:"https://www.kmooc.kr/view/course/detail/20384",date:"2026-10-28 확인"},
+ {n:3,title:"R을 활용한 통계학개론",org:"K-MOOC, KOCW 공개강의",url:"https://www.kocw.net/home/search/kemView.do?kemId=1517479",date:"2026-10-28 확인"},
+ {n:4,title:"국가통계포털 통계목록",org:"통계청, KOSIS",url:"https://kosis.kr/statisticsList/statisticsListIndex.do?menuId=M_01_02&outLink=Y&vwcd=MT_OTITLE",date:"2026-10-28 확인"}
+];
 var NEXT={title:"M19 다중회귀",line:"실제 데이터에서는 설명변수가 여러 개인 경우가 많습니다. 다음 모듈에서는 설명변수가 2개 이상인 다중회귀와 편회귀계수, 범주형 설명변수를 배웁니다."};
 
 /* =====================================================================
@@ -953,9 +958,9 @@ for(var gi=0;gi<GLOSSARY.length;gi+=6){
 }
 (function(){
   var s=document.createElement("section");s.className="slide";s.dataset.step="6";s.id="end";
-  var refs=REFS.length?'<div class="pcol" style="gap:10px"><div class="plabel" style="margin:0">참고자료</div><ol class="refs">'+REFS.map(function(r){return '<li><span>['+r.n+']</span><div>'+r.title+', '+r.org+'. <a href="'+r.url+'" target="_blank" rel="noopener">'+r.url+'</a> ('+r.date+')</div></li>';}).join("")+'</ol></div>':'';
+  var refs=REFS.length?'<div class="pcol" style="gap:10px;min-height:0;overflow:hidden"><div class="plabel" style="margin:0">참고자료</div><ol class="refs">'+REFS.map(function(r){return '<li><span>['+r.n+']</span><div>'+r.title+', '+r.org+'. <a href="'+r.url+'" target="_blank" rel="noopener">'+r.url+'</a> ('+r.date+')</div></li>';}).join("")+'</ol></div>':'';
   s.innerHTML='<div class="sh"><div class="sec">마무리</div><h2>'+(REFS.length?"참고자료와 다음 모듈":"다음 모듈")+'</h2></div>'+
-    '<div class="body '+(REFS.length?'split even':'full')+'" style="align-content:center">'+refs+
+    '<div class="body '+(REFS.length?'split even':'full')+'" style="'+(REFS.length?'grid-template-rows:minmax(0,1fr)':'align-content:center')+'">'+refs+
     '<div class="pcol" style="justify-content:center"><div class="nextmod"><small>다음 모듈 · '+NEXT.title+'</small><strong>'+NEXT.line+'</strong></div></div></div>'+
     '<p class="foot">학습 상태는 저장되지 않습니다.</p>';
   vp.appendChild(s);

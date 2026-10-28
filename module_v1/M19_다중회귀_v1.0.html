@@ -195,7 +195,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
 .gi .d{font-size:14px;line-height:1.5}
 .gi .e{font-size:12.5px;line-height:1.45;color:var(--gray)}
 .gi .e strong{color:var(--navy3)}
-.refs{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:8px;font-size:13.5px;line-height:1.5}
+.refs{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:8px;font-size:13.5px;line-height:1.5;overflow-y:auto;flex:1 1 auto;min-height:0}
 .refs li{display:grid;grid-template-columns:30px 1fr;gap:4px}
 .refs li span{font-weight:800;color:var(--navy3)}
 .refs a{color:var(--navy2);word-break:break-all}
@@ -223,7 +223,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
       <div class="body split">
         <div class="fig"><svg id="m19-ov" viewBox="0 0 440 260" role="img" aria-label="단순선형회귀에서 다중회귀, 가변수, 공분산분석으로 확장하는 흐름"></svg></div>
         <div class="side">
-          <div class="prevlink"><small>지난 모듈에서는</small>설명변수가 1개인 단순선형회귀 y = a + bx + ε를 최소제곱법으로 구하고 결정계수와 오차의 가정으로 평가했습니다.<small style="margin-top:8px">이번 모듈에서는</small>설명변수를 여러 개로 늘린 다중회귀, 범주형 설명변수를 넣는 가변수, 그리고 이를 결합한 공분산분석을 배웁니다.</div>
+          <div class="prevlink"><small>지난 모듈에서는</small>설명변수가 1개인 단순선형회귀 y = a + bx + ε를 최소제곱법으로 구하고 결정계수와 오차의 가정으로 평가했습니다. M17에서 상관만으로 원인이 아니듯, 회귀계수도 그것만으로 원인은 아닙니다.<small style="margin-top:8px">이번 모듈에서는</small>설명변수를 여러 개로 늘린 다중회귀, 범주형 설명변수를 넣는 가변수, 그리고 이를 결합한 공분산분석을 배웁니다.</div>
           <dl class="meta"><dt>학습 시간</dt><dd>약 45분</dd><dt>본문</dt><dd>소단원 4개</dd><dt>실습</dt><dd>조작형 · 분류형 · 추정형</dd></dl>
         </div>
       </div>
@@ -413,7 +413,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
         </div>
         <div class="side">
           <ul class="key"><li>편회귀계수는 단위와 퍼짐에 따라 달라집니다.</li><li><b>표준화편회귀계수</b>로 비교합니다.</li></ul>
-          <p class="exp">편회귀계수는 설명변수의 퍼짐 정도나 단위에 따라 크게 달라지므로 그대로 비교할 수 없습니다. 키를 cm 대신 m로 쓰면 계수는 0.538에서 53.8로 100배가 됩니다. 그래서 회귀분석 전에 각 설명변수를 평균 0, 표준편차 1로 변환한 뒤 구한 표준화편회귀계수를 씁니다. 각 설명변수가 1 표준편차 늘 때의 증가량이므로 비교할 수 있으며, R²나 p값은 원래 결과와 같습니다.</p>
+          <p class="exp">편회귀계수는 설명변수의 퍼짐 정도나 단위에 따라 크게 달라지므로 그대로 비교할 수 없습니다. 키를 cm 대신 m로 쓰면 계수는 0.538에서 53.8로 100배가 됩니다. 그래서 회귀분석 전에 각 설명변수를 평균 0, 표준편차 1로 변환한 뒤 구한 표준화편회귀계수를 씁니다. 각 설명변수가 1 표준편차 늘 때의 증가량이므로 비교할 수 있으며, R²나 p값은 원래 결과와 같습니다. 이 값은 설명변수만 표준화한 계수라 몸무게 단위(kg)가 남습니다. 반응변수까지 표준화한 완전 표준화 계수와는 다릅니다.</p>
           <p class="next"><span>다음 질문</span>설명변수끼리 상관이 있으면?</p>
         </div>
       </div>
@@ -512,7 +512,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
           <div class="stats"><div><small>다중회귀 예측 (키 + 허리)</small><strong id="m19-pm">-</strong></div><div><small>단순회귀 예측 (키만)</small><strong id="m19-ps">-</strong></div></div>
           <p class="howto">도전: 키는 그대로 두고 허리만 바꿔 보세요. 어느 예측이 변하나요?</p>
           <p class="pmsg" id="m19-msg"></p>
-          <div class="think"><span>생각해보기</span>허리를 고정하고 키만 1cm 올리면 다중회귀 예측은 얼마나 늘어나나요?</div>
+          <div class="think" style="flex-wrap:wrap"><span>생각해보기</span>허리를 고정하고 키만 1cm 올리면 다중회귀 예측은 얼마나 늘어나나요?<details style="flex-basis:100%;font-weight:600"><summary style="cursor:pointer">예시 답</summary>키의 편회귀계수만큼, 약 0.54kg 늘어납니다.</details></div>
         </div>
       </div>
     </section>
@@ -529,7 +529,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
           <div class="plabel" style="margin:0">결과 확인 · <span id="p2-count">0 / 0</span></div>
           <div class="bins" id="p2-bins"></div>
           <div class="p2row"><p class="pmsg" id="p2-msg"></p><button class="btn ghost" id="p2-reset">다시 하기</button></div>
-          <div class="think"><span>생각해보기</span>가변수의 계수도 표준화해서 비교하는 것이 자연스러울까요?</div>
+          <div class="think" style="flex-wrap:wrap"><span>생각해보기</span>가변수의 계수도 표준화해서 비교하는 것이 자연스러울까요?<details style="flex-basis:100%;font-weight:600"><summary style="cursor:pointer">예시 답</summary>0과 1인 가변수는 표준편차 1로 만든 비교보다, 원래 단위의 집단 차이를 보는 편이 자연스럽습니다.</details></div>
         </div>
       </div>
     </section>
@@ -547,7 +547,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
           <button class="btn" id="m19-check" style="align-self:flex-start">계산해서 확인</button>
           <div class="stats"><div><small>내 예측</small><strong id="m19-mine">-</strong></div><div><small>공분산분석 결과</small><strong id="m19-act">?</strong></div></div>
           <p class="pmsg" id="m19-msg3"></p>
-          <div class="think"><span>생각해보기</span>차이의 크기는 비슷한데 p값이 0.14에서 0.028로 작아진 이유는 무엇일까요?</div>
+          <div class="think" style="flex-wrap:wrap"><span>생각해보기</span>차이의 크기는 비슷한데 p값이 0.14에서 0.028로 작아진 이유는 무엇일까요?<details style="flex-basis:100%;font-weight:600"><summary style="cursor:pointer">예시 답</summary>차이는 비슷해도 잔차가 줄거나 정보가 늘면 표준오차가 작아져 p가 작아집니다.</details></div>
         </div>
       </div>
     </section>
@@ -592,7 +592,7 @@ var QUIZ=[
   exp:"설명변수 사이에 상관이 있으면 다릅니다. 키만 넣은 단순회귀의 기울기 0.724에는 키와 상관이 있는 허리둘레를 통한 영향까지 섞여 있습니다. 허리둘레를 함께 넣은 다중회귀에서 키의 편회귀계수는 0.538로, 허리둘레를 고정했을 때 키의 영향입니다.",back:"s-4-2d",backLabel:"4-2 편회귀계수의 해석 다시 보기"},
  {goal:2,type:"상황 판단",stem:"몸무게를 키(cm)와 하루 걸음 수(보)로 설명하는 다중회귀를 했습니다. 두 변수 중 어느 쪽 기여가 더 큰지 비교하려면 무엇을 봐야 할까요?",
   opts:["설명변수를 평균 0, 표준편차 1로 바꿔 구한 표준화편회귀계수","원래 편회귀계수의 크기","절편의 크기","각 변수의 평균값"],ans:0,
-  exp:"편회귀계수는 설명변수의 퍼짐이나 단위(cm, 보)에 따라 크게 달라지므로 그대로 비교할 수 없습니다. 각 설명변수를 표준화한 뒤 구한 표준화편회귀계수는 ‘1 표준편차 늘 때의 증가량’이므로 서로 비교할 수 있습니다.",back:"s-4-2c",backLabel:"4-2 표준화편회귀계수 다시 보기"},
+  exp:"편회귀계수는 설명변수의 퍼짐이나 단위(cm, m)에 따라 크게 달라지므로 그대로 비교할 수 없습니다. 각 설명변수를 표준화한 뒤 구한 표준화편회귀계수는 ‘1 표준편차 늘 때의 증가량’이므로 서로 비교할 수 있습니다. 몸무게는 표준화하지 않아 단위(kg)가 남으며, 반응변수까지 나눈 완전 표준화 계수와는 다릅니다.",back:"s-4-2c",backLabel:"4-2 표준화편회귀계수 다시 보기"},
  {goal:2,type:"상황 판단",stem:"혈액형(A, B, O, AB)을 설명변수로 회귀분석에 넣으려 합니다. 0 또는 1의 가변수를 몇 개 준비해야 할까요?",
   opts:["3개","4개","1개(A=0, B=1, O=2, AB=3)","2개"],ans:0,
   exp:"범주가 3개 이상이면 (범주 개수 − 1)개의 가변수를 씁니다. 혈액형은 범주 4개이므로 가변수 3개이며, 모두 0인 범주가 기준이 됩니다. 범주에는 대소 관계가 없으므로 0, 1, 2, 3처럼 하나의 변수에 숫자를 매기면 안 됩니다.",back:"s-4-3b",backLabel:"4-3 범주가 3개 이상일 때 다시 보기"},
@@ -608,19 +608,24 @@ var BINS=["편회귀계수","표준화편회귀계수","가변수의 계수"];
 var CARDS=[["허리 고정, 키 1cm↑ → 0.54kg↑","편회귀계수"],["키 단위를 m로 바꾸면 100배","편회귀계수"],
            ["키 1 표준편차↑ → 4.3kg↑","표준화편회귀계수"],["단위가 다른 변수끼리 비교 가능","표준화편회귀계수"],
            ["운동 함(1)과 안 함(0)의 평균 차이","가변수의 계수"],["기준 A형과 B형의 차이","가변수의 계수"]];
-var HINT={"편회귀계수":"다른 설명변수를 고정한 채 그 변수가 1 늘 때의 y 증가량이며, 단위에 따라 값이 바뀝니다.","표준화편회귀계수":"설명변수를 평균 0, 표준편차 1로 바꿔 구한 계수로, 크기를 비교할 수 있습니다.","가변수의 계수":"0 또는 1로 나타낸 범주 사이의 차이를 나타냅니다."};
+var HINT={"편회귀계수":"다른 설명변수를 고정한 채 그 변수가 1 늘 때의 y 증가량이며, 단위에 따라 값이 바뀝니다.","표준화편회귀계수":"설명변수만 평균 0, 표준편차 1로 바꿔 구한 계수입니다. y의 단위는 남습니다.","가변수의 계수":"0 또는 1로 나타낸 범주 사이의 차이를 나타냅니다."};
 
 var GLOSSARY=[
  ["일반화선형모형","generalized linear model, GLM","반응변수의 오차 분포를 정규분포 대신 이항분포나 푸아송 분포 등으로 바꿀 수 있게 넓힌 선형모형입니다.","불량 여부(0/1)를 반응변수로 하는 모형"],
  ["다중회귀","multiple regression","설명변수가 여러 개인 회귀로, y = a + b₁x₁ + … + bₖxₖ + ε로 나타냅니다.","몸무게 = a + b₁ × 키 + b₂ × 허리 + ε"],
  ["편회귀계수","partial regression coefficient","다중회귀에서 다른 설명변수를 고정한 채 그 변수가 1 늘었을 때 y의 증가량입니다.","키 0.538kg/cm"],
  ["회귀평면","regression plane","설명변수가 2개일 때 회귀모형이 만드는 x₁, x₂, y 3차원 공간 속의 평면입니다.","키·허리·몸무게 공간의 평면"],
- ["표준화편회귀계수","standardized partial regression coefficient","설명변수를 평균 0, 표준편차 1로 변환한 뒤 구한 회귀계수로, 계수 크기를 서로 비교할 수 있습니다.","키 4.32, 허리 3.04"],
+ ["표준화편회귀계수","standardized partial regression coefficient","설명변수만 평균 0, 표준편차 1로 변환한 뒤 구한 회귀계수입니다. 반응변수 단위가 남으므로, y까지 표준화한 완전 표준화 계수와는 다릅니다.","키 4.32kg, 허리 3.04kg"],
  ["가변수","dummy variable","범주형 변수를 회귀에 넣으려고 0 또는 1의 값으로 나타낸 변수입니다.","운동 안 함 0, 함 1"],
  ["공분산분석","ANCOVA, analysis of covariance","분산분석에 양적 변수(공변량)를 함께 넣어, 공변량의 영향을 고려한 뒤 집단 차이를 보는 방법입니다.","키를 고려한 운동 효과 −3.60kg"],
  ["공변량","covariate","공분산분석에서 추가로 넣는 양적 변수로, 반응변수의 차이를 일부 설명합니다.","키"]
 ];
-var REFS=[];
+var REFS=[
+ {n:1,title:"기초통계학Ⅱ",org:"여인권, 숙명여자대학교, KOCW 공개강의",url:"https://www.kocw.net/home/search/kemView.do?kemId=1080231",date:"2026-10-28 확인"},
+ {n:2,title:"R을 활용한 통계학개론",org:"K-MOOC, KOCW 공개강의",url:"https://www.kocw.net/home/search/kemView.do?kemId=1517479",date:"2026-10-28 확인"},
+ {n:3,title:"국가통계포털 통계목록",org:"통계청, KOSIS",url:"https://kosis.kr/statisticsList/statisticsListIndex.do?menuId=M_01_02&outLink=Y&vwcd=MT_OTITLE",date:"2026-10-28 확인"},
+ {n:4,title:"데이터로 배우는 통계학",org:"K-MOOC",url:"https://www.kmooc.kr/view/course/detail/20384",date:"2026-10-28 확인"}
+];
 var NEXT={title:"M20 회귀모형 다듬기",line:"설명변수가 너무 많거나 서로 강하게 상관하면 문제가 생깁니다. 다음 모듈에서는 고차원 데이터와 다중공선성, 상호작용, 이원배치 분산분석, 비선형회귀를 다룹니다."};
 
 /* =====================================================================
@@ -912,9 +917,9 @@ for(var gi=0;gi<GLOSSARY.length;gi+=6){
 }
 (function(){
   var s=document.createElement("section");s.className="slide";s.dataset.step="6";s.id="end";
-  var refs=REFS.length?'<div class="pcol" style="gap:10px"><div class="plabel" style="margin:0">참고자료</div><ol class="refs">'+REFS.map(function(r){return '<li><span>['+r.n+']</span><div>'+r.title+', '+r.org+'. <a href="'+r.url+'" target="_blank" rel="noopener">'+r.url+'</a> ('+r.date+')</div></li>';}).join("")+'</ol></div>':'';
+  var refs=REFS.length?'<div class="pcol" style="gap:10px;min-height:0;overflow:hidden"><div class="plabel" style="margin:0">참고자료</div><ol class="refs">'+REFS.map(function(r){return '<li><span>['+r.n+']</span><div>'+r.title+', '+r.org+'. <a href="'+r.url+'" target="_blank" rel="noopener">'+r.url+'</a> ('+r.date+')</div></li>';}).join("")+'</ol></div>':'';
   s.innerHTML='<div class="sh"><div class="sec">마무리</div><h2>'+(REFS.length?"참고자료와 다음 모듈":"다음 모듈")+'</h2></div>'+
-    '<div class="body '+(REFS.length?'split even':'full')+'" style="align-content:center">'+refs+
+    '<div class="body '+(REFS.length?'split even':'full')+'" style="'+(REFS.length?'grid-template-rows:minmax(0,1fr)':'align-content:center')+'">'+refs+
     '<div class="pcol" style="justify-content:center"><div class="nextmod"><small>다음 모듈 · '+NEXT.title+'</small><strong>'+NEXT.line+'</strong></div></div></div>'+
     '<p class="foot">학습 상태는 저장되지 않습니다.</p>';
   vp.appendChild(s);

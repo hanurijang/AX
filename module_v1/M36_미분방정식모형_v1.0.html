@@ -195,7 +195,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
 .gi .d{font-size:14px;line-height:1.5}
 .gi .e{font-size:12.5px;line-height:1.45;color:var(--gray)}
 .gi .e strong{color:var(--navy3)}
-.refs{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:8px;font-size:13.5px;line-height:1.5}
+.refs{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:8px;font-size:13.5px;line-height:1.5;overflow-y:auto;flex:1 1 auto;min-height:0}
 .refs li{display:grid;grid-template-columns:30px 1fr;gap:4px}
 .refs li span{font-weight:800;color:var(--navy3)}
 .refs a{color:var(--navy2);word-break:break-all}
@@ -223,7 +223,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
       <div class="body split">
         <div class="fig"><svg id="m36-ov" viewBox="0 0 440 260" role="img" aria-label="차분 방정식에서 미분 방정식, 밀도 효과를 넣은 로지스틱 방정식, 감염병 SIR 모형, 예측과 통제로 이어지는 흐름"></svg></div>
         <div class="side">
-          <div class="prevlink"><small>지난 모듈에서는</small>통계 모형·기계학습 모형과 메커니즘에서 출발하는 수리 모형을 비교하고, 모형이 현상을 이해하는 근사 도구라는 점을 배웠습니다.<small style="margin-top:8px">이번 모듈에서는</small>대표적인 결정론 모형인 차분 방정식과 미분 방정식으로 수의 변화를 나타내고, 감염병의 SIR 모형으로 유행을 예측하고 대책의 효과를 따져 봅니다.</div>
+          <div class="prevlink"><small>지난 모듈에서는</small>통계 모형·기계학습 모형과 메커니즘에서 출발하는 수리 모형을 비교하고, 모형이 현상을 이해하는 근사 도구라는 점을 배웠습니다.<small style="margin-top:8px">이번 모듈에서는</small>심화로, 결정론 모형인 차분 방정식과 미분 방정식으로 수의 변화를 나타내고, 감염병의 SIR 모형으로 유행을 예측하고 대책의 효과를 따져 봅니다.</div>
           <dl class="meta"><dt>학습 시간</dt><dd>약 40분</dd><dt>본문</dt><dd>소단원 4개</dd><dt>실습</dt><dd>조작형 · 분류형 · 추정형</dd></dl>
         </div>
       </div>
@@ -254,7 +254,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
           <div class="ga"><button class="jump" data-jump="q5">문항 5·6</button></div><div class="gp"><button class="jump" data-jump="p1">실습 1 조작</button></div>
         </div>
       </div>
-      <p class="foot">버튼을 누르면 해당 문항이나 실습 화면으로 바로 이동합니다.</p>
+      <p class="foot">4-2 평형점과 4-4 가정 확장은 추가 읽기입니다. 버튼을 누르면 해당 문항이나 실습으로 이동합니다.</p>
     </section>
 
     <!-- ③ 일상의 예시 ─────────────────────────────── -->
@@ -365,7 +365,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
 
     <!-- ④ 본문 ─────────────────────────────── -->
     <section class="slide" data-step="3" id="s-4-1a">
-      <div class="sh"><div class="sec">4-1 차분 방정식과 지수함수 증가</div><h2><span class="q">Q</span>5일마다 2배로 늘어나는 규칙은 어떻게 쓸까요?</h2></div>
+      <div class="sh"><div class="sec">4-1 차분 방정식과 지수함수 증가 · 기초</div><h2><span class="q">Q</span>5일마다 2배로 늘어나는 규칙은 어떻게 쓸까요?</h2></div>
       <div class="body split even">
         <div class="figcol">
           <div class="fig"><svg id="m36-diff" viewBox="0 0 420 150" role="img" aria-label="5일마다 2배인 감염자 수 1, 2, 4, 8 … 이 50일에 1,024명이 되어 직원 수 1,000명을 넘는 지수함수 증가 그래프"></svg></div>
@@ -385,7 +385,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
     </section>
 
     <section class="slide" data-step="3" id="s-4-1b">
-      <div class="sh"><div class="sec">4-1 차분 방정식과 지수함수 증가</div><h2><span class="q">Q</span>배율 r을 바꾸면 움직임은 어떻게 달라질까요?</h2></div>
+      <div class="sh"><div class="sec">4-1 차분 방정식과 지수함수 증가 · 기초</div><h2><span class="q">Q</span>배율 r을 바꾸면 움직임은 어떻게 달라질까요?</h2></div>
       <div class="body split even">
         <div class="fig"><svg id="m36-bif" viewBox="0 0 420 270" role="img" aria-label="x(t+1) = r x(t)에서 r 1.2는 증가, 1.0은 유지, 0.8은 감소하는 곡선과, r = 1을 경계로 소멸과 증식이 나뉘는 분기 다이어그램"></svg></div>
         <div class="side">
@@ -397,7 +397,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
     </section>
 
     <section class="slide" data-step="3" id="s-4-2a">
-      <div class="sh"><div class="sec">4-2 미분 방정식과 밀도 효과</div><h2><span class="q">Q</span>시간 간격을 아주 작게 하면 규칙은 어떻게 쓸까요?</h2></div>
+      <div class="sh"><div class="sec">4-2 미분 방정식과 밀도 효과 · 기초</div><h2><span class="q">Q</span>시간 간격을 아주 작게 하면 규칙은 어떻게 쓸까요?</h2></div>
       <div class="body split even">
         <div class="figcol">
           <div class="fig"><svg id="m36-ode" viewBox="0 0 420 150" role="img" aria-label="dx/dt = ax의 해 x(0)e^(at), a가 양수면 증가, 0이면 유지, 음수면 감소"></svg></div>
@@ -417,7 +417,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
     </section>
 
     <section class="slide" data-step="3" id="s-4-2b">
-      <div class="sh"><div class="sec">4-2 미분 방정식과 밀도 효과</div><h2><span class="q">Q</span>지수적 증가가 끝없이 이어지는 것이 현실적일까요?</h2></div>
+      <div class="sh"><div class="sec">4-2 미분 방정식과 밀도 효과 · 기초</div><h2><span class="q">Q</span>지수적 증가가 끝없이 이어지는 것이 현실적일까요?</h2></div>
       <div class="body split even">
         <div class="fig"><svg id="m36-logi" viewBox="0 0 420 270" role="img" aria-label="지수적 증가는 직원 수를 넘어 계속 커지지만, 로지스틱 방정식은 K = 1,000에 가까워지며 포화하는 S자 곡선"></svg></div>
         <div class="side">
@@ -429,19 +429,19 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
     </section>
 
     <section class="slide" data-step="3" id="s-4-2c">
-      <div class="sh"><div class="sec">4-2 미분 방정식과 밀도 효과</div><h2><span class="q">Q</span>더 변하지 않는 상태는 어디이고, 그곳은 안정할까요?</h2></div>
+      <div class="sh"><div class="sec">4-2 평형점 · 추가 읽기</div><h2><span class="q">Q</span>더 변하지 않는 상태는 어디이고, 그곳은 안정할까요?</h2></div>
       <div class="body split even">
         <div class="fig"><svg id="m36-eq" viewBox="0 0 420 270" role="img" aria-label="로지스틱 방정식의 변화율 그래프와 평형점, x = 0은 불안정평형점, x = K는 안정평형점이며 화살표가 K로 모임"></svg></div>
         <div class="side">
           <ul class="key"><li>x = K는 <b>안정평형점</b>, x = 0은 <b>불안정평형점</b></li><li><b>비선형 방정식</b>은 상태에 따라 규칙이 변함</li></ul>
-          <p class="exp">dx/dt = 0을 만족하는 x가 평형점입니다. x가 K보다 크면 dx/dt &lt; 0, 작으면 dx/dt &gt; 0이 되어 x = K로 되돌아가므로 안정평형점입니다. x = 0에서는 조금만 커져도 늘어나기 시작하므로 불안정평형점입니다. 로지스틱 방정식은 x × x의 곱이 있는 비선형 방정식으로, 대부분 식으로 풀 수 없어 수치 계산이나 평형점 근처의 선형 근사로 조사합니다.</p>
+          <p class="exp">dx/dt = 0을 만족하는 x가 평형점입니다. x가 K보다 크면 dx/dt &lt; 0, 작으면 dx/dt &gt; 0이 되어 x = K로 되돌아가므로 안정평형점입니다. x = 0에서는 조금만 커져도 늘어나기 시작하므로 불안정평형점입니다. 로지스틱 방정식은 x × x의 곱이 있는 비선형 방정식이지만, dx/dt = ax(1 − x/K)는 x(t) = K / (1 + (K/x₀ − 1)e^(−at))로 풀립니다. SIR처럼 식으로 풀기 어려운 모형은 수치 계산으로 조사합니다.</p>
           <p class="next"><span>다음 질문</span>감염병은 어떻게 모형으로 만들까?</p>
         </div>
       </div>
     </section>
 
     <section class="slide" data-step="3" id="s-4-3a">
-      <div class="sh"><div class="sec">4-3 감염병 모형</div><h2><span class="q">Q</span>감염되고 회복하는 흐름은 어떻게 식으로 쓸까요?</h2></div>
+      <div class="sh"><div class="sec">4-3 감염병 모형 · 기초</div><h2><span class="q">Q</span>감염되고 회복하는 흐름은 어떻게 식으로 쓸까요?</h2></div>
       <div class="body split even">
         <div class="figcol">
           <div class="fig"><svg id="m36-sir" viewBox="0 0 420 150" role="img" aria-label="직원 1,000명 SIR 모형의 S, I, R 곡선, 감염자 정점 약 100명(44일), 최종 누적 감염 약 692명"></svg></div>
@@ -461,31 +461,31 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
     </section>
 
     <section class="slide" data-step="3" id="s-4-3b">
-      <div class="sh"><div class="sec">4-3 감염병 모형</div><h2><span class="q">Q</span>감염자 한 명이 유행으로 번질지는 무엇으로 알 수 있을까요?</h2></div>
+      <div class="sh"><div class="sec">4-3 감염병 모형 · 기초</div><h2><span class="q">Q</span>감염자 한 명이 유행으로 번질지는 무엇으로 알 수 있을까요?</h2></div>
       <div class="body split even">
         <div class="fig"><svg id="m36-r0" viewBox="0 0 420 270" role="img" aria-label="가로축 R0, 세로축 최종 누적 감염 비율인 분기 다이어그램, R0 = 1 아래에서는 0, 위에서는 늘어나며 이 사업장 R0 1.7에서 약 69%"></svg></div>
         <div class="side">
-          <ul class="key"><li><b>기초감염재생산수</b> R₀ = β/γ × S(0)/N</li><li>R₀ &gt; 1이면 유행이 확산됨</li></ul>
-          <p class="exp">감염 초기에 최초 감염자 수 I(0)가 늘어나는지가 유행을 결정합니다. dI/dt = I(0)(βS(0)/N − γ) &gt; 0이면 유행하므로, 기초감염재생산수 R₀ = (β/γ) × S(0)/N이 1보다 큰지가 기준입니다. R₀는 대책이 없는 감수성 보유자뿐인 집단에서 감염자 1명이 감염시키는 사람 수의 평균이므로, 1보다 크면 확산된다는 것을 직관적으로도 알 수 있습니다. 이 사업장은 0.34 ÷ 0.2 = 1.7로 1을 넘으며, 최종적으로 약 69%가 감염을 겪습니다.</p>
+          <ul class="key"><li><b>기초감염재생산수</b> R₀ = β/γ</li><li>초기 S(0)/N ≈ 1이고 R₀ &gt; 1이면 유행</li></ul>
+          <p class="exp">기초감염재생산수 R₀ = β/γ는 거의 모두가 감수성 보유자일 때 감염자 1명이 감염시키는 사람 수의 평균입니다. 감염이 진행되면 감수성 보유자가 줄므로, 그때의 값은 실질감염재생산수 Rₜ = (β/γ) × S(t)/N입니다. 초기에 S(0)/N ≈ 1이면 두 값이 거의 같고, dI/dt &gt; 0인 조건도 R₀ &gt; 1과 같습니다. 이 사업장은 0.34 ÷ 0.2 = 1.7로 1을 넘으며, 최종적으로 약 69%가 감염을 겪습니다.</p>
           <p class="next"><span>다음 질문</span>대책을 쓰면 어떻게 달라질까?</p>
         </div>
       </div>
     </section>
 
     <section class="slide" data-step="3" id="s-4-4a">
-      <div class="sh"><div class="sec">4-4 예측과 통제, 더 좋은 모형으로</div><h2><span class="q">Q</span>30일째에 대책을 쓰면 유행은 어떻게 달라질까요?</h2></div>
+      <div class="sh"><div class="sec">4-4 예측과 통제 · 기초</div><h2><span class="q">Q</span>30일째에 대책을 쓰면 유행은 어떻게 달라질까요?</h2></div>
       <div class="body split even">
         <div class="fig"><svg id="m36-ctrl" viewBox="0 0 420 270" role="img" aria-label="30일까지 관측한 감염자 수 이후 대책 없음 Rt 1.48, 마스크 Rt 1.05, 접촉 절반 Rt 0.74의 감염자 수 시나리오"></svg></div>
         <div class="side">
           <ul class="key"><li><b>실질감염재생산수</b> Rₜ를 1 아래로</li><li>예측은 규칙이 그대로라는 전제 아래서만</li></ul>
-          <p class="exp">데이터로 파라미터를 추정하면 앞날을 예측할 수 있지만, 지금까지의 규칙이 달라지지 않는다는 전제의 예측입니다. 유행이 시작된 뒤 면역이나 대책이 반영된 값이 실질감염재생산수 Rₜ이며, 1보다 크면 감염자가 늘어납니다. 접촉을 줄이는 대책은 β를, 조기 격리는 γ를 바꿉니다. 30일째 Rₜ 1.48에서 교대·휴게를 분산해 접촉을 절반으로 줄이면 Rₜ는 0.74가 되어 최종 감염이 692명에서 236명으로 줄어듭니다. 이렇게 데이터로 얻을 수 없는 조건도 탐색할 수 있다는 것이 통계·기계학습 모형에는 없는 강점입니다.</p>
+          <p class="exp">데이터로 파라미터를 추정하면 앞날을 예측할 수 있지만, 지금까지의 규칙이 달라지지 않는다는 전제의 예측입니다. 유행이 시작된 뒤 면역이나 대책이 반영된 값이 실질감염재생산수 Rₜ이며, 1보다 크면 감염자가 늘어납니다. 접촉을 줄이는 대책은 β를, 조기 격리는 γ를 바꿉니다. 30일째 Rₜ 1.48에서 교대·휴게를 분산해 접촉을 절반으로 줄이면 Rₜ는 0.74가 되어 최종 감염이 692명에서 236명으로 줄어듭니다. 데이터에 없는 조건을 식의 파라미터로 넣어 비교할 수 있다는 것이, 메커니즘을 식으로 둔 모형의 강점입니다.</p>
           <p class="next"><span>다음 질문</span>이 모형을 더 좋게 만들려면?</p>
         </div>
       </div>
     </section>
 
     <section class="slide" data-step="3" id="s-4-4b">
-      <div class="sh"><div class="sec">4-4 예측과 통제, 더 좋은 모형으로</div><h2><span class="q">Q</span>SIR 모형의 가정을 바꾸면 무엇을 더 알 수 있을까요?</h2></div>
+      <div class="sh"><div class="sec">4-4 가정 확장 · 추가 읽기</div><h2><span class="q">Q</span>SIR 모형의 가정을 바꾸면 무엇을 더 알 수 있을까요?</h2></div>
       <div class="body split even">
         <div class="fig"><svg id="m36-ext" viewBox="0 0 420 270" role="img" aria-label="SIR 모형의 가정인 사람의 동질성, 무작위 접촉, 백신 없음을 연령 구조, 네트워크 구조, 백신 효과로 확장"></svg></div>
         <div class="side">
@@ -504,7 +504,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
           <tbody>
             <tr><td>차분 방정식</td><td>x(t+1) = r·x(t), r = 1이 증가·감소의 경계</td><td>5일마다 2배 → 50일 1,024명</td></tr>
             <tr><td>미분 방정식·밀도 효과</td><td>dx/dt = ax(1 − x/K): K는 안정, 0은 불안정 평형점</td><td>누적 감염자가 1,000명에서 포화</td></tr>
-            <tr><td>SIR 모형</td><td>S → I → R, R₀ = β/γ × S(0)/N &gt; 1이면 유행</td><td>R₀ 1.7, 정점 약 100명, 최종 약 692명</td></tr>
+            <tr><td>SIR 모형</td><td>S → I → R, R₀ = β/γ. 초기 S(0)/N ≈ 1이고 R₀ &gt; 1이면 유행</td><td>R₀ 1.7, 정점 약 100명, 최종 약 692명</td></tr>
             <tr><td>예측과 통제</td><td>Rₜ를 1 아래로, 규칙이 같다는 전제의 예측</td><td>접촉 절반 → Rₜ 0.74, 최종 236명</td></tr>
           </tbody>
         </table>
@@ -528,7 +528,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
           <div class="stats three"><div><small>R₀</small><strong id="m36-rr">-</strong></div><div><small>감염자 정점</small><strong id="m36-pk">-</strong></div><div><small>최종 누적 감염</small><strong id="m36-fin">-</strong></div></div>
           <p class="howto">도전: R₀가 1 근처를 넘나들도록 β나 γ를 움직여 최종 누적 감염이 어떻게 달라지는지 보세요.</p>
           <p class="pmsg" id="m36-msg"></p>
-          <div class="think"><span>생각해보기</span>우리 사업장에서 β를 줄이는 대책과 γ를 키우는 대책은 각각 무엇일까요?</div>
+          <div class="think" style="flex-wrap:wrap"><span>생각해보기</span>우리 사업장에서 β를 줄이는 대책과 γ를 키우는 대책은 각각 무엇일까요?<details style="flex-basis:100%;font-weight:600"><summary style="cursor:pointer">예시 답</summary>β를 줄이려면 접촉을 줄이는 교대·휴게 분산, γ를 키우려면 조기 격리입니다.</details></div>
         </div>
       </div>
     </section>
@@ -545,7 +545,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
           <div class="plabel" style="margin:0">결과 확인 · <span id="p2-count">0 / 0</span></div>
           <div class="bins" id="p2-bins"></div>
           <div class="p2row"><p class="pmsg" id="p2-msg"></p><button class="btn ghost" id="p2-reset">다시 하기</button></div>
-          <div class="think"><span>생각해보기</span>비선형 모형을 이해하려면 무엇부터 살펴볼까요?</div>
+          <div class="think" style="flex-wrap:wrap"><span>생각해보기</span>비선형 모형을 이해하려면 무엇부터 살펴볼까요?<details style="flex-basis:100%;font-weight:600"><summary style="cursor:pointer">예시 답</summary>평형점이 어디인지, 그곳이 안정한지부터 살펴봅니다.</details></div>
         </div>
       </div>
     </section>
@@ -564,7 +564,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
           <button class="btn" id="m36-check" style="align-self:flex-start">계산해서 확인</button>
           <div class="stats three"><div><small>내 예측</small><strong id="m36-mine">-</strong></div><div><small>지수함수 증가</small><strong id="m36-ex">?</strong></div><div><small>밀도 효과 반영</small><strong id="m36-lg">?</strong></div></div>
           <p class="pmsg" id="m36-msg3"></p>
-          <div class="think"><span>생각해보기</span>지수적으로 늘어나는 현상에서 대책이 하루 늦으면 어떻게 될까요?</div>
+          <div class="think" style="flex-wrap:wrap"><span>생각해보기</span>지수적으로 늘어나는 현상에서 대책이 하루 늦으면 어떻게 될까요?<details style="flex-basis:100%;font-weight:600"><summary style="cursor:pointer">예시 답</summary>하루 늦은 만큼 감염자가 더 커진 뒤에 대책을 시작하게 됩니다.</details></div>
         </div>
       </div>
     </section>
@@ -594,7 +594,7 @@ var STEPS=["학습개요","학습목표","일상의 예시","본문","형성평�
    사업장(직원 1,000명) 호흡기 감염병 유행: 첫 감염자 1명
    차분 방정식: 5일마다 2배 x(t+1) = 2x(t) → x(t) = 2^t (t = 5일 단위): 25일 32명, 40일 256명, 50일 1,024명(직원 수 초과)
    로지스틱(K = 1,000, a = ln2 ÷ 5 ≈ 0.139/일, x0 = 1): 25일 31명, 40일 204명, 50일 506명
-   SIR(RK4, dt 0.1): β = 0.34/일, γ = 0.2/일(평균 5일 앓음), R0 = β/γ × S(0)/N ≈ 1.7
+   SIR(RK4, dt 0.1): β = 0.34/일, γ = 0.2/일(평균 5일 앓음), R0 = β/γ = 1.7 (초기 S(0)/N ≈ 1)
      감염자 I: 10일 4, 20일 15, 30일 48, 40일 93 / 정점 약 100명(44.5일) / 최종 누적 감염 약 692명(69%)
      30일째 대책: β 0.17(접촉 절반) → Rt 0.74, 최종 236명 / β 0.24 → Rt 1.05, 최종 420명 / 대책 없음 Rt 1.48, 최종 692명
    최종 규모 방정식 z = 1 − e^(−R0 z): R0 1.2 → 0.31, 1.5 → 0.58, 2 → 0.80, 3 → 0.94 */
@@ -616,7 +616,7 @@ var QUIZ=[
   exp:"x = 0에서는 x가 0보다 조금이라도 커지면 dx/dt > 0이 되어 x가 늘어나기 시작하고, 자연적으로 0으로 되돌아가는 일은 없습니다. 이런 평형점을 불안정평형점이라 합니다. 반면 x = K는 벗어나도 되돌아오는 안정평형점입니다.",back:"s-4-2c",backLabel:"4-2 평형점의 안정성 다시 보기"},
  {goal:3,type:"계산",stem:"사업장 SIR 모형에서 감염률 β = 0.34/일, 회복률 γ = 0.2/일이고, 처음에는 거의 모두 감수성 보유자(S(0)/N ≈ 1)입니다. 기초감염재생산수 R₀는?",
   opts:["약 1.7","약 0.14","약 0.59","약 0.068"],ans:0,
-  exp:"R₀ = (β ÷ γ) × S(0)/N = 0.34 ÷ 0.2 × 1 = 1.7입니다. 1보다 크므로 유행이 확산됩니다. 0.14는 β − γ(초기 증가 속도), 0.59는 γ ÷ β, 0.068은 β × γ입니다. R₀는 감수성 보유자뿐인 집단에서 감염자 1명이 감염시키는 사람 수의 평균입니다.",back:"s-4-3b",backLabel:"4-3 기초감염재생산수 다시 보기"},
+  exp:"R₀ = β ÷ γ = 0.34 ÷ 0.2 = 1.7입니다. 처음 S(0)/N ≈ 1이라 (β/γ)×S(0)/N도 1.7과 같습니다. 1보다 크므로 유행이 확산됩니다. 유행이 진행된 뒤의 값은 Rₜ = (β/γ)×S(t)/N입니다. 0.14는 β − γ, 0.59는 γ ÷ β, 0.068은 β × γ입니다.",back:"s-4-3b",backLabel:"4-3 기초감염재생산수 다시 보기"},
  {goal:3,type:"상황 판단",stem:"30일째 감염자 48명, 실질감염재생산수 Rₜ ≈ 1.48입니다(β 0.34, γ 0.2). 다음 대책 중 Rₜ를 1 미만으로 낮춰 감염자 수를 줄어들게 하는 것은?",
   opts:["교대·휴게 분산으로 접촉을 절반으로(β 0.17)","마스크로 β를 0.24로","조기 격리로 γ를 0.25로","검사만 늘리고 β·γ는 그대로"],ans:0,
   exp:"Rₜ는 β에 비례하고 γ에 반비례합니다. 접촉을 절반으로 줄이면 β도 절반이 되어 Rₜ는 약 0.74로 1 아래가 됩니다. β 0.24는 Rₜ 약 1.05, γ 0.25는 약 1.19로 여전히 1보다 커 감염자 수가 늘어납니다. 수리 모형으로 ‘만약 ~라면’을 미리 따져 볼 수 있습니다.",back:"s-4-4a",backLabel:"4-4 예측과 통제 다시 보기"}
@@ -636,13 +636,16 @@ var GLOSSARY=[
  ["로지스틱 방정식","logistic equation","dx/dt = ax(1 − x/K)로, x가 K에 가까울수록 증가율이 0에 가까워져 K에서 포화합니다.","K = 직원 1,000명"],
  ["안정평형점","stable equilibrium","벗어나더라도 다시 되돌아오는 평형점입니다.","로지스틱의 x = K"],
  ["불안정평형점","unstable equilibrium","조금만 벗어나도 되돌아오지 않고 멀어지는 평형점입니다.","로지스틱의 x = 0"],
- ["비선형 방정식","nonlinear equation","x × x 같은 곱이 들어 있어 변수의 값에 따라 규칙이 달라지는 방정식으로, 대부분 식으로 풀 수 없습니다.","로지스틱 방정식, SIR 모형"],
+ ["비선형 방정식","nonlinear equation","x × x 같은 곱이 들어 규칙이 값에 따라 달라지는 방정식입니다. 로지스틱 방정식은 해석해가 있고, SIR은 수치 계산으로 풉니다.","로지스틱 방정식, SIR 모형"],
  ["SIR 모형","SIR model","감수성 보유자 S, 감염자 I, 회복자 R의 수 변화를 미분 방정식으로 나타낸 감염병의 기본 모형입니다.","직원 1,000명, β 0.34, γ 0.2"],
- ["기초감염재생산수","basic reproduction number, R₀","대책이 없는 감수성 보유자뿐인 집단에서 감염자 1명이 감염시키는 사람 수의 평균으로, 1보다 크면 유행이 확산됩니다.","0.34 ÷ 0.2 = 1.7"],
+ ["기초감염재생산수","basic reproduction number, R₀","거의 모두가 감수성 보유자일 때 감염자 1명이 감염시키는 사람 수의 평균 R₀ = β/γ입니다. 진행 중 값은 Rₜ = (β/γ)×S(t)/N입니다.","0.34 ÷ 0.2 = 1.7"],
  ["실질감염재생산수","effective reproduction number, Rₜ","유행이 시작된 뒤 면역이나 대책을 반영해 감염자 1명이 감염시키는 사람 수의 평균입니다.","접촉 절반 → 1.48에서 0.74로"]
 ];
 var REFS=[
- {n:1,title:"A Contribution to the Mathematical Theory of Epidemics",org:"W. O. Kermack, A. G. McKendrick, Proceedings of the Royal Society of London A 115(772), 700–721, 1927",url:"https://doi.org/10.1098/rspa.1927.0118",date:"2026-10-27 확인"}
+ {n:1,title:"A Contribution to the Mathematical Theory of Epidemics",org:"W. O. Kermack, A. G. McKendrick, Proceedings of the Royal Society of London A 115(772), 700–721, 1927",url:"https://doi.org/10.1098/rspa.1927.0118",date:"2026-10-27 확인"},
+ {n:2,title:"국가통계포털 통계목록",org:"통계청, KOSIS",url:"https://kosis.kr/statisticsList/statisticsListIndex.do?menuId=M_01_02&outLink=Y&vwcd=MT_OTITLE",date:"2026-10-28 확인"},
+ {n:3,title:"공공데이터포털",org:"행정안전부",url:"https://www.data.go.kr",date:"2026-10-28 확인"},
+ {n:4,title:"데이터로 배우는 통계학",org:"K-MOOC",url:"https://www.kmooc.kr/view/course/detail/20384",date:"2026-10-28 확인"}
 ];
 var NEXT={title:"M37 확률 모형과 수리 모형의 역할",line:"다음 모듈에서는 불확실한 요소가 본질인 현상을 다루는 확률 모형(무작위 행보)과, 수리 모형이 현상의 이해·예측·통제에서 맡는 역할을 살펴봅니다."};
 
@@ -854,7 +857,7 @@ on("m36-sir",function(s){
 on("m36-r0",function(s){
   var X=linG(0,3,50,400),Y=linG(0,1,220,40);
   [0,0.25,0.5,0.75,1].forEach(function(v){el("line",{x1:50,x2:400,y1:Y(v),y2:Y(v),stroke:C.grid},s);tG(s,44,Y(v)+3,Math.round(v*100)+"%",{a:"end",fs:9,c:C.gray2,fw:500});});
-  [0,0.5,1,1.5,2,2.5,3].forEach(function(v){tG(s,X(v),236,v,{fs:9,c:C.gray2,fw:500});});tG(s,400,256,"R₀ = β/γ × S(0)/N",{a:"end",fs:10,c:C.gray,fw:800});
+  [0,0.5,1,1.5,2,2.5,3].forEach(function(v){tG(s,X(v),236,v,{fs:9,c:C.gray2,fw:500});});tG(s,400,256,"R₀ = β/γ",{a:"end",fs:10,c:C.gray,fw:800});
   function fs(R){if(R<=1)return 0;var z=0.5;for(var i=0;i<300;i++)z=1-Math.exp(-R*z);return z;}
   el("rect",{x:X(0),y:40,width:X(1)-X(0),height:180,fill:"#EEF4FB"},s);tG(s,X(0.5),60,"유행이 시작되지 않음",{fw:800,fs:10.5,c:"#1C6EA4"});tG(s,X(2.1),60,"유행이 시작됨",{fw:800,fs:10.5,c:REDG});
   el("line",{x1:X(1),x2:X(1),y1:40,y2:220,stroke:C.navy3,"stroke-dasharray":"4 3"},s);
@@ -885,7 +888,7 @@ on("m36-ext",function(s){
 /* 실습 1 · SIR 조작(조작형) */
 (function(){
   var bb=document.getElementById("m36-b");if(!bb)return;var gg=document.getElementById("m36-g1"),svg=document.getElementById("m36-p1-svg");
-  function draw(){var b=+bb.value,g=+gg.value,o=sirG(b,g,150),r0=b/g*(NW-I0)/NW;clear(svg);
+  function draw(){var b=+bb.value,g=+gg.value,o=sirG(b,g,150),r0=b/g;clear(svg);
     var A=axG(svg,44,320,10,176,150,30,1000,250),X=A[0],Y=A[1];tG(svg,320,198,"일",{a:"end",fs:9,c:C.gray,fw:700});
     var bs=baseG();el("path",{d:plG(bs.slice(0,151).map(function(r){return[r[0],r[2]];}),X,Y),fill:"none",stroke:"#E9A7A0","stroke-width":1.6,"stroke-dasharray":"4 3"},svg);
     [[1,BLUG],[2,REDG],[3,GRNG]].forEach(function(c){el("path",{d:plG(o.map(function(r){return[r[0],r[c[0]]];}),X,Y),fill:"none",stroke:c[1],"stroke-width":2.4},svg);});
@@ -960,9 +963,9 @@ for(var gi=0;gi<GLOSSARY.length;gi+=6){
 }
 (function(){
   var s=document.createElement("section");s.className="slide";s.dataset.step="6";s.id="end";
-  var refs=REFS.length?'<div class="pcol" style="gap:10px"><div class="plabel" style="margin:0">참고자료</div><ol class="refs">'+REFS.map(function(r){return '<li><span>['+r.n+']</span><div>'+r.title+', '+r.org+'. <a href="'+r.url+'" target="_blank" rel="noopener">'+r.url+'</a> ('+r.date+')</div></li>';}).join("")+'</ol></div>':'';
+  var refs=REFS.length?'<div class="pcol" style="gap:10px;min-height:0;overflow:hidden"><div class="plabel" style="margin:0">참고자료</div><ol class="refs">'+REFS.map(function(r){return '<li><span>['+r.n+']</span><div>'+r.title+', '+r.org+'. <a href="'+r.url+'" target="_blank" rel="noopener">'+r.url+'</a> ('+r.date+')</div></li>';}).join("")+'</ol></div>':'';
   s.innerHTML='<div class="sh"><div class="sec">마무리</div><h2>'+(REFS.length?"참고자료와 다음 모듈":"다음 모듈")+'</h2></div>'+
-    '<div class="body '+(REFS.length?'split even':'full')+'" style="align-content:center">'+refs+
+    '<div class="body '+(REFS.length?'split even':'full')+'" style="'+(REFS.length?'grid-template-rows:minmax(0,1fr)':'align-content:center')+'">'+refs+
     '<div class="pcol" style="justify-content:center"><div class="nextmod"><small>다음 모듈 · '+NEXT.title+'</small><strong>'+NEXT.line+'</strong></div></div></div>'+
     '<p class="foot">학습 상태는 저장되지 않습니다.</p>';
   vp.appendChild(s);

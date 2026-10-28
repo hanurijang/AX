@@ -195,7 +195,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
 .gi .d{font-size:14px;line-height:1.5}
 .gi .e{font-size:12.5px;line-height:1.45;color:var(--gray)}
 .gi .e strong{color:var(--navy3)}
-.refs{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:8px;font-size:13.5px;line-height:1.5}
+.refs{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:8px;font-size:13.5px;line-height:1.5;overflow-y:auto;flex:1 1 auto;min-height:0}
 .refs li{display:grid;grid-template-columns:30px 1fr;gap:4px}
 .refs li span{font-weight:800;color:var(--navy3)}
 .refs a{color:var(--navy2);word-break:break-all}
@@ -448,7 +448,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
         </div>
         <div class="side">
           <ul class="key"><li><b>사전분포</b> p(θ) → <b>사후분포</b> p(θ | x)</li><li><b>베이즈 정리</b>로 갱신합니다.</li></ul>
-          <p class="exp">베이즈 통계에서는 통계 모형의 파라미터 θ를 확률변수로 취급해 그 확률분포를 생각합니다. 준비로서 통계 모형 p(x | θ)와 함께 분석자가 데이터를 알기 전 단계의 θ의 확률분포, 즉 사전분포 p(θ)를 마련해 둡니다. 이를 이용해 데이터를 안 후의 θ의 확률분포인 사후분포 p(θ | x)를 구하는 것이 베이즈 통계에서의 추정이며, 이때 베이즈 정리를 이용합니다. 우변의 분자는 가능도와 사전분포의 곱이고, 분모 p(x)는 데이터를 얻을 확률입니다. 분모를 직접 구하기 어려운 경우가 많아 다음 모듈의 MCMC 방법이라는 난수 발생 알고리즘으로 근사적으로 구합니다.</p>
+          <p class="exp">베이즈 통계에서는 통계 모형의 파라미터 θ를 확률변수로 취급해 그 확률분포를 생각합니다. 준비로서 통계 모형 p(x | θ)와 함께 분석자가 데이터를 알기 전 단계의 θ의 확률분포, 즉 사전분포 p(θ)를 마련해 둡니다. 이를 이용해 데이터를 안 후의 θ의 확률분포인 사후분포 p(θ | x)를 구하는 것이 베이즈 통계에서의 추정이며, 이때 베이즈 정리를 이용합니다. 우변의 분자는 가능도와 사전분포의 곱이고, 분모 p(x)는 데이터를 얻을 확률입니다. 이 분모는 θ를 포함하지 않는 상수로 볼 수 있어, 사후분포는 가능도 × 사전분포에 비례합니다. 다음 모듈의 MCMC는 이 비례 관계로 사후분포를 따르는 표본을 만듭니다. 분모 p(x) 자체를 근사하는 알고리즘은 아닙니다.</p>
           <p class="next"><span>다음 질문</span>사전분포는 어떻게 정할까?</p>
         </div>
       </div>
@@ -531,7 +531,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
           <div class="stats three"><div><small>사후 평균</small><strong id="m30-pm">-</strong></div><div><small>사후 표준편차</small><strong id="m30-ps">-</strong></div><div><small>95% 구간</small><strong id="m30-ci" style="font-size:15px">-</strong></div></div>
           <p class="howto">도전: 두 사전분포의 사후 평균 차이가 10 MPa 이내로 줄어드는 n을 찾아보세요.</p>
           <p class="pmsg" id="m30-msg"></p>
-          <div class="think"><span>생각해보기</span>데이터가 많아지면 사전분포의 영향은 왜 줄어들까요?</div>
+          <div class="think" style="flex-wrap:wrap"><span>생각해보기</span>데이터가 많아지면 사전분포의 영향은 왜 줄어들까요?<details style="flex-basis:100%;font-weight:600"><summary style="cursor:pointer">예시 답</summary>데이터가 많으면 가능도가 뾰족해져, 넓은 사전분포가 사후에 덜 남습니다.</details></div>
         </div>
       </div>
     </section>
@@ -548,7 +548,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
           <div class="plabel" style="margin:0">결과 확인 · <span id="p2-count">0 / 0</span></div>
           <div class="bins" id="p2-bins" style="grid-template-columns:repeat(2,1fr)"></div>
           <div class="p2row"><p class="pmsg" id="p2-msg"></p><button class="btn ghost" id="p2-reset">다시 하기</button></div>
-          <div class="think"><span>생각해보기</span>신강종 개발 보고서에는 어느 쪽 표현이 더 쓸모 있을까요?</div>
+          <div class="think" style="flex-wrap:wrap"><span>생각해보기</span>신강종 개발 보고서에는 어느 쪽 표현이 더 쓸모 있을까요?<details style="flex-basis:100%;font-weight:600"><summary style="cursor:pointer">예시 답</summary>‘550 MPa 이상일 확률’처럼 사후확률로 말하는 편이 결정에 더 쓸모 있습니다.</details></div>
         </div>
       </div>
     </section>
@@ -568,7 +568,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
           <button class="btn" id="m30-check" style="align-self:flex-start">사후분포로 계산</button>
           <div class="stats three"><div><small>내 예측</small><strong id="m30-mine">-</strong></div><div><small>실제 확률</small><strong id="m30-act">?</strong></div><div><small>사후 평균 ± SD</small><strong id="m30-post" style="font-size:14px">-</strong></div></div>
           <p class="pmsg" id="m30-msg3"></p>
-          <div class="think"><span>생각해보기</span>같은 기준이라도 시험편이 늘면 확률이 왜 바뀌나요?</div>
+          <div class="think" style="flex-wrap:wrap"><span>생각해보기</span>같은 기준이라도 시험편이 늘면 확률이 왜 바뀌나요?<details style="flex-basis:100%;font-weight:600"><summary style="cursor:pointer">예시 답</summary>시험편이 늘면 가능도가 달라져, 같은 기준의 사후확률도 바뀝니다.</details></div>
         </div>
       </div>
     </section>
@@ -646,7 +646,9 @@ var GLOSSARY=[
 ];
 var REFS=[
  {n:1,title:"On Information and Sufficiency",org:"S. Kullback, R. A. Leibler, The Annals of Mathematical Statistics 22(1), 79–86, 1951",url:"https://doi.org/10.1214/aoms/1177729694",date:"2026-10-27 확인"},
- {n:2,title:"Asymptotic Equivalence of Bayes Cross Validation and Widely Applicable Information Criterion in Singular Learning Theory",org:"S. Watanabe, Journal of Machine Learning Research 11, 3571–3594, 2010",url:"https://jmlr.org/papers/v11/watanabe10a.html",date:"2026-10-27 확인"}
+ {n:2,title:"Asymptotic Equivalence of Bayes Cross Validation and Widely Applicable Information Criterion in Singular Learning Theory",org:"S. Watanabe, Journal of Machine Learning Research 11, 3571–3594, 2010",url:"https://jmlr.org/papers/v11/watanabe10a.html",date:"2026-10-27 확인"},
+ {n:3,title:"데이터로 배우는 통계학",org:"K-MOOC",url:"https://www.kmooc.kr/view/course/detail/20384",date:"2026-10-28 확인"},
+ {n:4,title:"R을 활용한 통계학개론",org:"K-MOOC, KOCW 공개강의",url:"https://www.kocw.net/home/search/kemView.do?kemId=1517479",date:"2026-10-28 확인"}
 ];
 var NEXT={title:"M31 MCMC와 베이즈 통계 사례",line:"다음 모듈에서는 사후분포를 난수로 근사하는 MCMC 방법과, 이표본 평균값 비교·푸아송 회귀·계층적 베이지안 모형 같은 베이즈 통계 사례를 살펴봅니다."};
 
@@ -940,9 +942,9 @@ for(var gi=0;gi<GLOSSARY.length;gi+=6){
 }
 (function(){
   var s=document.createElement("section");s.className="slide";s.dataset.step="6";s.id="end";
-  var refs=REFS.length?'<div class="pcol" style="gap:10px"><div class="plabel" style="margin:0">참고자료</div><ol class="refs">'+REFS.map(function(r){return '<li><span>['+r.n+']</span><div>'+r.title+', '+r.org+'. <a href="'+r.url+'" target="_blank" rel="noopener">'+r.url+'</a> ('+r.date+')</div></li>';}).join("")+'</ol></div>':'';
+  var refs=REFS.length?'<div class="pcol" style="gap:10px;min-height:0;overflow:hidden"><div class="plabel" style="margin:0">참고자료</div><ol class="refs">'+REFS.map(function(r){return '<li><span>['+r.n+']</span><div>'+r.title+', '+r.org+'. <a href="'+r.url+'" target="_blank" rel="noopener">'+r.url+'</a> ('+r.date+')</div></li>';}).join("")+'</ol></div>':'';
   s.innerHTML='<div class="sh"><div class="sec">마무리</div><h2>'+(REFS.length?"참고자료와 다음 모듈":"다음 모듈")+'</h2></div>'+
-    '<div class="body '+(REFS.length?'split even':'full')+'" style="align-content:center">'+refs+
+    '<div class="body '+(REFS.length?'split even':'full')+'" style="'+(REFS.length?'grid-template-rows:minmax(0,1fr)':'align-content:center')+'">'+refs+
     '<div class="pcol" style="justify-content:center"><div class="nextmod"><small>다음 모듈 · '+NEXT.title+'</small><strong>'+NEXT.line+'</strong></div></div></div>'+
     '<p class="foot">학습 상태는 저장되지 않습니다.</p>';
   vp.appendChild(s);

@@ -195,7 +195,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
 .gi .d{font-size:14px;line-height:1.5}
 .gi .e{font-size:12.5px;line-height:1.45;color:var(--gray)}
 .gi .e strong{color:var(--navy3)}
-.refs{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:8px;font-size:13.5px;line-height:1.5}
+.refs{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:8px;font-size:13.5px;line-height:1.5;overflow-y:auto;flex:1 1 auto;min-height:0}
 .refs li{display:grid;grid-template-columns:30px 1fr;gap:4px}
 .refs li span{font-weight:800;color:var(--navy3)}
 .refs a{color:var(--navy2);word-break:break-all}
@@ -530,7 +530,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
           <div class="stats three"><div><small>이론 확률</small><strong id="m24-th">-</strong></div><div><small>‘효과 있음’ 팀</small><strong id="m24-sim">-</strong></div><div><small>목표 α</small><strong>5%</strong></div></div>
           <p class="howto">도전: ‘효과 있음’ 보고 확률이 50%를 처음 넘는 k를 찾아보세요.</p>
           <p class="pmsg" id="m24-msg"></p>
-          <div class="think"><span>생각해보기</span>분석 계획을 미리 정해 두면 이 문제를 어떻게 막을 수 있을까요?</div>
+          <div class="think" style="flex-wrap:wrap"><span>생각해보기</span>분석 계획을 미리 정해 두면 이 문제를 어떻게 막을 수 있을까요?<details style="flex-basis:100%;font-weight:600"><summary style="cursor:pointer">예시 답</summary>가설, 표본크기, 보고할 지표를 미리 정해 두면 유의한 것만 고르기 어렵습니다.</details></div>
         </div>
       </div>
     </section>
@@ -547,7 +547,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
           <div class="plabel" style="margin:0">결과 확인 · <span id="p2-count">0 / 0</span></div>
           <div class="bins" id="p2-bins"></div>
           <div class="p2row"><p class="pmsg" id="p2-msg"></p><button class="btn ghost" id="p2-reset">다시 하기</button></div>
-          <div class="think"><span>생각해보기</span>세 가지 원인 중 분석하는 사람이 직접 막을 수 있는 것은 무엇일까요?</div>
+          <div class="think" style="flex-wrap:wrap"><span>생각해보기</span>세 가지 원인 중 분석하는 사람이 직접 막을 수 있는 것은 무엇일까요?<details style="flex-basis:100%;font-weight:600"><summary style="cursor:pointer">예시 답</summary>선택적 보고와 p-해킹은 계획과 공개로 막을 수 있습니다. 학술지 쪽 출판편향은 개인만으로 어렵습니다.</details></div>
         </div>
       </div>
     </section>
@@ -566,7 +566,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
           <button class="btn" id="m24-check" style="align-self:flex-start">시뮬레이션 결과 보기</button>
           <div class="stats three"><div><small>내 예측</small><strong id="m24-mine">-</strong></div><div><small>게재 평균</small><strong id="m24-act">?</strong></div><div><small>게재 건수</small><strong id="m24-cnt">?</strong></div></div>
           <p class="pmsg" id="m24-msg3"></p>
-          <div class="think"><span>생각해보기</span>A공장의 +12 MPa는 실제 효과가 얼마일 때도 나올 수 있을까요?</div>
+          <div class="think" style="flex-wrap:wrap"><span>생각해보기</span>A공장의 +12 MPa는 실제 효과가 얼마일 때도 나올 수 있을까요?<details style="flex-basis:100%;font-weight:600"><summary style="cursor:pointer">예시 답</summary>실제 효과가 0이어도 표본 흔들림만으로 +12 MPa가 나올 수 있습니다.</details></div>
         </div>
       </div>
     </section>
@@ -640,7 +640,8 @@ var GLOSSARY=[
 var REFS=[
  {n:1,title:"Estimating the reproducibility of psychological science",org:"Open Science Collaboration, Science 349(6251), aac4716, 2015",url:"https://doi.org/10.1126/science.aac4716",date:"2026-10-27 확인"},
  {n:2,title:"The ASA Statement on p-Values: Context, Process, and Purpose",org:"R. L. Wasserstein, N. A. Lazar, The American Statistician 70(2), 129–133, 2016",url:"https://doi.org/10.1080/00031305.2016.1154108",date:"2026-10-27 확인"},
- {n:3,title:"Redefine statistical significance",org:"D. J. Benjamin 외, Nature Human Behaviour 2, 6–10, 2018",url:"https://doi.org/10.1038/s41562-017-0189-z",date:"2026-10-27 확인"}
+ {n:3,title:"Redefine statistical significance",org:"D. J. Benjamin 외, Nature Human Behaviour 2, 6–10, 2018",url:"https://doi.org/10.1038/s41562-017-0189-z",date:"2026-10-27 확인"},
+ {n:4,title:"데이터로 배우는 통계학",org:"K-MOOC",url:"https://www.kmooc.kr/view/course/detail/20384",date:"2026-10-28 확인"}
 ];
 var NEXT={title:"M25 p값과 효과크기 다시 보기",line:"다음 모듈에서는 p값의 정확한 뜻을 되짚고, 피셔류와 네이만-피어슨류 검정, 효과크기를 함께 보는 법을 배웁니다."};
 
@@ -968,9 +969,9 @@ for(var gi=0;gi<GLOSSARY.length;gi+=6){
 }
 (function(){
   var s=document.createElement("section");s.className="slide";s.dataset.step="6";s.id="end";
-  var refs=REFS.length?'<div class="pcol" style="gap:10px"><div class="plabel" style="margin:0">참고자료</div><ol class="refs">'+REFS.map(function(r){return '<li><span>['+r.n+']</span><div>'+r.title+', '+r.org+'. <a href="'+r.url+'" target="_blank" rel="noopener">'+r.url+'</a> ('+r.date+')</div></li>';}).join("")+'</ol></div>':'';
+  var refs=REFS.length?'<div class="pcol" style="gap:10px;min-height:0;overflow:hidden"><div class="plabel" style="margin:0">참고자료</div><ol class="refs">'+REFS.map(function(r){return '<li><span>['+r.n+']</span><div>'+r.title+', '+r.org+'. <a href="'+r.url+'" target="_blank" rel="noopener">'+r.url+'</a> ('+r.date+')</div></li>';}).join("")+'</ol></div>':'';
   s.innerHTML='<div class="sh"><div class="sec">마무리</div><h2>'+(REFS.length?"참고자료와 다음 모듈":"다음 모듈")+'</h2></div>'+
-    '<div class="body '+(REFS.length?'split even':'full')+'" style="align-content:center">'+refs+
+    '<div class="body '+(REFS.length?'split even':'full')+'" style="'+(REFS.length?'grid-template-rows:minmax(0,1fr)':'align-content:center')+'">'+refs+
     '<div class="pcol" style="justify-content:center"><div class="nextmod"><small>다음 모듈 · '+NEXT.title+'</small><strong>'+NEXT.line+'</strong></div></div></div>'+
     '<p class="foot">학습 상태는 저장되지 않습니다.</p>';
   vp.appendChild(s);

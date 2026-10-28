@@ -195,7 +195,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
 .gi .d{font-size:14px;line-height:1.5}
 .gi .e{font-size:12.5px;line-height:1.45;color:var(--gray)}
 .gi .e strong{color:var(--navy3)}
-.refs{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:8px;font-size:13.5px;line-height:1.5}
+.refs{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:8px;font-size:13.5px;line-height:1.5;overflow-y:auto;flex:1 1 auto;min-height:0}
 .refs li{display:grid;grid-template-columns:30px 1fr;gap:4px}
 .refs li span{font-weight:800;color:var(--navy3)}
 .refs a{color:var(--navy2);word-break:break-all}
@@ -447,12 +447,12 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
             <div class="mt">핵심 수학 개념 · 반복 검정의 제1종 오류</div>
             <div class="f">1 − (1 − α)<sup>k</sup> &nbsp;(k: 검정 횟수)</div>
             <div class="r"><span>계산</span><span>3쌍: 1 − (1 − 0.05)³ = 1 − 0.857 ≈ 0.143</span></div>
-            <div class="r"><span>해석</span><span>설정한 0.05를 훌쩍 넘습니다.</span></div>
+            <div class="r"><span>해석</span><span>검정이 서로 독립일 때의 값입니다. 쌍별 비교의 정확한 오류율은 아닙니다.</span></div>
           </div>
         </div>
         <div class="side">
           <ul class="key"><li>반복할수록 제1종 오류가 쉽게 일어납니다.</li><li>분산분석의 결론만으로 어느 쌍인지 모릅니다.</li></ul>
-          <p class="exp">비료 예시의 분산분석은 F = 60.7로 유의했지만, 대립가설 ‘적어도 한 쌍에는 차이가 있다’만으로는 어느 쌍인지 알 수 없습니다. 그렇다고 3쌍에 이표본 t검정을 유의수준 0.05로 반복하면, 적어도 한 쌍에서 제1종 오류가 일어날 확률이 0.143이 됩니다. 집단 수가 늘수록 쌍의 수(ₙC₂)도 늘어, 실은 차이가 없는데도 있다고 말하는 잘못이 쉽게 일어납니다.</p>
+          <p class="exp">비료 예시의 분산분석은 F = 60.7로 유의했지만, 대립가설 ‘적어도 한 쌍에는 차이가 있다’만으로는 어느 쌍인지 알 수 없습니다. k개의 검정이 서로 독립이고 각각의 제1종 오류가 α라면, 하나 이상 거짓 양성이 나올 확률은 1 − (1 − α)ᵏ입니다. 3쌍이 독립이면 이 값은 0.143입니다. 같은 데이터로 하는 쌍별 비교는 서로 독립이 아닐 수 있으므로, 이 식을 일반적인 정확한 오류율로 쓰지 않습니다. 사후검정에서는 비교 구조에 맞는 다중비교를 고릅니다.</p>
           <p class="next"><span>다음 질문</span>반복 검정 문제는 어떻게 피할까?</p>
         </div>
       </div>
@@ -533,7 +533,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
           <thead><tr><th>개념</th><th>무엇인가</th><th>비료 예시</th></tr></thead>
           <tbody>
             <tr><td>분산분석</td><td>F = 집단 간 변동 ÷ 집단 내 변동. ‘적어도 한 쌍은 다름’을 판단합니다.</td><td>F = 60.7, p &lt; 10⁻⁷</td></tr>
-            <tr><td>검정 다중성</td><td>t검정을 반복하면 제1종 오류 확률이 1 − (1 − α)ᵏ로 커집니다.</td><td>3쌍 → 0.143</td></tr>
+            <tr><td>검정 다중성</td><td>독립인 k개 검정이면 1 − (1 − α)ᵏ. 쌍별 비교는 독립이 아닐 수 있습니다.</td><td>독립일 때 3쌍 → 0.143</td></tr>
             <tr><td>다중비교 검정</td><td>본페로니(α/k), 튜키(모든 쌍), 던넷(대조군과), 윌리엄스(단조 변화)</td><td>튜키: A–B *, A–C ***, B–C ***</td></tr>
             <tr><td>비모수 대안</td><td>크러스컬-월리스, 스틸-드와스(튜키에 상응), 스틸(던넷에 상응)</td><td>순위합 25 / 53 / 93, p = 0.0011</td></tr>
           </tbody>
@@ -559,7 +559,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
           <div class="stats"><div><small>F값 (5% 지점 3.68)</small><strong id="m15-fv">-</strong></div><div><small>p값</small><strong id="m15-pv">-</strong></div></div>
           <p class="howto">도전: 집단 간 차이는 그대로(× 1.0) 두고, 흩어짐만 키워 p ≥ 0.05가 되는 지점을 찾아보세요.</p>
           <p class="pmsg" id="m15-msg"></p>
-          <div class="think"><span>생각해보기</span>평균의 차이가 같아도 결론이 달라지는 이유는 무엇인가요?</div>
+          <div class="think" style="flex-wrap:wrap"><span>생각해보기</span>평균의 차이가 같아도 결론이 달라지는 이유는 무엇인가요?<details style="flex-basis:100%;font-weight:600"><summary style="cursor:pointer">예시 답</summary>집단 안 퍼짐이 다르면 같은 평균 차이도 F와 p가 달라집니다.</details></div>
         </div>
       </div>
     </section>
@@ -576,26 +576,26 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
           <div class="plabel" style="margin:0">결과 확인 · <span id="p2-count">0 / 0</span></div>
           <div class="bins" id="p2-bins" style="grid-template-columns:repeat(2,1fr)"></div>
           <div class="p2row"><p class="pmsg" id="p2-msg"></p><button class="btn ghost" id="p2-reset">다시 하기</button></div>
-          <div class="think"><span>생각해보기</span>던넷 검정의 검정력이 튜키 검정보다 높은 이유는?</div>
+          <div class="think" style="flex-wrap:wrap"><span>생각해보기</span>던넷 검정의 검정력이 튜키 검정보다 높은 이유는?<details style="flex-basis:100%;font-weight:600"><summary style="cursor:pointer">예시 답</summary>던넷은 대조군과의 비교만 해서 비교 횟수가 적고, 그래서 각 비교의 검정력이 높습니다.</details></div>
         </div>
       </div>
     </section>
 
     <!-- ⑥ 실습 3 · 추정형 (모듈 전용) ─────────────── -->
     <section class="slide" data-step="5" id="p3">
-      <div class="sh"><div class="sec">실습 3 · 추정형</div><h2>목표: 모든 쌍을 t검정으로 비교할 때 제1종 오류 확률을 예측하고 확인합니다</h2></div>
+      <div class="sh"><div class="sec">실습 3 · 추정형</div><h2>목표: 검정이 서로 독립일 때, 모든 쌍을 반복하면 제1종 오류가 얼마나 커지는지 예측합니다</h2></div>
       <div class="body split">
         <div class="pcol">
-          <div class="plabel">해보기 · 집단 수를 고르고, 모든 쌍을 유의수준 0.05로 반복 검정할 때 ‘적어도 한 번’ 잘못 기각할 확률을 예측하세요</div>
-          <div class="fig" style="flex:1"><svg id="m15-p3-svg" viewBox="0 0 470 210" role="img" aria-label="쌍의 수에 따른 제1종 오류 확률 곡선"></svg></div>
+          <div class="plabel">해보기 · 검정이 서로 독립일 때, 집단 수를 고르고 ‘적어도 한 번’ 잘못 기각할 확률을 예측하세요</div>
+          <div class="fig" style="flex:1"><svg id="m15-p3-svg" viewBox="0 0 470 210" role="img" aria-label="검정이 서로 독립일 때 쌍의 수에 따른 제1종 오류 확률"></svg></div>
         </div>
         <div class="pcol" style="gap:9px;justify-content:center">
           <div class="mbtns" id="m15-qg" style="gap:6px"></div>
           <div class="ctrl">내 예측<input type="range" id="m15-g" min="0" max="100" step="1" value="20" aria-label="제1종 오류 확률 예측(%)"><strong id="m15-gv" style="min-width:56px;text-align:right">-</strong></div>
           <button class="btn" id="m15-check" style="align-self:flex-start">계산해서 확인</button>
-          <div class="stats"><div><small>내 예측</small><strong id="m15-mine">-</strong></div><div><small>실제 확률</small><strong id="m15-act">?</strong></div></div>
+          <div class="stats"><div><small>내 예측</small><strong id="m15-mine">-</strong></div><div><small>독립일 때</small><strong id="m15-act">?</strong></div></div>
           <p class="pmsg" id="m15-msg3"></p>
-          <div class="think"><span>생각해보기</span>본페로니 교정을 쓰면 이 확률은 어떻게 되나요?</div>
+          <div class="think" style="flex-wrap:wrap"><span>생각해보기</span>본페로니 교정을 쓰면 이 확률은 어떻게 되나요?<details style="flex-basis:100%;font-weight:600"><summary style="cursor:pointer">예시 답</summary>비교마다 유의수준을 비교 횟수로 나눠, 하나라도 잘못 유의할 확률의 상한이 낮아집니다.</details></div>
         </div>
       </div>
     </section>
@@ -638,9 +638,9 @@ var QUIZ=[
  {goal:1,type:"O/X 오개념",stem:"“분산분석에서 p < 0.05가 나왔으므로, 비료 A, B, C의 모든 쌍 사이에 차이가 있다고 결론 내릴 수 있다.”",
   opts:["O","X"],ans:1,ox:true,
   exp:"분산분석의 대립가설은 ‘적어도 한 쌍에는 차이가 있다’입니다. p < 0.05로 대립가설을 채택해도 어느 쌍에 차이가 있는지까지는 알 수 없으므로, 이를 알려면 다중비교 검정을 해야 합니다.",back:"s-4-1a",backLabel:"4-1 분산분석의 가설 다시 보기"},
- {goal:2,type:"계산",stem:"4개 집단의 모든 쌍(6쌍)을 각각 유의수준 0.05의 t검정으로 비교합니다. 귀무가설이 모두 옳을 때, 적어도 한 쌍에서 제1종 오류가 일어날 확률은 약 얼마일까요?",
+ {goal:2,type:"계산",stem:"4개 집단의 모든 쌍(6쌍)을 유의수준 0.05의 t검정으로 비교합니다. 여섯 검정이 서로 독립이고 귀무가설이 모두 옳다면, 적어도 한 쌍에서 제1종 오류가 일어날 확률은 약 얼마일까요?",
   opts:["약 0.26","약 0.05","약 0.20","약 0.30"],ans:0,
-  exp:"1 − (어느 쌍에서도 제1종 오류가 일어나지 않을 확률) = 1 − (1 − 0.05)⁶ = 1 − 0.95⁶ ≈ 0.26입니다. 0.30은 0.05를 6번 단순히 더한 값입니다. 쌍이 많을수록 전체 제1종 오류 확률이 커집니다.",back:"s-4-3a",backLabel:"4-3 검정 다중성 다시 보기"},
+  exp:"검정이 서로 독립이면 1 − (1 − 0.05)⁶ = 1 − 0.95⁶ ≈ 0.26입니다. 0.30은 0.05를 6번 더한 값입니다. 같은 데이터의 쌍별 비교는 독립이 아닐 수 있어, 0.26을 정확한 오류율로 쓰지는 않습니다.",back:"s-4-3a",backLabel:"4-3 검정 다중성 다시 보기"},
  {goal:2,type:"상황 판단",stem:"기존 공정(대조군)과 새로 개발한 공정 3종을 비교합니다. 관심은 ‘새 공정 각각이 기존 공정과 다른가’뿐입니다. 가장 알맞은 다중비교 방법은 무엇일까요?",
   opts:["던넷 검정","튜키 검정","t검정을 6번 반복","윌리엄스 검정"],ans:0,
   exp:"대조군과의 비교에만 관심이 있을 때는 던넷 검정을 씁니다. 모든 쌍을 비교하는 튜키 검정보다 검정력이 높습니다. 윌리엄스 검정은 처리량이 늘수록 단조 증가(또는 감소)한다고 상정할 수 있을 때 씁니다.",back:"s-4-4b",backLabel:"4-4 던넷·윌리엄스 검정 다시 보기"},
@@ -673,7 +673,12 @@ var GLOSSARY=[
  ["크러스컬-월리스 검정","Kruskal-Wallis test","정규성이 없을 때 분산분석 대신 쓰는 3집단 이상의 비모수검정입니다.","순위합 25 / 53 / 93, p = 0.0011"],
  ["스틸-드와스 검정","Steel-Dwass test","튜키 검정에 상응하는 비모수 다중비교 방법입니다. 던넷 검정에 상응하는 것은 스틸 검정입니다.","정규성 없는 세 공정의 쌍별 비교"]
 ];
-var REFS=[];
+var REFS=[
+ {n:1,title:"기초통계학Ⅱ",org:"여인권, 숙명여자대학교, KOCW 공개강의",url:"https://www.kocw.net/home/search/kemView.do?kemId=1080231",date:"2026-10-28 확인"},
+ {n:2,title:"데이터로 배우는 통계학",org:"K-MOOC",url:"https://www.kmooc.kr/view/course/detail/20384",date:"2026-10-28 확인"},
+ {n:3,title:"R을 활용한 통계학개론",org:"K-MOOC, KOCW 공개강의",url:"https://www.kocw.net/home/search/kemView.do?kemId=1517479",date:"2026-10-28 확인"},
+ {n:4,title:"공공데이터포털",org:"행정안전부",url:"https://www.data.go.kr",date:"2026-10-28 확인"}
+];
 var NEXT={title:"M16 비율 비교",line:"지금까지는 양적 데이터의 평균을 비교했습니다. 다음 모듈에서는 앞면·뒷면이나 불량·양품처럼 범주형 데이터의 비율을 검정하는 방법을 배웁니다."};
 
 /* =====================================================================
@@ -950,7 +955,7 @@ on("m15-np",function(s){
   g.addEventListener("input",function(){txt();draw();});
   document.getElementById("m15-check").onclick=function(){checked=true;var a=fw(ng),gv=+g.value/100,m=document.getElementById("m15-msg3"),ok=Math.abs(gv-a)<=.05;
     document.getElementById("m15-act").textContent=(a*100).toFixed(1)+"%";m.className="pmsg "+(ok?"ok":"ng");
-    m.textContent=(ok?"가깝게 예측했습니다. ":"실제와 차이가 있습니다. ")+ng+"집단 "+pairs(ng)+"쌍이면 1 − 0.95의 "+pairs(ng)+"제곱 ≈ "+(a*100).toFixed(1)+"%입니다. 쌍이 늘수록 ‘가짜 차이’를 찾을 확률이 커집니다.";draw();};
+    m.textContent=(ok?"가깝게 예측했습니다. ":"독립일 때의 값과 차이가 있습니다. ")+ng+"집단 "+pairs(ng)+"쌍, 검정이 독립이면 1 − 0.95의 "+pairs(ng)+"제곱 ≈ "+(a*100).toFixed(1)+"%입니다. 같은 데이터의 쌍별 비교는 이 값과 다를 수 있습니다.";draw();};
   txt();reset();
 })();
 
@@ -990,9 +995,9 @@ for(var gi=0;gi<GLOSSARY.length;gi+=6){
 }
 (function(){
   var s=document.createElement("section");s.className="slide";s.dataset.step="6";s.id="end";
-  var refs=REFS.length?'<div class="pcol" style="gap:10px"><div class="plabel" style="margin:0">참고자료</div><ol class="refs">'+REFS.map(function(r){return '<li><span>['+r.n+']</span><div>'+r.title+', '+r.org+'. <a href="'+r.url+'" target="_blank" rel="noopener">'+r.url+'</a> ('+r.date+')</div></li>';}).join("")+'</ol></div>':'';
+  var refs=REFS.length?'<div class="pcol" style="gap:10px;min-height:0;overflow:hidden"><div class="plabel" style="margin:0">참고자료</div><ol class="refs">'+REFS.map(function(r){return '<li><span>['+r.n+']</span><div>'+r.title+', '+r.org+'. <a href="'+r.url+'" target="_blank" rel="noopener">'+r.url+'</a> ('+r.date+')</div></li>';}).join("")+'</ol></div>':'';
   s.innerHTML='<div class="sh"><div class="sec">마무리</div><h2>'+(REFS.length?"참고자료와 다음 모듈":"다음 모듈")+'</h2></div>'+
-    '<div class="body '+(REFS.length?'split even':'full')+'" style="align-content:center">'+refs+
+    '<div class="body '+(REFS.length?'split even':'full')+'" style="'+(REFS.length?'grid-template-rows:minmax(0,1fr)':'align-content:center')+'">'+refs+
     '<div class="pcol" style="justify-content:center"><div class="nextmod"><small>다음 모듈 · '+NEXT.title+'</small><strong>'+NEXT.line+'</strong></div></div></div>'+
     '<p class="foot">학습 상태는 저장되지 않습니다.</p>';
   vp.appendChild(s);

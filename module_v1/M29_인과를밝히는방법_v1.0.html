@@ -195,7 +195,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
 .gi .d{font-size:14px;line-height:1.5}
 .gi .e{font-size:12.5px;line-height:1.45;color:var(--gray)}
 .gi .e strong{color:var(--navy3)}
-.refs{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:8px;font-size:13.5px;line-height:1.5}
+.refs{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:8px;font-size:13.5px;line-height:1.5;overflow-y:auto;flex:1 1 auto;min-height:0}
 .refs li{display:grid;grid-template-columns:30px 1fr;gap:4px}
 .refs li span{font-weight:800;color:var(--navy3)}
 .refs a{color:var(--navy2);word-break:break-all}
@@ -430,7 +430,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
         </div>
         <div class="side">
           <ul class="key"><li><b>통계적 인과 추론</b>: 관찰 데이터로 추정</li><li>중첩요인을 모형에 넣어 <b>조정</b>합니다.</li></ul>
-          <p class="exp">개입 실험은 윤리적인 문제가 있거나, 개입 자체가 불가능하거나, 많은 비용이 들어 언제나 가능하지는 않습니다. 유해 물질이 건강에 미치는 영향을 일부러 노출시켜 조사할 수는 없습니다. 이에 실제 데이터에서 인과효과를 추정하는 통계적 인과 추론과, 인과구조를 지정하는 통계적 인과 탐색이 활발히 개발되고 있습니다. 중첩에 대처하는 첫 수단은 다중회귀입니다. 중첩요인 z를 설명변수로 추가하면 편회귀계수 b<sub>1</sub>은 다른 설명변수와의 상관을 제거한 x의 영향이므로 인과효과가 되며, 이를 조정이라 합니다. 단, 투입 변수를 잘못 고르면 효과를 잘못 추정하므로 인과 그래프를 그리고 ‘뒷문(backdoor) 기준’에 따라 정하는 것이 바람직합니다.</p>
+          <p class="exp">개입 실험은 윤리적인 문제가 있거나, 개입 자체가 불가능하거나, 많은 비용이 들어 언제나 가능하지는 않습니다. 유해 물질이 건강에 미치는 영향을 일부러 노출시켜 조사할 수는 없습니다. 이에 실제 데이터에서 인과효과를 추정하는 통계적 인과 추론과, 인과구조를 지정하는 통계적 인과 탐색이 활발히 개발되고 있습니다. 중첩에 대처하는 첫 수단은 다중회귀입니다. 중첩요인 z를 설명변수로 추가하면 편회귀계수 b<sub>1</sub>은 z를 일정하게 두었을 때 x와 y의 조건부 연관입니다. 이를 조정이라 합니다. 측정한 중첩요인이 충분하고, 원인 뒤에 생긴 변수나 부적절한 변수를 넣지 않았을 때 인과효과로 해석합니다. 회귀계수 하나만으로 인과가 입증되지는 않으며, 넣을 변수는 인과 그래프의 ‘뒷문(backdoor) 기준’으로 고릅니다.</p>
           <p class="next"><span>다음 질문</span>중첩요인으로 나눠 보면?</p>
         </div>
       </div>
@@ -442,7 +442,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
         <div class="fig"><svg id="m29-strat" viewBox="0 0 420 270" role="img" aria-label="근속 5구간별 이수자와 비이수자의 불량률 차이와 가중평균 −0.30"></svg></div>
         <div class="side">
           <ul class="key"><li><b>층별 해석</b>: 중첩요인으로 층을 나눔</li><li>층을 고르는 기준이 자의적일 수 있습니다.</li></ul>
-          <p class="exp">또 다른 방법으로, 중첩요인을 기준으로 데이터를 몇 가지 그룹(층)으로 나누어 각 층 안에서 중첩요인의 효과를 가능한 한 작게 하는 방법이 있으며, 이를 층별 해석이라 합니다. 근속을 1~4.8년, 4.8~8.6년처럼 5개 구간으로 나누면 각 층의 이수자와 비이수자는 근속이 비슷해, 층별 차이는 −0.19~−0.42%p이고 인원 가중평균은 −0.30%p입니다. 다중회귀에서는 각각의 설명변수가 독립으로 인과효과를 갖는다고 가정하지만, 층별 해석에서는 층마다 다른 인과효과를 추정할 수 있습니다. 한편 층을 구분할 중첩요인을 어떻게 고를지, 연속값을 어떻게 이산화할지가 자의적이라는 문제가 있으니 주의해야 합니다.</p>
+          <p class="exp">또 다른 방법으로, 중첩요인을 기준으로 데이터를 몇 가지 그룹(층)으로 나누어 각 층 안에서 중첩요인의 효과를 가능한 한 작게 하는 방법이 있으며, 이를 층별 해석이라 합니다. 근속을 1~4.8년, 4.8~8.6년처럼 5개 구간으로 나누면 각 층의 이수자와 비이수자는 근속이 비슷해, 층별 차이는 −0.19~−0.42%p이고 인원 가중평균은 −0.30%p입니다. 다중회귀는 넣은 변수마다 일정한 조건부 연관을 가정하는 단순화이고, 층별 해석에서는 층마다 다른 차이를 볼 수 있습니다. 어느 쪽이든 측정하지 못한 중첩요인이 있으면 인과효과로 단정하지 않습니다. 한편 층을 구분할 중첩요인을 어떻게 고를지, 연속값을 어떻게 이산화할지가 자의적이라는 문제가 있으니 주의해야 합니다.</p>
           <p class="next"><span>다음 질문</span>비슷한 사람끼리 짝지으면?</p>
         </div>
       </div>
@@ -454,7 +454,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
         <div class="fig"><svg id="m29-psm" viewBox="0 0 420 270" role="img" aria-label="근속에 따른 경향 점수 곡선 위에 이수자와 비이수자를 놓고, 경향 점수가 비슷한 쌍 69개를 짝지어 평균 차 −0.30"></svg></div>
         <div class="side">
           <ul class="key"><li><b>경향 점수 짝짓기</b>: 이수 확률이 비슷한 쌍</li><li>여러 중첩요인을 동시에 다룰 수 있습니다.</li></ul>
-          <p class="exp">중첩요인의 대처 방법 중 원인변수 = 0인 집단과 1인 집단에서 비슷한 중첩요인을 가진 데이터를 골라 쌍으로 만드는 짝짓기라는 방법이 있습니다. 특히 루빈과 로젠바움이 제안한 경향 점수 짝짓기(PSM)는 경향 점수라는 1차원 값을 기준으로 쌍을 고르며 자주 사용됩니다<span class="cite">[2]</span>. 경향 점수는 원인변수 = 1에 할당될 확률로, 원인변수(이수 0 또는 1)를 반응변수로, 중첩요인을 설명변수로 한 로지스틱 회귀로 구합니다. 여러 중첩요인을 동시에 다룰 수 있다는 이점이 있습니다. 그리고 고른 쌍으로 반응변수의 차이를 계산해 그 평균값을 효과의 추정량으로 삼으며, 예시에서는 69쌍의 평균 차이가 −0.30%p였습니다.</p>
+          <p class="exp">중첩요인의 대처 방법 중 원인변수 = 0인 집단과 1인 집단에서 비슷한 중첩요인을 가진 데이터를 골라 쌍으로 만드는 짝짓기라는 방법이 있습니다. 특히 루빈과 로젠바움이 제안한 경향 점수 짝짓기(PSM)는 경향 점수라는 1차원 값을 기준으로 쌍을 고르며 자주 사용됩니다<span class="cite">[2]</span>. 경향 점수는 원인변수 = 1에 할당될 확률로, 원인변수(이수 0 또는 1)를 반응변수로, 중첩요인을 설명변수로 한 로지스틱 회귀로 구합니다. 여러 중첩요인을 동시에 다룰 수 있다는 이점이 있습니다. 그리고 고른 쌍으로 반응변수의 차이를 계산해 그 평균값을 효과의 추정량으로 삼으며, 예시에서는 69쌍의 평균 차이가 −0.30%p였습니다. 측정한 요인만 맞춘 것이므로 무작위 배정과 같지는 않고, 재지 못한 중첩요인은 남을 수 있습니다.</p>
           <p class="next"><span>다음 질문</span>처리 전후 데이터가 있다면?</p>
         </div>
       </div>
@@ -512,7 +512,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
           <div class="stats three"><div><small>단순 비교 차</small><strong id="m29-nv">-</strong></div><div><small>선택편향</small><strong id="m29-bv">-</strong></div><div><small>근속 평균 차</small><strong id="m29-zv">-</strong></div></div>
           <p class="howto">도전: 선택편향이 0에 가까워지는 설정을 찾고, 그것이 무엇을 뜻하는지 설명해 보세요.</p>
           <p class="pmsg" id="m29-msg"></p>
-          <div class="think"><span>생각해보기</span>현장에서 교육 대상자를 자원자로만 뽑으면 어떤 편향이 생길까요?</div>
+          <div class="think" style="flex-wrap:wrap"><span>생각해보기</span>현장에서 교육 대상자를 자원자로만 뽑으면 어떤 편향이 생길까요?<details style="flex-basis:100%;font-weight:600"><summary style="cursor:pointer">예시 답</summary>의욕이나 근속이 한쪽에 몰리는 선택편향이 생깁니다.</details></div>
         </div>
       </div>
     </section>
@@ -529,7 +529,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
           <div class="plabel" style="margin:0">결과 확인 · <span id="p2-count">0 / 0</span></div>
           <div class="bins" id="p2-bins" style="grid-template-columns:repeat(2,1fr)"></div>
           <div class="p2row"><p class="pmsg" id="p2-msg"></p><button class="btn ghost" id="p2-reset">다시 하기</button></div>
-          <div class="think"><span>생각해보기</span>우리 회사 교육 효과 분석에 가장 현실적인 방법은 무엇일까요?</div>
+          <div class="think" style="flex-wrap:wrap"><span>생각해보기</span>우리 회사 교육 효과 분석에 가장 현실적인 방법은 무엇일까요?<details style="flex-basis:100%;font-weight:600"><summary style="cursor:pointer">예시 답</summary>이미 있는 기록이라면 측정한 근속을 조정하거나 전후를 비교하는 이중차분이 현실적입니다.</details></div>
         </div>
       </div>
     </section>
@@ -548,7 +548,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
           <button class="btn" id="m29-check" style="align-self:flex-start">이중차분 계산</button>
           <div class="stats three"><div><small>A 전후 차</small><strong id="m29-aa">-</strong></div><div><small>내 예측</small><strong id="m29-mine">-</strong></div><div><small>이중차분 효과</small><strong id="m29-act">?</strong></div></div>
           <p class="pmsg" id="m29-msg3"></p>
-          <div class="think"><span>생각해보기</span>평행 경향 가정이 깨지는 현장 상황은 무엇이 있을까요?</div>
+          <div class="think" style="flex-wrap:wrap"><span>생각해보기</span>평행 경향 가정이 깨지는 현장 상황은 무엇이 있을까요?<details style="flex-basis:100%;font-weight:600"><summary style="cursor:pointer">예시 답</summary>도입한 라인에만 다른 개선이 겹치거나, 두 라인의 추세가 원래 다를 때 깨집니다.</details></div>
         </div>
       </div>
     </section>
@@ -604,7 +604,7 @@ var QUIZ=[
   exp:"무작위 통제 실험은 인과효과를 추정하는 강력한 방법이지만, 피험자에게 나쁜 영향을 줄 수 있는 실험은 윤리적으로 진행하기 어렵습니다. 이럴 때는 실제 데이터에서 다중회귀, 층별 해석, 경향 점수 짝짓기, 이중차분법 같은 통계적 인과 추론 방법을 사용합니다. 단순 평균 비교는 선택편향을 피할 수 없습니다.",back:"s-4-4a",backLabel:"4-4 통계적 인과 추론 다시 보기"},
  {goal:2,type:"상황 판단",stem:"근속연수를 설명변수로 로지스틱 회귀를 실행해 각 작업자가 교육을 이수할 확률을 구한 뒤, 이 확률이 비슷한 이수자와 비이수자를 쌍으로 묶어 불량률 차이의 평균을 냈습니다. 이 방법은 무엇일까요?",
   opts:["경향 점수 짝짓기","층별 해석","이중차분법","AB 테스트"],ans:0,
-  exp:"경향 점수는 원인변수 = 1(이수)에 할당될 확률로, 원인변수를 반응변수로 하고 중첩요인을 설명변수로 한 로지스틱 회귀로 구합니다. 경향 점수가 비슷한 쌍을 골라 반응변수 차이를 평균하면 여러 중첩요인을 동시에 다루면서 무작위 통제 실험과 비슷한 효과를 얻을 수 있습니다.",back:"s-4-4c",backLabel:"4-4 경향 점수 짝짓기 다시 보기"},
+  exp:"경향 점수는 원인변수 = 1(이수)에 할당될 확률로, 원인변수를 반응변수로 하고 중첩요인을 설명변수로 한 로지스틱 회귀로 구합니다. 경향 점수가 비슷한 쌍을 고르면 측정한 중첩요인을 동시에 맞출 수 있습니다. 재지 못한 요인은 남으므로 무작위 배정과 같지는 않습니다.",back:"s-4-4c",backLabel:"4-4 경향 점수 짝짓기 다시 보기"},
  {goal:3,type:"계산",stem:"교육을 도입한 라인 A의 불량률은 2.4%에서 1.9%로, 도입하지 않은 라인 B는 2.0%에서 1.8%로 바뀌었습니다. 이중차분법으로 추정한 교육의 효과는?",
   opts:["−0.3%p","−0.5%p","+0.1%p","−0.2%p"],ans:0,
   exp:"이중차분법은 (A후 − B후) − (A전 − B전) = (1.9 − 1.8) − (2.4 − 2.0) = 0.1 − 0.4 = −0.3%p입니다. −0.5%p는 A의 전후 차이만 본 값으로 그 기간 전체의 변화가 섞여 있고, +0.1%p는 도입 후 두 라인의 차이만 본 값입니다.",back:"s-4-4d",backLabel:"4-4 이중차분법 다시 보기"},
@@ -626,14 +626,16 @@ var GLOSSARY=[
  ["조건부 기댓값","conditional expectation","어떤 조건을 만족하는 집단으로 한정한 기댓값으로, E[Y | X = 1]처럼 씁니다.","이수자 집단의 평균 불량률"],
  ["선택편향","selection bias","무작위 할당이 아닐 때 처리를 받는 집단과 받지 않는 집단의 잠재적 차이가 원래 알고자 하는 효과에 더해지는 편향입니다.","−0.77 − (−0.30) = −0.47%p"],
  ["통계적 인과 추론","statistical causal inference","무작위 통제 실험 없이 실제(관찰) 데이터에서 인과효과를 추정하는 방법입니다.","관찰 기록으로 교육 효과 추정"],
- ["조정","adjustment","중첩요인을 측정해 다중회귀 모형에 포함하는 것입니다.","근속을 설명변수로 넣어 −0.30%p"],
+ ["조정","adjustment","측정한 중첩요인을 다중회귀에 넣어, 그 변수를 일정하게 둔 조건부 연관을 보는 것입니다. 가정이 맞을 때 인과효과로 해석합니다.","근속을 설명변수로 넣어 −0.30%p"],
  ["층별 해석","stratified analysis","중첩요인을 기준으로 데이터를 몇 개의 층으로 나누어, 각 층 안에서 중첩요인의 효과를 작게 하는 방법입니다.","근속 5구간별 비교"],
- ["경향 점수 짝짓기","propensity score matching, PSM","원인변수 = 1에 할당될 확률인 경향 점수가 비슷한 쌍을 골라 반응변수 차이를 평균하는 방법입니다.","69쌍 평균 차 −0.30%p"],
+ ["경향 점수 짝짓기","propensity score matching, PSM","원인변수 = 1에 할당될 확률이 비슷한 쌍을 골라 반응변수 차이를 평균하는 방법입니다. 측정한 요인만 맞추므로 무작위 배정과 같지는 않습니다.","69쌍 평균 차 −0.30%p"],
  ["이중차분법","difference in differences, DID","처리 집단과 비처리 집단의 차이를 처리 전후로 한 번 더 차분해 인과효과를 추정하는 방법입니다.","(1.9 − 1.8) − (2.4 − 2.0) = −0.3%p"]
 ];
 var REFS=[
  {n:1,title:"Statistics and Causal Inference",org:"P. W. Holland, Journal of the American Statistical Association 81(396), 945–960, 1986",url:"https://doi.org/10.1080/01621459.1986.10478354",date:"2026-10-27 확인"},
- {n:2,title:"The central role of the propensity score in observational studies for causal effects",org:"P. R. Rosenbaum, D. B. Rubin, Biometrika 70(1), 41–55, 1983",url:"https://doi.org/10.1093/biomet/70.1.41",date:"2026-10-27 확인"}
+ {n:2,title:"The central role of the propensity score in observational studies for causal effects",org:"P. R. Rosenbaum, D. B. Rubin, Biometrika 70(1), 41–55, 1983",url:"https://doi.org/10.1093/biomet/70.1.41",date:"2026-10-27 확인"},
+ {n:3,title:"데이터로 배우는 통계학",org:"K-MOOC",url:"https://www.kmooc.kr/view/course/detail/20384",date:"2026-10-28 확인"},
+ {n:4,title:"R을 활용한 통계학개론",org:"K-MOOC, KOCW 공개강의",url:"https://www.kocw.net/home/search/kemView.do?kemId=1517479",date:"2026-10-28 확인"}
 ];
 var NEXT={title:"M30 베이즈 통계의 사고방식",line:"이제 마지막 다섯 번째 과정 ‘베이즈·기계학습·수리 모형’을 시작합니다. 다음 모듈에서는 통계학의 두 흐름과 베이즈 통계의 사고방식을 살펴봅니다."};
 
@@ -917,9 +919,9 @@ for(var gi=0;gi<GLOSSARY.length;gi+=6){
 }
 (function(){
   var s=document.createElement("section");s.className="slide";s.dataset.step="6";s.id="end";
-  var refs=REFS.length?'<div class="pcol" style="gap:10px"><div class="plabel" style="margin:0">참고자료</div><ol class="refs">'+REFS.map(function(r){return '<li><span>['+r.n+']</span><div>'+r.title+', '+r.org+'. <a href="'+r.url+'" target="_blank" rel="noopener">'+r.url+'</a> ('+r.date+')</div></li>';}).join("")+'</ol></div>':'';
+  var refs=REFS.length?'<div class="pcol" style="gap:10px;min-height:0;overflow:hidden"><div class="plabel" style="margin:0">참고자료</div><ol class="refs">'+REFS.map(function(r){return '<li><span>['+r.n+']</span><div>'+r.title+', '+r.org+'. <a href="'+r.url+'" target="_blank" rel="noopener">'+r.url+'</a> ('+r.date+')</div></li>';}).join("")+'</ol></div>':'';
   s.innerHTML='<div class="sh"><div class="sec">마무리</div><h2>'+(REFS.length?"참고자료와 다음 모듈":"다음 모듈")+'</h2></div>'+
-    '<div class="body '+(REFS.length?'split even':'full')+'" style="align-content:center">'+refs+
+    '<div class="body '+(REFS.length?'split even':'full')+'" style="'+(REFS.length?'grid-template-rows:minmax(0,1fr)':'align-content:center')+'">'+refs+
     '<div class="pcol" style="justify-content:center"><div class="nextmod"><small>다음 모듈 · '+NEXT.title+'</small><strong>'+NEXT.line+'</strong></div></div></div>'+
     '<p class="foot">학습 상태는 저장되지 않습니다.</p>';
   vp.appendChild(s);
