@@ -165,6 +165,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
 .stats strong{font-size:22px;color:var(--navy);letter-spacing:-.4px}
 .pmsg{font-size:14.5px;font-weight:700;min-height:22px;line-height:1.45}
 .pmsg.ok{color:var(--ok)} .pmsg.ng{color:var(--ng)}
+#p3 .pmsg{margin:0;flex-shrink:0}
 .think{flex:0 0 auto;background:var(--amber-soft);border-radius:10px;padding:9px 14px;font-size:14.5px;font-weight:700;color:var(--amber-ink);display:flex;gap:10px;align-items:baseline}
 .think span{flex:0 0 auto;font-size:12px;font-weight:800}
 .howto{font-size:13.5px;color:var(--gray);line-height:1.5;margin:0}
@@ -384,7 +385,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
         <div class="fig"><svg id="m30-two" viewBox="0 0 420 270" role="img" aria-label="빈도주의는 θ를 고정된 값으로 보고 표본추출에서 불확실성이 생김, 베이즈는 θ의 불확실성을 사전분포와 사후분포로 나타냄"></svg></div>
         <div class="side">
           <ul class="key"><li><b>빈도주의 통계</b>: θ는 고정, 표본에 불확실성</li><li><b>베이즈 통계</b>: θ의 불확실성을 분포로</li></ul>
-          <p class="exp">지금까지 소개한 방법들은 빈도주의 통계라 부르는 흐름으로 분류됩니다. 여기서의 불확실성은 모집단에서 표본을 추출할 때의 불확실성으로, 고정된 파라미터 θ를 가진 확률분포를 상정해 데이터 x가 나타날 확률 p(x | θ)로 표현합니다. 확률은 무한히 반복한 결과로서의 객관적인 빈도입니다. 반면 베이즈 통계는 확률을 ‘얼마나 확신하는지’로 해석하며, 분석자가 θ를 어느 정도 알고 있는지를 확률분포로 나타냅니다. θ에 관해 아무것도 모르면 불확실성이 높고, 데이터를 얻어 정보를 알아내면 불확실성이 줄어들고 θ의 분포가 달라집니다. 두 흐름은 용도에 맞게 구별해 쓰면 됩니다.</p>
+          <p class="exp">빈도주의 추론은 모수를 고정하고 반복 표집·실험에서 추정량과 절차의 성질을 평가합니다. 점추정뿐 아니라 표준오차·신뢰구간도 제공합니다. 베이즈 추론은 가정한 모형과 사전정보 아래 모수의 불확실성을 분포로 나타내고 데이터로 갱신합니다. 갱신하면 언제나 불확실성이 줄어드는 것은 아닙니다. 이 모듈의 알려진 σ를 쓰는 정규 모형에서는 자료가 늘수록 사후 분산이 작아집니다. 두 접근 모두 표집·모형·측정 조건을 검토해야 합니다.</p>
           <p class="next"><span>다음 질문</span>베이즈 통계를 그림으로 보면?</p>
         </div>
       </div>
@@ -408,7 +409,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
         <div class="fig"><svg id="m30-model" viewBox="0 0 420 270" role="img" aria-label="모집단의 실제 분포 q(x)에서 데이터를 얻고, 통계 모형 p(x|θ)의 θ를 추정해 예측분포 p*(x)를 만든 뒤 q(x)와 비교"></svg></div>
         <div class="side">
           <ul class="key"><li><b>통계 모형</b> p(x | θ)로 q(x)를 근사</li><li>θ를 정하면 분포의 형태가 하나로 정해짐</li></ul>
-          <p class="exp">베이즈 통계를 배울 때는 통계 모형부터 생각하면 이해하기 쉽습니다. 통계 모형의 목적은 데이터의 발생원인 모집단의 실제 분포 q(x)를 아는 것입니다. 보통 q(x)를 직접 알기는 불가능하므로 얻은 데이터 x<sub>1</sub>, …, x<sub>n</sub>으로부터 추론하며, 이를 통계적 추론이라 합니다. 이를 위해 확률분포에 기초한 통계 모형 p(x | θ)를 가정합니다. 통계 모형은 항상 가정일 수밖에 없으므로, 데이터로 추정한 모형 p*(x)가 q(x)와 얼마나 들어맞는지 정량화해 적합도를 평가합니다. 정규분포라면 θ는 평균과 표준편차이며, 통계적 추론은 데이터로부터 θ를 결정하는 일에 다름없습니다.</p>
+          <p class="exp">통계 모형 p(x|θ)는 자료 생성 과정에 대한 가정입니다. 실제 분포 q와 일치한다고 보장되지 않으며, 추정 목적과 예측 목적에 맞춰 점검합니다. 이 예는 시험편들이 주어진 μ에서 독립이고 정규분포를 따르며, 개별 값의 표준편차 σ=20 MPa는 알려져 있다고 가정합니다. 추론 대상은 μ입니다. 새로운 시험편의 예측에서는 μ의 추정 불확실성과 개별 값의 퍼짐을 구별합니다. σ도 모르면 추가 추론이 필요합니다.</p>
           <p class="next"><span>다음 질문</span>빈도주의는 θ를 어떻게 정할까?</p>
         </div>
       </div>
@@ -427,8 +428,8 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
           </div>
         </div>
         <div class="side">
-          <ul class="key"><li><b>가능도</b>: 데이터를 고정한 θ의 함수</li><li><b>최대가능도 추정량</b> → <b>예측분포</b> p*(x)</li></ul>
-          <p class="exp">어떤 파라미터 θ에 대해 데이터가 얼마나 나타나기 쉬운가를 통계 모형으로 p(x<sub>1</sub>, …, x<sub>n</sub> | θ)라 나타냅니다. 이 식을 데이터를 고정하고 θ의 함수로 간주한 것을 가능도 또는 가능도함수라 합니다. 가능도가 크다는 것은 그 θ에서 데이터가 발생하기 쉽다는 뜻이므로, 가능도를 최대화하는 θ가 있는 모형이 얻은 데이터를 생성했을 가능성이 가장 크다고 봅니다. 이렇게 θ를 정하는 것이 최대가능도 방법이며, 얻은 θ̂를 최대가능도 추정량이라 합니다. 빈도주의 통계에서는 추정 결과를 하나의 값인 ‘점’으로 얻는 것이 특징이며, θ̂를 통계 모형에 대입한 p(x | θ̂)를 예측분포 p*(x)라 합니다.</p>
+          <ul class="key"><li>가능도는 고정한 자료에서 θ의 함수</li><li>최대가능도 ≠ θ가 참일 사후 확률</li></ul>
+          <p class="exp">가능도 L(θ;x)는 관찰한 자료 x를 고정하고 θ를 바꾸며 보는 함수입니다. 연속자료에서는 자료의 확률밀도이며 θ의 확률분포는 아닙니다. 최대가능도 추정은 가정한 모형 안에서 L을 최대화하는 점을 찾습니다. 그 점이 참모수일 확률이 가장 높다고 해석하지 않습니다. 여기서는 μ̂=555.4 MPa입니다. p(x새|μ̂)는 모수를 대입한 예측분포로 μ 추정의 불확실성을 직접 포함하지 않습니다. 표준오차·구간 등도 함께 보고합니다.</p>
           <p class="next"><span>다음 질문</span>베이즈 통계는 θ를 어떻게 다룰까?</p>
         </div>
       </div>
@@ -479,9 +480,20 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
           </div>
         </div>
         <div class="side">
-          <ul class="key"><li><b>쿨백-라이블러 발산</b>이 작을수록 좋은 예측</li><li><b>정보량 기준</b>: AIC, 베이즈에서는 <b>WAIC</b></li></ul>
-          <p class="exp">베이즈 추정으로 얻은 사후분포로 통계 모형을 평균하면 예측분포 p*(x) = ∫ p(x | θ) p(θ | x) dθ를 얻을 수 있습니다. 실제 모집단분포 q(x)와 예측분포가 어느 정도 일치하는가를 평가할 때는 두 확률분포를 비교하는 쿨백-라이블러 발산을 이용합니다<span class="cite">[1]</span>. 이 값이 작을수록 p*(x)가 q(x)를 잘 나타내며, 새롭게 얻을 데이터를 예측하는 성능도 높아집니다. 가능도 추정에서 이를 작게 하는 것이 AIC가 출현한 배경이며, AIC처럼 모형의 좋고 나쁨을 평가하는 지표를 정보량 기준이라 합니다. 베이즈 추정에서는 WAIC를 작게 하는 것과 같으며, WAIC는 계층 구조나 숨은 변수가 있는 복잡한 모형에서도 쓸 수 있습니다<span class="cite">[2]</span>.</p>
-          <p class="next"><span>다음 질문</span>베이즈 통계의 이점은?</p>
+          <ul class="key"><li>모수의 사후분포와 새 자료의 예측분포 구별</li><li>AIC·WAIC는 조건 아래 예측 성능을 추정</li></ul>
+          <p class="exp">사후 예측분포는 새 자료 x새에 대해 p(x새|x)=∫p(x새|θ)p(θ|x)dθ로 구하며 모수 불확실성을 평균합니다. 예측을 참분포 q와 비교하는 KL 발산은 기대 로그 점수의 차이와 연결됩니다<span class="cite">[1]</span>. 그러나 q를 모르므로 실제 KL을 자료에서 정확히 구할 수는 없습니다. AIC·WAIC는 각 조건 아래 새 자료의 예측 성능을 추정하는 기준이며 참 KL과 같은 값은 아닙니다. WAIC도 평가 단위·모형·사후 계산의 적절성을 확인해야 합니다<span class="cite">[2]</span>.</p>
+          <p class="next"><span>다음 질문</span>평균과 새 시험편의 기준 이상 확률은 같을까?</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" data-step="3" id="s-4-4d">
+      <div class="sh"><div class="sec">4-4 사후분포와 예측</div><h2><span class="q">Q</span>평균이 기준 이상일 확률과 새 시험편의 통과 확률은 같을까요?</h2></div>
+      <div class="body split even">
+        <div class="fig"><svg viewBox="0 0 420 270" role="img" aria-label="평균 μ의 사후 불확실성: 5장 후 평균 555.4 / SD 약 8.94 MPa; 새 시험편의 사후 예측 불확실성: SD ≈ √(20² + 8.94²) ≈ 21.91 MPa; 550 MPa 이상일 확률 비교: P(μ ≥ 550 | 자료) ≈ 72.7% / P(x새 ≥ 550 | 자료) ≈ 59.7%"><rect x="8" y="8" width="404" height="76" rx="10" fill="#EEF4FB"/><text x="210" y="37" text-anchor="middle" fill="#1B2A4A" font-size="13" font-weight="800">평균 μ의 사후 불확실성</text><text x="210" y="63" text-anchor="middle" fill="#6B7280" font-size="11">5장 후 평균 555.4 / SD 약 8.94 MPa</text><rect x="8" y="94" width="404" height="76" rx="10" fill="#FCF3D9"/><text x="210" y="123" text-anchor="middle" fill="#1B2A4A" font-size="13" font-weight="800">새 시험편의 사후 예측 불확실성</text><text x="210" y="149" text-anchor="middle" fill="#6B7280" font-size="11">SD ≈ √(20² + 8.94²) ≈ 21.91 MPa</text><rect x="8" y="180" width="404" height="76" rx="10" fill="#E3F1EA"/><text x="210" y="209" text-anchor="middle" fill="#1B2A4A" font-size="13" font-weight="800">550 MPa 이상일 확률 비교</text><text x="210" y="235" text-anchor="middle" fill="#6B7280" font-size="11">P(μ ≥ 550 | 자료) ≈ 72.7% / P(x새 ≥ 550 | 자료) ≈ 59.7%</text></svg></div>
+        <div class="side"><ul class="key"><li>μ의 불확실성과 개별 시험편의 퍼짐을 구별</li><li>판단 대상이 평균인지 새 관측값인지 먼저 명시</li></ul>
+          <p class="exp">독립 정규표본·알려진 σ=20 MPa와 범위 사전의 정규근사를 사용한 예입니다. 새 시험편의 변동에는 μ의 사후 분산과 개별 값의 분산이 모두 들어갑니다. 평균에 대한 95% 신용구간을 개별 시험편의 95% 예측구간으로 읽지 않습니다. 모형·사전·알려진 σ라는 가정이 바뀌면 수치도 달라집니다.</p>
+          <p class="next"><span>다음 질문</span>범위 확률을 실제 의사결정에 어떻게 쓸까?</p>
         </div>
       </div>
     </section>
@@ -492,7 +504,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
         <div class="fig"><svg id="m30-adv" viewBox="0 0 420 270" role="img" aria-label="시험편 5장 후 사후분포에서 μ가 550 이상일 확률 0.73을 색칠, 이점과 주의점"></svg></div>
         <div class="side">
           <ul class="key"><li>‘μ ≥ 550일 확률 73%’처럼 말할 수 있음</li><li>복잡한 모형도 추정 가능, 결과는 조금씩 다름</li></ul>
-          <p class="exp">베이즈 통계의 이점 중 하나는 통계 모형의 파라미터를 분포로 얻을 수 있다는 점입니다. 가정한 통계 모형과 사전분포, 얻은 데이터를 이용해 ‘파라미터가 이 범위에 있을 확률은 몇 %’와 같이 정량적인 평가가 가능합니다. 시험편 5장 후 사후분포에서는 ‘평균 인장강도가 550 MPa 이상일 확률은 약 73%’라고 말할 수 있으며, 이는 의사결정에 도움이 됩니다. 또 MCMC 방법 덕분에 계층 구조 등 복잡한 모형도 추정할 수 있습니다. 단, 난수를 이용한 시뮬레이션이므로 같은 데이터라도 결과가 조금씩 달라지고, 모형 가정이 부적절하면 분포를 제대로 파악하지 못할 수 있습니다.</p>
+          <p class="exp">가정한 모형·사전분포·자료 아래 μ의 범위 확률을 계산할 수 있습니다. 알려진 σ=20 MPa, 범위 사전분포의 정규근사에서 5장 후 P(μ≥550)≈.727입니다. 새 시험편이 550 이상일 확률과는 다릅니다. 이 예는 식으로 갱신하므로 난수가 필요하지 않습니다. MCMC를 사용할 때는 유한 표본의 몬테카를로 오차와 수렴을 따로 확인합니다. 어떤 계산법이든 모형·사전분포가 부적절하면 결론도 달라질 수 있습니다.</p>
           <p class="next"><span>정리</span>베이즈 통계의 사고방식을 정리해 봅시다.</p>
         </div>
       </div>
@@ -505,8 +517,8 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
           <thead><tr><th>구분</th><th>빈도주의 통계</th><th>베이즈 통계</th></tr></thead>
           <tbody>
             <tr><td>파라미터 θ</td><td>고정된 값, 표본추출에 불확실성</td><td>확률분포로 불확실성 표현</td></tr>
-            <tr><td>추정 방법</td><td>최대가능도 → 점 θ̂ (555.4 MPa)</td><td>베이즈 정리 → 사후분포 (평균 555.4, SD 8.94)</td></tr>
-            <tr><td>사전 정보</td><td>사용하지 않음</td><td>사전분포로 반영 (범위·척도도 가정)</td></tr>
+            <tr><td>추정 방법</td><td>점추정 μ̂=555.4 + 표준오차·신뢰구간</td><td>베이즈 정리 → 사후분포 정규근사 (평균 555.4, SD 8.94)</td></tr>
+            <tr><td>사전 정보</td><td>모수의 사전확률은 두지 않음; 외부정보·설계는 활용 가능</td><td>사전분포로 반영 (범위·척도도 가정)</td></tr>
             <tr><td>평가 지표 · 결과 표현</td><td>AIC · 신뢰구간, p값</td><td>WAIC · ‘550 이상일 확률 73%’</td></tr>
           </tbody>
         </table>
@@ -521,17 +533,17 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
       <div class="sh"><div class="sec">실습 1 · 조작형</div><h2>목표: 데이터 수와 사전분포에 따라 사후분포가 어떻게 바뀌는지 확인합니다</h2></div>
       <div class="body split">
         <div class="pcol" style="gap:8px">
-          <div class="plabel" style="margin:0">해보기 · 사전분포를 고르고, 시험편 측정값을 하나씩 추가해 보세요</div>
+          <div class="plabel" style="margin:0">해보기 · 알려진 σ=20 MPa 모형입니다. 사전을 고르고 측정값을 추가하세요 (균등 사전은 n≥1에서 정규근사)</div>
           <div class="mbtns" id="m30-pr" style="gap:6px"></div>
           <div class="ctrl">시험편 수 n<input type="range" id="m30-n" min="0" max="10" step="1" value="0" aria-label="시험편 수"><strong id="m30-nv" style="min-width:40px;text-align:right">-</strong></div>
           <div class="fig" style="flex:1"><svg id="m30-p1-svg" viewBox="0 0 470 170" role="img" aria-label="사전분포와 사후분포 곡선"></svg></div>
         </div>
         <div class="pcol" style="gap:10px;justify-content:center">
           <div class="plabel" style="margin:0">결과 확인</div>
-          <div class="stats three"><div><small>사후 평균</small><strong id="m30-pm">-</strong></div><div><small>사후 표준편차</small><strong id="m30-ps">-</strong></div><div><small>95% 구간</small><strong id="m30-ci" style="font-size:15px">-</strong></div></div>
+          <div class="stats three"><div><small>사후 평균</small><strong id="m30-pm">-</strong></div><div><small>사후 표준편차</small><strong id="m30-ps">-</strong></div><div><small>μ의 95% 신용구간</small><strong id="m30-ci" style="font-size:15px">-</strong></div></div>
           <p class="howto">도전: 두 사전분포의 사후 평균 차이가 10 MPa 이내로 줄어드는 n을 찾아보세요.</p>
           <p class="pmsg" id="m30-msg"></p>
-          <div class="think" style="flex-wrap:wrap"><span>생각해보기</span>데이터가 많아지면 사전분포의 영향은 왜 줄어들까요?<details style="flex-basis:100%;font-weight:600"><summary style="cursor:pointer">예시 답</summary>데이터가 많으면 가능도가 뾰족해져, 넓은 사전분포가 사후에 덜 남습니다.</details></div>
+          <div class="think" style="flex-wrap:wrap"><span>생각해보기</span>데이터가 많아지면 사전분포의 영향은 왜 줄어들까요?<details style="flex-basis:100%;font-weight:600"><summary style="cursor:pointer">예시 답</summary>이 모형은 표본 수에 따라 가능도가 뾰족해집니다. 일반적으로는 사전의 지지 범위·모형·추가 자료도 함께 확인합니다.</details></div>
         </div>
       </div>
     </section>
@@ -548,7 +560,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
           <div class="plabel" style="margin:0">결과 확인 · <span id="p2-count">0 / 0</span></div>
           <div class="bins" id="p2-bins" style="grid-template-columns:repeat(2,1fr)"></div>
           <div class="p2row"><p class="pmsg" id="p2-msg"></p><button class="btn ghost" id="p2-reset">다시 하기</button></div>
-          <div class="think" style="flex-wrap:wrap"><span>생각해보기</span>신강종 개발 보고서에는 어느 쪽 표현이 더 쓸모 있을까요?<details style="flex-basis:100%;font-weight:600"><summary style="cursor:pointer">예시 답</summary>‘550 MPa 이상일 확률’처럼 사후확률로 말하는 편이 결정에 더 쓸모 있습니다.</details></div>
+          <div class="think" style="flex-wrap:wrap"><span>생각해보기</span>신강종 개발 보고서에는 어느 쪽 표현이 더 쓸모 있을까요?<details style="flex-basis:100%;font-weight:600"><summary style="cursor:pointer">예시 답</summary>평균 μ가 질문인지 새 시험편의 강도가 질문인지 먼저 정하고, 그 대상의 구간·확률과 가정을 보고합니다.</details></div>
         </div>
       </div>
     </section>
@@ -559,14 +571,14 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
       <div class="body split">
         <div class="pcol">
           <div class="plabel">해보기 · 시험편 수와 품질 기준을 고르고, 평균 인장강도 μ가 기준 이상일 확률을 예측하세요 (400~700 MPa 균등 사전분포의 정규근사)</div>
-          <div class="fig" style="flex:1"><svg id="m30-p3-svg" viewBox="0 0 470 200" role="img" aria-label="사후분포와 기준선, 기준 이상 영역"></svg></div>
+          <div class="fig" style="flex:1"><svg id="m30-p3-svg" viewBox="0 0 470 210" role="img" aria-label="사후분포와 기준선, 기준 이상 영역"></svg></div>
         </div>
-        <div class="pcol" style="gap:8px;justify-content:center">
+        <div class="pcol" style="gap:6px;justify-content:center">
           <div class="mbtns" id="m30-qn" style="gap:5px"></div>
           <div class="mbtns" id="m30-qt" style="gap:5px"></div>
           <div class="ctrl">확률 예측<input type="range" id="m30-g" min="0" max="100" step="1" value="50" aria-label="확률 예측"><strong id="m30-gv" style="min-width:48px;text-align:right">-</strong></div>
           <button class="btn" id="m30-check" style="align-self:flex-start">사후분포로 계산</button>
-          <div class="stats three"><div><small>내 예측</small><strong id="m30-mine">-</strong></div><div><small>실제 확률</small><strong id="m30-act">?</strong></div><div><small>사후 평균 ± SD</small><strong id="m30-post" style="font-size:14px">-</strong></div></div>
+          <div class="stats three"><div><small>내 예측</small><strong id="m30-mine">-</strong></div><div><small>모형 아래 확률</small><strong id="m30-act">?</strong></div><div><small>사후 평균 ± SD</small><strong id="m30-post" style="font-size:14px">-</strong></div></div>
           <p class="pmsg" id="m30-msg3"></p>
           <div class="think" style="flex-wrap:wrap"><span>생각해보기</span>같은 기준이라도 시험편이 늘면 확률이 왜 바뀌나요?<details style="flex-basis:100%;font-weight:600"><summary style="cursor:pointer">예시 답</summary>시험편이 늘면 가능도가 달라져, 같은 기준의 사후확률도 바뀝니다.</details></div>
         </div>
@@ -617,32 +629,32 @@ var QUIZ=[
  {goal:2,type:"상황 판단",stem:"신규 강종이라 평균 인장강도에 대한 사전 정보가 거의 없습니다. 상식적으로 400 MPa 미만이나 700 MPa 초과는 생각하기 어렵습니다. 사전분포로 알맞은 것은?",
   opts:["400~700 MPa의 균등분포(범위 안에서 일정한 밀도)","기존 강종의 평균 하나로 고정된 값","데이터를 본 뒤 표본평균 근처로 좁힌 분포","사전분포는 정하지 않아도 된다"],ans:0,
   exp:"여기서는 400~700 MPa라는 범위 정보를 바탕으로, 그 안에서 밀도가 일정한 균등분포를 후보로 정합니다. 범위 밖의 확률은 0이므로 아무 정보도 없는 분포는 아닙니다. 사전분포는 현재 데이터를 보기 전에 근거를 정하고, 범위나 형태를 바꿔 사후결론의 민감도를 확인합니다.",back:"s-4-4b",backLabel:"4-4 사전분포 다시 보기"},
- {goal:3,type:"상황 판단",stem:"시험편 5장 측정 결과로 μ의 사후분포가 평균 555.4, 표준편차 8.94 MPa인 정규분포가 되었습니다. ‘μ가 550 MPa 이상일 확률’로 가장 가까운 것은?",
+ {goal:3,type:"상황 판단",stem:"알려진 σ=20 MPa 모형에서 5장 후 μ의 사후분포를 평균 555.4, SD 8.94 MPa인 정규분포로 근사합니다. P(μ≥550)에 가장 가까운 값은?",
   opts:["약 0.73","약 0.50","약 0.95","약 0.27"],ans:0,
-  exp:"(550 − 555.4) ÷ 8.94 ≈ −0.60이므로 P(μ > 550) = P(Z > −0.60) ≈ 0.73입니다. 베이즈 통계에서는 파라미터를 분포로 얻으므로 ‘파라미터가 이 범위에 있을 확률은 몇 %’처럼 정량적인 평가를 할 수 있고, 의사결정에 바로 쓸 수 있습니다. 0.27은 550 미만일 확률입니다.",back:"s-4-5a",backLabel:"4-5 베이즈 통계의 이점 다시 보기"},
+  exp:"z=(550−555.4)/8.94≈−.60이므로 평균 μ가 기준 이상일 사후 확률은 약 .73입니다. 가정한 모형·사전 아래의 확률이며 새 시험편 한 장의 강도가 550 이상일 확률과 다릅니다. 새 시험편에는 개별 값의 퍼짐 σ=20 MPa도 포함합니다.",back:"s-4-5a",backLabel:"4-5 베이즈 통계의 이점 다시 보기"},
  {goal:3,type:"O/X 오개념",stem:"“쿨백-라이블러 발산 D(q || p*)가 클수록 예측분포 p*(x)가 실제 모집단분포 q(x)를 잘 나타낸다.”",
   opts:["O","X"],ans:1,ox:true,
-  exp:"쿨백-라이블러 발산은 두 분포가 가까울수록 작은 값이 되며, 항상 0 이상이고 두 분포가 같을 때 0입니다. 따라서 D(q || p*)가 작을수록 예측분포가 실제 분포를 잘 나타내고 새 데이터를 예측하는 성능도 높아집니다. 이를 작게 하는 지표가 AIC(가능도 추정)와 WAIC(베이즈 추정)입니다.",back:"s-4-4c",backLabel:"4-4 정보량 기준 다시 보기"}
+  exp:"KL 발산은 음수가 아니고 분포가 거의 모든 곳에서 같으면 0입니다. 같은 q에서 작을수록 기대 로그 예측 점수가 좋습니다. q를 모르므로 실제 KL을 직접 계산하지는 못하며, AIC·WAIC는 각 조건 아래 새 자료의 예측 성능을 추정합니다. 참 KL과 같거나 무조건 최적 모형을 골라 준다는 뜻은 아닙니다.",back:"s-4-4c",backLabel:"4-4 정보량 기준 다시 보기"}
 ];
 
 var BINS=["빈도주의 통계","베이즈 통계"];
-var CARDS=[["파라미터는 고정된 참값이 있다","빈도주의 통계"],["추정 결과를 하나의 점으로 얻는다","빈도주의 통계"],["무한 반복 시의 객관적 빈도","빈도주의 통계"],
+var CARDS=[["파라미터는 고정된 참값이 있다","빈도주의 통계"],["반복 표집에서 추정량·구간의 성질 평가","빈도주의 통계"],["무한 반복 시의 객관적 빈도","빈도주의 통계"],
            ["확률 = 얼마나 확신하는지","베이즈 통계"],["사전분포를 사후분포로 갱신","베이즈 통계"],["‘550 이상일 확률 73%’라고 말함","베이즈 통계"]];
 var HINT={"빈도주의 통계":"불확실성은 표본추출에서 생기고 θ는 고정된 값으로 봅니다.","베이즈 통계":"θ의 불확실성을 확률분포로 나타내고 데이터로 갱신합니다."};
 
 var GLOSSARY=[
  ["빈도주의 통계","frequentist statistics","파라미터를 고정된 값으로 보고, 확률을 무한히 반복 실행한 결과로서의 객관적인 빈도로 해석하는 통계학의 흐름입니다.","μ는 정해진 값, 표본을 뽑을 때 불확실성"],
  ["베이즈 통계","Bayesian statistics","확률을 ‘얼마나 확신하는지’로 해석해 파라미터의 불확실성을 확률분포로 나타내는 통계학의 흐름입니다.","μ를 400~700 MPa의 분포로 표현"],
- ["통계 모형","statistical model","데이터의 발생원인 모집단의 실제 분포 q(x)를 추론하기 위해 가정한 확률분포 p(x | θ)입니다.","인장강도 ~ 정규분포(μ, 20)"],
- ["가능도","likelihood","데이터를 고정하고 파라미터 θ의 함수로 본, 그 θ에서 데이터가 얼마나 나타나기 쉬운지를 나타내는 값입니다.","L(μ | 583, 567, …)"],
+ ["통계 모형","statistical model","목적에 맞게 자료 생성 과정을 나타내는 확률 모형입니다. 가정은 자료·설계와 함께 점검합니다.","정규 모형: 평균 μ, 알려진 SD 20 MPa"],
+ ["가능도","likelihood","관찰한 자료를 고정하고 모수의 함수로 본 L(θ;x)입니다. 연속자료에서는 자료의 밀도이며 θ의 확률분포는 아닙니다.","L(μ | 583, 567, …)"],
  ["최대가능도 추정량","maximum likelihood estimator","가능도함수를 최대화하는 파라미터 값 θ̂으로, 하나의 점으로 얻습니다.","5장 평균 555.4 MPa"],
- ["예측분포","predictive distribution","추정한 파라미터로 만든, 실제 모집단분포 q(x)를 대신하는 분포 p*(x)입니다.","p(x | μ̂) = 정규분포(555.4, 20)"],
+ ["예측분포","predictive distribution","새 자료의 분포입니다. 모수 대입 예측과, 사후분포로 평균해 모수 불확실성도 포함한 사후 예측을 구별합니다.","5장 후 새 시험편 SD 약 21.91 MPa (정규근사)"],
  ["사전분포","prior distribution","데이터를 얻기 전에 근거를 정하는 파라미터 θ의 확률분포입니다. 균등분포도 범위와 척도에 관한 정보를 담습니다.","균등분포 400~700 MPa"],
- ["사후분포","posterior distribution","데이터를 얻은 뒤 갱신된 파라미터 θ의 확률분포 p(θ | x)입니다.","5장 후 평균 555.4, 표준편차 8.94"],
+ ["사후분포","posterior distribution","관찰한 자료와 가정한 모형·사전 아래 갱신한 모수의 분포입니다. 새 관측값의 분포와 다릅니다.","알려진 σ=20, 5장 후 μ의 SD≈8.94 (정규근사)"],
  ["베이즈 정리","Bayes' theorem","사후분포 = 가능도 × 사전분포 ÷ p(x)로, 조건부 확률로 간단하게 도출되는 관계식입니다.","0.015 ÷ 0.02 = 0.75"],
  ["쿨백-라이블러 발산","Kullback–Leibler divergence","두 확률분포가 얼마나 다른지 나타내는 값으로, 가까울수록 작고 같으면 0입니다.","D(q || p*)가 작을수록 좋은 예측"],
  ["정보량 기준","information criterion","AIC처럼 모형의 좋고 나쁨을 평가하는 지표입니다.","AIC = −2 log L + 2k"],
- ["WAIC","widely applicable information criterion","베이즈 추정에서 D(q || p*)를 작게 하는 정보량 기준으로, 복잡한 모형에서도 쓸 수 있습니다.","계층 구조를 가진 모형의 비교"]
+ ["WAIC","widely applicable information criterion","적절한 평가 단위와 사후 계산 등의 조건 아래 베이즈 모형의 새 자료 예측 성능을 추정하는 정보량 기준입니다.","참분포를 아는 실제 KL과는 구별"]
 ];
 var REFS=[
  {n:1,title:"On Information and Sufficiency",org:"S. Kullback, R. A. Leibler, The Annals of Mathematical Statistics 22(1), 79–86, 1951",url:"https://doi.org/10.1214/aoms/1177729694",date:"2026-10-27 확인"},
@@ -771,7 +783,7 @@ on("m30-ov",function(s){
   bxX(s,240,90,190,80,"#FCF3D9",C.amber);tX(s,335,112,"베이즈 통계",{fw:800,fs:13,c:C.amberInk});tX(s,335,134,"θ를 확률분포로",{fs:10.5});tX(s,335,154,"사전분포 → 사후분포",{fw:700,fs:10.5});
   arX(s,190,56,120,86,"oX");arX(s,250,56,320,86,"oX");
   bxX(s,240,196,190,56,C.navy);tX(s,335,218,"‘μ ≥ 550일 확률 73%’",{fw:800,fs:12,c:"#fff"});tX(s,335,238,"분포와 확률로 표현",{fs:10,c:"#C9D3E6"});arX(s,335,172,335,192,"oX");
-  bxX(s,10,196,190,56,"#F3F5F9");tX(s,105,218,"μ̂ = 555.4 MPa",{fw:800,fs:12});tX(s,105,238,"하나의 값으로 표현",{fs:10,c:C.gray});arX(s,105,172,105,192,"oX");
+  bxX(s,10,196,190,56,"#F3F5F9");tX(s,105,218,"μ̂ = 555.4 MPa",{fw:800,fs:12});tX(s,105,238,"점추정 + 표준오차·구간",{fs:10,c:C.gray});arX(s,105,172,105,192,"oX");
 });
 
 on("m30-case",function(s){
@@ -828,9 +840,8 @@ on("m30-mle",function(s){
 });
 
 on("m30-bayes",function(s){
-  var X=linX(500,620,0,120),b=[["사전분포 p(θ)",function(x){return 1/300;},0.006,"#9AA0AA",4],["가능도 p(x | θ)",function(x){return npX(x,555.4,8.94);},0.05,BLU,148],["사후분포 p(θ | x)",function(x){return npX(x,555.4,8.94);},0.05,C.amber,296]];
-  b.forEach(function(r,i){var x0=r[4];bxX(s,x0,6,120,138,i===2?"#FCF3D9":"#F3F5F9");tX(s,x0+60,26,r[0],{fw:800,fs:10.5,c:i===2?C.amberInk:C.navy});
-    var Xi=linX(500,620,x0+8,x0+112),Yi=linX(0,r[2],130,40);el("line",{x1:x0+8,x2:x0+112,y1:130,y2:130,stroke:C.gray2},s);curveX(s,Xi,Yi,r[1],500,620,r[3],r[3],2.2);});
+  var sd=SIGB/Math.sqrt(5),B=[["사전 p(μ)",function(x){return 1/300;},.006,"#9AA0AA",4],["가능도 (상대척도)",function(x){return Math.exp(-.5*Math.pow((x-555.4)/sd,2));},1.1,BLU,148],["사후 p(μ | x)",function(x){return npX(x,555.4,sd);},.05,C.amber,296]];
+  B.forEach(function(r,i){var x0=r[4];bxX(s,x0,6,120,138,i===2?"#FCF3D9":"#F3F5F9");tX(s,x0+60,26,r[0],{fw:800,fs:10,c:i===2?C.amberInk:C.navy});var X=linX(400,700,x0+8,x0+112),Y=linX(0,r[2],118,40);el("line",{x1:x0+8,x2:x0+112,y1:118,y2:118,stroke:C.gray2},s);curveX(s,X,Y,r[1],400,700,r[3],r[3],2.2);tX(s,x0+60,137,"μ: 400~700 MPa",{fs:8.5,c:C.gray});});
   tX(s,136,84,"×",{fw:800,fs:20,c:C.navy3});tX(s,284,84,"∝",{fw:800,fs:20,c:C.navy3});
 });
 
@@ -860,7 +871,7 @@ on("m30-adv",function(s){
   tX(s,X(550)-4,40,"기준 550",{a:"end",fw:800,fs:10.5,c:RED,halo:true});tX(s,X(572),Y(0.038),"P(μ ≥ 550) ≈ 0.73",{a:"start",fw:800,fs:12,c:C.amberInk,halo:true});
   [520,540,560,580].forEach(function(t){tX(s,X(t),150,t,{fs:9,c:C.gray,fw:500});});
   bxX(s,4,162,204,104,"#E3F1EA");tX(s,106,182,"이점",{fw:800,fs:12,c:GRN});tX(s,16,206,"• 파라미터를 분포로 얻음",{a:"start",fw:700,fs:10.5});tX(s,16,228,"• 확률로 직관적 판단",{a:"start",fw:700,fs:10.5});tX(s,16,250,"• MCMC로 복잡한 모형도",{a:"start",fw:700,fs:10.5});
-  bxX(s,212,162,204,104,"#FBE4E1");tX(s,314,182,"주의",{fw:800,fs:12,c:RED});tX(s,224,206,"• 난수라 결과가 조금씩 다름",{a:"start",fw:700,fs:10.5});tX(s,224,228,"• 가정이 부적절하면 분포를",{a:"start",fw:700,fs:10.5});tX(s,236,250,"제대로 파악 못 함",{a:"start",fw:700,fs:10.5});
+  bxX(s,212,162,204,104,"#FBE4E1");tX(s,314,182,"주의",{fw:800,fs:12,c:RED});tX(s,224,206,"• MCMC 근사에는 MC 오차",{a:"start",fw:700,fs:10.5});tX(s,224,228,"• 가정이 부적절하면 분포를",{a:"start",fw:700,fs:10.5});tX(s,236,250,"제대로 파악 못 함",{a:"start",fw:700,fs:10.5});
 });
 
 /* 실습 1 · 사후분포 갱신(조작형) */
@@ -872,14 +883,14 @@ on("m30-adv",function(s){
     clear(svg);var X=linX(470,640,30,460),Y=linX(0,0.075,150,10);el("line",{x1:30,x2:460,y1:150,y2:150,stroke:C.gray2},svg);
     [480,520,560,600,640].forEach(function(t){tX(svg,X(t),164,t,{fs:9,c:C.gray,fw:500});});
     if(inf)curveX(svg,X,Y,function(x){return npX(x,IPM,IPS);},470,640,"#9AA0AA",null,1.6);else el("line",{x1:30,x2:460,y1:Y(1/300),y2:Y(1/300),stroke:"#9AA0AA","stroke-width":1.6},svg);
-    tX(svg,36,inf?Y(npX(IPM,IPM,IPS))-4:Y(1/300)-6,"사전분포",{a:"start",fs:9.5,fw:800,c:C.gray,halo:true});
+    tX(svg,36,inf?Y(npX(IPM,IPM,IPS))-4:Y(1/300)-6,"사전 (470~640 구간 표시)",{a:"start",fs:9.5,fw:800,c:C.gray,halo:true});
     for(var i=0;i<n;i++)el("circle",{cx:X(XS[i]),cy:146,r:3.5,fill:BLU},svg);
     if(p&&n>0){curveX(svg,X,Y,function(x){return npX(x,p[0],p[1]);},470,640,C.amber,C.amber);tX(svg,X(p[0])+8,Y(npX(p[0],p[0],p[1]))+4,"사후분포",{a:"start",fw:800,fs:10,c:C.amberInk,halo:true});}
     var pm=document.getElementById("m30-pm"),ps=document.getElementById("m30-ps"),ci=document.getElementById("m30-ci");
-    if(!p){pm.textContent="—";ps.textContent="—";ci.textContent="400~700";}else{pm.textContent=p[0].toFixed(1);ps.textContent=p[1].toFixed(2);ci.textContent=(p[0]-1.96*p[1]).toFixed(0)+"~"+(p[0]+1.96*p[1]).toFixed(0);}
+    if(!p){pm.textContent="550.0";ps.textContent=((PHI-PLO)/Math.sqrt(12)).toFixed(2);ci.textContent="407.5~692.5";}else{pm.textContent=p[0].toFixed(1);ps.textContent=p[1].toFixed(2);ci.textContent=(p[0]-1.96*p[1]).toFixed(0)+"~"+(p[0]+1.96*p[1]).toFixed(0);}
     var a=postX(n,false),b=postX(n,true),m=document.getElementById("m30-msg"),ok=n>0&&Math.abs(a[0]-b[0])<=10;m.className="pmsg"+(ok?" ok":"");
-    m.textContent=n===0?"아직 데이터가 없어 사후분포는 사전분포 그대로입니다. 시험편을 추가해 보세요.":
-      (ok?"찾았습니다. ":"")+n+"장 후 사후 평균은 무정보 "+a[0].toFixed(1)+", 정보 있음 "+b[0].toFixed(1)+" MPa로 "+Math.abs(a[0]-b[0]).toFixed(1)+" MPa 차이입니다. 데이터가 늘수록 분포는 좁아지고 사전분포의 영향은 줄어듭니다.";}
+    m.textContent=n===0?(inf?"n=0이면 사후는 정규 사전 그대로입니다. 평균 520, SD 15 MPa이며 95% 신용구간을 표시합니다.":"n=0이면 균등 사전 그대로입니다. 95% 신용구간 407.5~692.5와 전체 범위 400~700은 다릅니다."):
+      (ok?"찾았습니다. ":"")+n+"장 후 사후 평균은 범위 사전 "+a[0].toFixed(1)+", 정보 있음 "+b[0].toFixed(1)+" MPa로 "+Math.abs(a[0]-b[0]).toFixed(1)+" MPa 차이입니다. 이 알려진 σ 모형에서는 분산이 줄어듭니다. 평균 차이는 추가된 값에 따라서도 달라집니다.";}
   ns.addEventListener("input",upd);upd();
 })();
 
