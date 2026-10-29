@@ -165,6 +165,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
 .stats strong{font-size:22px;color:var(--navy);letter-spacing:-.4px}
 .pmsg{font-size:14.5px;font-weight:700;min-height:22px;line-height:1.45}
 .pmsg.ok{color:var(--ok)} .pmsg.ng{color:var(--ng)}
+#p3 .pmsg{margin:0;flex-shrink:0}
 .think{flex:0 0 auto;background:var(--amber-soft);border-radius:10px;padding:9px 14px;font-size:14.5px;font-weight:700;color:var(--amber-ink);display:flex;gap:10px;align-items:baseline}
 .think span{flex:0 0 auto;font-size:12px;font-weight:800}
 .howto{font-size:13.5px;color:var(--gray);line-height:1.5;margin:0}
@@ -404,8 +405,8 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
       <div class="body split even">
         <div class="fig"><svg id="m14-nsample" viewBox="0 0 420 270" role="img" aria-label="1표본은 기준값과, 2표본은 서로, 3표본 이상은 여러 쌍을 비교"></svg></div>
         <div class="side">
-          <ul class="key"><li>1표본: 정한 값과 비교, 2표본: 서로 비교</li><li>3개 이상은 다중비교 보정이 필요합니다.</li></ul>
-          <p class="exp">데이터가 1표본뿐이면 2개 변수 사이의 관계가 아니라, 특정 1개 모집단에 대해 ‘성인 남성의 평균 키는 172.5cm’ 같은 가설을 세워 검증합니다. 2표본 이상이면 표본끼리 비교해 집단 간 차이를 조사할 수 있습니다. 단, 3개 이상의 표본을 서로 비교할 때는 다중비교라 불리는 보정 방법이 필요하며, 이는 다음 모듈에서 다룹니다.</p>
+          <ul class="key"><li>한 평균 vs 기준값 / 두 집단 평균 비교</li><li>여러 비교의 범위를 정하고 다중성 검토</li></ul>
+          <p class="exp">한 표본의 평균은 미리 정한 기준값과, 두 표본의 평균은 서로 비교할 수 있습니다. 세 집단 이상에서는 전체 평균이 같은지를 한 번의 F검정으로 물을 수 있습니다. 여러 쌍이나 여러 지표를 함께 검정한다면 비교 범위를 정하고 다중성 보정을 검토합니다. 집단 수만으로 보정 여부가 정해지는 것은 아닙니다.</p>
           <p class="next"><span>다음 질문</span>양적 변수의 분포는 왜 확인할까?</p>
         </div>
       </div>
@@ -474,7 +475,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
         </div>
         <div class="side">
           <ul class="key"><li><b>일표본 t검정</b>: 평균을 정한 값 μ와 비교</li><li>μ는 연구 배경에서 의미 있는 값이어야 합니다.</li></ul>
-          <p class="exp">t검정은 표본이 하나라도 할 수 있습니다. 귀무가설 ‘모집단의 평균은 μ이다’를 세워 확인하며, μ는 연구 배경에서 의미 있는 값이어야 합니다. 여기서는 수축기 혈압이 두 날 모두 140mmHg 이상이면 고혈압으로 진단한다는 기준<span class="cite">[1]</span>을 μ로 썼습니다. 이 검정은 95% 신뢰구간이 μ를 포함하는지 보는 것과 동전의 양면 관계입니다.</p>
+          <p class="exp">귀무가설은 ‘모평균 = 미리 정한 기준 μ’입니다. 여기서는 혈압 관련 기준<span class="cite">[1]</span>에서 착안해 μ = 140mmHg를 학습용 비교값으로 정했습니다. 집단 평균을 검정하는 것이므로 개인의 고혈압 진단과는 구별합니다. 같은 t방법으로 구한 양측 5% 검정과 95% 신뢰구간은 대응합니다. 이 구간은 140을 포함하므로 평균이 140과 다르다고 기각하지 못하며, 같다고 증명한 것은 아닙니다.</p>
           <p class="next"><span>다음 질문</span>두 집단의 분산이 다르면 어떻게 할까?</p>
         </div>
       </div>
@@ -534,13 +535,13 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
             <div class="mt">핵심 수학 개념 · 순위합과 U</div>
             <div class="f">U = R − n(n + 1) ÷ 2</div>
             <div class="r"><span>기호</span><span>R: 한 집단의 순위합, n: 그 집단의 표본크기</span></div>
-            <div class="r"><span>계산</span><span>33.5 − 7 × 8 ÷ 2 = 5.5 → p = 0.017</span></div>
-            <div class="r"><span>해석</span><span>신약군이 낮은 순위에 몰려 위치가 다르다고 판단합니다.</span></div>
+            <div class="r"><span>계산</span><span>33.5 − 7 × 8 ÷ 2 = 5.5 → 근사 p ≈ 0.017</span></div>
+            <div class="r"><span>해석</span><span>동일 분포 가설을 기각하며, 위치 해석에는 같은 모양을 가정합니다.</span></div>
           </div>
         </div>
         <div class="side">
           <ul class="key"><li><b>윌콕슨 순위합 검정</b>: 값 대신 순위로 비교</li><li>맨-휘트니 U검정과 같은 방법입니다.</li></ul>
-          <p class="exp">독립 두 집단을 순위로 비교할 때 윌콕슨 순위합 검정(맨-휘트니 U검정)을 쓸 수 있습니다. 합친 자료에 작은 값부터 순위를 매기고, 같은 값에는 평균 순위를 줍니다. 두 분포가 동일하다는 귀무가설을 검정하며, 분포 모양이 같고 위치만 이동한다는 조건에서 위치 차이로 해석할 수 있습니다. 평균 차이 검정의 자동 대체는 아닙니다. 예 ①은 순위합 33.5, U = 5.5, p ≈ 0.017입니다.</p>
+          <p class="exp">독립 두 집단을 순위로 비교할 때 윌콕슨 순위합 검정(맨-휘트니 U검정)을 쓸 수 있습니다. 합친 자료에 작은 값부터 순위를 매기고, 같은 값에는 평균 순위를 줍니다. 두 분포가 동일하다는 귀무가설을 검정하며, 분포 모양이 같고 위치만 이동한다는 조건에서 위치 차이로 해석할 수 있습니다. 평균 차이 검정의 자동 대체는 아닙니다. 예 ①은 순위합 33.5, U = 5.5입니다. 동점 보정·연속성 보정을 적용한 양측 정규근사 p ≈ 0.017이며, 정확 순열 계산과는 다를 수 있습니다.</p>
           <p class="next"><span>다음 질문</span>두 집단의 분포 모양이 다르면 어떻게 될까?</p>
         </div>
       </div>
@@ -553,7 +554,18 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
         <div class="side">
           <ul class="key"><li>위치 차이 해석에는 같은 분포 모양이 필요</li><li>모양이 다르면 <b>브루너-문젤 검정</b> 등을 검토</li></ul>
           <p class="exp">순위합 검정은 정규분포를 요구하지 않지만 관측치의 독립성 등 조건이 필요합니다. 두 분포가 동일하다는 귀무가설과 평균·중앙값이 같다는 가설은 다릅니다. 분산이나 모양이 다르면 유의한 결과를 단순한 위치 차이로 읽지 않습니다. 모양이 다른 두 집단의 상대효과를 비교하려면 브루너-문젤 검정 등을 검토할 수 있습니다. 이 방법도 작은 표본에서는 근사의 정확도를 확인해야 합니다.</p>
-          <p class="next"><span>정리</span>검정 방법을 고르는 길을 한 장에 모아 봅시다.</p>
+          <p class="next"><span>다음 질문</span>같은 순위합인데 p값이 달라질 수 있을까?</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" data-step="3" id="s-4-5c">
+      <div class="sh"><div class="sec">4-5 비모수검정</div><h2><span class="q">Q</span>같은 순위합인데 p값이 달라질 수 있을까요?</h2></div>
+      <div class="body split even">
+        <div class="fig"><svg viewBox="0 0 420 270" role="img" aria-label="이 모듈: 두 집단 7명씩 · 동점은 평균 순위: 신약군 순위합 33.5 / U = 5.5; 동점·연속성 보정을 한 양측 정규근사: p ≈ 0.01733; 집단 표지를 모두 바꾸어 보는 정확 순열 계산: 3,432가지 중 양측 꼬리 48가지 / p ≈ 0.01399"><rect x="8" y="8" width="404" height="76" rx="10" fill="#EEF4FB"/><text x="210" y="37" text-anchor="middle" fill="#1B2A4A" font-size="13" font-weight="800">이 모듈: 두 집단 7명씩 · 동점은 평균 순위</text><text x="210" y="63" text-anchor="middle" fill="#6B7280" font-size="11">신약군 순위합 33.5 / U = 5.5</text><rect x="8" y="94" width="404" height="76" rx="10" fill="#FCF3D9"/><text x="210" y="123" text-anchor="middle" fill="#1B2A4A" font-size="13" font-weight="800">동점·연속성 보정을 한 양측 정규근사</text><text x="210" y="149" text-anchor="middle" fill="#6B7280" font-size="11">p ≈ 0.01733</text><rect x="8" y="180" width="404" height="76" rx="10" fill="#E3F1EA"/><text x="210" y="209" text-anchor="middle" fill="#1B2A4A" font-size="13" font-weight="800">집단 표지를 모두 바꾸어 보는 정확 순열 계산</text><text x="210" y="235" text-anchor="middle" fill="#6B7280" font-size="11">3,432가지 중 양측 꼬리 48가지 / p ≈ 0.01399</text></svg></div>
+        <div class="side"><ul class="key"><li>표본·통계량이 같아도 계산법에 따라 p값이 달라짐</li><li>소표본·동점 여부와 양측 꼬리 규칙을 보고</li></ul>
+          <p class="exp">동일 분포 가설 아래 집단 표지를 교환할 수 있다고 가정하고, 합친 관측값은 고정한 채 7명씩 나누는 모든 배치를 셌습니다. 순위합의 중심 52.5에서 관찰값 이상 떨어진 경우를 양측 꼬리로 셉니다. 이 정확 계산과 정규근사는 모두 5%에서 기각하지만 p값 자체는 같지 않습니다. 소프트웨어의 정확 계산·동점 처리 옵션도 확인합니다.</p>
+          <p class="next"><span>다음 질문</span>검정 방법을 고르는 기준을 한 장에 모아 볼까?</p>
         </div>
       </div>
     </section>
@@ -567,7 +579,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
             <tr><td>표본 1개 · 정한 값과 비교</td><td>일표본 t검정 (μ는 의미 있는 값)</td><td>위약군 145.0 vs 140 → t = 1.69, p = 0.142</td></tr>
             <tr><td>서로 다른 두 집단 · 평균 비교</td><td>Welch 우선 검토 (작은 표본은 분포 확인)</td><td>신약 vs 위약 → t = −2.73, p = 0.018</td></tr>
             <tr><td>같은 대상을 두 번 측정</td><td>대응 있는 t검정 (차이의 평균 = 0)</td><td>복용 전 vs 후 → t = −7.77, p = 0.0002</td></tr>
-            <tr><td>독립 두 집단 · 순위 기반 비교</td><td>윌콕슨 순위합 검정 (맨-휘트니 U검정)</td><td>순위합 33.5 vs 71.5 → p = 0.017</td></tr>
+            <tr><td>독립 두 집단 · 순위 기반 비교</td><td>윌콕슨 순위합 검정 (맨-휘트니 U검정)</td><td>순위합 33.5 vs 71.5 → 근사 p ≈ 0.017</td></tr>
           </tbody>
         </table>
       </div>
@@ -578,7 +590,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
 
     <!-- ⑥ 실습 1 · 조작형 (모듈 전용) ─────────────── -->
     <section class="slide" data-step="5" id="p1">
-      <div class="sh"><div class="sec">실습 1 · 조작형</div><h2>목표: 약 효과와 개인차를 바꾸며 대응 있는·없는 검정의 p값을 비교합니다</h2></div>
+      <div class="sh"><div class="sec">실습 1 · 조작형</div><h2>목표: 전후 변화와 흔들림을 바꾸며 대응을 무시했을 때의 차이를 살펴봅니다</h2></div>
       <div class="body split">
         <div class="pcol" style="gap:8px">
           <div class="plabel" style="margin:0">해보기 · 신약군 7명의 복용 전 혈압은 그대로 두고 조건을 바꿔 보세요</div>
@@ -588,8 +600,8 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
         </div>
         <div class="pcol" style="gap:10px;justify-content:center">
           <div class="plabel" style="margin:0">결과 확인</div>
-          <div class="stats"><div><small>대응 없는 t검정 p</small><strong id="m14-pu">-</strong></div><div><small>대응 있는 t검정 p</small><strong id="m14-pp">-</strong></div></div>
-          <p class="howto">도전: 대응 있는 검정은 유의(p &lt; 0.05)하지만 대응 없는 검정은 유의하지 않은 조건을 찾아보세요.</p>
+          <div class="stats"><div><small>대응 무시 p (참고)</small><strong id="m14-pu">-</strong></div><div><small>대응 있는 t검정 p</small><strong id="m14-pp">-</strong></div></div>
+          <p class="howto">도전: 대응 검정만 유의한 조건을 찾아보세요. 검정 방법은 p값 크기가 아니라 측정 설계로 정합니다.</p>
           <p class="pmsg" id="m14-msg"></p>
           <div class="think" style="flex-wrap:wrap"><span>생각해보기</span>변화의 흔들림을 키우면 대응 있는 검정의 장점은 어떻게 되나요?<details style="flex-basis:100%;font-weight:600"><summary style="cursor:pointer">예시 답</summary>개인 차이를 빼는 이득이 줄어 대응의 장점이 약해집니다.</details></div>
         </div>
@@ -621,7 +633,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
           <div class="plabel">해보기 · 14명을 합쳐 혈압이 낮은 순서로 순위를 매기면, 신약군 7명의 순위합은 얼마일까요?</div>
           <div class="fig" style="flex:1"><svg id="m14-p3-svg" viewBox="0 0 470 210" role="img" aria-label="14명의 혈압을 수직선에 놓고 순위를 매기는 그림"></svg></div>
         </div>
-        <div class="pcol" style="gap:9px;justify-content:center">
+        <div class="pcol" style="gap:6px;justify-content:center">
           <div class="ctrl">내 예측<input type="range" id="m14-g" min="28" max="77" step="0.5" value="52.5" aria-label="신약군 순위합 예측"><strong id="m14-gv" style="min-width:56px;text-align:right">-</strong></div>
           <p class="howto">힌트: 순위합은 가장 작으면 1 + … + 7 = 28, 가장 크면 8 + … + 14 = 77, 두 집단이 섞여 있으면 52.5 근처입니다.</p>
           <button class="btn" id="m14-check" style="align-self:flex-start">순위를 매겨 확인</button>
@@ -658,7 +670,7 @@ var STEPS=["학습개요","학습목표","일상의 예시","본문","형성평�
    스튜던트 t −2.73(df 12, p 0.018), 웰치 t −2.73(df 11.86, p 0.018)
    일표본(위약 vs 140): t 1.69, p 0.142, 95% CI 137.8~152.2
    대응 있음: 차이 평균 −5.29, sd 1.80, t −7.77(df 6), p 0.0002 / 대응 없음 t −1.43, p 0.178
-   윌콕슨 순위합: 신약 33.5, 위약 71.5, U 5.5, p 0.017 */
+   윌콕슨 순위합: 신약 33.5, 위약 71.5, U 5.5, 양측 정규근사 p 0.01733 / 정확 표지 순열 p 48/3432 */
 var DRUG=[142,132,127,140,142,130,126], PLAC=[145,130,150,142,145,155,148], BEFORE=[148,136,134,143,147,138,130];
 var RANKD=[8,5,2,6,8,3.5,1], RANKP=[10.5,3.5,13,8,10.5,14,12];
 var CASE=null, PAIRS=null, P1={target:null};
@@ -694,15 +706,15 @@ var HINT={"일표본 t검정":"표본 1개의 평균을 미리 정한 의미 있
 var GLOSSARY=[
  ["분할표","contingency table","두 범주형 변수의 각 조합에 속하는 개수를 표로 나타낸 것입니다.","백신 접종 유무 × 감염 유무의 2 × 2 표"],
  ["모수검정","parametric test","모집단의 확률분포를 모수로 나타내는 모형을 가정하는 검정입니다. t검정 외에도 다양한 분포 모형이 있습니다.","t검정"],
- ["비모수검정","nonparametric test","평균이나 표준편차 같은 모수에 기반을 두지 않고 순위 등으로 검정하는 방법입니다.","윌콕슨 순위합 검정"],
+ ["비모수검정","nonparametric test","분포를 특정한 유한 차원 모수 모형으로 제한하지 않는 검정입니다. 순위검정도 독립성·교환가능성 등 적용 조건을 확인합니다.","윌콕슨 순위합 검정"],
  ["정규성","normality","데이터가 정규분포로부터 얻어졌다고 간주할 수 있는 성질입니다.","신약군 혈압이 종 모양으로 퍼짐"],
  ["Q-Q 플롯","quantile-quantile plot","데이터의 분위수와 정규분포의 분위수를 점으로 찍어, 직선에 가까운지 눈으로 보는 그림입니다.","점이 대각선 근처에 모이면 정규분포에 가까움"],
  ["샤피로-윌크 검정","Shapiro-Wilk test","‘모집단이 정규분포이다’를 귀무가설로 두고 정규성을 조사하는 가설검정입니다.","신약군 p = 0.135"],
  ["등분산성","homoscedasticity","비교하는 집단들의 분산이 같다는 성질입니다.","레빈 검정 p = 0.78로 판단 보류"],
  ["일표본 t검정","one-sample t-test","표본 1개의 평균을 연구 배경에서 의미 있는 값 μ와 비교하는 t검정입니다.","위약군 평균 145.0과 기준값 140 비교"],
- ["웰치의 t검정","Welch's t-test","두 집단의 분산이 달라도 쓸 수 있도록 일반적인 t검정을 개량한 방법입니다. 작은 표본에서는 정규성·이상치에 주의하고, 큰 표본의 근사는 왜도와 표본크기를 함께 봅니다.","예 ① t = −2.73, p = 0.018"],
+ ["웰치의 t검정","Welch's t-test","독립 두 집단의 평균을 등분산 가정 없이 비교합니다. 작은 표본에서는 정규성·이상치를, 큰 표본에서는 근사 정확도를 확인합니다.","예 ① t = −2.73, p = 0.018"],
  ["대응 있는 t검정","paired t-test","같은 대상을 두 번 잰 데이터에서 차이의 평균이 0인지 검정하는 방법입니다.","신약군 7명의 복용 전후 t = −7.77"],
- ["윌콕슨 순위합 검정","Wilcoxon rank sum test","독립 두 집단을 순위로 비교하는 비모수검정입니다. 같은 모양의 위치 이동 모형에서 위치 차이로 해석하며, 맨-휘트니 U검정과 같습니다.","신약군 순위합 33.5, p = 0.017"],
+ ["윌콕슨 순위합 검정","Wilcoxon rank sum test","독립 두 집단의 동일 분포 가설을 순위로 검정합니다. 같은 모양이면 위치 차이로 해석하며 p값 계산법을 명시합니다.","W = 33.5, U = 5.5, 양측 정규근사 p ≈ 0.017"],
  ["브루너-문젤 검정","Brunner-Munzel test","P(X<Y)+0.5P(X=Y)=0.5라는 상대효과를 검정하는 비모수 방법입니다. 분포 모양이 달라도 쓸 수 있지만 표본크기와 근사 조건을 확인합니다.","분산이 크게 다른 두 공정의 비교"]
 ];
 var REFS=[
@@ -840,7 +852,7 @@ on("m14-ov",function(s){
   mkF(s,"oF",C.navy3);
   [[10,"데이터 유형","양적 · 질적"],[155,"표본의 수","1 · 2 · 3개 이상"],[300,"분포 성질","정규성 · 등분산성"]].forEach(function(b,i){bxF(s,b[0],14,130,62,"#fff",C.navy);tF(s,b[0]+65,40,b[1],{fw:800,fs:13.5});tF(s,b[0]+65,60,b[2],{fs:10.5,c:C.gray});
     if(i<2)el("line",{x1:b[0]+132,x2:b[0]+152,y1:45,y2:45,stroke:C.navy3,"stroke-width":2,"marker-end":"url(#oF)"},s);});
-  var T=[["일표본 t검정","정한 값과 비교"],["이표본 t검정","웰치의 t검정"],["대응 있는 t검정","같은 대상 전후"],["윌콕슨 순위합","정규성 없음"]];
+  var T=[["일표본 t검정","정한 값과 비교"],["이표본 t검정","웰치의 t검정"],["대응 있는 t검정","같은 대상 전후"],["윌콕슨 순위합","독립 두 집단 순위 비교"]];
   T.forEach(function(t,i){var x=8+i*108;bxF(s,x,150,100,62,i===3?"#FCF3D9":C.navy,i===3?C.amber:null);tF(s,x+50,176,t[0],{fw:800,fs:11.5,c:i===3?C.amberInk:"#fff"});tF(s,x+50,196,t[1],{fs:10,c:i===3?C.amberInk:"#C9D3E6"});
     el("path",{d:"M220 80 C220 112 "+(x+50)+" 112 "+(x+50)+" 146",fill:"none",stroke:C.navy3,"stroke-width":1.8,"marker-end":"url(#oF)"},s);});
   tF(s,220,240,"세 가지를 확인한 뒤, 두 집단 비교에 알맞은 검정을 고릅니다",{fs:11.5,c:C.gray});
@@ -893,7 +905,7 @@ on("m14-nsample",function(s){
   tF(s,70,236,"정한 값과 비교",{fs:10.5,c:C.gray});
   bar(170,4.5,"#F3C9A8");bar(224,6,"#BFD9B0");brk(185,239,Y(8),"비교");tF(s,210,236,"두 집단끼리 비교",{fs:10.5,c:C.gray});
   bar(298,4,C.amber);bar(339,5.6,C.amber);bar(380,6.8,C.amber);brk(313,354,Y(7.6),"");brk(354,395,Y(8.6),"");brk(313,395,Y(9.6),"");tF(s,354,Y(9.6)-6,"여러 쌍",{fw:800,fs:10.5,c:"#2B8CC4"});
-  tF(s,350,236,"다중비교 보정 필요",{fs:10.5,c:"#B42318",fw:700});
+  tF(s,350,236,"여러 쌍 비교 시 보정",{fs:10.5,c:"#B42318",fw:700});
 });
 
 on("m14-param",function(s){
@@ -1003,15 +1015,14 @@ on("m14-shape",function(s){
     var sd=sdF(D),tp=meanF(D)/(sd/Math.sqrt(7)),pp=sd<1e-9?(Math.abs(meanF(D))<1e-9?1:0):ptF(tp,6);
     document.getElementById("m14-kv").textContent="−"+kk+" mmHg";document.getElementById("m14-cv").textContent="× "+cc;
     document.getElementById("m14-pu").textContent=pfmtF(pu);document.getElementById("m14-pp").textContent=pfmtF(pp);
-    clear(svg);var Y=linF(80,160,176,12),xb=120,xa=300;
-    [80,100,120,140,160].forEach(function(t){el("line",{x1:60,x2:360,y1:Y(t),y2:Y(t),stroke:C.grid},svg);tF(svg,54,Y(t)+4,t,{a:"end",fs:9.5,c:C.gray2,fw:500});});
+    clear(svg);var ymax=Math.max(160,Math.ceil((Math.max.apply(null,A.concat(BEFORE))+5)/10)*10),Y=linF(80,ymax,176,12),xb=120,xa=300;
+    [80,100,120,140,ymax].forEach(function(t){el("line",{x1:60,x2:360,y1:Y(t),y2:Y(t),stroke:C.grid},svg);tF(svg,54,Y(t)+4,t,{a:"end",fs:9.5,c:C.gray2,fw:500});});
     for(var i=0;i<7;i++){el("line",{x1:xb,x2:xa,y1:Y(BEFORE[i]),y2:Y(A[i]),stroke:C.navy3,"stroke-width":1.5},svg);el("circle",{cx:xb,cy:Y(BEFORE[i]),r:4.5,fill:C.navy3},svg);el("circle",{cx:xa,cy:Y(A[i]),r:4.5,fill:"#E59A5E"},svg);}
-    tF(svg,xb,190,"복용 전",{fw:800});tF(svg,xa,190,"복용 후",{fw:800});
-    tF(svg,372,60,"대응 없음",{a:"start",fw:800,fs:11,c:pu<.05?C.ok:C.gray});tF(svg,372,78,"p "+pfmtF(pu),{a:"start",fw:800,fs:12,c:pu<.05?C.ok:C.gray});
+    tF(svg,xb,186,"복용 전",{fw:800});tF(svg,xa,186,"복용 후",{fw:800});
+    tF(svg,372,60,"대응 무시",{a:"start",fw:800,fs:11,c:pu<.05?C.ok:C.gray});tF(svg,372,78,"p "+pfmtF(pu),{a:"start",fw:800,fs:12,c:pu<.05?C.ok:C.gray});
     tF(svg,372,116,"대응 있음",{a:"start",fw:800,fs:11,c:pp<.05?C.ok:C.gray});tF(svg,372,134,"p "+pfmtF(pp),{a:"start",fw:800,fs:12,c:pp<.05?C.ok:C.gray});
     var m=document.getElementById("m14-msg"),ok=pp<.05&&pu>=.05;m.className="pmsg"+(ok?" ok":"");
-    m.textContent=ok?"찾았습니다. 평균 변화 −"+kk+", 흔들림 × "+cc+"이면 대응 있는 검정만 유의합니다("+peqF(pp)+"). 사람 사이의 혈압 차이가 빠졌기 때문입니다.":
-      "대응 없는 검정 "+peqF(pu)+", 대응 있는 검정 "+peqF(pp)+"입니다. "+(pp<.05&&pu<.05?"변화가 커서 두 방법 모두 유의합니다. 변화를 줄여 보세요.":"변화가 흔들림에 비해 작아 대응 있는 검정도 유의하지 않습니다.");
+    m.textContent=(ok?"대응 검정만 유의한 조건입니다. ":"현재 조건: ")+"대응 검정 "+peqF(pp)+", 대응 무시(참고) "+peqF(pu)+". 이 자료는 전후 짝을 살려 분석합니다. 평균 변화의 유의성만으로 약의 인과효과가 확정되지는 않습니다.";
   }
   k.addEventListener("input",upd);c.addEventListener("input",upd);upd();
 })();
@@ -1028,7 +1039,7 @@ on("m14-shape",function(s){
   g.addEventListener("input",function(){txt();if(checked){checked=false;document.getElementById("m14-act").textContent="?";var m=document.getElementById("m14-msg3");m.className="pmsg";m.textContent="예측을 바꿨습니다. 다시 확인해 보세요.";}draw();});
   document.getElementById("m14-check").onclick=function(){checked=true;var gv=+g.value,m=document.getElementById("m14-msg3"),ok=Math.abs(gv-33.5)<=5;
     document.getElementById("m14-act").textContent="33.5";m.className="pmsg "+(ok?"ok":"ng");
-    m.textContent=(ok?"가깝게 예측했습니다. ":"실제와 차이가 있습니다. ")+"신약군 순위합은 33.5로 가장 작은 값 28에 가깝습니다. U = 33.5 − 28 = 5.5, p = 0.017로 두 집단의 위치가 다르다고 판단합니다.";draw();};
+    m.textContent=(ok?"예측이 가깝습니다. ":"실제 순위합 33.5입니다. ")+"U = 5.5, 양측 정규근사 p ≈ 0.017. 동일 분포를 기각하며 위치 해석에는 같은 모양을 가정합니다.";draw();};
   txt();draw();var m0=document.getElementById("m14-msg3");m0.className="pmsg";m0.textContent="신약군 점들이 어디에 몰려 있는지 보고 순위합을 예측한 뒤 「순위를 매겨 확인」을 누르세요.";
 })();
 
