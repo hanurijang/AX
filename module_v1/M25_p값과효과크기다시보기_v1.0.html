@@ -165,6 +165,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
 .stats strong{font-size:22px;color:var(--navy);letter-spacing:-.4px}
 .pmsg{font-size:14.5px;font-weight:700;min-height:22px;line-height:1.45}
 .pmsg.ok{color:var(--ok)} .pmsg.ng{color:var(--ng)}
+#p1 .pmsg,#p3 .pmsg{margin:0;flex-shrink:0}
 .think{flex:0 0 auto;background:var(--amber-soft);border-radius:10px;padding:9px 14px;font-size:14.5px;font-weight:700;color:var(--amber-ink);display:flex;gap:10px;align-items:baseline}
 .think span{flex:0 0 auto;font-size:12px;font-weight:800}
 .howto{font-size:13.5px;color:var(--gray);line-height:1.5;margin:0}
@@ -355,10 +356,10 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
     <section class="slide" data-step="3" id="s-4-1a">
       <div class="sh"><div class="sec">4-1 p값 되돌아보기</div><h2><span class="q">Q</span>귀무가설이 옳다면 p값은 어떻게 나올까요?</h2></div>
       <div class="body split even">
-        <div class="fig"><svg id="m25-h0" viewBox="0 0 420 270" role="img" aria-label="귀무가설이 옳을 때 t검정 100번의 p값 산점도와 10,000번의 p값 히스토그램, 고르게 퍼지고 5% 정도가 0.05 미만"></svg></div>
+        <div class="fig"><svg id="m25-h0" viewBox="0 0 420 270" role="img" aria-label="귀무가설 모형의 저장 예: t검정 100번의 p값 산점도와 10,000번의 p값 히스토그램, 고르게 퍼지고 5% 정도가 0.05 미만"></svg></div>
         <div class="side">
-          <ul class="key"><li>p값: 귀무가설이 옳다고 가정할 때의 확률</li><li>귀무가설이 옳으면 p값은 <b>균등분포</b></li></ul>
-          <p class="exp">미국통계협회의 성명은 데이터 해석 결과 대다수가 p값에 기반함에도, 원리와 p값을 이해하지 못한 채 사용하는 사람이 많다는 점을 지적했습니다<span class="cite">[1]</span>. p값의 정의는 ‘귀무가설이 옳다고 가정할 때 실제 관찰한 데이터 이상으로 극단적인 값을 얻을 확률’입니다. 두 집단 모두 평균 0, 표준편차 1인 모집단에서 뽑아 t검정을 하면, p값은 0~1에 대략 고르게 퍼지고 그중 5% 정도에서 p &lt; 0.05가 됩니다. 즉 귀무가설이 옳더라도 평균 20번에 1번꼴로 p &lt; α가 될 수 있습니다.</p>
+          <ul class="key"><li>귀무가설과 검정 모형 아래의 꼬리 확률</li><li>연속형 정확 검정과 이산형 p값을 구별</li></ul>
+          <p class="exp">p값은 귀무가설과 검정 모형 아래 관찰한 통계량 이상으로 극단적인 결과가 나올 확률입니다<span class="cite">[1]</span>. 독립 정규표본의 등분산 t검정처럼 연속형의 정확한 검정에서는 귀무가설 아래 p값이 0~1의 균등분포를 따릅니다. 유한 번 반복한 히스토그램은 고르지 않을 수 있습니다. 이산형 검정의 유효한 p값은 균등분포가 아니어도 P(p ≤ α) ≤ α를 만족할 수 있습니다. 자료 의존적인 선택이나 가정 위반까지 이 보장이 적용되는 것은 아닙니다.</p>
           <p class="next"><span>다음 질문</span>왜 하필 0.05일까?</p>
         </div>
       </div>
@@ -368,7 +369,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
       <div class="sh"><div class="sec">4-1 p값 되돌아보기</div><h2><span class="q">Q</span>유의한 결과 중 귀무가설이 옳았던 것은 얼마나 될까요?</h2></div>
       <div class="body split even">
         <div class="figcol">
-          <div class="fig"><svg id="m25-alpha" viewBox="0 0 420 150" role="img" aria-label="연구 600건 중 귀무가설이 옳은 500건에서 25건, 대립가설이 옳은 100건에서 80건이 유의, 유의한 105건 중 25건은 귀무가설이 옳았음"></svg></div>
+          <div class="fig"><svg id="m25-alpha" viewBox="0 0 420 150" role="img" aria-label="가정한 연구 600건에서 위양성 기대 25건, 참양성 기대 80건. 유의 결과의 조건부 위양성 확률 약 24%"></svg></div>
           <div class="math">
             <div class="mt">핵심 수학 개념 · 유의한 결과 중 귀무가설이 옳은 비율</div>
             <div class="f">귀무 × α ÷ (귀무 × α + 대립 × 검정력)</div>
@@ -377,8 +378,8 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
           </div>
         </div>
         <div class="side">
-          <ul class="key"><li>α = 0.05에는 특별한 근거가 없습니다.</li><li>α를 줄이면 β가 커지는 상충 관계</li></ul>
-          <p class="exp">놀랍게도 0.05를 쓰는 데 근거는 없습니다. 통계학자 피셔가 자의적임을 인정하면서도 증거의 강력함을 나타내는 지표로 사용한 것이 시작이고, 현대 과학은 이를 관례처럼 따를 뿐입니다. 귀무가설이 옳을 때와 대립가설이 옳을 때의 비율이 5:1이고 검정력 0.8로 검정하면, 유의했던 결과 중 약 24%는 사실 귀무가설이 옳았던 것입니다. α를 작게 하면 β가 커지므로, α = 0.005로 낮추되 표본크기를 70% 정도 늘려 β가 커지지 않게 하자는 제안도 있습니다<span class="cite">[2]</span>.</p>
+          <ul class="key"><li>α는 오류 비용과 목적에 맞춰 사전에 정함</li><li>24%는 가정한 비율·오류율의 조건부 계산</li></ul>
+          <p class="exp">α = 0.05는 널리 쓰는 관례이며 모든 문제에서 최적인 기준은 아닙니다. 오류의 비용과 연구 목적을 고려해 사전에 정합니다. 귀무·대립이 참인 비율 5:1, 실제 위양성률 .05, 검정력 .8을 가정한 사고실험에서 유의 결과 중 귀무가 참일 조건부 확률은 25/105 ≈ 24%입니다. 600건의 실제 건수가 반드시 25·80이 된다는 뜻은 아닙니다. 같은 표본 수·효과에서 α를 줄이면 검정력은 낮아집니다. 교재의 α=.005·표본 약 70% 증가 제안<span class="cite">[2]</span>은 특정 설정의 과거 제안이며 보편적인 표본수 규칙은 아닙니다.</p>
           <p class="next"><span>다음 질문</span>p값을 보는 관점은 하나뿐일까?</p>
         </div>
       </div>
@@ -387,10 +388,10 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
     <section class="slide" data-step="3" id="s-4-2a">
       <div class="sh"><div class="sec">4-2 피셔류와 네이만-피어슨류 검정</div><h2><span class="q">Q</span>p = 0.01과 p = 0.001은 다른 결과일까요?</h2></div>
       <div class="body split even">
-        <div class="fig"><svg id="m25-fnp" viewBox="0 0 420 270" role="img" aria-label="피셔류는 p값 크기로 증거의 강력함을 평가, 네이만-피어슨류는 α 미만인지로 기각과 채택을 결정"></svg></div>
+        <div class="fig"><svg id="m25-fnp" viewBox="0 0 420 270" role="img" aria-label="피셔류는 p값 크기로 증거의 강력함을 평가, 네이만-피어슨류는 α 미만인지로 기각과 비기각을 결정"></svg></div>
         <div class="side">
-          <ul class="key"><li><b>피셔류 검정</b>: p값 크기 = 증거의 강력함</li><li><b>네이만-피어슨류 검정</b>: α 미만인지로 결정</li></ul>
-          <p class="exp">역사적으로 통계학 검정에는 피셔류 검정과 그 후 발전한 네이만-피어슨류 검정이 있습니다. 피셔류 검정은 귀무가설이 옳을 때의 p값을 계산해 귀무가설과 데이터의 괴리 정도를 평가하며, 기각한다는 개념이 없습니다. 네이만과 피어슨은 대립가설을 세우고 제1종·제2종 오류를 고려하는 현대 가설검정의 흐름을 만들었고, p값이 α 미만인지에만 주목해 기각/채택을 결정하므로 0.01이든 0.001이든 똑같이 ‘유의’입니다. 현대에는 p값 자체를 기재하거나 *, **, ***로 단계를 표시하도록 권장해, p값 크기에도 의미를 부여하려는 움직임이 있습니다.</p>
+          <ul class="key"><li>자료와 모형의 괴리 평가 / 오류율 관리</li><li>기각·비기각과 효과의 크기·중요성은 구별</li></ul>
+          <p class="exp">교재는 p값으로 모형과 자료의 괴리를 평가하는 관점과, 대립가설·오류율·검정력을 정해 반복 의사결정을 설계하는 관점을 대비합니다. 이를 ‘피셔는 기각을 전혀 하지 않는다’거나 ‘네이만–피어슨 검정만 표본을 설계한다’는 절대적 구분으로 읽지 않습니다. 고정한 α=.05에서는 p=.01과 .001 모두 기각하지만 효과크기가 같다는 뜻은 아닙니다. 비기각은 귀무가설의 증명이 아닙니다. 별표만 제시하기보다 p값·효과 추정·구간과 설계를 함께 보고합니다.</p>
           <p class="next"><span>다음 질문</span>표본크기는 언제 어떻게 정할까?</p>
         </div>
       </div>
@@ -403,14 +404,14 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
           <div class="fig"><svg id="m25-four" viewBox="0 0 420 150" role="img" aria-label="유의수준, 검정력, 효과크기, 표본크기 중 셋을 정하면 나머지 하나가 정해짐"></svg></div>
           <div class="math">
             <div class="mt">핵심 수학 개념 · 표본크기 설계</div>
-            <div class="f">α, 1 − β, 효과크기 중 셋 → 표본크기 n</div>
+            <div class="f">검정·설계 고정 + α·검정력·d → 집단당 n</div>
             <div class="r"><span>값</span><span>α 0.05, 1 − β 0.8, d = 10 MPa ÷ 10 MPa = 1</span></div>
             <div class="r"><span>결과</span><span>n = 16.71 → 집단마다 17개 (소프트웨어로 계산)</span></div>
           </div>
         </div>
         <div class="side">
-          <ul class="key"><li>n은 데이터를 얻기 전에 미리 정합니다.</li><li>결과를 보고 n을 늘리면 p-해킹입니다.</li></ul>
-          <p class="exp">네이만-피어슨류 검정에서는 미리 검출하고자 하는 효과크기를 정하고, 설정한 α와 β에 따라 필요한 표본크기 n을 결정해야 합니다. n이 크면 아주 약간의 차이라도 귀무가설을 기각해 버리기 때문입니다. 유의수준 α, 검정력 1 − β, 효과크기, 표본크기 n 중 셋을 정하면 나머지 하나가 정해집니다. 직접 계산하기는 쉽지 않아 통계 소프트웨어를 쓰며, 예를 들어 R의 power.t.test 함수에 셋을 넣으면 남은 하나를 구해 줍니다. 결과를 본 뒤 데이터를 추가해 n을 늘리는 것은 p-해킹으로 이어지는 잘못된 순서입니다.</p>
+          <ul class="key"><li>검정·설계·효과크기·오류율을 사전 계획</li><li>적절히 설계한 순차검정과 임의 중단은 구별</li></ul>
+          <p class="exp">독립 정규·공통 분산의 두 집단, 같은 집단 크기, 양측 t검정을 가정합니다. 목표 d와 α, 검정력을 정하면 집단당 n을 계산할 수 있습니다. α=.05·검정력 .8·d=1이면 n≈16.71→17입니다. 필요한 n은 단측·양측, 배정 비율, 군집·반복측정 설계 등에 따라 달라집니다. 유의할 때까지 자료를 더 모으고 고정표본 p값을 그대로 쓰면 오류율이 커질 수 있습니다. 사전에 계획해 오류율을 관리하는 순차검정이나 효과와 무관한 표본수 조정은 구별합니다.</p>
           <p class="next"><span>다음 질문</span>표본이 아주 크면 p값은 어떻게 될까?</p>
         </div>
       </div>
@@ -422,7 +423,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
         <div class="fig"><svg id="m25-big" viewBox="0 0 420 270" role="img" aria-label="실험 17개씩은 9 MPa 차이로 p 0.0124, 품질 데이터베이스 1만 개씩은 0.5 MPa 차이로 p 0.0004"></svg></div>
         <div class="side">
           <ul class="key"><li>p값은 차이의 크기와 표본크기 모두에 의존</li><li>n이 크면 아주 작은 차이도 p &lt; 0.05</li></ul>
-          <p class="exp">p값이 작다는 것을 알면 충분히 큰 차이가 있으리라 생각하기 쉽습니다. 그러나 표본크기 n이 클수록 아주 약간의 차이로도 p값이 작아질 수 있습니다. 즉 p값은 차이의 크기뿐 아니라 표본크기 n에도 의존하며, 이는 n이 커짐에 따라 신뢰구간의 폭이 좁아지는 현상과 관련이 있습니다. 설계한 실험은 17장씩으로 9 MPa 차이에 p = 0.0124였지만, 표본크기를 설계하지 않은 품질 데이터베이스는 각 10,000개라서 0.5 MPa라는 작은 차이로도 p = 0.0004가 되었습니다.</p>
+          <p class="exp">집단당 n=17인 가상 실험은 B−A=9 MPa, p≈.0124입니다. 독립·공통 SD 10 MPa를 가정한 집단당 n=10,000의 가상 DB 비교는 0.5 MPa에도 p≈.0004입니다. 작은 p값이 큰 개선이나 채택 결정을 보장하지 않습니다. 원래 단위의 차이와 신뢰구간을 사전에 정한 실무 기준·비용과 비교합니다. d=.05라는 표준화 크기만으로 가치가 없다고 단정하지도 않습니다. 실제 DB의 군집·시간 의존성·교란을 무시하면 큰 n에서도 추론이 부적절할 수 있습니다.</p>
           <p class="next"><span>다음 질문</span>n에 따라 p값은 얼마나 달라질까?</p>
         </div>
       </div>
@@ -433,9 +434,20 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
       <div class="body split even">
         <div class="fig"><svg id="m25-curve" viewBox="0 0 420 270" role="img" aria-label="효과크기 d가 1일 때 표본크기에 따른 평균 p값 곡선과 검정력 곡선, n 17에서 검정력 0.8"></svg></div>
         <div class="side">
-          <ul class="key"><li>n↑ → 평균 p값↓, 검정력↑</li><li>p &lt; 0.05에만 관심을 두면 안 됩니다.</li></ul>
-          <p class="exp">평균이 10 MPa 다른(d = 1) 두 모집단에서 표본을 뽑아 t검정을 2,000번씩 반복하면, 평균 p값은 n = 10에서 0.11이지만 n이 커질수록 빠르게 0에 가까워집니다. 대립가설이 옳을 때 p &lt; 0.05가 될 비율인 검정력은 n = 17에서 0.8을 넘어, 앞서 계산한 표본크기와 일치합니다. 그러므로 p &lt; 0.05에만 관심을 두어서는 안 되며 효과크기나 신뢰구간을 함께 나타내는 것이 중요합니다. 단, 큰 표본크기는 신뢰구간을 좁혀 더 신뢰할 만한 추정값을 준다는 점에서는 반가운 일입니다.</p>
+          <ul class="key"><li>검정력: 모형 아래 반복 검출 확률</li><li>저장 평균 p값과 한 번의 실험 p값 구별</li></ul>
+          <p class="exp">아래 곡선은 공통 SD 10 MPa, 평균 차이 10 MPa인 정규 모형의 기존 저장 예입니다. n별 평균 p값은 2,000회 모의실험 요약이고 검정력은 해당 양측 t검정의 이론값입니다. n=17에서 검정력은 약 .81로 .8을 넘습니다. 한 번의 실험 p값이 n 증가에 따라 항상 감소한다는 법칙은 아닙니다. 같은 조건에서 n을 늘리면 추정 구간은 대체로 좁아지지만 측정 편향이나 모형 오류가 사라지는 것은 아닙니다.</p>
           <p class="next"><span>다음 질문</span>효과의 크기는 어떻게 나타낼까?</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" data-step="3" id="s-4-3c">
+      <div class="sh"><div class="sec">4-3 유의성과 실무 기준</div><h2><span class="q">Q</span>p값이 작으면 신규 조건을 바로 채택해도 될까요?</h2></div>
+      <div class="body split even">
+        <div class="fig"><svg viewBox="0 0 420 270" role="img" aria-label="가상 DB: B−A = +0.5 MPa · 집단당 n=10,000: 공통 SD 10 MPa · 독립 정규·등분산 t모형; 양측 p ≈ 0.0004 · 차이의 95% 구간: 약 +0.223 ~ +0.777 MPa; 예시 채택 기준: 적어도 +1 MPa 개선: 이 구간은 기준보다 낮음 / 비용·품질 조건도 검토"><rect x="8" y="8" width="404" height="76" rx="10" fill="#EEF4FB"/><text x="210" y="37" text-anchor="middle" fill="#1B2A4A" font-size="13" font-weight="800">가상 DB: B−A = +0.5 MPa · 집단당 n=10,000</text><text x="210" y="63" text-anchor="middle" fill="#6B7280" font-size="11">공통 SD 10 MPa · 독립 정규·등분산 t모형</text><rect x="8" y="94" width="404" height="76" rx="10" fill="#FCF3D9"/><text x="210" y="123" text-anchor="middle" fill="#1B2A4A" font-size="13" font-weight="800">양측 p ≈ 0.0004 · 차이의 95% 구간</text><text x="210" y="149" text-anchor="middle" fill="#6B7280" font-size="11">약 +0.223 ~ +0.777 MPa</text><rect x="8" y="180" width="404" height="76" rx="10" fill="#E3F1EA"/><text x="210" y="209" text-anchor="middle" fill="#1B2A4A" font-size="13" font-weight="800">예시 채택 기준: 적어도 +1 MPa 개선</text><text x="210" y="235" text-anchor="middle" fill="#6B7280" font-size="11">이 구간은 기준보다 낮음 / 비용·품질 조건도 검토</text></svg></div>
+        <div class="side"><ul class="key"><li>통계적 유의성 ≠ 효과의 크기 ≠ 채택 가치</li><li>실무 기준은 원래 단위로 사전에 정하기</li></ul>
+          <p class="exp">여기서 +1 MPa는 설명을 위해 정한 가상 채택 기준입니다. 같은 0.5 MPa 차이도 현장의 비용·위험·생산 규모에 따라 의미가 다릅니다. d가 작거나 p가 작다는 한 가지 이유로 결정을 내리지 않습니다. 구간 계산이 타당한 설계인지 확인하고 추정 차이와 불확실성을 기준에 비추어 평가합니다.</p>
+          <p class="next"><span>다음 질문</span>표준편차로 나눈 효과크기는 무엇을 더 알려 줄까?</p>
         </div>
       </div>
     </section>
@@ -466,7 +478,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
         <div class="fig"><svg id="m25-dgrid" viewBox="0 0 420 270" role="img" aria-label="표준편차 1일 때 평균 차이 2, 1, 0.2는 d 2, 1, 0.2이고, 표준편차 0.5일 때는 d 4, 2, 0.4"></svg></div>
         <div class="side">
           <ul class="key"><li>같은 평균 차이도 흩어짐이 작으면 d가 큼</li><li>단위를 맞춘 효과크기로 <b>메타 분석</b>에 유용</li></ul>
-          <p class="exp">모집단의 표준편차가 모두 1이면 평균값 차이 2, 1, 0.2일 때 Cohen's d도 2, 1, 0.2입니다. 표준편차가 0.5처럼 작으면 같은 차이에서도 d는 4, 2, 0.4가 됩니다. ‘평균값 차이는 10’이라고만 하면 큰지 작은지 알 수 없기 때문이며, d는 데이터 값 그 자체나 단위에 의존하지 않도록 분산으로 표준화한 지표입니다. 평균 차이와 표준편차가 같다면 n만 늘려도 d가 자동으로 커지지는 않습니다. 다만 표본으로 추정한 d는 표집에 따라 변하고, 추정의 불확실성과 소표본 편향은 n에 영향을 받습니다. 그래서 여러 논문을 통합해 결과를 종합적으로 평가하는 메타 분석에서도 효과크기가 중요합니다.</p>
+          <p class="exp">모집단의 표준편차가 모두 1이면 평균값 차이 2, 1, 0.2일 때 Cohen's d도 2, 1, 0.2입니다. 표준편차가 0.5처럼 작으면 같은 차이에서도 d는 4, 2, 0.4가 됩니다. ‘평균값 차이는 10’이라고만 하면 큰지 작은지 알 수 없기 때문이며, d는 두 집단에 같은 단위 변환을 적용해도 변하지 않는 표준화 평균차입니다. SD가 달라지면 해석도 달라집니다. 평균 차이와 표준편차가 같다면 n만 늘려도 d가 자동으로 커지지는 않습니다. 다만 표본으로 추정한 d는 표집에 따라 변하고, 추정의 불확실성과 소표본 편향은 n에 영향을 받습니다. 그래서 여러 논문을 통합해 결과를 종합적으로 평가하는 메타 분석에서도 효과크기가 중요합니다.</p>
           <p class="next"><span>다음 질문</span>다른 분석에서는 어떤 효과크기를 쓸까?</p>
         </div>
       </div>
@@ -477,23 +489,23 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
       <div class="body split even">
         <div class="fig"><svg id="m25-tbl" viewBox="0 0 420 270" role="img" aria-label="검정 방법별 효과크기 지표와 소, 중, 대 기준값 표"></svg></div>
         <div class="side">
-          <ul class="key"><li>상관 r, 회귀 R², 분산분석 <b>에타제곱</b>(η²)</li><li>2×2 분할표 φ, 그 밖의 분할표 <b>Cramér's V</b></li></ul>
-          <p class="exp">분석 방법에 따라 다양한 효과크기가 제안되어 있습니다. 상관이라면 상관계수 r, 회귀라면 결정계수 R²를 그대로 쓰고, 분산분석의 에타제곱은 분산 설명률로 R²과 같다고 생각하면 됩니다. 윌콕슨 순위합 검정에서는 z ÷ √n, 2×2 분할표에서는 φ = √(χ² ÷ n), 그 밖의 분할표에서는 Cramér's V를 씁니다. 크기 해석 기준은 참고일 뿐 분야나 문맥에 따라 뜻이 다릅니다<span class="cite">[3]</span>. 효과크기 외에도 차이 ± 신뢰구간을 보고하면 차이의 크기를 나타낼 수 있으며, p값만이 아니라 효과크기도 함께 나타내는 것이 현대 통계 해석의 주류입니다.</p>
+          <ul class="key"><li>상관 r, 회귀 R², 분산분석 <b>에타제곱</b>(η²)</li><li>2×2의 |φ|, 일반 분할표의 <b>Cramér's V</b></li></ul>
+          <p class="exp">효과크기는 질문과 분석에 맞게 정의합니다. 상관 r, 같은 자료·절편 모형의 R², 요인 제곱합/전체 제곱합인 η² 등이 있습니다. 다요인 모형의 부분 η²는 분모가 달라 구별합니다. 순위검정의 z/√N은 표준화 방식·동점 보정·전체 N을 명시합니다. 2×2의 |φ|와 Cramér’s V는 Pearson χ²로 계산하며 V는 더 큰 분할표에도 씁니다. 표의 소·중·대 기준은 관례적 참고값입니다<span class="cite">[3]</span>. 원래 단위의 차이·불확실성·실무 기준도 함께 제시합니다.</p>
           <p class="next"><span>정리</span>p값과 효과크기를 정리해 봅시다.</p>
         </div>
       </div>
     </section>
 
     <section class="slide" data-step="3" id="s-4-sum">
-      <div class="sh"><div class="sec">4-5 정리</div><h2>p값은 ‘있다/없다’를, 효과크기는 ‘얼마나’를 알려 줍니다</h2></div>
+      <div class="sh"><div class="sec">4-5 정리</div><h2>p값·효과크기·신뢰구간을 실무 기준과 함께 읽습니다</h2></div>
       <div class="body full" style="align-content:center">
         <table class="sumtbl">
           <thead><tr><th>개념</th><th>핵심</th><th>이 모듈의 예</th></tr></thead>
           <tbody>
-            <tr><td>p값</td><td>귀무가설이 옳다고 가정할 때 그 이상 극단적인 값을 얻을 확률</td><td>귀무가설이 옳으면 약 5%가 p &lt; 0.05</td></tr>
-            <tr><td>두 관점</td><td>피셔류: p값 크기로 증거 평가 · 네이만-피어슨류: α로 결정, n 설계</td><td>d = 1, 검정력 0.8 → n = 17</td></tr>
+            <tr><td>p값</td><td>귀무가설이 옳다고 가정할 때 그 이상 극단적인 값을 얻을 확률</td><td>연속형 정확 검정의 귀무 모형에서 P(p &lt; .05)=.05</td></tr>
+            <tr><td>두 관점</td><td>자료와 모형의 괴리 평가 / 사전 오류율·검정력에 따른 판단</td><td>d = 1, 검정력 0.8 → n = 17</td></tr>
             <tr><td>표본크기와 p</td><td>n이 크면 아주 작은 차이도 유의</td><td>각 10,000개, 0.5 MPa → p = 0.0004</td></tr>
-            <tr><td>효과크기</td><td>Cohen's d = (B − A) ÷ sₚ, Hedges' g = J × d</td><td>9.0 ÷ 9.90 ≈ 0.91 (대)</td></tr>
+            <tr><td>효과크기</td><td>Cohen's d = (B − A) ÷ sₚ, Hedges' g = J × d</td><td>9.0 ÷ 9.90 ≈ 0.91 (관례상 대)</td></tr>
           </tbody>
         </table>
       </div>
@@ -506,18 +518,18 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
     <section class="slide" data-step="5" id="p1">
       <div class="sh"><div class="sec">실습 1 · 조작형</div><h2>목표: 표본크기를 바꾸며 검정력과 평균 p값의 변화를 확인합니다</h2></div>
       <div class="body split">
-        <div class="pcol" style="gap:8px">
-          <div class="plabel" style="margin:0">해보기 · 검출할 차이(표준편차 10 MPa)를 고르고 집단당 표본크기 n을 움직이세요</div>
+        <div class="pcol" style="gap:6px">
+          <div class="plabel" style="margin:0">해보기 · 독립 정규·공통 SD 10 MPa의 양측 t검정 모형입니다. 차이와 집단당 n을 바꾸세요</div>
           <div class="mbtns" id="m25-dd" style="gap:6px"></div>
           <div class="ctrl">표본크기 n<input type="range" id="m25-n" min="0" max="128" step="1" value="8" aria-label="집단당 표본크기"><strong id="m25-nv" style="min-width:40px;text-align:right">-</strong></div>
           <div class="fig" style="flex:1"><svg id="m25-p1-svg" viewBox="0 0 470 170" role="img" aria-label="표본크기에 따른 검정력과 평균 p값 곡선"></svg></div>
         </div>
-        <div class="pcol" style="gap:10px;justify-content:center">
+        <div class="pcol" style="gap:6px;justify-content:center">
           <div class="plabel" style="margin:0">결과 확인</div>
-          <div class="stats three"><div><small>효과크기 d</small><strong id="m25-dv">-</strong></div><div><small>검정력</small><strong id="m25-pw">-</strong></div><div><small>평균 p값</small><strong id="m25-mp">-</strong></div></div>
+          <div class="stats three"><div><small>효과크기 d</small><strong id="m25-dv">-</strong></div><div><small>검정력</small><strong id="m25-pw">-</strong></div><div><small>저장 평균 p값</small><strong id="m25-mp">-</strong></div></div>
           <p class="howto">도전: 차이 10 MPa(d = 1)에서 검정력이 처음 0.8을 넘는 n을 찾아보세요.</p>
           <p class="pmsg" id="m25-msg"></p>
-          <div class="think" style="flex-wrap:wrap"><span>생각해보기</span>평균 차이와 표준편차가 같다면 n만 늘려도 d가 커지지 않는 이유는 무엇일까요?<details style="flex-basis:100%;font-weight:600"><summary style="cursor:pointer">예시 답</summary>d는 평균 차이를표준편차로 나눈 값입니다. 두 값이 같으면 d도 같지만, 실제 표본의 d와 그 불확실성은 표집에 따라 달라집니다.</details></div>
+          <div class="think" style="flex-wrap:wrap"><span>생각해보기</span>평균 차이와 표준편차가 같다면 n만 늘려도 d가 커지지 않는 이유는 무엇일까요?<details style="flex-basis:100%;font-weight:600"><summary style="cursor:pointer">예시 답</summary>d는 평균 차이를 표준편차로 나눈 값입니다. 두 값이 같으면 d도 같지만, 실제 표본의 d와 그 불확실성은 표집에 따라 달라집니다.</details></div>
         </div>
       </div>
     </section>
@@ -547,11 +559,11 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
           <div class="plabel">해보기 · 상황을 고르고 두 분포가 얼마나 떨어져 있는지 보며 d를 예측하세요</div>
           <div class="fig" style="flex:1"><svg id="m25-p3-svg" viewBox="0 0 470 210" role="img" aria-label="두 조건의 인장강도 분포"></svg></div>
         </div>
-        <div class="pcol" style="gap:9px;justify-content:center">
+        <div class="pcol" style="gap:6px;justify-content:center">
           <div class="mbtns" id="m25-qs" style="gap:6px"></div>
           <div class="ctrl">d 예측<input type="range" id="m25-g" min="0" max="3" step="0.05" value="1" aria-label="Cohen's d 예측"><strong id="m25-gv" style="min-width:48px;text-align:right">-</strong></div>
           <button class="btn" id="m25-check" style="align-self:flex-start">계산해서 확인</button>
-          <div class="stats three"><div><small>내 예측</small><strong id="m25-mine">-</strong></div><div><small>실제 d</small><strong id="m25-act">?</strong></div><div><small>크기</small><strong id="m25-lv">?</strong></div></div>
+          <div class="stats three"><div><small>내 예측</small><strong id="m25-mine">-</strong></div><div><small>실제 d</small><strong id="m25-act">?</strong></div><div><small>관례적 기준</small><strong id="m25-lv">?</strong></div></div>
           <p class="pmsg" id="m25-msg3"></p>
           <div class="think" style="flex-wrap:wrap"><span>생각해보기</span>평균 차이가 같은데 d가 달라지는 상황은 무엇이었나요?<details style="flex-basis:100%;font-weight:600"><summary style="cursor:pointer">예시 답</summary>평균 차이는 같은데 표준편차가 다르면 d가 달라집니다.</details></div>
         </div>
@@ -595,13 +607,13 @@ var P100=[0.4543,0.8491,0.8445,0.9321,0.0115,0.0091,0.8905,0.0856,0.9507,0.416,0
 var QUIZ=[
  {goal:1,type:"O/X 오개념",stem:"“신규 열처리 조건의 t검정 결과 p = 0.0124가 나왔다면, 귀무가설(두 조건의 평균이 같다)이 옳을 확률이 1.24%라는 뜻이다.”",
   opts:["O","X"],ans:1,ox:true,
-  exp:"p값은 ‘귀무가설이 옳다고 가정할 때, 실제 관찰한 데이터 이상으로 극단적인 값을 얻을 확률’입니다. 귀무가설이 옳을 확률이 아닙니다. 실제로 귀무가설과 대립가설이 옳은 비율이 5:1이고 검정력이 0.8이라면, α = 0.05로 유의했던 결과 중 약 24%는 사실 귀무가설이 옳았던 것입니다.",back:"s-4-1a",backLabel:"4-1 p값의 정의 다시 보기"},
+  exp:"p=.0124는 귀무가설이 참일 사후 확률이 아닙니다. 귀무가설과 검정 모형 아래 관찰값 이상 극단적인 통계량의 확률입니다. 본문의 24%는 별도로 가정한 귀무·대립 비율과 오류율에 따른 조건부 계산이며 이 실험의 사후 확률로 옮기지 않습니다.",back:"s-4-1a",backLabel:"4-1 p값의 정의 다시 보기"},
  {goal:1,type:"상황 판단",stem:"유의수준 α = 0.05로 두 번의 실험을 했더니 실험 1은 p = 0.04, 실험 2는 p = 0.001이었습니다. 네이만-피어슨류 검정의 관점에서 알맞은 판단은 무엇일까요?",
-  opts:["두 실험 모두 귀무가설을 기각하며, 결론은 같다","실험 2가 더 강하게 기각되므로 결론이 다르다","실험 1은 판단을 보류한다","실험 2만 귀무가설을 기각한다"],ans:0,
-  exp:"네이만-피어슨류 검정에서는 p값이 유의수준 α 미만인가 이상인가에만 주목해 기각/채택이라는 결론을 내립니다. 그래서 p값이 0.04이든 0.001이든 p < 0.05라는 점에서는 똑같이 통계적으로 유의하다는 결과가 됩니다. p값의 크기로 증거의 강력함을 평가하는 것은 피셔류 검정의 특징입니다.",back:"s-4-2a",backLabel:"4-2 피셔류와 네이만-피어슨류 다시 보기"},
+  opts:["둘 다 정한 α 기준에서 기각하지만 효과크기가 같다는 뜻은 아니다", "실험 2만 귀무가설을 기각한다", "실험 1은 귀무가설이 참이라고 증명한다", "실험 2의 효과가 반드시 40배 크다"],ans:0,
+  exp:"고정한 α=.05에서 두 p값 모두 기준 미만이므로 기각합니다. p값은 효과크기·불확실성·설계 등에 의존하므로 서로 다른 실험의 p값만으로 효과가 같거나 몇 배라고 말할 수 없습니다. 비기각도 귀무가설의 증명은 아닙니다.",back:"s-4-2a",backLabel:"4-2 피셔류와 네이만-피어슨류 다시 보기"},
  {goal:2,type:"상황 판단",stem:"품질 데이터베이스에서 두 조건의 강판 각 10,000개를 비교했더니 평균 차이는 0.5 MPa(표준편차 10 MPa)인데 p = 0.0004였습니다. 가장 알맞은 판단은 무엇일까요?",
-  opts:["표본이 매우 커서 작은 차이도 유의해진 것이므로 효과크기로 실질적 의미를 판단한다","p가 매우 작으므로 큰 개선 효과가 있다","p < 0.001이므로 조건을 바로 바꾼다","표본이 크면 p값을 믿을 수 없으므로 표본을 줄여 다시 검정한다"],ans:0,
-  exp:"평균값의 차이가 같더라도 표본크기 n이 커질수록 p값은 작아집니다. 이 예의 Cohen's d는 0.5 ÷ 10 = 0.05로 매우 작습니다. 그러므로 p < 0.05에만 관심을 두지 말고 효과크기나 신뢰구간도 함께 보아야 합니다. 큰 표본은 신뢰구간을 좁혀 주므로 줄일 필요는 없습니다.",back:"s-4-3a",backLabel:"4-3 표본크기와 p값 다시 보기"},
+  opts:["원래 단위의 차이·신뢰구간을 실무 기준·비용과 함께 평가한다", "p가 매우 작으므로 큰 개선 효과가 있다", "p < .001이므로 조건을 바로 바꾼다", "d가 작으므로 어떤 현장에서도 가치가 없다"],ans:0,
+  exp:"독립·공통 SD 10 MPa 모형에서 d=.5/10=.05지만 실무적 중요성은 이 수치만으로 정해지지 않습니다. 원래 단위의 차이와 구간을 사전 기준·비용에 비추어 판단합니다. 큰 n이 자료의 의존성·교란·측정 편향까지 해결하지는 않습니다.",back:"s-4-3a",backLabel:"4-3 표본크기와 p값 다시 보기"},
  {goal:2,type:"계산",stem:"α = 0.05, 검정력 0.8로 효과크기 d = 1을 검출하려면 집단마다 약 17개가 필요했습니다. 효과크기만 d = 0.5로 줄이면 필요한 표본크기는 약 몇 개가 될까요?",
   opts:["약 64개 (약 4배)","약 34개 (2배)","약 17개 (같음)","약 9개 (절반)"],ans:0,
   exp:"필요한 표본크기는 대략 효과크기의 제곱에 반비례합니다. d가 절반이 되면 n은 약 4배가 되어, 계산하면 63.77 → 64개입니다. 검출하려는 차이가 작을수록 표본이 훨씬 많이 필요하므로, 효과크기를 사전에 정하고 표본크기를 설계해야 합니다.",back:"s-4-2b",backLabel:"4-2 표본크기 정하기 다시 보기"},
@@ -614,19 +626,19 @@ var QUIZ=[
 ];
 
 var BINS=["피셔류 검정","네이만-피어슨류 검정"];
-var CARDS=[["p값의 크기로 증거의 강력함을 평가","피셔류 검정"],["기각한다는 개념이 없음","피셔류 검정"],["p = 0.003처럼 p값 자체를 기재","피셔류 검정"],
+var CARDS=[["p값의 크기로 증거의 강력함을 평가","피셔류 검정"],["고정한 오류율 판단과 구별해 자료의 괴리 평가","피셔류 검정"],["p = 0.003처럼 p값 자체를 기재","피셔류 검정"],
            ["대립가설과 제2종 오류를 고려","네이만-피어슨류 검정"],["p = 0.01과 0.001을 똑같이 ‘유의’로 봄","네이만-피어슨류 검정"],["효과크기, α, β로 n을 미리 정함","네이만-피어슨류 검정"]];
-var HINT={"피셔류 검정":"귀무가설과 데이터의 괴리 정도를 p값의 크기로 평가합니다.","네이만-피어슨류 검정":"α 미만인지에만 주목해 기각/채택을 결정하고, 표본크기를 미리 설계합니다."};
+var HINT={"피셔류 검정":"귀무가설과 데이터의 괴리 정도를 p값의 크기로 평가합니다.","네이만-피어슨류 검정":"대립가설·반복 오류율·검정력을 사전에 정해 의사결정 절차를 설계합니다."};
 
 var GLOSSARY=[
- ["균등분포","uniform distribution","어떤 범위 안의 모든 값이 같은 확률로 나오는 분포로, 귀무가설이 옳을 때 p값이 이 분포를 따릅니다.","효과 없는 비교 10,000번의 p값이 0~1에 고르게 퍼짐"],
+ ["균등분포","uniform distribution","연속형 구간에서 밀도가 일정한 분포입니다. 연속형의 정확한 검정은 귀무가설 아래 p값이 U(0,1)을 따르지만 모든 p값이 그런 것은 아닙니다.","유효한 이산형 p값은 균등하지 않을 수 있음"],
  ["피셔류 검정","Fisher's significance test","귀무가설이 옳을 때의 p값을 계산해 귀무가설과 데이터의 괴리 정도, 즉 증거의 강력함을 평가하는 검정입니다.","p = 0.0124를 그대로 기재"],
- ["네이만-피어슨류 검정","Neyman–Pearson hypothesis test","대립가설을 세우고 제1종·제2종 오류를 고려해, p값이 α 미만인지로 기각/채택을 결정하는 검정입니다.","d = 1, α 0.05, 검정력 0.8 → n = 17"],
+ ["네이만-피어슨류 검정","Neyman–Pearson hypothesis test","대립가설과 제1종·제2종 오류를 정해 반복 의사결정 절차를 설계하는 관점입니다. 비기각을 귀무가설의 증명으로 읽지 않습니다.","d = 1, α 0.05, 검정력 0.8 → n = 17"],
  ["Cohen's d","Cohen's d","두 독립집단의 공통 분산을 가정해 평균 차이를 통합표본표준편차 sₚ로 나눈 효과크기입니다. 평균을 빼는 순서에 따라 부호가 바뀝니다.","(509.0 − 500.0) ÷ 9.90 ≈ 0.91"],
  ["Hedges' g","Hedges' g","소표본에서 d의 치우침을 줄이려고 g = J × d로 보정한 효과크기입니다. J ≈ 1 − 3/(4df − 1), df = nA + nB − 2입니다.","d ≈ 0.91에 J를 곱하면 약 0.89"],
  ["메타 분석","meta-analysis","어떤 현상을 보고한 여러 논문을 통합해 결과를 종합적으로 평가하는 방법입니다.","여러 공장의 열처리 시험 결과를 d로 모아 평가"],
  ["에타제곱","eta squared, η²","분산분석에서 어떤 요인의 제곱합이 전체 제곱합에서 차지하는 비율로, 분산 설명률이라고도 합니다.","소 0.01 · 중 0.06 · 대 0.14"],
- ["Cramér's V","Cramér's V","2×2 이외의 분할표에서 행과 열이 관련된 정도를 0~1로 나타내는 효과크기로, 연관계수라고도 합니다.","열처리 조건 3가지 × 등급 3가지 분할표"]
+ ["Cramér's V","Cramér's V","Pearson χ²와 전체 N, 표의 행·열 수로 구하는 0~1의 연관 크기입니다. 2×2에서도 쓰며 이때 |φ|와 같습니다.","열처리 조건 3가지 × 등급 3가지 분할표"]
 ];
 var REFS=[
  {n:1,title:"The ASA Statement on p-Values: Context, Process, and Purpose",org:"R. L. Wasserstein, N. A. Lazar, The American Statistician 70(2), 129–133, 2016",url:"https://doi.org/10.1080/00031305.2016.1154108",date:"2026-10-27 확인"},
@@ -783,8 +795,8 @@ on("m25-alpha",function(s){
   bxS(s,112,8,108,46,"#F3F5F9");tS(s,166,28,"귀무가설 옳음",{fw:800,fs:10.5});tS(s,166,45,"500건 (5/6)",{fs:10});
   bxS(s,112,96,108,46,"#EEF4FB");tS(s,166,116,"대립가설 옳음",{fw:800,fs:10.5,c:"#1C6EA4"});tS(s,166,133,"100건 (1/6)",{fs:10});
   arS(s,84,70,108,36,"aS");arS(s,84,80,108,114,"aS");
-  bxS(s,248,8,90,46,"#FBE4E1");tS(s,293,28,"유의 25건",{fw:800,fs:11,c:RED});tS(s,293,45,"× α 0.05",{fs:9.5,c:C.gray});
-  bxS(s,248,96,90,46,"#E3F1EA");tS(s,293,116,"유의 80건",{fw:800,fs:11,c:GRN});tS(s,293,133,"× 검정력 0.8",{fs:9.5,c:C.gray});
+  bxS(s,248,8,90,46,"#FBE4E1");tS(s,293,28,"유의 기대 25건",{fw:800,fs:11,c:RED});tS(s,293,45,"× α 0.05",{fs:9.5,c:C.gray});
+  bxS(s,248,96,90,46,"#E3F1EA");tS(s,293,116,"유의 기대 80건",{fw:800,fs:11,c:GRN});tS(s,293,133,"× 검정력 0.8",{fs:9.5,c:C.gray});
   arS(s,222,31,244,31,"aS");arS(s,222,119,244,119,"aS");
   bxS(s,350,40,66,70,C.navy);tS(s,383,62,"25 ÷ 105",{fw:800,fs:10.5,c:"#fff"});tS(s,383,84,"≈ 24%",{fw:800,fs:14,c:"#FCD34D"});tS(s,383,101,"귀무가 옳음",{fs:9,c:"#C9D3E6"});
   el("path",{d:"M340 31 C346 40 346 50 348 56",fill:"none",stroke:RED,"stroke-width":1.5},s);el("path",{d:"M340 119 C346 110 346 100 348 94",fill:"none",stroke:GRN,"stroke-width":1.5},s);
@@ -792,10 +804,10 @@ on("m25-alpha",function(s){
 
 on("m25-fnp",function(s){
   var cx=[60,180,330];el("rect",{x:4,y:6,width:412,height:32,rx:6,fill:C.navy},s);["","피셔류","네이만-피어슨류"].forEach(function(h,i){tS(s,cx[i],27,h,{fw:800,fs:12.5,c:i===1?"#9CCBEA":i===2?"#FCD34D":"#fff"});});
-  var R=[["보는 것","p값의 크기","p < α 인가"],["결론","증거의 강력함","기각 / 채택"],["p 0.01 vs 0.001","0.001이 더 강한 증거","둘 다 ‘유의’로 같음"],["대립가설·β","고려하지 않음","고려함"],["표본크기 n","정해 두지 않음","효과크기·α·β로 설계"]];
+  var R=[["보는 것","p값의 크기","p < α 인가"],["초점","모형과 자료의 괴리","사전 오류율·판단"],["p 0.01 vs 0.001","0.001이 더 강한 증거","둘 다 ‘유의’로 같음"],["대립가설·β","고려하지 않음","고려함"],["표본 설계","어느 관점이든 검토","효과크기·α·β 고려"]];
   R.forEach(function(r,j){var y=62+j*34;el("rect",{x:4,y:y-20,width:412,height:30,rx:4,fill:j%2?"#F8F9FB":"#fff"},s);
     r.forEach(function(v,i){tS(s,cx[i],y,v,{fw:i===0?800:700,fs:i===0?10.5:11,c:i===1?"#1C6EA4":i===2?C.amberInk:C.navy});});});
-  bxS(s,4,226,412,40,"#FCF3D9");tS(s,210,244,"현대 권장: p값 자체를 기재하거나 *, **, ***로 단계 표시",{fw:800,fs:11,c:C.amberInk});tS(s,210,259,"(p < 0.05, p < 0.01, p < 0.001)",{fs:9.5,c:C.gray});
+  bxS(s,4,226,412,40,"#FCF3D9");tS(s,210,244,"보고: p값·효과 추정·구간·설계를 함께 제시",{fw:800,fs:11,c:C.amberInk});tS(s,210,259,"별표만으로 크기나 실무적 중요성을 판단하지 않음",{fs:9.5,c:C.gray});
 });
 
 on("m25-four",function(s){
@@ -822,7 +834,7 @@ on("m25-curve",function(s){
     el("line",{x1:48,x2:404,y1:Y(ref),y2:Y(ref),stroke:C.amber,"stroke-width":1.5,"stroke-dasharray":"4 3"},s);tS(s,404,Y(ref)-4,refl,{a:"end",fs:9.5,fw:800,c:C.amberInk});
     var p=[];for(var i=0;i<M;i++)p.push(X(N[i]).toFixed(1)+" "+Y(arr[i]).toFixed(1));el("path",{d:"M"+p.join(" L"),fill:"none",stroke:col,"stroke-width":2.4},s);
     [0,20,40,60,80,100].forEach(function(t){if(t)tS(s,X(t),y0+117,t,{fs:9,c:C.gray,fw:500});});return Y;}
-  var Y1=pane(4,"평균 p값 (d = 1, 2,000번 반복)",R.mp,RED,.05,"0.05");
+  var Y1=pane(4,"저장 평균 p값 (d = 1, 2,000회 요약)",R.mp,RED,.05,"0.05");
   var i10=N.indexOf(10);el("circle",{cx:X(10),cy:Y1(R.mp[i10]),r:5,fill:RED,stroke:"#fff","stroke-width":1.5},s);tS(s,X(10)+8,Y1(R.mp[i10])-4,"n = 10 → 0.11",{a:"start",fw:800,fs:10.5,c:RED,halo:true});
   var Y2=pane(140,"검정력 1 − β",R.pw,BLU,.8,"0.8");
   var i17=N.indexOf(17);el("line",{x1:X(17),x2:X(17),y1:166,y2:244,stroke:C.amber,"stroke-width":1.5,"stroke-dasharray":"4 3"},s);
@@ -850,7 +862,7 @@ on("m25-dgrid",function(s){
 
 on("m25-tbl",function(s){
   var cx=[70,170,250,320,384];el("rect",{x:4,y:4,width:412,height:28,rx:6,fill:C.navy},s);["분석","효과크기","소","중","대"].forEach(function(h,i){tS(s,cx[i],23,h,{fw:800,fs:11,c:"#fff"});});
-  var R=[["t검정","d","0.2","0.5","0.8"],["상관","r","0.1","0.3","0.5"],["(다중) 회귀","R²","0.02","0.13","0.26"],["분산분석","η²","0.01","0.06","0.14"],["윌콕슨 순위합","r = z ÷ √n","0.1","0.3","0.5"],["카이제곱(2×2)","φ","0.1","0.3","0.5"],["카이제곱(그 밖)","Cramér's V","0.1","0.3","0.5"]];
+  var R=[["t검정","d","0.2","0.5","0.8"],["상관","r","0.1","0.3","0.5"],["(다중) 회귀","R²","0.02","0.13","0.26"],["분산분석","η²","0.01","0.06","0.14"],["윌콕슨 순위합","r = z ÷ √N","0.1","0.3","0.5"],["카이제곱(2×2)","|φ|","0.1","0.3","0.5"],["카이제곱(일반)","Cramér's V","표의","차원에","따라"]];
   R.forEach(function(r,j){var y=52+j*30;el("rect",{x:4,y:y-19,width:412,height:27,rx:4,fill:j===0?"#E3F1EA":j%2?"#F8F9FB":"#fff"},s);r.forEach(function(v,i){tS(s,cx[i],y,v,{fw:i<2?800:600,fs:i===1?10.5:11});});});
   tS(s,404,264,"[3]",{a:"end",fw:800,fs:10,c:BLU});tS(s,200,264,"기준은 참고용 · 분야와 문맥에 따라 다름",{fs:10,fw:700,c:C.gray});
 });
@@ -872,7 +884,7 @@ on("m25-tbl",function(s){
     el("circle",{cx:X(n),cy:Y(pw),r:5.5,fill:BLU,stroke:"#fff","stroke-width":2},svg);el("circle",{cx:X(n),cy:Y(mp),r:5.5,fill:RED,stroke:"#fff","stroke-width":2},svg);
     var m=document.getElementById("m25-msg"),ok=cur===2&&n===17;m.className="pmsg"+(ok?" ok":"");
     m.textContent=ok?"찾았습니다. 차이 10 MPa(d = 1)에서 n = 16이면 검정력 "+R.pw[k-1].toFixed(2)+", n = 17이면 "+pw.toFixed(2)+"로 처음 0.8을 넘습니다. 표본크기 설계 결과 16.71 → 17과 같습니다.":
-      "n = "+n+"이면 검정력 "+pw.toFixed(2)+", 평균 p값 "+(mp<0.001?"0.001 미만":mp.toFixed(3))+"입니다. 효과크기 d("+dv.toFixed(1)+")는 n과 관계없이 그대로이지만, n이 커질수록 p값은 작아지고 검정력은 커집니다.";
+      "n = "+n+", 이론 검정력 "+pw.toFixed(2)+", 저장 평균 p값 "+(mp<0.001?"0.001 미만":mp.toFixed(3))+"입니다. d = "+dv.toFixed(1)+"인 모형의 요약이며 한 번의 실험 결과가 아닙니다.";
   }
   ns.addEventListener("input",upd);upd();
 })();
@@ -895,7 +907,7 @@ on("m25-tbl",function(s){
   g.addEventListener("input",txt);
   document.getElementById("m25-check").onclick=function(){seen[cur]=true;var c=SC[cur],d=c[1]/c[2],gv=+g.value,ok=Math.abs(gv-d)<=Math.max(.15,.2*d),m=document.getElementById("m25-msg3");
     document.getElementById("m25-act").textContent=d.toFixed(2);document.getElementById("m25-lv").textContent=lv(d);m.className="pmsg "+(ok?"ok":"ng");
-    m.textContent=(ok?"가깝게 예측했습니다. ":"차이가 있습니다. ")+"d = "+c[1]+" ÷ "+c[2]+" ≈ "+d.toFixed(2)+"이며, 기준상 ‘"+lv(d)+"’입니다."+(cur>=2?" 라인 비교 ①과 ②는 평균 차이가 같은 5 MPa이지만 흩어짐이 달라 d가 4배 차이 납니다.":"");draw();};
+    m.textContent=(ok?"가깝게 예측했습니다. ":"차이가 있습니다. ")+"d = "+c[1]+" ÷ "+c[2]+" ≈ "+d.toFixed(2)+"이며, 관례상 ‘"+lv(d)+"’입니다."+(cur>=2?" 라인 비교 ①과 ②는 평균 차이가 같은 5 MPa이지만 흩어짐이 달라 d가 4배 차이 납니다.":"");draw();};
   txt();reset();
 })();
 
