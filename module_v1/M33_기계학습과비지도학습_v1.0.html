@@ -165,6 +165,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
 .stats strong{font-size:22px;color:var(--navy);letter-spacing:-.4px}
 .pmsg{font-size:14.5px;font-weight:700;min-height:22px;line-height:1.45}
 .pmsg.ok{color:var(--ok)} .pmsg.ng{color:var(--ng)}
+#p1 .pmsg,#p3 .pmsg{margin:0;flex-shrink:0}
 .think{flex:0 0 auto;background:var(--amber-soft);border-radius:10px;padding:9px 14px;font-size:14.5px;font-weight:700;color:var(--amber-ink);display:flex;gap:10px;align-items:baseline}
 .think span{flex:0 0 auto;font-size:12px;font-weight:800}
 .howto{font-size:13.5px;color:var(--gray);line-height:1.5;margin:0}
@@ -386,9 +387,20 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
       <div class="body split even">
         <div class="fig"><svg id="m33-km" viewBox="0 0 420 270" role="img" aria-label="k평균 k = 3으로 운전 기록 60건을 세 군집으로 나눈 결과와 중심. 정상·고하중·과열 의심은 확인이 필요한 임시 해석"></svg></div>
         <div class="side">
-          <ul class="key"><li><b>군집분석</b>: 데이터가 속한 군집을 구함</li><li><b>k평균</b>: 할당 → 중심 계산 → 재할당 반복</li></ul>
-          <p class="exp">군집분석은 정답 라벨 없이 비슷한 자료를 묶습니다. k평균은 k와 초기 중심을 정하고 가까운 중심에 할당한 뒤 중심을 다시 계산하는 과정을 반복합니다. 결과는 변수의 척도·k·초기값에 따라 달라집니다. 이 예시는 진동·온도를 표준화해 k = 3으로 묶었으며, 정상·고하중·과열 의심은 현장 확인이 필요한 임시 이름입니다. 초기 중심 선택을 개선하는 k평균++도 결과의 유일성을 보장하지는 않습니다.</p>
-          <p class="next"><span>다음 질문</span>군집 개수를 미리 정하지 않으려면?</p>
+          <ul class="key"><li>표준화 공간의 유클리드 제곱거리 합 최소화</li><li>할당 안정 ≠ 전체 최솟값·의미 있는 군집</li></ul>
+          <p class="exp">k평균은 정한 거리에서 점과 중심 사이의 제곱거리 합을 줄이며 할당과 중심 평균 계산을 반복합니다. 이 실습은 60건의 진동·온도를 각각 표준화하고, 서로 다른 관측점에서 초기 중심을 골라 시작합니다. 표준화는 변수별 가중치를 바꾸는 선택이며 항상 최선인 것은 아닙니다. 초기값·k·이상치·구조에 따라 결과가 달라질 수 있고, 할당이 안정되어도 전체 최솟값이나 현장 의미가 보장되지는 않습니다. k평균++도 결과의 유일성을 보장하지 않습니다.</p>
+          <p class="next"><span>다음 질문</span>표준화하면 가까운 점도 달라질까?</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" data-step="3" id="s-4-3c">
+      <div class="sh"><div class="sec">4-3 거리와 표준화</div><h2><span class="q">Q</span>표준화하면 가장 가까운 점도 달라질까요?</h2></div>
+      <div class="body split even">
+        <div class="fig"><svg viewBox="0 0 420 270" role="img" aria-label="가상 점 A=(2,45), B=(4,46), C=(2.5,55): 좌표 단위: 진동 mm/s · 온도 ℃; 원래 수치의 유클리드 거리: A–B ≈ 2.24 / A–C ≈ 10.01 → B가 가까움; 60건의 SD로 나눈 표준화 거리: A–B ≈ 1.77 / A–C ≈ 1.11 → C가 가까움"><rect x="8" y="8" width="404" height="76" rx="10" fill="#EEF4FB"/><text x="210" y="37" text-anchor="middle" fill="#1B2A4A" font-size="13" font-weight="800">가상 점 A=(2,45), B=(4,46), C=(2.5,55)</text><text x="210" y="63" text-anchor="middle" fill="#6B7280" font-size="11">좌표 단위: 진동 mm/s · 온도 ℃</text><rect x="8" y="94" width="404" height="76" rx="10" fill="#FCF3D9"/><text x="210" y="123" text-anchor="middle" fill="#1B2A4A" font-size="13" font-weight="800">원래 수치의 유클리드 거리</text><text x="210" y="149" text-anchor="middle" fill="#6B7280" font-size="11">A–B ≈ 2.24 / A–C ≈ 10.01 → B가 가까움</text><rect x="8" y="180" width="404" height="76" rx="10" fill="#E3F1EA"/><text x="210" y="209" text-anchor="middle" fill="#1B2A4A" font-size="13" font-weight="800">60건의 SD로 나눈 표준화 거리</text><text x="210" y="235" text-anchor="middle" fill="#6B7280" font-size="11">A–B ≈ 1.77 / A–C ≈ 1.11 → C가 가까움</text></svg></div>
+        <div class="side"><ul class="key"><li>거리 계산의 척도는 변수 가중치에 해당</li><li>표준화가 언제나 최선은 아니며 목적·단위·이상치 확인</li></ul>
+          <p class="exp">이 모듈은 각 변수에서 60건 평균을 빼고, 편차제곱 평균(분모 n)의 제곱근으로 나눕니다. 온도 SD는 약 9.777℃, 진동 SD는 약 1.130mm/s입니다. 그림은 읽기 쉬운 원래 단위로 표시하지만 계산은 표준화 좌표에서 합니다. 두 단위의 원래 수치를 그대로 더하는 거리와 다른 문제를 풀게 됩니다. 상수 변수의 SD가 0이면 이 변환을 적용할 수 없습니다.</p>
+          <p class="next"><span>다음 질문</span>군집끼리의 거리는 어떻게 정할까?</p>
         </div>
       </div>
     </section>
@@ -398,8 +410,8 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
       <div class="body split even">
         <div class="fig"><svg id="m33-dend" viewBox="0 0 420 270" role="img" aria-label="운전 기록 12건의 덴드로그램, 높이 1.6에서 자르면 3개, 0.7에서 자르면 5개 군집"></svg></div>
         <div class="side">
-          <ul class="key"><li><b>계층적 군집화</b>: 가까운 군집끼리 차례로 합침</li><li><b>덴드로그램</b>을 자르는 높이로 개수 결정</li></ul>
-          <p class="exp">계층적 군집화는 모든 데이터가 다른 군집인 상태에서 시작해, 가장 가까운(비슷한) 군집끼리 순서대로 합쳐 나갑니다. 그러면 나무 형태의 덴드로그램(수형도)을 그릴 수 있습니다. 군집 개수는 미리 정하지 않으며, 아래로 갈수록 세밀하게, 위로 갈수록 대략적으로 바라보게 됩니다. 운전 기록 12건을 높이 1.6에서 자르면 3개 군집이 됩니다. 유사도를 재는 거리의 정의는 다양해 분석자가 지정해야 하며, 정답이 없으므로 결과에 분석자의 자의성이 개입된다는 점도 염두에 두어야 합니다.</p>
+          <ul class="key"><li>평균 연결: 두 군집의 모든 교차 점 쌍 거리 평균</li><li>높이 이하 결합을 포함해 나무를 자름</li></ul>
+          <p class="exp">이 예는 60건 전체에서 정한 표준화 척도를 12건 부분집합에도 적용하고 유클리드 거리를 씁니다. 평균 연결은 두 군집에 속한 모든 점 쌍의 거리 평균으로 군집 간 거리를 정합니다. 가까운 군집부터 합친 결합 높이가 덴드로그램의 세로축입니다. 높이 1.6에서 3군집이 되지만 높이의 의미는 거리·연결법·척도에 따라 달라집니다. 여기서는 자르는 높이 이하의 결합까지 포함합니다. 군집 번호·색·좌우 순서는 정상/이상 판정이나 서열이 아닙니다.</p>
           <p class="next"><span>다음 질문</span>비선형 구조는 어떻게 요약할까?</p>
         </div>
       </div>
@@ -440,11 +452,11 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
       <div class="sh"><div class="sec">실습 1 · 조작형</div><h2>목표: k평균을 한 단계씩 진행하며 군집이 정해지는 과정을 확인합니다</h2></div>
       <div class="body split">
         <div class="pcol" style="gap:8px">
-          <div class="plabel" style="margin:0">해보기 · 군집 개수 k를 고르고 「한 단계 진행」을 눌러 보세요. 「처음 위치 바꾸기」로 초기 중심을 바꿀 수 있습니다</div>
+          <div class="plabel" style="margin:0">해보기 · 표준화 좌표의 거리로 계산하고 원래 단위로 그립니다. k를 고르고 단계 진행·초기 중심 변경을 비교하세요</div>
           <div class="mbtns" id="m33-kb" style="gap:6px"></div>
           <div class="fig" style="flex:1"><svg id="m33-p1-svg" viewBox="0 0 470 180" role="img" aria-label="운전 기록 산점도와 군집 중심"></svg></div>
         </div>
-        <div class="pcol" style="gap:10px;justify-content:center">
+        <div class="pcol" style="gap:6px;justify-content:center">
           <div style="display:flex;gap:8px"><button class="btn" id="m33-step">한 단계 진행</button><button class="btn ghost" id="m33-init">처음 위치 바꾸기</button></div>
           <div class="stats three"><div><small>진행 단계</small><strong id="m33-it">-</strong></div><div><small>바뀐 할당</small><strong id="m33-ch">-</strong></div><div><small>군집 내 제곱합</small><strong id="m33-wss">-</strong></div></div>
           <p class="howto">도전: 할당이 더 바뀌지 않을 때까지 진행하고, k = 2·3·4의 군집 내 제곱합을 비교해 보세요.</p>
@@ -479,11 +491,11 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
           <div class="plabel">해보기 · 자르는 높이를 고르고, 빨간 선이 세로선과 만나는 수를 세어 군집 개수를 예측하세요</div>
           <div class="fig" style="flex:1"><svg id="m33-p3-svg" viewBox="0 0 470 210" role="img" aria-label="운전 기록 12건의 덴드로그램과 자르는 높이"></svg></div>
         </div>
-        <div class="pcol" style="gap:9px;justify-content:center">
+        <div class="pcol" style="gap:6px;justify-content:center">
           <div class="mbtns" id="m33-qh" style="gap:5px"></div>
           <div class="ctrl">군집 개수 예측<input type="range" id="m33-g" min="1" max="12" step="1" value="3" aria-label="군집 개수 예측"><strong id="m33-gv" style="min-width:40px;text-align:right">-</strong></div>
           <button class="btn" id="m33-check" style="align-self:flex-start">잘라서 확인</button>
-          <div class="stats three"><div><small>내 예측</small><strong id="m33-mine">-</strong></div><div><small>실제 군집 수</small><strong id="m33-act">?</strong></div><div><small>그 아래 결합</small><strong id="m33-mg">?</strong></div></div>
+          <div class="stats three"><div><small>내 예측</small><strong id="m33-mine">-</strong></div><div><small>실제 군집 수</small><strong id="m33-act">?</strong></div><div><small>그 높이까지 결합</small><strong id="m33-mg">?</strong></div></div>
           <p class="pmsg" id="m33-msg3"></p>
           <div class="think" style="flex-wrap:wrap"><span>생각해보기</span>현장에서는 어느 높이로 자를지를 무엇으로 정할 수 있을까요?<details style="flex-basis:100%;font-weight:600"><summary style="cursor:pointer">예시 답</summary>결합 거리가 크게 뛰는 높이와 필요한 집단 수, 군집의 안정성을 현장 지식과 함께 봅니다.</details></div>
         </div>
@@ -513,14 +525,17 @@ var STEPS=["학습개요","학습목표","일상의 예시","본문","형성평�
 
 /* 예시 데이터(이 모듈에서 정한 값)
    압연기 운전 기록 60건: 진동(mm/s)과 베어링 온도(℃), 정답(운전 상태 라벨) 없음
-   생성 중심: (2.0, 45) 20건 · (4.5, 52) 20건 · (3.2, 68) 20건 → 정상 운전 · 고하중 운전 · 과열 의심
-   표준화 후 k평균 군집 내 제곱합: k 2 → 76.2, k 3 → 12.8, k 4 → 11.0
-   계층적 군집화(평균 연결, 표준화, 12건: 각 군집 4건) 결합 높이 0.10, 0.20, 0.28, 0.41, 0.43, 0.56, 0.63, 0.95, 1.34, 1.87, 2.44
-   자르는 높이 0.7 → 5개, 1.1 → 4개, 1.6 → 3개, 2.0 → 2개 */
+   생성 중심은 가상 설정이며 운전 의미·정답 라벨이 아니다.
+   표시 자료에서 평균·SD(분모 n)를 계산해 표준화한다. 단위와 척도에 민감하다.
+   12건 부분집합도 전체 60건의 척도를 쓰며 유클리드·평균 연결을 실행한다.
+   절단은 높이 이하 결합 포함. k평균은 빈 군집의 이전 중심을 유지하고 이를 표시한다. */
 var CASE=null, PAIRS=null, P1={target:null};
 var CP=[[2.18,43.3],[1.75,46.9],[2.26,40.4],[2.02,41.9],[1.29,48.3],[2.45,45.3],[1.96,40.0],[2.28,45.0],[2.83,51.8],[2.12,39.7],[1.52,47.9],[1.69,47.7],[2.46,44.4],[1.34,47.1],[2.12,42.6],[2.17,50.4],[1.48,51.0],[2.08,41.9],[2.25,44.2],[1.65,45.5],[4.22,48.3],[4.66,48.7],[4.03,56.7],[4.76,48.3],[4.36,55.8],[4.48,49.2],[4.71,52.9],[4.92,56.1],[4.06,51.8],[4.86,48.0],[4.9,50.3],[4.45,56.0],[5.19,52.7],[4.16,54.5],[4.25,52.3],[4.67,53.0],[4.19,51.4],[5.13,48.5],[4.59,53.9],[5.27,52.6],[2.31,65.4],[3.2,67.2],[3.64,66.1],[4.07,62.2],[2.59,68.1],[3.25,66.3],[3.45,71.2],[3.54,67.6],[2.89,71.2],[3.43,70.7],[3.01,66.3],[3.18,66.9],[2.96,66.2],[3.34,66.4],[3.03,70.9],[3.34,66.2],[3.16,66.5],[3.61,65.2],[3.96,72.9],[3.17,66.7]];
-var CMU=[3.281, 54.942], CSD=[1.13, 9.777];
-var DL=[[5.0,7.0,0.097,2.0],[0.0,3.0,0.201,2.0],[2.0,13.0,0.283,3.0],[9.0,10.0,0.405,2.0],[4.0,12.0,0.435,3.0],[6.0,11.0,0.564,2.0],[1.0,14.0,0.632,4.0],[15.0,17.0,0.949,4.0],[8.0,19.0,1.335,5.0],[16.0,20.0,1.871,8.0],[18.0,21.0,2.438,12.0]], DORD=[1, 2, 0, 3, 4, 5, 7, 8, 9, 10, 6, 11], DPS=[[2.18,43.3],[1.75,46.9],[2.26,40.4],[2.02,41.9],[4.22,48.3],[4.66,48.7],[4.03,56.7],[4.76,48.3],[2.31,65.4],[3.2,67.2],[3.64,66.1],[4.07,62.2]];
+var CMU=[0,1].map(function(j){return sum(CP.map(function(p){return p[j];}))/CP.length;}),
+    CSD=[0,1].map(function(j){return Math.sqrt(sum(CP.map(function(p){return Math.pow(p[j]-CMU[j],2);}))/CP.length);});
+var DPS=[0,1,2,3,20,21,22,23,40,41,42,43].map(function(i){return CP[i].slice();}),
+    DL=averageLinkageB(DPS),DORD=leafOrderB(DL,2*DPS.length-2);
+
 
 var QUIZ=[
  {goal:1,type:"상황 판단",stem:"압연기 운전 기록 60건에는 진동과 베어링 온도만 있고 ‘정상/이상’ 같은 라벨은 없습니다. 비슷한 운전 패턴끼리 묶어 보려면 어떤 학습에 해당할까요?",
@@ -529,15 +544,15 @@ var QUIZ=[
  {goal:1,type:"O/X 오개념",stem:"“선형회귀는 통계학과 지도 학습 모두에 쓰일 수 있고, 해석 가능성은 모형과 가정에 따라 달라진다.”",
   opts:["O","X"],ans:0,ox:true,
   exp:"통계학과 기계학습은 도구와 목적이 겹칩니다. 선형회귀로 효과를 추론하거나 새 값을 예측할 수 있고, 두 분야 모두 단순한 모형과 복잡한 모형을 사용합니다. 기계학습이라는 이름만으로 해석이 쉽거나 어렵다고 정할 수 없습니다.",back:"s-4-2a",backLabel:"4-2 통계학과 기계학습의 차이 다시 보기"},
- {goal:2,type:"상황 판단",stem:"k평균으로 운전 기록을 군집화하려 합니다. 분석을 시작할 때 분석자가 먼저 정해야 하는 것은?",
-  opts:["군집 개수 k","각 데이터의 정답 군집","덴드로그램을 자를 높이","군집별 중심 위치"],ans:0,
-  exp:"k평균은 분석자가 데이터를 몇 개의 군집으로 나눌 것인가, 즉 군집 개수 k를 정하며 시작합니다. 그런 뒤 각 데이터에 무작위로 군집을 할당하고, 각 군집의 중심 위치(데이터의 평균)를 구한 다음, 데이터마다 가장 근접한 군집을 할당하고 중심 위치를 다시 계산하는 과정을 반복합니다.",back:"s-4-3a",backLabel:"4-3 k평균 다시 보기"},
- {goal:2,type:"O/X 오개념",stem:"“k평균은 처음에 군집을 어떻게 무작위로 할당하든 항상 같은 결과를 낸다.”",
+ {goal:2,type:"상황 판단",stem:"k평균의 입력 k는 무엇을 정하는 값일까요?",
+  opts:["요청할 군집 개수", "각 데이터의 정답 군집", "덴드로그램의 결합 높이", "이미 계산된 군집 내 제곱합"],ans:0,
+  exp:"k는 요청할 군집 개수입니다. 이 실습은 관측점에서 초기 중심을 고른 뒤 가까운 중심에 할당하고 중심 평균을 계산합니다. 교재의 무작위 초기 할당도 가능한 시작 방법이지만 이 실습의 초기화와는 다릅니다. 거리·척도와 초기화 방식도 분석 전에 정합니다.",back:"s-4-3a",backLabel:"4-3 k평균 다시 보기"},
+ {goal:2,type:"O/X 오개념",stem:"“k평균은 같은 k와 척도라면 초기 중심을 어떻게 고르든 항상 같은 결과를 낸다.”",
   opts:["O","X"],ans:1,ox:true,
-  exp:"k평균 결과는 초기 무작위 군집 할당에 따라 달라질 가능성이 있습니다. 그래서 초기 중심을 서로 멀리 떨어지게 고르도록 개량한 k평균++를 사용하기도 합니다. 실습 1에서 「처음 위치 바꾸기」로 결과가 달라지는지 확인할 수 있습니다.",back:"s-4-3a",backLabel:"4-3 k평균의 주의점 다시 보기"},
- {goal:3,type:"계산",stem:"운전 기록 12건을 계층적 군집화했더니 군집이 합쳐진 높이가 0.10, 0.20, 0.28, 0.41, 0.43, 0.56, 0.63, 0.95, 1.34, 1.87, 2.44였습니다. 높이 1.1에서 자르면 군집은 몇 개일까요?",
+  exp:"초기 중심에 따라 서로 다른 할당 안정점에 도달할 수 있습니다. 여러 초기값의 목적함수와 구성원·안정성을 비교합니다. k평균++는 초기 중심 선택을 개선하는 방법이며 모든 자료에서 전체 최솟값이나 유일한 결과를 보장하지 않습니다.",back:"s-4-3a",backLabel:"4-3 k평균의 주의점 다시 보기"},
+ {goal:3,type:"계산",stem:"12건의 평균 연결 결합 높이를 소수 둘째 자리로 나타내면 .10, .20, .28, .41, .43, .56, .63, .95, 1.34, 1.87, 2.44입니다. 높이 1.1에서 자르면 몇 군집일까요?",
   opts:["4개","3개","8개","5개"],ans:0,
-  exp:"처음에는 12건이 모두 다른 군집이고, 한 번 합칠 때마다 군집이 하나씩 줄어듭니다. 높이 1.1보다 낮은 결합은 0.10~0.95의 8번이므로 12 − 8 = 4개 군집이 됩니다. 덴드로그램은 어느 단계에서 바라보느냐에 따라 군집 개수가 달라집니다.",back:"s-4-3b",backLabel:"4-3 계층적 군집화 다시 보기"},
+  exp:"1.1 이하의 결합은 .10~.95의 8번이므로 12−8=4군집입니다. 표시 높이는 반올림했으며 계산에는 반올림 전 값을 씁니다. 이 절단은 어떤 높이와도 같지 않아 반올림에 따른 경계 문제가 없습니다.",back:"s-4-3b",backLabel:"4-3 계층적 군집화 다시 보기"},
  {goal:3,type:"상황 판단",stem:"PCA의 2차원 투영에서 운전 기록의 구조가 잘 보이지 않습니다. 비선형 차원 축소를 검토할 때 알맞은 접근은?",
   opts:["t-SNE·UMAP을 검토하되 설정·초기값과 원자료도 함께 확인한다","분리된 무리가 보이면 실제 고장 유형으로 확정한다","지도에서 두 무리가 멀수록 원자료에서도 반드시 멀다","비선형 자료에는 PCA 자체를 계산할 수 없다"],ans:0,
   exp:"PCA는 비선형 자료에도 계산할 수 있지만 선형 투영이 구조를 충분히 드러내지 못할 수 있습니다. t-SNE·UMAP은 대안이나 설정과 초기값에 민감하고, 분리된 무리가 실제 집단을 보장하지 않습니다. 무리 사이 거리와 크기를 원자료의 거리·분산으로 곧바로 읽지 않습니다.",back:"s-4-4a",backLabel:"4-4 PCA 이외의 차원 축소 다시 보기"}
@@ -545,8 +560,8 @@ var QUIZ=[
 
 var BINS=["비지도 학습","지도 학습","강화학습"];
 var CARDS=[["라벨 없는 운전 기록을 패턴별로 묶기","비지도 학습"],["센서 수백 개를 2차원으로 요약","비지도 학습"],
-           ["불량 여부 정답으로 판정 모형 학습","지도 학습"],["과거 조업 조건으로 강도 예측","지도 학습"],
-           ["로봇 팔이 보상으로 동작을 갱신","강화학습"],["시행착오로 최적 제어 방법 습득","강화학습"]];
+           ["불량 여부 정답으로 판정 모형 학습","지도 학습"],["조업 조건과 측정 강도 쌍으로 예측 학습","지도 학습"],
+           ["로봇 팔이 보상으로 동작을 갱신","강화학습"],["제어 행동 후 보상으로 정책 갱신","강화학습"]];
 var HINT={"비지도 학습":"정답 데이터 없이 구조를 찾습니다.","지도 학습":"입력 x와 정답 y의 관계를 학습합니다.","강화학습":"행동에 따른 보상과 상태로 행동을 갱신합니다."};
 
 var GLOSSARY=[
@@ -555,8 +570,8 @@ var GLOSSARY=[
  ["지도 학습","supervised learning","입력 x와 정답 y의 관계를 학습하는 방법입니다. 선형회귀도 지도 학습에 쓰이며 분류·회귀 과제를 포함합니다.","불량 여부를 정답으로 판정 모형 학습"],
  ["강화학습","reinforcement learning","정답 데이터는 주어지지 않고, 에이전트가 환경에 행동한 뒤 보상과 상태를 통해 행동을 갱신하는 학습입니다.","로봇 팔 제어"],
  ["군집분석","cluster analysis","정해 둔 유사도·척도·설정으로 비슷한 자료를 묶는 방법입니다. 군집은 정답 집단이나 고장 원인으로 자동 확정되지 않습니다.","운전 기록 60건 → 3개 군집"],
- ["k평균","k-means","군집 개수 k를 정하고, 중심 계산과 가장 가까운 중심으로의 재할당을 반복하는 가장 기본적인 군집화 방법입니다.","k = 3, 군집 내 제곱합 12.8"],
- ["계층적 군집화","hierarchical clustering","모든 데이터가 다른 군집인 상태에서 시작해 가장 가까운 군집끼리 순서대로 합쳐 나가는 방법입니다.","12건을 평균 연결로 결합"],
+ ["k평균","k-means","정한 척도의 제곱거리 합을 줄이도록 할당과 중심 평균 계산을 반복합니다. 초기값에 따른 할당 안정이 전체 최솟값을 보장하지는 않습니다.","k=3의 한 초기값 결과: WSS 약 12.8"],
+ ["계층적 군집화","hierarchical clustering","여기서는 모든 점을 따로 두고 가까운 군집을 합치는 응집형을 씁니다. 거리와 연결법에 따라 나무·절단 결과가 달라집니다.","12건, 전체 60건 척도·유클리드 거리·평균 연결"],
  ["덴드로그램","dendrogram","계층적 군집화에서 군집이 합쳐지는 순서와 거리를 나무 형태로 그린 그림으로, 수형도라고도 합니다.","높이 1.1에서 자르면 4개"],
  ["t-SNE","t-distributed Stochastic Neighbor Embedding","국소 이웃 관계를 저차원에서 표현하는 비선형 차원 축소 방법입니다. 군집 간 거리·크기를 그대로 해석하지 않으며 설정과 초기값을 확인합니다.","고차원 센서 데이터를 2차원 지도로"],
  ["UMAP","Uniform Manifold Approximation and Projection","이웃 구조를 저차원에 나타내는 비선형 차원 축소 방법입니다. 설정에 따라 결과가 달라지며 투영상의 무리·거리는 원자료와 함께 확인합니다.","대량 운전 데이터 시각화"]
@@ -675,8 +690,25 @@ function arB(s,x1,y1,x2,y2,id,col){return el("line",{x1:x1,y1:y1,x2:x2,y2:y2,str
 var RED="#B42318",GRN="#23704F",BLU="#2B8CC4",PNK="#C2416E",KC=["#2B8CC4","#C2416E","#E0A100","#23704F"];
 function rngB(seed){var s=seed>>>0;return function(){s=(s+0x6D2B79F5)|0;var t=Math.imul(s^s>>>15,1|s);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296;};}
 var ZB=CP.map(function(p){return [(p[0]-CMU[0])/CSD[0],(p[1]-CMU[1])/CSD[1]];});
+/* 평균 연결: 전체 60건의 척도를 사용하고 모든 교차 점 쌍의 거리를 평균한다. */
+function averageLinkageB(points){
+  var z=points.map(function(p){return[(p[0]-CMU[0])/CSD[0],(p[1]-CMU[1])/CSD[1]];}),n=z.length,
+      active=z.map(function(p,i){return{id:i,members:[i]};}),rows=[];
+  function distance(a,b){var d=0;a.members.forEach(function(i){b.members.forEach(function(j){d+=Math.hypot(z[i][0]-z[j][0],z[i][1]-z[j][1]);});});return d/(a.members.length*b.members.length);}
+  while(active.length>1){var best=Infinity,ai=0,bi=1;
+    for(var i=0;i<active.length;i++)for(var j=i+1;j<active.length;j++){var d=distance(active[i],active[j]);if(d<best){best=d;ai=i;bi=j;}}
+    var a=active[ai],b=active[bi],members=a.members.concat(b.members);rows.push([a.id,b.id,best,members.length]);
+    active=active.filter(function(c,i){return i!==ai&&i!==bi;});active.push({id:n+rows.length-1,members:members});
+  }return rows;
+}
+function leafOrderB(rows,id){var n=rows.length+1;if(id<n)return[id];var r=rows[id-n];return leafOrderB(rows,r[0]).concat(leafOrderB(rows,r[1]));}
+function cutLabelsB(h){var n=DPS.length,par=[];for(var i=0;i<2*n-1;i++)par[i]=i;
+  function root(i){while(par[i]!==i)i=par[i];return i;}
+  DL.forEach(function(r,j){if(r[2]<=h){par[root(r[0])]=n+j;par[root(r[1])]=n+j;}});
+  var ids={},next=0;return DPS.map(function(p,i){var r=root(i);if(ids[r]==null)ids[r]=next++;return ids[r];});
+}
 function kmB(k,cen){var lab=ZB.map(function(z){var b=0,bd=1e9;cen.forEach(function(c,j){var d=(z[0]-c[0])*(z[0]-c[0])+(z[1]-c[1])*(z[1]-c[1]);if(d<bd){bd=d;b=j;}});return b;});return lab;}
-function upB(k,lab){var c=[];for(var j=0;j<k;j++){var sx=0,sy=0,n=0;ZB.forEach(function(z,i){if(lab[i]===j){sx+=z[0];sy+=z[1];n++;}});c.push(n?[sx/n,sy/n]:[0,0]);}return c;}
+function upB(k,lab,previous){var c=[];for(var j=0;j<k;j++){var sx=0,sy=0,n=0;ZB.forEach(function(z,i){if(lab[i]===j){sx+=z[0];sy+=z[1];n++;}});c.push(n?[sx/n,sy/n]:previous[j].slice());}return c;}
 function wssB(lab,cen){var w=0;ZB.forEach(function(z,i){var c=cen[lab[i]];w+=(z[0]-c[0])*(z[0]-c[0])+(z[1]-c[1])*(z[1]-c[1]);});return w;}
 function axB(s,x0,y0,w,h){var X=linB(0.5,6.2,x0+30,x0+w-6),Y=linB(32,82,y0+h-18,y0+6);
   [2,4,6].forEach(function(t){tB(s,X(t),y0+h-4,t,{fs:9,c:C.gray,fw:500});});[40,60,80].forEach(function(t){el("line",{x1:x0+30,x2:x0+w-6,y1:Y(t),y2:Y(t),stroke:C.grid},s);tB(s,x0+26,Y(t)+3,t,{a:"end",fs:9,c:C.gray2,fw:500});});return[X,Y];}
@@ -716,25 +748,25 @@ on("m33-vs",function(s){
 
 on("m33-km",function(s){
   bxB(s,4,4,282,262,"#F8F9FB");var A=axB(s,4,4,282,262),X=A[0],Y=A[1];
-  var c0=[[2.0,45],[4.5,52],[3.2,68]].map(function(c){return[(c[0]-CMU[0])/CSD[0],(c[1]-CMU[1])/CSD[1]];}),lab=kmB(3,c0),cen=upB(3,lab);for(var it=0;it<10;it++){lab=kmB(3,cen);cen=upB(3,lab);}
+  var c0=[[2.0,45],[4.5,52],[3.2,68]].map(function(c){return[(c[0]-CMU[0])/CSD[0],(c[1]-CMU[1])/CSD[1]];}),lab=kmB(3,c0),cen=upB(3,lab,c0);for(var it=0;it<10;it++){lab=kmB(3,cen);cen=upB(3,lab,cen);}
   CP.forEach(function(p,i){el("circle",{cx:X(p[0]),cy:Y(p[1]),r:4.2,fill:KC[lab[i]],"fill-opacity":.85},s);});
   var names=["정상 후보","고하중 후보","과열 의심 후보"];
   cen.forEach(function(c,j){var px=c[0]*CSD[0]+CMU[0],py=c[1]*CSD[1]+CMU[1];el("path",{d:"M"+(X(px)-7)+" "+(Y(py)-7)+" L"+(X(px)+7)+" "+(Y(py)+7)+" M"+(X(px)+7)+" "+(Y(py)-7)+" L"+(X(px)-7)+" "+(Y(py)+7),stroke:C.navy,"stroke-width":3},s);
     el("circle",{cx:46,cy:30+j*17,r:5,fill:KC[j]},s);tB(s,56,34+j*17,names[j],{a:"start",fw:800,fs:10.5,c:KC[j]});});
   tB(s,280,262,"진동 (mm/s)",{a:"end",fs:9,c:C.gray,fw:700});tB(s,36,16,"온도 (℃)",{a:"start",fs:9,c:C.gray,fw:700});
   bxB(s,294,4,122,262,"#F3F5F9");tB(s,355,26,"k평균 순서",{fw:800,fs:11});
-  ["① k 정하기","② 무작위 할당","③ 중심(평균) 계산","④ 가까운 중심에","    다시 할당","⑤ ③~④ 반복","⑥ 할당이 안 바뀌면","    멈춤"].forEach(function(t,i){tB(s,302,54+i*22,t,{a:"start",fs:10,fw:700});});
+  ["① k 정하기","② 초기 중심 고르기","③ 가까운 중심에 할당","④ 중심(평균) 계산","⑤ ③~④ 반복","⑥ 할당이 안정되면","    종료·재시작 비교"].forEach(function(t,i){tB(s,302,54+i*22,t,{a:"start",fs:10,fw:700});});
   tB(s,355,240,"× = 군집 중심",{fw:800,fs:10});
 });
 
 on("m33-dend",function(s){
   drawDB(s,10,404,20,220,null);
   [[1.6,"3개",RED],[0.7,"5개",PNK]].forEach(function(c){var Y=linB(0,2.6,220,20);el("line",{x1:10,x2:404,y1:Y(c[0]),y2:Y(c[0]),stroke:c[2],"stroke-width":2,"stroke-dasharray":"6 4"},s);tB(s,408,Y(c[0])+4,c[1],{a:"end",fw:800,fs:10.5,c:c[2],halo:true});});
-  tB(s,14,262,"높이 = 군집 사이 거리(표준화) · 아래 숫자 = 운전 기록 번호",{a:"start",fs:9.5,c:C.gray,fw:700});
+  tB(s,14,262,"높이 = 표준화 유클리드 거리의 평균 연결 / 번호 = 부분집합 기록",{a:"start",fs:9.5,c:C.gray,fw:700});
 });
 function drawDB(s,x0,x1,yTop,yBot,cut){var n=12,pos={},Y=linB(0,2.6,yBot,yTop),step=(x1-x0-30)/(n-1);
-  var par=[];for(var q=0;q<2*n;q++)par[q]=q;function fd(q){while(par[q]!==q)q=par[q];return q;}DL.forEach(function(r,i){if(r[2]<1.6){par[fd(r[0])]=n+i;par[fd(r[1])]=n+i;}});
-  var gm={},gc=0;DORD.forEach(function(leaf,i){pos[leaf]=[x0+20+i*step,0];var rt=fd(leaf);if(gm[rt]==null)gm[rt]=gc++;var g=gm[rt];tB(s,x0+20+i*step,yBot+16,leaf+1,{fw:800,fs:10.5,c:KC[g]});});
+  var groups=cut==null?null:cutLabelsB(cut),palette=["#2B8CC4","#C2416E","#E0A100","#23704F","#7C3AED","#B42318","#075985","#9D174D","#854D0E","#166534","#6D28D9","#374151"];
+  DORD.forEach(function(leaf,i){pos[leaf]=[x0+20+i*step,0];var col=groups?palette[groups[leaf]]:C.navy;tB(s,x0+20+i*step,yBot+16,leaf+1,{fw:800,fs:10.5,c:col});});
   DL.forEach(function(r,i){var a=pos[r[0]],b=pos[r[1]],h=r[2],id=n+i,col=cut!=null&&h>cut?"#C9CED6":C.navy;
     el("path",{d:"M"+a[0]+" "+Y(a[1])+" L"+a[0]+" "+Y(h)+" L"+b[0]+" "+Y(h)+" L"+b[0]+" "+Y(b[1]),fill:"none",stroke:col,"stroke-width":2},s);pos[id]=[(a[0]+b[0])/2,h];});
   [0,1,2].forEach(function(t){tB(s,x0+6,Y(t)+3,t,{a:"start",fs:8.5,c:C.gray2,fw:500});});return Y;}
@@ -752,19 +784,19 @@ on("m33-tsne",function(s){
   var kb=document.getElementById("m33-kb");if(!kb)return;var svg=document.getElementById("m33-p1-svg"),K=3,seed=5,cen,lab,it,ch,done;
   [2,3,4].forEach(function(k){var b=document.createElement("button");b.type="button";b.className="mbtn";b.textContent="k = "+k;b.style.padding="3px 10px";b.onclick=function(){K=k;init();};kb.appendChild(b);});
   function init(){var r=rngB(seed),pick=[];while(pick.length<K){var i=Math.floor(r()*ZB.length);if(pick.indexOf(i)<0)pick.push(i);}cen=pick.map(function(i){return ZB[i].slice();});lab=null;it=0;ch=null;done=false;draw();}
-  function step(){if(done)return;var nl=kmB(K,cen);ch=lab?nl.filter(function(v,i){return v!==lab[i];}).length:ZB.length;lab=nl;cen=upB(K,lab);it++;if(ch===0)done=true;draw();}
+  function step(){if(done)return;var nl=kmB(K,cen);ch=lab?nl.filter(function(v,i){return v!==lab[i];}).length:ZB.length;lab=nl;cen=upB(K,lab,cen);it++;if(ch===0)done=true;draw();}
   function draw(){[].forEach.call(kb.children,function(x,i){x.classList.toggle("on",i+2===K);x.setAttribute("aria-pressed",i+2===K);});
     clear(svg);var A=axB(svg,4,2,300,176),X=A[0],Y=A[1];
     CP.forEach(function(p,i){el("circle",{cx:X(p[0]),cy:Y(p[1]),r:3.6,fill:lab?KC[lab[i]]:"#9AA0AA","fill-opacity":.85},svg);});
     cen.forEach(function(c,j){var px=c[0]*CSD[0]+CMU[0],py=c[1]*CSD[1]+CMU[1];el("circle",{cx:X(px),cy:Y(py),r:8,fill:"#fff",stroke:KC[j],"stroke-width":3},svg);el("path",{d:"M"+(X(px)-4)+" "+Y(py)+" h8 M"+X(px)+" "+(Y(py)-4)+" v8",stroke:KC[j],"stroke-width":2.5},svg);});
     tB(svg,300,174,"진동 →",{a:"end",fs:9,c:C.gray,fw:700});tB(svg,36,12,"온도",{a:"start",fs:9,c:C.gray,fw:700});
-    var w=lab?wssB(lab,cen):null;bxB(svg,316,10,148,160,"#F3F5F9");tB(svg,390,32,"k = "+K,{fw:800,fs:13});
-    tB(svg,390,58,lab?"단계 "+it+" 완료":"초기 중심만 놓음",{fw:700,fs:10.5});tB(svg,390,84,done?"수렴 (할당 변화 0)":lab?"할당 변화 "+ch+"건":"",{fw:800,fs:10.5,c:done?GRN:C.amberInk});
+    var empty=lab?cen.filter(function(c,j){return lab.indexOf(j)<0;}).length:0,w=lab?wssB(lab,cen):null;bxB(svg,316,10,148,160,"#F3F5F9");tB(svg,390,32,"k = "+K,{fw:800,fs:13});
+    tB(svg,390,58,lab?"단계 "+it+" 완료":"초기 중심만 놓음",{fw:700,fs:10.5});tB(svg,390,84,done?(empty?"할당 안정 · 빈 군집 "+empty:"할당 안정 (변화 0)"):lab?"할당 변화 "+ch+"건":"",{fw:800,fs:10.5,c:done?GRN:C.amberInk});
     tB(svg,390,116,w!=null?"군집 내 제곱합":"",{fs:10,fw:700,c:C.gray});tB(svg,390,138,w!=null?w.toFixed(1):"",{fw:800,fs:14});
     document.getElementById("m33-it").textContent=it;document.getElementById("m33-ch").textContent=ch==null?"-":ch+"건";document.getElementById("m33-wss").textContent=w==null?"-":w.toFixed(1);
     var m=document.getElementById("m33-msg");m.className="pmsg"+(done?" ok":"");
-    m.textContent=!lab?"초기 중심(○+)을 무작위로 놓았습니다. 「한 단계 진행」을 누르면 가까운 중심으로 할당하고 중심을 다시 계산합니다.":
-      done?"수렴했습니다. k = "+K+"에서 "+it+"단계 만에 할당이 더 바뀌지 않았고, 군집 내 제곱합은 "+w.toFixed(1)+"입니다."+(K===3?" k = 3은 후보이며 현장 기록으로 의미를 확인해야 합니다.":""):
+    m.textContent=!lab?"초기 중심(○+)을 관측점에서 골랐습니다. 계산은 표준화 좌표를 씁니다. 「한 단계 진행」을 누르면 가까운 중심으로 할당하고 중심을 다시 계산합니다.":
+      done?"할당이 안정되었습니다. k = "+K+", "+it+"단계, 제곱합 "+w.toFixed(1)+"입니다."+(empty?" 빈 군집 "+empty+"개는 이전 중심을 유지했습니다. 초기 중심을 바꿔 다시 비교하세요.":" 전체 최솟값 보장은 아니므로 여러 초기값을 비교합니다.")+(K===3?" k = 3은 후보이며 현장 기록으로 의미를 확인해야 합니다.":""):
       (it===1?"단계 1: 60건 모두를 가장 가까운 중심에 할당하고 중심을 다시 계산했습니다.":"단계 "+it+": "+ch+"건의 할당이 바뀌었습니다.")+" 중심이 무리의 가운데로 옮겨 가고 있습니다. 계속 진행해 보세요.";}
   document.getElementById("m33-step").onclick=step;document.getElementById("m33-init").onclick=function(){seed+=11;init();};
   init();
@@ -774,7 +806,7 @@ on("m33-tsne",function(s){
 (function(){
   var g=document.getElementById("m33-g");if(!g)return;var qh=document.getElementById("m33-qh"),svg=document.getElementById("m33-p3-svg"),HS=[0.7,1.1,1.6,2.0],cur=0,seen={};
   HS.forEach(function(h,i){var b=document.createElement("button");b.type="button";b.className="mbtn";b.textContent="높이 "+h.toFixed(1);b.style.padding="3px 9px";b.onclick=function(){cur=i;reset();};qh.appendChild(b);});
-  function nmerge(h){return DL.filter(function(r){return r[2]<h;}).length;}
+  function nmerge(h){return DL.filter(function(r){return r[2]<=h;}).length;}
   function draw(){clear(svg);var h=HS[cur],Y=drawDB(svg,10,460,14,180,seen[cur]?h:null);
     el("line",{x1:10,x2:460,y1:Y(h),y2:Y(h),stroke:RED,"stroke-width":2.2,"stroke-dasharray":"6 4"},svg);tB(svg,460,Y(h)-5,"자르는 높이 "+h.toFixed(1),{a:"end",fw:800,fs:10.5,c:RED,halo:true});}
   function txt(){document.getElementById("m33-gv").textContent=(+g.value)+"개";document.getElementById("m33-mine").textContent=(+g.value)+"개";}
@@ -784,7 +816,7 @@ on("m33-tsne",function(s){
   g.addEventListener("input",txt);
   document.getElementById("m33-check").onclick=function(){seen[cur]=true;var h=HS[cur],m=nmerge(h),k=12-m,gv=+g.value,ok=gv===k,ms=document.getElementById("m33-msg3");
     document.getElementById("m33-act").textContent=k+"개";document.getElementById("m33-mg").textContent=m+"번";ms.className="pmsg "+(ok?"ok":"ng");
-    ms.textContent=(ok?"정확합니다. ":"차이가 있습니다. ")+"높이 "+h.toFixed(1)+"보다 아래에서 "+m+"번 합쳐졌으므로 12 − "+m+" = "+k+"개 군집입니다."+(k===3?" 군집 수가 k평균(k = 3)과 같아도 구성원까지 같은 것은 아닙니다.":"");draw();};
+    ms.textContent=(ok?"정확합니다. ":"차이가 있습니다. ")+"높이 "+h.toFixed(1)+" 이하에서 "+m+"번 합쳐졌으므로 12 − "+m+" = "+k+"개 군집입니다."+(k===3?" 군집 수가 k평균(k = 3)과 같아도 구성원까지 같은 것은 아닙니다.":"");draw();};
   txt();reset();
 })();
 
