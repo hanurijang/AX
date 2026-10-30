@@ -205,6 +205,12 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
 
 .rotate{position:fixed;left:0;right:0;bottom:max(14px,env(safe-area-inset-bottom));text-align:center;font-size:13px;color:#3A4560;display:none}
 @media (orientation:portrait) and (max-width:700px){.rotate{display:block}}
+#p1 .stats strong{font-size:20px}
+#p1 .pmsg{margin:0;flex-shrink:0}
+#p1 .howto{margin:0}
+#p1 .pcol:last-child{gap:6px!important}
+.gmap .gp{gap:4px}
+.gmap .gp .jump{padding:6px;font-size:12px}
 </style>
 </head>
 <body>
@@ -249,7 +255,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
           <div class="gn">1</div><div class="gt"><span>사건의 확률을 구하고, 이산형·연속형 확률분포를 <b>해석한다</b>.</span></div>
           <div class="ga"><button class="jump" data-jump="q1">문항 1·2</button></div><div class="gp"><button class="jump" data-jump="p1">실습 1 조작</button></div>
           <div class="gn">2</div><div class="gt"><span>확률분포의 기댓값과 분산을 <b>계산하고</b>, 추론통계에서의 역할을 설명한다.</span></div>
-          <div class="ga"><button class="jump" data-jump="q3">문항 3·4</button></div><div class="gp"><button class="jump" data-jump="p3">실습 3 추정</button></div>
+          <div class="ga"><button class="jump" data-jump="q3">문항 3·4</button></div><div class="gp"><button class="jump" data-jump="p1" aria-label="실습 1 기댓값·분산 계산">실습 1</button><button class="jump" data-jump="p3" aria-label="실습 3 평균 추정">실습 3</button></div>
           <div class="gn">3</div><div class="gt"><span>두 확률변수가 독립인지 <b>판단하고</b>, 동시확률과 조건부확률을 구한다.</span></div>
           <div class="ga"><button class="jump" data-jump="q5">문항 5·6</button></div><div class="gp"><button class="jump" data-jump="p2">실습 2 분류</button></div>
         </div>
@@ -538,7 +544,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
 
     <!-- ⑥ 실습 1 · 조작형 (모듈 전용) ─────────────── -->
     <section class="slide" data-step="5" id="p1">
-      <div class="sh"><div class="sec">실습 1 · 조작형</div><h2>목표: 구슬 개수를 바꾸며 확률분포와 기댓값을 계산합니다</h2></div>
+      <div class="sh"><div class="sec">실습 1 · 조작형</div><h2>목표: 구슬 비율을 바꾸며 기댓값·분산을 계산합니다</h2></div>
       <div class="body split">
         <div class="pcol" style="gap:10px">
           <div class="plabel" style="margin:0">해보기 · 붉은 구슬은 100원, 흰 구슬은 500원을 받는다고 합시다</div>
@@ -548,10 +554,10 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
         </div>
         <div class="pcol" style="gap:10px;justify-content:center">
           <div class="plabel" style="margin:0">결과 확인</div>
-          <div class="stats three"><div><small>P(붉은)</small><strong id="m6-pr">-</strong></div><div><small>P(흰)</small><strong id="m6-pw">-</strong></div><div><small>기댓값</small><strong id="m6-e">-</strong></div></div>
+          <div class="stats"><div><small>P(붉은)</small><strong id="m6-pr">-</strong></div><div><small>P(흰)</small><strong id="m6-pw">-</strong></div><div><small>기댓값 E(X)</small><strong id="m6-e">-</strong></div><div><small>분산 V(X)</small><strong id="m6-v">-</strong></div></div>
           <p class="howto">도전: 받을 금액의 기댓값이 정확히 200원이 되는 구슬 개수를 찾아보세요.</p>
           <p class="pmsg" id="m6-msg"></p>
-          <div class="think" style="flex-wrap:wrap"><span>생각해보기</span>구슬 개수를 두 배로 늘려도(붉은 8·흰 2) 확률과 기댓값이 그대로인 까닭은 무엇일까요?<details style="flex-basis:100%;font-weight:600"><summary style="cursor:pointer">예시 답</summary>붉은 구슬의 비율이 같아서 확률과 기댓값이 같습니다.</details></div>
+          <div class="think" style="flex-wrap:wrap"><span>생각해보기</span>붉은 4·흰 1을 8·2로 바꾸면 분산도 같을까요?<details style="flex-basis:100%;font-weight:600"><summary style="cursor:pointer">예시 답</summary>네. 금액과 확률이 같아 E=180원, V=25,600원²로 같습니다. V=Σ(금액−E)²×확률입니다.</details></div>
         </div>
       </div>
     </section>
@@ -568,7 +574,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
           <div class="plabel" style="margin:0">결과 확인 · <span id="p2-count">0 / 0</span></div>
           <div class="bins" id="p2-bins" style="grid-template-columns:repeat(2,1fr)"></div>
           <div class="p2row"><p class="pmsg" id="p2-msg"></p><button class="btn ghost" id="p2-reset">다시 하기</button></div>
-          <div class="think" style="flex-wrap:wrap"><span>생각해보기</span>꺼낸 구슬을 다시 넣고 두 번 꺼낸다면 독립일까요?<details style="flex-basis:100%;font-weight:600"><summary style="cursor:pointer">예시 답</summary>꺼낸 구슬을 다시 넣고 매번 잘 섞어 각 구슬을 같은 확률로 뽑는다면 독립으로 모형화할 수 있습니다.</details></div>
+          <div class="think" style="flex-wrap:wrap"><span>생각해보기</span>붉은 4·흰 1에서 첫 붉은 구슬을 빼면, 다음이 흴 확률은?<details style="flex-basis:100%;font-weight:600"><summary style="cursor:pointer">예시 답</summary>남은 4개 중 흰 1개이므로 1/4입니다. 다시 넣고 매번 잘 섞어 뽑는 모형에서는 1/5로 그대로여서 독립입니다.</details></div>
         </div>
       </div>
     </section>
@@ -627,18 +633,18 @@ var QUIZ=[
  {goal:1,type:"O/X 오개념",stem:"“키처럼 연속형 확률변수에서 X가 정확히 170.0cm일 확률은 확률밀도함수의 높이 f(170)이다.”",
   opts:["O","X"],ans:1,ox:true,
   exp:"연속형 확률변수가 하나의 값을 가질 확률은 0입니다. 확률은 밀도 곡선 아래 구간의 면적입니다. 밀도 높이는 확률이 아니므로 1보다 클 수도 있습니다.",back:"s-4-2b",backLabel:"4-2 확률밀도함수 다시 보기"},
- {goal:2,type:"계산",stem:"붉은 구슬 4개와 흰 구슬 1개가 든 주머니에서 하나를 꺼내, 붉은 구슬이면 100원, 흰 구슬이면 500원을 받습니다. 받을 금액의 기댓값은 얼마일까요?",
-  opts:["180원","300원","600원","100원"],ans:0,
-  exp:"E(X) = 100 × 4/5 + 500 × 1/5 = 80 + 100 = 180원입니다. 180원은 분포의 평균이며 한 번에 받는 금액은 100원 또는 500원입니다. 유한 횟수의 실제 평균도 매번 180원일 필요는 없습니다.",back:"s-4-3b",backLabel:"4-3 기댓값 다시 보기"},
+ {goal:2,type:"계산",stem:"붉은 구슬 4개·흰 구슬 1개에서 각 구슬을 같은 확률로 하나 꺼냅니다. 붉으면 X=100원, 희면 X=500원일 때 E(X)와 V(X)는?",
+  opts:["180원, 25,600원²","180원, 160원²","300원, 40,000원²","180원, 0원²"],ans:0,
+  exp:"E(X)=100×4/5+500×1/5=180원입니다. V(X)=(100−180)²×4/5+(500−180)²×1/5=25,600원²이며 표준편차는 160원입니다. 기댓값은 한 번의 실현값과 다르며 분산은 편차 제곱을 확률로 가중합니다. 실습 1에서 비율을 바꿔 확인하세요.",back:"s-4-3c",backLabel:"4-3 분산 다시 보기"},
  {goal:2,type:"상황 판단",stem:"추론통계에서 공장 제품 30개의 무게를 재어 얻은 표본 데이터는 어떻게 보고 분석할까요?",
   opts:["모집단을 나타내는 확률분포에서 생성된 실현값","모집단 그 자체","확률과 무관한 고정된 값","확률밀도함수의 세로축 값"],ans:0,
   exp:"추론통계는 현실의 모집단을 수학 세계의 확률분포로 가정하고, 표본 데이터는 그 확률분포에서 생성된 실현값이라고 봅니다. 표본은 모집단의 일부일 뿐 모집단 그 자체가 아닙니다.",back:"s-4-3a",backLabel:"4-3 추론통계와 확률분포 다시 보기"},
  {goal:3,type:"계산",stem:"공정한 주사위 A와 B를 서로 독립으로 던질 때, A는 1의 눈, B는 2의 눈이 나올 확률은 얼마일까요?",
   opts:["1/36","1/3","1/6","1/12"],ans:0,
   exp:"공정성과 독립을 가정했으므로 P(X = 1, Y = 2) = 1/6 × 1/6 = 1/36입니다. 1/3은 두 확률을 더한 값입니다. 동시확률을 주변확률의 곱으로 구하려면 독립이 필요합니다.",back:"s-4-4a",backLabel:"4-4 동시확률 다시 보기"},
- {goal:3,type:"O/X 오개념",stem:"“X와 Y가 독립이라도, Y의 값을 알게 되면 X가 나올 확률이 달라진다.”",
-  opts:["O","X"],ans:1,ox:true,
-  exp:"독립이면 확률이 양수인 조건에 대해 P(X | Y) = P(X)입니다. X의 원래 확률이 균등하다는 뜻은 아닙니다. Y를 알면 X의 확률이 바뀌는 것은 맞춰 입는 옷처럼 독립이 아닐 때입니다.",back:"s-4-4c",backLabel:"4-4 조건부확률 다시 보기"}
+ {goal:3,type:"계산",stem:"붉은 4개·흰 1개를 잘 섞어 두 번 비복원 무작위 추출합니다. 첫 번째가 붉었다는 조건에서 두 번째가 흴 확률은?",
+  opts:["1/4","1/5","4/5","0"],ans:0,
+  exp:"첫 붉은 구슬을 빼면 붉은 3개·흰 1개, 총 4개입니다. P(둘째 흰색 | 첫째 붉은색)=1/4입니다. 조건을 모를 때 둘째 흰색 확률 1/5와 다르므로 독립이 아닙니다. 동시확률 (4/5)×(1/4)=1/5를 조건의 확률 4/5로 나눠도 1/4입니다.",back:"s-4-4c",backLabel:"4-4 조건부확률 다시 보기"}
 ];
 
 var BINS=["독립","독립이 아님"];
@@ -966,11 +972,12 @@ on("m6-cond",function(s){
   function upd(){
     var nr=+r.value,nw=+w.value,n=nr+nw,s=document.getElementById("m6-p1-svg"),m=document.getElementById("m6-msg");
     document.getElementById("m6-rc").textContent=nr+"개";document.getElementById("m6-wc").textContent=nw+"개";clear(s);
-    if(n===0){["m6-pr","m6-pw","m6-e"].forEach(function(id){document.getElementById(id).textContent="-";});m.className="pmsg ng";m.textContent="주머니가 비었습니다. 구슬을 하나 이상 넣으세요.";return;}
-    var pr=nr/n,pw=nw/n,E=100*pr+500*pw;
+    if(n===0){["m6-pr","m6-pw","m6-e","m6-v"].forEach(function(id){document.getElementById(id).textContent="-";});m.className="pmsg ng";m.textContent="주머니가 비었습니다. 구슬을 하나 이상 넣으세요.";return;}
+    var pr=nr/n,pw=nw/n,E=100*pr+500*pw,V=Math.pow(100-E,2)*pr+Math.pow(500-E,2)*pw;
     document.getElementById("m6-pr").textContent=frac(nr,n);
     document.getElementById("m6-pw").textContent=frac(nw,n);
     document.getElementById("m6-e").textContent=(Math.round(E*10)/10)+"원";
+    document.getElementById("m6-v").textContent=V.toLocaleString("ko-KR",{maximumFractionDigits:1})+"원²";
     el("rect",{x:2,y:2,width:186,height:196,rx:10,fill:"#fff"},s);bagAt(s,95,108,68,nr,nw);
     el("rect",{x:196,y:2,width:272,height:196,rx:10,fill:"#fff"},s);
     el("text",{x:210,y:24,"font-size":11,fill:C.gray},s,"확률분포 P(X)");

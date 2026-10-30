@@ -205,6 +205,9 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
 
 .rotate{position:fixed;left:0;right:0;bottom:max(14px,env(safe-area-inset-bottom));text-align:center;font-size:13px;color:#3A4560;display:none}
 @media (orientation:portrait) and (max-width:700px){.rotate{display:block}}
+#p3 .pcol:last-child{gap:6px!important}
+#p3 .pmsg{margin:0;flex-shrink:0}
+#m7-scale{font:inherit;padding:3px 6px;border:1px solid var(--navy3);border-radius:5px;background:white;color:var(--navy)}
 </style>
 </head>
 <body>
@@ -248,7 +251,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
           <div></div><div class="hd">목표</div><div class="hd">확인하는 문항</div><div class="hd">연결 실습</div>
           <div class="gn">1</div><div class="gt"><span>정규분포의 μ와 σ로 값이 들어갈 범위와 확률을 <b>계산한다</b>.</span></div>
           <div class="ga"><button class="jump" data-jump="q1">문항 1·2</button></div><div class="gp"><button class="jump" data-jump="p1">실습 1 조작</button></div>
-          <div class="gn">2</div><div class="gt"><span>z값과 T점수로 서로 다른 분포 속 위치를 <b>비교한다</b>.</span></div>
+          <div class="gn">2</div><div class="gt"><span>z값으로 분포 속 위치를 <b>비교하고</b> 가상 T점수로 환산한다.</span></div>
           <div class="ga"><button class="jump" data-jump="q3">문항 3·4</button></div><div class="gp"><button class="jump" data-jump="p3">실습 3 추정</button></div>
           <div class="gn">3</div><div class="gt"><span>이론적인 확률분포를 파라미터와 이산형·연속형으로 <b>구분한다</b>.</span></div>
           <div class="ga"><button class="jump" data-jump="q5">문항 5·6</button></div><div class="gp"><button class="jump" data-jump="p2">실습 2 분류</button></div>
@@ -534,7 +537,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
 
     <!-- ⑥ 실습 3 · 추정형 (모듈 전용) ─────────────── -->
     <section class="slide" data-step="5" id="p3">
-      <div class="sh"><div class="sec">실습 3 · 추정형</div><h2>목표: 키를 보고 z값을 예측한 뒤 계산값과 비교합니다</h2></div>
+      <div class="sh"><div class="sec">실습 3 · 추정형</div><h2>목표: z값·가상 T점수를 예측하고 계산값과 비교합니다</h2></div>
       <div class="body split">
         <div class="pcol">
           <div class="plabel">해보기 · 이 사람은 자기 분포에서 평균보다 σ의 몇 배 떨어져 있을까요?</div>
@@ -542,11 +545,12 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
         </div>
         <div class="pcol" style="gap:9px;justify-content:center">
           <div class="plabel" style="margin:0" id="m7-qt">-</div>
-          <div class="ctrl">내 예측 z<input type="range" id="m7-g" min="-3" max="3" step="0.1" value="0" aria-label="z값 예측"><strong id="m7-gv" style="min-width:48px;text-align:right">-</strong></div>
+          <div class="ctrl"><label for="m7-scale">예측 척도</label><select id="m7-scale" aria-label="예측 척도"><option value="z">z값</option><option value="T">가상 T점수 (50+10z)</option></select></div>
+          <div class="ctrl"><label id="m7-glabel" for="m7-g">내 예측 z</label><input type="range" id="m7-g" min="-3" max="3" step="0.1" value="0" aria-label="z값 예측"><strong id="m7-gv" style="min-width:48px;text-align:right">-</strong></div>
           <div style="display:flex;gap:8px"><button class="btn" id="m7-check">계산해서 확인</button><button class="btn ghost" id="m7-nextq">다음 사람</button></div>
-          <div class="stats"><div><small>내 예측</small><strong id="m7-mine">-</strong></div><div><small>실제 z값</small><strong id="m7-act">?</strong></div></div>
+          <div class="stats"><div><small>내 예측</small><strong id="m7-mine">-</strong></div><div><small id="m7-actlabel">실제 z값</small><strong id="m7-act">?</strong></div></div>
           <p class="pmsg" id="m7-msg3"></p>
-          <div class="think" style="flex-wrap:wrap"><span>생각해보기</span>z값이 같은 두 사람은 원래 키가 달라도 무엇이 같을까요?<details style="flex-basis:100%;font-weight:600"><summary style="cursor:pointer">예시 답</summary>각자 분포 안에서 평균으로부터 표준편차의 같은 배수만큼 떨어져 있습니다.</details></div>
+          <div class="think" style="flex-wrap:wrap"><span>생각해보기</span>가상 T=70인 두 사람은 원래 키도 같을까요?<details style="flex-basis:100%;font-weight:600"><summary style="cursor:pointer">예시 답</summary>z=(70−50)/10=2로, 각자 평균보다 2σ 위라는 위치가 같습니다. 평균·σ가 다르면 원래 키는 다를 수 있습니다.</details></div>
         </div>
       </div>
     </section>
@@ -585,9 +589,9 @@ var QUIZ=[
  {goal:1,type:"O/X 오개념",stem:"“정규분포에서 표준편차 σ를 크게 하면 봉우리의 위치가 오른쪽으로 옮겨 간다.”",
   opts:["O","X"],ans:1,ox:true,
   exp:"분포의 위치를 정하는 것은 평균 μ이고, σ는 분포의 너비를 정합니다. σ를 키우면 위치는 그대로이고 곡선이 낮고 넓게 퍼집니다.",back:"s-4-2b",backLabel:"4-2 μ와 σ의 역할 다시 보기"},
- {goal:2,type:"계산",stem:"성인 남성의 키 분포(평균 167.6cm, 표준편차 7.0cm)에서 181.6cm인 사람의 z값은 얼마일까요?",
-  opts:["2.0","14.0","0.5","1.08"],ans:0,
-  exp:"z = (181.6 − 167.6) ÷ 7.0 = 14 ÷ 7 = 2.0입니다. 14.0은 표준편차로 나누지 않은 평균과의 차이이고, 1.08은 181.6을 평균으로 나눈 값입니다.",back:"s-4-3a",backLabel:"4-3 표준화 다시 보기"},
+ {goal:2,type:"계산",stem:"평균 167.6cm·표준편차 7.0cm에서 181.6cm의 z와 가상 T점수(T=50+10z)는?",
+  opts:["z=2, T=70","z=14, T=190","z=2, T=52","z=0.5, T=55"],ans:0,
+  exp:"z=(181.6−167.6)/7=2이고 가상 T=50+10×2=70입니다. 같은 가상 T는 각 분포에서 같은 z 위치를 뜻합니다. T점수의 이 변환 예를 실제 수능 영역별 점수 공식과 동일시하지 않습니다.",back:"s-4-3b",backLabel:"4-3 가상 T점수 다시 보기"},
  {goal:2,type:"상황 판단",stem:"각 집단의 키가 정규분포를 따른다고 가정합니다. 180cm 남성(z ≈ 1.77)과 170cm 여성(z ≈ 2.30)이 있습니다. 자기 분포 안에서 더 드문 사람은 누구일까요?",
   opts:["170cm인 여성","180cm인 남성","두 사람이 똑같이 드물다","분포가 달라 비교할 수 없다"],ans:0,
   exp:"두 집단이 각각 정규분포라는 가정에서 상측 확률을 비교합니다. 남성 z≈1.77의 상측은 약 3.82%, 여성 z≈2.30의 상측은 약 1.06%여서 여성이 더 드뭅니다. 모양이 다른 임의의 분포에서는 z 크기만으로 꼬리 확률을 비교할 수 없습니다.",back:"s-4-3a",backLabel:"4-3 남성과 여성 비교 다시 보기"},
@@ -882,7 +886,8 @@ on("m7-zoo",function(s){
 /* 실습 3 · z값 예측(추정형) */
 (function(){
   var g=document.getElementById("m7-g");if(!g)return;
-  var qi=0,checked=false,svg=document.getElementById("m7-p3-svg");
+  var qi=0,checked=false,scale="z",svg=document.getElementById("m7-p3-svg");
+  function guessZ(){return scale==="T"?(+g.value-50)/10:+g.value;}
   function cur(){var q=ZQ[qi],D=q[0]==="남성"?MEN:WOMEN;return {who:q[0],x:q[1],D:D,z:(q[1]-D.mu)/D.sd};}
   function draw(){
     clear(svg);var c=cur(),D=c.D,X=lin(D.mu-3.6*D.sd,D.mu+3.6*D.sd,20,450),Y=lin(0,npdf(D.mu,D.mu,D.sd)*1.12,150,14),col=c.who==="남성"?C.navy2:"#C2416E";
@@ -891,19 +896,30 @@ on("m7-zoo",function(s){
     for(var k=-3;k<=3;k++){var v=D.mu+k*D.sd;el("line",{x1:X(v),x2:X(v),y1:150,y2:154,stroke:C.gray2},svg);t7(svg,X(v),166,g1(v),{fs:9.5,c:C.gray,fw:500});
       if(checked)t7(svg,X(v),182,(k>0?"+":"")+k+"σ",{fs:9.5,c:C.navy3,fw:700});}
     el("line",{x1:X(c.x),x2:X(c.x),y1:24,y2:150,stroke:C.amber,"stroke-width":2.5},svg);t7(svg,X(c.x),20,c.x+"cm",{fw:800,c:C.amberInk,halo:true});
-    var gx=D.mu+(+g.value)*D.sd;el("path",{d:"M"+X(gx)+" 194 l-7 12 h14z",fill:C.navy},svg);t7(svg,Math.max(90,Math.min(380,X(gx))),214,"내 예측 z = "+(+g.value).toFixed(1),{fs:10.5,fw:800});
+    var gx=D.mu+guessZ()*D.sd;el("path",{d:"M"+X(gx)+" 194 l-7 12 h14z",fill:C.navy},svg);t7(svg,Math.max(90,Math.min(380,X(gx))),214,"내 예측 "+scale+" = "+(+g.value).toFixed(1),{fs:10.5,fw:800});
     t7(svg,24,30,c.who+" 키 N("+D.mu+", "+D.sd.toFixed(1)+"²)",{a:"start",fw:800,c:col});
   }
-  function load(){var c=cur();checked=false;document.getElementById("m7-qt").textContent="문제 "+(qi+1)+"/"+ZQ.length+" · "+c.who+" "+c.x+"cm (평균 "+c.D.mu+", 표준편차 "+c.D.sd.toFixed(1)+")";
-    document.getElementById("m7-act").textContent="?";var m=document.getElementById("m7-msg3");m.className="pmsg";m.textContent="z값을 예측한 뒤 「계산해서 확인」을 누르세요.";draw();}
+  function resetResult(){
+    checked=false;document.getElementById("m7-act").textContent="?";
+    var m=document.getElementById("m7-msg3");m.className="pmsg";
+    m.textContent=(scale==="T"?"가상 T=50+10z를 예측하세요. 실제 수능 점수 공식과는 구별합니다.":"z값을 예측한 뒤 「계산해서 확인」을 누르세요.");draw();
+  }
   function txt(){document.getElementById("m7-gv").textContent=(+g.value).toFixed(1);document.getElementById("m7-mine").textContent=(+g.value).toFixed(1);}
-  g.addEventListener("input",function(){txt();draw();});
+  function load(){var c=cur();g.value=scale==="T"?50:0;txt();
+    document.getElementById("m7-qt").textContent="문제 "+(qi+1)+"/"+ZQ.length+" · "+c.who+" "+c.x+"cm (평균 "+c.D.mu+", 표준편차 "+c.D.sd.toFixed(1)+")";resetResult();}
+  document.getElementById("m7-scale").addEventListener("change",function(){
+    scale=this.value;g.min=scale==="T"?20:-3;g.max=scale==="T"?80:3;g.step=scale==="T"?1:.1;
+    document.getElementById("m7-glabel").textContent="내 예측 "+(scale==="T"?"가상 T":"z");
+    document.getElementById("m7-actlabel").textContent=scale==="T"?"계산 가상 T":"실제 z값";
+    g.setAttribute("aria-label",scale==="T"?"가상 T점수 예측":"z값 예측");load();
+  });
+  g.addEventListener("input",function(){txt();resetResult();});
   document.getElementById("m7-check").onclick=function(){
-    checked=true;var c=cur(),d=Math.abs(+g.value-c.z),m=document.getElementById("m7-msg3"),up=(1-Phi(c.z))*100;
-    document.getElementById("m7-act").textContent=f2(c.z);m.className="pmsg "+(d<=.2?"ok":"ng");
-    m.textContent="z = ("+c.x+" − "+c.D.mu+") ÷ "+c.D.sd.toFixed(1)+" ≈ "+f2(c.z)+"입니다. 내 예측과의 차이는 "+d.toFixed(2)+"이고, "+(c.z>=0?"이보다 큰 사람은 약 "+(up<1?up.toFixed(2):up.toFixed(1)):"이보다 작은 사람은 약 "+(100-up).toFixed(1))+"%입니다.";draw();};
+    checked=true;var c=cur(),d=Math.abs(guessZ()-c.z),m=document.getElementById("m7-msg3"),up=(1-Phi(c.z))*100,T=50+10*c.z;
+    document.getElementById("m7-act").textContent=f2(scale==="T"?T:c.z);m.className="pmsg "+(d<=.2?"ok":"ng");
+    m.textContent="z=("+c.x+"−"+c.D.mu+")/"+c.D.sd.toFixed(1)+"≈"+f2(c.z)+", 가상 T=50+10z≈"+f2(T)+". 이 정규 모형의 "+(c.z>=0?"상측 "+up.toFixed(2):"하측 "+(100-up).toFixed(2))+"% 위치입니다.";draw();};
   document.getElementById("m7-nextq").onclick=function(){qi=(qi+1)%ZQ.length;load();};
-  txt();load();
+  load();
 })();
 
 

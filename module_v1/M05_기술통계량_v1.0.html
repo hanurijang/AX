@@ -643,7 +643,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
           <div class="plabel" style="margin:0">결과 확인 · <span id="p2-count">0 / 0</span></div>
           <div class="bins" id="p2-bins"></div>
           <div class="p2row"><p class="pmsg" id="p2-msg"></p><button class="btn ghost" id="p2-reset">다시 하기</button></div>
-          <div class="think" style="flex-wrap:wrap"><span>생각해보기</span>‘실제일 수 있는’ 이상값은 지워도 될까요? 지우면 무엇을 잃을까요?<details style="flex-basis:100%;font-weight:600"><summary style="cursor:pointer">예시 답</summary>실제일 수 있는 이상값은 지우지 않고 표시합니다. 지우면 드문 사건을 잃습니다.</details></div>
+          <div class="think" style="flex-wrap:wrap"><span>생각해보기</span>2SD 점검과 1.5IQR 표시는 같은 기준일까요?<details style="flex-basis:100%;font-weight:600"><summary style="cursor:pointer">예시 답</summary>다릅니다. 여기서는 36·85점을 점검하지만, 본문의 IQR 경계 23.5~99.5 안에는 듭니다. 어느 기준도 자동 삭제 근거는 아닙니다.</details></div>
         </div>
       </div>
     </section>
@@ -653,7 +653,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
       <div class="sh"><div class="sec">실습 3 · 추정형</div><h2>목표: 점그림만 보고 표준편차를 예측한 뒤 계산값과 비교합니다</h2></div>
       <div class="body split">
         <div class="pcol">
-          <div class="plabel">해보기 · 점들이 평균에서 평균적으로 얼마나 떨어져 있을까요? <span class="tag-v">가상 데이터</span></div>
+          <div class="plabel">해보기 · 편차 제곱의 평균에 제곱근을 취한 기술용 SDₙ을 가늠하세요. <span class="tag-v">가상 데이터</span></div>
           <div class="fig" style="flex:1"><svg id="m5-p3-svg" viewBox="0 0 470 220" role="img" aria-label="9명 점수의 점그림과 표준편차 범위"></svg></div>
         </div>
         <div class="pcol" style="gap:9px;justify-content:center">
