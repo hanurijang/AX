@@ -205,6 +205,9 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
 
 .rotate{position:fixed;left:0;right:0;bottom:max(14px,env(safe-area-inset-bottom));text-align:center;font-size:13px;color:#3A4560;display:none}
 @media (orientation:portrait) and (max-width:700px){.rotate{display:block}}
+/* 실습 피드백이 접히거나 도움말을 하단 밖으로 밀지 않도록 여백 정리. */
+.slide[data-step="5"] .pmsg{margin:0;flex-shrink:0}
+.slide[data-step="5"] .think{font-size:13px;line-height:1.35;padding:7px 10px;gap:6px}
 </style>
 </head>
 <body>
@@ -248,7 +251,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
           <div></div><div class="hd">목표</div><div class="hd">확인하는 문항</div><div class="hd">연결 실습</div>
           <div class="gn">1</div><div class="gt"><span>표본오차가 생기는 까닭과 큰 수의 법칙을 <b>설명한다</b>.</span></div>
           <div class="ga"><button class="jump" data-jump="q1">문항 1·2</button></div><div class="gp"><button class="jump" data-jump="p1">실습 1 조작</button></div>
-          <div class="gn">2</div><div class="gt"><span>중심극한정리로 표본평균 분포의 퍼짐 σ/√n을 <b>계산한다</b>.</span></div>
+          <div class="gn">2</div><div class="gt"><span>독립·동일분포 표본에서 평균의 퍼짐 σ/√n을 <b>계산하고</b>, 중심극한정리의 정규 근사와 구별한다.</span></div>
           <div class="ga"><button class="jump" data-jump="q3">문항 3·4</button></div><div class="gp"><button class="jump" data-jump="p3">실습 3 추정</button></div>
           <div class="gn">3</div><div class="gt"><span>고정된 값과 추정량을 <b>구분하고</b>, 표본으로 표준오차를 구한다.</span></div>
           <div class="ga"><button class="jump" data-jump="q5">문항 5·6</button></div><div class="gp"><button class="jump" data-jump="p2">실습 2 분류</button></div>

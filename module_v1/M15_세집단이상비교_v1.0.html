@@ -206,6 +206,14 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
 
 .rotate{position:fixed;left:0;right:0;bottom:max(14px,env(safe-area-inset-bottom));text-align:center;font-size:13px;color:#3A4560;display:none}
 @media (orientation:portrait) and (max-width:700px){.rotate{display:block}}
+/* 실습 피드백이 접히거나 도움말을 하단 밖으로 밀지 않도록 여백 정리. */
+.slide[data-step="5"] .pmsg{margin:0;flex-shrink:0}
+.slide[data-step="5"] .think{font-size:13px;line-height:1.35;padding:7px 10px;gap:6px}
+#p2 .bins{gap:6px}
+#p2 .bin{padding:4px;gap:3px}
+#p2 .bin h4{font-size:12px;padding:2px}
+#p2 .bin .dcard{font-size:11px;line-height:1.25;padding:3px 5px}
+#p2 .think{padding:5px 10px;gap:4px}
 </style>
 </head>
 <body>
@@ -250,7 +258,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
           <div class="gn">1</div><div class="gt"><span>분산분석의 가설과 F값으로 집단 간 차이를 <b>해석한다</b>.</span></div>
           <div class="ga"><button class="jump" data-jump="q1">문항 1·2</button></div><div class="gp"><button class="jump" data-jump="p1">실습 1 조작</button></div>
           <div class="gn">2</div><div class="gt"><span>검정 다중성을 계산하고 알맞은 다중비교 방법을 <b>구분한다</b>.</span></div>
-          <div class="ga"><button class="jump" data-jump="q3">문항 3·4</button></div><div class="gp"><button class="jump" data-jump="p3">실습 3 추정</button></div>
+          <div class="ga"><button class="jump" data-jump="q3">문항 3·4</button></div><div class="gp"><button class="jump" data-jump="p3">실습 3 오류율</button><button class="jump" data-jump="p2">실습 2 방법</button></div>
           <div class="gn">3</div><div class="gt"><span>분석 순서와 비모수 대안의 필요성을 <b>판단한다</b>.</span></div>
           <div class="ga"><button class="jump" data-jump="q5">문항 5·6</button></div><div class="gp"><button class="jump" data-jump="p2">실습 2 분류</button></div>
         </div>
@@ -588,7 +596,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
           <div class="plabel" style="margin:0">결과 확인 · <span id="p2-count">0 / 0</span></div>
           <div class="bins" id="p2-bins" style="grid-template-columns:repeat(2,1fr)"></div>
           <div class="p2row"><p class="pmsg" id="p2-msg"></p><button class="btn ghost" id="p2-reset">다시 하기</button></div>
-          <div class="think" style="flex-wrap:wrap"><span>생각해보기</span>던넷 검정의 검정력이 튜키 검정보다 높은 이유는?<details style="flex-basis:100%;font-weight:600"><summary style="cursor:pointer">예시 답</summary>던넷은 대조군과의 비교만 해서 비교 횟수가 적고, 그래서 각 비교의 검정력이 높습니다.</details></div>
+          <div class="think" style="flex-wrap:wrap"><span>생각해보기</span>대조군 비교만 필요할 때 던넷을 검토하는 이유는?<details style="flex-basis:100%;font-weight:600"><summary style="cursor:pointer">예시 답</summary>비교 범위를 줄이면 이점이 있을 수 있지만 항상 우월하지 않습니다. 사전 비교·보정에서는 전체 F검정의 유의성이 필수는 아닙니다.</details></div>
         </div>
       </div>
     </section>

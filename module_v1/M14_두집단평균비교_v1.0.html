@@ -206,6 +206,16 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
 
 .rotate{position:fixed;left:0;right:0;bottom:max(14px,env(safe-area-inset-bottom));text-align:center;font-size:13px;color:#3A4560;display:none}
 @media (orientation:portrait) and (max-width:700px){.rotate{display:block}}
+/* 분류 완료·도움말 확장 시에도 네 방법과 해설을 함께 표시합니다. */
+#p2 .bins{gap:6px}
+#p2 .bin{padding:4px;gap:3px}
+#p2 .bin h4{font-size:12px;padding:2px}
+#p2 .bin .dcard{font-size:11px;line-height:1.25;padding:3px 5px}
+/* 실습 피드백이 접히거나 도움말을 하단 밖으로 밀지 않도록 여백 정리. */
+.slide[data-step="5"] .pmsg{margin:0;flex-shrink:0}
+.slide[data-step="5"] .think{font-size:13px;line-height:1.35;padding:7px 10px;gap:6px}
+#s-4-sum .sumtbl td{padding-top:8px;padding-bottom:8px}
+#p2 .think{padding:5px 10px;gap:4px}
 </style>
 </head>
 <body>
@@ -620,7 +630,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
           <div class="plabel" style="margin:0">결과 확인 · <span id="p2-count">0 / 0</span></div>
           <div class="bins" id="p2-bins" style="grid-template-columns:repeat(2,1fr)"></div>
           <div class="p2row"><p class="pmsg" id="p2-msg"></p><button class="btn ghost" id="p2-reset">다시 하기</button></div>
-          <div class="think" style="flex-wrap:wrap"><span>생각해보기</span>같은 설비를 정비 전후로 쟀는데 대응 없는 검정을 쓰면 무엇을 잃나요?<details style="flex-basis:100%;font-weight:600"><summary style="cursor:pointer">예시 답</summary>같은 설비의 전후 짝을 무시해, 설비마다의 차이가 오차에 섞입니다.</details></div>
+          <div class="think" style="flex-wrap:wrap"><span>생각해보기</span>전후 대응을 무시하면 무엇을 잃나요?<details style="flex-basis:100%;font-weight:600"><summary style="cursor:pointer">예시 답</summary>짝 정보가 사라져 설비 간 차이가 오차에 섞입니다.</details></div>
         </div>
       </div>
     </section>

@@ -205,6 +205,13 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
 
 .rotate{position:fixed;left:0;right:0;bottom:max(14px,env(safe-area-inset-bottom));text-align:center;font-size:13px;color:#3A4560;display:none}
 @media (orientation:portrait) and (max-width:700px){.rotate{display:block}}
+/* 실습 피드백이 접히거나 도움말을 하단 밖으로 밀지 않도록 여백 정리. */
+.slide[data-step="5"] .pmsg{margin:0;flex-shrink:0}
+.slide[data-step="5"] .think{font-size:13px;line-height:1.35;padding:7px 10px;gap:6px}
+#p2 .bin{padding:4px;gap:4px}
+#p2 .bin h4{font-size:12px;padding:3px}
+#p2 .bin .dcard{font-size:11px;line-height:1.25;padding:3px 5px}
+#m13-sortquestion{flex:1 1 auto;min-width:0;font-size:inherit;font-weight:inherit}
 </style>
 </head>
 <body>
@@ -247,9 +254,9 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
         <div class="gmap">
           <div></div><div class="hd">목표</div><div class="hd">확인하는 문항</div><div class="hd">연결 실습</div>
           <div class="gn">1</div><div class="gt"><span>오차 막대의 종류와 유의 표기를 보고 결과를 <b>해석한다</b>.</span></div>
-          <div class="ga"><button class="jump" data-jump="q1">문항 1·2</button></div><div class="gp"><button class="jump" data-jump="p2">실습 2 분류</button></div>
+          <div class="ga"><button class="jump" data-jump="q1">문항 1·2</button></div><div class="gp"><button class="jump" data-jump="p2" data-sortmode="reading">실습 2 해석</button></div>
           <div class="gn">2</div><div class="gt"><span>진실과 판단의 조합에서 제1종·제2종 오류를 <b>구분한다</b>.</span></div>
-          <div class="ga"><button class="jump" data-jump="q3">문항 3·4</button></div><div class="gp"><button class="jump" data-jump="p2">실습 2 분류</button></div>
+          <div class="ga"><button class="jump" data-jump="q3">문항 3·4</button></div><div class="gp"><button class="jump" data-jump="p2" data-sortmode="errors">실습 2 오류</button></div>
           <div class="gn">3</div><div class="gt"><span>α, β, 표본크기, 효과크기의 관계로 실험 설계를 <b>판단한다</b>.</span></div>
           <div class="ga"><button class="jump" data-jump="q5">문항 5·6</button></div><div class="gp"><button class="jump" data-jump="p1">실습 1 조작</button> <button class="jump" data-jump="p3">실습 3 추정</button></div>
         </div>
@@ -519,17 +526,18 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
 
     <!-- ⑥ 실습 2 · 분류형 ─────────────────────── -->
     <section class="slide" data-step="5" id="p2">
-      <div class="sh"><div class="sec">실습 2 · 분류형</div><h2>목표: 상황 카드를 진실과 판단의 조합에 따라 나눕니다</h2></div>
+      <div class="sh"><div class="sec">실습 2 · 분류형</div><h2>목표: 결과 해석과 두 오류를 각각 분류합니다</h2></div>
       <div class="body split even">
         <div class="pcol">
-          <div class="plabel">해보기 · 카드의 ‘진실’과 ‘판단’을 보고 칸에 놓으세요</div>
+          <div class="ctrl"><label for="m13-sortmode">분류 주제</label><select id="m13-sortmode"><option value="errors">두 오류</option><option value="reading">오차 막대·유의 표기</option></select></div>
+          <div class="plabel" id="m13-sorthelp">해보기 · 카드의 ‘진실’과 ‘판단’을 보고 칸에 놓으세요</div>
           <div class="pool" id="p2-pool"></div>
         </div>
         <div class="pcol" style="gap:8px">
           <div class="plabel" style="margin:0">결과 확인 · <span id="p2-count">0 / 0</span></div>
           <div class="bins" id="p2-bins"></div>
           <div class="p2row"><p class="pmsg" id="p2-msg"></p><button class="btn ghost" id="p2-reset">다시 하기</button></div>
-          <div class="think" style="flex-wrap:wrap"><span>생각해보기</span>현실에서는 진실을 모르는데, 두 오류의 ‘확률’은 어떻게 다룰 수 있었나요?<details style="flex-basis:100%;font-weight:600"><summary style="cursor:pointer">예시 답</summary>진실은 몰라도 α는 미리 정하고, β는 사전에 정한 효과와 검정 설계에 따라 계획합니다.</details></div>
+          <div class="think" style="flex-wrap:wrap"><span>생각해보기</span><span id="m13-sortquestion">현실에서는 진실을 모르는데, 두 오류의 확률은 어떻게 다루나요?</span><details style="flex-basis:100%;font-weight:600"><summary style="cursor:pointer">예시 답</summary><span id="m13-sortanswer">α는 미리 정하고, β는 사전에 정한 효과와 검정 설계에 따라 계획합니다.</span></details></div>
         </div>
       </div>
     </section>
@@ -607,6 +615,18 @@ var CARDS=[["효과 없는 약 · ‘유의하지 않음’ 판단","올바른 �
            ["효과 없는 약 · ‘유의함’ 판단","제1종 오류"],["불량률이 같은 두 공정 · ‘차이 있음’ 판단","제1종 오류"],
            ["효과 있는 약 · ‘유의하지 않음’ 판단","제2종 오류"],["불량률이 다른 두 공정 · ‘차이 검출 못함’ 판단","제2종 오류"]];
 var HINT={"올바른 판단":"진실과 판단이 일치합니다.","제1종 오류":"차이가 없는데 있다고 판단했습니다(위양성, H0 아래 오류율≤α).","제2종 오류":"차이가 있는데 있다고 말하지 못했습니다(위음성, 확률 β)."};
+
+// 기존 본문과 문항의 해석을 실습에서도 확인합니다. 교재 원자료를 바꾸지 않습니다.
+var READING_BINS=["올바른 해석","잘못된 해석"];
+var READING_CARDS=[
+ ["범례 없는 오차 막대는 종류를 확인한 뒤 해석한다","올바른 해석"],
+ ["SD 막대는 개인 관측값의 퍼짐을 나타낸다","올바른 해석"],
+ ["별표를 가장 높은 해당 단계로 표시할 때 p=0.005는 **이다","올바른 해석"],
+ ["SE 막대는 개인 관측값의 표준편차이다","잘못된 해석"],
+ ["두 평균의 95% 구간이 겹치면 차이는 반드시 유의하지 않다","잘못된 해석"],
+ ["N.S.는 두 모집단 평균이 같다는 증명이다","잘못된 해석"]
+];
+var READING_HINT={"올바른 해석":"막대 종류와 범례를 먼저 확인합니다.","잘못된 해석":"SD와 SE는 다릅니다. 개별 구간의 겹침이나 N.S.만으로 차이 없음을 증명하지 않습니다."};
 
 var GLOSSARY=[
  ["오차 막대","error bar","평균값 위아래로 그려 표준오차, 신뢰구간, 표준편차 등을 나타내는 막대입니다.","예 ① 신약군 134.1 ± 2.66(SE)"],
@@ -965,7 +985,7 @@ function show(i){
   var nx=document.getElementById("next");nx.disabled=cur===slides.length-1;
   nx.textContent=(cur<slides.length-1&&+slides[cur+1].dataset.step!==st)?STEPS[+slides[cur+1].dataset.step]+"(으)로":"다음";
 }
-function bindJumps(root){[].forEach.call(root.querySelectorAll("[data-jump]"),function(b){b.addEventListener("click",function(){var t=document.getElementById(b.dataset.jump);if(t)show(slides.indexOf(t));});});}
+function bindJumps(root){[].forEach.call(root.querySelectorAll("[data-jump]"),function(b){b.addEventListener("click",function(){if(b.dataset.sortmode){var mode=document.getElementById("m13-sortmode");mode.value=b.dataset.sortmode;mode.dispatchEvent(new Event("change"));}var t=document.getElementById(b.dataset.jump);if(t)show(slides.indexOf(t));});});}
 bindJumps(document);
 document.getElementById("prev").onclick=function(){show(cur-1);};
 document.getElementById("next").onclick=function(){show(cur+1);};
@@ -1001,7 +1021,8 @@ p1d();
 /* ---------- 실습 2 · 분류형 ---------- */
 (function(){if(!document.getElementById("p2-pool"))return;
 var pool=document.getElementById("p2-pool"),binWrap=document.getElementById("p2-bins"),selC=null,done2=0;
-var bins=BINS.map(function(n){var b=document.createElement("div");b.className="bin";b.dataset.bin=n;b.innerHTML="<h4>"+n+"</h4>";binWrap.appendChild(b);return b;});
+var errorCards=CARDS,errorBins=BINS,errorHint=HINT,bins=[];
+function buildBins(){binWrap.innerHTML="";bins=BINS.map(function(n){var b=document.createElement("div");b.className="bin";b.dataset.bin=n;b.innerHTML="<h4>"+n+"</h4>";binWrap.appendChild(b);return b;});bindBins();}
 function p2msg(t,c){var m=document.getElementById("p2-msg");m.textContent=t;m.className="pmsg "+(c||"");document.getElementById("p2-count").textContent=done2+" / "+CARDS.length;}
 function p2init(){
   pool.innerHTML="";bins.forEach(function(b){[].slice.call(b.querySelectorAll(".dcard")).forEach(function(c){c.remove();});});done2=0;selC=null;
@@ -1034,11 +1055,21 @@ function attach(d){
   d.addEventListener("pointercancel",function(){if(gh){gh.remove();gh=null;}d.style.opacity="";sx=null;if(ov)ov.classList.remove("hover");ov=null;});
   d.addEventListener("keydown",function(e){if(e.key==="Enter"||e.key===" "){e.preventDefault();pick(d);}});
 }
-bins.forEach(function(b){b.tabIndex=0;b.setAttribute("role","button");b.setAttribute("aria-label",b.dataset.bin+" 칸에 놓기");
+function bindBins(){bins.forEach(function(b){b.tabIndex=0;b.setAttribute("role","button");b.setAttribute("aria-label",b.dataset.bin+" 칸에 놓기");
   b.addEventListener("click",function(e){if(selC&&!e.target.closest(".dcard"))drop(selC,b);});
   b.addEventListener("keydown",function(e){if((e.key==="Enter"||e.key===" ")&&selC){e.preventDefault();drop(selC,b);}});});
+}
 document.getElementById("p2-reset").onclick=p2init;
-p2init();
+document.getElementById("m13-sortmode").addEventListener("change",function(){
+  var reading=this.value==="reading";
+  binWrap.style.gridTemplateColumns=reading?"repeat(2,1fr)":"repeat(3,1fr)";
+  CARDS=reading?READING_CARDS:errorCards;BINS=reading?READING_BINS:errorBins;HINT=reading?READING_HINT:errorHint;
+  document.getElementById("m13-sorthelp").textContent=reading?"해보기 · 범례: * p<0.05, ** p<0.01, *** p<0.001 (가장 높은 해당 단계)":"해보기 · 카드의 진실과 판단을 보고 분류하세요";
+  document.getElementById("m13-sortquestion").textContent=reading?"막대 종류와 유의 표기만으로 무엇을 알 수 있나요?":"현실에서는 진실을 모르는데, 두 오류의 확률은 어떻게 다루나요?";
+  document.getElementById("m13-sortanswer").textContent=reading?"SD는 관측값의 퍼짐, SE는 평균 추정의 흔들림입니다. 별표는 범례의 p값 범위를 나타내며 효과크기나 인과를 증명하지 않습니다.":"α는 미리 정하고, β는 사전에 정한 효과와 검정 설계에 따라 계획합니다.";
+  document.querySelector("#p2 details").open=false;buildBins();p2init();
+});
+buildBins();p2init();
 
 })();
 /* ---------- 실습 3 · 추정형 ---------- */
