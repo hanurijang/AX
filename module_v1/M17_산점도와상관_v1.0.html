@@ -205,6 +205,9 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
 
 .rotate{position:fixed;left:0;right:0;bottom:max(14px,env(safe-area-inset-bottom));text-align:center;font-size:13px;color:#3A4560;display:none}
 @media (orientation:portrait) and (max-width:700px){.rotate{display:block}}
+/* 확장한 도움말과 여러 줄 피드백을 실습 화면 안에 유지합니다. */
+.slide[data-step="5"] .pmsg{margin:0;flex-shrink:0}
+.slide[data-step="5"] .think{font-size:13px;line-height:1.35;padding:7px 10px;gap:6px}
 </style>
 </head>
 <body>
@@ -1003,7 +1006,7 @@ on("m17-info",function(s){
   function reset(){[].forEach.call(qb.children,function(x,i){var on=i===cur;x.classList.toggle("on",on);x.setAttribute("aria-pressed",on);});
     document.getElementById("m17-act").textContent="?";var m=document.getElementById("m17-msg3");m.className="pmsg";m.textContent="점이 직선에 얼마나 모였는지, 오른쪽 위로 향하는지 아래로 향하는지 보고 r을 예측하세요.";draw();}
   function txt(){var v=fmtJ(+g.value/100);document.getElementById("m17-gv").textContent=v;document.getElementById("m17-mine").textContent=v;}
-  g.addEventListener("input",txt);
+  g.addEventListener("input",function(){checked=false;txt();reset();});
   document.getElementById("m17-check").onclick=function(){checked=true;var a=R[cur],gv=+g.value/100,ok=Math.abs(gv-a)<=.15,m=document.getElementById("m17-msg3");
     document.getElementById("m17-act").textContent=fmtJ(a);m.className="pmsg "+(ok?"ok":"ng");
     m.textContent="실제 r = "+fmtJ(a)+" · 예측과의 차이 "+Math.abs(gv-a).toFixed(2);draw();};

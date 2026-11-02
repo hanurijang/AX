@@ -205,6 +205,9 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
 
 .rotate{position:fixed;left:0;right:0;bottom:max(14px,env(safe-area-inset-bottom));text-align:center;font-size:13px;color:#3A4560;display:none}
 @media (orientation:portrait) and (max-width:700px){.rotate{display:block}}
+/* 확장한 도움말과 여러 줄 피드백을 실습 화면 안에 유지합니다. */
+.slide[data-step="5"] .pmsg{margin:0;flex-shrink:0}
+.slide[data-step="5"] .think{font-size:13px;line-height:1.35;padding:7px 10px;gap:6px}
 </style>
 </head>
 <body>
@@ -371,7 +374,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
       <div class="sh"><div class="sec">4-2 다중회귀와 편회귀계수</div><h2><span class="q">Q</span>설명변수가 여러 개이면 회귀식은 어떻게 될까요?</h2></div>
       <div class="body split even">
         <div class="figcol">
-          <div class="fig"><svg id="m19-plane" viewBox="0 0 420 150" role="img" aria-label="키, 허리둘레, 몸무게 3차원 공간의 회귀평면"></svg></div>
+          <div class="fig"><svg id="m19-plane" viewBox="0 -32 420 182" role="img" aria-label="키, 허리둘레, 몸무게 3차원 공간의 회귀평면"></svg></div>
           <div class="math">
             <div class="mt">핵심 수학 개념 · 다중선형회귀모형</div>
             <div class="f">y = a + b₁x₁ + b₂x₂ + … + bₖxₖ + ε</div>
@@ -547,7 +550,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
           <button class="btn" id="m19-check" style="align-self:flex-start">계산해서 확인</button>
           <div class="stats"><div><small>내 예측</small><strong id="m19-mine">-</strong></div><div><small>공분산분석 결과</small><strong id="m19-act">?</strong></div></div>
           <p class="pmsg" id="m19-msg3"></p>
-          <div class="think" style="flex-wrap:wrap"><span>생각해보기</span>차이의 크기는 비슷한데 p값이 0.14에서 0.028로 작아진 이유는 무엇일까요?<details style="flex-basis:100%;font-weight:600"><summary style="cursor:pointer">예시 답</summary>차이는 비슷해도 잔차가 줄거나 정보가 늘면 표준오차가 작아져 p가 작아집니다.</details></div>
+          <div class="think" style="flex-wrap:wrap"><span>생각해보기</span>키 조정 후 p값이 작아져도 모형 조건을 확인해야 할까요?<details style="flex-basis:100%;font-weight:600"><summary style="cursor:pointer">예시 답</summary>네. 공통 기울기·집단 간 키 범위 겹침·잔차 가정을 확인합니다. 비유의가 평행성을 증명하지 않으며, 조정한 차이도 인과효과를 보장하지 않습니다.</details></div>
         </div>
       </div>
     </section>
@@ -874,11 +877,12 @@ on("m19-cond",function(s){
     [150,160,170,180,190].forEach(function(t){tL(svg,X(t),190,t,{fs:9.5,c:C.gray,fw:500});});tL(svg,456,204,"키(cm)",{a:"end",fs:10,c:C.gray});
     ancovaPlot(svg,X,Y,checked);[0,1].forEach(function(gg){el("circle",{cx:60,cy:24+gg*16,r:5,fill:GC[gg]},svg);tL(svg,70,28+gg*16,GN[gg],{a:"start",fw:700,fs:10});});}
   function txt(){var v=(+g.value).toFixed(1).replace("-","−");document.getElementById("m19-gv").textContent=v+"kg";document.getElementById("m19-mine").textContent=v+"kg";}
-  g.addEventListener("input",function(){txt();if(checked){checked=false;document.getElementById("m19-act").textContent="?";draw();}});
+  g.addEventListener("input",function(){txt();reset();});
   document.getElementById("m19-check").onclick=function(){checked=true;var gv=+g.value,ok=Math.abs(gv-AN.d)<=1,m=document.getElementById("m19-msg3");
     document.getElementById("m19-act").textContent="−3.60kg";m.className="pmsg "+(ok?"ok":"ng");
     m.textContent=(ok?"가깝게 예측했습니다. ":"차이가 있습니다. ")+"키를 고려한 운동 관련 차이는 −3.60kg(p = 0.028)으로 단순 비교(−4.58kg)와 크기는 비슷하지만, 키에 따른 흩어짐이 설명되어 p값이 0.14에서 0.028로 작아졌습니다.";draw();};
-  txt();draw();var m0=document.getElementById("m19-msg3");m0.className="pmsg";m0.textContent="두 집단의 점들을 키에 따라 견주어 보고, 같은 키일 때의 몸무게 차이를 예측해 보세요.";
+  function reset(){checked=false;document.getElementById("m19-act").textContent="?";var m0=document.getElementById("m19-msg3");m0.className="pmsg";m0.textContent="두 집단의 점들을 키에 따라 견주어 보고, 같은 키일 때의 몸무게 차이를 예측해 보세요.";draw();}
+  txt();reset();
 })();
 
 

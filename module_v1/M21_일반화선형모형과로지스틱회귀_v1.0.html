@@ -205,6 +205,9 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
 
 .rotate{position:fixed;left:0;right:0;bottom:max(14px,env(safe-area-inset-bottom));text-align:center;font-size:13px;color:#3A4560;display:none}
 @media (orientation:portrait) and (max-width:700px){.rotate{display:block}}
+/* 확장한 도움말과 여러 줄 피드백을 실습 화면 안에 유지합니다. */
+.slide[data-step="5"] .pmsg{margin:0;flex-shrink:0}
+.slide[data-step="5"] .think{font-size:13px;line-height:1.35;padding:7px 10px;gap:6px}
 </style>
 </head>
 <body>
@@ -558,7 +561,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
           <div class="plabel" style="margin:0">결과 확인 · <span id="p2-count">0 / 0</span></div>
           <div class="bins" id="p2-bins"></div>
           <div class="p2row"><p class="pmsg" id="p2-msg"></p><button class="btn ghost" id="p2-reset">다시 하기</button></div>
-          <div class="think" style="flex-wrap:wrap"><span>생각해보기</span>‘불량률(%)’을 반응변수로 하면 어느 칸에 가까울까요?<details style="flex-basis:100%;font-weight:600"><summary style="cursor:pointer">예시 답</summary>0과 1의 로지스틱보다는, 비율이나 건수를 노출로 나눈 모형에 가깝습니다.</details></div>
+          <div class="think" style="flex-wrap:wrap"><span>생각해보기</span>검사 n개 중 불량 K개의 비율은 로지스틱 회귀로 다룰 수 있나요?<details style="flex-basis:100%;font-weight:600"><summary style="cursor:pointer">예시 답</summary>같은 조건의 독립 시행이면 K를 이항(n,p)으로 두고 logit(p)를 모형화합니다. 비율만 쓰지 말고 분모 n도 반영합니다.</details></div>
         </div>
       </div>
     </section>
@@ -577,7 +580,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
           <button class="btn" id="m21-check" style="align-self:flex-start">계산해서 확인</button>
           <div class="stats three"><div><small>내 예측</small><strong id="m21-mine">-</strong></div><div><small>회귀식 p</small><strong id="m21-act">?</strong></div><div><small>오즈 p ÷ (1 − p)</small><strong id="m21-od">?</strong></div></div>
           <p class="pmsg" id="m21-msg3"></p>
-          <div class="think" style="flex-wrap:wrap"><span>생각해보기</span>농도가 1 오를 때마다 오즈는 몇 배가 되나요?<details style="flex-basis:100%;font-weight:600"><summary style="cursor:pointer">예시 답</summary>오즈는 exp(0.877) ≈ 2.40배가 됩니다.</details></div>
+          <div class="think" style="flex-wrap:wrap"><span>생각해보기</span>농도 1 증가의 OR은? 별도 OR 구간 [0.7,2.9]의 의미는?<details style="flex-basis:100%;font-weight:600"><summary style="cursor:pointer">예시 답</summary>OR≈2.40입니다. 별도 95% 구간은 1을 포함해 대응하는 양측 5% 검정에서 OR=1을 기각하지 못합니다. 무효과의 증명은 아닙니다.</details></div>
         </div>
       </div>
     </section>
@@ -924,7 +927,7 @@ on("m21-cc",function(s){
   function reset(){[].forEach.call(qb.children,function(x,i){var on=XS[i]===cur;x.classList.toggle("on",on);x.setAttribute("aria-pressed",on);});
     ["m21-act","m21-od"].forEach(function(id){document.getElementById(id).textContent="?";});var m=document.getElementById("m21-msg3");m.className="pmsg";m.textContent="농도 "+cur+" 근처의 빨간 점(사망)과 파란 점(생존)을 보고 사망 확률을 예측하세요.";draw();}
   function txt(){document.getElementById("m21-gv").textContent=g.value+"%";document.getElementById("m21-mine").textContent=g.value+"%";}
-  g.addEventListener("input",function(){txt();draw();});
+  g.addEventListener("input",function(){checked=false;txt();reset();});
   document.getElementById("m21-check").onclick=function(){checked=true;var p=pN(cur),od=p/(1-p),gv=+g.value/100,ok=Math.abs(gv-p)<=.1,m=document.getElementById("m21-msg3");
     document.getElementById("m21-act").textContent=(p*100).toFixed(1)+"%";document.getElementById("m21-od").textContent=od<10?od.toFixed(2):od.toFixed(1);m.className="pmsg "+(ok?"ok":"ng");
     m.textContent=(ok?"가깝게 예측했습니다. ":"차이가 있습니다. ")+"농도 "+cur+"에서 p = "+(p*100).toFixed(1)+"%. 농도 1당 오즈는 2.40배이며, 확률의 배수와 다릅니다.";draw();};

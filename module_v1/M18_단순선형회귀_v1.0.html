@@ -205,6 +205,9 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
 
 .rotate{position:fixed;left:0;right:0;bottom:max(14px,env(safe-area-inset-bottom));text-align:center;font-size:13px;color:#3A4560;display:none}
 @media (orientation:portrait) and (max-width:700px){.rotate{display:block}}
+/* 확장한 도움말과 여러 줄 피드백을 실습 화면 안에 유지합니다. */
+.slide[data-step="5"] .pmsg{margin:0;flex-shrink:0}
+.slide[data-step="5"] .think{font-size:13px;line-height:1.35;padding:7px 10px;gap:6px}
 </style>
 </head>
 <body>
@@ -247,9 +250,9 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
         <div class="gmap">
           <div></div><div class="hd">목표</div><div class="hd">확인하는 문항</div><div class="hd">연결 실습</div>
           <div class="gn">1</div><div class="gt"><span>최소제곱법으로 구한 회귀식으로 값을 <b>계산한다</b>.</span></div>
-          <div class="ga"><button class="jump" data-jump="q1">문항 1·2</button></div><div class="gp"><button class="jump" data-jump="p1">실습 1 조작</button></div>
+          <div class="ga"><button class="jump" data-jump="q1">문항 1·2</button></div><div class="gp"><button class="jump" data-jump="p1">실습 1 조작</button><button class="jump" data-jump="p3">실습 3 예측</button></div>
           <div class="gn">2</div><div class="gt"><span>기울기 검정, 구간, 결정계수를 <b>해석한다</b>.</span></div>
-          <div class="ga"><button class="jump" data-jump="q3">문항 3·4</button></div><div class="gp"><button class="jump" data-jump="p2">실습 2 분류</button></div>
+          <div class="ga"><button class="jump" data-jump="q3">문항 3·4</button></div><div class="gp"><button class="jump" data-jump="p2">실습 2 해석</button><button class="jump" data-jump="p3">실습 3 구간</button></div>
           <div class="gn">3</div><div class="gt"><span>오차의 가정과 변수 설정이 알맞은지 <b>판단한다</b>.</span></div>
           <div class="ga"><button class="jump" data-jump="q5">문항 5·6</button></div><div class="gp"><button class="jump" data-jump="p3">실습 3 추정</button></div>
         </div>
@@ -582,7 +585,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
           <button class="btn" id="m18-check" style="align-self:flex-start">계산해서 확인</button>
           <div class="stats"><div><small>내 예측</small><strong id="m18-mine">-</strong></div><div><small>회귀식 예측 (95% 예측구간)</small><strong id="m18-act" style="font-size:18px">?</strong></div></div>
           <p class="pmsg" id="m18-msg3"></p>
-          <div class="think" style="flex-wrap:wrap"><span>생각해보기</span>수학 100점처럼 데이터 범위 밖일 때 구간은 어떻게 되나요?<details style="flex-basis:100%;font-weight:600"><summary style="cursor:pointer">예시 답</summary>데이터 범위 밖은 구간이 넓어지고, 직선이 그대로라는 가정도 약해집니다.</details></div>
+          <div class="think" style="flex-wrap:wrap"><span>생각해보기</span>수학 100점처럼 범위 밖도 같은 식으로 예측해도 될까요?<details style="flex-basis:100%;font-weight:600"><summary style="cursor:pointer">예시 답</summary>구간이 넓어지고 직선의 지속도 불확실합니다. 오차·자료 범위·변수 설정을 점검하며, 변수 추가만으로 인과가 보장되지 않습니다.</details></div>
         </div>
       </div>
     </section>
@@ -926,7 +929,7 @@ on("m18-purpose",function(s){
   function reset(){[].forEach.call(qb.children,function(x,i){var on=XS[i]===cur;x.classList.toggle("on",on);x.setAttribute("aria-pressed",on);});
     document.getElementById("m18-act").textContent="?";var m=document.getElementById("m18-msg3");m.className="pmsg";m.textContent="수학 "+cur+"점인 새 학생의 과학 점수를 예측한 뒤 「계산해서 확인」을 누르세요.";draw();}
   function txt(){document.getElementById("m18-gv").textContent=g.value+"점";document.getElementById("m18-mine").textContent=g.value+"점";}
-  g.addEventListener("input",function(){txt();draw();});
+  g.addEventListener("input",function(){checked=false;txt();reset();});
   document.getElementById("m18-check").onclick=function(){checked=true;var yh=yhK(cur),h=TC8*seK(cur,true),lo=yh-h,hi=yh+h,gv=+g.value,ok=gv>=lo&&gv<=hi,m=document.getElementById("m18-msg3");
     document.getElementById("m18-act").textContent=yh.toFixed(1)+" ("+lo.toFixed(1)+"~"+hi.toFixed(1)+")";m.className="pmsg "+(ok?"ok":"ng");
     m.textContent=cur>90?"외삽: 자료 밖 직선 가정에 주의하세요.":"평균 예측과 새 학생의 변동을 구별하세요.";draw();};

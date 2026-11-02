@@ -205,6 +205,14 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
 
 .rotate{position:fixed;left:0;right:0;bottom:max(14px,env(safe-area-inset-bottom));text-align:center;font-size:13px;color:#3A4560;display:none}
 @media (orientation:portrait) and (max-width:700px){.rotate{display:block}}
+/* 확장한 도움말과 여러 줄 피드백을 실습 화면 안에 유지합니다. */
+.slide[data-step="5"] .pmsg{margin:0;flex-shrink:0}
+.slide[data-step="5"] .think{font-size:13px;line-height:1.35;padding:7px 10px;gap:6px}
+#p2 .bins{gap:6px}
+#p2 .bin{padding:4px;gap:3px}
+#p2 .bin h4{font-size:12px;padding:2px}
+#p2 .bin .dcard{font-size:11px;line-height:1.25;padding:3px 5px}
+#p2 .think{padding:5px 10px;gap:4px}
 </style>
 </head>
 <body>
@@ -886,7 +894,7 @@ on("m22-merit",function(s){
   function reset(){[].forEach.call(qb.children,function(x,i){var on=XS[i]===cur;x.classList.toggle("on",on);x.setAttribute("aria-pressed",on);});
     document.getElementById("m22-act").textContent="?";var m=document.getElementById("m22-msg3");m.className="pmsg";m.textContent="비료 "+cur+" 근처의 점들을 보고 평균 꽃 개수를 예측한 뒤 「계산해서 확인」을 누르세요.";draw();}
   function txt(){document.getElementById("m22-gv").textContent=(+g.value).toFixed(1);document.getElementById("m22-mine").textContent=(+g.value).toFixed(1)+"송이";}
-  g.addEventListener("input",function(){txt();draw();});
+  g.addEventListener("input",function(){checked=false;txt();reset();});
   document.getElementById("m22-check").onclick=function(){checked=true;var l=lamP(cur),gv=+g.value,ok=Math.abs(gv-l)<=Math.max(1,l*.25),m=document.getElementById("m22-msg3");
     document.getElementById("m22-act").textContent=(l<1?l.toFixed(2):l.toFixed(1))+"송이";m.className="pmsg "+(ok?"ok":"ng");
     m.textContent=(ok?"가깝게 예측했습니다. ":"차이가 있습니다. ")+"λ = exp(−2.54 + 0.577 × "+cur+") ≈ "+(l<1?l.toFixed(2):l.toFixed(1))+"송이입니다. 비료 양이 2 늘면 λ는 1.78 × 1.78 ≈ 3.2배가 됩니다.";draw();};

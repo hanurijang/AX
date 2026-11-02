@@ -205,6 +205,14 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
 
 .rotate{position:fixed;left:0;right:0;bottom:max(14px,env(safe-area-inset-bottom));text-align:center;font-size:13px;color:#3A4560;display:none}
 @media (orientation:portrait) and (max-width:700px){.rotate{display:block}}
+/* 확장한 도움말과 여러 줄 피드백을 실습 화면 안에 유지합니다. */
+.slide[data-step="5"] .pmsg{margin:0;flex-shrink:0}
+.slide[data-step="5"] .think{font-size:13px;line-height:1.35;padding:7px 10px;gap:6px}
+#p2 .bins{gap:6px}
+#p2 .bin{padding:4px;gap:3px}
+#p2 .bin h4{font-size:12px;padding:2px}
+#p2 .bin .dcard{font-size:11px;line-height:1.25;padding:3px 5px}
+#p2 .think{padding:5px 10px;gap:4px}
 </style>
 </head>
 <body>
@@ -552,7 +560,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
           <div class="plabel" style="margin:0">결과 확인 · <span id="p2-count">0 / 0</span></div>
           <div class="bins" id="p2-bins"></div>
           <div class="p2row"><p class="pmsg" id="p2-msg"></p><button class="btn ghost" id="p2-reset">다시 하기</button></div>
-          <div class="think" style="flex-wrap:wrap"><span>생각해보기</span>내포 관계인 모형이라면 AIC도 함께 쓸 수 있을까요?<details style="flex-basis:100%;font-weight:600"><summary style="cursor:pointer">예시 답</summary>내포된 모형은 가능도비 검정과 AIC를 함께 볼 수 있습니다.</details></div>
+          <div class="think" style="flex-wrap:wrap"><span>생각해보기</span>내포 모형의 log L이 −40→−38이면 ΔD는? AIC도 비교할 수 있나요?<details style="flex-basis:100%;font-weight:600"><summary style="cursor:pointer">예시 답</summary>별도 예의 ΔD=−2(−40+38)=4입니다. 같은 자료·반응·가능도와 정칙조건을 확인합니다. 파라미터 수를 반영한 AIC도 비교할 수 있습니다.</details></div>
         </div>
       </div>
     </section>
@@ -928,7 +936,7 @@ on("m23-other",function(s){
   function reset(){[].forEach.call(qb.children,function(x,i){var on=NS[i]===cur;x.classList.toggle("on",on);x.setAttribute("aria-pressed",on);});
     document.getElementById("m23-act").textContent=seen[cur]?SEL[cur][1].toFixed(2):"?";document.getElementById("m23-aact").textContent=seen[cur]?SEL[cur][0].toFixed(2):"?";
     var m=document.getElementById("m23-msg3");m.className="pmsg";m.textContent="n = "+(+cur).toLocaleString()+"일 때 BIC가 실제 모형(1차식)을 고를 비율을 예측한 뒤 「저장 결과 보기」를 누르세요.";draw();}
-  g.addEventListener("input",function(){txt();draw();});
+  g.addEventListener("input",function(){txt();reset();});
   document.getElementById("m23-check").onclick=function(){seen[cur]=true;var a=SEL[cur],gv=+g.value/100,ok=Math.abs(gv-a[1])<=0.1,m=document.getElementById("m23-msg3");
     document.getElementById("m23-act").textContent=a[1].toFixed(2);document.getElementById("m23-aact").textContent=a[0].toFixed(2);m.className="pmsg "+(ok?"ok":"ng");
     m.textContent="저장 비율: BIC "+a[1].toFixed(2)+", AIC "+a[0].toFixed(2)+". 한 번의 선택은 보장되지 않습니다.";draw();};

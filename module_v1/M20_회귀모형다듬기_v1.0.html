@@ -205,6 +205,9 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
 
 .rotate{position:fixed;left:0;right:0;bottom:max(14px,env(safe-area-inset-bottom));text-align:center;font-size:13px;color:#3A4560;display:none}
 @media (orientation:portrait) and (max-width:700px){.rotate{display:block}}
+/* 확장한 도움말과 여러 줄 피드백을 실습 화면 안에 유지합니다. */
+.slide[data-step="5"] .pmsg{margin:0;flex-shrink:0}
+.slide[data-step="5"] .think{font-size:13px;line-height:1.35;padding:7px 10px;gap:6px}
 </style>
 </head>
 <body>
@@ -555,7 +558,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
           <div class="plabel" style="margin:0">결과 확인 · <span id="p2-count">0 / 0</span></div>
           <div class="bins" id="p2-bins" style="grid-template-columns:repeat(2,1fr)"></div>
           <div class="p2row"><p class="pmsg" id="p2-msg"></p><button class="btn ghost" id="p2-reset">다시 하기</button></div>
-          <div class="think" style="flex-wrap:wrap"><span>생각해보기</span>y = a·e^(bx)의 양변에 로그를 취하면 어떤 모형이 될까요?<details style="flex-basis:100%;font-weight:600"><summary style="cursor:pointer">예시 답</summary>log y = log a + bx인 직선 모형이 됩니다.</details></div>
+          <div class="think" style="flex-wrap:wrap"><span>생각해보기</span>y = a·e^(bx)는 로그로 직선화할 수 있나요?<details style="flex-basis:100%;font-weight:600"><summary style="cursor:pointer">예시 답</summary>a>0, y>0이면 log y = log a + bx입니다. 로그 척도의 최소제곱은 원래 척도의 가법 오차 모형과 다르므로 오차 가정도 확인합니다.</details></div>
         </div>
       </div>
     </section>
@@ -573,7 +576,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
           <button class="btn" id="m20-check" style="align-self:flex-start">실제와 비교</button>
           <div class="stats three"><div><small>내 예측</small><strong id="m20-mine">-</strong></div><div><small>상호작용 없을 때</small><strong id="m20-add">?</strong></div><div><small>실제 평균</small><strong id="m20-act">?</strong></div></div>
           <p class="pmsg" id="m20-msg3"></p>
-          <div class="think" style="flex-wrap:wrap"><span>생각해보기</span>예측과 실제의 차이 14cm는 회귀식의 어느 계수와 같나요?<details style="flex-basis:100%;font-weight:600"><summary style="cursor:pointer">예시 답</summary>그 14cm는 상호작용의 크기입니다. 평행이라고 본 16cm와 실제 30cm의 차이입니다.</details></div>
+          <div class="think" style="flex-wrap:wrap"><span>생각해보기</span>실제−예측의 14cm와 상호작용 계수 c는 같나요?<details style="flex-basis:100%;font-weight:600"><summary style="cursor:pointer">예시 답</summary>크기는 14cm이지만 c는 −14cm입니다. 온도 차이가 비료 없음에서 17cm, 있음에서 3cm이므로 c=3−17=−14입니다.</details></div>
         </div>
       </div>
     </section>
@@ -908,11 +911,12 @@ on("m20-mm",function(s){
     if(checked){el("line",{x1:X(0),y1:Y(cmM("00")),x2:X(1),y2:Y(ADD),stroke:"#9AA0AA","stroke-width":2,"stroke-dasharray":"2 3"},svg);el("circle",{cx:X(1),cy:Y(ADD),r:5,fill:"#9AA0AA"},svg);tM(svg,X(1)-10,Y(ADD)+18,"평행이면 "+ADD.toFixed(0),{a:"end",fw:800,fs:10.5,c:C.gray,halo:true});
       el("line",{x1:X(0),y1:Y(cmM("00")),x2:X(1),y2:Y(cmM("01")),stroke:FC[1],"stroke-width":2.5},svg);el("circle",{cx:X(1),cy:Y(cmM("01")),r:6,fill:"#fff",stroke:FC[1],"stroke-width":2.5},svg);tM(svg,X(1)+12,Y(cmM("01"))+16,"실제 "+cmM("01").toFixed(0),{a:"start",fw:800,fs:10.5,c:FC[1],halo:true});}}
   function txt(){var v=(+g.value).toFixed(1);document.getElementById("m20-gv").textContent=v+"cm";document.getElementById("m20-mine").textContent=v+"cm";}
-  g.addEventListener("input",function(){txt();draw();});
+  g.addEventListener("input",function(){txt();reset();});
   document.getElementById("m20-check").onclick=function(){checked=true;var gv=+g.value,ok=Math.abs(gv-ADD)<=1.5,m=document.getElementById("m20-msg3");
     document.getElementById("m20-add").textContent=ADD.toFixed(0)+"cm";document.getElementById("m20-act").textContent=cmM("01").toFixed(0)+"cm";m.className="pmsg "+(ok?"ok":"ng");
     m.textContent=(ok?"평행 가정에 가깝습니다. ":"평행 가정을 확인하세요. ")+"평행이면 13 + (35 − 32) = 16cm, 실제는 30cm입니다. 상호작용 계수는 3 − 17 = −14cm입니다.";draw();};
-  txt();draw();var m0=document.getElementById("m20-msg3");m0.className="pmsg";m0.textContent="‘비료 있음’ 선의 기울기를 참고해, 두 선이 평행하다면 오른쪽 빈 칸이 얼마일지 예측하세요.";
+  function reset(){checked=false;document.getElementById("m20-add").textContent="?";document.getElementById("m20-act").textContent="?";var m0=document.getElementById("m20-msg3");m0.className="pmsg";m0.textContent="‘비료 있음’ 선의 기울기를 참고해, 두 선이 평행하다면 오른쪽 빈 칸이 얼마일지 예측하세요.";draw();}
+  txt();reset();
 })();
 
 
