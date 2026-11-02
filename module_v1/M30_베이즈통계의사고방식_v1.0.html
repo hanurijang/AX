@@ -206,6 +206,12 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
 
 .rotate{position:fixed;left:0;right:0;bottom:max(14px,env(safe-area-inset-bottom));text-align:center;font-size:13px;color:#3A4560;display:none}
 @media (orientation:portrait) and (max-width:700px){.rotate{display:block}}
+
+/* 21차: 펼친 실습 도움말과 판정 문구의 높이 확보 */
+.slide[data-step="5"] .pmsg{margin:0;flex-shrink:0}
+.slide[data-step="5"] .think{font-size:13px;line-height:1.35;padding:7px 10px;gap:6px}
+#s-4-4b .side{gap:8px}
+#s-4-4b .exp{font-size:14px;line-height:1.5}
 </style>
 </head>
 <body>
@@ -910,7 +916,7 @@ on("m30-adv",function(s){
   function reset(){[].forEach.call(qn.children,function(x,i){x.classList.toggle("on",i===cn);x.setAttribute("aria-pressed",i===cn);});[].forEach.call(qt.children,function(x,i){x.classList.toggle("on",i===ct);x.setAttribute("aria-pressed",i===ct);});
     var p=postX(NS[cn],false);document.getElementById("m30-post").textContent=p[0].toFixed(1)+" ± "+p[1].toFixed(1);document.getElementById("m30-act").textContent=seen[key()]?(prob()*100>99.9?">99.9%":(prob()*100).toFixed(1)+"%"):"?";
     var m=document.getElementById("m30-msg3");m.className="pmsg";m.textContent="곡선 아래 면적 중 기준선 오른쪽이 차지하는 비율을 예측한 뒤 「사후분포로 계산」을 누르세요.";draw();}
-  g.addEventListener("input",txt);
+  g.addEventListener("input",function(){txt();reset();});
   document.getElementById("m30-check").onclick=function(){seen[key()]=true;var pr=prob()*100,gv=+g.value,ok=Math.abs(gv-pr)<=10,p=postX(NS[cn],false),m=document.getElementById("m30-msg3");
     document.getElementById("m30-act").textContent=pr>99.9?">99.9%":pr.toFixed(1)+"%";m.className="pmsg "+(ok?"ok":"ng");
     m.textContent=(ok?"가깝게 예측했습니다. ":"차이가 있습니다. ")+"z = ("+TS[ct]+" − "+p[0].toFixed(1)+") ÷ "+p[1].toFixed(2)+" ≈ "+((TS[ct]-p[0])/p[1]).toFixed(2).replace("-","−")+"이므로 P(μ ≥ "+TS[ct]+") ≈ "+(pr>99.9?"99.9% 이상":pr.toFixed(1)+"%")+"입니다.";draw();};

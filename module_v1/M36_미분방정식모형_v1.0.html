@@ -206,6 +206,16 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
 
 .rotate{position:fixed;left:0;right:0;bottom:max(14px,env(safe-area-inset-bottom));text-align:center;font-size:13px;color:#3A4560;display:none}
 @media (orientation:portrait) and (max-width:700px){.rotate{display:block}}
+
+/* 21차: 펼친 실습 도움말과 판정 문구의 높이 확보 */
+.slide[data-step="5"] .pmsg{margin:0;flex-shrink:0}
+.slide[data-step="5"] .think{font-size:13px;line-height:1.35;padding:7px 10px;gap:6px}
+#p2 .bins{gap:6px}
+#p2 .bin{padding:4px;gap:3px}
+#p2 .bin h4{font-size:12px;padding:2px}
+#p2 .bin .dcard{font-size:11px;line-height:1.25;padding:3px 5px}
+.gl .gi .d{font-size:13px;line-height:1.35}
+.gl .gi .e{font-size:12px;line-height:1.35}
 </style>
 </head>
 <body>
@@ -932,7 +942,7 @@ on("m36-ext",function(s){
   function reset(){[].forEach.call(db.children,function(x,i){x.classList.toggle("on",i===cur);x.setAttribute("aria-pressed",i===cur);});var d=DS[cur];
     document.getElementById("m36-ex").textContent=seen[cur]?Math.pow(2,d/5).toLocaleString()+"명":"?";document.getElementById("m36-lg").textContent=seen[cur]?Math.round(logiG(d))+"명":"?";
     var ms=document.getElementById("m36-msg3");ms.className="pmsg";ms.textContent="5일마다 2배라면 "+d+"일 뒤 감염자는 몇 명일까요? 직감으로 정한 뒤 「계산해서 확인」을 누르세요.";txt();}
-  g.addEventListener("input",txt);
+  g.addEventListener("input",function(){txt();reset();});
   document.getElementById("m36-check").onclick=function(){seen[cur]=true;var d=DS[cur],ex=Math.pow(2,d/5),lg=Math.round(logiG(d)),gv=+g.value,ok=Math.abs(gv-ex)<=ex*0.2,ms=document.getElementById("m36-msg3");
     document.getElementById("m36-ex").textContent=ex.toLocaleString()+"명";document.getElementById("m36-lg").textContent=lg+"명";ms.className="pmsg "+(ok?"ok":"ng");
     ms.textContent=(ok?"근접했습니다. ":"차이가 있습니다. ")+d+"일은 5일 단위로 "+(d/5)+"번이므로 2^"+(d/5)+" = "+ex.toLocaleString()+"명입니다."+(ex>1000?" 직원 수를 넘으므로 현실과 맞지 않으며, 밀도 효과를 넣으면 "+lg+"명이고 이후 1,000명에 가까워지며 포화합니다.":" 밀도 효과를 넣으면 "+lg+"명입니다.");draw();};

@@ -205,6 +205,10 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
 
 .rotate{position:fixed;left:0;right:0;bottom:max(14px,env(safe-area-inset-bottom));text-align:center;font-size:13px;color:#3A4560;display:none}
 @media (orientation:portrait) and (max-width:700px){.rotate{display:block}}
+
+/* 21차: 펼친 실습 도움말과 판정 문구의 높이 확보 */
+.slide[data-step="5"] .pmsg{margin:0;flex-shrink:0}
+.slide[data-step="5"] .think{font-size:13px;line-height:1.35;padding:7px 10px;gap:6px}
 </style>
 </head>
 <body>
@@ -251,7 +255,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
           <div class="gn">2</div><div class="gt"><span>기여율과 누적기여율을 <b>계산한다</b>.</span></div>
           <div class="ga"><button class="jump" data-jump="q3">문항 3·4</button></div><div class="gp"><button class="jump" data-jump="p1">실습 1 조작</button></div>
           <div class="gn">3</div><div class="gt"><span>주성분점수와 인자분석 결과를 <b>해석한다</b>.</span></div>
-          <div class="ga"><button class="jump" data-jump="q5">문항 5·6</button></div><div class="gp"><button class="jump" data-jump="p3">실습 3 추정</button></div>
+          <div class="ga"><button class="jump" data-jump="q5">문항 5·6</button></div><div class="gp"><button class="jump" data-jump="p3">실습 3 점수</button><button class="jump" data-jump="p2">실습 2 인자</button></div>
         </div>
       </div>
       <p class="foot">4-1·4-2는 기초, 4-3 인자분석은 추가 읽기입니다. 버튼을 누르면 해당 문항이나 실습으로 이동합니다.</p>
@@ -479,7 +483,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
           <div class="plabel" style="margin:0">결과 확인 · <span id="p2-count">0 / 0</span></div>
           <div class="bins" id="p2-bins"></div>
           <div class="p2row"><p class="pmsg" id="p2-msg"></p><button class="btn ghost" id="p2-reset">다시 하기</button></div>
-          <div class="think" style="flex-wrap:wrap"><span>생각해보기</span>우리 공정 데이터에서 함께 움직이는 변수 묶음은 무엇일까요?<details style="flex-basis:100%;font-weight:600"><summary style="cursor:pointer">예시 답</summary>같이 오르내리는 온도, 하중처럼 한 덩어리로 움직이는 변수들입니다.</details></div>
+          <div class="think" style="flex-wrap:wrap"><span>생각해보기</span>인자에 이름을 붙이면 인과관계가 증명될까요?<details style="flex-basis:100%;font-weight:600"><summary style="cursor:pointer">예시 답</summary>아닙니다. 인자분석은 변수 사이의 공분산을 설명합니다. 인과 해석에는 분야 지식과 연구 설계 등 별도 근거가 필요합니다.</details></div>
         </div>
       </div>
     </section>
@@ -498,7 +502,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
           <button class="btn" id="m32-check" style="align-self:flex-start">점수 계산</button>
           <div class="stats three"><div><small>내 예측</small><strong id="m32-mine">-</strong></div><div><small>실제 PC1</small><strong id="m32-act">?</strong></div><div><small>실제 PC2</small><strong id="m32-act2">?</strong></div></div>
           <p class="pmsg" id="m32-msg3"></p>
-          <div class="think" style="flex-wrap:wrap"><span>생각해보기</span>연신율이 PC1 점수에 거의 영향을 주지 않는 이유는?<details style="flex-basis:100%;font-weight:600"><summary style="cursor:pointer">예시 답</summary>다른 변수와 거의 같이 움직이지 않으면 PC1의 가중치가 작기 때문입니다.</details></div>
+          <div class="think" style="flex-wrap:wrap"><span>생각해보기</span>연신율이 PC1 점수에 거의 영향을 주지 않는 이유는?<details style="flex-basis:100%;font-weight:600"><summary style="cursor:pointer">예시 답</summary>이 자료에서 연신율의 PC1 가중치가 작기 때문입니다. 이는 PC1 축에 대한 기여가 작다는 뜻이며, 모든 변수와 상관이 없다는 뜻은 아닙니다. 연신율과 충격값의 관계는 PC2에서 살펴봅니다.</details></div>
         </div>
       </div>
     </section>
@@ -816,7 +820,7 @@ on("m32-fa",function(s){
   function reset(){[].forEach.call(qs.children,function(x,i){x.classList.toggle("on",i===cur);x.setAttribute("aria-pressed",i===cur);});var p=DS[IDS[cur]-1];
     document.getElementById("m32-act").textContent=seen[cur]?fmZ(p[0],2):"?";document.getElementById("m32-act2").textContent=seen[cur]?fmZ(p[1],2):"?";
     var m=document.getElementById("m32-msg3");m.className="pmsg";m.textContent="강도 3항목(파랑)의 막대가 클수록 PC1 점수가 커집니다. 예측한 뒤 「점수 계산」을 누르세요.";draw();}
-  g.addEventListener("input",txt);
+  g.addEventListener("input",function(){txt();reset();});
   document.getElementById("m32-check").onclick=function(){seen[cur]=true;var p=DS[IDS[cur]-1],gv=+g.value,ok=Math.abs(gv-p[0])<=0.6,m=document.getElementById("m32-msg3");
     document.getElementById("m32-act").textContent=fmZ(p[0],2);document.getElementById("m32-act2").textContent=fmZ(p[1],2);m.className="pmsg "+(ok?"ok":"ng");
     var desc=(p[0]>1?"강도가 높고":p[0]<-1?"강도가 낮고":"강도는 평균 정도이고")+" "+(p[1]>1?"인성도 높은":p[1]<-1?"인성은 낮은":"인성은 평균 정도인");

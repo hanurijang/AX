@@ -206,6 +206,10 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
 
 .rotate{position:fixed;left:0;right:0;bottom:max(14px,env(safe-area-inset-bottom));text-align:center;font-size:13px;color:#3A4560;display:none}
 @media (orientation:portrait) and (max-width:700px){.rotate{display:block}}
+
+/* 21차: 펼친 실습 도움말과 판정 문구의 높이 확보 */
+.slide[data-step="5"] .pmsg{margin:0;flex-shrink:0}
+.slide[data-step="5"] .think{font-size:13px;line-height:1.35;padding:7px 10px;gap:6px}
 </style>
 </head>
 <body>
@@ -813,7 +817,7 @@ on("m33-tsne",function(s){
   function reset(){[].forEach.call(qh.children,function(x,i){x.classList.toggle("on",i===cur);x.setAttribute("aria-pressed",i===cur);});var h=HS[cur],m=nmerge(h);
     document.getElementById("m33-act").textContent=seen[cur]?(12-m)+"개":"?";document.getElementById("m33-mg").textContent=seen[cur]?m+"번":"?";
     var ms=document.getElementById("m33-msg3");ms.className="pmsg";ms.textContent="빨간 선과 만나는 세로선의 수가 그 높이에서의 군집 수입니다. 예측한 뒤 「잘라서 확인」을 누르세요.";draw();}
-  g.addEventListener("input",txt);
+  g.addEventListener("input",function(){txt();reset();});
   document.getElementById("m33-check").onclick=function(){seen[cur]=true;var h=HS[cur],m=nmerge(h),k=12-m,gv=+g.value,ok=gv===k,ms=document.getElementById("m33-msg3");
     document.getElementById("m33-act").textContent=k+"개";document.getElementById("m33-mg").textContent=m+"번";ms.className="pmsg "+(ok?"ok":"ng");
     ms.textContent=(ok?"정확합니다. ":"차이가 있습니다. ")+"높이 "+h.toFixed(1)+" 이하에서 "+m+"번 합쳐졌으므로 12 − "+m+" = "+k+"개 군집입니다."+(k===3?" 군집 수가 k평균(k = 3)과 같아도 구성원까지 같은 것은 아닙니다.":"");draw();};

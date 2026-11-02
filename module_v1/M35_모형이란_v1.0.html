@@ -205,6 +205,10 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
 
 .rotate{position:fixed;left:0;right:0;bottom:max(14px,env(safe-area-inset-bottom));text-align:center;font-size:13px;color:#3A4560;display:none}
 @media (orientation:portrait) and (max-width:700px){.rotate{display:block}}
+
+/* 21차: 펼친 실습 도움말과 판정 문구의 높이 확보 */
+.slide[data-step="5"] .pmsg{margin:0;flex-shrink:0}
+.slide[data-step="5"] .think{font-size:13px;line-height:1.35;padding:7px 10px;gap:6px}
 </style>
 </head>
 <body>
@@ -607,7 +611,7 @@ var QUIZ=[
   exp:"실제 현상은 상상 이상으로 복잡하고 관련된 요소를 모두 상정할 수도 없으므로, 현상을 완벽하게 모형화하는 것은 불가능합니다. 모형은 어디까지나 현상을 이해하는 데 도움이 되는 근사 도구로, 실제 현상과 모형은 다르다는 사실을 명심하고 얻은 모형이 얼마나 좋은지 확인하는 것이 중요합니다.",back:"s-4-2b",backLabel:"4-2 완벽한 모형은 없다 다시 보기"},
  {goal:3,type:"계산",stem:"시간 t[h], k=0.04h⁻¹인 가상 냉각식 T(t) = 25 + 575 × e^(−0.04t)에서 24시간 뒤 온도는 약 몇 ℃일까요? (e^(−0.96) ≈ 0.383)",
   opts:["약 245℃","약 150℃","약 220℃","약 383℃"],ans:0,
-  exp:"t = 24를 넣으면 지수는 −0.04 × 24 = −0.96이고, 25 + 575 × 0.383 ≈ 245℃입니다. 220℃는 주변 온도 25를 더하지 않은 값, 150℃는 0~12시간 측정값에 직선을 맞춰 24시간까지 늘인 값입니다. 나중에 잰 24시간 온도는 248℃(예시값)로 수리 모형과 가깝습니다.",back:"s-4-3a",backLabel:"4-3 수리 모형이란 다시 보기"},
+  exp:"t = 24를 넣으면 지수는 −0.04 × 24 = −0.96이고, 25 + 575 × 0.383 ≈ 245℃입니다. 220℃는 주변 온도 25를 더하지 않은 값, 150℃는 0~12시간 측정값에 직선을 맞춰 24시간까지 늘인 값입니다. 실제 측정이 아닌 가상 관측값인 24시간 온도 248℃는 수리 모형과 가깝습니다.",back:"s-4-3a",backLabel:"4-3 수리 모형이란 다시 보기"},
  {goal:3,type:"상황 판단",stem:"압연 설비의 하루 고장 건수처럼 같은 조건에서도 매번 결과가 달라지는 확률적 변동이 본질인 현상을 다루려 합니다. 알맞은 모형은?",
   opts:["확률 모형","결정론 모형","운동 방정식","직선 회귀만 사용"],ans:0,
   exp:"결정론이란 특정 시각의 상태가 정해지면 다음 시각의 상태가 단 하나로 정해지는 성질로, 이런 현상에는 미분 방정식 같은 결정론 모형을 씁니다. 도박에서 이기고 지기를 반복할 때처럼 확률적인 변동이 중요한 요소인 현상에는 무작위 행보, 마르코프 연쇄 같은 확률 모형을 적용할 수 있습니다.",back:"s-4-4a",backLabel:"4-4 수리 모형의 종류 다시 보기"}
@@ -872,7 +876,7 @@ on("m35-solve",function(s){
   function reset(){[].forEach.call(tb.children,function(x,i){x.classList.toggle("on",i===cur);x.setAttribute("aria-pressed",i===cur);});var t=TS[cur];
     document.getElementById("m35-act").textContent=seen[cur]?LATE[t]+"℃":"?";document.getElementById("m35-mod").textContent=seen[cur]?Math.round(coolF(t,CK,CTA))+"℃":"?";
     var ms=document.getElementById("m35-msg3");ms.className="pmsg";ms.textContent=t+"시간 뒤의 가상 관측을 예측하세요.";txt();}
-  g.addEventListener("input",txt);
+  g.addEventListener("input",function(){txt();reset();});
   document.getElementById("m35-check").onclick=function(){seen[cur]=true;var t=TS[cur],v=LATE[t],md=Math.round(coolF(t,CK,CTA)),ln=Math.round(LINA+LINB*t),gv=+g.value,ok=Math.abs(gv-v)<=30,ms=document.getElementById("m35-msg3");
     document.getElementById("m35-act").textContent=v+"℃";document.getElementById("m35-mod").textContent=md+"℃";ms.className="pmsg "+(ok?"ok":"ng");
     ms.textContent="직선 외삽: "+fmF(ln)+"℃. 가정을 점검하세요.";draw();};

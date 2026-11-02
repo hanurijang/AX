@@ -205,6 +205,11 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
 
 .rotate{position:fixed;left:0;right:0;bottom:max(14px,env(safe-area-inset-bottom));text-align:center;font-size:13px;color:#3A4560;display:none}
 @media (orientation:portrait) and (max-width:700px){.rotate{display:block}}
+
+/* 21차: 펼친 실습 도움말과 판정 문구의 높이 확보 */
+.slide[data-step="5"] .pmsg{margin:0;flex-shrink:0}
+.slide[data-step="5"] .think{font-size:13px;line-height:1.35;padding:7px 10px;gap:6px}
+#p1 .pcol:last-child{gap:5px!important}
 </style>
 </head>
 <body>
@@ -472,7 +477,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
           <div class="stats three"><div><small>n일 뒤 고장 확률</small><strong id="m37-pn">-</strong></div><div><small>정상 상태 고장</small><strong id="m37-ps">-</strong></div><div><small>연간 고장일</small><strong id="m37-yd">-</strong></div></div>
           <p class="howto">도전: 연간 고장일이 13일보다 적어지는 가장 작은 예방 정비율을 찾아보세요.</p>
           <p class="pmsg" id="m37-msg"></p>
-          <div class="think" style="flex-wrap:wrap"><span>생각해보기</span>우리 설비의 전이확률은 어떤 기록으로 추정할 수 있을까요?<details style="flex-basis:100%;font-weight:600"><summary style="cursor:pointer">예시 답</summary>정상에서 고장으로 바뀐 횟수와, 각 상태에 머문 시간 기록으로 추정합니다.</details></div>
+          <div class="think" style="flex-wrap:wrap"><span>생각해보기</span>우리 설비의 전이확률은 어떤 기록으로 추정할 수 있을까요?<details style="flex-basis:100%;font-weight:600"><summary style="cursor:pointer">예시 답</summary>같은 관측 간격·정비 정책에서 현재 상태별 전이 횟수를 셉니다. 각 전이 횟수를 해당 행의 총 횟수로 나눕니다.</details></div>
         </div>
       </div>
     </section>
@@ -499,7 +504,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
       <div class="sh"><div class="sec">실습 3 · 추정형</div><h2>목표: 입출고가 쌓이면 재고가 얼마나 퍼질지 예측하고 시뮬레이션과 비교합니다</h2></div>
       <div class="body split">
         <div class="pcol">
-          <div class="plabel">해보기 · 입출고 횟수를 고르고, 재고 100개에서 평균적으로 얼마나 벗어날지(표준편차) 예측하세요</div>
+          <div class="plabel">해보기 · 입출고 횟수를 고르고, 재고 분포의 표준편차가 몇 개일지 예측하세요</div>
           <div class="fig" style="flex:1"><svg id="m37-p3-svg" viewBox="0 0 470 210" role="img" aria-label="무작위 행보 500회 시뮬레이션의 최종 재고 분포와 예측"></svg></div>
         </div>
         <div class="pcol" style="gap:9px;justify-content:center">
@@ -822,8 +827,8 @@ on("m37-role",function(s){
   function txt(){document.getElementById("m37-gv").textContent=g.value+"개";document.getElementById("m37-mine").textContent=g.value+"개";draw();}
   function reset(){[].forEach.call(tb.children,function(x,i){x.classList.toggle("on",i===cur);x.setAttribute("aria-pressed",i===cur);});var t=TS[cur];
     document.getElementById("m37-th").textContent=seen[cur]?Math.sqrt(t)+"개":"?";document.getElementById("m37-sim").textContent=seen[cur]?sim(t).sd.toFixed(1)+"개":"?";
-    var ms=document.getElementById("m37-msg3");ms.className="pmsg";ms.textContent="입출고 "+t+"번 뒤 재고는 100개에서 평균적으로 몇 개쯤 벗어날까요? 예측한 뒤 「500번 시뮬레이션」을 누르세요.";txt();}
-  g.addEventListener("input",txt);
+    var ms=document.getElementById("m37-msg3");ms.className="pmsg";ms.textContent="입출고 "+t+"번 뒤 재고 분포의 표준편차는 몇 개일까요? 예측한 뒤 「500번 시뮬레이션」을 누르세요.";txt();}
+  g.addEventListener("input",function(){txt();reset();});
   document.getElementById("m37-check").onclick=function(){seen[cur]=true;var t=TS[cur],S=sim(t),th=Math.sqrt(t),gv=+g.value,ok=Math.abs(gv-th)<=th*0.2,ms=document.getElementById("m37-msg3");
     document.getElementById("m37-th").textContent=th+"개";document.getElementById("m37-sim").textContent=S.sd.toFixed(1)+"개";ms.className="pmsg "+(ok?"ok":"ng");
     ms.textContent=(ok?"근접했습니다. ":"차이가 있습니다. ")+"이론값은 σ√t = √"+t+" = "+th+"개이고, 500번 시뮬레이션의 표준편차는 "+S.sd.toFixed(1)+"개입니다. 약 95%가 "+(100-2*th)+"~"+(100+2*th)+"개 안에 들어옵니다.";draw();};

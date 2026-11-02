@@ -205,6 +205,15 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
 
 .rotate{position:fixed;left:0;right:0;bottom:max(14px,env(safe-area-inset-bottom));text-align:center;font-size:13px;color:#3A4560;display:none}
 @media (orientation:portrait) and (max-width:700px){.rotate{display:block}}
+
+/* 21차: 펼친 실습 도움말과 판정 문구의 높이 확보 */
+.slide[data-step="5"] .pmsg{margin:0;flex-shrink:0}
+.slide[data-step="5"] .think{font-size:13px;line-height:1.35;padding:7px 10px;gap:6px}
+#s-4-4a .side{gap:8px}
+#s-4-4a .exp{font-size:14px;line-height:1.5}
+.gl .gi .d{font-size:13px;line-height:1.35}
+.gl .gi .e{font-size:12px;line-height:1.35}
+#p3 .pcol:last-child{gap:3px!important}
 </style>
 </head>
 <body>
@@ -539,7 +548,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
           <button class="btn" id="m31-check" style="align-self:flex-start">표집값으로 계산</button>
           <div class="stats three"><div><small>내 예측</small><strong id="m31-mine">-</strong></div><div><small>사후확률</small><strong id="m31-act">?</strong></div><div><small>EAP · 95% 구간</small><strong style="font-size:13px">14.9 · [4.8, 25.5]</strong></div></div>
           <p class="pmsg" id="m31-msg3"></p>
-          <div class="think" style="flex-wrap:wrap"><span>생각해보기</span>p = 0.0056이라는 결과와 비교해 어떤 정보가 더 생겼나요?<details style="flex-basis:100%;font-weight:600"><summary style="cursor:pointer">예시 답</summary>p값 하나 대신 파라미터의 분포와, 그 값이 어떤 범위에 있을 확률이 생깁니다.</details></div>
+          <div class="think" style="flex-wrap:wrap"><span>생각해보기</span>EAP와 MAP는 언제 다를 수 있고, 신용구간은 무엇을 뜻할까요?<details style="flex-basis:100%;font-weight:600"><summary style="cursor:pointer">예시 답</summary>EAP는 평균, MAP는 최빈값이라 비대칭이면 다를 수 있습니다. 95% 신용구간은 자료·모형·사전분포 아래 사후확률 95%를 담습니다.</details></div>
         </div>
       </div>
     </section>
@@ -597,8 +606,8 @@ var QUIZ=[
   opts:["사후최빈값(MAP)","사후기댓값(EAP)","최대가능도 추정량","번인"],ans:0,
   exp:"사후분포를 요약하는 점 추정값으로, 평균값인 사후기댓값(EAP)과 분포의 봉우리, 즉 확률밀도가 가장 높은 값인 사후최빈값(MAP)이 있습니다. 예시의 차이 사후분포는 거의 좌우 대칭이라 EAP 14.9와 MAP 약 14로 비슷합니다.",back:"s-4-2b",backLabel:"4-2 EAP와 MAP 다시 보기"},
  {goal:3,type:"상황 판단",stem:"꽃 20그루의 푸아송 회귀를 베이즈 추정했더니 기울기 b의 사후분포가 EAP 0.589, 95% 신용구간 [0.468, 0.718]이었습니다. 가장 알맞은 해석은?",
-  opts:["b가 0보다 클 가능성이 매우 높아, 비료 양이 늘수록 꽃 개수가 늘어나는 효과를 정량적으로 말할 수 있다","b는 정확히 0.589이다","신용구간이 넓으므로 효과가 없다","베이즈 추정에서는 회귀계수를 해석할 수 없다"],ans:0,
-  exp:"베이즈 추정 결과로 파라미터 a, b의 사후분포를 각각 얻을 수 있으며, b의 95% 신용구간 [0.468, 0.718]은 0을 포함하지 않아 설명변수의 효과를 정량적으로 알 수 있습니다. 이로써 모형과 현실 현상의 대응을 보다 심도 있게 검토할 수 있습니다.",back:"s-4-3a",backLabel:"4-3 푸아송 회귀의 예 다시 보기"},
+  opts:["가정한 모형 아래 비료 양과 조건부 평균 꽃 개수의 양의 연관을 지지한다","b는 정확히 0.589이다","신용구간이 넓으므로 효과가 없다","베이즈 추정에서는 회귀계수를 해석할 수 없다"],ans:0,
+  exp:"베이즈 추정 결과로 파라미터 a, b의 사후분포를 각각 얻을 수 있으며, b의 95% 신용구간 [0.468, 0.718]은 0을 포함하지 않아 설명변수의 효과를 정량적으로 알 수 있습니다. log λ = a + bx에서 x가 1 증가할 때 조건부 평균 λ는 exp(b)배가 됩니다. 이 연관을 인과효과로 해석하려면 연구 설계와 추가 가정이 필요합니다.",back:"s-4-3a",backLabel:"4-3 푸아송 회귀의 예 다시 보기"},
  {goal:3,type:"상황 판단",stem:"압연 라인별 차이 rᵢ의 사전분포를 평균 0, 표준편차 s인 정규분포로 두고, s에도 사전분포를 주었습니다. 이때 s를 무엇이라 부를까요?",
   opts:["초모수","번인","체인","사후기댓값"],ans:0,
   exp:"개체(라인) 차이 rᵢ의 사전분포 p(rᵢ | s)의 형태를 결정하는 파라미터 s에 관해 사전분포 p(s)가 설정되었을 때, p(rᵢ | s)를 계층적 사전분포라 하고 s를 초모수(hyper-parameter), p(s)를 초사전분포라 부릅니다. 이런 계층적 사전분포를 쓰는 모형이 계층적 베이지안 모형입니다.",back:"s-4-4a",backLabel:"4-4 계층적 베이지안 모형 다시 보기"}
@@ -795,7 +804,7 @@ on("m31-gibbs",function(s){
   bxY(s,282,24,128,46,"#FBE4F0");tY(s,346,44,"분홍선: 첫 15번",{fw:800,fs:10,c:PNK});tY(s,346,60,"가로·세로 번갈아",{fs:9.5});
   bxY(s,282,80,128,46,"#EEF4FB");tY(s,346,100,"파랑 점: 이후 표집",{fw:800,fs:10,c:"#1C6EA4"});tY(s,346,116,"상관 0.7 분포로 수렴",{fs:9.5});
   bxY(s,282,136,128,62,"#FCF3D9");tY(s,346,156,"초기 구간 = 번인",{fw:800,fs:10.5,c:C.amberInk});tY(s,346,174,"분석에서 버림",{fs:9.5});tY(s,346,190,"(웜업)",{fs:9.5,c:C.gray});
-  tY(s,150,270,"x",{fs:10,c:C.gray,fw:700});
+  tY(s,150,262,"x",{fs:10,c:C.gray,fw:700});
 });
 
 on("m31-trace",function(s){
@@ -864,13 +873,13 @@ on("m31-hier",function(s){
   KS.forEach(function(v,i){var b=document.createElement("button");b.type="button";b.className="mbtn";b.textContent="차이 > "+v;b.style.padding="3px 8px";b.onclick=function(){cur=i;reset();};qk.appendChild(b);});
   function draw(){clear(svg);var k=KS[cur],X=linY(-10,41,30,460),mx=Math.max.apply(null,DH),Y=linY(0,mx*1.12,176,14);
     histY(svg,DH,DE0,1,X,Y,176,"#9CCBEA",seen[cur]?k:null);el("line",{x1:30,x2:460,y1:176,y2:176,stroke:C.gray2},svg);
-    [-10,0,10,20,30,40].forEach(function(t){tY(svg,X(t),190,t,{fs:9,c:C.gray,fw:500});});tY(svg,460,200,"μB − μA (MPa)",{a:"end",fs:9,c:C.gray,fw:700});
+    [-10,0,10,20,30,40].forEach(function(t){tY(svg,X(t),190,t,{fs:9,c:C.gray,fw:500});});tY(svg,460,198,"μB − μA (MPa)",{a:"end",fs:9,c:C.gray,fw:700});
     el("line",{x1:X(k),x2:X(k),y1:14,y2:176,stroke:RED,"stroke-width":2,"stroke-dasharray":"4 3"},svg);tY(svg,X(k)-4,26,"기준 "+k,{a:"end",fw:800,fs:10.5,c:RED,halo:true});
     tY(svg,460,26,"표집 25,000개의 히스토그램",{a:"end",fw:800,fs:10.5});}
   function txt(){document.getElementById("m31-gv").textContent=(+g.value)+"%";document.getElementById("m31-mine").textContent=(+g.value)+"%";}
   function reset(){[].forEach.call(qk.children,function(x,i){x.classList.toggle("on",i===cur);x.setAttribute("aria-pressed",i===cur);});
     document.getElementById("m31-act").textContent=seen[cur]?(DP[String(KS[cur])]*100).toFixed(1)+"%":"?";var m=document.getElementById("m31-msg3");m.className="pmsg";m.textContent="히스토그램에서 기준선 오른쪽에 있는 표집값의 비율을 예측한 뒤 「표집값으로 계산」을 누르세요.";draw();}
-  g.addEventListener("input",txt);
+  g.addEventListener("input",function(){txt();reset();});
   document.getElementById("m31-check").onclick=function(){seen[cur]=true;var pr=DP[String(KS[cur])]*100,gv=+g.value,ok=Math.abs(gv-pr)<=10,m=document.getElementById("m31-msg3");
     document.getElementById("m31-act").textContent=pr.toFixed(1)+"%";m.className="pmsg "+(ok?"ok":"ng");
     m.textContent=(ok?"가깝게 예측했습니다. ":"차이가 있습니다. ")+"예시 표집 25,000개 중 차이가 "+KS[cur]+" MPa보다 큰 비율은 "+pr.toFixed(1)+"%입니다. "+(KS[cur]===0?"신규 조건 B가 A보다 높을":"B가 A보다 "+KS[cur]+" MPa 넘게 높을")+" 사후확률로 해석합니다.";draw();};

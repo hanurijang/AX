@@ -205,6 +205,14 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
 
 .rotate{position:fixed;left:0;right:0;bottom:max(14px,env(safe-area-inset-bottom));text-align:center;font-size:13px;color:#3A4560;display:none}
 @media (orientation:portrait) and (max-width:700px){.rotate{display:block}}
+
+/* 21차: 펼친 실습 도움말과 판정 문구의 높이 확보 */
+.slide[data-step="5"] .pmsg{margin:0;flex-shrink:0}
+.slide[data-step="5"] .think{font-size:13px;line-height:1.35;padding:7px 10px;gap:6px}
+#p2 .bins{gap:6px}
+#p2 .bin{padding:4px;gap:3px}
+#p2 .bin h4{font-size:12px;padding:2px}
+#p2 .bin .dcard{font-size:11px;line-height:1.25;padding:3px 5px}
 </style>
 </head>
 <body>
@@ -537,7 +545,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
           <div class="plabel" style="margin:0">결과 확인 · <span id="p2-count">0 / 0</span></div>
           <div class="bins" id="p2-bins" style="grid-template-columns:repeat(2,1fr)"></div>
           <div class="p2row"><p class="pmsg" id="p2-msg"></p><button class="btn ghost" id="p2-reset">다시 하기</button></div>
-          <div class="think" style="flex-wrap:wrap"><span>생각해보기</span>판정 이유를 설명하기 쉬운 방법은 무엇일까요?<details style="flex-basis:100%;font-weight:600"><summary style="cursor:pointer">예시 답</summary>규칙이 보이는 나무 모형이나, 계수를 읽을 수 있는 회귀가 이유를 설명하기 쉽습니다.</details></div>
+          <div class="think" style="flex-wrap:wrap"><span>생각해보기</span>별도 회귀 예에서 오차가 −2, 0, 4이면 MAE는?<details style="flex-basis:100%;font-weight:600"><summary style="cursor:pointer">예시 답</summary>MAE = (2+0+4)/3 = 2로 원래 반응변수와 같은 단위입니다. 이 분류 카드의 성능과는 별도이며, 분류에는 민감도·특이도 같은 지표를 씁니다.</details></div>
         </div>
       </div>
     </section>
@@ -617,7 +625,7 @@ var QUIZ=[
   exp:"평균절대오차는 오차의 절댓값을 평균한 값으로 (2 + 3 + 5 + 5 + 0) ÷ 5 = 3.0 MPa입니다. 12.6은 오차를 제곱해 평균한 평균제곱오차, 3.55는 그 제곱근인 제곱근평균제곱오차, −0.2는 부호를 그대로 둔 오차의 평균이라 양과 음이 서로 상쇄된 값입니다.",back:"s-4-3a",backLabel:"4-3 회귀의 예측 성능 다시 보기"},
  {goal:3,type:"상황 판단",stem:"두 조업 변수로 결함·정상을 나누려는데, 결함 코일이 왼쪽 위와 오른쪽 아래에, 정상 코일이 오른쪽 위와 왼쪽 아래에 모여 있습니다. 성능이 가장 낮을 것으로 예상되는 방법은?",
   opts:["두 변수의 1차항만 넣은 로지스틱 회귀","결정 트리","SVM(커널 함수 사용)","신경망"],ans:0,
-  exp:"직선 1개로 두 클래스를 나눌 수 없는 선형분리가 불가능한 문제입니다. 원래 두 변수를 그대로 쓴 로지스틱 회귀는 선형 점수로 분리하므로 깔끔하게 나누지 못합니다. 결정 트리는 축에 평행한 선을 조합하고, SVM과 신경망은 비선형 경계를 만들 수 있어 깔끔하게 분리할 수 있습니다.",back:"s-4-4b",backLabel:"4-4 분리의 특징 다시 보기"}
+  exp:"직선 1개로 두 클래스를 나눌 수 없는 선형분리가 불가능한 문제입니다. 원래 두 변수를 그대로 쓴 로지스틱 회귀는 선형 점수로 분리하므로 깔끔하게 나누지 못합니다. 결정 트리는 축에 평행한 선을 조합하고, 커널 SVM과 신경망은 비선형 경계를 표현할 수 있습니다. 실제 분리 능력은 모형의 크기와 설정에 달려 있으며, 새 자료의 성능은 별도로 평가해야 합니다.",back:"s-4-4b",backLabel:"4-4 분리의 특징 다시 보기"}
 ];
 
 var BINS=["로지스틱 회귀","결정 트리","SVM","신경망"];
@@ -926,7 +934,7 @@ on("m34-sep",function(s){
   function reset(){[].forEach.call(db.children,function(x,i){x.classList.toggle("on",i===cur);x.setAttribute("aria-pressed",i===cur);});var d=DS[cur];
     document.getElementById("m34-tr").textContent=TRAIN[d-1]+"%";document.getElementById("m34-act").textContent=seen[cur]?VALID[d-1]+"%":"?";
     var ms=document.getElementById("m34-msg3");ms.className="pmsg";ms.textContent="깊이 "+d+"에서 학습 정답률은 "+TRAIN[d-1]+"%입니다. 학습에 쓰지 않은 검증 코일에서는 몇 %일지 예측한 뒤 「검증해서 확인」을 누르세요.";draw();}
-  g.addEventListener("input",txt);
+  g.addEventListener("input",function(){txt();reset();});
   document.getElementById("m34-check").onclick=function(){seen[cur]=true;var d=DS[cur],v=VALID[d-1],tr=TRAIN[d-1],gv=+g.value,ok=Math.abs(gv-v)<=2,ms=document.getElementById("m34-msg3");
     document.getElementById("m34-act").textContent=v+"%";ms.className="pmsg "+(ok?"ok":"ng");
     ms.textContent=(ok?"근접했습니다. ":"차이가 있습니다. ")+"깊이 "+d+"의 검증 정답률은 "+v+"%로 학습보다 "+(tr-v).toFixed(1).replace(/\.0$/,"")+"%p 낮습니다."+
