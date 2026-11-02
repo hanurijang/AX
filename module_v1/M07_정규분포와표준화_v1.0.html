@@ -208,6 +208,11 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
 #p3 .pcol:last-child{gap:6px!important}
 #p3 .pmsg{margin:0;flex-shrink:0}
 #m7-scale{font:inherit;padding:3px 6px;border:1px solid var(--navy3);border-radius:5px;background:white;color:var(--navy)}
+
+/* 22차: 과정 경계의 명시적 이동 링크 */
+.nextmod .nextlink{align-self:flex-start;display:inline-flex;align-items:center;min-height:36px;box-sizing:border-box;margin-top:6px;padding:6px 12px;border:2px solid #fff;border-radius:8px;background:#fff;color:var(--navy);font-size:14px;font-weight:800;line-height:1.35;text-decoration:none}
+.nextmod .nextlink:hover{text-decoration:underline}
+.nextmod .nextlink:focus-visible{outline:3px solid var(--amber);outline-offset:4px}
 </style>
 </head>
 <body>
@@ -629,7 +634,7 @@ var REFS=[
  {n:5,title:"기초통계학",org:"여인권, 숙명여자대학교, KOCW 공개강의",url:"https://www.kocw.net/home/search/kemView.do?kemId=1052562",date:"2026-10-28 확인"},
  {n:6,title:"R을 활용한 통계학개론",org:"K-MOOC, KOCW 공개강의",url:"https://www.kocw.net/home/search/kemView.do?kemId=1517479",date:"2026-10-28 확인"}
 ];
-var NEXT={title:"M08 추론통계의 직관",line:"이제 모집단을 확률분포로, 데이터를 그 실현값으로 볼 준비가 되었습니다. 다음 과정에서는 표본으로 모집단을 추정하는 추론통계를 직관적으로 이해합니다."};
+var NEXT={href:"M08_추론통계의직관_v1.0.html",action:"다음 모듈 학습하기 →",title:"M08 추론통계의 직관",line:"이제 모집단을 확률분포로, 데이터를 그 실현값으로 볼 준비가 되었습니다. 다음 과정에서는 표본으로 모집단을 추정하는 추론통계를 직관적으로 이해합니다."};
 
 /* =====================================================================
    아래부터는 공통 엔진입니다. 모듈마다 바꾸지 않습니다.
@@ -961,7 +966,7 @@ for(var gi=0;gi<GLOSSARY.length;gi+=6){
   var refs=REFS.length?'<div class="pcol" style="gap:10px;min-height:0;overflow:hidden"><div class="plabel" style="margin:0">참고자료</div><ol class="refs">'+REFS.map(function(r){return '<li><span>['+r.n+']</span><div>'+r.title+', '+r.org+'. <a href="'+r.url+'" target="_blank" rel="noopener">'+r.url+'</a> ('+r.date+')</div></li>';}).join("")+'</ol></div>':'';
   s.innerHTML='<div class="sh"><div class="sec">마무리</div><h2>'+(REFS.length?"참고자료와 다음 모듈":"다음 모듈")+'</h2></div>'+
     '<div class="body '+(REFS.length?'split even':'full')+'" style="'+(REFS.length?'grid-template-rows:minmax(0,1fr)':'align-content:center')+'">'+refs+
-    '<div class="pcol" style="justify-content:center"><div class="nextmod"><small>다음 모듈 · '+NEXT.title+'</small><strong>'+NEXT.line+'</strong></div></div></div>'+
+    '<div class="pcol" style="justify-content:center"><div class="nextmod"><small>다음 모듈 · '+NEXT.title+'</small><strong>'+NEXT.line+'</strong><a class="nextlink" href="'+NEXT.href+'">'+NEXT.action+'</a></div></div></div>'+
     '<p class="foot">학습 상태는 저장되지 않습니다.</p>';
   vp.appendChild(s);
 })();

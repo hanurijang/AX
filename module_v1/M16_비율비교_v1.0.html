@@ -208,6 +208,11 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
 /* 실습 피드백이 접히거나 도움말을 하단 밖으로 밀지 않도록 여백 정리. */
 .slide[data-step="5"] .pmsg{margin:0;flex-shrink:0}
 .slide[data-step="5"] .think{font-size:13px;line-height:1.35;padding:7px 10px;gap:6px}
+
+/* 22차: 과정 경계의 명시적 이동 링크 */
+.nextmod .nextlink{align-self:flex-start;display:inline-flex;align-items:center;min-height:36px;box-sizing:border-box;margin-top:6px;padding:6px 12px;border:2px solid #fff;border-radius:8px;background:#fff;color:var(--navy);font-size:14px;font-weight:800;line-height:1.35;text-decoration:none}
+.nextmod .nextlink:hover{text-decoration:underline}
+.nextmod .nextlink:focus-visible{outline:3px solid var(--amber);outline-offset:4px}
 </style>
 </head>
 <body>
@@ -641,7 +646,7 @@ var REFS=[
  {n:4,title:"기초통계학Ⅱ",org:"여인권, 숙명여자대학교, KOCW 공개강의",url:"https://www.kocw.net/home/search/kemView.do?kemId=1080231",date:"2026-10-28 확인"},
  {n:5,title:"R을 활용한 통계학개론",org:"K-MOOC, KOCW 공개강의",url:"https://www.kocw.net/home/search/kemView.do?kemId=1517479",date:"2026-10-28 확인"}
 ];
-var NEXT={title:"M17 산점도와 상관",line:"지금까지는 집단을 비교하거나 범주형 변수의 관계를 검정했습니다. 다음 모듈에서는 두 양적 변수 사이의 관계를 산점도와 상관계수로 살펴봅니다."};
+var NEXT={href:"M17_산점도와상관_v1.0.html",action:"다음 모듈 학습하기 →",title:"M17 산점도와 상관",line:"지금까지는 집단을 비교하거나 범주형 변수의 관계를 검정했습니다. 다음 모듈에서는 두 양적 변수 사이의 관계를 산점도와 상관계수로 살펴봅니다."};
 
 /* =====================================================================
    아래부터는 공통 엔진입니다. 모듈마다 바꾸지 않습니다.
@@ -931,7 +936,7 @@ for(var gi=0;gi<GLOSSARY.length;gi+=6){
   var refs=REFS.length?'<div class="pcol" style="gap:10px;min-height:0;overflow:hidden"><div class="plabel" style="margin:0">참고자료</div><ol class="refs">'+REFS.map(function(r){return '<li><span>['+r.n+']</span><div>'+r.title+', '+r.org+'. <a href="'+r.url+'" target="_blank" rel="noopener">'+r.url+'</a> ('+r.date+')</div></li>';}).join("")+'</ol></div>':'';
   s.innerHTML='<div class="sh"><div class="sec">마무리</div><h2>'+(REFS.length?"참고자료와 다음 모듈":"다음 모듈")+'</h2></div>'+
     '<div class="body '+(REFS.length?'split even':'full')+'" style="'+(REFS.length?'grid-template-rows:minmax(0,1fr)':'align-content:center')+'">'+refs+
-    '<div class="pcol" style="justify-content:center"><div class="nextmod"><small>다음 모듈 · '+NEXT.title+'</small><strong>'+NEXT.line+'</strong></div></div></div>'+
+    '<div class="pcol" style="justify-content:center"><div class="nextmod"><small>다음 모듈 · '+NEXT.title+'</small><strong>'+NEXT.line+'</strong><a class="nextlink" href="'+NEXT.href+'">'+NEXT.action+'</a></div></div></div>'+
     '<p class="foot">학습 상태는 저장되지 않습니다.</p>';
   vp.appendChild(s);
 })();
