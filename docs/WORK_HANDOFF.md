@@ -7,9 +7,9 @@
 | 구분 | 상태·근거 |
 |---|---|
 | 저장소 | `hanurijang/AX`, 원격 `https://github.com/hanurijang/AX.git`, 대상 브랜치 `main` |
-| 마지막 교재 수정 | **24차 참고자료 표시·키보드 접근 보완**, `a1021b029190bbe0a86e2b039639a661797b5320`. [24차 기록](CONTENT_REVIEW_TEXTBOOK_P24_20261102.md). 37모듈 제목 링크·새 탭 안내·포커스·자료 목록 스크롤 키 |
-| 이전 수정 | 교재 1~24차와 홈 UI/UX 수정이 Git에 보존되어 있다. [차수·모듈별 색인](REVIEW_COVERAGE.md) 참조 |
-| 원격 확인 | 24차 시작 시 `e2fe5ca`와 원격 main 일치 확인. 콘텐츠 커밋 `a1021b0` 뒤에 인계·색인 갱신 커밋이 이어진다. 최신 원격은 Git으로 확인 |
+| 마지막 교재 수정 | **25차 키보드 조작·단축키 충돌 보완**, `ff5dedbbd38a5e3bb21f2b5cc75bdd424891687e`. [25차 기록](CONTENT_REVIEW_TEXTBOOK_P25_20261102.md). 37모듈의 조작 요소·수정키·조합 입력 보호, M01~M06 실습 도움말·피드백 높이 보정 |
+| 이전 수정 | 교재 1~25차와 홈 UI/UX 수정이 Git에 보존되어 있다. [차수·모듈별 색인](REVIEW_COVERAGE.md) 참조 |
+| 원격 확인 | 25차 시작 시 `cd6d0b7`와 원격 main 일치 확인. 콘텐츠 커밋 `ff5dedb` 뒤에 인계·색인 갱신 커밋이 이어진다. 최신 원격은 Git으로 확인 |
 | 17차 교재 수정 | **완료**. 목표 21개의 대응표, 220슬라이드·42문항·42카드·43목표 이동, 구슬 100설정·z/T 36설정 검사. 실행 오류·검사 영역 넘침·SVG 글자 잘림 0건. 과정 경계 연결 점검은 후속으로 남김 |
 | 18차 교재 수정 | **완료**. 27개 목표 대응표·277슬라이드·54문항·58개 이동 버튼·기존 58카드+해석 6카드 검사. 최종 실행 오류·검사 영역 넘침·SVG 글자 잘림 0건 |
 | 19차 교재 수정 | **완료**. 21목표 대응표·221슬라이드·42문항·45이동 버튼·44카드·추정 입력 양 끝 14설정 검사. 최종 실행 오류·검사 영역 넘침·SVG 글자 잘림 0건 |
@@ -18,10 +18,11 @@
 | 22차 교재 수정 | **완료**. 경계·최종 5화면 × 2크기, Enter·클릭 총 20회 이동, 목표 파일·제목·과정 소속·HTTP 200·포커스·참고자료 스크롤 확인. 검사 오류·넘침·SVG 글자 잘림 0건 |
 | 23차 교재 수정 | **완료**. 신규 32모듈 링크·안내 2곳 정합화. 전체 37화면 × 2크기 = 74조건·Enter/클릭 148회 이동 통과. 검사 영역 넘침·SVG 글자 잘림·실행 오류 0건 |
 | 24차 교재 수정 | **완료(표시·접근성 범위)**. 161항목·47 URL 목록/형식 검사, 74화면 조건·322회 링크 포커스·148회 다음 이동 통과. 넘침·SVG 글자 잘림·실행 오류 0건. 외부 요청 0회·URL 원격 유효성 미확인 |
-| 다음 차수 | **25차 미착수**. 참고자료 이외의 키보드 단축키와 문항·실습 조작 충돌 점검. 외부 참고자료의 실제 접속·본문 대조는 환경 허용 목록 밖이어서 별도 후속 |
-| 인계 기록 | 차수 문서·인계·색인에 진행상황 보존. 재실행 코드는 `scripts/review_p17.py`·`scripts/review_p18.py`·`scripts/review_p19.py`·`scripts/review_p20.py`·`scripts/review_p21.py`·`scripts/review_p22.py`·`scripts/review_p23.py`·`scripts/review_p24.py`·`scripts/reference_inventory.py` |
+| 25차 교재 수정 | **완료(검사 범위)**. 37모듈·조작 키 1,036조건·수정키 148조건·방어 이벤트 74조건·일반 이동 222조건·range 37개 검사. 24차의 74화면 조건·322포커스·148회 이동 회귀 통과. 넘침·SVG 글자 잘림·실행 오류 0건 |
+| 다음 차수 | **26차 미착수**. 단계 이동·문항 복귀·실습 초기화 후 포커스 위치·Tab 순서 점검. 외부 참고자료의 실제 접속·본문 대조는 환경 제한에 따른 별도 후속 |
+| 인계 기록 | 차수 문서·인계·색인에 진행상황 보존. 재실행 코드는 `scripts/review_p17.py`·`scripts/review_p18.py`·`scripts/review_p19.py`·`scripts/review_p20.py`·`scripts/review_p21.py`·`scripts/review_p22.py`·`scripts/review_p23.py`·`scripts/review_p24.py`·`scripts/reference_inventory.py`·`scripts/review_p25.py` |
 | 환경 | 이전 환경은 접속 불가. 새 환경에서 저장소 명령·GitHub 읽기 연결을 확인. 프로세스·로컬 참고자료가 이전되었다고 가정하지 않음 |
-| 배포 | 24차는 로컬 HTTP 검증이며 실제 서비스 배포 결과는 확인하지 않음 |
+| 배포 | 25차는 로컬 HTTP 검증이며 실제 서비스 배포 결과는 확인하지 않음 |
 
 **37개 모두에 원본 환류 기록이 있다는 것은 모든 이슈의 해결·출고 승인 완료를 뜻하지 않는다.** 차수별로 검사한 입력과 화면 크기가 다르며, 전체 기기·모든 실습 입력·전문가 감수·사용자 파일럿은 완료 상태로 기록하지 않는다.
 
@@ -55,7 +56,7 @@
 
 `모듈 / 목표 번호·행동 / 표시된 문항 / 실제 문항·평가 행동 / 표시된 실습 / 실제 실습·조작 / 점프 대상 / 불일치 근거 / 원문 쪽수 / 처리·검증 / 상태`
 
-M01~M07은 17차, M08~M16은 18차, M17~M23은 19차, M24~M29는 20차 대응표에 처리·유지 판단을 기록했다. M30~M37은 21차 대응표에 기록했다. 전체 37모듈의 111목표 연결 점검을 마쳤다. 과정 경계는 22차, 과정 내부 이동은 23차에 점검·보완했다. 다음 차수 기록명은 실제 작업일에 맞춰 `docs/CONTENT_REVIEW_TEXTBOOK_P25_YYYYMMDD.md` 등으로 정한다.
+M01~M07은 17차, M08~M16은 18차, M17~M23은 19차, M24~M29는 20차 대응표에 처리·유지 판단을 기록했다. M30~M37은 21차 대응표에 기록했다. 전체 37모듈의 111목표 연결 점검을 마쳤다. 과정 경계는 22차, 과정 내부 이동은 23차에 점검·보완했다. 다음 차수 기록명은 실제 작업일에 맞춰 `docs/CONTENT_REVIEW_TEXTBOOK_P26_YYYYMMDD.md` 등으로 정한다.
 
 ## 원본 자료와 사라진 로컬 파일
 
@@ -82,7 +83,7 @@ M01~M07은 17차, M08~M16은 18차, M17~M23은 19차, M24~M29는 20차 대응표
 - `/workspace/ax-setup/p*_numbers.py`, `p*_review.py`, `review-p*/`: 독립 수치 확인·브라우저 검사 스크립트와 결과·화면. **Git에 없고 현재 환경에도 없으므로 과거 검증을 같은 명령으로 즉시 재실행할 수 없다.** 문서에는 당시 설정·기대값·검사 범위가 남아 있다.
 - `/workspace/ax-setup/home-review/check_home.py`: 홈 검사 스크립트. 새 검사에서 과거 모의 요청을 실제 발송으로 대체하지 않는다.
 
-검증 코드는 [17차](../scripts/review_p17.py)·[18차](../scripts/review_p18.py)·[19차](../scripts/review_p19.py)·[20차](../scripts/review_p20.py)·[21차](../scripts/review_p21.py)·[22차](../scripts/review_p22.py)·[23차](../scripts/review_p23.py)·[24차](../scripts/review_p24.py)에 보존했다. 24차는 `python scripts/review_p24.py`, 목록 검사는 `python scripts/reference_inventory.py`로 실행한다. 23차는 `python scripts/review_p23.py`로 실행한다. 22차는 `python scripts/review_p22.py`로 실행한다. 21차는 `python scripts/review_p21.py`로 실행한다. 각각 `python scripts/review_p17.py`, `python scripts/review_p18.py`, `python scripts/review_p19.py`, `python scripts/review_p20.py`로 실행한다. 18~24차는 17차의 공통 도우미를 가져오므로 공통 도우미와 각 차수 파일을 함께 유지한다. 환경·범위·결과는 해당 차수 기록을 따른다. 이후에도 재사용할 검증 코드와 실행법은 추적 경로에 보존하고 원본 자료·임시 출력만 `ref/` 또는 저장소 밖에 둔다. 과거 스크립트를 재구성한 검사와 과거 실행 결과는 구별한다.
+검증 코드는 [17차](../scripts/review_p17.py)·[18차](../scripts/review_p18.py)·[19차](../scripts/review_p19.py)·[20차](../scripts/review_p20.py)·[21차](../scripts/review_p21.py)·[22차](../scripts/review_p22.py)·[23차](../scripts/review_p23.py)·[24차](../scripts/review_p24.py)·[25차](../scripts/review_p25.py)에 보존했다. 25차는 `python scripts/review_p25.py`로 실행한다. 24차는 `python scripts/review_p24.py`, 목록 검사는 `python scripts/reference_inventory.py`로 실행한다. 23차는 `python scripts/review_p23.py`로 실행한다. 22차는 `python scripts/review_p22.py`로 실행한다. 21차는 `python scripts/review_p21.py`로 실행한다. 각각 `python scripts/review_p17.py`, `python scripts/review_p18.py`, `python scripts/review_p19.py`, `python scripts/review_p20.py`로 실행한다. 18~25차는 17차의 공통 도우미를 가져오므로 공통 도우미와 각 차수 파일을 함께 유지한다. 환경·범위·결과는 해당 차수 기록을 따른다. 이후에도 재사용할 검증 코드와 실행법은 추적 경로에 보존하고 원본 자료·임시 출력만 `ref/` 또는 저장소 밖에 둔다. 과거 스크립트를 재구성한 검사와 과거 실행 결과는 구별한다.
 
 ## 새 클라우드 작업의 재개 절차
 
@@ -139,4 +140,4 @@ python -m http.server 8000 --bind 127.0.0.1
 
 ## 새 작업에 전달할 요청문
 
-> `hanurijang/AX`의 main에서 이어가세요. 인계·색인과 Git 상태를 먼저 확인하세요. 마지막 수정은 24차 `a1021b0`이며 37모듈 참고자료의 제목 링크·새 탭 안내·포커스·스크롤 키를 보완했습니다. 161항목·47 URL의 메타데이터/형식과 74화면 조건·322회 포커스·148회 학습 이동을 검증했습니다. 외부 사이트는 환경 허용 목록 밖이어서 요청하지 않았고 URL 유효성·본문·권리는 미검증입니다. 이를 깨진 링크로 단정하거나 확인일을 갱신하지 마세요. 다음 25차는 자료 목록 밖의 단축키와 문항·실습 조작 충돌 점검입니다. `scripts/review_p24.py`·`scripts/reference_inventory.py`와 공통 `review_p17.py`를 참고하고 수정·검증·기록 후 커밋·푸시하세요.
+> `hanurijang/AX`의 main에서 이어가세요. 인계·색인과 Git 상태를 먼저 확인하세요. 마지막 수정은 25차 `ff5dedb`이며 문항·실습 조작과 전역 슬라이드 단축키 충돌을 37모듈에서 보완했습니다. 본문과 하단 이전/다음의 단축키는 유지합니다. 키보드·기존 참고자료/학습 이동 회귀를 통과했고, 실제 IME·OS 전체 단축키 검증으로 일반화하지 마세요. 다음 26차는 단계·문항 복귀·실습 초기화 후 포커스와 Tab 순서 점검입니다. 외부 47 URL 접속·본문·권리는 여전히 미검증입니다. `scripts/review_p25.py`와 `scripts/review_p24.py` 및 공통 `review_p17.py`를 참고하고 수정·검증·기록 후 커밋·푸시하세요.
