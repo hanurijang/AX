@@ -992,8 +992,12 @@ bindJumps(document);
 document.getElementById("prev").onclick=function(){show(cur-1);};
 document.getElementById("next").onclick=function(){show(cur+1);};
 document.addEventListener("keydown",function(e){
-  if(e.target&&e.target.closest&&e.target.closest(".refs"))return;
-  if(e.target&&(e.target.type==="range"))return;
+  if(e.defaultPrevented||e.isComposing||e.altKey||e.ctrlKey||e.metaKey||e.shiftKey)return;
+  var t=e.target;
+  if(t&&t.closest){
+    if(t.isContentEditable||t.closest(".refs"))return;
+    if(!t.closest("#prev,#next")&&t.closest('input,textarea,select,button,a,summary,[role="button"],[role="slider"],[role="textbox"],[role="combobox"]'))return;
+  }
   if(e.key==="ArrowRight"||e.key==="PageDown"){show(cur+1);e.preventDefault();}
   else if(e.key==="ArrowLeft"||e.key==="PageUp"){show(cur-1);e.preventDefault();}
 });
