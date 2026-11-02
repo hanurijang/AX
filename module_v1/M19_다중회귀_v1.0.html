@@ -208,6 +208,11 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
 /* 확장한 도움말과 여러 줄 피드백을 실습 화면 안에 유지합니다. */
 .slide[data-step="5"] .pmsg{margin:0;flex-shrink:0}
 .slide[data-step="5"] .think{font-size:13px;line-height:1.35;padding:7px 10px;gap:6px}
+
+/* 23차: 과정 내부의 명시적 다음 학습 이동 */
+.nextmod .nextlink{align-self:flex-start;display:inline-flex;align-items:center;min-height:36px;box-sizing:border-box;margin-top:6px;padding:6px 12px;border:2px solid #fff;border-radius:8px;background:#fff;color:var(--navy);font-size:14px;font-weight:800;line-height:1.35;text-decoration:none}
+.nextmod .nextlink:hover{text-decoration:underline}
+.nextmod .nextlink:focus-visible{outline:3px solid var(--amber);outline-offset:4px}
 </style>
 </head>
 <body>
@@ -629,7 +634,7 @@ var REFS=[
  {n:3,title:"국가통계포털 통계목록",org:"통계청, KOSIS",url:"https://kosis.kr/statisticsList/statisticsListIndex.do?menuId=M_01_02&outLink=Y&vwcd=MT_OTITLE",date:"2026-10-28 확인"},
  {n:4,title:"데이터로 배우는 통계학",org:"K-MOOC",url:"https://www.kmooc.kr/view/course/detail/20384",date:"2026-10-28 확인"}
 ];
-var NEXT={title:"M20 회귀모형 다듬기",line:"설명변수가 너무 많거나 서로 강하게 상관하면 문제가 생깁니다. 다음 모듈에서는 고차원 데이터와 다중공선성, 상호작용, 이원배치 분산분석, 비선형회귀를 다룹니다."};
+var NEXT={href:"M20_회귀모형다듬기_v1.0.html",action:"다음 모듈 학습하기 →",title:"M20 회귀모형 다듬기",line:"설명변수가 너무 많거나 서로 강하게 상관하면 문제가 생깁니다. 다음 모듈에서는 고차원 데이터와 다중공선성, 상호작용, 이원배치 분산분석, 비선형회귀를 다룹니다."};
 
 /* =====================================================================
    아래부터는 공통 엔진입니다. 모듈마다 바꾸지 않습니다.
@@ -924,7 +929,7 @@ for(var gi=0;gi<GLOSSARY.length;gi+=6){
   var refs=REFS.length?'<div class="pcol" style="gap:10px;min-height:0;overflow:hidden"><div class="plabel" style="margin:0">참고자료</div><ol class="refs">'+REFS.map(function(r){return '<li><span>['+r.n+']</span><div>'+r.title+', '+r.org+'. <a href="'+r.url+'" target="_blank" rel="noopener">'+r.url+'</a> ('+r.date+')</div></li>';}).join("")+'</ol></div>':'';
   s.innerHTML='<div class="sh"><div class="sec">마무리</div><h2>'+(REFS.length?"참고자료와 다음 모듈":"다음 모듈")+'</h2></div>'+
     '<div class="body '+(REFS.length?'split even':'full')+'" style="'+(REFS.length?'grid-template-rows:minmax(0,1fr)':'align-content:center')+'">'+refs+
-    '<div class="pcol" style="justify-content:center"><div class="nextmod"><small>다음 모듈 · '+NEXT.title+'</small><strong>'+NEXT.line+'</strong></div></div></div>'+
+    '<div class="pcol" style="justify-content:center"><div class="nextmod"><small>다음 모듈 · '+NEXT.title+'</small><strong>'+NEXT.line+'</strong><a class="nextlink" href="'+NEXT.href+'">'+NEXT.action+'</a></div></div></div>'+
     '<p class="foot">학습 상태는 저장되지 않습니다.</p>';
   vp.appendChild(s);
 })();

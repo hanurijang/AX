@@ -214,6 +214,11 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
 #p2 .bin h4{font-size:12px;padding:2px}
 #p2 .bin .dcard{font-size:11px;line-height:1.25;padding:3px 5px}
 #p2 .think{padding:5px 10px;gap:4px}
+
+/* 23차: 과정 내부의 명시적 다음 학습 이동 */
+.nextmod .nextlink{align-self:flex-start;display:inline-flex;align-items:center;min-height:36px;box-sizing:border-box;margin-top:6px;padding:6px 12px;border:2px solid #fff;border-radius:8px;background:#fff;color:var(--navy);font-size:14px;font-weight:800;line-height:1.35;text-decoration:none}
+.nextmod .nextlink:hover{text-decoration:underline}
+.nextmod .nextlink:focus-visible{outline:3px solid var(--amber);outline-offset:4px}
 </style>
 </head>
 <body>
@@ -699,7 +704,7 @@ var REFS=[
  {n:3,title:"R을 활용한 통계학개론",org:"K-MOOC, KOCW 공개강의",url:"https://www.kocw.net/home/search/kemView.do?kemId=1517479",date:"2026-10-28 확인"},
  {n:4,title:"공공데이터포털",org:"행정안전부",url:"https://www.data.go.kr",date:"2026-10-28 확인"}
 ];
-var NEXT={title:"M16 비율 비교",line:"지금까지는 양적 데이터의 평균을 비교했습니다. 다음 모듈에서는 앞면·뒷면이나 불량·양품처럼 범주형 데이터의 비율을 검정하는 방법을 배웁니다."};
+var NEXT={href:"M16_비율비교_v1.0.html",action:"다음 모듈 학습하기 →",title:"M16 비율 비교",line:"지금까지는 양적 데이터의 평균을 비교했습니다. 다음 모듈에서는 앞면·뒷면이나 불량·양품처럼 범주형 데이터의 비율을 검정하는 방법을 배웁니다."};
 
 /* =====================================================================
    아래부터는 공통 엔진입니다. 모듈마다 바꾸지 않습니다.
@@ -1019,7 +1024,7 @@ for(var gi=0;gi<GLOSSARY.length;gi+=6){
   var refs=REFS.length?'<div class="pcol" style="gap:10px;min-height:0;overflow:hidden"><div class="plabel" style="margin:0">참고자료</div><ol class="refs">'+REFS.map(function(r){return '<li><span>['+r.n+']</span><div>'+r.title+', '+r.org+'. <a href="'+r.url+'" target="_blank" rel="noopener">'+r.url+'</a> ('+r.date+')</div></li>';}).join("")+'</ol></div>':'';
   s.innerHTML='<div class="sh"><div class="sec">마무리</div><h2>'+(REFS.length?"참고자료와 다음 모듈":"다음 모듈")+'</h2></div>'+
     '<div class="body '+(REFS.length?'split even':'full')+'" style="'+(REFS.length?'grid-template-rows:minmax(0,1fr)':'align-content:center')+'">'+refs+
-    '<div class="pcol" style="justify-content:center"><div class="nextmod"><small>다음 모듈 · '+NEXT.title+'</small><strong>'+NEXT.line+'</strong></div></div></div>'+
+    '<div class="pcol" style="justify-content:center"><div class="nextmod"><small>다음 모듈 · '+NEXT.title+'</small><strong>'+NEXT.line+'</strong><a class="nextlink" href="'+NEXT.href+'">'+NEXT.action+'</a></div></div></div>'+
     '<p class="foot">학습 상태는 저장되지 않습니다.</p>';
   vp.appendChild(s);
 })();

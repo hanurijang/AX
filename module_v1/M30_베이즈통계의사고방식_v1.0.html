@@ -212,6 +212,11 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
 .slide[data-step="5"] .think{font-size:13px;line-height:1.35;padding:7px 10px;gap:6px}
 #s-4-4b .side{gap:8px}
 #s-4-4b .exp{font-size:14px;line-height:1.5}
+
+/* 23차: 과정 내부의 명시적 다음 학습 이동 */
+.nextmod .nextlink{align-self:flex-start;display:inline-flex;align-items:center;min-height:36px;box-sizing:border-box;margin-top:6px;padding:6px 12px;border:2px solid #fff;border-radius:8px;background:#fff;color:var(--navy);font-size:14px;font-weight:800;line-height:1.35;text-decoration:none}
+.nextmod .nextlink:hover{text-decoration:underline}
+.nextmod .nextlink:focus-visible{outline:3px solid var(--amber);outline-offset:4px}
 </style>
 </head>
 <body>
@@ -668,7 +673,7 @@ var REFS=[
  {n:3,title:"데이터로 배우는 통계학",org:"K-MOOC",url:"https://www.kmooc.kr/view/course/detail/20384",date:"2026-10-28 확인"},
  {n:4,title:"R을 활용한 통계학개론",org:"K-MOOC, KOCW 공개강의",url:"https://www.kocw.net/home/search/kemView.do?kemId=1517479",date:"2026-10-28 확인"}
 ];
-var NEXT={title:"M31 MCMC와 베이즈 통계 사례",line:"다음 모듈에서는 사후분포를 난수로 근사하는 MCMC 방법과, 이표본 평균값 비교·푸아송 회귀·계층적 베이지안 모형 같은 베이즈 통계 사례를 살펴봅니다."};
+var NEXT={href:"M31_MCMC와베이즈통계사례_v1.0.html",action:"다음 모듈 학습하기 →",title:"M31 MCMC와 베이즈 통계 사례",line:"다음 모듈에서는 사후분포를 난수로 근사하는 MCMC 방법과, 이표본 평균값 비교·푸아송 회귀·계층적 베이지안 모형 같은 베이즈 통계 사례를 살펴봅니다."};
 
 /* =====================================================================
    아래부터는 공통 엔진입니다. 모듈마다 바꾸지 않습니다.
@@ -962,7 +967,7 @@ for(var gi=0;gi<GLOSSARY.length;gi+=6){
   var refs=REFS.length?'<div class="pcol" style="gap:10px;min-height:0;overflow:hidden"><div class="plabel" style="margin:0">참고자료</div><ol class="refs">'+REFS.map(function(r){return '<li><span>['+r.n+']</span><div>'+r.title+', '+r.org+'. <a href="'+r.url+'" target="_blank" rel="noopener">'+r.url+'</a> ('+r.date+')</div></li>';}).join("")+'</ol></div>':'';
   s.innerHTML='<div class="sh"><div class="sec">마무리</div><h2>'+(REFS.length?"참고자료와 다음 모듈":"다음 모듈")+'</h2></div>'+
     '<div class="body '+(REFS.length?'split even':'full')+'" style="'+(REFS.length?'grid-template-rows:minmax(0,1fr)':'align-content:center')+'">'+refs+
-    '<div class="pcol" style="justify-content:center"><div class="nextmod"><small>다음 모듈 · '+NEXT.title+'</small><strong>'+NEXT.line+'</strong></div></div></div>'+
+    '<div class="pcol" style="justify-content:center"><div class="nextmod"><small>다음 모듈 · '+NEXT.title+'</small><strong>'+NEXT.line+'</strong><a class="nextlink" href="'+NEXT.href+'">'+NEXT.action+'</a></div></div></div>'+
     '<p class="foot">학습 상태는 저장되지 않습니다.</p>';
   vp.appendChild(s);
 })();
