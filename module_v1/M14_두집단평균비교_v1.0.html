@@ -221,6 +221,13 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
 .nextmod .nextlink{align-self:flex-start;display:inline-flex;align-items:center;min-height:36px;box-sizing:border-box;margin-top:6px;padding:6px 12px;border:2px solid #fff;border-radius:8px;background:#fff;color:var(--navy);font-size:14px;font-weight:800;line-height:1.35;text-decoration:none}
 .nextmod .nextlink:hover{text-decoration:underline}
 .nextmod .nextlink:focus-visible{outline:3px solid var(--amber);outline-offset:4px}
+
+/* 24차: 제목으로 식별하는 참고자료 링크와 키보드 포커스 */
+.refs{padding:3px}
+.refs .refsource{font-weight:700;word-break:normal;overflow-wrap:anywhere}
+.refs .refsource small{font-size:11px;font-weight:600;white-space:nowrap}
+.refs .refmeta{font-size:12px;color:var(--gray);line-height:1.45;margin-top:2px}
+.refs a:focus-visible{outline:2px solid var(--navy);outline-offset:2px;border-radius:2px}
 </style>
 </head>
 <body>
@@ -1094,7 +1101,7 @@ for(var gi=0;gi<GLOSSARY.length;gi+=6){
 }
 (function(){
   var s=document.createElement("section");s.className="slide";s.dataset.step="6";s.id="end";
-  var refs=REFS.length?'<div class="pcol" style="gap:10px;min-height:0;overflow:hidden"><div class="plabel" style="margin:0">참고자료</div><ol class="refs">'+REFS.map(function(r){return '<li><span>['+r.n+']</span><div>'+r.title+', '+r.org+'. <a href="'+r.url+'" target="_blank" rel="noopener">'+r.url+'</a> ('+r.date+')</div></li>';}).join("")+'</ol></div>':'';
+  var refs=REFS.length?'<div class="pcol" style="gap:10px;min-height:0;overflow:hidden"><div class="plabel" style="margin:0">참고자료</div><ol class="refs">'+REFS.map(function(r){return '<li><span>['+r.n+']</span><div><a class="refsource" href="'+r.url+'" target="_blank" rel="noopener">'+r.title+' <small>(새 탭)</small></a><div class="refmeta">'+r.org+' · '+r.date+'</div></div></li>';}).join("")+'</ol></div>':'';
   s.innerHTML='<div class="sh"><div class="sec">마무리</div><h2>'+(REFS.length?"참고자료와 다음 모듈":"다음 모듈")+'</h2></div>'+
     '<div class="body '+(REFS.length?'split even':'full')+'" style="'+(REFS.length?'grid-template-rows:minmax(0,1fr)':'align-content:center')+'">'+refs+
     '<div class="pcol" style="justify-content:center"><div class="nextmod"><small>다음 모듈 · '+NEXT.title+'</small><strong>'+NEXT.line+'</strong><a class="nextlink" href="'+NEXT.href+'">'+NEXT.action+'</a></div></div></div>'+
@@ -1133,6 +1140,7 @@ bindJumps(document);
 document.getElementById("prev").onclick=function(){show(cur-1);};
 document.getElementById("next").onclick=function(){show(cur+1);};
 document.addEventListener("keydown",function(e){
+  if(e.target&&e.target.closest&&e.target.closest(".refs"))return;
   if(e.target&&(e.target.type==="range"))return;
   if(e.key==="ArrowRight"||e.key==="PageDown"){show(cur+1);e.preventDefault();}
   else if(e.key==="ArrowLeft"||e.key==="PageUp"){show(cur-1);e.preventDefault();}

@@ -1,0 +1,162 @@
+module,n,title,org,url,date,external_verification
+1,1,데이터로 배우는 통계학,K-MOOC,https://www.kmooc.kr/view/course/detail/20384,2026-10-28 확인,미실행: 환경 HTTP 허용 목록 밖
+1,2,국가통계포털 통계목록,"통계청, KOSIS",https://kosis.kr/statisticsList/statisticsListIndex.do?menuId=M_01_02&outLink=Y&vwcd=MT_OTITLE,2026-10-28 확인,미실행: 환경 HTTP 허용 목록 밖
+1,3,공공데이터포털,행정안전부,https://www.data.go.kr,2026-10-28 확인,미실행: 환경 HTTP 허용 목록 밖
+1,4,기초통계학,"여인권, 숙명여자대학교, KOCW 공개강의",https://www.kocw.net/home/search/kemView.do?kemId=1052562,2026-10-28 확인,미실행: 환경 HTTP 허용 목록 밖
+2,1,데이터로 배우는 통계학,K-MOOC,https://www.kmooc.kr/view/course/detail/20384,2026-10-28 확인,미실행: 환경 HTTP 허용 목록 밖
+2,2,국가통계포털 통계목록,"통계청, KOSIS",https://kosis.kr/statisticsList/statisticsListIndex.do?menuId=M_01_02&outLink=Y&vwcd=MT_OTITLE,2026-10-28 확인,미실행: 환경 HTTP 허용 목록 밖
+2,3,공공데이터포털,행정안전부,https://www.data.go.kr,2026-10-28 확인,미실행: 환경 HTTP 허용 목록 밖
+2,4,기초통계학,"여인권, 숙명여자대학교, KOCW 공개강의",https://www.kocw.net/home/search/kemView.do?kemId=1052562,2026-10-28 확인,미실행: 환경 HTTP 허용 목록 밖
+3,1,기초통계학,"여인권, 숙명여자대학교, KOCW 공개강의",https://www.kocw.net/home/search/kemView.do?kemId=1052562,2026-10-28 확인,미실행: 환경 HTTP 허용 목록 밖
+3,2,데이터로 배우는 통계학,K-MOOC,https://www.kmooc.kr/view/course/detail/20384,2026-10-28 확인,미실행: 환경 HTTP 허용 목록 밖
+3,3,국가통계포털 통계목록,"통계청, KOSIS",https://kosis.kr/statisticsList/statisticsListIndex.do?menuId=M_01_02&outLink=Y&vwcd=MT_OTITLE,2026-10-28 확인,미실행: 환경 HTTP 허용 목록 밖
+3,4,공공데이터포털,행정안전부,https://www.data.go.kr,2026-10-28 확인,미실행: 환경 HTTP 허용 목록 밖
+4,1,The Choice of a Class Interval,"H. A. Sturges, Journal of the American Statistical Association 21(153), 65–66, 1926",https://doi.org/10.1080/01621459.1926.10502161,2026-10-24 확인,미실행: 환경 HTTP 허용 목록 밖
+4,2,국가통계포털 통계목록,"통계청, KOSIS",https://kosis.kr/statisticsList/statisticsListIndex.do?menuId=M_01_02&outLink=Y&vwcd=MT_OTITLE,2026-10-28 확인,미실행: 환경 HTTP 허용 목록 밖
+4,3,데이터로 배우는 통계학,K-MOOC,https://www.kmooc.kr/view/course/detail/20384,2026-10-28 확인,미실행: 환경 HTTP 허용 목록 밖
+4,4,기초통계학,"여인권, 숙명여자대학교, KOCW 공개강의",https://www.kocw.net/home/search/kemView.do?kemId=1052562,2026-10-28 확인,미실행: 환경 HTTP 허용 목록 밖
+4,5,공공데이터포털,행정안전부,https://www.data.go.kr,2026-10-28 확인,미실행: 환경 HTTP 허용 목록 밖
+5,1,Box and Whisker Plots,"mathcentre / statstutor, 2003",https://www.statstutor.ac.uk/resources/uploaded/boxandwhiskerplots.pdf,2026-10-24 확인,미실행: 환경 HTTP 허용 목록 밖
+5,2,국가통계포털 통계목록,"통계청, KOSIS",https://kosis.kr/statisticsList/statisticsListIndex.do?menuId=M_01_02&outLink=Y&vwcd=MT_OTITLE,2026-10-28 확인,미실행: 환경 HTTP 허용 목록 밖
+5,3,데이터로 배우는 통계학,K-MOOC,https://www.kmooc.kr/view/course/detail/20384,2026-10-28 확인,미실행: 환경 HTTP 허용 목록 밖
+5,4,기초통계학,"여인권, 숙명여자대학교, KOCW 공개강의",https://www.kocw.net/home/search/kemView.do?kemId=1052562,2026-10-28 확인,미실행: 환경 HTTP 허용 목록 밖
+5,5,R을 활용한 통계학개론,"K-MOOC, KOCW 공개강의",https://www.kocw.net/home/search/kemView.do?kemId=1517479,2026-10-28 확인,미실행: 환경 HTTP 허용 목록 밖
+5,6,공공데이터포털,행정안전부,https://www.data.go.kr,2026-10-28 확인,미실행: 환경 HTTP 허용 목록 밖
+6,1,기초통계학,"여인권, 숙명여자대학교, KOCW 공개강의",https://www.kocw.net/home/search/kemView.do?kemId=1052562,2026-10-28 확인,미실행: 환경 HTTP 허용 목록 밖
+6,2,데이터로 배우는 통계학,K-MOOC,https://www.kmooc.kr/view/course/detail/20384,2026-10-28 확인,미실행: 환경 HTTP 허용 목록 밖
+6,3,R을 활용한 통계학개론,"K-MOOC, KOCW 공개강의",https://www.kocw.net/home/search/kemView.do?kemId=1517479,2026-10-28 확인,미실행: 환경 HTTP 허용 목록 밖
+6,4,공공데이터포털,행정안전부,https://www.data.go.kr,2026-10-28 확인,미실행: 환경 HTTP 허용 목록 밖
+7,1,Notes on the Poisson and Exponential Distributions,"Kellogg School of Management, Northwestern University (DECS-430 강의 자료)",https://www.kellogg.northwestern.edu/faculty/weber/decs-430/Notes%20on%20the%20Poisson%20and%20exponential%20distributions.pdf,2026-10-24 확인,미실행: 환경 HTTP 허용 목록 밖
+7,2,STAT 270 Chapter 4 강의 노트(Binomial·Poisson),Simon Fraser University,https://www.sfu.ca/science/stat/weldon/270-070207-ch4-4.pdf,2026-10-24 확인,미실행: 환경 HTTP 허용 목록 밖
+7,3,2020학년도 대학수학능력시험 채점 결과,교육부,https://www.moe.go.kr/boardCnts/view.do?boardID=294&boardSeq=79182&lev=0&m=020402&opType=N&page=1&s=moe&searchType=null,2026-10-28 확인,미실행: 환경 HTTP 허용 목록 밖
+7,4,데이터로 배우는 통계학,K-MOOC,https://www.kmooc.kr/view/course/detail/20384,2026-10-28 확인,미실행: 환경 HTTP 허용 목록 밖
+7,5,기초통계학,"여인권, 숙명여자대학교, KOCW 공개강의",https://www.kocw.net/home/search/kemView.do?kemId=1052562,2026-10-28 확인,미실행: 환경 HTTP 허용 목록 밖
+7,6,R을 활용한 통계학개론,"K-MOOC, KOCW 공개강의",https://www.kocw.net/home/search/kemView.do?kemId=1517479,2026-10-28 확인,미실행: 환경 HTTP 허용 목록 밖
+8,1,데이터로 배우는 통계학,K-MOOC,https://www.kmooc.kr/view/course/detail/20384,2026-10-28 확인,미실행: 환경 HTTP 허용 목록 밖
+8,2,기초통계학,"여인권, 숙명여자대학교, KOCW 공개강의",https://www.kocw.net/home/search/kemView.do?kemId=1052562,2026-10-28 확인,미실행: 환경 HTTP 허용 목록 밖
+8,3,R을 활용한 통계학개론,"K-MOOC, KOCW 공개강의",https://www.kocw.net/home/search/kemView.do?kemId=1517479,2026-10-28 확인,미실행: 환경 HTTP 허용 목록 밖
+8,4,국가통계포털 통계목록,"통계청, KOSIS",https://kosis.kr/statisticsList/statisticsListIndex.do?menuId=M_01_02&outLink=Y&vwcd=MT_OTITLE,2026-10-28 확인,미실행: 환경 HTTP 허용 목록 밖
+8,5,공공데이터포털,행정안전부,https://www.data.go.kr,2026-10-28 확인,미실행: 환경 HTTP 허용 목록 밖
+9,1,기초통계학,"여인권, 숙명여자대학교, KOCW 공개강의",https://www.kocw.net/home/search/kemView.do?kemId=1052562,2026-10-28 확인,미실행: 환경 HTTP 허용 목록 밖
+9,2,데이터로 배우는 통계학,K-MOOC,https://www.kmooc.kr/view/course/detail/20384,2026-10-28 확인,미실행: 환경 HTTP 허용 목록 밖
+9,3,R을 활용한 통계학개론,"K-MOOC, KOCW 공개강의",https://www.kocw.net/home/search/kemView.do?kemId=1517479,2026-10-28 확인,미실행: 환경 HTTP 허용 목록 밖
+9,4,공공데이터포털,행정안전부,https://www.data.go.kr,2026-10-28 확인,미실행: 환경 HTTP 허용 목록 밖
+10,1,기초통계학,"여인권, 숙명여자대학교, KOCW 공개강의",https://www.kocw.net/home/search/kemView.do?kemId=1052562,2026-10-28 확인,미실행: 환경 HTTP 허용 목록 밖
+10,2,데이터로 배우는 통계학,K-MOOC,https://www.kmooc.kr/view/course/detail/20384,2026-10-28 확인,미실행: 환경 HTTP 허용 목록 밖
+10,3,R을 활용한 통계학개론,"K-MOOC, KOCW 공개강의",https://www.kocw.net/home/search/kemView.do?kemId=1517479,2026-10-28 확인,미실행: 환경 HTTP 허용 목록 밖
+10,4,공공데이터포털,행정안전부,https://www.data.go.kr,2026-10-28 확인,미실행: 환경 HTTP 허용 목록 밖
+11,1,기초통계학Ⅱ,"여인권, 숙명여자대학교, KOCW 공개강의",https://www.kocw.net/home/search/kemView.do?kemId=1080231,2026-10-28 확인,미실행: 환경 HTTP 허용 목록 밖
+11,2,데이터로 배우는 통계학,K-MOOC,https://www.kmooc.kr/view/course/detail/20384,2026-10-28 확인,미실행: 환경 HTTP 허용 목록 밖
+11,3,기초통계학,"여인권, 숙명여자대학교, KOCW 공개강의",https://www.kocw.net/home/search/kemView.do?kemId=1052562,2026-10-28 확인,미실행: 환경 HTTP 허용 목록 밖
+11,4,R을 활용한 통계학개론,"K-MOOC, KOCW 공개강의",https://www.kocw.net/home/search/kemView.do?kemId=1517479,2026-10-28 확인,미실행: 환경 HTTP 허용 목록 밖
+12,1,기초통계학Ⅱ,"여인권, 숙명여자대학교, KOCW 공개강의",https://www.kocw.net/home/search/kemView.do?kemId=1080231,2026-10-28 확인,미실행: 환경 HTTP 허용 목록 밖
+12,2,데이터로 배우는 통계학,K-MOOC,https://www.kmooc.kr/view/course/detail/20384,2026-10-28 확인,미실행: 환경 HTTP 허용 목록 밖
+12,3,기초통계학,"여인권, 숙명여자대학교, KOCW 공개강의",https://www.kocw.net/home/search/kemView.do?kemId=1052562,2026-10-28 확인,미실행: 환경 HTTP 허용 목록 밖
+12,4,R을 활용한 통계학개론,"K-MOOC, KOCW 공개강의",https://www.kocw.net/home/search/kemView.do?kemId=1517479,2026-10-28 확인,미실행: 환경 HTTP 허용 목록 밖
+13,1,Error bars in experimental biology,"G. Cumming, F. Fidler, D. L. Vaux, Journal of Cell Biology 177(1), 7–11, 2007",https://doi.org/10.1083/jcb.200611141,2026-10-25 확인,미실행: 환경 HTTP 허용 목록 밖
+13,2,데이터로 배우는 통계학,K-MOOC,https://www.kmooc.kr/view/course/detail/20384,2026-10-28 확인,미실행: 환경 HTTP 허용 목록 밖
+13,3,기초통계학,"여인권, 숙명여자대학교, KOCW 공개강의",https://www.kocw.net/home/search/kemView.do?kemId=1052562,2026-10-28 확인,미실행: 환경 HTTP 허용 목록 밖
+13,4,기초통계학Ⅱ,"여인권, 숙명여자대학교, KOCW 공개강의",https://www.kocw.net/home/search/kemView.do?kemId=1080231,2026-10-28 확인,미실행: 환경 HTTP 허용 목록 밖
+13,5,R을 활용한 통계학개론,"K-MOOC, KOCW 공개강의",https://www.kocw.net/home/search/kemView.do?kemId=1517479,2026-10-28 확인,미실행: 환경 HTTP 허용 목록 밖
+14,1,Hypertension (Fact sheet),"World Health Organization, 2025-09-25",https://www.who.int/news-room/fact-sheets/detail/hypertension,2026-10-25 확인,미실행: 환경 HTTP 허용 목록 밖
+14,2,Why Psychologists Should by Default Use Welch's t-test Instead of Student's t-test,"M. Delacre, D. Lakens, C. Leys, International Review of Social Psychology 30(1), 92–101, 2017",https://doi.org/10.5334/irsp.82,2026-10-25 확인,미실행: 환경 HTTP 허용 목록 밖
+14,3,데이터로 배우는 통계학,K-MOOC,https://www.kmooc.kr/view/course/detail/20384,2026-10-28 확인,미실행: 환경 HTTP 허용 목록 밖
+14,4,기초통계학Ⅱ,"여인권, 숙명여자대학교, KOCW 공개강의",https://www.kocw.net/home/search/kemView.do?kemId=1080231,2026-10-28 확인,미실행: 환경 HTTP 허용 목록 밖
+14,5,R을 활용한 통계학개론,"K-MOOC, KOCW 공개강의",https://www.kocw.net/home/search/kemView.do?kemId=1517479,2026-10-28 확인,미실행: 환경 HTTP 허용 목록 밖
+15,1,기초통계학Ⅱ,"여인권, 숙명여자대학교, KOCW 공개강의",https://www.kocw.net/home/search/kemView.do?kemId=1080231,2026-10-28 확인,미실행: 환경 HTTP 허용 목록 밖
+15,2,데이터로 배우는 통계학,K-MOOC,https://www.kmooc.kr/view/course/detail/20384,2026-10-28 확인,미실행: 환경 HTTP 허용 목록 밖
+15,3,R을 활용한 통계학개론,"K-MOOC, KOCW 공개강의",https://www.kocw.net/home/search/kemView.do?kemId=1517479,2026-10-28 확인,미실행: 환경 HTTP 허용 목록 밖
+15,4,공공데이터포털,행정안전부,https://www.data.go.kr,2026-10-28 확인,미실행: 환경 HTTP 허용 목록 밖
+16,1,chisq.test: Pearson's Chi-squared Test for Count Data (R Documentation),The R Project for Statistical Computing,https://search.r-project.org/R/refmans/stats/html/chisq.test.html,2026-10-25 확인,미실행: 환경 HTTP 허용 목록 밖
+16,2,공공데이터포털,행정안전부,https://www.data.go.kr,2026-10-28 확인,미실행: 환경 HTTP 허용 목록 밖
+16,3,데이터로 배우는 통계학,K-MOOC,https://www.kmooc.kr/view/course/detail/20384,2026-10-28 확인,미실행: 환경 HTTP 허용 목록 밖
+16,4,기초통계학Ⅱ,"여인권, 숙명여자대학교, KOCW 공개강의",https://www.kocw.net/home/search/kemView.do?kemId=1080231,2026-10-28 확인,미실행: 환경 HTTP 허용 목록 밖
+16,5,R을 활용한 통계학개론,"K-MOOC, KOCW 공개강의",https://www.kocw.net/home/search/kemView.do?kemId=1517479,2026-10-28 확인,미실행: 환경 HTTP 허용 목록 밖
+17,1,Graphs in Statistical Analysis (Anscombe's quartet),"F. J. Anscombe, The American Statistician 27(1), 17–21, 1973 · 데이터 출처: Duke University 강의 자료",https://www2.stat.duke.edu/courses/Fall03/sta290/Lectures/Anscombe.html,2026-10-26 확인,미실행: 환경 HTTP 허용 목록 밖
+17,2,Detecting Novel Associations in Large Data Sets,"D. N. Reshef 외, Science 334(6062), 1518–1524, 2011",https://doi.org/10.1126/science.1205438,2026-10-26 확인,미실행: 환경 HTTP 허용 목록 밖
+17,3,데이터로 배우는 통계학,K-MOOC,https://www.kmooc.kr/view/course/detail/20384,2026-10-28 확인,미실행: 환경 HTTP 허용 목록 밖
+17,4,기초통계학Ⅱ,"여인권, 숙명여자대학교, KOCW 공개강의",https://www.kocw.net/home/search/kemView.do?kemId=1080231,2026-10-28 확인,미실행: 환경 HTTP 허용 목록 밖
+17,5,R을 활용한 통계학개론,"K-MOOC, KOCW 공개강의",https://www.kocw.net/home/search/kemView.do?kemId=1517479,2026-10-28 확인,미실행: 환경 HTTP 허용 목록 밖
+17,6,국가통계포털 통계목록,"통계청, KOSIS",https://kosis.kr/statisticsList/statisticsListIndex.do?menuId=M_01_02&outLink=Y&vwcd=MT_OTITLE,2026-10-28 확인,미실행: 환경 HTTP 허용 목록 밖
+18,1,기초통계학Ⅱ,"여인권, 숙명여자대학교, KOCW 공개강의",https://www.kocw.net/home/search/kemView.do?kemId=1080231,2026-10-28 확인,미실행: 환경 HTTP 허용 목록 밖
+18,2,데이터로 배우는 통계학,K-MOOC,https://www.kmooc.kr/view/course/detail/20384,2026-10-28 확인,미실행: 환경 HTTP 허용 목록 밖
+18,3,R을 활용한 통계학개론,"K-MOOC, KOCW 공개강의",https://www.kocw.net/home/search/kemView.do?kemId=1517479,2026-10-28 확인,미실행: 환경 HTTP 허용 목록 밖
+18,4,국가통계포털 통계목록,"통계청, KOSIS",https://kosis.kr/statisticsList/statisticsListIndex.do?menuId=M_01_02&outLink=Y&vwcd=MT_OTITLE,2026-10-28 확인,미실행: 환경 HTTP 허용 목록 밖
+19,1,기초통계학Ⅱ,"여인권, 숙명여자대학교, KOCW 공개강의",https://www.kocw.net/home/search/kemView.do?kemId=1080231,2026-10-28 확인,미실행: 환경 HTTP 허용 목록 밖
+19,2,R을 활용한 통계학개론,"K-MOOC, KOCW 공개강의",https://www.kocw.net/home/search/kemView.do?kemId=1517479,2026-10-28 확인,미실행: 환경 HTTP 허용 목록 밖
+19,3,국가통계포털 통계목록,"통계청, KOSIS",https://kosis.kr/statisticsList/statisticsListIndex.do?menuId=M_01_02&outLink=Y&vwcd=MT_OTITLE,2026-10-28 확인,미실행: 환경 HTTP 허용 목록 밖
+19,4,데이터로 배우는 통계학,K-MOOC,https://www.kmooc.kr/view/course/detail/20384,2026-10-28 확인,미실행: 환경 HTTP 허용 목록 밖
+20,1,기초통계학Ⅱ,"여인권, 숙명여자대학교, KOCW 공개강의",https://www.kocw.net/home/search/kemView.do?kemId=1080231,2026-10-28 확인,미실행: 환경 HTTP 허용 목록 밖
+20,2,R을 활용한 통계학개론,"K-MOOC, KOCW 공개강의",https://www.kocw.net/home/search/kemView.do?kemId=1517479,2026-10-28 확인,미실행: 환경 HTTP 허용 목록 밖
+20,3,국가통계포털 통계목록,"통계청, KOSIS",https://kosis.kr/statisticsList/statisticsListIndex.do?menuId=M_01_02&outLink=Y&vwcd=MT_OTITLE,2026-10-28 확인,미실행: 환경 HTTP 허용 목록 밖
+20,4,데이터로 배우는 통계학,K-MOOC,https://www.kmooc.kr/view/course/detail/20384,2026-10-28 확인,미실행: 환경 HTTP 허용 목록 밖
+21,1,기초통계학Ⅱ,"여인권, 숙명여자대학교, KOCW 공개강의",https://www.kocw.net/home/search/kemView.do?kemId=1080231,2026-10-28 확인,미실행: 환경 HTTP 허용 목록 밖
+21,2,R을 활용한 통계학개론,"K-MOOC, KOCW 공개강의",https://www.kocw.net/home/search/kemView.do?kemId=1517479,2026-10-28 확인,미실행: 환경 HTTP 허용 목록 밖
+21,3,공공데이터포털,행정안전부,https://www.data.go.kr,2026-10-28 확인,미실행: 환경 HTTP 허용 목록 밖
+21,4,데이터로 배우는 통계학,K-MOOC,https://www.kmooc.kr/view/course/detail/20384,2026-10-28 확인,미실행: 환경 HTTP 허용 목록 밖
+22,1,A ratings based Poisson model for World Cup soccer simulation,"D. Dyte, S. R. Clarke, Journal of the Operational Research Society 51(8), 993–998, 2000",https://iaorifors.com/paper/32889,2026-10-26 확인,미실행: 환경 HTTP 허용 목록 밖
+22,2,기초통계학Ⅱ,"여인권, 숙명여자대학교, KOCW 공개강의",https://www.kocw.net/home/search/kemView.do?kemId=1080231,2026-10-28 확인,미실행: 환경 HTTP 허용 목록 밖
+22,3,R을 활용한 통계학개론,"K-MOOC, KOCW 공개강의",https://www.kocw.net/home/search/kemView.do?kemId=1517479,2026-10-28 확인,미실행: 환경 HTTP 허용 목록 밖
+22,4,데이터로 배우는 통계학,K-MOOC,https://www.kmooc.kr/view/course/detail/20384,2026-10-28 확인,미실행: 환경 HTTP 허용 목록 밖
+23,1,Model selection for ecologists: the worldviews of AIC and BIC,"K. Aho, D. Derryberry, T. Peterson, Ecology 95(3), 631–636, 2014",https://doi.org/10.1890/13-1452.1,2026-10-27 확인,미실행: 환경 HTTP 허용 목록 밖
+23,2,기초통계학Ⅱ,"여인권, 숙명여자대학교, KOCW 공개강의",https://www.kocw.net/home/search/kemView.do?kemId=1080231,2026-10-28 확인,미실행: 환경 HTTP 허용 목록 밖
+23,3,R을 활용한 통계학개론,"K-MOOC, KOCW 공개강의",https://www.kocw.net/home/search/kemView.do?kemId=1517479,2026-10-28 확인,미실행: 환경 HTTP 허용 목록 밖
+23,4,데이터로 배우는 통계학,K-MOOC,https://www.kmooc.kr/view/course/detail/20384,2026-10-28 확인,미실행: 환경 HTTP 허용 목록 밖
+24,1,Estimating the reproducibility of psychological science,"Open Science Collaboration, Science 349(6251), aac4716, 2015",https://doi.org/10.1126/science.aac4716,2026-10-27 확인,미실행: 환경 HTTP 허용 목록 밖
+24,2,"The ASA Statement on p-Values: Context, Process, and Purpose","R. L. Wasserstein, N. A. Lazar, The American Statistician 70(2), 129–133, 2016",https://doi.org/10.1080/00031305.2016.1154108,2026-10-27 확인,미실행: 환경 HTTP 허용 목록 밖
+24,3,Redefine statistical significance,"D. J. Benjamin 외, Nature Human Behaviour 2, 6–10, 2018",https://doi.org/10.1038/s41562-017-0189-z,2026-10-27 확인,미실행: 환경 HTTP 허용 목록 밖
+24,4,데이터로 배우는 통계학,K-MOOC,https://www.kmooc.kr/view/course/detail/20384,2026-10-28 확인,미실행: 환경 HTTP 허용 목록 밖
+25,1,"The ASA Statement on p-Values: Context, Process, and Purpose","R. L. Wasserstein, N. A. Lazar, The American Statistician 70(2), 129–133, 2016",https://doi.org/10.1080/00031305.2016.1154108,2026-10-27 확인,미실행: 환경 HTTP 허용 목록 밖
+25,2,Redefine statistical significance,"D. J. Benjamin 외, Nature Human Behaviour 2, 6–10, 2018",https://doi.org/10.1038/s41562-017-0189-z,2026-10-27 확인,미실행: 환경 HTTP 허용 목록 밖
+25,3,Statistical Power Analysis for the Behavioral Sciences (2nd ed.),"J. Cohen, Lawrence Erlbaum Associates, 1988",https://www.routledge.com/9780805802832,2026-10-27 확인,미실행: 환경 HTTP 허용 목록 밖
+25,4,데이터로 배우는 통계학,K-MOOC,https://www.kmooc.kr/view/course/detail/20384,2026-10-28 확인,미실행: 환경 HTTP 허용 목록 밖
+26,1,Bayes Factors,"R. E. Kass, A. E. Raftery, Journal of the American Statistical Association 90(430), 773–795, 1995",https://doi.org/10.1080/01621459.1995.10476572,2026-10-27 확인,미실행: 환경 HTTP 허용 목록 밖
+26,2,Redefine statistical significance,"D. J. Benjamin 외, Nature Human Behaviour 2, 6–10, 2018",https://doi.org/10.1038/s41562-017-0189-z,2026-10-27 확인,미실행: 환경 HTTP 허용 목록 밖
+26,3,Why Most Published Research Findings Are False,"J. P. A. Ioannidis, PLoS Medicine 2(8), e124, 2005",https://doi.org/10.1371/journal.pmed.0020124,2026-10-27 확인,미실행: 환경 HTTP 허용 목록 밖
+26,4,데이터로 배우는 통계학,K-MOOC,https://www.kmooc.kr/view/course/detail/20384,2026-10-28 확인,미실행: 환경 HTTP 허용 목록 밖
+27,1,HARKing: Hypothesizing After the Results are Known,"N. L. Kerr, Personality and Social Psychology Review 2(3), 196–217, 1998",https://doi.org/10.1207/s15327957pspr0203_4,2026-10-27 확인,미실행: 환경 HTTP 허용 목록 밖
+27,2,The preregistration revolution,"B. A. Nosek 외, PNAS 115(11), 2600–2606, 2018",https://doi.org/10.1073/pnas.1708274114,2026-10-27 확인,미실행: 환경 HTTP 허용 목록 밖
+27,3,"Statistical tests, P values, confidence intervals, and power: a guide to misinterpretations","S. Greenland 외, European Journal of Epidemiology 31, 337–350, 2016",https://doi.org/10.1007/s10654-016-0149-3,2026-10-27 확인,미실행: 환경 HTTP 허용 목록 밖
+27,4,데이터로 배우는 통계학,K-MOOC,https://www.kmooc.kr/view/course/detail/20384,2026-10-28 확인,미실행: 환경 HTTP 허용 목록 밖
+28,1,"Chocolate Consumption, Cognitive Function, and Nobel Laureates","F. H. Messerli, The New England Journal of Medicine 367(16), 1562–1564, 2012",https://doi.org/10.1056/NEJMon1211064,2026-10-27 확인,미실행: 환경 HTTP 허용 목록 밖
+28,2,데이터로 배우는 통계학,K-MOOC,https://www.kmooc.kr/view/course/detail/20384,2026-10-28 확인,미실행: 환경 HTTP 허용 목록 밖
+28,3,공공데이터포털,행정안전부,https://www.data.go.kr,2026-10-28 확인,미실행: 환경 HTTP 허용 목록 밖
+28,4,R을 활용한 통계학개론,"K-MOOC, KOCW 공개강의",https://www.kocw.net/home/search/kemView.do?kemId=1517479,2026-10-28 확인,미실행: 환경 HTTP 허용 목록 밖
+29,1,Statistics and Causal Inference,"P. W. Holland, Journal of the American Statistical Association 81(396), 945–960, 1986",https://doi.org/10.1080/01621459.1986.10478354,2026-10-27 확인,미실행: 환경 HTTP 허용 목록 밖
+29,2,The central role of the propensity score in observational studies for causal effects,"P. R. Rosenbaum, D. B. Rubin, Biometrika 70(1), 41–55, 1983",https://doi.org/10.1093/biomet/70.1.41,2026-10-27 확인,미실행: 환경 HTTP 허용 목록 밖
+29,3,데이터로 배우는 통계학,K-MOOC,https://www.kmooc.kr/view/course/detail/20384,2026-10-28 확인,미실행: 환경 HTTP 허용 목록 밖
+29,4,R을 활용한 통계학개론,"K-MOOC, KOCW 공개강의",https://www.kocw.net/home/search/kemView.do?kemId=1517479,2026-10-28 확인,미실행: 환경 HTTP 허용 목록 밖
+30,1,On Information and Sufficiency,"S. Kullback, R. A. Leibler, The Annals of Mathematical Statistics 22(1), 79–86, 1951",https://doi.org/10.1214/aoms/1177729694,2026-10-27 확인,미실행: 환경 HTTP 허용 목록 밖
+30,2,Asymptotic Equivalence of Bayes Cross Validation and Widely Applicable Information Criterion in Singular Learning Theory,"S. Watanabe, Journal of Machine Learning Research 11, 3571–3594, 2010",https://jmlr.org/papers/v11/watanabe10a.html,2026-10-27 확인,미실행: 환경 HTTP 허용 목록 밖
+30,3,데이터로 배우는 통계학,K-MOOC,https://www.kmooc.kr/view/course/detail/20384,2026-10-28 확인,미실행: 환경 HTTP 허용 목록 밖
+30,4,R을 활용한 통계학개론,"K-MOOC, KOCW 공개강의",https://www.kocw.net/home/search/kemView.do?kemId=1517479,2026-10-28 확인,미실행: 환경 HTTP 허용 목록 밖
+31,1,"Stochastic Relaxation, Gibbs Distributions, and the Bayesian Restoration of Images","S. Geman, D. Geman, IEEE Transactions on Pattern Analysis and Machine Intelligence 6(6), 721–741, 1984",https://doi.org/10.1109/TPAMI.1984.4767596,2026-10-27 확인,미실행: 환경 HTTP 허용 목록 밖
+31,2,Stan: A Probabilistic Programming Language,"B. Carpenter 외, Journal of Statistical Software 76(1), 2017",https://doi.org/10.18637/jss.v076.i01,2026-10-27 확인,미실행: 환경 HTTP 허용 목록 밖
+31,3,데이터로 배우는 통계학,K-MOOC,https://www.kmooc.kr/view/course/detail/20384,2026-10-28 확인,미실행: 환경 HTTP 허용 목록 밖
+31,4,R을 활용한 통계학개론,"K-MOOC, KOCW 공개강의",https://www.kocw.net/home/search/kemView.do?kemId=1517479,2026-10-28 확인,미실행: 환경 HTTP 허용 목록 밖
+32,1,On lines and planes of closest fit to systems of points in space,"K. Pearson, The London, Edinburgh, and Dublin Philosophical Magazine and Journal of Science 2(11), 559–572, 1901",https://doi.org/10.1080/14786440109462720,2026-10-27 확인,미실행: 환경 HTTP 허용 목록 밖
+32,2,Principal component analysis: a review and recent developments,"I. T. Jolliffe, J. Cadima, Philosophical Transactions of the Royal Society A 374, 20150202, 2016",https://doi.org/10.1098/rsta.2015.0202,2026-10-27 확인,미실행: 환경 HTTP 허용 목록 밖
+32,3,AI-Hub 소개,"한국지능정보사회진흥원, AI-Hub",https://www.aihub.or.kr/intrcn/intrcn.do,2026-10-28 확인,미실행: 환경 HTTP 허용 목록 밖
+32,4,AI 학습데이터 구축 안내서,한국지능정보사회진흥원,https://nia.or.kr/site/nia_kor/ex/bbs/View.do?bcIdx=28714&cbIdx=26537&parentSeq=28714,2026-10-28 확인,미실행: 환경 HTTP 허용 목록 밖
+33,1,Visualizing Data using t-SNE,"L. van der Maaten, G. Hinton, Journal of Machine Learning Research 9, 2579–2605, 2008",https://jmlr.org/papers/v9/vandermaaten08a.html,2026-10-27 확인,미실행: 환경 HTTP 허용 목록 밖
+33,2,UMAP: Uniform Manifold Approximation and Projection for Dimension Reduction,"L. McInnes, J. Healy, J. Melville, arXiv:1802.03426, 2018",https://arxiv.org/abs/1802.03426,2026-10-27 확인,미실행: 환경 HTTP 허용 목록 밖
+33,3,AI-Hub 소개,"한국지능정보사회진흥원, AI-Hub",https://www.aihub.or.kr/intrcn/intrcn.do,2026-10-28 확인,미실행: 환경 HTTP 허용 목록 밖
+33,4,AI 학습데이터 구축 안내서,한국지능정보사회진흥원,https://nia.or.kr/site/nia_kor/ex/bbs/View.do?bcIdx=28714&cbIdx=26537&parentSeq=28714,2026-10-28 확인,미실행: 환경 HTTP 허용 목록 밖
+34,1,An introduction to ROC analysis,"T. Fawcett, Pattern Recognition Letters 27(8), 861–874, 2006",https://doi.org/10.1016/j.patrec.2005.10.010,2026-10-27 확인,미실행: 환경 HTTP 허용 목록 밖
+34,2,Random Forests,"L. Breiman, Machine Learning 45, 5–32, 2001",https://doi.org/10.1023/A:1010933404324,2026-10-27 확인,미실행: 환경 HTTP 허용 목록 밖
+34,3,R을 활용한 통계학개론,"K-MOOC, KOCW 공개강의",https://www.kocw.net/home/search/kemView.do?kemId=1517479,2026-10-28 확인,미실행: 환경 HTTP 허용 목록 밖
+34,4,공공데이터포털,행정안전부,https://www.data.go.kr,2026-10-28 확인,미실행: 환경 HTTP 허용 목록 밖
+34,5,AI-Hub 소개,"한국지능정보사회진흥원, AI-Hub",https://www.aihub.or.kr/intrcn/intrcn.do,2026-10-28 확인,미실행: 환경 HTTP 허용 목록 밖
+34,6,AI 학습데이터 구축 안내서,한국지능정보사회진흥원,https://nia.or.kr/site/nia_kor/ex/bbs/View.do?bcIdx=28714&cbIdx=26537&parentSeq=28714,2026-10-28 확인,미실행: 환경 HTTP 허용 목록 밖
+35,1,Robustness in the Strategy of Scientific Model Building,"G. E. P. Box, Robustness in Statistics, Academic Press, 201–236, 1979",https://www.gwern.net/doc/statistics/decision/1979-box.pdf,2026-10-27 확인,미실행: 환경 HTTP 허용 목록 밖
+35,2,Newton's law of cooling revisited,"M. Vollmer, European Journal of Physics 30(5), 1063–1084, 2009",https://doi.org/10.1088/0143-0807/30/5/014,2026-10-27 확인,미실행: 환경 HTTP 허용 목록 밖
+35,3,R을 활용한 통계학개론,"K-MOOC, KOCW 공개강의",https://www.kocw.net/home/search/kemView.do?kemId=1517479,2026-10-28 확인,미실행: 환경 HTTP 허용 목록 밖
+35,4,데이터로 배우는 통계학,K-MOOC,https://www.kmooc.kr/view/course/detail/20384,2026-10-28 확인,미실행: 환경 HTTP 허용 목록 밖
+36,1,A Contribution to the Mathematical Theory of Epidemics,"W. O. Kermack, A. G. McKendrick, Proceedings of the Royal Society of London A 115(772), 700–721, 1927",https://doi.org/10.1098/rspa.1927.0118,2026-10-27 확인,미실행: 환경 HTTP 허용 목록 밖
+36,2,국가통계포털 통계목록,"통계청, KOSIS",https://kosis.kr/statisticsList/statisticsListIndex.do?menuId=M_01_02&outLink=Y&vwcd=MT_OTITLE,2026-10-28 확인,미실행: 환경 HTTP 허용 목록 밖
+36,3,공공데이터포털,행정안전부,https://www.data.go.kr,2026-10-28 확인,미실행: 환경 HTTP 허용 목록 밖
+36,4,데이터로 배우는 통계학,K-MOOC,https://www.kmooc.kr/view/course/detail/20384,2026-10-28 확인,미실행: 환경 HTTP 허용 목록 밖
+37,1,The Problem of the Random Walk,"K. Pearson, Nature 72, 294, 1905",https://doi.org/10.1038/072294b0,2026-10-27 확인,미실행: 환경 HTTP 허용 목록 밖
+37,2,R을 활용한 통계학개론,"K-MOOC, KOCW 공개강의",https://www.kocw.net/home/search/kemView.do?kemId=1517479,2026-10-28 확인,미실행: 환경 HTTP 허용 목록 밖
+37,3,공공데이터포털,행정안전부,https://www.data.go.kr,2026-10-28 확인,미실행: 환경 HTTP 허용 목록 밖
+37,4,데이터로 배우는 통계학,K-MOOC,https://www.kmooc.kr/view/course/detail/20384,2026-10-28 확인,미실행: 환경 HTTP 허용 목록 밖
