@@ -1,6 +1,6 @@
 # 교재 검수 색인
 
-갱신일: **2026-11-02, 한국 시간**. Git에 보존된 1~22차 기록을 차수·모듈별로 연결했다. 재개 순서·원본 자료·남은 일은 [작업 인계](WORK_HANDOFF.md)를 먼저 읽는다.
+갱신일: **2026-11-02, 한국 시간**. Git에 보존된 1~23차 기록을 차수·모듈별로 연결했다. 재개 순서·원본 자료·남은 일은 [작업 인계](WORK_HANDOFF.md)를 먼저 읽는다.
 
 ## 완료한 차수와 보존 커밋
 
@@ -30,9 +30,10 @@
 | [20차](CONTENT_REVIEW_TEXTBOOK_P20_20261102.md) | M24~M29 목표/내용·판정 초기화·화면 보정 | 재현성 지표·모형확률·조건부 비율·인과 가정 연결 | `f63d90d` |
 | [21차](CONTENT_REVIEW_TEXTBOOK_P21_20261102.md) | M30~M37 목표 연결·판정 초기화·화면 보정 | 인과·PCA·MAE·가상 관측·표준편차 해설 정합화 | `6aa4a92` |
 | [22차](CONTENT_REVIEW_TEXTBOOK_P22_20261102.md) | M07·M16·M23·M29·M37 마무리 | 과정 경계 다음 모듈 링크·최종 과정 복귀·키보드 이동 | `5e4be39` |
+| [23차](CONTENT_REVIEW_TEXTBOOK_P23_20261102.md) | 과정 내부 32모듈·전체 37마무리 재검사 | 다음 모듈 링크·M14/M25 안내 조건·74조건/148회 이동 | `2ac2e07` |
 | [홈 UI/UX](HOME_UI_REVIEW_20261029.md) | 홈·과정/모듈 탐색 | 검색·필터·최근 모듈·의견 폼·접근성 | `8d7b2d2` |
 
-1~16차 및 홈 수정은 `3803f90` 이력에 포함되어 있다. 17차는 `1fe4c51`, 18차는 `32c9261`, 19차는 `59c3053`, 20차는 `f63d90d`, 21차는 `6aa4a92`, 22차는 `5e4be39`이며 각 콘텐츠 커밋 뒤에 인계·색인 갱신 커밋이 이어진다. 최신 원격 보존 여부는 재개 시 Git으로 확인한다. 인계 문서 자체의 커밋은 다음 명령으로 확인한다.
+1~16차 및 홈 수정은 `3803f90` 이력에 포함되어 있다. 17차는 `1fe4c51`, 18차는 `32c9261`, 19차는 `59c3053`, 20차는 `f63d90d`, 21차는 `6aa4a92`, 22차는 `5e4be39`, 23차는 `2ac2e07`이며 각 콘텐츠 커밋 뒤에 인계·색인 갱신 커밋이 이어진다. 최신 원격 보존 여부는 재개 시 Git으로 확인한다. 인계 문서 자체의 커밋은 다음 명령으로 확인한다.
 
 ```sh
 git log -1 --oneline -- README.md docs/WORK_HANDOFF.md docs/REVIEW_COVERAGE.md
@@ -57,7 +58,7 @@ git log -1 --oneline -- README.md docs/WORK_HANDOFF.md docs/REVIEW_COVERAGE.md
 | [M11 가설검정의원리와p값](../module_v1/M11_가설검정의원리와p값_v1.1.html) | [5차](CONTENT_REVIEW_TEXTBOOK_P5_20261028.md) | [18차 대응표](CONTENT_REVIEW_TEXTBOOK_P18_20261102.md) |
 | [M12 가설검정해보기](../module_v1/M12_가설검정해보기_v1.0.html) | [5차](CONTENT_REVIEW_TEXTBOOK_P5_20261028.md) | [18차 대응표](CONTENT_REVIEW_TEXTBOOK_P18_20261102.md) |
 | [M13 검정결과읽기와두가지오류](../module_v1/M13_검정결과읽기와두가지오류_v1.0.html) | [18차](CONTENT_REVIEW_TEXTBOOK_P18_20261102.md) | [18차 대응표](CONTENT_REVIEW_TEXTBOOK_P18_20261102.md) |
-| [M14 두집단평균비교](../module_v1/M14_두집단평균비교_v1.0.html) | [13차](CONTENT_REVIEW_TEXTBOOK_P13_20261029.md) | [18차 대응표](CONTENT_REVIEW_TEXTBOOK_P18_20261102.md) |
+| [M14 두집단평균비교](../module_v1/M14_두집단평균비교_v1.0.html) | [23차 안내 정합화](CONTENT_REVIEW_TEXTBOOK_P23_20261102.md) | [18차 대응표](CONTENT_REVIEW_TEXTBOOK_P18_20261102.md) |
 | [M15 세집단이상비교](../module_v1/M15_세집단이상비교_v1.0.html) | [18차](CONTENT_REVIEW_TEXTBOOK_P18_20261102.md) | [18차 대응표](CONTENT_REVIEW_TEXTBOOK_P18_20261102.md) |
 | [M16 비율비교](../module_v1/M16_비율비교_v1.0.html) | [18차](CONTENT_REVIEW_TEXTBOOK_P18_20261102.md) | [18차 대응표](CONTENT_REVIEW_TEXTBOOK_P18_20261102.md) |
 | [M17 산점도와상관](../module_v1/M17_산점도와상관_v1.0.html) | [8차](CONTENT_REVIEW_TEXTBOOK_P8_20261028.md) | [19차 대응표](CONTENT_REVIEW_TEXTBOOK_P19_20261102.md) |
@@ -68,7 +69,7 @@ git log -1 --oneline -- README.md docs/WORK_HANDOFF.md docs/REVIEW_COVERAGE.md
 | [M22 푸아송회귀와다양한일반화선형모형](../module_v1/M22_푸아송회귀와다양한일반화선형모형_v1.0.html) | [3차](CONTENT_REVIEW_TEXTBOOK_20261028.md) | [19차 대응표](CONTENT_REVIEW_TEXTBOOK_P19_20261102.md) |
 | [M23 모형의평가와비교](../module_v1/M23_모형의평가와비교_v1.0.html) | [19차](CONTENT_REVIEW_TEXTBOOK_P19_20261102.md) | [19차 대응표](CONTENT_REVIEW_TEXTBOOK_P19_20261102.md) |
 | [M24 재현성](../module_v1/M24_재현성_v1.0.html) | [20차](CONTENT_REVIEW_TEXTBOOK_P20_20261102.md) | [20차 대응표](CONTENT_REVIEW_TEXTBOOK_P20_20261102.md) |
-| [M25 p값과효과크기다시보기](../module_v1/M25_p값과효과크기다시보기_v1.0.html) | [20차](CONTENT_REVIEW_TEXTBOOK_P20_20261102.md) | [20차 대응표](CONTENT_REVIEW_TEXTBOOK_P20_20261102.md) |
+| [M25 p값과효과크기다시보기](../module_v1/M25_p값과효과크기다시보기_v1.0.html) | [23차 안내 정합화](CONTENT_REVIEW_TEXTBOOK_P23_20261102.md) | [20차 대응표](CONTENT_REVIEW_TEXTBOOK_P20_20261102.md) |
 | [M26 베이즈인수와좋은가설](../module_v1/M26_베이즈인수와좋은가설_v1.0.html) | [20차](CONTENT_REVIEW_TEXTBOOK_P20_20261102.md) | [20차 대응표](CONTENT_REVIEW_TEXTBOOK_P20_20261102.md) |
 | [M27 p해킹](../module_v1/M27_p해킹_v1.0.html) | [20차](CONTENT_REVIEW_TEXTBOOK_P20_20261102.md) | [20차 대응표](CONTENT_REVIEW_TEXTBOOK_P20_20261102.md) |
 | [M28 인과와상관](../module_v1/M28_인과와상관_v1.0.html) | [20차](CONTENT_REVIEW_TEXTBOOK_P20_20261102.md) | [20차 대응표](CONTENT_REVIEW_TEXTBOOK_P20_20261102.md) |
@@ -86,7 +87,7 @@ M11의 현행 파일은 `v1.1`이다. 이전 `v1.0` 경로를 복원해 링크�
 
 ## 이 색인에 없는 완료 판단
 
-- M01~M07의 목표 21개는 17차, M08~M16의 목표 27개는 18차, M17~M23의 목표 21개는 19차, M24~M29의 목표 18개는 20차 대응표에 기록했다. M30~M37의 목표 24개는 21차에 기록해 전체 111목표의 연결을 점검했다. 과정 경계 4곳과 최종 M37은 [22차](CONTENT_REVIEW_TEXTBOOK_P22_20261102.md)에 점검·보완했다. 과정 내부 이동은 [다음 할 일](WORK_HANDOFF.md)에 남아 있다.
+- M01~M07의 목표 21개는 17차, M08~M16의 목표 27개는 18차, M17~M23의 목표 21개는 19차, M24~M29의 목표 18개는 20차 대응표에 기록했다. M30~M37의 목표 24개는 21차에 기록해 전체 111목표의 연결을 점검했다. 과정 경계 4곳과 최종 M37은 [22차](CONTENT_REVIEW_TEXTBOOK_P22_20261102.md)에 점검·보완했다. 과정 내부 32곳은 [23차](CONTENT_REVIEW_TEXTBOOK_P23_20261102.md)에 점검·보완했다. 후속은 [다음 할 일](WORK_HANDOFF.md)을 따른다.
 - 사용자 제공 검수 매트릭스 전문은 Git에 없으므로, 이 표가 그 문서의 모든 이슈 ID·출고 기준을 대체하지 않는다.
 - 1~16차의 검증 스크립트·JSON·화면은 저장소 밖에 있었고 새 환경에 없다. 17차 코드는 [scripts/review_p17.py](../scripts/review_p17.py), 18차는 [scripts/review_p18.py](../scripts/review_p18.py), 19차는 [scripts/review_p19.py](../scripts/review_p19.py), 20차는 [scripts/review_p20.py](../scripts/review_p20.py)에 보존했다. 과거 결과와 이번에 재실행한 검사를 구별한다.
 - 실제 배포 확인·외부 URL/권리 확인·전체 기기/입력 검증·전문가 감수·사용자 파일럿을 이 색인으로 완료 처리하지 않는다.
@@ -95,4 +96,4 @@ M11의 현행 파일은 `v1.1`이다. 이전 `v1.0` 경로를 복원해 링크�
 
 ## 과정 경계 이동 점검
 
-[22차](CONTENT_REVIEW_TEXTBOOK_P22_20261102.md)에서 M07→M08, M16→M17, M23→M24, M29→M30 및 최종 M37→course5 이동을 확인했다. 이는 위 표의 원본 환류·목표 점검과 별도인 내비게이션 수정이다. 과정 내부 32개 모듈의 마무리 이동은 후속이며 모든 모듈의 다음 학습 이동을 완료했다고 보지 않는다.
+[22차](CONTENT_REVIEW_TEXTBOOK_P22_20261102.md)에서 M07→M08, M16→M17, M23→M24, M29→M30 및 최종 M37→course5 이동을 확인했다. 이는 위 표의 원본 환류·목표 점검과 별도인 내비게이션 수정이다. 과정 내부 32개는 [23차](CONTENT_REVIEW_TEXTBOOK_P23_20261102.md)에 링크를 추가했다. 23차에서 전체 37개 마무리 화면을 2크기·148회 이동으로 재검사했다. 원본 환류 열은 안내 내용도 정합화한 M14·M25만 23차로 갱신하고 이동만 추가한 나머지는 이전 기록을 유지했다. 통계 내용 전체 검증이나 외부 URL 검사가 완료되었다는 뜻은 아니다.
