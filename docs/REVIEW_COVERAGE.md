@@ -1,6 +1,6 @@
 # 교재 검수 색인
 
-갱신일: **2026-11-02, 한국 시간**. Git에 보존된 1~20차 기록을 차수·모듈별로 연결했다. 재개 순서·원본 자료·남은 일은 [작업 인계](WORK_HANDOFF.md)를 먼저 읽는다.
+갱신일: **2026-11-02, 한국 시간**. Git에 보존된 1~21차 기록을 차수·모듈별로 연결했다. 재개 순서·원본 자료·남은 일은 [작업 인계](WORK_HANDOFF.md)를 먼저 읽는다.
 
 ## 완료한 차수와 보존 커밋
 
@@ -28,9 +28,10 @@
 | [18차](CONTENT_REVIEW_TEXTBOOK_P18_20261102.md) | M08~M16 점검·화면 보정; M09·M13·M15·M16 목표/내용 변경 | 27목표 연결·해석 분류·완료/도움말 화면 | `32c9261` |
 | [19차](CONTENT_REVIEW_TEXTBOOK_P19_20261102.md) | M17~M23 점검·판정 초기화·화면; M18·M19·M20·M21·M23 목표/내용 보완 | 회귀·GLM 목표 연결·해설 정합화·ΔD 질문 | `59c3053` |
 | [20차](CONTENT_REVIEW_TEXTBOOK_P20_20261102.md) | M24~M29 목표/내용·판정 초기화·화면 보정 | 재현성 지표·모형확률·조건부 비율·인과 가정 연결 | `f63d90d` |
+| [21차](CONTENT_REVIEW_TEXTBOOK_P21_20261102.md) | M30~M37 목표 연결·판정 초기화·화면 보정 | 인과·PCA·MAE·가상 관측·표준편차 해설 정합화 | `6aa4a92` |
 | [홈 UI/UX](HOME_UI_REVIEW_20261029.md) | 홈·과정/모듈 탐색 | 검색·필터·최근 모듈·의견 폼·접근성 | `8d7b2d2` |
 
-1~16차 및 홈 수정은 `3803f90` 이력에 포함되어 있다. 17차는 `1fe4c51`, 18차는 `32c9261`, 19차는 `59c3053`, 20차는 `f63d90d`이며 각 콘텐츠 커밋 뒤에 인계·색인 갱신 커밋이 이어진다. 최신 원격 보존 여부는 재개 시 Git으로 확인한다. 인계 문서 자체의 커밋은 다음 명령으로 확인한다.
+1~16차 및 홈 수정은 `3803f90` 이력에 포함되어 있다. 17차는 `1fe4c51`, 18차는 `32c9261`, 19차는 `59c3053`, 20차는 `f63d90d`, 21차는 `6aa4a92`이며 각 콘텐츠 커밋 뒤에 인계·색인 갱신 커밋이 이어진다. 최신 원격 보존 여부는 재개 시 Git으로 확인한다. 인계 문서 자체의 커밋은 다음 명령으로 확인한다.
 
 ```sh
 git log -1 --oneline -- README.md docs/WORK_HANDOFF.md docs/REVIEW_COVERAGE.md
@@ -38,7 +39,7 @@ git log -1 --oneline -- README.md docs/WORK_HANDOFF.md docs/REVIEW_COVERAGE.md
 
 ## 37개 모듈의 원본 환류·목표 연결 점검 기록
 
-모든 모듈에 적어도 한 번의 원본 환류 기록이 있다. 아래는 **최신 원본 환류 기록**과 **17~20차 목표 연결 점검 범위**를 구별한 색인이다. M02·M03은 17차에서 원문 내용을 새로 수정하지 않았으므로 원본 환류 열의 이전 기록을 유지했다. 18차에서도 내용은 유지하고 화면만 보정한 M08·M10·M11·M12·M14의 원본 환류 열은 이전 기록을 유지했다. 19차에서 내용은 유지하고 실습 동작·화면만 보정한 M17·M22도 원본 환류 열의 이전 기록을 유지했다. 모든 목표·문항·실습·검수 매트릭스 항목이 해결되었다는 완료표는 아니다. 이전 차수의 수정도 누적되어 있으므로 각 문서의 유지 사항과 근거를 함께 확인한다.
+모든 모듈에 적어도 한 번의 원본 환류 기록이 있다. 아래는 **최신 원본 환류 기록**과 **17~21차 목표 연결 점검 범위**를 구별한 색인이다. M02·M03은 17차에서 원문 내용을 새로 수정하지 않았으므로 원본 환류 열의 이전 기록을 유지했다. 18차에서도 내용은 유지하고 화면만 보정한 M08·M10·M11·M12·M14의 원본 환류 열은 이전 기록을 유지했다. 19차에서 내용은 유지하고 실습 동작·화면만 보정한 M17·M22도 원본 환류 열의 이전 기록을 유지했다. 21차에서 입력·화면만 보정한 M30·M33·M36도 원본 환류 열의 이전 기록을 유지했다. 모든 목표·문항·실습·검수 매트릭스 항목이 해결되었다는 완료표는 아니다. 이전 차수의 수정도 누적되어 있으므로 각 문서의 유지 사항과 근거를 함께 확인한다.
 
 | 모듈·현행 파일 | 최신 원본 환류 기록 | 목표 연결 점검 |
 |---|---|---|
@@ -71,20 +72,20 @@ git log -1 --oneline -- README.md docs/WORK_HANDOFF.md docs/REVIEW_COVERAGE.md
 | [M27 p해킹](../module_v1/M27_p해킹_v1.0.html) | [20차](CONTENT_REVIEW_TEXTBOOK_P20_20261102.md) | [20차 대응표](CONTENT_REVIEW_TEXTBOOK_P20_20261102.md) |
 | [M28 인과와상관](../module_v1/M28_인과와상관_v1.0.html) | [20차](CONTENT_REVIEW_TEXTBOOK_P20_20261102.md) | [20차 대응표](CONTENT_REVIEW_TEXTBOOK_P20_20261102.md) |
 | [M29 인과를밝히는방법](../module_v1/M29_인과를밝히는방법_v1.0.html) | [20차](CONTENT_REVIEW_TEXTBOOK_P20_20261102.md) | [20차 대응표](CONTENT_REVIEW_TEXTBOOK_P20_20261102.md) |
-| [M30 베이즈통계의사고방식](../module_v1/M30_베이즈통계의사고방식_v1.0.html) | [15차](CONTENT_REVIEW_TEXTBOOK_P15_20261029.md) | 17~20차 범위 밖 |
-| [M31 MCMC와베이즈통계사례](../module_v1/M31_MCMC와베이즈통계사례_v1.0.html) | [4차](CONTENT_REVIEW_TEXTBOOK_P4_20261028.md) | 17~20차 범위 밖 |
-| [M32 주성분분석과인자분석](../module_v1/M32_주성분분석과인자분석_v1.0.html) | [4차](CONTENT_REVIEW_TEXTBOOK_P4_20261028.md) | 17~20차 범위 밖 |
-| [M33 기계학습과비지도학습](../module_v1/M33_기계학습과비지도학습_v1.0.html) | [16차](CONTENT_REVIEW_TEXTBOOK_P16_20261029.md) | 17~20차 범위 밖 |
-| [M34 지도학습과예측성능](../module_v1/M34_지도학습과예측성능_v1.0.html) | [4차](CONTENT_REVIEW_TEXTBOOK_P4_20261028.md) | 17~20차 범위 밖 |
-| [M35 모형이란](../module_v1/M35_모형이란_v1.0.html) | [12차](CONTENT_REVIEW_TEXTBOOK_P12_20261029.md) | 17~20차 범위 밖 |
-| [M36 미분방정식모형](../module_v1/M36_미분방정식모형_v1.0.html) | [15차](CONTENT_REVIEW_TEXTBOOK_P15_20261029.md) | 17~20차 범위 밖 |
-| [M37 확률모형과수리모형의역할](../module_v1/M37_확률모형과수리모형의역할_v1.0.html) | [4차](CONTENT_REVIEW_TEXTBOOK_P4_20261028.md) | 17~20차 범위 밖 |
+| [M30 베이즈통계의사고방식](../module_v1/M30_베이즈통계의사고방식_v1.0.html) | [15차](CONTENT_REVIEW_TEXTBOOK_P15_20261029.md) | [21차 대응표](CONTENT_REVIEW_TEXTBOOK_P21_20261102.md) |
+| [M31 MCMC와베이즈통계사례](../module_v1/M31_MCMC와베이즈통계사례_v1.0.html) | [21차](CONTENT_REVIEW_TEXTBOOK_P21_20261102.md) | [21차 대응표](CONTENT_REVIEW_TEXTBOOK_P21_20261102.md) |
+| [M32 주성분분석과인자분석](../module_v1/M32_주성분분석과인자분석_v1.0.html) | [21차](CONTENT_REVIEW_TEXTBOOK_P21_20261102.md) | [21차 대응표](CONTENT_REVIEW_TEXTBOOK_P21_20261102.md) |
+| [M33 기계학습과비지도학습](../module_v1/M33_기계학습과비지도학습_v1.0.html) | [16차](CONTENT_REVIEW_TEXTBOOK_P16_20261029.md) | [21차 대응표](CONTENT_REVIEW_TEXTBOOK_P21_20261102.md) |
+| [M34 지도학습과예측성능](../module_v1/M34_지도학습과예측성능_v1.0.html) | [21차](CONTENT_REVIEW_TEXTBOOK_P21_20261102.md) | [21차 대응표](CONTENT_REVIEW_TEXTBOOK_P21_20261102.md) |
+| [M35 모형이란](../module_v1/M35_모형이란_v1.0.html) | [21차](CONTENT_REVIEW_TEXTBOOK_P21_20261102.md) | [21차 대응표](CONTENT_REVIEW_TEXTBOOK_P21_20261102.md) |
+| [M36 미분방정식모형](../module_v1/M36_미분방정식모형_v1.0.html) | [15차](CONTENT_REVIEW_TEXTBOOK_P15_20261029.md) | [21차 대응표](CONTENT_REVIEW_TEXTBOOK_P21_20261102.md) |
+| [M37 확률모형과수리모형의역할](../module_v1/M37_확률모형과수리모형의역할_v1.0.html) | [21차](CONTENT_REVIEW_TEXTBOOK_P21_20261102.md) | [21차 대응표](CONTENT_REVIEW_TEXTBOOK_P21_20261102.md) |
 
 M11의 현행 파일은 `v1.1`이다. 이전 `v1.0` 경로를 복원해 링크하지 않는다.
 
 ## 이 색인에 없는 완료 판단
 
-- M01~M07의 목표 21개는 17차, M08~M16의 목표 27개는 18차, M17~M23의 목표 21개는 19차, M24~M29의 목표 18개는 20차 대응표에 기록했다. M30 이후의 목표 연결과 과정 경계 점검은 [다음 할 일](WORK_HANDOFF.md)에 남아 있다.
+- M01~M07의 목표 21개는 17차, M08~M16의 목표 27개는 18차, M17~M23의 목표 21개는 19차, M24~M29의 목표 18개는 20차 대응표에 기록했다. M30~M37의 목표 24개는 21차에 기록해 전체 111목표의 연결을 점검했다. 과정 경계 점검은 [다음 할 일](WORK_HANDOFF.md)에 남아 있다.
 - 사용자 제공 검수 매트릭스 전문은 Git에 없으므로, 이 표가 그 문서의 모든 이슈 ID·출고 기준을 대체하지 않는다.
 - 1~16차의 검증 스크립트·JSON·화면은 저장소 밖에 있었고 새 환경에 없다. 17차 코드는 [scripts/review_p17.py](../scripts/review_p17.py), 18차는 [scripts/review_p18.py](../scripts/review_p18.py), 19차는 [scripts/review_p19.py](../scripts/review_p19.py), 20차는 [scripts/review_p20.py](../scripts/review_p20.py)에 보존했다. 과거 결과와 이번에 재실행한 검사를 구별한다.
 - 실제 배포 확인·외부 URL/권리 확인·전체 기기/입력 검증·전문가 감수·사용자 파일럿을 이 색인으로 완료 처리하지 않는다.
