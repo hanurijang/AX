@@ -205,6 +205,9 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
 
 .rotate{position:fixed;left:0;right:0;bottom:max(14px,env(safe-area-inset-bottom));text-align:center;font-size:13px;color:#3A4560;display:none}
 @media (orientation:portrait) and (max-width:700px){.rotate{display:block}}
+/* 여러 줄 피드백과 펼친 도움말이 실습 영역 안에 머물도록 조정. */
+.slide[data-step="5"] .pmsg{margin:0;flex-shrink:0}
+.slide[data-step="5"] .think{font-size:13px;line-height:1.35;padding:7px 10px;gap:6px}
 </style>
 </head>
 <body>
@@ -592,7 +595,7 @@ var TR=[[0.755,0.867,0.415,0.318,0.223,0.192,0.253,0.2,0.156,0.093,0.118,0.054,0
 var QUIZ=[
  {goal:1,type:"상황 판단",stem:"개선팀이 냉각 첨가제 A~G를 차례로 시험했더니 G만 p < 0.05였습니다. 보고서에 ‘첨가제 G가 강도를 높인다는 가설을 세우고 검증했다’고 썼다면, 이것은 무엇에 해당할까요?",
   opts:["HARKing (결과를 보고 가설 만들기)","가설검증형 연구","사전 등록","본페로니 교정"],ans:0,
-  exp:"HARKing은 ‘Hypothesizing After the Results are Known’의 약자로, 데이터를 얻어 결과를 보고 나서 가설을 만드는 행위입니다. 많은 실험을 반복하거나 여러 변수를 만져서 의미 있어 보이는 결과만 골라, 처음에 세운 가설인 양 보고하는 것을 말하며 선택을 숨기면 재현성 저하로 이어질 수 있습니다.",back:"s-4-1c",backLabel:"4-1 HARKing 다시 보기"},
+  exp:"HARKing은 결과를 보고 만든 가설을 사전에 세운 가설처럼 보고하는 행위입니다. 사후 탐색을 투명하게 밝히고 새 자료에서 검증하는 일과 구별합니다. 선택을 숨긴 확증적 보고는 재현성을 해칠 수 있습니다.",back:"s-4-1c",backLabel:"4-1 HARKing 다시 보기"},
  {goal:1,type:"O/X 오개념",stem:"“측정값이나 p값 숫자를 직접 고치지 않았다면 p-해킹이 아니다.”",
   opts:["O","X"],ans:1,ox:true,
   exp:"결과를 보고 표본·분석을 바꾸거나 유리한 결과만 선택하면서 그 과정을 무시하면 숫자를 직접 고치지 않아도 p-해킹이 될 수 있습니다. 사전에 검정력과 표본 수를 설계하는 것은 그 자체로 p-해킹이 아닙니다.",back:"s-4-1a",backLabel:"4-1 p-해킹의 정의 다시 보기"},
@@ -861,7 +864,7 @@ on("m27-myth",function(s){
   function reset(){[].forEach.call(qm.children,function(x,i){x.classList.toggle("on",i===cur);x.setAttribute("aria-pressed",i===cur);});var P=pr(MS[cur]);
     document.getElementById("m27-act").textContent=seen[cur]?fmt(P*.05)+"쌍":"?";document.getElementById("m27-bf").textContent=seen[cur]?(.05/P).toPrecision(3):"?";
     var m=document.getElementById("m27-msg3");m.className="pmsg";m.textContent="변수 "+MS[cur]+"개의 모든 쌍을 검정할 때 우연히 유의해지는 쌍의 수를 예측한 뒤 「계산해서 확인」을 누르세요.";draw();}
-  g.addEventListener("input",txt);
+  g.addEventListener("input",function(){txt();reset();});
   document.getElementById("m27-check").onclick=function(){seen[cur]=true;var P=pr(MS[cur]),E=P*.05,gv=+g.value,ok=Math.abs(gv-E)<=Math.max(2,.25*E),m=document.getElementById("m27-msg3");
     document.getElementById("m27-act").textContent=fmt(E)+"쌍";document.getElementById("m27-bf").textContent=(.05/P).toPrecision(3);m.className="pmsg "+(ok?"ok":"ng");
     m.textContent=(ok?"가까운 예측입니다. ":"차이가 있습니다. ")+"기댓값은 반복 평균입니다.";draw();};

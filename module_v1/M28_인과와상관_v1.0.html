@@ -205,6 +205,9 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
 
 .rotate{position:fixed;left:0;right:0;bottom:max(14px,env(safe-area-inset-bottom));text-align:center;font-size:13px;color:#3A4560;display:none}
 @media (orientation:portrait) and (max-width:700px){.rotate{display:block}}
+/* 여러 줄 피드백과 펼친 도움말이 실습 영역 안에 머물도록 조정. */
+.slide[data-step="5"] .pmsg{margin:0;flex-shrink:0}
+.slide[data-step="5"] .think{font-size:13px;line-height:1.35;padding:7px 10px;gap:6px}
 </style>
 </head>
 <body>
@@ -530,7 +533,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
           <div class="plabel" style="margin:0">결과 확인 · <span id="p2-count">0 / 0</span></div>
           <div class="bins" id="p2-bins"></div>
           <div class="p2row"><p class="pmsg" id="p2-msg"></p><button class="btn ghost" id="p2-reset">다시 하기</button></div>
-          <div class="think" style="flex-wrap:wrap"><span>생각해보기</span>중첩요인 사례로 예측은 할 수 있을까요, 개입은 할 수 있을까요?<details style="flex-basis:100%;font-weight:600"><summary style="cursor:pointer">예시 답</summary>예측은 할 수 있어도, 교육만 바꿔 불량률이 낮아진다고 개입할 수는 없습니다.</details></div>
+          <div class="think" style="flex-wrap:wrap"><span>생각해보기</span>공통 원인만 있는 사례에서 예측과 개입은 어떻게 다른가요?<details style="flex-basis:100%;font-weight:600"><summary style="cursor:pointer">예시 답</summary>같은 분포의 연관을 예측에 활용할 수 있지만 새 자료 성능을 확인해야 합니다. 공통 원인만 있는 구조에서는 교육만 바꾸어 불량률을 바꿀 수 없습니다.</details></div>
         </div>
       </div>
     </section>
@@ -617,7 +620,7 @@ var GLOSSARY=[
  ["인과 그래프","causal graph","원인과 결과를 원과 화살표로 나타낸 그림으로, 화살표 꼬리가 원인, 머리가 결과입니다.","근속 → 교육, 근속 → 불량률"],
  ["인과관계","causation","원인을 바꾸면 결과가 달라지는 관계로, 원인 → 결과라는 방향성이 특징입니다.","냉각 속도를 바꾸면 강도가 바뀜"],
  ["연관·상관","association, correlation","넓은 연관·의존성과 피어슨 선형 상관을 구별합니다. r=0이어도 의존성과 인과효과가 있을 수 있습니다.","교육 시간과 불량률 r = −0.80"],
- ["관찰 연구","observational study","실험 없이 현재 상태를 관찰해 데이터를 얻는 연구입니다. 그 자료만으로 인과를 확정할 수는 없지만, 측정한 중첩요인을 조정하면 조건부 연관을 볼 수 있습니다.","작업자 기록에서 교육 시간과 불량률 수집"],
+ ["관찰 연구","observational study","개입 없이 관찰한 자료를 쓰는 연구입니다. 교란 조정으로 조건부 연관을 볼 수 있으나 인과 해석에는 추가 가정이 필요합니다.","작업자 기록에서 교육 시간과 불량률 수집"],
  ["중첩요인","confounder","처치와 결과의 공통 원인처럼 인과효과 추정을 왜곡할 수 있는 요인입니다. 단순히 두 변수와 상관이 있다는 것만으로 정하지 않습니다.","근속연수"],
  ["실험 연구","experimental study","연구자가 조건에 개입해 자료를 얻는 연구입니다. 모든 실험이 무작위 배정인 것은 아닙니다.","교육 시간을 무작위로 배정"],
  ["무작위 통제 실험","randomized controlled trial, RCT","조건을 무작위 배정해 교란을 설계상 줄이는 실험입니다. 표본의 완전한 균형이나 비유의=무효과를 보장하지 않습니다.","무작위 배정 후 r = −0.18, p = 0.27"],
@@ -894,7 +897,7 @@ on("m28-chance",function(s){
   function reset(){[].forEach.call(qb.children,function(x,i){x.classList.toggle("on",i===cur);x.setAttribute("aria-pressed",i===cur);});var c=SC[cur][1];
     document.getElementById("m28-ob").textContent=fmV((OBS+c)*10,2);document.getElementById("m28-act").textContent=seen[cur]?fmV(c*10,2):"?";
     var m=document.getElementById("m28-msg3");m.className="pmsg";m.textContent="관찰 데이터의 기울기는 10시간당 "+fmV((OBS+c)*10,2)+"%p입니다. 근속연수의 영향을 생각해 모형의 개입 효과를 예측하세요.";draw();}
-  g.addEventListener("input",function(){txt();draw();});
+  g.addEventListener("input",function(){txt();reset();});
   document.getElementById("m28-check").onclick=function(){seen[cur]=true;var c=SC[cur][1],ac=c*10,gv=+g.value,ok=Math.abs(gv-ac)<=0.1,m=document.getElementById("m28-msg3");
     document.getElementById("m28-act").textContent=fmV(ac,2);m.className="pmsg "+(ok?"ok":"ng");
     m.textContent="모형 효과 "+fmV(ac,2)+"%p · 교란 약 −0.79%p";draw();};

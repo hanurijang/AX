@@ -206,6 +206,9 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
 
 .rotate{position:fixed;left:0;right:0;bottom:max(14px,env(safe-area-inset-bottom));text-align:center;font-size:13px;color:#3A4560;display:none}
 @media (orientation:portrait) and (max-width:700px){.rotate{display:block}}
+/* 여러 줄 피드백과 펼친 도움말이 실습 영역 안에 머물도록 조정. */
+.slide[data-step="5"] .pmsg{margin:0;flex-shrink:0}
+.slide[data-step="5"] .think{font-size:13px;line-height:1.35;padding:7px 10px;gap:6px}
 </style>
 </head>
 <body>
@@ -626,7 +629,7 @@ var QUIZ=[
 ];
 
 var BINS=["피셔류 검정","네이만-피어슨류 검정"];
-var CARDS=[["p값의 크기로 증거의 강력함을 평가","피셔류 검정"],["고정한 오류율 판단과 구별해 자료의 괴리 평가","피셔류 검정"],["p = 0.003처럼 p값 자체를 기재","피셔류 검정"],
+var CARDS=[["p값의 크기로 증거의 강력함을 평가","피셔류 검정"],["고정한 오류율 판단과 구별해 자료의 괴리 평가","피셔류 검정"],["고정 α의 결정 대신 p값 크기로 자료의 괴리를 평가","피셔류 검정"],
            ["대립가설과 제2종 오류를 고려","네이만-피어슨류 검정"],["p = 0.01과 0.001을 똑같이 ‘유의’로 봄","네이만-피어슨류 검정"],["효과크기, α, β로 n을 미리 정함","네이만-피어슨류 검정"]];
 var HINT={"피셔류 검정":"귀무가설과 데이터의 괴리 정도를 p값의 크기로 평가합니다.","네이만-피어슨류 검정":"대립가설·반복 오류율·검정력을 사전에 정해 의사결정 절차를 설계합니다."};
 
@@ -904,7 +907,7 @@ on("m25-tbl",function(s){
   function reset(){[].forEach.call(qb.children,function(x,i){var on=i===cur;x.classList.toggle("on",on);x.setAttribute("aria-pressed",on);});
     var d=SC[cur][1]/SC[cur][2];document.getElementById("m25-act").textContent=seen[cur]?d.toFixed(2):"?";document.getElementById("m25-lv").textContent=seen[cur]?lv(d):"?";
     var m=document.getElementById("m25-msg3");m.className="pmsg";m.textContent="두 분포가 표준편차의 몇 배만큼 떨어져 있는지 보고 d를 예측한 뒤 「계산해서 확인」을 누르세요.";draw();}
-  g.addEventListener("input",txt);
+  g.addEventListener("input",function(){txt();reset();});
   document.getElementById("m25-check").onclick=function(){seen[cur]=true;var c=SC[cur],d=c[1]/c[2],gv=+g.value,ok=Math.abs(gv-d)<=Math.max(.15,.2*d),m=document.getElementById("m25-msg3");
     document.getElementById("m25-act").textContent=d.toFixed(2);document.getElementById("m25-lv").textContent=lv(d);m.className="pmsg "+(ok?"ok":"ng");
     m.textContent=(ok?"가깝게 예측했습니다. ":"차이가 있습니다. ")+"d = "+c[1]+" ÷ "+c[2]+" ≈ "+d.toFixed(2)+"이며, 관례상 ‘"+lv(d)+"’입니다."+(cur>=2?" 라인 비교 ①과 ②는 평균 차이가 같은 5 MPa이지만 흩어짐이 달라 d가 4배 차이 납니다.":"");draw();};

@@ -206,6 +206,14 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
 
 .rotate{position:fixed;left:0;right:0;bottom:max(14px,env(safe-area-inset-bottom));text-align:center;font-size:13px;color:#3A4560;display:none}
 @media (orientation:portrait) and (max-width:700px){.rotate{display:block}}
+/* 여러 줄 피드백과 펼친 도움말이 실습 영역 안에 머물도록 조정. */
+.slide[data-step="5"] .pmsg{margin:0;flex-shrink:0}
+.slide[data-step="5"] .think{font-size:13px;line-height:1.35;padding:7px 10px;gap:6px}
+#p2 .bins{gap:6px}
+#p2 .bin{padding:4px;gap:3px}
+#p2 .bin h4{font-size:12px;padding:2px}
+#p2 .bin .dcard{font-size:11px;line-height:1.25;padding:3px 5px}
+#p2 .think{padding:5px 10px;gap:4px}
 </style>
 </head>
 <body>
@@ -314,16 +322,16 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
     <section class="slide" data-step="2">
       <div class="sh"><div class="sec">일상의 예시 4/5</div><h2>우리 가게 매출이 올랐다고 새 메뉴 덕일까요?</h2></div>
       <div class="body split">
-        <div class="fig"><svg viewBox="0 0 440 250" role="img" aria-label="새 메뉴를 낸 우리 가게와 내지 않은 옆 가게의 매출이 모두 올라, 차이의 변화만 새 메뉴 효과">
+        <div class="fig"><svg viewBox="0 0 440 250" role="img" aria-label="새 메뉴 도입·미도입 가게의 전후 변화 차이. 인과 해석에는 평행 경향 등 조건 필요">
           <line x1="60" y1="200" x2="400" y2="200" stroke="#9AA0AA"/><text x="110" y="220" text-anchor="middle" font-size="11" fill="#6B7280">작년</text><text x="350" y="220" text-anchor="middle" font-size="11" fill="#6B7280">올해</text>
-          <line x1="110" y1="120" x2="350" y2="60" stroke="#C2416E" stroke-width="3"/><circle cx="110" cy="120" r="6" fill="#C2416E"/><circle cx="350" cy="60" r="6" fill="#C2416E"/><text x="358" y="58" font-size="11.5" font-weight="800" fill="#C2416E">우리 가게(새 메뉴)</text>
+          <line x1="110" y1="120" x2="350" y2="60" stroke="#C2416E" stroke-width="3"/><circle cx="110" cy="120" r="6" fill="#C2416E"/><circle cx="350" cy="60" r="6" fill="#C2416E"/><text x="430" y="42" text-anchor="end" font-size="11.5" font-weight="800" fill="#C2416E">우리 가게(새 메뉴)</text>
           <line x1="110" y1="160" x2="350" y2="120" stroke="#2B8CC4" stroke-width="3"/><circle cx="110" cy="160" r="6" fill="#2B8CC4"/><circle cx="350" cy="120" r="6" fill="#2B8CC4"/><text x="358" y="124" font-size="11.5" font-weight="800" fill="#1C6EA4">옆 가게</text>
           <line x1="110" y1="120" x2="350" y2="80" stroke="#C2416E" stroke-width="1.5" stroke-dasharray="5 4"/><text x="230" y="78" text-anchor="middle" font-size="10.5" fill="#6B7280">새 메뉴가 없었다면</text>
-          <text x="220" y="244" text-anchor="middle" font-size="11.5" font-weight="700" fill="#1B2A4A">동네 전체가 오른 만큼은 빼고 봐야 함</text>
+          <text x="220" y="244" text-anchor="middle" font-size="11.5" font-weight="700" fill="#1B2A4A">평행 경향 등을 가정해 변화 차이를 봄</text>
         </svg></div>
         <div class="side">
-          <ul class="key"><li>함께 변한 만큼을 빼야 순수한 효과가 남습니다.</li></ul>
-          <p class="exp">새 메뉴를 낸 뒤 매출이 크게 올랐어도, 같은 기간 새 메뉴를 내지 않은 옆 가게 매출도 올랐다면 동네 전체의 경기가 좋아진 영향이 섞여 있습니다. 옆 가게가 오른 만큼은 빼고, 두 가게의 차이가 얼마나 더 벌어졌는지를 보아야 새 메뉴의 효과에 가깝습니다. 비교 대상의 변화를 기준으로 삼는 생각입니다.</p>
+          <ul class="key"><li>비교 가게의 변화로 공통 추세를 가늠합니다.</li></ul>
+          <p class="exp">새 메뉴를 낸 뒤 매출이 크게 올랐어도, 같은 기간 새 메뉴를 내지 않은 옆 가게 매출도 올랐다면 동네 전체의 경기가 좋아진 영향이 섞여 있습니다. 두 가게의 전후 변화 차이를 계산합니다. 새 메뉴가 없었다면 같은 정도로 변했을 것이라는 평행 경향, 다른 동시 개선이 없다는 등의 가정이 맞아야 인과효과로 해석할 수 있습니다.</p>
           <p class="next"><span>본문에서</span>4-4 통계적 인과 추론으로 이어집니다.</p>
         </div>
       </div>
@@ -890,7 +898,7 @@ on("m29-did",function(s){
   function reset(){[].forEach.call(qb.children,function(x,i){x.classList.toggle("on",i===cur);x.setAttribute("aria-pressed",i===cur);});var v=SC[cur];
     document.getElementById("m29-aa").textContent=fmW(v[1]-v[0],1);document.getElementById("m29-act").textContent=seen[cur]?fmW(did(v),1):"?";
     var m=document.getElementById("m29-msg3");m.className="pmsg";m.textContent="두 라인의 전후 변화를 보고 DID 값을 예측한 뒤 「이중차분 계산」을 누르세요.";draw();}
-  g.addEventListener("input",txt);
+  g.addEventListener("input",function(){txt();reset();});
   document.getElementById("m29-check").onclick=function(){seen[cur]=true;var v=SC[cur],d=did(v),gv=+g.value,ok=Math.abs(gv-d)<=0.05,m=document.getElementById("m29-msg3");
     document.getElementById("m29-act").textContent=fmW(d,1);m.className="pmsg "+(ok?"ok":"ng");
     m.textContent=(ok?"계산이 맞습니다. ":"차이가 있습니다. ")+"("+v[1].toFixed(1)+" − "+v[3].toFixed(1)+") − ("+v[0].toFixed(1)+" − "+v[2].toFixed(1)+") = "+fmW(d,1)+"%p입니다. A의 전후 차("+fmW(v[1]-v[0],1)+")만 보면 공통 변화가 섞입니다. 인과 해석에는 평행 경향 등의 조건이 필요합니다.";draw();};
