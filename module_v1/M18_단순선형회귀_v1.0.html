@@ -381,7 +381,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
           <text x="333" y="156" text-anchor="middle" font-size="11" fill="#C9D3E6">계수 · R² · 오차 · 방향</text>
         </svg></div>
         <div class="side">
-          <p class="exp">네 장면은 관계를 ‘시작값 + 기울기 × x’로 나타내고, 얼마나 잘 맞는지 점수를 매기고, 오차가 일정한지 확인하고, 어느 쪽에서 어느 쪽을 볼지 정하는 순서로 이어집니다. 가열 온도로 강판 강도를 예측하거나 가동 시간으로 마모량을 설명할 때도 같은 순서로 회귀분석을 합니다.</p>
+          <p class="exp">회귀식은 설명변수로 반응변수의 평균적 경향을 나타냅니다. 직선을 자료에 맞춘 뒤에는 잔차와 불확실성, 새 자료의 예측 성능도 확인해야 합니다.</p>
           <p class="next"><span>다음 질문</span>회귀모형은 어떤 식으로 쓸까?</p>
         </div>
       </div>
@@ -413,7 +413,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
           </div>
         </div>
         <div class="side">
-          <ul class="key"><li><b>최소제곱법</b>: 잔차제곱합 E를 최소로</li><li><b>잔차</b>: 회귀식 값과 데이터의 차이</li></ul>
+          <ul class="key"><li><b>최소제곱법</b>: 잔차제곱합 E를 최소로</li><li><b>잔차</b>: 관측값 − 적합값</li></ul>
           <p class="exp">‘데이터에 가능한 한 잘 들어맞는 회귀모형이 좋은 모형’이라고 생각하면, 데이터와 회귀식의 차이가 가능한 한 작은 것을 찾으면 됩니다. 회귀식으로 구한 ŷᵢ와 데이터 yᵢ의 차이인 잔차를 제곱해 모두 더한 E는 a와 b의 2차 함수라 볼록한 그릇 모양이 되며, 그 바닥에서 E가 최소입니다. 이렇게 a와 b를 구하는 방법이 최소제곱법입니다.</p>
           <p class="next"><span>다음 질문</span>구한 a와 b는 얼마나 믿을 만할까?</p>
         </div>
@@ -899,7 +899,7 @@ on("m18-assume",function(s){
 
 on("m18-resid",function(s){
   bxK(s,6,6,408,190);var X=linK(40,95,56,396),Y=linK(-10,10,170,30);axesK(s,X,Y,40,95,-10,10,[40,50,60,70,80,90],[-10,-5,0,5,10],"수학 x",null);
-  tK(s,20,24,"잔차 = 과학 − 회귀식 값",{a:"start",fw:800,fs:10.5});el("line",{x1:56,x2:396,y1:Y(0),y2:Y(0),stroke:"#C2416E","stroke-width":2},s);
+  tK(s,64,16,"잔차 = 과학 − 회귀식 값",{a:"start",fw:800,fs:10.5});el("line",{x1:56,x2:396,y1:Y(0),y2:Y(0),stroke:"#C2416E","stroke-width":2},s);
   STU.forEach(function(n,i){var r=SCI[i]-yhK(MATH[i]);el("line",{x1:X(MATH[i]),x2:X(MATH[i]),y1:Y(0),y2:Y(r),stroke:"#9AA0AA"},s);el("circle",{cx:X(MATH[i]),cy:Y(r),r:5,fill:"#2B8CC4"},s);tK(s,X(MATH[i])+7,Y(r)+4,n,{a:"start",fw:800,fs:9.5,halo:true});});
   bxK(s,6,204,200,60,"#E3F1EA");tK(s,106,226,"정규성 (샤피로-윌크)",{fw:800,fs:11,c:C.ok});tK(s,106,248,"p = 0.43 → 기각 안 함",{fw:800,fs:12});
   bxK(s,214,204,200,60,"#E3F1EA");tK(s,314,226,"등분산성 (브루쉬-페이건)",{fw:800,fs:11,c:C.ok});tK(s,314,248,"p = 0.39 → 기각 안 함",{fw:800,fs:12});
@@ -926,18 +926,20 @@ on("m18-purpose",function(s){
   function upd(){
     var a=+as.value,b=+bs.value/100,E=0;STU.forEach(function(n,i){E+=Math.pow(a+b*MATH[i]-SCI[i],2);});
     document.getElementById("m18-av").textContent=a;document.getElementById("m18-bv").textContent=b.toFixed(2);document.getElementById("m18-e").textContent=E.toFixed(1);
-    clear(svg);var X=linK(40,95,46,330),Y=linK(30,100,156,8);
-    [40,60,80,100].forEach(function(t){el("line",{x1:46,x2:330,y1:Y(t),y2:Y(t),stroke:C.grid},svg);tK(svg,40,Y(t)+4,t,{a:"end",fs:9.5,c:C.gray2,fw:500});});
+    clear(svg);var lo=10*Math.floor(Math.min(30,a+b*40,a+b*95)/10),hi=10*Math.ceil(Math.max(100,a+b*40,a+b*95)/10),step=10*Math.ceil((hi-lo)/50),ticks=[];
+    svg.setAttribute("data-axis-low",lo);svg.setAttribute("data-axis-high",hi);
+    var X=linK(40,95,46,330),Y=linK(lo,hi,156,8);for(var v=lo;v<=hi;v+=step)ticks.push(v);
+    ticks.forEach(function(t){el("line",{x1:46,x2:330,y1:Y(t),y2:Y(t),stroke:C.grid},svg);tK(svg,40,Y(t)+4,t,{a:"end",fs:9.5,c:C.gray2,fw:500});});
     [40,50,60,70,80,90].forEach(function(t){tK(svg,X(t),168,t,{fs:9.5,c:C.gray,fw:500});});
     el("line",{x1:X(40),y1:Y(yhK(40)),x2:X(95),y2:Y(yhK(95)),stroke:"#C9D3E6","stroke-width":2,"stroke-dasharray":"5 3"},svg);
-    var y40=Math.max(25,Math.min(105,a+b*40)),y95=Math.max(25,Math.min(105,a+b*95));el("line",{x1:X(40),y1:Y(a+b*40),x2:X(95),y2:Y(a+b*95),stroke:"#C2416E","stroke-width":2.5},svg);
-    STU.forEach(function(n,i){el("line",{x1:X(MATH[i]),x2:X(MATH[i]),y1:Y(SCI[i]),y2:Y(Math.max(25,Math.min(105,a+b*MATH[i]))),stroke:"#B42318","stroke-width":1.4},svg);});
+    el("line",{x1:X(40),y1:Y(a+b*40),x2:X(95),y2:Y(a+b*95),stroke:"#C2416E","stroke-width":2.5},svg);
+    STU.forEach(function(n,i){el("line",{x1:X(MATH[i]),x2:X(MATH[i]),y1:Y(SCI[i]),y2:Y(a+b*MATH[i]),"data-student":i,stroke:"#B42318","stroke-width":1.4},svg);});
     stuK(svg,X,Y,"#2B8CC4",4.2);
     var W=110,frac=Math.min(1,EMIN/E);bxK(svg,344,14,120,140,"#F3F5F9");tK(svg,404,34,"잔차제곱합 E",{fw:800,fs:10.5});
     el("rect",{x:364,y:44,width:80,height:96,fill:"#fff",stroke:C.grid},svg);var top=Math.max(E,400)*1.05,hE=96*E/top;el("rect",{x:364,y:140-hE,width:38,height:hE,fill:"#C2416E"},svg);
     var hM=96*EMIN/top;el("rect",{x:406,y:140-hM,width:38,height:hM,fill:"#23704F"},svg);tK(svg,383,152,"내 직선",{fs:9,fw:700});tK(svg,425,152,"최소",{fs:9,fw:700});
     var m=document.getElementById("m18-msg"),ok=E<170;m.className="pmsg"+(ok?" ok":"");
-    m.textContent=ok?"찾았습니다. E = "+E.toFixed(1)+"로 최소값 162.4에 가깝습니다. 연한 점선이 최소제곱 직선입니다.":"현재 E = "+E.toFixed(1)+"입니다. 빨간 잔차 막대가 전체적으로 짧아지도록 a와 b를 함께 움직여 보세요.";
+    m.textContent=ok?"찾았습니다. E = "+E.toFixed(1)+"로 최소값 162.4에 가깝습니다. 연한 점선이 최소제곱 직선입니다.":"현재 E = "+E.toFixed(1)+"입니다. 빨간 잔차 막대가 전체적으로 짧아지도록 a와 b를 움직여 보세요. 세로축 범위도 함께 확인하세요.";
   }
   as.addEventListener("input",upd);bs.addEventListener("input",upd);upd();
 })();

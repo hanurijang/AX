@@ -382,7 +382,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
           <text x="333" y="144" text-anchor="middle" font-size="11.5" fill="#C9D3E6">귀무가설 · p값 · 유의수준</text>
         </svg></div>
         <div class="side">
-          <p class="exp">네 장면은 비교할 집단을 두고, 부정하고 싶은 쪽을 기본값으로 삼고, 아무 차이가 없어도 우연히 생기는 차이를 고려하고, 그 가정 아래 너무 드문 결과라면 가정을 의심하는 순서로 이어집니다. 통계학은 이를 가설검정이라는 방법으로 정리합니다.</p>
+          <p class="exp">차이가 보인다고 곧바로 효과가 있다고 결론 내릴 수는 없습니다. 효과가 없다는 가정 아래 지금보다 극단적인 결과가 얼마나 드문지 계산해 봅시다.</p>
           <p class="next"><span>다음 질문</span>가설을 검증하는 분석이란 무엇일까?</p>
         </div>
       </div>
@@ -428,9 +428,9 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
     <section class="slide bdpage" data-step="3" id="s-4-2b">
       <div class="sh"><div class="sec">4-2 귀무가설과 대립가설</div><h2><span class="q">Q</span>귀무가설의 기각과 비기각은 무슨 뜻일까요?</h2></div>
       <div class="body split even">
-        <div class="fig"><svg id="m11-logic" viewBox="0 0 420 270" role="img" aria-label="귀무가설이 틀렸음을 보여 대립가설을 지지하는 흐름과 반대 방향은 불가능"></svg></div>
+        <div class="fig"><svg id="m11-logic" viewBox="0 0 420 270" role="img" aria-label="귀무가설의 기각은 반대 증거이며, 비기각은 귀무가설의 증명이 아님"></svg></div>
         <div class="side">
-          <ul class="key"><li>귀무가설이 틀렸음을 보여 대립가설을 지지합니다.</li><li>반대 방향의 흐름은 불가능합니다.</li></ul>
+          <ul class="key"><li>귀무가설과 자료가 얼마나 맞지 않는지 평가합니다.</li><li>기각하지 못했다고 귀무가설이 증명되지는 않습니다.</li></ul>
           <p class="exp">이 차이 검정은 귀무가설과 분석 가정 아래 관찰한 검정통계량 이상으로 극단적인 결과가 얼마나 드문지 묻습니다. 드물면 귀무가설과 자료의 불일치 증거로 보지만, 논리적 모순을 찾아 참·거짓을 증명하는 귀류법은 아닙니다. p값이 크면 기각할 증거가 부족하다는 뜻이며 평균이 같다는 증명은 아닙니다. 허용 차이를 정하는 동등성 검정 등은 다른 가설로 설계합니다.</p>
           <p class="next"><span>다음 질문</span>효과가 없어도 표본평균에 차이가 생길까?</p>
         </div>
@@ -646,7 +646,7 @@ var GLOSSARY=[
  ["실험군","treatment group","어떠한 조치를 취한 집단입니다.","신약을 투여한 7명"],
  ["대조군","control group","실험군과 비교·대조하려고 마련한 집단입니다.","위약을 투여한 7명"],
  ["귀무가설","null hypothesis","검정의 기준으로 두는 가설입니다. 여기서는 모집단 평균의 차이가 0이라는 가설이며, 모든 귀무가설이 단순한 한 상태인 것은 아닙니다.","μA = μB"],
- ["대립가설","alternative hypothesis","밝히고 싶은 가설로, 귀무가설이 틀렸음을 보여 지지합니다.","μA ≠ μB"],
+ ["대립가설","alternative hypothesis","귀무가설과 대비하는 가설입니다. 검정의 가정 아래 귀무가설을 기각하면 이를 지지하는 증거로 해석합니다.","μA ≠ μB"],
  ["p값","p-value","귀무가설과 검정의 가정 아래 관찰한 검정통계량 이상으로 극단적인 값이 나올 확률입니다. 귀무가설이 참일 확률은 아닙니다.","차이 −10.9 → p ≈ 0.02"],
  ["유의수준","significance level","검정 전에 정하는 제1종 오류율의 기준 α입니다. 유효한 p값을 α와 비교하며, 보통 0.05를 씁니다.","p ≈ 0.02 < 0.05 → 기각"],
  ["통계적으로 유의","statistically significant","p값이 유의수준 이하여서 귀무가설을 기각했다는 뜻입니다.","신약군과 위약군에 통계적으로 유의한 차이가 있다"]
@@ -875,10 +875,10 @@ on("m11-alpha",function(s){
   mkB(s,"aB",C.navy3);
   var X=linB(0,1,30,390);bxB(s,6,6,408,96);tB(s,22,28,"p값의 자리 (0 ~ 1)",{a:"start",fw:800,fs:12});
   el("rect",{x:X(0),y:46,width:X(.05)-X(0),height:24,fill:"#FBE4E1",stroke:"#B42318"},s);el("rect",{x:X(.05),y:46,width:X(1)-X(.05),height:24,fill:"#F3F5F9",stroke:C.gray2},s);
-  tB(s,X(.05),88,"α = 0.05",{fw:800,c:"#B42318"});tB(s,X(0),88,"0",{fs:10,c:C.gray});tB(s,X(1),88,"1",{fs:10,c:C.gray});tB(s,X(.5),63,"p > 0.05 → 판단 보류",{fw:700,fs:11});
+  tB(s,114,88,"α = 0.05",{fw:800,c:"#B42318"});tB(s,X(0),88,"0",{fs:10,c:C.gray});tB(s,X(1),88,"1",{fs:10,c:C.gray});tB(s,X(.5),63,"p > 0.05 → 판단 보류",{fw:700,fs:11});
   el("path",{d:"M"+X(.02)+" 44 l-5 -9 h10z",fill:"#B42318"},s);tB(s,390,28,"▼ 혈압 예 p ≈ 0.02",{a:"end",fs:10.5,fw:800,c:"#B42318"});
   bxB(s,6,112,200,152,"#FBE4E1","#B42318");tB(s,106,138,"p ≤ 0.05",{fw:800,fs:14,c:"#B42318"});
-  tB(s,106,166,"귀무가설 기각",{fw:800});tB(s,106,188,"대립가설 채택",{fw:800});tB(s,106,214,"‘통계적으로 유의한",{fs:11,c:"#22262E"});tB(s,106,232,"차이가 있다’",{fs:11,c:"#22262E"});tB(s,106,254,"대립가설의 증거 하나",{fs:10,c:C.gray});
+  tB(s,106,166,"귀무가설 기각",{fw:800});tB(s,106,188,"대립가설 지지 증거",{fw:800});tB(s,106,214,"‘통계적으로 유의한",{fs:11,c:"#22262E"});tB(s,106,232,"차이가 있다’",{fs:11,c:"#22262E"});tB(s,106,254,"대립가설의 증거 하나",{fs:10,c:C.gray});
   bxB(s,214,112,200,152,"#F3F5F9",C.gray2);tB(s,314,138,"p > 0.05",{fw:800,fs:14});
   tB(s,314,166,"기각하지 못함",{fw:800});tB(s,314,188,"판단 보류",{fw:800});tB(s,314,214,"‘유의한 차이를",{fs:11,c:"#22262E"});tB(s,314,232,"발견하지 못했다’",{fs:11,c:"#22262E"});tB(s,314,254,"귀무가설이 옳다는 뜻 아님",{fs:10,c:"#B42318",fw:800});
 });
@@ -890,7 +890,7 @@ on("m11-flow",function(s){
     el("line",{x1:210,y1:b[1]+42,x2:210,y2:b[1]+58,stroke:C.amber,"stroke-width":3,"marker-end":"url(#fB)"},s);});
   tB(s,60,186,"p < 0.05",{fw:800,fs:12});tB(s,360,186,"p ≥ 0.05",{fw:800,fs:12});
   el("line",{x1:180,y1:160,x2:120,y2:196,stroke:C.amber,"stroke-width":3,"marker-end":"url(#fB)"},s);el("line",{x1:240,y1:160,x2:300,y2:196,stroke:C.amber,"stroke-width":3,"marker-end":"url(#fB)"},s);
-  bxB(s,20,200,180,62,C.navy);tB(s,110,226,"귀무가설 기각",{fw:800,c:"#fff",fs:12.5});tB(s,110,246,"대립가설 채택",{fw:800,c:"#FCF3D9",fs:12});
+  bxB(s,20,200,180,62,C.navy);tB(s,110,226,"귀무가설 기각",{fw:800,c:"#fff",fs:12.5});tB(s,110,246,"대립가설 지지 증거",{fw:800,c:"#FCF3D9",fs:12});
   bxB(s,220,200,180,62,"#F3F5F9",C.gray2);tB(s,310,226,"기각하지 않음",{fw:800,fs:12.5});tB(s,310,246,"판단 보류",{fw:800,fs:12,c:C.gray});
 });
 
@@ -905,7 +905,7 @@ on("m11-flow",function(s){
     clear(svg);var X=linB(-16,16,30,456);histB(svg,PERM,-16,16,1,X,160,130,function(){return C.soft;},null,cut);
     axisB(svg,X,160,[-15,-10,-5,0,5,10,15],"x̄A − x̄B (mmHg)");
     [cut,-cut].forEach(function(x,i){if(Math.abs(x)<=16)el("line",{x1:X(x),x2:X(x),y1:20,y2:160,stroke:"#B42318","stroke-width":i?1.5:2.5,"stroke-dasharray":i?"4 3":"none"},svg);});
-    tB(svg,X(v)+(v<0?-4:4),16,"관찰 "+(v>0?"+":v<0?"−":"")+Math.abs(v).toFixed(1),{a:v<0?"end":"start",fw:800,c:"#B42318",halo:true});
+    tB(svg,X(v)+(v<-10?4:v>10?-4:v<0?-4:4),16,"관찰 "+(v>0?"+":v<0?"−":"")+Math.abs(v).toFixed(1),{a:v<-10?"start":v>10?"end":v<0?"end":"start",fw:800,c:"#B42318",halo:true});
     var m=document.getElementById("m11-msg");
     if(near){m.className="pmsg ok";m.textContent="실제 관찰값 −76/7(표시 −10.9)의 절댓값을 기준으로 합니다. 3,432가지 중 "+r.c+"가지만 이만큼 극단적이어서 p ≈ "+r.p.toFixed(3)+"입니다. 0.05보다 작으므로 귀무가설을 기각합니다.";}
     else if(sig){m.className="pmsg ok";m.textContent="p "+(r.c===0?"< 0.001":"= "+r.p.toFixed(3))+"로 0.05 이하입니다. 귀무가설 세계에서 이만큼의 차이는 드물어 귀무가설을 기각하고, 통계적으로 유의한 차이가 있다고 판단합니다.";}

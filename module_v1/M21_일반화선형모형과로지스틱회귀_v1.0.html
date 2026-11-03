@@ -376,7 +376,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
           <text x="333" y="156" text-anchor="middle" font-size="11" fill="#C9D3E6">가능도 · 오즈비</text>
         </svg></div>
         <div class="side">
-          <p class="exp">네 장면은 결과가 두 값일 때 확률을 다루고, 데이터를 가장 잘 설명하는 값을 고르고, 확률이 S자로 변하며, 확률 대신 비율로 비교하기도 한다는 순서로 이어집니다. 가열 온도에 따른 코일 결함 발생이나 압력에 따른 부품 파손처럼 0/1로 기록되는 현장 데이터도 같은 방법으로 분석합니다.</p>
+          <p class="exp">0/1 결과에서는 직선의 값보다 사건이 일어날 확률을 알고 싶습니다. 반응변수의 분포와 연결함수를 정해 확률을 모형화하고, 계수를 오즈비로 읽어 봅시다.</p>
           <p class="next"><span>다음 질문</span>선형회귀를 어떻게 넓힐까?</p>
         </div>
       </div>
@@ -599,7 +599,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
       <div class="body split">
         <div class="pcol">
           <div class="plabel">해보기 · 농도를 고르고, 그 농도에서 벌레가 죽을 확률을 예측하세요</div>
-          <div class="fig" style="flex:1"><svg id="m21-p3-svg" viewBox="0 0 470 210" role="img" aria-label="벌레 데이터, 로지스틱 곡선과 내 예측"></svg></div>
+          <div class="fig" style="flex:1"><svg id="m21-p3-svg" viewBox="0 0 470 226" role="img" aria-label="벌레 데이터, 로지스틱 곡선과 내 예측"></svg></div>
         </div>
         <div class="pcol" style="gap:9px;justify-content:center">
           <div class="mbtns" id="m21-qc" style="gap:6px"></div>
@@ -932,11 +932,12 @@ on("m21-cc",function(s){
     [0,.5,1].forEach(function(t){el("line",{x1:40,x2:330,y1:Y(t),y2:Y(t),stroke:C.grid},svg);tN(svg,34,Y(t)+4,t,{a:"end",fs:9.5,c:C.gray2,fw:500});});
     [0,4,8,12].forEach(function(t){tN(svg,X(t),164,t,{fs:9.5,c:C.gray,fw:500});});
     curveN(svg,X,Y,LA,LB,0,12,"#C9D3E6",2);bugDots(svg,X,Y,3.8);curveN(svg,X,Y,a,b,0,12,"#C2416E",2.8);
-    var W=96;bxN(svg,346,14,118,140,"#F3F5F9");tN(svg,405,32,"로그 가능도",{fw:800,fs:10.5});var Yl=linN(-40,0,140,46);
-    el("rect",{x:366,y:46,width:80,height:94,fill:"#fff",stroke:C.grid},svg);var v=Math.max(-40,ll);el("rect",{x:368,y:Yl(v),width:36,height:140-Yl(v),fill:"#C2416E"},svg);el("rect",{x:408,y:Yl(LLMAX),width:36,height:140-Yl(LLMAX),fill:"#23704F"},svg);
+    var W=96;bxN(svg,346,14,118,140,"#F3F5F9");tN(svg,405,32,"로그 가능도",{fw:800,fs:10.5});var lower=-10*Math.ceil(Math.max(10,-ll,-LLMAX)/10),Yl=linN(lower,0,140,46);svg.setAttribute("data-loglik-low",lower);
+    el("rect",{x:366,y:46,width:80,height:94,fill:"#fff",stroke:C.grid},svg);el("rect",{x:368,y:Yl(0),width:36,height:Yl(ll)-Yl(0),fill:"#C2416E","data-loglik":ll},svg);el("rect",{x:408,y:Yl(0),width:36,height:Yl(LLMAX)-Yl(0),fill:"#23704F","data-loglik":LLMAX},svg);
+    tN(svg,362,50,"0",{a:"end",fs:8,c:C.gray});tN(svg,362,140,lower,{a:"end",fs:8,c:C.gray});
     tN(svg,386,152,"내 곡선",{fs:9,fw:700});tN(svg,426,152,"최대",{fs:9,fw:700});
     var m=document.getElementById("m21-msg"),ok=ll>-9.5;m.className="pmsg"+(ok?" ok":"");
-    m.textContent=ok?"log L = "+fmN(ll)+" (최대 −9.11)에 가깝습니다.":"현재 로그 가능도는 "+fmN(ll)+"입니다. 빨간 점(사망)이 많은 곳에서 곡선이 1에, 파란 점(생존)이 많은 곳에서 0에 가깝도록 a와 b를 함께 움직이세요. 막대가 짧을수록(0에 가까울수록) 좋습니다.";
+    m.textContent=ok?"log L = "+fmN(ll)+" (최대 −9.11)에 가깝습니다.":"현재 로그 가능도는 "+fmN(ll)+"입니다. 빨간 점(사망)이 많은 곳에서 곡선이 1에, 파란 점(생존)이 많은 곳에서 0에 가깝도록 a와 b를 함께 움직이세요. 0에서 아래로 그린 막대가 짧을수록 좋습니다. 축 범위도 함께 바뀝니다.";
   }
   as.addEventListener("input",upd);bs.addEventListener("input",upd);upd();
 })();
@@ -947,7 +948,7 @@ on("m21-cc",function(s){
   XS.forEach(function(v){var b=document.createElement("button");b.type="button";b.className="mbtn";b.textContent="농도 "+v;b.style.padding="3px 8px";b.onclick=function(){cur=v;checked=false;reset();};qb.appendChild(b);});
   function draw(){clear(svg);var X=linN(0,12,44,456),Y=linN(0,1,180,14);
     [0,.25,.5,.75,1].forEach(function(t){el("line",{x1:44,x2:456,y1:Y(t),y2:Y(t),stroke:C.grid},svg);tN(svg,38,Y(t)+4,(t*100)+"%",{a:"end",fs:9.5,c:C.gray2,fw:500});});
-    [0,2,4,6,8,10,12].forEach(function(t){tN(svg,X(t),196,t,{fs:9.5,c:C.gray,fw:500});});tN(svg,456,204,"살충제 농도",{a:"end",fs:10,c:C.gray});
+    [0,2,4,6,8,10,12].forEach(function(t){tN(svg,X(t),196,t,{fs:9.5,c:C.gray,fw:500});});tN(svg,456,216,"살충제 농도",{a:"end",fs:10,c:C.gray});
     bugDots(svg,X,Y,3.8);if(checked)curveN(svg,X,Y,null,null,0,12,"#C2416E",2.5);
     el("line",{x1:X(cur),x2:X(cur),y1:14,y2:180,stroke:C.navy3,"stroke-dasharray":"4 3"},svg);
     el("circle",{cx:X(cur),cy:Y(+g.value/100),r:7,fill:C.amber,stroke:"#fff","stroke-width":2},svg);tN(svg,X(cur)+(cur>8?-10:10),Y(+g.value/100)+4,"내 예측 "+g.value+"%",{a:cur>8?"end":"start",fw:800,c:C.amberInk,halo:true});

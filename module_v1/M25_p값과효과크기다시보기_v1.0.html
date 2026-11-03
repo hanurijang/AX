@@ -376,7 +376,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
           <text x="333" y="156" text-anchor="middle" font-size="11" fill="#C9D3E6">함께 읽기</text>
         </svg></div>
         <div class="side">
-          <p class="exp">네 장면은 p값이 어떤 조건의 확률인지, 크기를 볼지 기준선만 볼지, 데이터가 많을 때 생기는 착시, 차이를 흩어짐에 견주어 보는 법으로 이어집니다. 신규 열처리 조건이 p &lt; 0.05로 유의하더라도, 실제 개선 폭이 공정을 바꿀 만큼 큰지는 효과크기로 따로 판단해야 합니다.</p>
+          <p class="exp">p값만으로 효과의 크기나 채택 가치를 알 수는 없습니다. 원래 단위의 차이와 신뢰구간을 보고, 효과크기와 표본크기가 검정 결과에 주는 영향도 확인해 봅시다.</p>
           <p class="next"><span>다음 질문</span>p값은 정확히 무엇의 확률일까?</p>
         </div>
       </div>
@@ -806,7 +806,7 @@ on("m25-case",function(s){
 });
 
 on("m25-h0",function(s){
-  bxS(s,4,4,412,126,"#F3F5F9");var X=linS(0,100,44,404),Y=linS(0,1,112,22);
+  bxS(s,4,4,412,126,"#F3F5F9");var X=linS(0,100,44,404),Y=linS(0,1,112,38);
   tS(s,14,18,"t검정 100번의 p값 (귀무가설이 옳음)",{a:"start",fw:800,fs:10.5});
   [0,.5,1].forEach(function(t){el("line",{x1:44,x2:404,y1:Y(t),y2:Y(t),stroke:C.grid},s);tS(s,38,Y(t)+4,t,{a:"end",fs:9,c:C.gray2,fw:500});});
   el("line",{x1:44,x2:404,y1:Y(.05),y2:Y(.05),stroke:RED,"stroke-width":1.5,"stroke-dasharray":"4 3"},s);

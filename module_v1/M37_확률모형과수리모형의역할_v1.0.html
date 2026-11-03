@@ -799,7 +799,7 @@ on("m37-stat",function(s){
   [0,0.25,0.5,0.75,1].forEach(function(v){el("line",{x1:50,x2:280,y1:Y(v),y2:Y(v),stroke:C.grid},s);tH(s,44,Y(v)+3,v,{a:"end",fs:9,c:C.gray2,fw:500});});
   for(var t=0;t<=10;t+=2)tH(s,X(t),242,t,{fs:9,c:C.gray2,fw:500});tH(s,280,258,"며칠 뒤",{a:"end",fs:9.5,c:C.gray,fw:700});
   [[[1,0,0],"오늘 정상에서",BLUH],[[0,0,1],"오늘 고장에서",REDH]].forEach(function(c,k){var p=c[0],d="M"+X(0)+" "+Y(p[2]);var pts=[[0,p[2]]];for(var t=1;t<=10;t++){p=mulH(p,MQ);pts.push([t,p[2]]);d+=" L"+X(t).toFixed(1)+" "+Y(p[2]).toFixed(1);}
-    el("path",{d:d,fill:"none",stroke:c[2],"stroke-width":2.4},s);pts.forEach(function(q){el("circle",{cx:X(q[0]),cy:Y(q[1]),r:2.6,fill:c[2]},s);});tH(s,X(1)+6,k?Y(0.11)-8:Y(0.02)+16,c[1],{a:"start",fs:9.5,fw:800,c:c[2],halo:true});});
+    el("path",{d:d,fill:"none",stroke:c[2],"stroke-width":2.4},s);pts.forEach(function(q){el("circle",{cx:X(q[0]),cy:Y(q[1]),r:2.6,fill:c[2]},s);});tH(s,X(1)+6,k?Y(0.20)-8:Y(0.02)-10,c[1],{a:"start",fs:9.5,fw:800,c:c[2],halo:true});});
   var st=statH(MQ);el("line",{x1:50,x2:280,y1:Y(st[2]),y2:Y(st[2]),stroke:C.navy,"stroke-dasharray":"5 3"},s);tH(s,278,Y(st[2])-5,"고장 0.038",{a:"end",fs:9.5,fw:800,halo:true});
   tH(s,54,22,"고장 확률",{a:"start",fs:9.5,c:C.gray,fw:700});
   bxH(s,296,30,120,196,"#F3F5F9");tH(s,356,50,"정상 상태 π",{fw:800,fs:11});

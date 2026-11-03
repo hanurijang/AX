@@ -375,7 +375,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
           <text x="333" y="156" text-anchor="middle" font-size="11" fill="#C9D3E6">r · ρ · τ · 검정</text>
         </svg></div>
         <div class="side">
-          <p class="exp">네 장면은 두 값을 점으로 찍어 경향을 보고, 그 정도를 숫자로 나타내고, 극단적인 값에는 순위를 쓰고, 우연인지 확인하는 순서로 이어집니다. 설비 온도와 불량률, 가동 시간과 마모량처럼 현장의 두 측정값 사이 관계를 볼 때도 같은 순서를 따릅니다.</p>
+          <p class="exp">두 값이 함께 변하는지는 산점도에서 먼저 확인할 수 있습니다. 관계의 모양과 이상점을 살핀 다음, 선형 관계와 단조 관계에 맞는 상관계수를 구해 봅시다.</p>
           <p class="next"><span>다음 질문</span>두 양적 변수는 어떻게 그림으로 나타낼까?</p>
         </div>
       </div>
@@ -882,7 +882,7 @@ on("m17-scatter",function(s){
   bxJ(s,6,6,408,258);var X=linJ(40,95,60,400),Y=linJ(40,90,220,26);
   [40,50,60,70,80,90].forEach(function(t){el("line",{x1:X(t),x2:X(t),y1:26,y2:220,stroke:C.grid},s);tJ(s,X(t),236,t,{fs:9.5,c:C.gray,fw:500});});
   [40,50,60,70,80,90].forEach(function(t){el("line",{x1:60,x2:400,y1:Y(t),y2:Y(t),stroke:C.grid},s);tJ(s,54,Y(t)+4,t,{a:"end",fs:9.5,c:C.gray2,fw:500});});
-  tJ(s,400,254,"수학 점수",{a:"end",fs:10.5,c:C.gray,fw:700});tJ(s,22,20,"과학 점수",{a:"start",fs:10.5,c:C.gray,fw:700});
+  tJ(s,400,254,"수학 점수",{a:"end",fs:10.5,c:C.gray,fw:700});tJ(s,58,16,"과학 점수",{a:"start",fs:10.5,c:C.gray,fw:700});
   STU.forEach(function(n,i){var a=i===0;el("circle",{cx:X(MATH[i]),cy:Y(SCI[i]),r:a?7:5.5,fill:a?"#B42318":"#2B8CC4"},s);tJ(s,X(MATH[i])+8,Y(SCI[i])-6,n,{a:"start",fw:800,fs:10.5,c:a?"#B42318":C.navy,halo:true});});
   tJ(s,X(85)-10,Y(80)-16,"학생 A (85, 80)",{a:"end",fw:800,fs:11,c:"#B42318",halo:true});
 });

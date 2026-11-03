@@ -269,7 +269,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
       <div class="ov">
       <div class="ov-main">
       <div class="sh"><div class="sec">학습개요 · 이 모듈의 예시</div><h2>라벨 없는 압연기 운전 기록 60건에서 운전 패턴을 찾습니다</h2></div>
-        <div class="fig plain"><svg id="m33-case" viewBox="0 0 440 250" role="img" aria-label="진동과 베어링 온도의 산점도 60점, 라벨 없이 회색 점"></svg></div>
+        <div class="fig plain"><svg id="m33-case" viewBox="0 0 440 268" role="img" aria-label="진동과 베어링 온도의 산점도 60점, 라벨 없이 회색 점"></svg></div>
       </div>
         <div class="side shade">
           <ul class="key"><li>정답 라벨이 없어도 무리를 찾을 수 있을까요?</li></ul>
@@ -382,7 +382,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
           <text x="333" y="156" text-anchor="middle" font-size="11" fill="#C9D3E6">군집분석 · 차원 축소</text>
         </svg></div>
         <div class="side">
-          <p class="exp">네 장면은 정답 유무에 따른 학습 방식, 설명과 예측이라는 목적의 차이, 가까운 것끼리 모으고 중심을 옮기는 방법, 가까운 것부터 차례로 묶는 방법으로 이어집니다. 설비 센서 데이터는 대부분 ‘정상/이상’ 라벨 없이 쌓이므로, 먼저 비지도 학습으로 운전 패턴을 나눠 보면 이상 징후를 찾는 출발점이 됩니다.</p>
+          <p class="exp">정답 라벨이 없어도 기록의 비슷한 패턴을 묶거나 적은 수의 축으로 표현할 수 있습니다. 거리의 척도와 군집 수, 그림의 설정에 따라 해석이 어떻게 달라지는지 확인해 봅시다.</p>
           <p class="next"><span>다음 질문</span>기계학습은 어떻게 나뉠까?</p>
         </div>
       </div>
@@ -416,7 +416,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
     <section class="slide bdpage" data-step="3" id="s-4-3a">
       <div class="sh"><div class="sec">4-3 비지도 학습: 군집분석</div><h2><span class="q">Q</span>라벨 없는 운전 기록을 어떻게 무리로 나눌까요?</h2></div>
       <div class="body split even">
-        <div class="fig"><svg id="m33-km" viewBox="0 0 420 270" role="img" aria-label="k평균 k = 3으로 운전 기록 60건을 세 군집으로 나눈 결과와 중심. 정상·고하중·과열 의심은 확인이 필요한 임시 해석"></svg></div>
+        <div class="fig"><svg id="m33-km" viewBox="0 0 420 284" role="img" aria-label="k평균 k = 3으로 운전 기록 60건을 세 군집으로 나눈 결과와 중심. 정상·고하중·과열 의심은 확인이 필요한 임시 해석"></svg></div>
         <div class="side">
           <ul class="key"><li>표준화 공간의 유클리드 제곱거리 합 최소화</li><li>할당 안정 ≠ 전체 최솟값·의미 있는 군집</li></ul>
           <p class="exp">k평균은 정한 거리에서 점과 중심 사이의 제곱거리 합을 줄이며 할당과 중심 평균 계산을 반복합니다. 이 실습은 60건의 진동·온도를 각각 표준화하고, 서로 다른 관측점에서 초기 중심을 골라 시작합니다. 표준화는 변수별 가중치를 바꾸는 선택이며 항상 최선인 것은 아닙니다. 초기값·k·이상치·구조에 따라 결과가 달라질 수 있고, 할당이 안정되어도 전체 최솟값이나 현장 의미가 보장되지는 않습니다. k평균++도 결과의 유일성을 보장하지 않습니다.</p>
@@ -485,7 +485,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
         <div class="pcol" style="gap:8px">
           <div class="plabel" style="margin:0">해보기 · 표준화 좌표의 거리로 계산하고 원래 단위로 그립니다. k를 고르고 단계 진행·초기 중심 변경을 비교하세요</div>
           <div class="mbtns" id="m33-kb" style="gap:6px"></div>
-          <div class="fig" style="flex:1"><svg id="m33-p1-svg" viewBox="0 0 470 180" role="img" aria-label="운전 기록 산점도와 군집 중심"></svg></div>
+          <div class="fig" style="flex:1"><svg id="m33-p1-svg" viewBox="0 0 470 198" role="img" aria-label="운전 기록 산점도와 군집 중심"></svg></div>
         </div>
         <div class="pcol" style="gap:6px;justify-content:center">
           <div style="display:flex;gap:8px"><button class="btn" id="m33-step">한 단계 진행</button><button class="btn ghost" id="m33-init">처음 위치 바꾸기</button></div>
@@ -757,7 +757,7 @@ on("m33-ov",function(s){
 
 on("m33-case",function(s){
   bxB(s,4,4,432,242,"#F8F9FB");var A=axB(s,4,4,432,242),X=A[0],Y=A[1];CP.forEach(function(p){el("circle",{cx:X(p[0]),cy:Y(p[1]),r:4.5,fill:"#9AA0AA","fill-opacity":.8},s);});
-  tB(s,430,240,"진동 (mm/s)",{a:"end",fs:9.5,c:C.gray,fw:700});tB(s,40,18,"베어링 온도 (℃) · 60건, 라벨 없음",{a:"start",fs:9.5,c:C.gray,fw:700});
+  tB(s,430,264,"진동 (mm/s)",{a:"end",fs:9.5,c:C.gray,fw:700});tB(s,40,18,"베어링 온도 (℃) · 60건, 라벨 없음",{a:"start",fs:9.5,c:C.gray,fw:700});
 });
 
 on("m33-types",function(s){
@@ -786,7 +786,7 @@ on("m33-km",function(s){
   var names=["정상 후보","고하중 후보","과열 의심 후보"];
   cen.forEach(function(c,j){var px=c[0]*CSD[0]+CMU[0],py=c[1]*CSD[1]+CMU[1];el("path",{d:"M"+(X(px)-7)+" "+(Y(py)-7)+" L"+(X(px)+7)+" "+(Y(py)+7)+" M"+(X(px)+7)+" "+(Y(py)-7)+" L"+(X(px)-7)+" "+(Y(py)+7),stroke:C.navy,"stroke-width":3},s);
     el("circle",{cx:46,cy:30+j*17,r:5,fill:KC[j]},s);tB(s,56,34+j*17,names[j],{a:"start",fw:800,fs:10.5,c:KC[j]});});
-  tB(s,280,262,"진동 (mm/s)",{a:"end",fs:9,c:C.gray,fw:700});tB(s,36,16,"온도 (℃)",{a:"start",fs:9,c:C.gray,fw:700});
+  tB(s,280,274,"진동 (mm/s)",{a:"end",fs:9,c:C.gray,fw:700});tB(s,36,16,"온도 (℃)",{a:"start",fs:9,c:C.gray,fw:700});
   bxB(s,294,4,122,262,"#F3F5F9");tB(s,355,26,"k평균 순서",{fw:800,fs:11});
   ["① k 정하기","② 초기 중심 고르기","③ 가까운 중심에 할당","④ 중심(평균) 계산","⑤ ③~④ 반복","⑥ 할당이 안정되면","    종료·재시작 비교"].forEach(function(t,i){tB(s,302,54+i*22,t,{a:"start",fs:10,fw:700});});
   tB(s,355,240,"× = 군집 중심",{fw:800,fs:10});
@@ -822,7 +822,7 @@ on("m33-tsne",function(s){
     clear(svg);var A=axB(svg,4,2,300,176),X=A[0],Y=A[1];
     CP.forEach(function(p,i){el("circle",{cx:X(p[0]),cy:Y(p[1]),r:3.6,fill:lab?KC[lab[i]]:"#9AA0AA","fill-opacity":.85},svg);});
     cen.forEach(function(c,j){var px=c[0]*CSD[0]+CMU[0],py=c[1]*CSD[1]+CMU[1];el("circle",{cx:X(px),cy:Y(py),r:8,fill:"#fff",stroke:KC[j],"stroke-width":3},svg);el("path",{d:"M"+(X(px)-4)+" "+Y(py)+" h8 M"+X(px)+" "+(Y(py)-4)+" v8",stroke:KC[j],"stroke-width":2.5},svg);});
-    tB(svg,300,174,"진동 →",{a:"end",fs:9,c:C.gray,fw:700});tB(svg,36,12,"온도",{a:"start",fs:9,c:C.gray,fw:700});
+    tB(svg,300,188,"진동 →",{a:"end",fs:9,c:C.gray,fw:700});tB(svg,36,12,"온도",{a:"start",fs:9,c:C.gray,fw:700});
     var empty=lab?cen.filter(function(c,j){return lab.indexOf(j)<0;}).length:0,w=lab?wssB(lab,cen):null;bxB(svg,316,10,148,160,"#F3F5F9");tB(svg,390,32,"k = "+K,{fw:800,fs:13});
     tB(svg,390,58,lab?"단계 "+it+" 완료":"초기 중심만 놓음",{fw:700,fs:10.5});tB(svg,390,84,done?(empty?"할당 안정 · 빈 군집 "+empty:"할당 안정 (변화 0)"):lab?"할당 변화 "+ch+"건":"",{fw:800,fs:10.5,c:done?GRN:C.amberInk});
     tB(svg,390,116,w!=null?"군집 내 제곱합":"",{fs:10,fw:700,c:C.gray});tB(svg,390,138,w!=null?w.toFixed(1):"",{fw:800,fs:14});

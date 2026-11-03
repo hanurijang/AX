@@ -387,7 +387,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
           <text x="333" y="148" text-anchor="middle" font-size="11" fill="#C9D3E6">통계 · 기계학습 · 수리</text>
         </svg></div>
         <div class="side">
-          <p class="exp">네 장면은 기록에서 출발하는 방법과 원리에서 출발하는 방법, 중요한 것만 남기는 간략화, 변화의 규칙으로 앞일을 계산하기, 결과가 하나로 정해지는 현상과 확률로 정해지는 현상으로 이어집니다. 코일 냉각처럼 원리를 짐작할 수 있는 현상은 측정하지 않은 시점까지 수리 모형으로 내다볼 수 있습니다.</p>
+          <p class="exp">자료에서 식을 맞추는 방법과 현상의 작동 원리에서 식을 세우는 방법을 함께 쓸 수 있습니다. 냉각 예시에서 남긴 가정과 생략한 요소를 보고, 예측이 맞는 범위를 확인해 봅시다.</p>
           <p class="next"><span>다음 질문</span>세 가지 모형은 무엇이 다를까?</p>
         </div>
       </div>
@@ -476,7 +476,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
       <div class="sh"><div class="sec">4-3 수리 모형이란?</div><h2><span class="q">Q</span>수리 모형은 규칙을 어떻게 나타낼까요?</h2></div>
       <div class="body split even">
         <div class="figcol">
-          <div class="fig"><svg id="m35-ode" viewBox="0 0 420 150" role="img" aria-label="냉각 규칙 dT/dt = −k(T − Ta)를 적용하면 온도가 600℃에서 주변 온도 25℃로 다가가는 곡선"></svg></div>
+          <div class="fig"><svg id="m35-ode" viewBox="0 0 420 166" role="img" aria-label="냉각 규칙 dT/dt = −k(T − Ta)를 적용하면 온도가 600℃에서 주변 온도 25℃로 다가가는 곡선"></svg></div>
           <div class="math">
             <div class="mt">핵심 수학 개념 · 냉각의 미분 방정식</div>
             <div class="f">dT/dt = −k(T − Ta) → T(t) = Ta + (T₀ − Ta)e<sup>−kt</sup></div>
@@ -840,7 +840,7 @@ on("m35-ideal",function(s){
 });
 
 on("m35-ode",function(s){
-  var A=axF(s,40,250,10,126,72,24,0,600,200),X=A[0],Y=A[1];tF(s,250,146,"시간",{a:"end",fs:9,c:C.gray,fw:700});
+  var A=axF(s,40,250,10,126,72,24,0,600,200),X=A[0],Y=A[1];tF(s,250,158,"시간",{a:"end",fs:9,c:C.gray,fw:700});
   el("line",{x1:40,x2:250,y1:Y(25),y2:Y(25),stroke:GRNF,"stroke-width":1.2,"stroke-dasharray":"3 3"},s);
   el("path",{d:pathF(function(t){return coolF(t,CK,CTA);},0,72,X,Y,72),fill:"none",stroke:PNKF,"stroke-width":2.6},s);
   [0,24,48].forEach(function(t){var v=coolF(t,CK,CTA);el("circle",{cx:X(t),cy:Y(v),r:4,fill:PNKF},s);tF(s,X(t)+6,Math.max(18,Y(v)-5),Math.round(v)+"℃",{a:"start",fs:9.5,fw:800,halo:true});});

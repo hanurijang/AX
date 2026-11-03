@@ -325,17 +325,17 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
     <section class="slide" data-step="2">
       <div class="sh"><div class="sec">일상의 예시 3/5</div><h2>국어 80점과 수학 70점, 어느 쪽이 더 잘한 걸까요?</h2></div>
       <div class="body split">
-        <div class="fig"><svg viewBox="0 0 440 250" role="img" aria-label="국어 80점은 반 평균 78점 근처, 수학 70점은 반 평균 50점보다 훨씬 높음">
+        <div class="fig"><svg viewBox="0 0 440 250" role="img" aria-label="국어는 평균보다 2점, 수학은 20점 높음. 표준편차가 없어 상대적 위치는 아직 비교할 수 없음">
           <rect x="20" y="30" width="190" height="190" rx="12" fill="#fff"/><rect x="230" y="30" width="190" height="190" rx="12" fill="#fff"/>
           <text x="115" y="56" text-anchor="middle" font-size="13" font-weight="800" fill="#1B2A4A">국어</text><text x="325" y="56" text-anchor="middle" font-size="13" font-weight="800" fill="#1B2A4A">수학</text>
           <text x="115" y="104" text-anchor="middle" font-size="30" font-weight="800" fill="#2C4170">80점</text><text x="325" y="104" text-anchor="middle" font-size="30" font-weight="800" fill="#2C4170">70점</text>
           <text x="115" y="146" text-anchor="middle" font-size="12" fill="#6B7280">반 평균 78점</text><text x="325" y="146" text-anchor="middle" font-size="12" fill="#6B7280">반 평균 50점</text>
-          <text x="115" y="190" text-anchor="middle" font-size="12.5" font-weight="700" fill="#6B7280">평균보다 조금 위</text><text x="325" y="190" text-anchor="middle" font-size="12.5" font-weight="800" fill="#6E4F00">평균보다 한참 위</text>
-          <text x="220" y="244" text-anchor="middle" font-size="11" fill="#9AA0AA">점수는 설명을 위한 예입니다</text>
+          <text x="115" y="190" text-anchor="middle" font-size="12.5" font-weight="700" fill="#6B7280">평균과의 차이 +2점</text><text x="325" y="190" text-anchor="middle" font-size="12.5" font-weight="800" fill="#6E4F00">평균과의 차이 +20점</text>
+          <text x="220" y="244" text-anchor="middle" font-size="11" fill="#9AA0AA">상대적 위치 비교에는 표준편차도 필요합니다</text>
         </svg></div>
         <div class="side">
           <ul class="key"><li>점수 그 자체보다 무리 속 위치가 중요합니다.</li></ul>
-          <p class="exp">국어는 반 평균이 78점이라 80점이 평균보다 조금 높을 뿐이지만, 수학은 반 평균이 50점이라 70점이 평균보다 한참 높습니다. 점수만 보면 국어가 높지만, 반에서의 위치로 보면 수학을 더 잘한 셈입니다. 서로 다른 무리의 값을 비교하려면 같은 잣대가 필요합니다.</p>
+          <p class="exp">국어는 평균보다 2점, 수학은 평균보다 20점 높습니다. 평균과의 차이만으로 어느 과목의 상대적 성적이 더 좋은지 정할 수는 없습니다. 점수의 표준편차도 알아야 합니다. 서로 다른 무리의 값을 비교하려면 같은 잣대가 필요합니다.</p>
           <p class="next"><span>본문에서</span>4-3 표준화로 이어집니다.</p>
         </div>
       </div>
@@ -380,7 +380,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
           <text x="333" y="144" text-anchor="middle" font-size="11.5" fill="#C9D3E6">이론적인 확률분포</text>
         </svg></div>
         <div class="side">
-          <p class="exp">네 장면은 정해진 틀을 숫자 몇 개로 조절하고, 가운데가 많은 종 모양을 보고, 같은 잣대로 위치를 비교하고, 세는 값과 재는 값을 구분하는 순서로 이어집니다. 통계학은 이를 파라미터, 정규분포, 표준화, 다양한 확률분포로 정리합니다.</p>
+          <p class="exp">분포의 종류를 정하면 몇 개의 모수로 모양을 나타낼 수 있습니다. 정규분포의 평균·표준편차가 하는 일을 보고, 서로 다른 집단의 값을 표준화해 비교해 봅시다.</p>
           <p class="next"><span>다음 질문</span>이론적인 확률분포는 무엇으로 정해질까?</p>
         </div>
       </div>
@@ -472,7 +472,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
             <div class="mt">핵심 수학 개념 · T점수</div>
             <div class="f">T = 10z + 50 &nbsp;(평균 50, 표준편차 10)</div>
             <div class="r"><span>계산</span><span>(80 − 50) ÷ 15 = 2 → 70,&nbsp; (50 − 30) ÷ 10 = 2 → 70</span></div>
-            <div class="r"><span>해석</span><span>원점수는 80점과 50점으로 달라도 분포 속 위치는 같습니다.</span></div>
+            <div class="r"><span>해석</span><span>원점수는 달라도 평균보다 2σ 높다는 점은 같습니다.</span></div>
           </div>
         </div>
         <div class="side">

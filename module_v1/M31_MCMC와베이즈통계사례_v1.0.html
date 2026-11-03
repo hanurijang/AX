@@ -389,7 +389,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
           <text x="333" y="156" text-anchor="middle" font-size="11" fill="#C9D3E6">표집 → 요약 → 해석</text>
         </svg></div>
         <div class="side">
-          <p class="exp">네 장면은 무작위 시도로 답에 다가가는 방법, 현재 위치에서 다음 위치를 정하며 돌아다니는 방법, 분포를 대표값·범위·확률로 요약하는 법, 개별 차이 위에 한 층을 더 두는 모형으로 이어집니다. 신규 조건의 강도 개선을 ‘10 MPa 이상 높을 확률 83%’처럼 보고하려면 이 흐름을 따르면 됩니다.</p>
+          <p class="exp">사후분포를 식으로 다루기 어려울 때는 MCMC로 표집할 수 있습니다. 얻은 표집으로 확률과 구간을 계산하기 전에 체인의 탐색과 계산 오차를 확인해야 합니다.</p>
           <p class="next"><span>다음 질문</span>난수로 답을 구한다는 것은?</p>
         </div>
       </div>
@@ -477,7 +477,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
         </div>
         <div class="side">
           <ul class="key"><li>점: <b>사후기댓값</b>(EAP), <b>사후최빈값</b>(MAP)</li><li>폭: <b>신용구간</b>, 신뢰구간과 의미가 다름</li></ul>
-          <p class="exp">번인 기간을 버린 표집값으로 평균값 차이 μB − μA의 사후분포를 그리면 히스토그램이 됩니다. 이 분포를 요약하는 점 추정값으로 평균값인 사후기댓값(EAP)이나 최빈값인 사후최빈값(MAP)을 계산할 수 있고, 폭을 이용한 추정으로 95% 신용구간을 얻을 수도 있습니다. 가정한 모형·사전분포와 관측자료 아래에서 요약하면 EAP는 14.9 MPa이고 95% 신용구간은 [4.8, 25.5]입니다. 추정 결과 95% 확률로 통계 모형의 파라미터가 이 범위에 있다는 뜻이며, 빈도주의 통계의 신뢰구간과는 의미가 다르므로 주의합니다. 이 분포를 더 자세히 살펴보면 ‘차이가 10 MPa 이상이 될 확률은 83.5%’와 같은 정량적인 논의가 가능해집니다.</p>
+          <p class="exp">모형·사전분포와 자료를 정한 뒤 얻은 사후분포는 평균인 EAP, 최빈값인 MAP, 신용구간 등으로 요약합니다. 기존 25,000개 표집 요약은 EAP 14.9 MPa, 95% 신용구간 [4.8, 25.5]입니다. 이 가정 아래 평균 차이가 구간에 있을 사후확률이 95%라는 뜻이며, 빈도주의 신뢰구간과 해석이 다릅니다. 차이가 10 MPa를 넘을 사후확률은 약 83.5%입니다. 그림에 저장된 구간 도수의 합은 24,999개로 전체 요약과 1개 차이가 있어 원표집 대조가 필요합니다.</p>
           <p class="next"><span>다음 질문</span>회귀 모형에도 쓸 수 있을까?</p>
         </div>
       </div>
@@ -489,7 +489,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
         <div class="fig"><svg id="m31-pois" viewBox="0 0 420 270" role="img" aria-label="꽃 20그루 데이터와 푸아송 회귀의 절편 a, 기울기 b의 사후분포, a EAP −2.65, b EAP 0.589"></svg></div>
         <div class="side">
           <ul class="key"><li>a, b 각각의 사후분포를 얻습니다.</li><li>b의 신용구간으로 효과를 정량적으로 봅니다.</li></ul>
-          <p class="exp">앞서 다룬 비료 양과 꽃 개수 데이터(꽃 20그루)를 대상으로, 일반화선형모형의 푸아송 회귀 log λ = a + bx를 베이즈 통계로 추정해 봅니다. 사전분포를 균등분포로 설정하고 MCMC 방법으로 얻은 결과, 파라미터인 절편 a와 기울기 b의 사후분포를 각각 얻을 수 있습니다. 점 추정을 거쳐 a의 EAP는 −2.65, b의 EAP는 0.589가 되었습니다. 또한 95% 신용구간도 얻었는데, b에 주목하면 [0.468, 0.718]로 0을 포함하지 않아 반응변수에 대한 설명변수의 효과를 정량적으로 알 수 있습니다. 이로써 모형과 현실 현상의 대응을 보다 심도 있게 검토할 수 있게 됩니다.</p>
+          <p class="exp">앞서 다룬 비료 양과 꽃 개수 데이터(꽃 20그루)를 대상으로, 일반화선형모형의 푸아송 회귀 log λ = a + bx를 베이즈 통계로 추정해 봅니다. 사전분포를 균등분포로 설정하고 MCMC 방법으로 얻은 결과, 파라미터인 절편 a와 기울기 b의 사후분포를 각각 얻을 수 있습니다. 점 추정을 거쳐 a의 EAP는 −2.65, b의 EAP는 0.589가 되었습니다. 또한 95% 신용구간도 얻었는데, b에 주목하면 [0.468, 0.718]로 0을 포함하지 않아 반응변수에 대한 설명변수의 효과를 정량적으로 알 수 있습니다. 이 계수는 다른 조건을 같게 둔 평균 개수의 변화를 나타내며, 관찰자료만으로 인과효과가 확인되는 것은 아닙니다.</p>
           <p class="next"><span>다음 질문</span>개체 차이가 있는 모형은?</p>
         </div>
       </div>
@@ -568,7 +568,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
       <div class="body split">
         <div class="pcol">
           <div class="plabel">해보기 · 기준을 고르고, 신규 조건 B가 기존 A보다 그 이상 높을 확률을 히스토그램으로 예측하세요</div>
-          <div class="fig" style="flex:1"><svg id="m31-p3-svg" viewBox="0 0 470 200" role="img" aria-label="차이의 사후분포 히스토그램과 기준선"></svg></div>
+          <div class="fig" style="flex:1"><svg id="m31-p3-svg" viewBox="0 0 470 224" role="img" aria-label="차이의 사후분포 히스토그램과 기준선"></svg></div>
         </div>
         <div class="pcol" style="gap:9px;justify-content:center">
           <div class="mbtns" id="m31-qk" style="gap:5px"></div>
@@ -888,12 +888,12 @@ on("m31-hier",function(s){
     el("circle",{cx:99,cy:97,r:85,fill:"none",stroke:RED,"stroke-width":1.6},svg);
     var est=4*inn/n,err=est-Math.PI;
     var EST=NS.map(function(nn){var rr=rngY(seed),k=0;for(var j=0;j<nn;j++){var a=rr()*2-1,b=rr()*2-1;if(a*a+b*b<=1)k++;}return 4*k/nn;});
-    var X2=function(i){return 230+i*55;},Y2=linY(2.6,3.7,170,20);el("line",{x1:220,x2:460,y1:Y2(Math.PI),y2:Y2(Math.PI),stroke:GRN,"stroke-width":1.5,"stroke-dasharray":"4 3"},svg);tY(svg,460,Y2(Math.PI)-4,"π",{a:"end",fw:800,fs:11,c:GRN});
+    var X2=function(i){return 230+i*55;},Y2=linY(2.6,3.7,170,20);el("line",{x1:220,x2:460,y1:Y2(Math.PI),y2:Y2(Math.PI),stroke:GRN,"stroke-width":1.5,"stroke-dasharray":"4 3"},svg);tY(svg,220,Y2(Math.PI)-4,"π",{a:"end",fw:800,fs:11,c:GRN});
     EST.forEach(function(v,i){var vv=Math.max(2.6,Math.min(3.7,v));el("circle",{cx:X2(i),cy:Y2(vv),r:i===cur?6:4,fill:i===cur?RED:BLU},svg);tY(svg,X2(i),186,["10","100","1천","1만","10만"][i],{fs:9,c:C.gray,fw:700});tY(svg,X2(i),Y2(vv)-9,v.toFixed(3),{fs:8.5,fw:800,c:i===cur?RED:"#1C6EA4",halo:true});});
     tY(svg,226,16,"점 개수별 추정값",{a:"start",fw:800,fs:10});
     document.getElementById("m31-ratio").textContent=(inn/n).toFixed(4);document.getElementById("m31-est").textContent=est.toFixed(4);document.getElementById("m31-err").textContent=(err>=0?"+":"−")+Math.abs(err).toFixed(4);
     var m=document.getElementById("m31-msg"),ok=Math.abs(err)<0.01;m.className="pmsg"+(ok?" ok":"");
-    m.textContent=(ok?"찾았습니다. ":"")+n.toLocaleString()+"개 중 원 안 "+inn.toLocaleString()+"개 → 4 × "+(inn/n).toFixed(4)+" = "+est.toFixed(4)+"입니다. "+(ok?"점이 많을수록 실제 원주율에 가까워집니다.":"점을 늘리면 실제 원주율 3.1416에 더 가까워집니다.");}
+    m.textContent=(ok?"찾았습니다. ":"")+n.toLocaleString()+"개 중 원 안 "+inn.toLocaleString()+"개 → 4 × "+(inn/n).toFixed(4)+" = "+est.toFixed(4)+"입니다. "+(ok?"독립 난수를 늘리면 추정의 변동이 줄어듭니다. 매번 참값에 더 가까워지는 것은 아닙니다.":"점을 늘린 뒤 오차가 어떻게 달라지는지 비교해 보세요. 한 번의 오차가 반드시 줄지는 않습니다.");}
   upd();
 })();
 
@@ -903,9 +903,9 @@ on("m31-hier",function(s){
   KS.forEach(function(v,i){var b=document.createElement("button");b.type="button";b.className="mbtn";b.textContent="차이 > "+v;b.style.padding="3px 8px";b.onclick=function(){cur=i;reset();};qk.appendChild(b);});
   function draw(){clear(svg);var k=KS[cur],X=linY(-10,41,30,460),mx=Math.max.apply(null,DH),Y=linY(0,mx*1.12,176,14);
     histY(svg,DH,DE0,1,X,Y,176,"#9CCBEA",seen[cur]?k:null);el("line",{x1:30,x2:460,y1:176,y2:176,stroke:C.gray2},svg);
-    [-10,0,10,20,30,40].forEach(function(t){tY(svg,X(t),190,t,{fs:9,c:C.gray,fw:500});});tY(svg,460,198,"μB − μA (MPa)",{a:"end",fs:9,c:C.gray,fw:700});
+    [-10,0,10,20,30,40].forEach(function(t){tY(svg,X(t),190,t,{fs:9,c:C.gray,fw:500});});tY(svg,460,212,"μB − μA (MPa)",{a:"end",fs:9,c:C.gray,fw:700});
     el("line",{x1:X(k),x2:X(k),y1:14,y2:176,stroke:RED,"stroke-width":2,"stroke-dasharray":"4 3"},svg);tY(svg,X(k)-4,26,"기준 "+k,{a:"end",fw:800,fs:10.5,c:RED,halo:true});
-    tY(svg,460,26,"표집 25,000개의 히스토그램",{a:"end",fw:800,fs:10.5});}
+    tY(svg,460,26,"저장 구간 집계: 24,999개",{a:"end",fw:800,fs:10.5});}
   function txt(){document.getElementById("m31-gv").textContent=(+g.value)+"%";document.getElementById("m31-mine").textContent=(+g.value)+"%";}
   function reset(){[].forEach.call(qk.children,function(x,i){x.classList.toggle("on",i===cur);x.setAttribute("aria-pressed",i===cur);});
     document.getElementById("m31-act").textContent=seen[cur]?(DP[String(KS[cur])]*100).toFixed(1)+"%":"?";var m=document.getElementById("m31-msg3");m.className="pmsg";m.textContent="히스토그램에서 기준선 오른쪽에 있는 표집값의 비율을 예측한 뒤 「표집값으로 계산」을 누르세요.";draw();}

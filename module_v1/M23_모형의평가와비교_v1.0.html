@@ -380,7 +380,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
           <text x="333" y="156" text-anchor="middle" font-size="11" fill="#C9D3E6">검정 · AIC · BIC</text>
         </svg></div>
         <div class="side">
-          <p class="exp">네 장면은 더한 부분이 정말 개선인지 확인하고, 지금 데이터에만 맞추는 함정을 피하고, 정확함과 간단함을 함께 보고, 목적에 맞는 기준을 고르는 순서로 이어집니다. 강판 강도를 예측하는 회귀모형 후보가 여럿일 때, 어떤 설명변수까지 넣을지 정할 때도 같은 순서로 판단합니다.</p>
+          <p class="exp">항을 늘리면 지금 자료에는 더 잘 맞출 수 있지만 새 자료의 예측까지 좋아지지는 않습니다. 모형 개선을 검정하는 질문과 예측·모형 증거를 비교하는 질문을 구별해 봅시다.</p>
           <p class="next"><span>다음 질문</span>회귀계수 하나는 어떻게 검정할까?</p>
         </div>
       </div>
@@ -817,7 +817,7 @@ on("m23-ov",function(s){
 on("m23-case",function(s){
   bxQ(s,4,4,432,242,"#fff","#D5D9E0");var X=linQ(0,10.5,56,410),Y=linQ(0,30,206,22);
   [0,10,20,30].forEach(function(t){el("line",{x1:56,x2:410,y1:Y(t),y2:Y(t),stroke:C.grid},s);tQ(s,50,Y(t)+4,t,{a:"end",fs:10,c:C.gray2,fw:500});});
-  [0,2,4,6,8,10].forEach(function(t){tQ(s,X(t),222,t,{fs:10,c:C.gray,fw:500});});tQ(s,410,240,"비료 양 x",{a:"end",fs:10.5,c:C.gray,fw:700});tQ(s,16,16,"꽃의 개수",{a:"start",fs:10.5,c:C.gray,fw:700});
+  [0,2,4,6,8,10].forEach(function(t){tQ(s,X(t),222,t,{fs:10,c:C.gray,fw:500});});tQ(s,410,240,"비료 양 x",{a:"end",fs:10.5,c:C.gray,fw:700});tQ(s,66,18,"꽃의 개수",{a:"start",fs:10.5,c:C.gray,fw:700});
   ["M1","M2","M3"].forEach(function(m){var p=[];for(var i=0;i<=120;i++){var x=10.5*i/120;p.push(X(x).toFixed(1)+" "+Y(Math.min(31,lamQ(m,x))).toFixed(1));}
     el("path",{d:"M"+p.join(" L"),fill:"none",stroke:MCQ[m],"stroke-width":m==="M1"?2:2.6,"stroke-dasharray":m==="M3"?"6 4":"none"},s);});
   for(var i=0;i<FX.length;i++)el("circle",{cx:X(FX[i]),cy:Y(FY[i]),r:4.6,fill:C.amber,stroke:"#fff","stroke-width":1},s);
@@ -878,7 +878,7 @@ on("m23-ovf",function(s){
   [36,44,52,60,68].forEach(function(t){tQ(s,X(t),190,t,{fs:9.5,c:C.gray,fw:500});});
   var g=el("g",{"clip-path":"url(#cQ)"},s);
   el("line",{x1:X(33),x2:X(71),y1:Y(20+0.6*33),y2:Y(20+0.6*71),stroke:C.gray2,"stroke-width":2,"stroke-dasharray":"6 4"},g);
-  [[1,"#2B8CC4"],[7,"#B42318"]].forEach(function(d){var p=[];for(var i=0;i<=200;i++){var x=34+34*i/200;p.push(X(x).toFixed(1)+" "+Y(Math.max(28,Math.min(72,polyQ(d[0],x)))).toFixed(1));}el("path",{d:"M"+p.join(" L"),fill:"none",stroke:d[1],"stroke-width":2.4},g);});
+  [[1,"#2B8CC4"],[7,"#B42318"]].forEach(function(d){var p=[];for(var i=0;i<=200;i++){var x=34+34*i/200;p.push(X(x).toFixed(1)+" "+Y(polyQ(d[0],x)).toFixed(1));}el("path",{d:"M"+p.join(" L"),fill:"none",stroke:d[1],"stroke-width":2.4},g);});
   for(var i=0;i<OX.length;i++)el("circle",{cx:X(OX[i]),cy:Y(OY[i]),r:4.8,fill:C.amber,stroke:"#fff","stroke-width":1},s);
   var L=[["#2B8CC4","1차식","none"],["#B42318","7차식","none"],[C.gray2,"실제 y = 20 + 0.6x","6 4"]];
   L.forEach(function(l,j){var x=60+j*92+(j===2?0:0);el("line",{x1:x,x2:x+18,y1:30,y2:30,stroke:l[0],"stroke-width":2.4,"stroke-dasharray":l[2]},s);tQ(s,x+22,34,l[1],{a:"start",fs:10,fw:700,halo:true});});
@@ -935,7 +935,7 @@ on("m23-other",function(s){
     [36,44,52,60,68].forEach(function(t){tQ(svg,X(t),184,t,{fs:9.5,c:C.gray,fw:500});});
     var g=el("g",{"clip-path":"url(#cQ1)"},svg);
     el("line",{x1:X(33),x2:X(71),y1:Y(39.8),y2:Y(62.6),stroke:C.gray2,"stroke-width":2,"stroke-dasharray":"6 4"},g);
-    var p=[];for(var i=0;i<=240;i++){var x=34+34*i/240;p.push(X(x).toFixed(1)+" "+Y(Math.max(28,Math.min(72,polyQ(cur,x)))).toFixed(1));}el("path",{d:"M"+p.join(" L"),fill:"none",stroke:cur===1?"#2B8CC4":"#B42318","stroke-width":2.6},g);
+    var p=[];for(var i=0;i<=240;i++){var x=34+34*i/240;p.push(X(x).toFixed(1)+" "+Y(polyQ(cur,x)).toFixed(1));}el("path",{d:"M"+p.join(" L"),fill:"none",stroke:cur===1?"#2B8CC4":"#B42318","stroke-width":2.6},g);
     for(var j=0;j<OX.length;j++)el("circle",{cx:X(OX[j]),cy:Y(OY[j]),r:4.8,fill:C.amber,stroke:"#fff","stroke-width":1},svg);
     tQ(svg,48,24,cur+"차식 · 파라미터 "+(cur+2)+"개 (점 9개)",{a:"start",fw:800,fs:11,c:cur===1?"#1C6EA4":"#B42318",halo:true});
     tQ(svg,456,160,"점선: 실제 직선",{a:"end",fs:10,fw:700,c:C.gray,halo:true});
