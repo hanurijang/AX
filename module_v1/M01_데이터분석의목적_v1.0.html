@@ -30,9 +30,10 @@ button{font:inherit;color:inherit}
 .rail{position:relative;flex:1;height:60px;margin-right:22px}
 .rail .track{position:absolute;left:14px;right:14px;top:21px;height:3px;background:#3A4D78;border-radius:2px}
 .rail .fill{position:absolute;left:0;top:0;bottom:0;background:var(--amber);border-radius:2px;transition:width .35s ease}
-.station{position:absolute;top:10px;width:72px;margin-left:-36px;background:none;border:0;padding:0;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:4px}
+.pagedot{position:absolute;z-index:1;top:10px;height:24px;margin:0;padding:0;border:0;background:none;cursor:pointer}
+.station{position:absolute;z-index:2;top:10px;width:24px;min-width:0;margin-left:-12px;background:none;border:0;padding:0;cursor:pointer;display:flex;flex-direction:column;align-items:center}
 .station .dot{width:24px;height:24px;border-radius:50%;display:grid;place-items:center;font-size:11.5px;font-weight:800;background:var(--navy);color:#8E9DBD;border:2px solid #4A5D88;transition:all .25s}
-.station .lb{font-size:11.5px;color:#8E9DBD;white-space:nowrap}
+.station .lb{position:absolute;top:28px;left:50%;transform:translateX(-50%);font-size:11.5px;color:#8E9DBD;white-space:nowrap}
 .station.done .dot{background:#C9D3E6;border-color:#C9D3E6;color:var(--navy)}
 .station.done .lb{color:#C9D3E6}
 .station.cur .dot{background:var(--amber);border-color:#FFE08A;color:var(--navy);transform:scale(1.12)}
@@ -51,9 +52,11 @@ h2 .q{flex:0 0 auto;margin-top:2px;width:28px;height:28px;border-radius:6px;back
 h2.big{font-size:30px;line-height:1.32}
 .body{flex:1 1 auto;min-height:0;display:grid;gap:24px}
 .split{grid-template-columns:1.2fr 1fr}
+.split.figwide{grid-template-columns:1.55fr .85fr}
 .split.even{grid-template-columns:1fr 1fr}
 .full{grid-template-columns:1fr}
 .fig{background:var(--panel);border-radius:12px;padding:12px;min-height:0;display:flex;align-items:center;justify-content:center}
+.fig.fit{padding:6px}
 .fig svg{width:100%;height:100%;display:block}
 .figcol{min-height:0;display:flex;flex-direction:column;gap:10px}
 .figcol .fig{flex:1 1 auto}
@@ -66,15 +69,52 @@ h2.big{font-size:30px;line-height:1.32}
 .key b{color:var(--navy);background:linear-gradient(transparent 62%,var(--amber-soft) 62%)}
 /* 해설 문단: 2~4문장, 150~250자 */
 .exp{margin:0;font-size:15px;line-height:1.62;letter-spacing:-.2px;color:var(--ink)}
-.exp b{color:var(--navy)}
+.exp b{font-weight:800;color:var(--navy);background:linear-gradient(transparent 62%,#FFE08A 62% 92%,transparent 92%)}
 /* 연결 문장: 다음 소단원으로 넘기는 질문 */
 .next{margin:0;border-top:1px dashed var(--line);padding-top:9px;font-size:14px;font-weight:700;color:var(--navy2);display:flex;gap:8px;align-items:baseline}
 .next span{flex:0 0 auto;font-size:11.5px;font-weight:800;color:var(--navy3);background:var(--navy-soft);border-radius:4px;padding:0 6px;line-height:20px}
+.next .nt{flex:1;min-width:0;padding:0;background:none;border-radius:0;font-size:14px;font-weight:700;color:var(--navy2);line-height:1.45}
 /* 각주: 기호의 뜻과 출처 번호만 */
 .foot{flex:0 0 auto;font-size:12px;line-height:1.5;color:var(--gray);margin:0}
 .foot b{color:var(--ink)}
 .cite{font-size:.72em;font-weight:700;color:var(--navy3);vertical-align:super;line-height:0;margin-left:1px}
 .tag-v{display:inline-block;font-size:11px;font-weight:700;border-radius:4px;padding:0 6px;line-height:18px;white-space:nowrap;vertical-align:1px;color:var(--gray);background:#F3F4F6;box-shadow:inset 0 0 0 1px var(--line)}
+.exopen{cursor:pointer}
+.exopen:hover rect{stroke:#E0A100;stroke-width:2.5}
+.exopen:focus{outline:none}
+.exopen:focus-visible rect{stroke:#E0A100;stroke-width:2.5}
+.exmodal{position:absolute;inset:0;z-index:30;background:rgba(27,42,74,.46);display:flex;align-items:center;justify-content:center;padding:36px 48px}
+.exmodal[hidden]{display:none}
+.exsheet{width:640px;max-width:100%;max-height:100%;background:#fff;border-radius:14px;padding:16px 18px 14px;display:flex;flex-direction:column;gap:10px;box-shadow:0 18px 44px rgba(27,42,74,.28)}
+.exsheet.tbl{width:max-content}
+.exmh{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;padding-bottom:8px;box-shadow:inset 0 -1px 0 var(--line)}
+.exmh h3{flex:1;min-width:0;margin:0;font-size:17px;line-height:1.4;color:var(--navy)}
+.exsheet .nav{flex:none;white-space:nowrap}
+.exbody{min-height:0;max-height:380px;overflow:auto;padding-top:10px}
+.excap{margin:0 0 8px;font-size:12px;font-weight:700;color:var(--gray)}
+.extable{width:max-content;border-collapse:separate;border-spacing:0;font-size:13.5px;line-height:1.35;font-variant-numeric:tabular-nums}
+.extable thead{position:sticky;top:-10px;z-index:1}
+.extable th{background:#F6F7F9;text-align:left;font-size:12px;font-weight:800;color:var(--navy2);padding:7px 10px;white-space:nowrap;box-shadow:inset 0 -1px 0 var(--line)}
+.extable td{padding:5px 10px;border-bottom:1px solid var(--line);color:var(--ink);white-space:nowrap}
+.extable tbody tr:nth-child(even) td{background:#FAFBFC}
+.extable tr.wkend td{background:#F8F6F1}
+.extable tbody tr:hover td{background:var(--amber-soft)}
+.extable .num{text-align:right}
+.exresult{display:flex;flex-direction:column;align-items:center;gap:12px;padding:6px 4px 2px}
+.exresult p{margin:0;font-size:15px;line-height:1.55;text-align:center}
+.exbadge{width:112px;height:112px;border-radius:50%;background:#FCF3D9;box-shadow:inset 0 0 0 3px #E0A100;display:flex;flex-direction:column;align-items:center;justify-content:center;color:var(--navy)}
+.exbadge b{font-size:32px;line-height:1}
+.exbadge span{margin-top:4px;font-size:13px;font-weight:800;color:#6E4F00}
+.exresult svg{width:100%;height:168px}
+.exq{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:8px}
+.exq li{display:flex;flex-wrap:wrap;align-items:center;gap:6px 10px;padding:10px 12px;border-radius:10px;background:#F6F7F9}
+.exq p{flex:1 1 220px;margin:0;font-size:15px;line-height:1.5;font-weight:700;color:var(--navy)}
+.extag{flex:none;padding:2px 8px;border-radius:999px;background:var(--amber-soft);color:var(--amber-ink);font-size:11.5px;font-weight:800;line-height:1.45;white-space:nowrap}
+.exnote{flex:1 1 100%;margin:0;font-size:12px;font-weight:650;line-height:1.45;color:var(--gray)}
+.exlimbox{margin-top:12px;padding:10px 10px 8px;border-radius:12px;background:#F3F4F6}
+.exlim{margin:0 4px 8px;font-size:12px;font-weight:800;letter-spacing:-.2px;color:var(--gray)}
+.exq-lim li{background:#fff;box-shadow:inset 0 0 0 1px var(--line)}
+.exq-lim .extag{background:#EEF0F3;color:var(--navy2)}
 
 /* 핵심 수학 개념 박스 */
 .math{flex:0 0 auto;border-left:3px solid var(--navy3);background:#F6F7F9;border-radius:0 8px 8px 0;padding:9px 13px;font-size:13.5px;line-height:1.5}
@@ -86,7 +126,7 @@ h2.big{font-size:30px;line-height:1.32}
 
 /* ---------- 하단 바 ---------- */
 .bottombar{position:absolute;left:0;right:0;bottom:0;height:46px;border-top:1px solid var(--line);display:flex;align-items:center;padding:0 22px 0 36px;gap:12px;background:#fff}
-.counter{font-size:13px;color:var(--gray);font-weight:600}
+.counter{font-size:13px;color:var(--gray);font-weight:600;font-variant-numeric:tabular-nums;text-align:right;min-width:5ch}
 .counter strong{color:var(--navy)}
 .spacer{flex:1}
 .nav{border:1.5px solid var(--navy);background:#fff;color:var(--navy);border-radius:8px;height:32px;padding:0 16px;font-size:14px;font-weight:700;cursor:pointer}
@@ -107,14 +147,12 @@ h2.big{font-size:30px;line-height:1.32}
 .prevlink{background:var(--panel);border-radius:10px;padding:12px 14px;font-size:14.5px;line-height:1.55}
 .prevlink small{display:block;font-size:12px;font-weight:800;color:var(--navy3);margin-bottom:3px}
 
-/* ② 학습목표: 목표 → 문항 → 실습 연결 */
-.gmap{display:grid;grid-template-columns:44px 1fr 150px 150px;align-items:stretch;row-gap:12px;column-gap:0}
-.gmap .hd{font-size:12px;font-weight:700;color:var(--gray);padding:0 14px 2px}
-.gmap .gn{background:var(--navy);color:#fff;font-weight:800;font-size:18px;display:grid;place-items:center;border-radius:10px 0 0 10px}
-.gmap .gt{background:var(--panel);padding:14px 18px;font-size:17px;font-weight:700;line-height:1.42;letter-spacing:-.3px;display:flex;align-items:center}
-.gmap .gt b{color:var(--navy)}
-.gmap .ga,.gmap .gp{background:var(--panel);display:flex;align-items:center;padding:0 10px;border-left:2px solid #fff}
-.gmap .gp{border-radius:0 10px 10px 0}
+/* ② 학습목표 */
+.goals{display:flex;flex-direction:column;justify-content:center;gap:4px;height:100%}
+.goal{display:flex;align-items:center;gap:20px;background:transparent;border-radius:14px;padding:2px 28px}
+.goal i{flex:0 0 48px;height:48px;border-radius:50%;background:var(--navy);color:#fff;display:grid;place-items:center;font-style:normal;font-weight:800;font-size:20px}
+.goal p{margin:0;font-size:18.5px;font-weight:700;line-height:1.5;letter-spacing:-.3px}
+.goal b{font-weight:800;color:var(--navy);background:linear-gradient(transparent 62%,#FFE08A 62% 92%,transparent 92%)}
 .jump{border:1.5px solid var(--navy3);background:#fff;border-radius:7px;padding:6px 10px;font-size:13px;font-weight:700;color:var(--navy);cursor:pointer;text-align:left;line-height:1.3;width:100%}
 .jump:hover{background:var(--navy-soft)}
 
@@ -235,195 +273,194 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
     <!-- ① 학습개요 ─────────────────────────────── -->
     <section class="slide" data-step="0">
       <div class="sh"><div class="sec">학습개요</div>
-        <h2 class="big">데이터 분석은 목적을 먼저 정하는 데서 시작합니다</h2></div>
-      <div class="body split">
-        <div class="fig"><svg viewBox="0 0 440 260" role="img" aria-label="데이터에서 목적을 정해 요약, 설명, 예측으로 나뉘는 흐름">
-          <defs><marker id="m-ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10z" fill="#5B6E97"/></marker></defs>
-          <rect x="14" y="100" width="88" height="60" rx="10" fill="#1B2A4A"/>
-          <text x="58" y="136" text-anchor="middle" font-size="16" font-weight="800" fill="#fff">데이터</text>
-          <line x1="104" y1="130" x2="132" y2="130" stroke="#5B6E97" stroke-width="2" marker-end="url(#m-ar)"/>
-          <rect x="136" y="100" width="100" height="60" rx="10" fill="#FCF3D9" stroke="#E0A100" stroke-width="2"/>
-          <text x="186" y="126" text-anchor="middle" font-size="14" font-weight="800" fill="#6E4F00">목적</text>
-          <text x="186" y="146" text-anchor="middle" font-size="14" font-weight="800" fill="#6E4F00">정하기</text>
-          <path d="M238 130 C252 130 252 58 266 58" fill="none" stroke="#5B6E97" stroke-width="2" marker-end="url(#m-ar)"/>
-          <line x1="238" y1="130" x2="266" y2="130" stroke="#5B6E97" stroke-width="2" marker-end="url(#m-ar)"/>
-          <path d="M238 130 C252 130 252 202 266 202" fill="none" stroke="#5B6E97" stroke-width="2" marker-end="url(#m-ar)"/>
-          <rect x="270" y="30" width="156" height="56" rx="10" fill="#fff" stroke="#1B2A4A" stroke-width="1.5"/>
-          <text x="284" y="53" font-size="14" font-weight="800" fill="#1B2A4A">① 요약</text>
-          <text x="284" y="73" font-size="12" fill="#6B7280">많은 수치를 값 하나로</text>
-          <rect x="270" y="102" width="156" height="56" rx="10" fill="#fff" stroke="#1B2A4A" stroke-width="1.5"/>
-          <text x="284" y="125" font-size="14" font-weight="800" fill="#1B2A4A">② 설명</text>
-          <text x="284" y="145" font-size="12" fill="#6B7280">성질과 관계를 밝힘</text>
-          <rect x="270" y="174" width="156" height="56" rx="10" fill="#fff" stroke="#1B2A4A" stroke-width="1.5"/>
-          <text x="284" y="197" font-size="14" font-weight="800" fill="#1B2A4A">③ 예측</text>
-          <text x="284" y="217" font-size="12" fill="#6B7280">아직 없는 값을 가늠</text>
+        <h2 class="big">분석의 목적은 요약·설명·예측입니다</h2></div>
+      <div class="body split figwide">
+        <div class="fig fit"><svg viewBox="0 0 520 280" role="img" aria-label="기록이 데이터로 모이고, 목적 정하기에서 요약·설명·예측을 정한 뒤 전처리하거나 가공하면 각각의 결과가 나타나는 흐름">
+          <defs>
+            <marker id="m-ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0 0L10 5L0 10z" fill="#5B6E97"/></marker>
+            <symbol id="ex-click" viewBox="0 0 20 20">
+              <circle cx="10" cy="10" r="10" fill="#FCF3D9"/>
+              <path fill="#6E4F00" d="M7.2 4.4 7.2 14.4 9.5 12.1 11.6 15.8 13.1 15 11 11.3 14 11.1Z"/>
+            </symbol>
+          </defs>
+          <g class="exopen" data-ex="data" role="button" tabindex="0" aria-label="원자료를 엽니다">
+            <rect x="6" y="102" width="100" height="76" rx="10" fill="#1B2A4A"/>
+            <text x="40" y="146" text-anchor="middle" font-size="15" font-weight="800" fill="#fff">데이터</text>
+            <use href="#ex-click" x="72" y="128" width="22" height="22"/>
+          </g>
+          <line x1="106" y1="140" x2="140" y2="140" stroke="#5B6E97" stroke-width="2" marker-end="url(#m-ar)"/>
+          <rect x="142" y="102" width="62" height="76" rx="10" fill="#FCF3D9" stroke="#E0A100" stroke-width="2"/>
+          <text x="173" y="132" text-anchor="middle" font-size="15" font-weight="800" fill="#6E4F00">목적</text>
+          <text x="173" y="154" text-anchor="middle" font-size="15" font-weight="800" fill="#6E4F00">정하기</text>
+          <line x1="204" y1="140" x2="238" y2="140" stroke="#5B6E97" stroke-width="2" marker-end="url(#m-ar)"/>
+          <rect x="240" y="102" width="72" height="76" rx="10" fill="#fff" stroke="#5B6E97" stroke-width="1.5"/>
+          <text x="276" y="132" text-anchor="middle" font-size="15" font-weight="800" fill="#1B2A4A">전처리</text>
+          <text x="276" y="154" text-anchor="middle" font-size="13" font-weight="700" fill="#1B2A4A">또는 가공</text>
+          <line x1="312" y1="140" x2="328" y2="140" stroke="#5B6E97" stroke-width="2"/>
+          <line x1="328" y1="48" x2="328" y2="232" stroke="#5B6E97" stroke-width="2" stroke-linecap="round"/>
+          <line x1="328" y1="48" x2="348" y2="48" stroke="#5B6E97" stroke-width="2" marker-end="url(#m-ar)"/>
+          <line x1="328" y1="140" x2="348" y2="140" stroke="#5B6E97" stroke-width="2" marker-end="url(#m-ar)"/>
+          <line x1="328" y1="232" x2="348" y2="232" stroke="#5B6E97" stroke-width="2" marker-end="url(#m-ar)"/>
+          <g class="exopen" data-ex="sum" role="button" tabindex="0" aria-label="요약이 대답하는 질문을 엽니다">
+            <rect x="350" y="10" width="162" height="76" rx="10" fill="#fff" stroke="#D5D9E0" stroke-width="1.5"/>
+            <circle cx="374" cy="48" r="13" fill="#1B2A4A"/><text x="374" y="53" text-anchor="middle" font-size="13" font-weight="800" fill="#fff">1</text>
+            <text x="394" y="42" font-size="15" font-weight="800" fill="#1B2A4A">요약</text>
+            <text x="394" y="62" font-size="12" fill="#6B7280">전체의 특징을 나타냄</text>
+            <use href="#ex-click" x="484" y="18" width="20" height="20"/>
+          </g>
+          <g class="exopen" data-ex="rel" role="button" tabindex="0" aria-label="설명이 대답하는 질문을 엽니다">
+            <rect x="350" y="102" width="162" height="76" rx="10" fill="#fff" stroke="#D5D9E0" stroke-width="1.5"/>
+            <circle cx="374" cy="140" r="13" fill="#1B2A4A"/><text x="374" y="145" text-anchor="middle" font-size="13" font-weight="800" fill="#fff">2</text>
+            <text x="394" y="134" font-size="15" font-weight="800" fill="#1B2A4A">설명</text>
+            <text x="394" y="154" font-size="12" fill="#6B7280">성질과 관계를 밝힘</text>
+            <use href="#ex-click" x="484" y="110" width="20" height="20"/>
+          </g>
+          <g class="exopen" data-ex="pred" role="button" tabindex="0" aria-label="예측이 대답하는 질문을 엽니다">
+            <rect x="350" y="194" width="162" height="76" rx="10" fill="#fff" stroke="#D5D9E0" stroke-width="1.5"/>
+            <circle cx="374" cy="232" r="13" fill="#1B2A4A"/><text x="374" y="237" text-anchor="middle" font-size="13" font-weight="800" fill="#fff">3</text>
+            <text x="394" y="226" font-size="15" font-weight="800" fill="#1B2A4A">예측</text>
+            <text x="394" y="246" font-size="12" fill="#6B7280">아직 없는 값을 가늠</text>
+            <use href="#ex-click" x="484" y="202" width="20" height="20"/>
+          </g>
         </svg></div>
         <div class="side">
-          <div class="prevlink"><small>과정 1 · 데이터와 기술통계</small>데이터 분석의 목적에서 출발해 모집단과 표본, 기술통계량을 거쳐 정규분포까지 7개 모듈로 이어집니다. 이 모듈이 첫 번째입니다.</div>
-          <dl class="meta"><dt>학습 시간</dt><dd>약 40분</dd><dt>본문</dt><dd>소단원 4개</dd><dt>실습</dt><dd>조작형 · 분류형 · 추정형</dd></dl>
+          <ul class="key"><li>같은 데이터도 목적에 따라 하는 일이 다릅니다.</li></ul>
+          <p class="exp">기록이 모여 데이터가 됩니다. 목적 정하기에서 <b>요약·설명·예측</b> 가운데 하나를 정합니다. 정한 목적에 맞게 자료를 전처리하거나 가공합니다. 가공이 끝나면 목적에 따른 각각의 결과가 나타납니다.</p>
+          <p class="next"><span>마치면</span><span class="nt">주어진 데이터가 목적에 따라 어떻게 활용되는지 알 수 있습니다.</span></p>
         </div>
       </div>
-    </section>
-
-    <section class="slide" data-step="0">
-      <div class="sh"><div class="sec">학습개요 · 이 모듈의 예시</div>
-        <h2>세 가지 예시로 끝까지 배웁니다</h2></div>
-      <div class="body split">
-        <div class="fig"><svg viewBox="0 0 440 250" role="img" aria-label="요약, 설명, 예측에 쓰는 세 가지 예시">
-          <defs><marker id="m-ar0" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10z" fill="#5B6E97"/></marker></defs>
-          <rect x="10" y="12" width="420" height="68" rx="10" fill="#fff"/>
-          <rect x="22" y="30" width="60" height="32" rx="6" fill="#1B2A4A"/><text x="52" y="51" text-anchor="middle" font-size="13" font-weight="800" fill="#fff">요약</text>
-          <text x="98" y="40" font-size="12" fill="#22262E">1.2  2.1  2.1  2.4  0.8  0.7</text>
-          <text x="98" y="62" font-size="12" fill="#22262E">1.6  1.3  0.9  4.2  2.0  1.0</text>
-          <line x1="290" y1="46" x2="348" y2="46" stroke="#5B6E97" stroke-width="2" marker-end="url(#m-ar0)"/>
-          <circle cx="384" cy="46" r="24" fill="#fff" stroke="#E0A100" stroke-width="3"/><text x="384" y="52" text-anchor="middle" font-size="16" font-weight="800" fill="#1B2A4A">1.7</text>
-          <rect x="10" y="91" width="420" height="68" rx="10" fill="#fff"/>
-          <rect x="22" y="109" width="60" height="32" rx="6" fill="#1B2A4A"/><text x="52" y="130" text-anchor="middle" font-size="13" font-weight="800" fill="#fff">설명</text>
-          <rect x="112" y="118" width="26" height="30" rx="2" fill="#2C4170"/><rect x="148" y="102" width="26" height="46" rx="2" fill="#A9B8D4"/>
-          <text x="125" y="154" text-anchor="middle" font-size="9.5" fill="#6B7280"></text>
-          <text x="196" y="122" font-size="12.5" font-weight="700" fill="#22262E">신약 집단과 위약 집단의 혈압 비교</text>
-          <text x="196" y="142" font-size="12" fill="#6B7280">연소득과 행복도의 관계</text>
-          <rect x="10" y="170" width="420" height="68" rx="10" fill="#fff"/>
-          <rect x="22" y="188" width="60" height="32" rx="6" fill="#1B2A4A"/><text x="52" y="209" text-anchor="middle" font-size="13" font-weight="800" fill="#fff">예측</text>
-          <g fill="#5B6E97"><circle cx="110" cy="222" r="3"/><circle cx="122" cy="214" r="3"/><circle cx="132" cy="218" r="3"/><circle cx="144" cy="206" r="3"/><circle cx="154" cy="200" r="3"/><circle cx="166" cy="196" r="3"/><circle cx="176" cy="190" r="3"/></g>
-          <line x1="104" y1="224" x2="182" y2="186" stroke="#1B2A4A" stroke-width="2"/>
-          <text x="196" y="201" font-size="12.5" font-weight="700" fill="#22262E">여름 평균기온으로 가을 수확량 예측</text>
-          <text x="196" y="221" font-size="12" fill="#6B7280">30℃이면 15톤가량</text>
-        </svg></div>
-        <div class="side">
-          <ul class="key"><li>목적마다 예시 하나를 <b>끝까지</b> 씁니다.</li></ul>
-          <p class="exp">요약에는 원자료 12개를, 설명에는 신약 실험과 연소득·행복도를, 예측에는 여름 기온과 가을 수확량을 씁니다. 본문에서 만난 예시가 형성평가와 실습에도 그대로 나오므로, 숫자와 장면을 기억해 두면 문제를 풀 때 바로 떠올릴 수 있습니다.</p>
-        </div>
-      </div>
-      <p class="foot">혈압 막대와 기온·수확량 점은 관계를 보여 주려고 만든 값입니다 <span class="tag-v">가상 데이터</span></p>
     </section>
 
     <!-- ② 학습목표 ─────────────────────────────── -->
     <section class="slide" data-step="1">
-      <div class="sh"><div class="sec">학습목표</div><h2>이 모듈을 마치면 이렇게 할 수 있습니다</h2></div>
-      <div class="body full" style="align-content:center">
-        <div class="gmap">
-          <div></div><div class="hd">목표</div><div class="hd">확인하는 문항</div><div class="hd">연결 실습</div>
-          <div class="gn">1</div><div class="gt"><span>분석 사례가 요약·설명·예측 중 어느 목적인지 <b>구분한다</b>.</span></div>
-          <div class="ga"><button class="jump" data-jump="q1">문항 1·2</button></div><div class="gp"><button class="jump" data-jump="p2">실습 2 분류</button></div>
-          <div class="gn">2</div><div class="gt"><span>원자료 12개의 평균값을 <b>계산하고</b>, 평균이 가리는 값을 찾는다.</span></div>
-          <div class="ga"><button class="jump" data-jump="q3">문항 3·4</button></div><div class="gp"><button class="jump" data-jump="p1">실습 1 조작</button></div>
-          <div class="gn">3</div><div class="gt"><span>두 변수의 관계가 인과인지 상관인지 <b>판단하고</b>, 관계로 새 값을 예측한다.</span></div>
-          <div class="ga"><button class="jump" data-jump="q5">문항 5·6</button></div><div class="gp"><button class="jump" data-jump="p3">실습 3 추정</button></div>
+      <div class="sh"><div class="sec">학습목표</div><h2 class="big">이 모듈을 마치면 이렇게 할 수 있습니다</h2></div>
+      <div class="body full">
+        <div class="goals">
+          <div class="goal"><i>1</i><p>분석 사례가 요약·설명·예측 중 어느 목적인지 <b>구분한다</b>.</p></div>
+          <div class="goal"><i>2</i><p>자료의 평균값을 <b>계산하고</b>, 그 평균이 개별 값을 대표하는지 판단한다.</p></div>
+          <div class="goal"><i>3</i><p>변수 사이의 관계를 <b>밝히고</b>, 그 관계가 상관인지 인과인지 판단한다.</p></div>
+          <div class="goal"><i>4</i><p>밝힌 관계로 아직 없는 값을 <b>예측한다</b>.</p></div>
         </div>
       </div>
-      <p class="foot">버튼을 누르면 해당 문항이나 실습 화면으로 바로 이동합니다.</p>
     </section>
 
     <!-- ③ 일상의 예시 ─────────────────────────────── -->
     <section class="slide" data-step="2">
-      <div class="sh"><div class="sec">일상의 예시 1/5</div><h2>걸음 수 앱에는 매일 숫자가 쌓입니다</h2></div>
+      <div class="sh"><div class="sec">일상의 예시 1/5</div><h2>출근할 때마다 기록이 남습니다</h2></div>
       <div class="body split">
-        <div class="fig"><svg viewBox="0 0 440 250" role="img" aria-label="요일별 걸음 수가 기록된 휴대폰 화면">
-          <rect x="140" y="12" width="160" height="226" rx="22" fill="#1B2A4A"/><rect x="150" y="34" width="140" height="186" rx="8" fill="#fff"/>
-          <text x="220" y="56" text-anchor="middle" font-size="12.5" font-weight="800" fill="#1B2A4A">오늘까지 걸음 수</text>
-          <g font-size="12" fill="#22262E">
-            <text x="162" y="84">월</text><rect x="184" y="75" width="35" height="11" rx="3" fill="#A9B8D4"/><text x="282" y="84" text-anchor="end">6,240</text>
-            <text x="162" y="112">화</text><rect x="184" y="103" width="45" height="11" rx="3" fill="#A9B8D4"/><text x="282" y="112" text-anchor="end">8,105</text>
-            <text x="162" y="140">수</text><rect x="184" y="131" width="28" height="11" rx="3" fill="#A9B8D4"/><text x="282" y="140" text-anchor="end">4,980</text>
-            <text x="162" y="168">목</text><rect x="184" y="159" width="41" height="11" rx="3" fill="#A9B8D4"/><text x="282" y="168" text-anchor="end">7,312</text>
-            <text x="162" y="196">금</text><rect x="184" y="187" width="50" height="11" rx="3" fill="#E0A100"/><text x="282" y="196" text-anchor="end">9,026</text>
+        <div class="fig"><svg viewBox="0 0 440 250" role="img" aria-label="출발 시각, 도착 시각, 비가 왔는지가 적힌 출근 기록">
+          <rect x="70" y="18" width="300" height="214" rx="12" fill="#fff" stroke="#1B2A4A" stroke-width="2"/>
+          <text x="220" y="48" text-anchor="middle" font-size="15" font-weight="800" fill="#1B2A4A">출근 기록</text>
+          <line x1="90" y1="62" x2="350" y2="62" stroke="#D5D9E0"/>
+          <g font-size="13" font-weight="800" fill="#5B6E97">
+            <text x="108" y="86">날</text><text x="168" y="86">출발</text><text x="246" y="86">도착</text><text x="318" y="86">비</text>
           </g>
-          <circle cx="76" cy="132" r="30" fill="#E4E9F2"/><path d="M64 148 q12 -36 24 -4" fill="none" stroke="#5B6E97" stroke-width="5" stroke-linecap="round"/>
-          <circle cx="364" cy="132" r="30" fill="#E4E9F2"/><path d="M352 148 q12 -36 24 -4" fill="none" stroke="#5B6E97" stroke-width="5" stroke-linecap="round"/>
+          <rect x="90" y="124" width="260" height="28" rx="4" fill="#FCF3D9"/>
+          <g font-size="15" font-weight="700" fill="#22262E">
+            <text x="108" y="116">월</text><text x="168" y="116">7:40</text><text x="246" y="116">8:20</text><text x="318" y="116">없음</text>
+            <text x="108" y="144">화</text><text x="168" y="144">7:35</text><text x="246" y="144">8:55</text><text x="318" y="144">있음</text>
+            <text x="108" y="172">수</text><text x="168" y="172">7:42</text><text x="246" y="172">8:18</text><text x="318" y="172">없음</text>
+            <text x="108" y="200">목</text><text x="168" y="200">7:38</text><text x="246" y="200">8:24</text><text x="318" y="200">없음</text>
+          </g>
         </svg></div>
         <div class="side">
-          <ul class="key"><li>걸음을 재면 숫자, 곧 데이터가 남습니다.</li></ul>
-          <p class="exp">휴대폰은 하루 동안 걸은 걸음을 세어 날마다 기록합니다. 무언가를 관찰하고 재면 이렇게 숫자가 쌓입니다. 하지만 숫자를 바라보기만 해서는 그 숫자가 무엇을 말하는지 알기 어렵습니다.</p>
-          <p class="next"><span>본문에서</span>4-1 데이터와 통계학으로 이어집니다.</p>
+          <ul class="key"><li>출발 시각, 도착 시각, 비가 왔는지가 남습니다.</li></ul>
+          <p class="exp">매일 집을 나선 시각과 도착한 시각, 그날 비가 왔는지가 기록으로 쌓입니다. 이렇게 쌓인 기록이 데이터입니다. 이 데이터로 무엇을 할지는 요약·설명·예측 가운데 하나로 정합니다.</p>
         </div>
       </div>
     </section>
 
     <section class="slide" data-step="2">
-      <div class="sh"><div class="sec">일상의 예시 2/5</div><h2>한 달 지출은 ‘하루 평균’ 하나로 말합니다</h2></div>
+      <div class="sh"><div class="sec">일상의 예시 2/5</div><h2>나흘 도착의 평균</h2></div>
       <div class="body split">
-        <div class="fig"><svg viewBox="0 0 440 250" role="img" aria-label="영수증 여러 장이 하루 평균 한 값으로 정리되는 그림">
-          <defs><marker id="m-ar2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10z" fill="#5B6E97"/></marker></defs>
-          <g transform="rotate(-8 100 125)"><rect x="40" y="40" width="110" height="150" rx="6" fill="#fff" stroke="#C9D0DB" stroke-width="2"/></g>
-          <g transform="rotate(5 110 125)"><rect x="52" y="44" width="110" height="150" rx="6" fill="#fff" stroke="#C9D0DB" stroke-width="2"/></g>
-          <rect x="62" y="50" width="110" height="150" rx="6" fill="#fff" stroke="#5B6E97" stroke-width="2"/>
-          <text x="117" y="74" text-anchor="middle" font-size="12" font-weight="800" fill="#1B2A4A">영수증</text>
-          <g stroke="#A9B8D4" stroke-width="5" stroke-linecap="round"><line x1="76" y1="94" x2="158" y2="94"/><line x1="76" y1="114" x2="146" y2="114"/><line x1="76" y1="134" x2="152" y2="134"/><line x1="76" y1="154" x2="138" y2="154"/></g>
-          <text x="117" y="186" text-anchor="middle" font-size="11.5" fill="#6B7280">30일 치</text>
-          <line x1="190" y1="125" x2="262" y2="125" stroke="#5B6E97" stroke-width="3" marker-end="url(#m-ar2)"/>
-          <text x="226" y="114" text-anchor="middle" font-size="12" font-weight="700" fill="#5B6E97">한 값으로</text>
-          <circle cx="338" cy="125" r="62" fill="#fff" stroke="#E0A100" stroke-width="4"/>
-          <text x="338" y="118" text-anchor="middle" font-size="15" font-weight="800" fill="#1B2A4A">하루 평균</text>
-          <text x="338" y="142" text-anchor="middle" font-size="15" font-weight="800" fill="#6E4F00">○○원</text>
+        <div class="fig"><svg viewBox="0 0 440 250" role="img" aria-label="나흘의 도착 시각과 그 평균. 화요일은 평균에서 멀리 떨어져 있습니다">
+          <line x1="70" y1="132" x2="360" y2="132" stroke="#E0A100" stroke-width="2" stroke-dasharray="5 4"/>
+          <text x="372" y="136" font-size="13" font-weight="800" fill="#6E4F00">평균</text>
+          <g>
+            <rect x="86" y="153" width="44" height="47" rx="4" fill="#1B2A4A"/><text x="108" y="218" text-anchor="middle" font-size="13" font-weight="700" fill="#1B2A4A">월</text>
+            <rect x="156" y="72" width="44" height="128" rx="4" fill="#E0A100"/><text x="178" y="218" text-anchor="middle" font-size="13" font-weight="700" fill="#1B2A4A">화</text>
+            <rect x="226" y="158" width="44" height="42" rx="4" fill="#1B2A4A"/><text x="248" y="218" text-anchor="middle" font-size="13" font-weight="700" fill="#1B2A4A">수</text>
+            <rect x="296" y="144" width="44" height="56" rx="4" fill="#1B2A4A"/><text x="318" y="218" text-anchor="middle" font-size="13" font-weight="700" fill="#1B2A4A">목</text>
+          </g>
+          <text x="220" y="40" text-anchor="middle" font-size="13" font-weight="700" fill="#5B6E97">도착 시각</text>
         </svg></div>
         <div class="side">
-          <ul class="key"><li>들쭉날쭉한 기록도 값 하나로 정리됩니다.</li></ul>
-          <p class="exp">30일 동안의 지출을 하나하나 말하면 듣는 사람이 기억하지 못합니다. ‘하루 평균 얼마’라고 하면 한 번에 감이 옵니다. 많은 숫자를 값 하나로 줄이는 이 일이 데이터 요약입니다.</p>
-          <p class="next"><span>본문에서</span>4-2 데이터 요약으로 이어집니다.</p>
+          <ul class="key"><li>평균이 개별 날을 대표하는지 판단합니다.</li></ul>
+          <p class="exp">여러 날의 도착 시각을 평균으로 나타냅니다. 그 평균이 개별 날을 대표하는지는 따로 판단합니다.</p>
         </div>
       </div>
     </section>
 
     <section class="slide" data-step="2">
-      <div class="sh"><div class="sec">일상의 예시 3/5</div><h2>붉은 사과는 달고, 초록 사과는 시큼했습니다</h2></div>
+      <div class="sh"><div class="sec">일상의 예시 3/5</div><h2>비 온 날은 늦었습니다</h2></div>
       <div class="body split">
-        <div class="fig"><svg viewBox="0 0 440 250" role="img" aria-label="붉은 사과는 달고 초록 사과는 시큼하다는 관계">
-          <path d="M120 70 c-46 -18 -82 18 -74 66 c8 48 44 74 74 62 c30 12 66 -14 74 -62 c8 -48 -28 -84 -74 -66z" fill="#C2413A"/>
-          <path d="M120 70 c0 -16 4 -26 12 -34" stroke="#6B4B2A" stroke-width="5" fill="none" stroke-linecap="round"/><path d="M128 44 c14 -12 30 -10 38 0 c-12 10 -26 10 -38 0z" fill="#3E8E4E"/>
-          <path d="M320 70 c-46 -18 -82 18 -74 66 c8 48 44 74 74 62 c30 12 66 -14 74 -62 c8 -48 -28 -84 -74 -66z" fill="#8DBB4C"/>
-          <path d="M320 70 c0 -16 4 -26 12 -34" stroke="#6B4B2A" stroke-width="5" fill="none" stroke-linecap="round"/><path d="M328 44 c14 -12 30 -10 38 0 c-12 10 -26 10 -38 0z" fill="#3E8E4E"/>
-          <rect x="80" y="210" width="80" height="28" rx="14" fill="#1B2A4A"/><text x="120" y="229" text-anchor="middle" font-size="13.5" font-weight="800" fill="#fff">달다</text>
-          <rect x="280" y="210" width="80" height="28" rx="14" fill="#1B2A4A"/><text x="320" y="229" text-anchor="middle" font-size="13.5" font-weight="800" fill="#fff">시큼하다</text>
-          <text x="220" y="140" text-anchor="middle" font-size="22" font-weight="800" fill="#5B6E97">vs</text>
+        <div class="fig"><svg viewBox="0 0 440 250" role="img" aria-label="비와 도착을 상관과 인과 사이에서 저울질합니다. 저울은 어느 쪽으로도 기울지 않습니다">
+          <text x="220" y="34" text-anchor="middle" font-size="16" font-weight="800" fill="#1B2A4A">상관일까, 인과일까</text>
+          <text x="220" y="74" text-anchor="middle" font-size="13" font-weight="800" fill="#5B6E97">비와 도착</text>
+          <line x1="220" y1="102" x2="220" y2="168" stroke="#1B2A4A" stroke-width="3"/>
+          <polygon points="196,190 244,190 220,168" fill="#1B2A4A"/>
+          <line x1="48" y1="102" x2="392" y2="102" stroke="#1B2A4A" stroke-width="4" stroke-linecap="round"/>
+          <circle cx="220" cy="102" r="6" fill="#E0A100"/>
+          <line x1="100" y1="102" x2="100" y2="132" stroke="#5B6E97" stroke-width="1.5"/>
+          <line x1="340" y1="102" x2="340" y2="132" stroke="#5B6E97" stroke-width="1.5"/>
+          <rect x="36" y="132" width="128" height="62" rx="12" fill="#fff" stroke="#1B2A4A" stroke-width="1.5"/>
+          <text x="100" y="158" text-anchor="middle" font-size="16" font-weight="800" fill="#1B2A4A">상관</text>
+          <text x="100" y="178" text-anchor="middle" font-size="12" font-weight="700" fill="#5B6E97">함께 변하는가</text>
+          <rect x="276" y="132" width="128" height="62" rx="12" fill="#fff" stroke="#1B2A4A" stroke-width="1.5"/>
+          <text x="340" y="158" text-anchor="middle" font-size="16" font-weight="800" fill="#1B2A4A">인과</text>
+          <text x="340" y="178" text-anchor="middle" font-size="12" font-weight="700" fill="#5B6E97">바꾸면 바뀌는가</text>
         </svg></div>
         <div class="side">
-          <ul class="key"><li>경험으로 색과 맛의 관계를 짐작합니다.</li></ul>
-          <p class="exp">몇 번 먹어 본 경험만으로도 ‘붉은 사과는 달다’는 관계를 떠올립니다. 경험과 지식도 일종의 데이터입니다. 이렇게 대상의 성질과 관계를 밝히는 일이 대상 설명입니다. 다만 경험만으로는 그 관계가 우연인지 알 수 없습니다.</p>
-          <p class="next"><span>본문에서</span>4-3 대상 설명으로 이어집니다.</p>
+          <ul class="key"><li>그 관계가 상관인지 인과인지 판단합니다.</li></ul>
+          <p class="exp">비와 늦은 도착이 함께 움직이는 관계를 밝힙니다. 상관은 함께 변하는가로, 인과는 한쪽을 바꾸면 다른 쪽이 바뀌는가로 판단합니다.</p>
         </div>
       </div>
     </section>
 
     <section class="slide" data-step="2">
-      <div class="sh"><div class="sec">일상의 예시 4/5</div><h2>먹구름이 끼면 우산을 챙깁니다</h2></div>
+      <div class="sh"><div class="sec">일상의 예시 4/5</div><h2>내일은 몇 시에 도착할까요</h2></div>
       <div class="body split">
-        <div class="fig"><svg viewBox="0 0 440 250" role="img" aria-label="먹구름을 보고 우산을 챙기는 장면">
-          <defs><marker id="m-ar3" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10z" fill="#5B6E97"/></marker></defs>
-          <path d="M60 120 a34 34 0 0 1 30 -50 a44 44 0 0 1 82 6 a30 30 0 0 1 6 58 h-112 a26 26 0 0 1 -6 -14z" fill="#6B7280"/>
-          <g stroke="#5B6E97" stroke-width="4" stroke-linecap="round"><line x1="84" y1="158" x2="78" y2="176"/><line x1="114" y1="158" x2="108" y2="176"/><line x1="144" y1="158" x2="138" y2="176"/><line x1="99" y1="188" x2="93" y2="206"/><line x1="129" y1="188" x2="123" y2="206"/></g>
-          <line x1="206" y1="125" x2="252" y2="125" stroke="#5B6E97" stroke-width="3" marker-end="url(#m-ar3)"/>
-          <path d="M270 120 a70 70 0 0 1 140 0 q-17 -12 -35 0 q-17 -12 -35 0 q-17 -12 -35 0 q-18 -12 -35 0z" fill="#1B2A4A"/>
-          <path d="M340 120 v70 a12 12 0 0 1 -24 0" fill="none" stroke="#1B2A4A" stroke-width="6" stroke-linecap="round"/>
-          <text x="340" y="232" text-anchor="middle" font-size="12" font-weight="700" fill="#6B7280">비가 오기 전에 챙김</text>
+        <div class="fig"><svg viewBox="0 0 440 250" role="img" aria-label="이미 밝힌 비와 도착의 관계로 아직 없는 내일의 도착을 예측하는 그림">
+          <defs><marker id="m-day4" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10z" fill="#5B6E97"/></marker></defs>
+          <rect x="28" y="62" width="160" height="110" rx="12" fill="#fff" stroke="#1B2A4A" stroke-width="1.5"/>
+          <text x="108" y="108" text-anchor="middle" font-size="15" font-weight="800" fill="#1B2A4A">밝힌 관계</text>
+          <text x="108" y="134" text-anchor="middle" font-size="13" fill="#5B6E97">비와 도착</text>
+          <line x1="196" y1="117" x2="248" y2="117" stroke="#5B6E97" stroke-width="2.5" marker-end="url(#m-day4)"/>
+          <rect x="252" y="62" width="160" height="110" rx="12" fill="#FCF3D9" stroke="#E0A100" stroke-width="2"/>
+          <text x="332" y="108" text-anchor="middle" font-size="15" font-weight="800" fill="#1B2A4A">내일의 도착</text>
+          <text x="332" y="134" text-anchor="middle" font-size="13" font-weight="700" fill="#6E4F00">아직 없는 값</text>
         </svg></div>
         <div class="side">
-          <ul class="key"><li>지금까지 본 것으로 앞일을 가늠합니다.</li></ul>
-          <p class="exp">먹구름이 낀 뒤에 비가 내리던 경험이 쌓여 있으면, 아직 내리지 않은 비를 미리 가늠할 수 있습니다. 이미 얻은 데이터로 앞으로 얻을 데이터를 가늠하는 일, 이것이 예측입니다.</p>
-          <p class="next"><span>본문에서</span>4-4 미지의 데이터 예측으로 이어집니다.</p>
+          <ul class="key"><li>밝힌 관계로 아직 없는 값을 예측합니다.</li></ul>
+          <p class="exp">내일의 도착 시각은 아직 기록에 없습니다. 비와 도착의 관계로 그 시각을 예측합니다.</p>
         </div>
       </div>
     </section>
 
     <section class="slide" data-step="2">
-      <div class="sh"><div class="sec">일상의 예시 5/5</div><h2>이 장면들을 숫자로 옮기면 무엇을 할 수 있을까요?</h2></div>
+      <div class="sh"><div class="sec">일상의 예시 5/5</div><h2>같은 기록으로 하는 일이 다릅니다</h2></div>
       <div class="body split even">
-        <div class="fig"><svg viewBox="0 0 420 250" role="img" aria-label="네 가지 일상 장면이 데이터 분석으로 이어지는 그림">
-          <defs><marker id="m-ar4" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10z" fill="#5B6E97"/></marker></defs>
-          <g font-size="13" font-weight="700" fill="#1B2A4A" text-anchor="middle">
-            <rect x="14" y="18" width="150" height="44" rx="10" fill="#fff" stroke="#5B6E97" stroke-width="1.5"/><text x="89" y="45">기록이 쌓인다</text>
-            <rect x="14" y="74" width="150" height="44" rx="10" fill="#fff" stroke="#5B6E97" stroke-width="1.5"/><text x="89" y="101">하루 평균으로 말한다</text>
-            <rect x="14" y="130" width="150" height="44" rx="10" fill="#fff" stroke="#5B6E97" stroke-width="1.5"/><text x="89" y="157">색과 맛을 잇는다</text>
-            <rect x="14" y="186" width="150" height="44" rx="10" fill="#fff" stroke="#5B6E97" stroke-width="1.5"/><text x="89" y="213">비를 미리 가늠한다</text>
+        <div class="fig"><svg viewBox="0 0 440 250" role="img" aria-label="같은 출근 기록이 요약, 설명, 예측으로 나뉘는 그림">
+          <defs><marker id="m-day5" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10z" fill="#5B6E97"/></marker></defs>
+          <rect x="16" y="78" width="150" height="94" rx="12" fill="#1B2A4A"/>
+          <text x="91" y="116" text-anchor="middle" font-size="15" font-weight="800" fill="#fff">출근 기록</text>
+          <text x="91" y="142" text-anchor="middle" font-size="12" fill="#C9D3E6">출발 · 도착 · 비</text>
+          <g stroke="#5B6E97" stroke-width="2" fill="none">
+            <path d="M168 125 C210 125 210 46 246 46" marker-end="url(#m-day5)"/>
+            <path d="M168 125 H246" marker-end="url(#m-day5)"/>
+            <path d="M168 125 C210 125 210 204 246 204" marker-end="url(#m-day5)"/>
           </g>
-          <g stroke="#5B6E97" stroke-width="2" fill="none"><path d="M166 40 C220 40 220 112 254 120" marker-end="url(#m-ar4)"/><path d="M166 96 C210 96 220 118 254 122" marker-end="url(#m-ar4)"/><path d="M166 152 C210 152 220 130 254 128" marker-end="url(#m-ar4)"/><path d="M166 208 C220 208 220 138 254 130" marker-end="url(#m-ar4)"/></g>
-          <rect x="258" y="84" width="150" height="82" rx="12" fill="#1B2A4A"/>
-          <text x="333" y="118" text-anchor="middle" font-size="16" font-weight="800" fill="#fff">데이터 분석</text>
-          <text x="333" y="142" text-anchor="middle" font-size="11.5" fill="#C9D3E6">얻기 · 요약 · 설명 · 예측</text>
+          <g font-weight="800" fill="#1B2A4A" text-anchor="middle">
+            <rect x="250" y="18" width="174" height="56" rx="10" fill="#fff" stroke="#5B6E97" stroke-width="1.5"/>
+            <text x="337" y="42" font-size="15">요약</text><text x="337" y="60" font-size="12" font-weight="700" fill="#5B6E97">평균 도착</text>
+            <rect x="250" y="97" width="174" height="56" rx="10" fill="#fff" stroke="#5B6E97" stroke-width="1.5"/>
+            <text x="337" y="121" font-size="15">설명</text><text x="337" y="139" font-size="12" font-weight="700" fill="#5B6E97">비와 늦음</text>
+            <rect x="250" y="176" width="174" height="56" rx="10" fill="#fff" stroke="#5B6E97" stroke-width="1.5"/>
+            <text x="337" y="200" font-size="15">예측</text><text x="337" y="218" font-size="12" font-weight="700" fill="#5B6E97">내일의 도착</text>
+          </g>
         </svg></div>
         <div class="side">
-          <p class="exp">네 장면은 숫자를 모으고, 값 하나로 줄이고, 관계를 찾고, 앞일을 가늠하는 일입니다. 데이터 분석은 이 일들을 경험이 아니라 숫자와 분석 방법으로 정확하게 해내는 방법입니다.</p>
-          <p class="next"><span>다음 질문</span>데이터는 어디서 오고, 무엇을 위해 분석할까?</p>
+          <p class="exp">출발 시각, 도착 시각, 비는 같은 기록입니다. 요약은 도착을 평균으로 나타내고, 설명은 비와 늦음의 관계를 밝히며, 예측은 내일의 도착을 구합니다.</p>
         </div>
       </div>
     </section>
@@ -723,10 +760,17 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
   </main>
 
   <footer class="bottombar">
-    <a class="home" href="../index.html" title="홈으로 (학습 과정)" aria-label="홈으로"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 10.5 12 3l9 7.5"/><path d="M5.5 9.5V21h13V9.5"/></svg><span>홈</span></a><span class="counter" id="counter"></span><span class="spacer"></span>
+    <a class="home" href="../index.html" title="홈으로 (학습 과정)" aria-label="홈으로"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 10.5 12 3l9 7.5"/><path d="M5.5 9.5V21h13V9.5"/></svg><span>홈</span></a><span class="spacer"></span>
     <button class="nav" id="prev" type="button">이전</button>
     <button class="nav primary" id="next" type="button">다음</button>
+    <span class="counter" id="counter"></span>
   </footer>
+  <div class="exmodal" id="exmodal" hidden>
+    <div class="exsheet" role="dialog" aria-modal="true" aria-labelledby="exmt">
+      <div class="exmh"><h3 id="exmt"></h3><button class="nav" id="exclose" type="button">닫기</button></div>
+      <div class="exbody" id="exbody"></div>
+    </div>
+  </div>
 </div>
 <p class="rotate">화면을 가로로 돌리면 더 크게 볼 수 있습니다.</p>
 
@@ -988,24 +1032,70 @@ STEPS.forEach(function(n,i){
   b.addEventListener("click",function(){show(stepFirst[i]);});
   rail.appendChild(b);stations.push(b);
 });
+var pageDots=[];
+var gapPages={};
+slides.forEach(function(s,i){
+  var st=+s.dataset.step,local=i-stepFirst[st],count=stepCount[st];
+  if(local===0&&st!==6)return;
+  var gap=st<6?st:5;
+  (gapPages[gap]=gapPages[gap]||[]).push({i:i,st:st,local:local,count:count});
+});
+Object.keys(gapPages).forEach(function(gap){
+  gapPages[gap].forEach(function(d){
+    var b=document.createElement("button");b.type="button";b.className="pagedot";b.tabIndex=-1;b.dataset.slide=String(d.i);
+    b.setAttribute("aria-hidden","true");b.title=STEPS[d.st]+" "+(d.local+1)+"/"+d.count;
+    b.addEventListener("click",function(){show(d.i);});
+    rail.appendChild(b);pageDots.push(b);d.btn=b;
+  });
+});
+var stationX=[];
+function measureStations(){stationX=stations.map(function(b){return b.offsetLeft+b.offsetWidth/2;});}
+function tipFor(st,local){
+  var R=12;
+  if(st<5){var A=stationX[st],B=stationX[st+1];return A+R+local*(B-A)/stepCount[st];}
+  var A=stationX[5],B=stationX[6],n5=stepCount[5],total=n5+stepCount[6];
+  var index=st===5?local:n5+local;
+  return A+R+index*(B-(A+R))/(total-1);
+}
+function layoutPageDots(){
+  measureStations();
+  Object.keys(gapPages).forEach(function(gap){
+    var g=+gap,list=gapPages[gap],edgeL=stationX[g]+12,edgeR=stationX[g+1]-12;
+    list.forEach(function(d){
+      var tip=tipFor(d.st,d.local);
+      var prev=d.local>0?tipFor(d.st,d.local-1):tipFor(d.st-1,stepCount[d.st-1]-1);
+      var next=d.local+1<stepCount[d.st]?tipFor(d.st,d.local+1):(d.st<6?tipFor(d.st+1,0):stationX[6]);
+      var left=Math.max(edgeL,(prev+tip)/2),right=Math.min(edgeR,(tip+next)/2);
+      d.btn.style.left=left+"px";d.btn.style.width=Math.max(0,right-left)+"px";
+    });
+  });
+}
+layoutPageDots();
 function show(i){
   cur=Math.max(0,Math.min(slides.length-1,i));
   slides.forEach(function(s,k){s.classList.toggle("on",k===cur);});
   var st=+slides[cur].dataset.step;seen[st]=true;
   stations.forEach(function(b,k){b.classList.toggle("cur",k===st);b.classList.toggle("done",k<st||(!!seen[k]&&k!==st));if(k===st)b.setAttribute("aria-current","step");else b.removeAttribute("aria-current");});
-  var within=(cur-stepFirst[st])/Math.max(1,stepCount[st]);
-  var frac=st===6&&cur===slides.length-1?1:(st+within)/6;
-  document.getElementById("fill").style.width=(Math.min(1,frac)*100)+"%";
-  document.getElementById("counter").innerHTML="<strong>"+STEPS[st]+"</strong> "+(cur-stepFirst[st]+1)+" / "+stepCount[st];
+  pageDots.forEach(function(b){var k=+b.dataset.slide;b.classList.toggle("cur",k===cur);b.classList.toggle("done",k<cur);});
+  var track=document.querySelector(".rail .track");
+  var w=tipFor(+slides[cur].dataset.step,cur-stepFirst[st])-track.offsetLeft;
+  document.getElementById("fill").style.width=Math.max(0,Math.min(track.clientWidth,w))+"px";
+  document.getElementById("counter").textContent=(cur+1)+"/"+slides.length;
   document.getElementById("prev").disabled=cur===0;
   var nx=document.getElementById("next");nx.disabled=cur===slides.length-1;
-  nx.textContent=(cur<slides.length-1&&+slides[cur+1].dataset.step!==st)?STEPS[+slides[cur+1].dataset.step]+"(으)로":"다음";
+  nx.textContent="다음";
 }
 function bindJumps(root){[].forEach.call(root.querySelectorAll("[data-jump]"),function(b){b.addEventListener("click",function(){var t=document.getElementById(b.dataset.jump);if(t)show(slides.indexOf(t));});});}
 bindJumps(document);
 document.getElementById("prev").onclick=function(){show(cur-1);};
 document.getElementById("next").onclick=function(){show(cur+1);};
 document.addEventListener("keydown",function(e){
+  var em=document.getElementById("exmodal");
+  if(em&&!em.hidden){
+    if(e.key==="Escape")em.hidden=true;
+    if(e.key==="Escape"||e.key==="ArrowRight"||e.key==="ArrowLeft"||e.key==="PageDown"||e.key==="PageUp")e.preventDefault();
+    return;
+  }
   if(e.defaultPrevented||e.isComposing||e.altKey||e.ctrlKey||e.metaKey||e.shiftKey)return;
   var t=e.target;
   if(t&&t.closest){
@@ -1017,7 +1107,7 @@ document.addEventListener("keydown",function(e){
 });
 var tx=null,ty=null;
 vp.addEventListener("touchstart",function(e){var t=e.target;if(t.closest&&(t.closest("input")||t.closest(".dcard"))){tx=null;return;}tx=e.touches[0].clientX;ty=e.touches[0].clientY;},{passive:true});
-vp.addEventListener("touchend",function(e){if(tx==null)return;var dx=e.changedTouches[0].clientX-tx,dy=e.changedTouches[0].clientY-ty;if(Math.abs(dx)>60&&Math.abs(dx)>Math.abs(dy)*1.5)show(cur+(dx<0?1:-1));tx=null;},{passive:true});
+vp.addEventListener("touchend",function(e){if(tx==null)return;var em=document.getElementById("exmodal");if(em&&!em.hidden){tx=null;return;}var dx=e.changedTouches[0].clientX-tx,dy=e.changedTouches[0].clientY-ty;if(Math.abs(dx)>60&&Math.abs(dx)>Math.abs(dy)*1.5)show(cur+(dx<0?1:-1));tx=null;},{passive:true});
 
 /* ---------- 실습 1 · 조작형 ---------- */
 (function(){if(!document.getElementById("p1-items")||!CASE)return;
@@ -1097,6 +1187,93 @@ document.getElementById("p3-check").onclick=function(){
   document.getElementById("p3-res").classList.add("on");p3d();
 };
 p3d();
+
+var exmodal=document.getElementById("exmodal"),exmt=document.getElementById("exmt"),exbody=document.getElementById("exbody"),exfrom=null;
+function closeEx(){if(!exmodal)return;exmodal.hidden=true;if(exfrom){exfrom.focus();exfrom=null;}}
+document.getElementById("exclose").onclick=closeEx;
+exmodal.addEventListener("click",function(e){if(e.target===exmodal)closeEx();});
+function rawTable(heads,rows,numeric){
+  var wrap=document.createElement("div"),cap=document.createElement("p");
+  cap.className="excap";cap.textContent="7월 1일–30일 · 가상 데이터";
+  var t=document.createElement("table"),th=document.createElement("thead"),hr=document.createElement("tr");
+  t.className="extable";
+  heads.forEach(function(h,i){var c=document.createElement("th");if(numeric[i])c.className="num";c.textContent=h;hr.appendChild(c);});
+  th.appendChild(hr);t.appendChild(th);
+  var tb=document.createElement("tbody");
+  rows.forEach(function(r){var tr=document.createElement("tr");
+    if(r[1]==="토"||r[1]==="일")tr.className="wkend";
+    r.forEach(function(cell,i){var td=document.createElement("td");if(numeric[i])td.className="num";td.textContent=cell;tr.appendChild(td);});
+    tb.appendChild(tr);});
+  t.appendChild(tb);wrap.appendChild(cap);wrap.appendChild(t);return wrap;
+}
+/* 학습개요 전용. 본문·실습의 기온·수확(PAIRS)과는 별개입니다. */
+var CAFE={
+  date:["7/1","7/2","7/3","7/4","7/5","7/6","7/7","7/8","7/9","7/10","7/11","7/12","7/13","7/14","7/15","7/16","7/17","7/18","7/19","7/20","7/21","7/22","7/23","7/24","7/25","7/26","7/27","7/28","7/29","7/30"],
+  day:["수","목","금","토","일","월","화","수","목","금","토","일","월","화","수","목","금","토","일","월","화","수","목","금","토","일","월","화","수","목"],
+  temp:[28,29,30,31,32,33,31,29,28,27,29,30,32,33,34,32,30,29,28,30,31,33,32,30,29,28,31,33,32,30],
+  ice:[80,85,88,93,92,101,87,84,75,77,77,87,91,93,105,89,84,77,80,88,88,96,93,81,78,77,93,94,93,84],
+  hot:[48,46,40,40,33,32,34,42,42,51,44,40,36,35,27,32,38,46,44,41,38,34,35,42,43,45,40,34,34,41]
+};
+function howMark(how){
+  if(!how)return "";
+  return how.length<=12?'<span class="extag">'+how+'</span>':'<span class="exnote">'+how+'</span>';
+}
+function askItem(it){
+  return '<li><p>'+it.q+'</p>'+howMark(it.how)+'</li>';
+}
+function askList(items){
+  return '<ul class="exq">'+items.map(askItem).join("")+'</ul>';
+}
+function askSplit(yes,no,limitLabel){
+  return askList(yes)+'<div class="exlimbox"><p class="exlim">'+limitLabel+'</p><ul class="exq exq-lim">'+no.map(askItem).join("")+'</ul></div>';
+}
+function openEx(kind,from){
+  exfrom=from;exbody.replaceChildren();
+  exmodal.querySelector(".exsheet").classList.toggle("tbl",kind==="data");
+  if(kind==="data"){
+    exmt.textContent="원자료";
+    exbody.appendChild(rawTable(["날짜","요일","최고기온(℃)","아이스 아메리카노(잔)","따뜻한 아메리카노(잔)"],CAFE.date.map(function(d,i){return [d,CAFE.day[i],String(CAFE.temp[i]),String(CAFE.ice[i]),String(CAFE.hot[i])];}),[false,false,true,true,true]));
+  }else if(kind==="sum"){
+    exmt.textContent="요약은 이런 질문에 답합니다";
+    exbody.innerHTML=askSplit([
+      {q:"이 카페는 하루에 아이스 아메리카노를 보통 몇 잔 파나요?",how:"평균, 중위수"},
+      {q:"한 달 동안 아메리카노는 모두 몇 잔 팔렸나요?",how:"합계"},
+      {q:"팔린 잔 가운데 아이스가 차지하는 비중은 어느 정도인가요?",how:"비율"},
+      {q:"가장 많이(또는 적게) 아이스 아메리카노를 판매한 날은 언제인가요?",how:"최대/최소값"}
+    ],[
+      {q:"최고기온이 오르면 아이스 아메리카노 판매량도 늘어날까요?",how:"설명의 영역"}
+    ],"이 목적으로는 답하지 않습니다");
+  }else if(kind==="rel"){
+    exmt.textContent="설명은 상관관계 또는 인과관계에 대한 질문에 답합니다";
+    exbody.innerHTML=askSplit([
+      {q:"요일별로 판매량에 차이가 있을까요?",how:"그룹간 비교"},
+      {q:"최고기온이 오르면 아이스 아메리카노 판매량도 늘어날까요?",how:"상관분석"},
+      {q:"아이스 아메리카노가 많이 팔린 날은 따뜻한 아메리카노가 적게 팔릴까요?",how:"변수간 역상관"}
+    ],[
+      {q:"기온이 올라서 아이스 아메리카노가 더 팔린 것인가요?",how:"상관은 보여도 100% 인과로 단정할 수 없음"},
+      {q:"표에 없는 변수(예: 직원 수, 주변 행사 등)가 미친 영향"}
+    ],"이 목적으로는 답하지 않습니다");
+  }else{
+    exmt.textContent="예측은 이런 질문에 답합니다";
+    exbody.innerHTML=askSplit([
+      {q:"내일 아이스 아메리카노는 몇 잔 팔릴까요?"},
+      {q:"다음 주 월요일에는 따뜻한 아메리카노가 몇 잔 팔릴까요?"},
+      {q:"최고기온이 35℃인 다음 주 토요일에 팔릴 예상 아이스 아메리카노 잔수는?"}
+    ],[
+      {q:"내일의 최고기온은 몇 도로 예보될까요?",how:"기온 자체가 예측 대상이 아님"},
+      {q:"기온을 강제로 35℃로 올리면 판매량이 늘어날까요?",how:"단순 예측 모델은 인과적 개입 효과를 증명하지 못함"}
+    ],"이 목적으로는 답하지 않습니다");
+  }
+  exmodal.hidden=false;
+  document.getElementById("exclose").focus();
+}
+[].forEach.call(document.querySelectorAll(".exopen"),function(g){
+  function go(){openEx(g.getAttribute("data-ex"),g);}
+  g.addEventListener("click",go);
+  g.addEventListener("keydown",function(e){if(e.key==="Enter"||e.key===" "){e.preventDefault();go();}});
+});
+var showSlide=show;
+show=function(i){if(exmodal)exmodal.hidden=true;showSlide(i);};
 
 })();
 show(0);
