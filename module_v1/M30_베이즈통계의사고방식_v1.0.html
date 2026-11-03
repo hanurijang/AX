@@ -30,9 +30,10 @@ button{font:inherit;color:inherit}
 .rail{position:relative;flex:1;height:60px;margin-right:22px}
 .rail .track{position:absolute;left:14px;right:14px;top:21px;height:3px;background:#3A4D78;border-radius:2px}
 .rail .fill{position:absolute;left:0;top:0;bottom:0;background:var(--amber);border-radius:2px;transition:width .35s ease}
-.station{position:absolute;top:10px;width:72px;margin-left:-36px;background:none;border:0;padding:0;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:4px}
+.pagedot{position:absolute;z-index:1;top:10px;height:24px;margin:0;padding:0;border:0;background:none;cursor:pointer}
+.station{position:absolute;z-index:2;top:10px;width:24px;min-width:0;margin-left:-12px;background:none;border:0;padding:0;cursor:pointer;display:flex;flex-direction:column;align-items:center}
 .station .dot{width:24px;height:24px;border-radius:50%;display:grid;place-items:center;font-size:11.5px;font-weight:800;background:var(--navy);color:#8E9DBD;border:2px solid #4A5D88;transition:all .25s}
-.station .lb{font-size:11.5px;color:#8E9DBD;white-space:nowrap}
+.station .lb{position:absolute;top:28px;left:50%;transform:translateX(-50%);font-size:11.5px;color:#8E9DBD;white-space:nowrap}
 .station.done .dot{background:#C9D3E6;border-color:#C9D3E6;color:var(--navy)}
 .station.done .lb{color:#C9D3E6}
 .station.cur .dot{background:var(--amber);border-color:#FFE08A;color:var(--navy);transform:scale(1.12)}
@@ -58,6 +59,17 @@ h2.big{font-size:30px;line-height:1.32}
 .figcol{min-height:0;display:flex;flex-direction:column;gap:10px}
 .figcol .fig{flex:1 1 auto}
 .side{min-height:0;display:flex;flex-direction:column;gap:12px;justify-content:center}
+.ovpage{padding:0;gap:0}
+.ov{flex:1;min-height:0;display:grid;grid-template-columns:1.25fr 1fr;height:100%}
+.ov-main{min-height:0;display:flex;flex-direction:column;gap:12px;padding:16px 24px 10px 36px}
+.ov-main .fig{flex:1 1 auto}
+.fig.plain{background:none;padding:0}
+.ovpage .side.shade{background:var(--panel);border-radius:0;padding:28px 36px 28px 28px;height:100%}
+.ovpage .side.shade{gap:22px}
+.ovpage .bridge{display:flex;flex-direction:column;gap:28px}
+.ovpage .bridge .block{display:flex;flex-direction:column;gap:8px}
+.ovpage .ovlab{margin:0;font-size:13px;font-weight:800;letter-spacing:-.2px;color:var(--navy)}
+.ovpage .side .key b,.ovpage .side .exp b{font-weight:800;color:var(--navy);background:linear-gradient(transparent 62%,#FFE08A 62% 92%,transparent 92%)}
 
 /* 핵심 문장: 40자 안팎, 1~2개 */
 .key{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:9px}
@@ -86,7 +98,7 @@ h2.big{font-size:30px;line-height:1.32}
 
 /* ---------- 하단 바 ---------- */
 .bottombar{position:absolute;left:0;right:0;bottom:0;height:46px;border-top:1px solid var(--line);display:flex;align-items:center;padding:0 22px 0 36px;gap:12px;background:#fff}
-.counter{font-size:13px;color:var(--gray);font-weight:600}
+.counter{font-size:13px;color:var(--gray);font-weight:600;font-variant-numeric:tabular-nums;text-align:right;min-width:5ch}
 .counter strong{color:var(--navy)}
 .spacer{flex:1}
 .nav{border:1.5px solid var(--navy);background:#fff;color:var(--navy);border-radius:8px;height:32px;padding:0 16px;font-size:14px;font-weight:700;cursor:pointer}
@@ -107,14 +119,12 @@ h2.big{font-size:30px;line-height:1.32}
 .prevlink{background:var(--panel);border-radius:10px;padding:12px 14px;font-size:14.5px;line-height:1.55}
 .prevlink small{display:block;font-size:12px;font-weight:800;color:var(--navy3);margin-bottom:3px}
 
-/* ② 학습목표: 목표 → 문항 → 실습 연결 */
-.gmap{display:grid;grid-template-columns:44px 1fr 150px 150px;align-items:stretch;row-gap:12px;column-gap:0}
-.gmap .hd{font-size:12px;font-weight:700;color:var(--gray);padding:0 14px 2px}
-.gmap .gn{background:var(--navy);color:#fff;font-weight:800;font-size:18px;display:grid;place-items:center;border-radius:10px 0 0 10px}
-.gmap .gt{background:var(--panel);padding:14px 18px;font-size:17px;font-weight:700;line-height:1.42;letter-spacing:-.3px;display:flex;align-items:center}
-.gmap .gt b{color:var(--navy)}
-.gmap .ga,.gmap .gp{background:var(--panel);display:flex;align-items:center;padding:0 10px;border-left:2px solid #fff}
-.gmap .gp{border-radius:0 10px 10px 0}
+/* ② 학습목표 */
+.goals{display:flex;flex-direction:column;justify-content:center;gap:4px;height:100%}
+.goal{display:flex;align-items:center;gap:20px;background:transparent;border-radius:14px;padding:2px 28px}
+.goal i{flex:0 0 48px;height:48px;border-radius:50%;background:var(--navy);color:#fff;display:grid;place-items:center;font-style:normal;font-weight:800;font-size:20px}
+.goal p{margin:0;font-size:18.5px;font-weight:700;line-height:1.5;letter-spacing:-.3px}
+.goal b{font-weight:800;color:var(--navy);background:linear-gradient(transparent 62%,#FFE08A 62% 92%,transparent 92%)}
 .jump{border:1.5px solid var(--navy3);background:#fff;border-radius:7px;padding:6px 10px;font-size:13px;font-weight:700;color:var(--navy);cursor:pointer;text-align:left;line-height:1.3;width:100%}
 .jump:hover{background:var(--navy-soft)}
 
@@ -236,44 +246,41 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
 
   <main class="viewport" id="vp">
     <!-- ① 학습개요 ─────────────────────────────── -->
-    <section class="slide" data-step="0">
+    <section class="slide ovpage" data-step="0">
+      <div class="ov">
+      <div class="ov-main">
       <div class="sh"><div class="sec">학습개요</div>
         <h2 class="big">베이즈 통계는 파라미터에 대한 믿음을 데이터로 갱신합니다</h2></div>
-      <div class="body split">
-        <div class="fig"><svg id="m30-ov" viewBox="0 0 440 260" role="img" aria-label="빈도주의는 파라미터를 점으로, 베이즈는 사전분포를 데이터로 갱신해 사후분포로 얻는 흐름"></svg></div>
-        <div class="side">
-          <div class="prevlink"><small>지난 과정에서는</small>재현성, p값과 효과크기, p-해킹, 인과와 상관, 인과를 밝히는 방법까지 결과를 올바르게 해석하는 법을 배웠습니다.<small style="margin-top:8px">이번 과정에서는</small>베이즈 통계, 기계학습, 수리 모형을 다룹니다. 첫 모듈에서는 통계학의 두 흐름과 베이즈 통계의 사고방식, 사전분포와 사후분포, 정보량 기준을 배웁니다.</div>
-          <dl class="meta"><dt>학습 시간</dt><dd>약 40분</dd><dt>본문</dt><dd>소단원 5개</dd><dt>실습</dt><dd>조작형 · 분류형 · 추정형</dd></dl>
+        <div class="fig plain"><svg id="m30-ov" viewBox="0 0 440 260" role="img" aria-label="빈도주의는 파라미터를 점으로, 베이즈는 사전분포를 데이터로 갱신해 사후분포로 얻는 흐름"></svg></div>
+      </div>
+        <div class="side shade">
+          <div class="bridge"><div class="block"><p class="ovlab">지난 과정에서는</p><p class="exp">재현성, p값과 효과크기, <b>p-해킹</b>, 인과와 상관, 인과를 밝히는 방법까지 결과를 올바르게 해석하는 법을 배웠습니다.</p></div><div class="block"><p class="ovlab">이번 과정에서는</p><ul class="key"><li>베이즈 통계, 기계학습, 수리 모형을 다룹니다. 첫 모듈에서는 통계학의 두 흐름과 베이즈 통계의 사고방식, <b>사전분포와 사후분포</b>, 정보량 기준을 배웁니다.</li></ul></div></div>
         </div>
       </div>
     </section>
 
-    <section class="slide" data-step="0">
+    <section class="slide ovpage" data-step="0">
+      <div class="ov">
+      <div class="ov-main">
       <div class="sh"><div class="sec">학습개요 · 이 모듈의 예시</div><h2>신규 강종 S의 평균 인장강도를 시험편이 들어올 때마다 추정합니다</h2></div>
-      <div class="body split">
-        <div class="fig"><svg id="m30-case" viewBox="0 0 440 250" role="img" aria-label="시험편 10장의 인장강도 측정값 583, 567, 533, 548, 546, 599, 533, 580, 554, 572"></svg></div>
-        <div class="side">
+        <div class="fig plain"><svg id="m30-case" viewBox="0 0 440 250" role="img" aria-label="시험편 10장의 인장강도 측정값 583, 567, 533, 548, 546, 599, 533, 580, 554, 572"></svg></div>
+      </div>
+        <div class="side shade">
           <ul class="key"><li>모르는 평균 μ를 어떻게 표현할까요?</li></ul>
-          <p class="exp">새로 개발한 강종 S의 평균 인장강도 μ를 알고 싶습니다(예시값). 측정 표준편차는 20 MPa로 알고 있다고 가정합니다. 처음에는 400~700 MPa 어디쯤이라는 것밖에 모르지만, 시험편 10장의 측정값 583, 567, 533, … MPa가 하나씩 들어옵니다. 이 데이터로 μ를 하나의 값으로 추정할 수도, μ가 어디쯤일지 분포로 나타낼 수도 있습니다.</p>
+          <p class="exp">새로 개발한 강종 S의 평균 인장강도 μ를 알고 싶습니다(예시값). 측정 표준편차는 20 MPa로 알고 있다고 가정합니다. 처음에는 400~700 MPa 어디쯤이라는 것밖에 모르지만, 시험편 10장의 측정값 583, 567, 533, … MPa가 하나씩 들어옵니다. 이 데이터로 μ를 하나의 값으로 추정할 수도, μ가 어디쯤일지 <b>분포</b>로 나타낼 수도 있습니다.</p>
         </div>
       </div>
     </section>
 
-    <!-- ② 학습목표 ─────────────────────────────── -->
     <section class="slide" data-step="1">
-      <div class="sh"><div class="sec">학습목표</div><h2>이 모듈을 마치면 이렇게 할 수 있습니다</h2></div>
-      <div class="body full" style="align-content:center">
-        <div class="gmap">
-          <div></div><div class="hd">목표</div><div class="hd">확인하는 문항</div><div class="hd">연결 실습</div>
-          <div class="gn">1</div><div class="gt"><span>빈도주의와 베이즈의 불확실성 관점을 <b>구분한다</b>.</span></div>
-          <div class="ga"><button class="jump" data-jump="q1">문항 1·2</button></div><div class="gp"><button class="jump" data-jump="p2">실습 2 분류</button></div>
-          <div class="gn">2</div><div class="gt"><span>베이즈 정리로 사후분포를 <b>계산한다</b>.</span></div>
-          <div class="ga"><button class="jump" data-jump="q3">문항 3·4</button></div><div class="gp"><button class="jump" data-jump="p1">실습 1 조작</button></div>
-          <div class="gn">3</div><div class="gt"><span>사후분포로 확률을 구하고 정보량 기준을 <b>판단한다</b>.</span></div>
-          <div class="ga"><button class="jump" data-jump="q5">문항 5·6</button></div><div class="gp"><button class="jump" data-jump="p3">실습 3 추정</button></div>
+      <div class="sh"><div class="sec">학습목표</div><h2 class="big">이 모듈을 마치면 이렇게 할 수 있습니다</h2></div>
+      <div class="body full">
+        <div class="goals">
+          <div class="goal"><i>1</i><p>빈도주의와 베이즈의 불확실성 관점을 <b>구분한다</b>.</p></div>
+          <div class="goal"><i>2</i><p>베이즈 정리로 사후분포를 <b>계산한다</b>.</p></div>
+          <div class="goal"><i>3</i><p>사후분포로 확률을 구하고 정보량 기준을 <b>판단한다</b>.</p></div>
         </div>
       </div>
-      <p class="foot">버튼을 누르면 해당 문항이나 실습 화면으로 바로 이동합니다.</p>
     </section>
 
     <!-- ③ 일상의 예시 ─────────────────────────────── -->
@@ -384,7 +391,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
             <rect x="14" y="154" width="150" height="38" rx="10" fill="#fff" stroke="#5B6E97" stroke-width="1.5"/><text x="89" y="178">사전 정보 × 데이터</text>
             <rect x="14" y="202" width="150" height="38" rx="10" fill="#fff" stroke="#5B6E97" stroke-width="1.5"/><text x="89" y="226">확률로 판단</text>
           </g>
-          <g stroke="#5B6E97" stroke-width="2" fill="none"><path d="M166 29 C220 29 220 112 254 120" marker-end="url(#b2)"/><path d="M166 77 C210 77 220 116 254 122" marker-end="url(#b2)"/><path d="M166 125 L254 125" marker-end="url(#b2)"/><path d="M166 173 C210 173 220 134 254 128" marker-end="url(#b2)"/><path d="M166 221 C220 221 220 140 254 130" marker-end="url(#b2)"/></g>
+          <g stroke="#5B6E97" stroke-width="2" fill="none"><path d="M166 29 C200 29 200 120 232 120 H254" marker-end="url(#b2)"/><path d="M166 77 C200 77 210 122 232 122 H254" marker-end="url(#b2)"/><path d="M166 125 L254 125" marker-end="url(#b2)"/><path d="M166 173 C200 173 210 128 232 128 H254" marker-end="url(#b2)"/><path d="M166 221 C200 221 200 130 232 130 H254" marker-end="url(#b2)"/></g>
           <rect x="258" y="84" width="150" height="82" rx="12" fill="#1B2A4A"/>
           <text x="333" y="116" text-anchor="middle" font-size="15" font-weight="800" fill="#fff">베이즈 통계의</text><text x="333" y="136" text-anchor="middle" font-size="15" font-weight="800" fill="#fff">사고방식</text>
           <text x="333" y="156" text-anchor="middle" font-size="11" fill="#C9D3E6">사전 → 사후</text>
@@ -607,9 +614,10 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
   </main>
 
   <footer class="bottombar">
-    <a class="home" href="../index.html" title="홈으로 (학습 과정)" aria-label="홈으로"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 10.5 12 3l9 7.5"/><path d="M5.5 9.5V21h13V9.5"/></svg><span>홈</span></a><span class="counter" id="counter"></span><span class="spacer"></span>
+    <a class="home" href="../index.html" title="홈으로 (학습 과정)" aria-label="홈으로"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 10.5 12 3l9 7.5"/><path d="M5.5 9.5V21h13V9.5"/></svg><span>홈</span></a><span class="spacer"></span>
     <button class="nav" id="prev" type="button">이전</button>
     <button class="nav primary" id="next" type="button">다음</button>
+    <span class="counter" id="counter"></span>
   </footer>
 </div>
 <p class="rotate">화면을 가로로 돌리면 더 크게 볼 수 있습니다.</p>
@@ -796,16 +804,16 @@ function curveX(s,X,Y,f,lo,hi,col,fill,w){var p=[];for(var i=0;i<=200;i++){var x
 
 on("m30-ov",function(s){
   mkX(s,"oX",C.navy3);
-  bxX(s,140,8,160,46,"#F3F5F9",C.navy3);tX(s,220,28,"모르는 파라미터 θ",{fw:800,fs:12.5});tX(s,220,45,"예: 평균 인장강도 μ",{fs:10,c:C.gray});
-  bxX(s,10,90,190,80,"#EEF4FB",BLU);tX(s,105,112,"빈도주의 통계",{fw:800,fs:13,c:"#1C6EA4"});tX(s,105,134,"θ는 고정된 값",{fs:10.5});tX(s,105,154,"최대가능도 → 점 θ̂",{fw:700,fs:10.5});
-  bxX(s,240,90,190,80,"#FCF3D9",C.amber);tX(s,335,112,"베이즈 통계",{fw:800,fs:13,c:C.amberInk});tX(s,335,134,"θ를 확률분포로",{fs:10.5});tX(s,335,154,"사전분포 → 사후분포",{fw:700,fs:10.5});
+  bxX(s,140,8,160,46,"#F3F5F9");tX(s,220,28,"모르는 파라미터 θ",{fw:800,fs:12.5});tX(s,220,45,"예: 평균 인장강도 μ",{fs:10,c:C.gray});
+  bxX(s,10,90,190,80,"#EEF4FB");tX(s,105,112,"빈도주의 통계",{fw:800,fs:13,c:"#1C6EA4"});tX(s,105,134,"θ는 고정된 값",{fs:10.5});tX(s,105,154,"최대가능도 → 점 θ̂",{fw:700,fs:10.5});
+  bxX(s,240,90,190,80,"#FCF3D9");tX(s,335,112,"베이즈 통계",{fw:800,fs:13,c:C.amberInk});tX(s,335,134,"θ를 확률분포로",{fs:10.5});tX(s,335,154,"사전분포 → 사후분포",{fw:700,fs:10.5});
   arX(s,190,56,120,86,"oX");arX(s,250,56,320,86,"oX");
   bxX(s,240,196,190,56,C.navy);tX(s,335,218,"‘μ ≥ 550일 확률 73%’",{fw:800,fs:12,c:"#fff"});tX(s,335,238,"분포와 확률로 표현",{fs:10,c:"#C9D3E6"});arX(s,335,172,335,192,"oX");
   bxX(s,10,196,190,56,"#F3F5F9");tX(s,105,218,"μ̂ = 555.4 MPa",{fw:800,fs:12});tX(s,105,238,"점추정 + 표준오차·구간",{fs:10,c:C.gray});arX(s,105,172,105,192,"oX");
 });
 
 on("m30-case",function(s){
-  bxX(s,4,4,432,242);var X=linX(0.5,10.5,50,420),Y=linX(500,620,210,30);
+  bxX(s,4,4,432,242,"#fff","#D5D9E0");var X=linX(0.5,10.5,50,420),Y=linX(500,620,210,30);
   [520,560,600].forEach(function(t){el("line",{x1:50,x2:420,y1:Y(t),y2:Y(t),stroke:C.grid},s);tX(s,44,Y(t)+4,t,{a:"end",fs:9.5,c:C.gray2,fw:500});});
   XS.forEach(function(v,i){var x=X(i+1);el("line",{x1:x,x2:x,y1:210,y2:Y(v),stroke:"#C9D3E6","stroke-width":8},s);el("circle",{cx:x,cy:Y(v),r:6,fill:BLU,stroke:"#fff","stroke-width":1.5},s);tX(s,x,Y(v)-10,v,{fw:800,fs:10,halo:true});tX(s,x,226,"#"+(i+1),{fs:9.5,c:C.gray,fw:700});});
   tX(s,16,22,"인장강도(MPa)",{a:"start",fs:10,c:C.gray,fw:700});tX(s,420,22,"측정 표준편차 20 MPa · 예시값",{a:"end",fs:10,c:C.gray,fw:700});tX(s,235,242,"시험편 순서",{fs:9.5,c:C.gray,fw:700});
@@ -992,18 +1000,58 @@ STEPS.forEach(function(n,i){
   b.addEventListener("click",function(){show(stepFirst[i]);});
   rail.appendChild(b);stations.push(b);
 });
+var pageDots=[];
+var gapPages={};
+slides.forEach(function(s,i){
+  var st=+s.dataset.step,local=i-stepFirst[st],count=stepCount[st];
+  if(local===0&&st!==6)return;
+  var gap=st<6?st:5;
+  (gapPages[gap]=gapPages[gap]||[]).push({i:i,st:st,local:local,count:count});
+});
+Object.keys(gapPages).forEach(function(gap){
+  gapPages[gap].forEach(function(d){
+    var b=document.createElement("button");b.type="button";b.className="pagedot";b.tabIndex=-1;b.dataset.slide=String(d.i);
+    b.setAttribute("aria-hidden","true");b.title=STEPS[d.st]+" "+(d.local+1)+"/"+d.count;
+    b.addEventListener("click",function(){show(d.i);});
+    rail.appendChild(b);pageDots.push(b);d.btn=b;
+  });
+});
+var stationX=[];
+function measureStations(){stationX=stations.map(function(b){return b.offsetLeft+b.offsetWidth/2;});}
+function tipFor(st,local){
+  var R=12;
+  if(st<5){var A=stationX[st],B=stationX[st+1];return A+R+local*(B-A)/stepCount[st];}
+  var A=stationX[5],B=stationX[6],n5=stepCount[5],total=n5+stepCount[6];
+  var index=st===5?local:n5+local;
+  return A+R+index*(B-(A+R))/(total-1);
+}
+function layoutPageDots(){
+  measureStations();
+  Object.keys(gapPages).forEach(function(gap){
+    var g=+gap,list=gapPages[gap],edgeL=stationX[g]+12,edgeR=stationX[g+1]-12;
+    list.forEach(function(d){
+      var tip=tipFor(d.st,d.local);
+      var prev=d.local>0?tipFor(d.st,d.local-1):tipFor(d.st-1,stepCount[d.st-1]-1);
+      var next=d.local+1<stepCount[d.st]?tipFor(d.st,d.local+1):(d.st<6?tipFor(d.st+1,0):stationX[6]);
+      var left=Math.max(edgeL,(prev+tip)/2),right=Math.min(edgeR,(tip+next)/2);
+      d.btn.style.left=left+"px";d.btn.style.width=Math.max(0,right-left)+"px";
+    });
+  });
+}
+layoutPageDots();
 function show(i){
   cur=Math.max(0,Math.min(slides.length-1,i));
   slides.forEach(function(s,k){s.classList.toggle("on",k===cur);});
   var st=+slides[cur].dataset.step;seen[st]=true;
   stations.forEach(function(b,k){b.classList.toggle("cur",k===st);b.classList.toggle("done",k<st||(!!seen[k]&&k!==st));if(k===st)b.setAttribute("aria-current","step");else b.removeAttribute("aria-current");});
-  var within=(cur-stepFirst[st])/Math.max(1,stepCount[st]);
-  var frac=st===6&&cur===slides.length-1?1:(st+within)/6;
-  document.getElementById("fill").style.width=(Math.min(1,frac)*100)+"%";
-  document.getElementById("counter").innerHTML="<strong>"+STEPS[st]+"</strong> "+(cur-stepFirst[st]+1)+" / "+stepCount[st];
+  pageDots.forEach(function(b){var k=+b.dataset.slide;b.classList.toggle("cur",k===cur);b.classList.toggle("done",k<cur);});
+  var track=document.querySelector(".rail .track");
+  var w=tipFor(+slides[cur].dataset.step,cur-stepFirst[st])-track.offsetLeft;
+  document.getElementById("fill").style.width=Math.max(0,Math.min(track.clientWidth,w))+"px";
+  document.getElementById("counter").textContent=(cur+1)+"/"+slides.length;
   document.getElementById("prev").disabled=cur===0;
   var nx=document.getElementById("next");nx.disabled=cur===slides.length-1;
-  nx.textContent=(cur<slides.length-1&&+slides[cur+1].dataset.step!==st)?STEPS[+slides[cur+1].dataset.step]+"(으)로":"다음";
+  nx.textContent="다음";
 }
 function bindJumps(root){[].forEach.call(root.querySelectorAll("[data-jump]"),function(b){b.addEventListener("click",function(){var t=document.getElementById(b.dataset.jump);if(t)show(slides.indexOf(t));});});}
 bindJumps(document);

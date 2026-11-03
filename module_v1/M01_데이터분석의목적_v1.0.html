@@ -52,15 +52,21 @@ h2 .q{flex:0 0 auto;margin-top:2px;width:28px;height:28px;border-radius:6px;back
 h2.big{font-size:30px;line-height:1.32}
 .body{flex:1 1 auto;min-height:0;display:grid;gap:24px}
 .split{grid-template-columns:1.2fr 1fr}
-.split.figwide{grid-template-columns:1.55fr .85fr}
+.split.figwide{grid-template-columns:1.25fr 1fr}
 .split.even{grid-template-columns:1fr 1fr}
 .full{grid-template-columns:1fr}
 .fig{background:var(--panel);border-radius:12px;padding:12px;min-height:0;display:flex;align-items:center;justify-content:center}
 .fig.fit{padding:6px}
+.fig.plain{background:none;padding:0}
 .fig svg{width:100%;height:100%;display:block}
 .figcol{min-height:0;display:flex;flex-direction:column;gap:10px}
 .figcol .fig{flex:1 1 auto}
 .side{min-height:0;display:flex;flex-direction:column;gap:12px;justify-content:center}
+.ovpage{padding:0;gap:0}
+.ov{flex:1;min-height:0;display:grid;grid-template-columns:1.25fr 1fr;height:100%}
+.ov-main{min-height:0;display:flex;flex-direction:column;gap:12px;padding:16px 24px 10px 36px}
+.ov-main .fig{flex:1 1 auto}
+.ovpage .side.shade{background:var(--panel);border-radius:0;padding:28px 36px 28px 28px;height:100%}
 
 /* 핵심 문장: 40자 안팎, 1~2개 */
 .key{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:9px}
@@ -271,11 +277,12 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
 
   <main class="viewport" id="vp">
     <!-- ① 학습개요 ─────────────────────────────── -->
-    <section class="slide" data-step="0">
+    <section class="slide ovpage" data-step="0">
+      <div class="ov">
+      <div class="ov-main">
       <div class="sh"><div class="sec">학습개요</div>
         <h2 class="big">분석의 목적은 요약·설명·예측입니다</h2></div>
-      <div class="body split figwide">
-        <div class="fig fit"><svg viewBox="0 0 520 280" role="img" aria-label="기록이 데이터로 모이고, 목적 정하기에서 요약·설명·예측을 정한 뒤 전처리하거나 가공하면 각각의 결과가 나타나는 흐름">
+        <div class="fig plain"><svg viewBox="0 0 520 300" role="img" aria-label="기록이 데이터로 모이고, 목적 정하기에서 요약·설명·예측을 정하면 각각의 결과가 나타나는 흐름">
           <defs>
             <marker id="m-ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0 0L10 5L0 10z" fill="#5B6E97"/></marker>
             <symbol id="ex-click" viewBox="0 0 20 20">
@@ -284,48 +291,44 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
             </symbol>
           </defs>
           <g class="exopen" data-ex="data" role="button" tabindex="0" aria-label="원자료를 엽니다">
-            <rect x="6" y="102" width="100" height="76" rx="10" fill="#1B2A4A"/>
-            <text x="40" y="146" text-anchor="middle" font-size="15" font-weight="800" fill="#fff">데이터</text>
-            <use href="#ex-click" x="72" y="128" width="22" height="22"/>
+            <rect x="8" y="72" width="124" height="156" rx="12" fill="#1B2A4A"/>
+            <text x="70" y="156" text-anchor="middle" font-size="16" font-weight="800" fill="#fff">데이터</text>
+            <use href="#ex-click" x="104" y="80" width="20" height="20"/>
           </g>
-          <line x1="106" y1="140" x2="140" y2="140" stroke="#5B6E97" stroke-width="2" marker-end="url(#m-ar)"/>
-          <rect x="142" y="102" width="62" height="76" rx="10" fill="#FCF3D9" stroke="#E0A100" stroke-width="2"/>
-          <text x="173" y="132" text-anchor="middle" font-size="15" font-weight="800" fill="#6E4F00">목적</text>
-          <text x="173" y="154" text-anchor="middle" font-size="15" font-weight="800" fill="#6E4F00">정하기</text>
-          <line x1="204" y1="140" x2="238" y2="140" stroke="#5B6E97" stroke-width="2" marker-end="url(#m-ar)"/>
-          <rect x="240" y="102" width="72" height="76" rx="10" fill="#fff" stroke="#5B6E97" stroke-width="1.5"/>
-          <text x="276" y="132" text-anchor="middle" font-size="15" font-weight="800" fill="#1B2A4A">전처리</text>
-          <text x="276" y="154" text-anchor="middle" font-size="13" font-weight="700" fill="#1B2A4A">또는 가공</text>
-          <line x1="312" y1="140" x2="328" y2="140" stroke="#5B6E97" stroke-width="2"/>
-          <line x1="328" y1="48" x2="328" y2="232" stroke="#5B6E97" stroke-width="2" stroke-linecap="round"/>
-          <line x1="328" y1="48" x2="348" y2="48" stroke="#5B6E97" stroke-width="2" marker-end="url(#m-ar)"/>
-          <line x1="328" y1="140" x2="348" y2="140" stroke="#5B6E97" stroke-width="2" marker-end="url(#m-ar)"/>
-          <line x1="328" y1="232" x2="348" y2="232" stroke="#5B6E97" stroke-width="2" marker-end="url(#m-ar)"/>
+          <line x1="132" y1="150" x2="158" y2="150" stroke="#5B6E97" stroke-width="2" marker-end="url(#m-ar)"/>
+          <rect x="160" y="72" width="116" height="156" rx="12" fill="#FCF3D9"/>
+          <text x="218" y="156" text-anchor="middle" font-size="16" font-weight="800" fill="#6E4F00">목적 정하기</text>
+          <line x1="276" y1="150" x2="294" y2="150" stroke="#5B6E97" stroke-width="2"/>
+          <line x1="294" y1="54" x2="294" y2="246" stroke="#5B6E97" stroke-width="2" stroke-linecap="round"/>
+          <line x1="294" y1="54" x2="312" y2="54" stroke="#5B6E97" stroke-width="2" marker-end="url(#m-ar)"/>
+          <line x1="294" y1="150" x2="312" y2="150" stroke="#5B6E97" stroke-width="2" marker-end="url(#m-ar)"/>
+          <line x1="294" y1="246" x2="312" y2="246" stroke="#5B6E97" stroke-width="2" marker-end="url(#m-ar)"/>
           <g class="exopen" data-ex="sum" role="button" tabindex="0" aria-label="요약이 대답하는 질문을 엽니다">
-            <rect x="350" y="10" width="162" height="76" rx="10" fill="#fff" stroke="#D5D9E0" stroke-width="1.5"/>
-            <circle cx="374" cy="48" r="13" fill="#1B2A4A"/><text x="374" y="53" text-anchor="middle" font-size="13" font-weight="800" fill="#fff">1</text>
-            <text x="394" y="42" font-size="15" font-weight="800" fill="#1B2A4A">요약</text>
-            <text x="394" y="62" font-size="12" fill="#6B7280">전체의 특징을 나타냄</text>
-            <use href="#ex-click" x="484" y="18" width="20" height="20"/>
+            <rect x="314" y="12" width="198" height="84" rx="12" fill="#fff" stroke="#D5D9E0" stroke-width="1.5"/>
+            <circle cx="340" cy="54" r="14" fill="#1B2A4A"/><text x="340" y="59" text-anchor="middle" font-size="14" font-weight="800" fill="#fff">1</text>
+            <text x="364" y="48" font-size="16" font-weight="800" fill="#1B2A4A">요약</text>
+            <text x="364" y="70" font-size="13" fill="#6B7280">전체의 특징을 나타냄</text>
+            <use href="#ex-click" x="484" y="20" width="20" height="20"/>
           </g>
           <g class="exopen" data-ex="rel" role="button" tabindex="0" aria-label="설명이 대답하는 질문을 엽니다">
-            <rect x="350" y="102" width="162" height="76" rx="10" fill="#fff" stroke="#D5D9E0" stroke-width="1.5"/>
-            <circle cx="374" cy="140" r="13" fill="#1B2A4A"/><text x="374" y="145" text-anchor="middle" font-size="13" font-weight="800" fill="#fff">2</text>
-            <text x="394" y="134" font-size="15" font-weight="800" fill="#1B2A4A">설명</text>
-            <text x="394" y="154" font-size="12" fill="#6B7280">성질과 관계를 밝힘</text>
-            <use href="#ex-click" x="484" y="110" width="20" height="20"/>
+            <rect x="314" y="108" width="198" height="84" rx="12" fill="#fff" stroke="#D5D9E0" stroke-width="1.5"/>
+            <circle cx="340" cy="150" r="14" fill="#1B2A4A"/><text x="340" y="155" text-anchor="middle" font-size="14" font-weight="800" fill="#fff">2</text>
+            <text x="364" y="144" font-size="16" font-weight="800" fill="#1B2A4A">설명</text>
+            <text x="364" y="166" font-size="13" fill="#6B7280">성질과 관계를 밝힘</text>
+            <use href="#ex-click" x="484" y="116" width="20" height="20"/>
           </g>
           <g class="exopen" data-ex="pred" role="button" tabindex="0" aria-label="예측이 대답하는 질문을 엽니다">
-            <rect x="350" y="194" width="162" height="76" rx="10" fill="#fff" stroke="#D5D9E0" stroke-width="1.5"/>
-            <circle cx="374" cy="232" r="13" fill="#1B2A4A"/><text x="374" y="237" text-anchor="middle" font-size="13" font-weight="800" fill="#fff">3</text>
-            <text x="394" y="226" font-size="15" font-weight="800" fill="#1B2A4A">예측</text>
-            <text x="394" y="246" font-size="12" fill="#6B7280">아직 없는 값을 가늠</text>
-            <use href="#ex-click" x="484" y="202" width="20" height="20"/>
+            <rect x="314" y="204" width="198" height="84" rx="12" fill="#fff" stroke="#D5D9E0" stroke-width="1.5"/>
+            <circle cx="340" cy="246" r="14" fill="#1B2A4A"/><text x="340" y="251" text-anchor="middle" font-size="14" font-weight="800" fill="#fff">3</text>
+            <text x="364" y="240" font-size="16" font-weight="800" fill="#1B2A4A">예측</text>
+            <text x="364" y="262" font-size="13" fill="#6B7280">아직 없는 값을 가늠</text>
+            <use href="#ex-click" x="484" y="212" width="20" height="20"/>
           </g>
         </svg></div>
-        <div class="side">
+      </div>
+        <div class="side shade">
           <ul class="key"><li>같은 데이터도 목적에 따라 하는 일이 다릅니다.</li></ul>
-          <p class="exp">기록이 모여 데이터가 됩니다. 목적 정하기에서 <b>요약·설명·예측</b> 가운데 하나를 정합니다. 정한 목적에 맞게 자료를 전처리하거나 가공합니다. 가공이 끝나면 목적에 따른 각각의 결과가 나타납니다.</p>
+          <p class="exp">기록이 모여 데이터가 됩니다. 목적 정하기에서 <b>요약·설명·예측</b> 가운데 하나를 정합니다. 정한 목적에 따른 결과가 나타납니다.</p>
           <p class="next"><span>마치면</span><span class="nt">주어진 데이터가 목적에 따라 어떻게 활용되는지 알 수 있습니다.</span></p>
         </div>
       </div>
@@ -446,9 +449,9 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
           <text x="91" y="116" text-anchor="middle" font-size="15" font-weight="800" fill="#fff">출근 기록</text>
           <text x="91" y="142" text-anchor="middle" font-size="12" fill="#C9D3E6">출발 · 도착 · 비</text>
           <g stroke="#5B6E97" stroke-width="2" fill="none">
-            <path d="M168 125 C210 125 210 46 246 46" marker-end="url(#m-day5)"/>
+            <path d="M168 125 C196 125 196 46 218 46 H246" marker-end="url(#m-day5)"/>
             <path d="M168 125 H246" marker-end="url(#m-day5)"/>
-            <path d="M168 125 C210 125 210 204 246 204" marker-end="url(#m-day5)"/>
+            <path d="M168 125 C196 125 196 204 218 204 H246" marker-end="url(#m-day5)"/>
           </g>
           <g font-weight="800" fill="#1B2A4A" text-anchor="middle">
             <rect x="250" y="18" width="174" height="56" rx="10" fill="#fff" stroke="#5B6E97" stroke-width="1.5"/>
@@ -595,16 +598,16 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
         <div class="fig"><svg viewBox="0 0 420 270" role="img" aria-label="환자를 실험군과 대조군으로 나눠 혈압을 비교하는 실험">
           <defs><marker id="m-ar6" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10z" fill="#5B6E97"/></marker></defs>
           <rect x="140" y="10" width="140" height="40" rx="10" fill="#1B2A4A"/><text x="210" y="36" text-anchor="middle" font-size="14" font-weight="800" fill="#fff">고혈압 환자</text>
-          <path d="M210 52 C210 70 110 66 110 86" fill="none" stroke="#5B6E97" stroke-width="2" marker-end="url(#m-ar6)"/>
-          <path d="M210 52 C210 70 310 66 310 86" fill="none" stroke="#5B6E97" stroke-width="2" marker-end="url(#m-ar6)"/>
+          <path d="M210 52 C210 64 110 64 110 68 V86" fill="none" stroke="#5B6E97" stroke-width="2" marker-end="url(#m-ar6)"/>
+          <path d="M210 52 C210 64 310 64 310 68 V86" fill="none" stroke="#5B6E97" stroke-width="2" marker-end="url(#m-ar6)"/>
           <rect x="30" y="92" width="160" height="70" rx="10" fill="#FCF3D9" stroke="#E0A100" stroke-width="2"/>
           <text x="110" y="116" text-anchor="middle" font-size="14" font-weight="800" fill="#1B2A4A">실험군</text>
           <rect x="72" y="128" width="34" height="16" rx="8" fill="#2C4170"/><text x="140" y="141" text-anchor="middle" font-size="12.5" font-weight="700" fill="#22262E">신약</text>
           <rect x="230" y="92" width="160" height="70" rx="10" fill="#fff" stroke="#5B6E97" stroke-width="2"/>
           <text x="310" y="116" text-anchor="middle" font-size="14" font-weight="800" fill="#1B2A4A">대조군</text>
           <rect x="272" y="128" width="34" height="16" rx="8" fill="#2C4170"/><text x="340" y="141" text-anchor="middle" font-size="12.5" font-weight="700" fill="#22262E">위약</text>
-          <path d="M110 164 C110 184 200 180 206 196" fill="none" stroke="#5B6E97" stroke-width="2" marker-end="url(#m-ar6)"/>
-          <path d="M310 164 C310 184 220 180 214 196" fill="none" stroke="#5B6E97" stroke-width="2" marker-end="url(#m-ar6)"/>
+          <path d="M110 164 C110 176 206 176 206 180 V196" fill="none" stroke="#5B6E97" stroke-width="2" marker-end="url(#m-ar6)"/>
+          <path d="M310 164 C310 176 214 176 214 180 V196" fill="none" stroke="#5B6E97" stroke-width="2" marker-end="url(#m-ar6)"/>
           <rect x="150" y="200" width="120" height="34" rx="10" fill="#1B2A4A"/><text x="210" y="222" text-anchor="middle" font-size="13.5" font-weight="800" fill="#fff">혈압 비교</text>
           <text x="210" y="256" text-anchor="middle" font-size="12" fill="#6B7280">두 약은 겉모습이 똑같아 누가 어느 약인지 모릅니다</text>
         </svg></div>
@@ -635,8 +638,8 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
           <line x1="156" y1="192" x2="264" y2="192" stroke="#9AA0AA" stroke-width="3" marker-start="url(#m-ar8)" marker-end="url(#m-ar8)"/>
           <text x="210" y="180" text-anchor="middle" font-size="11.5" fill="#6B7280">함께 커진다</text>
           <rect x="160" y="226" width="100" height="28" rx="8" fill="#F3F4F6" stroke="#9AA0AA" stroke-dasharray="4 3"/><text x="210" y="245" text-anchor="middle" font-size="12" fill="#6B7280">가정환경?</text>
-          <path d="M160 238 C120 238 100 226 98 216" fill="none" stroke="#9AA0AA" stroke-width="1.5" stroke-dasharray="4 3" marker-end="url(#m-ar8)"/>
-          <path d="M260 238 C300 238 320 226 322 216" fill="none" stroke="#9AA0AA" stroke-width="1.5" stroke-dasharray="4 3" marker-end="url(#m-ar8)"/>
+          <path d="M160 238 C120 238 98 238 98 228 V216" fill="none" stroke="#9AA0AA" stroke-width="1.5" stroke-dasharray="4 3" marker-end="url(#m-ar8)"/>
+          <path d="M260 238 C300 238 322 238 322 228 V216" fill="none" stroke="#9AA0AA" stroke-width="1.5" stroke-dasharray="4 3" marker-end="url(#m-ar8)"/>
         </svg></div>
         <div class="side">
           <ul class="key"><li><b>인과관계</b>: 원인을 바꾸면 결과가 바뀜</li><li><b>상관관계</b>: 함께 변하나 원인은 모름</li></ul>

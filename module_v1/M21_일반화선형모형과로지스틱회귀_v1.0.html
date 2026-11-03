@@ -30,9 +30,10 @@ button{font:inherit;color:inherit}
 .rail{position:relative;flex:1;height:60px;margin-right:22px}
 .rail .track{position:absolute;left:14px;right:14px;top:21px;height:3px;background:#3A4D78;border-radius:2px}
 .rail .fill{position:absolute;left:0;top:0;bottom:0;background:var(--amber);border-radius:2px;transition:width .35s ease}
-.station{position:absolute;top:10px;width:72px;margin-left:-36px;background:none;border:0;padding:0;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:4px}
+.pagedot{position:absolute;z-index:1;top:10px;height:24px;margin:0;padding:0;border:0;background:none;cursor:pointer}
+.station{position:absolute;z-index:2;top:10px;width:24px;min-width:0;margin-left:-12px;background:none;border:0;padding:0;cursor:pointer;display:flex;flex-direction:column;align-items:center}
 .station .dot{width:24px;height:24px;border-radius:50%;display:grid;place-items:center;font-size:11.5px;font-weight:800;background:var(--navy);color:#8E9DBD;border:2px solid #4A5D88;transition:all .25s}
-.station .lb{font-size:11.5px;color:#8E9DBD;white-space:nowrap}
+.station .lb{position:absolute;top:28px;left:50%;transform:translateX(-50%);font-size:11.5px;color:#8E9DBD;white-space:nowrap}
 .station.done .dot{background:#C9D3E6;border-color:#C9D3E6;color:var(--navy)}
 .station.done .lb{color:#C9D3E6}
 .station.cur .dot{background:var(--amber);border-color:#FFE08A;color:var(--navy);transform:scale(1.12)}
@@ -58,6 +59,17 @@ h2.big{font-size:30px;line-height:1.32}
 .figcol{min-height:0;display:flex;flex-direction:column;gap:10px}
 .figcol .fig{flex:1 1 auto}
 .side{min-height:0;display:flex;flex-direction:column;gap:12px;justify-content:center}
+.ovpage{padding:0;gap:0}
+.ov{flex:1;min-height:0;display:grid;grid-template-columns:1.25fr 1fr;height:100%}
+.ov-main{min-height:0;display:flex;flex-direction:column;gap:12px;padding:16px 24px 10px 36px}
+.ov-main .fig{flex:1 1 auto}
+.fig.plain{background:none;padding:0}
+.ovpage .side.shade{background:var(--panel);border-radius:0;padding:28px 36px 28px 28px;height:100%}
+.ovpage .side.shade{gap:22px}
+.ovpage .bridge{display:flex;flex-direction:column;gap:28px}
+.ovpage .bridge .block{display:flex;flex-direction:column;gap:8px}
+.ovpage .ovlab{margin:0;font-size:13px;font-weight:800;letter-spacing:-.2px;color:var(--navy)}
+.ovpage .side .key b,.ovpage .side .exp b{font-weight:800;color:var(--navy);background:linear-gradient(transparent 62%,#FFE08A 62% 92%,transparent 92%)}
 
 /* 핵심 문장: 40자 안팎, 1~2개 */
 .key{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:9px}
@@ -86,7 +98,7 @@ h2.big{font-size:30px;line-height:1.32}
 
 /* ---------- 하단 바 ---------- */
 .bottombar{position:absolute;left:0;right:0;bottom:0;height:46px;border-top:1px solid var(--line);display:flex;align-items:center;padding:0 22px 0 36px;gap:12px;background:#fff}
-.counter{font-size:13px;color:var(--gray);font-weight:600}
+.counter{font-size:13px;color:var(--gray);font-weight:600;font-variant-numeric:tabular-nums;text-align:right;min-width:5ch}
 .counter strong{color:var(--navy)}
 .spacer{flex:1}
 .nav{border:1.5px solid var(--navy);background:#fff;color:var(--navy);border-radius:8px;height:32px;padding:0 16px;font-size:14px;font-weight:700;cursor:pointer}
@@ -107,14 +119,12 @@ h2.big{font-size:30px;line-height:1.32}
 .prevlink{background:var(--panel);border-radius:10px;padding:12px 14px;font-size:14.5px;line-height:1.55}
 .prevlink small{display:block;font-size:12px;font-weight:800;color:var(--navy3);margin-bottom:3px}
 
-/* ② 학습목표: 목표 → 문항 → 실습 연결 */
-.gmap{display:grid;grid-template-columns:44px 1fr 150px 150px;align-items:stretch;row-gap:12px;column-gap:0}
-.gmap .hd{font-size:12px;font-weight:700;color:var(--gray);padding:0 14px 2px}
-.gmap .gn{background:var(--navy);color:#fff;font-weight:800;font-size:18px;display:grid;place-items:center;border-radius:10px 0 0 10px}
-.gmap .gt{background:var(--panel);padding:14px 18px;font-size:17px;font-weight:700;line-height:1.42;letter-spacing:-.3px;display:flex;align-items:center}
-.gmap .gt b{color:var(--navy)}
-.gmap .ga,.gmap .gp{background:var(--panel);display:flex;align-items:center;padding:0 10px;border-left:2px solid #fff}
-.gmap .gp{border-radius:0 10px 10px 0}
+/* ② 학습목표 */
+.goals{display:flex;flex-direction:column;justify-content:center;gap:4px;height:100%}
+.goal{display:flex;align-items:center;gap:20px;background:transparent;border-radius:14px;padding:2px 28px}
+.goal i{flex:0 0 48px;height:48px;border-radius:50%;background:var(--navy);color:#fff;display:grid;place-items:center;font-style:normal;font-weight:800;font-size:20px}
+.goal p{margin:0;font-size:18.5px;font-weight:700;line-height:1.5;letter-spacing:-.3px}
+.goal b{font-weight:800;color:var(--navy);background:linear-gradient(transparent 62%,#FFE08A 62% 92%,transparent 92%)}
 .jump{border:1.5px solid var(--navy3);background:#fff;border-radius:7px;padding:6px 10px;font-size:13px;font-weight:700;color:var(--navy);cursor:pointer;text-align:left;line-height:1.3;width:100%}
 .jump:hover{background:var(--navy-soft)}
 
@@ -232,44 +242,41 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
 
   <main class="viewport" id="vp">
     <!-- ① 학습개요 ─────────────────────────────── -->
-    <section class="slide" data-step="0">
+    <section class="slide ovpage" data-step="0">
+      <div class="ov">
+      <div class="ov-main">
       <div class="sh"><div class="sec">학습개요</div>
         <h2 class="big">조건부 분포와 연결함수로 0/1 데이터도 회귀로 다룹니다</h2></div>
-      <div class="body split">
-        <div class="fig"><svg id="m21-ov" viewBox="0 0 440 260" role="img" aria-label="일반화선형모형의 세 부분: 조건부 분포, 선형예측변수, 연결함수와 최대가능도 추정"></svg></div>
-        <div class="side">
-          <div class="prevlink"><small>지난 모듈에서는</small>다중공선성을 점검하고, 상호작용과 비선형회귀로 회귀모형의 형태를 넓혔습니다.<small style="margin-top:8px">이번 모듈에서는</small>반응변수가 생존/사망처럼 값이 2개일 때 쓰는 일반화선형모형의 원리와 최대가능도 방법, 로지스틱 회귀와 오즈비를 배웁니다.</div>
-          <dl class="meta"><dt>학습 시간</dt><dd>약 45분</dd><dt>본문</dt><dd>소단원 4개</dd><dt>실습</dt><dd>조작형 · 분류형 · 추정형</dd></dl>
+        <div class="fig plain"><svg id="m21-ov" viewBox="0 0 440 260" role="img" aria-label="일반화선형모형의 세 부분: 조건부 분포, 선형예측변수, 연결함수와 최대가능도 추정"></svg></div>
+      </div>
+        <div class="side shade">
+          <div class="bridge"><div class="block"><p class="ovlab">지난 모듈에서는</p><p class="exp">다중공선성을 점검하고, 상호작용과 <b>비선형회귀</b>로 회귀모형의 형태를 넓혔습니다.</p></div><div class="block"><p class="ovlab">이번 모듈에서는</p><ul class="key"><li>반응변수가 생존/사망처럼 값이 2개일 때 쓰는 일반화선형모형의 원리와 최대가능도 방법, <b>로지스틱 회귀</b>와 오즈비를 배웁니다.</li></ul></div></div>
         </div>
       </div>
     </section>
 
-    <section class="slide" data-step="0">
+    <section class="slide ovpage" data-step="0">
+      <div class="ov">
+      <div class="ov-main">
       <div class="sh"><div class="sec">학습개요 · 이 모듈의 예시</div><h2>살충제 농도에 따라 벌레 30마리가 죽었는지 살았는지 봅니다</h2></div>
-      <div class="body split">
-        <div class="fig"><svg id="m21-case" viewBox="0 0 440 250" role="img" aria-label="살충제 농도에 따른 벌레 30마리의 생존 0, 사망 1 데이터"></svg></div>
-        <div class="side">
+        <div class="fig plain"><svg id="m21-case" viewBox="0 0 440 250" role="img" aria-label="살충제 농도에 따른 벌레 30마리의 생존 0, 사망 1 데이터"></svg></div>
+      </div>
+        <div class="side shade">
           <ul class="key"><li>반응변수는 0(생존)과 1(사망) 두 값뿐입니다.</li></ul>
-          <p class="exp">벌레 30마리에게 0~12 사이의 서로 다른 농도로 살충제를 뿌린 뒤 각 개체가 살았는지(0) 죽었는지(1)를 기록했습니다(예시값). 30마리 중 17마리가 죽었고, 농도가 높을수록 죽은 개체가 많아 보입니다. 이 데이터로 ‘농도가 오르면 사망 확률이 얼마나 달라지는가’를 모듈 끝까지 분석합니다.</p>
+          <p class="exp">벌레 30마리에게 0~12 사이의 서로 다른 농도로 살충제를 뿌린 뒤 각 개체가 살았는지(0) 죽었는지(1)를 기록했습니다(예시값). 30마리 중 17마리가 죽었고, 농도가 높을수록 죽은 개체가 많아 보입니다. 이 데이터로 ‘농도가 오르면 <b>사망 확률</b>이 얼마나 달라지는가’를 모듈 끝까지 분석합니다.</p>
         </div>
       </div>
     </section>
 
-    <!-- ② 학습목표 ─────────────────────────────── -->
     <section class="slide" data-step="1">
-      <div class="sh"><div class="sec">학습목표</div><h2>이 모듈을 마치면 이렇게 할 수 있습니다</h2></div>
-      <div class="body full" style="align-content:center">
-        <div class="gmap">
-          <div></div><div class="hd">목표</div><div class="hd">확인하는 문항</div><div class="hd">연결 실습</div>
-          <div class="gn">1</div><div class="gt"><span>반응변수에 맞는 모형과 최대가능도 방법을 <b>구분한다</b>.</span></div>
-          <div class="ga"><button class="jump" data-jump="q1">문항 1·2</button></div><div class="gp"><button class="jump" data-jump="p1">실습 1 조작</button> <button class="jump" data-jump="p2">실습 2 분류</button></div>
-          <div class="gn">2</div><div class="gt"><span>로지스틱 회귀식으로 확률을 <b>계산한다</b>.</span></div>
-          <div class="ga"><button class="jump" data-jump="q3">문항 3·4</button></div><div class="gp"><button class="jump" data-jump="p3">실습 3 추정</button></div>
-          <div class="gn">3</div><div class="gt"><span>오즈비와 그 신뢰구간의 의미를 <b>판단한다</b>.</span></div>
-          <div class="ga"><button class="jump" data-jump="q5">문항 5·6</button></div><div class="gp"><button class="jump" data-jump="p3">실습 3 추정</button></div>
+      <div class="sh"><div class="sec">학습목표</div><h2 class="big">이 모듈을 마치면 이렇게 할 수 있습니다</h2></div>
+      <div class="body full">
+        <div class="goals">
+          <div class="goal"><i>1</i><p>반응변수에 맞는 모형과 최대가능도 방법을 <b>구분한다</b>.</p></div>
+          <div class="goal"><i>2</i><p>로지스틱 회귀식으로 확률을 <b>계산한다</b>.</p></div>
+          <div class="goal"><i>3</i><p>오즈비와 그 신뢰구간의 의미를 <b>판단한다</b>.</p></div>
         </div>
       </div>
-      <p class="foot">버튼을 누르면 해당 문항이나 실습 화면으로 바로 이동합니다.</p>
     </section>
 
     <!-- ③ 일상의 예시 ─────────────────────────────── -->
@@ -355,7 +362,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
             <rect x="14" y="130" width="150" height="44" rx="10" fill="#fff" stroke="#5B6E97" stroke-width="1.5"/><text x="89" y="157">S자 곡선</text>
             <rect x="14" y="186" width="150" height="44" rx="10" fill="#fff" stroke="#5B6E97" stroke-width="1.5"/><text x="89" y="213">이길 쪽 ÷ 질 쪽</text>
           </g>
-          <g stroke="#5B6E97" stroke-width="2" fill="none"><path d="M166 40 C220 40 220 112 254 120" marker-end="url(#b2)"/><path d="M166 96 C210 96 220 118 254 122" marker-end="url(#b2)"/><path d="M166 152 C210 152 220 130 254 128" marker-end="url(#b2)"/><path d="M166 208 C220 208 220 138 254 130" marker-end="url(#b2)"/></g>
+          <g stroke="#5B6E97" stroke-width="2" fill="none"><path d="M166 40 C200 40 200 120 232 120 H254" marker-end="url(#b2)"/><path d="M166 96 C200 96 210 122 232 122 H254" marker-end="url(#b2)"/><path d="M166 152 C200 152 210 128 232 128 H254" marker-end="url(#b2)"/><path d="M166 208 C200 208 200 130 232 130 H254" marker-end="url(#b2)"/></g>
           <rect x="258" y="84" width="150" height="82" rx="12" fill="#1B2A4A"/>
           <text x="333" y="116" text-anchor="middle" font-size="15" font-weight="800" fill="#fff">일반화선형모형</text><text x="333" y="136" text-anchor="middle" font-size="15" font-weight="800" fill="#fff">로지스틱 회귀</text>
           <text x="333" y="156" text-anchor="middle" font-size="11" fill="#C9D3E6">가능도 · 오즈비</text>
@@ -601,9 +608,10 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
   </main>
 
   <footer class="bottombar">
-    <a class="home" href="../index.html" title="홈으로 (학습 과정)" aria-label="홈으로"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 10.5 12 3l9 7.5"/><path d="M5.5 9.5V21h13V9.5"/></svg><span>홈</span></a><span class="counter" id="counter"></span><span class="spacer"></span>
+    <a class="home" href="../index.html" title="홈으로 (학습 과정)" aria-label="홈으로"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 10.5 12 3l9 7.5"/><path d="M5.5 9.5V21h13V9.5"/></svg><span>홈</span></a><span class="spacer"></span>
     <button class="nav" id="prev" type="button">이전</button>
     <button class="nav primary" id="next" type="button">다음</button>
+    <span class="counter" id="counter"></span>
   </footer>
 </div>
 <p class="rotate">화면을 가로로 돌리면 더 크게 볼 수 있습니다.</p>
@@ -791,9 +799,9 @@ function curveN(s,X,Y,a,b,x0,x1,col,w){var p=[];for(var i=0;i<=120;i++){var x=x0
 
 on("m21-ov",function(s){
   mkN(s,"oN",C.navy3);
-  bxN(s,20,24,120,64,"#EEF4FB","#2B8CC4");tN(s,80,48,"선형예측변수",{fw:800,fs:12,c:"#1C6EA4"});tN(s,80,70,"a + bx",{fw:800,fs:13});
-  bxN(s,160,24,120,64,"#FCF3D9",C.amber);tN(s,220,48,"연결함수",{fw:800,fs:12,c:C.amberInk});tN(s,220,70,"로짓 함수",{fw:800,fs:12});
-  bxN(s,300,24,120,64,"#FBE4F0","#C2416E");tN(s,360,48,"확률분포",{fw:800,fs:12,c:"#C2416E"});tN(s,360,70,"이항분포 p",{fw:800,fs:12});
+  bxN(s,20,24,120,64,"#EEF4FB");tN(s,80,48,"선형예측변수",{fw:800,fs:12,c:"#1C6EA4"});tN(s,80,70,"a + bx",{fw:800,fs:13});
+  bxN(s,160,24,120,64,"#FCF3D9");tN(s,220,48,"연결함수",{fw:800,fs:12,c:C.amberInk});tN(s,220,70,"로짓 함수",{fw:800,fs:12});
+  bxN(s,300,24,120,64,"#FBE4F0");tN(s,360,48,"확률분포",{fw:800,fs:12,c:"#C2416E"});tN(s,360,70,"이항분포 p",{fw:800,fs:12});
   [[142,158],[282,298]].forEach(function(l){el("line",{x1:l[0],x2:l[1],y1:56,y2:56,stroke:C.navy3,"stroke-width":2,"marker-end":"url(#oN)"},s);});
   bxN(s,80,118,280,56,C.navy);tN(s,220,142,"일반화선형모형 (GLM)",{fw:800,fs:13.5,c:"#fff"});tN(s,220,162,"최대가능도 방법으로 a, b 추정",{fs:10.5,c:"#C9D3E6"});
   el("line",{x1:220,x2:220,y1:92,y2:114,stroke:C.navy3,"stroke-width":2,"marker-end":"url(#oN)"},s);
@@ -802,7 +810,7 @@ on("m21-ov",function(s){
 });
 
 on("m21-case",function(s){
-  bxN(s,4,4,432,242);var X=linN(0,12,60,410),Y=linN(0,1,190,60);
+  bxN(s,4,4,432,242,"#fff","#D5D9E0");var X=linN(0,12,60,410),Y=linN(0,1,190,60);
   el("line",{x1:60,x2:410,y1:190,y2:190,stroke:C.grid},s);el("line",{x1:60,x2:410,y1:60,y2:60,stroke:C.grid},s);
   [0,2,4,6,8,10,12].forEach(function(t){tN(s,X(t),214,t,{fs:10,c:C.gray,fw:500});});tN(s,410,232,"살충제 농도",{a:"end",fs:10.5,c:C.gray,fw:700});
   tN(s,54,64,"사망 1",{a:"end",fw:800,fs:11,c:"#B42318"});tN(s,54,194,"생존 0",{a:"end",fw:800,fs:11,c:"#1C6EA4"});
@@ -1003,18 +1011,58 @@ STEPS.forEach(function(n,i){
   b.addEventListener("click",function(){show(stepFirst[i]);});
   rail.appendChild(b);stations.push(b);
 });
+var pageDots=[];
+var gapPages={};
+slides.forEach(function(s,i){
+  var st=+s.dataset.step,local=i-stepFirst[st],count=stepCount[st];
+  if(local===0&&st!==6)return;
+  var gap=st<6?st:5;
+  (gapPages[gap]=gapPages[gap]||[]).push({i:i,st:st,local:local,count:count});
+});
+Object.keys(gapPages).forEach(function(gap){
+  gapPages[gap].forEach(function(d){
+    var b=document.createElement("button");b.type="button";b.className="pagedot";b.tabIndex=-1;b.dataset.slide=String(d.i);
+    b.setAttribute("aria-hidden","true");b.title=STEPS[d.st]+" "+(d.local+1)+"/"+d.count;
+    b.addEventListener("click",function(){show(d.i);});
+    rail.appendChild(b);pageDots.push(b);d.btn=b;
+  });
+});
+var stationX=[];
+function measureStations(){stationX=stations.map(function(b){return b.offsetLeft+b.offsetWidth/2;});}
+function tipFor(st,local){
+  var R=12;
+  if(st<5){var A=stationX[st],B=stationX[st+1];return A+R+local*(B-A)/stepCount[st];}
+  var A=stationX[5],B=stationX[6],n5=stepCount[5],total=n5+stepCount[6];
+  var index=st===5?local:n5+local;
+  return A+R+index*(B-(A+R))/(total-1);
+}
+function layoutPageDots(){
+  measureStations();
+  Object.keys(gapPages).forEach(function(gap){
+    var g=+gap,list=gapPages[gap],edgeL=stationX[g]+12,edgeR=stationX[g+1]-12;
+    list.forEach(function(d){
+      var tip=tipFor(d.st,d.local);
+      var prev=d.local>0?tipFor(d.st,d.local-1):tipFor(d.st-1,stepCount[d.st-1]-1);
+      var next=d.local+1<stepCount[d.st]?tipFor(d.st,d.local+1):(d.st<6?tipFor(d.st+1,0):stationX[6]);
+      var left=Math.max(edgeL,(prev+tip)/2),right=Math.min(edgeR,(tip+next)/2);
+      d.btn.style.left=left+"px";d.btn.style.width=Math.max(0,right-left)+"px";
+    });
+  });
+}
+layoutPageDots();
 function show(i){
   cur=Math.max(0,Math.min(slides.length-1,i));
   slides.forEach(function(s,k){s.classList.toggle("on",k===cur);});
   var st=+slides[cur].dataset.step;seen[st]=true;
   stations.forEach(function(b,k){b.classList.toggle("cur",k===st);b.classList.toggle("done",k<st||(!!seen[k]&&k!==st));if(k===st)b.setAttribute("aria-current","step");else b.removeAttribute("aria-current");});
-  var within=(cur-stepFirst[st])/Math.max(1,stepCount[st]);
-  var frac=st===6&&cur===slides.length-1?1:(st+within)/6;
-  document.getElementById("fill").style.width=(Math.min(1,frac)*100)+"%";
-  document.getElementById("counter").innerHTML="<strong>"+STEPS[st]+"</strong> "+(cur-stepFirst[st]+1)+" / "+stepCount[st];
+  pageDots.forEach(function(b){var k=+b.dataset.slide;b.classList.toggle("cur",k===cur);b.classList.toggle("done",k<cur);});
+  var track=document.querySelector(".rail .track");
+  var w=tipFor(+slides[cur].dataset.step,cur-stepFirst[st])-track.offsetLeft;
+  document.getElementById("fill").style.width=Math.max(0,Math.min(track.clientWidth,w))+"px";
+  document.getElementById("counter").textContent=(cur+1)+"/"+slides.length;
   document.getElementById("prev").disabled=cur===0;
   var nx=document.getElementById("next");nx.disabled=cur===slides.length-1;
-  nx.textContent=(cur<slides.length-1&&+slides[cur+1].dataset.step!==st)?STEPS[+slides[cur+1].dataset.step]+"(으)로":"다음";
+  nx.textContent="다음";
 }
 function bindJumps(root){[].forEach.call(root.querySelectorAll("[data-jump]"),function(b){b.addEventListener("click",function(){var t=document.getElementById(b.dataset.jump);if(t)show(slides.indexOf(t));});});}
 bindJumps(document);
