@@ -884,7 +884,8 @@ on("m14-ov",function(s){
     if(i<2)el("line",{x1:b[0]+132,x2:b[0]+152,y1:45,y2:45,stroke:C.navy3,"stroke-width":2,"marker-end":"url(#oF)"},s);});
   var T=[["일표본 t검정","정한 값과 비교"],["이표본 t검정","웰치의 t검정"],["대응 있는 t검정","같은 대상 전후"],["윌콕슨 순위합","독립 두 집단 순위 비교"]];
   T.forEach(function(t,i){var x=8+i*108;bxF(s,x,150,100,62,i===3?"#FCF3D9":C.navy);tF(s,x+50,176,t[0],{fw:800,fs:11.5,c:i===3?C.amberInk:"#fff"});tF(s,x+50,196,t[1],{fs:10,c:i===3?C.amberInk:"#C9D3E6"});
-    el("path",{d:"M220 80 C220 112 "+(x+50)+" 112 "+(x+50)+" 146",fill:"none",stroke:C.navy3,"stroke-width":1.8,"marker-end":"url(#oF)"},s);});
+    var cx=x+50,d="M220 80 V100 Q220 112 "+(cx<220?208:232)+" 112 H"+(cx<220?cx+8:cx-8)+" Q"+cx+" 112 "+cx+" 124 V146";
+    el("path",{d:d,fill:"none",stroke:C.navy3,"stroke-width":1.8,"marker-end":"url(#oF)"},s);});
   tF(s,220,240,"세 가지를 확인한 뒤, 두 집단 비교에 알맞은 검정을 고릅니다",{fs:11.5,c:C.gray});
 });
 

@@ -780,7 +780,8 @@ on("m31-ov",function(s){
   arY(s,120,62,170,82,"oY");arY(s,320,62,270,82,"oY");
   var B=[[10,"이표본 비교","EAP·신용구간"],[155,"푸아송 회귀","a, b의 사후분포"],[300,"계층 모형","초모수 s"]];
   B.forEach(function(b){bxY(s,b[0],184,130,62,"#F3F5F9");tY(s,b[0]+65,210,b[1],{fw:800,fs:12});tY(s,b[0]+65,230,b[2],{fs:10,c:C.gray});
-    el("path",{d:"M220 142 C220 162 "+(b[0]+65)+" 160 "+(b[0]+65)+" 180",fill:"none",stroke:C.navy3,"stroke-width":2,"marker-end":"url(#oY)"},s);});
+    var cx=b[0]+65,d=cx===220?"M220 142 V180":"M220 142 V148 Q220 156 "+(cx<220?214:226)+" 156 H"+(cx<220?cx+6:cx-6)+" Q"+cx+" 156 "+cx+" 162 V180";
+    el("path",{d:d,fill:"none",stroke:C.navy3,"stroke-width":2,"marker-end":"url(#oY)"},s);});
 });
 
 on("m31-case",function(s){
@@ -807,8 +808,8 @@ on("m31-mk",function(s){
   el("circle",{cx:310,cy:90,r:44,fill:"#FBE4E1",stroke:RED,"stroke-width":2.5},s);tY(s,310,95,"고장",{fw:800,fs:14,c:RED});
   el("path",{d:"M150 72 C200 44 220 44 268 70",fill:"none",stroke:C.navy3,"stroke-width":2,"marker-end":"url(#mY)"},s);tY(s,210,46,"0.1",{fw:800,fs:11});
   el("path",{d:"M270 110 C220 136 200 136 152 110",fill:"none",stroke:C.navy3,"stroke-width":2,"marker-end":"url(#mY)"},s);tY(s,210,146,"0.6 (복구)",{fw:800,fs:11});
-  el("path",{d:"M78 60 C40 20 30 90 66 100",fill:"none",stroke:C.navy3,"stroke-width":2,"marker-end":"url(#mY)"},s);tY(s,30,40,"0.9",{fw:800,fs:11});
-  el("path",{d:"M342 60 C380 20 390 90 354 100",fill:"none",stroke:C.navy3,"stroke-width":2,"marker-end":"url(#mY)"},s);tY(s,392,40,"0.4",{fw:800,fs:11});
+  el("path",{d:"M80 54 C30 24 34 96 50 96 H66",fill:"none",stroke:C.navy3,"stroke-width":2,"marker-end":"url(#mY)"},s);tY(s,30,40,"0.9",{fw:800,fs:11});
+  el("path",{d:"M340 54 C390 24 386 96 370 96 H354",fill:"none",stroke:C.navy3,"stroke-width":2,"marker-end":"url(#mY)"},s);tY(s,392,40,"0.4",{fw:800,fs:11});
   bxY(s,4,168,412,98,"#F3F5F9");tY(s,14,186,"고장 상태에서 출발했을 때 ‘정상’일 확률",{a:"start",fw:800,fs:10.5});
   var X=linY(0,10,40,404),Y=linY(0,1,256,196),p=0,P=[];for(var t=0;t<=10;t++){P.push(p);p=p*0.9+(1-p)*0.6;}
   el("line",{x1:40,x2:404,y1:Y(0.857),y2:Y(0.857),stroke:C.amber,"stroke-width":1.5,"stroke-dasharray":"4 3"},s);tY(s,404,Y(0.857)-4,"0.857로 일정",{a:"end",fw:800,fs:9.5,c:C.amberInk});

@@ -776,7 +776,8 @@ on("m28-ov",function(s){
   bxV(s,140,8,160,48,C.navy);tV(s,220,30,"데이터 속 상관",{fw:800,fs:13,c:"#fff"});tV(s,220,47,"X와 Y가 함께 움직임",{fs:10,c:"#C9D3E6"});
   var B=[[10,"인과관계","X → Y","#E3F1EA",GRN],[155,"허위상관","Z → X, Z → Y","#FCF3D9",C.amberInk],[300,"우연한 상관","공통 원인도 없음","#FBE4E1",RED]];
   B.forEach(function(b){bxV(s,b[0],100,130,62,b[3]);tV(s,b[0]+65,126,b[1],{fw:800,fs:13,c:b[4]});tV(s,b[0]+65,146,b[2],{fs:10.5,c:"#22262E"});
-    el("path",{d:"M220 58 C220 80 "+(b[0]+65)+" 76 "+(b[0]+65)+" 96",fill:"none",stroke:C.navy3,"stroke-width":2,"marker-end":"url(#oV)"},s);});
+    var cx=b[0]+65,d=cx===220?"M220 58 V96":"M220 58 V64 Q220 70 "+(cx<220?214:226)+" 70 H"+(cx<220?cx+6:cx-6)+" Q"+cx+" 70 "+cx+" 76 V96";
+    el("path",{d:d,fill:"none",stroke:C.navy3,"stroke-width":2,"marker-end":"url(#oV)"},s);});
   tV(s,75,180,"개입 ○ · 예측 ○",{fw:700,fs:10.5,c:GRN});tV(s,220,180,"개입 ✕ · 예측 ○",{fw:700,fs:10.5,c:C.amberInk});tV(s,365,180,"개입 ✕ · 예측 ✕",{fw:700,fs:10.5,c:RED});
   bxV(s,60,202,320,50,"#F3F5F9");tV(s,220,223,"관찰 데이터인가, 실험 데이터인가?",{fw:800,fs:12});tV(s,220,241,"중첩요인은 없는가?",{fs:10.5,c:C.gray,fw:700});
 });

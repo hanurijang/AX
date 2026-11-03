@@ -799,7 +799,8 @@ on("m23-ov",function(s){
   bxQ(s,120,8,200,50,"#F3F5F9");tQ(s,220,30,"후보 모형 여러 개",{fw:800,fs:13});tQ(s,220,48,"최대가능도 방법으로 추정",{fs:10.5,c:C.gray});
   var B=[[10,"왈드 검정","회귀계수 하나","#EEF4FB","#1C6EA4"],[155,"가능도비 검정","내포 관계인 두 모형","#FCF3D9",C.amberInk],[300,"AIC · BIC","내포 관계 불필요","#E3F1EA",C.ok]];
   B.forEach(function(b){bxQ(s,b[0],100,130,62,b[3]);tQ(s,b[0]+65,126,b[1],{fw:800,fs:13,c:b[4]});tQ(s,b[0]+65,146,b[2],{fs:10.5,c:"#22262E"});
-    el("path",{d:"M220 60 C220 80 "+(b[0]+65)+" 76 "+(b[0]+65)+" 96",fill:"none",stroke:C.navy3,"stroke-width":2,"marker-end":"url(#oQ)"},s);});
+    var cx=b[0]+65,d=cx===220?"M220 60 V96":"M220 60 V64 Q220 70 "+(cx<220?214:226)+" 70 H"+(cx<220?cx+6:cx-6)+" Q"+cx+" 70 "+cx+" 76 V96";
+    el("path",{d:d,fill:"none",stroke:C.navy3,"stroke-width":2,"marker-end":"url(#oQ)"},s);});
   tQ(s,145,186,"검정",{fw:800,fs:11,c:C.gray});el("line",{x1:20,x2:270,y1:176,y2:176,stroke:C.gray2,"stroke-dasharray":"4 3"},s);
   tQ(s,365,186,"정보기준",{fw:800,fs:11,c:C.gray});el("line",{x1:305,x2:425,y1:176,y2:176,stroke:C.gray2,"stroke-dasharray":"4 3"},s);
   bxQ(s,80,206,280,46,C.navy);tQ(s,220,227,"목적에 맞는 모형 선택",{fw:800,fs:13.5,c:"#fff"});tQ(s,220,244,"예측 중시 → AIC · 실제 모형 선택 → BIC",{fs:10.5,c:"#C9D3E6"});

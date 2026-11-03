@@ -784,7 +784,7 @@ on("m25-ov",function(s){
   bxS(s,150,8,140,46,"#F3F5F9");tS(s,220,28,"p값",{fw:800,fs:13});tS(s,220,45,"귀무가설이 옳다면?",{fs:10,c:C.gray});
   bxS(s,20,84,180,54,"#EEF4FB");tS(s,110,106,"피셔류",{fw:800,fs:12.5,c:"#1C6EA4"});tS(s,110,124,"p값 크기 = 증거의 강력함",{fs:10,c:"#22262E"});
   bxS(s,240,84,180,54,"#FCF3D9");tS(s,330,106,"네이만-피어슨류",{fw:800,fs:12.5,c:C.amberInk});tS(s,330,124,"α로 결정 · n을 미리 설계",{fs:10,c:"#22262E"});
-  el("path",{d:"M200 56 C190 66 130 66 116 80",fill:"none",stroke:C.navy3,"stroke-width":2,"marker-end":"url(#oS)"},s);el("path",{d:"M240 56 C250 66 310 66 324 80",fill:"none",stroke:C.navy3,"stroke-width":2,"marker-end":"url(#oS)"},s);
+  el("line",{x1:200,y1:56,x2:116,y2:80,stroke:C.navy3,"stroke-width":2,"marker-end":"url(#oS)"},s);el("line",{x1:240,y1:56,x2:324,y2:80,stroke:C.navy3,"stroke-width":2,"marker-end":"url(#oS)"},s);
   bxS(s,110,158,220,40,"#FBE4E1");tS(s,220,183,"n이 크면 작은 차이도 p < 0.05",{fw:800,fs:11.5,c:RED});
   arS(s,110,140,160,154,"oS");arS(s,330,140,280,154,"oS");arS(s,220,200,220,212,"oS");
   bxS(s,80,214,280,42,C.navy);tS(s,220,240,"효과크기 · 신뢰구간과 함께 보고",{fw:800,fs:13,c:"#fff"});
@@ -837,7 +837,7 @@ on("m25-four",function(s){
   var B=[["유의수준 α","0.05","#F3F5F9",C.navy],["검정력 1 − β","0.8","#F3F5F9",C.navy],["효과크기","d = 1","#F3F5F9",C.navy],["표본크기 n","?","#FCF3D9",C.amberInk]];
   B.forEach(function(b,i){var x=6+i*104;bxS(s,x,14,96,62,b[2],i===3?C.amber:C.navy3);tS(s,x+48,38,b[0],{fw:800,fs:11,c:b[3]});tS(s,x+48,62,b[1],{fw:800,fs:15,c:b[3]});});
   el("path",{d:"M14 84 L14 94 L302 94 L302 84",fill:"none",stroke:C.navy3,"stroke-width":2},s);tS(s,158,114,"셋을 정하면",{fw:800,fs:11.5});
-  mkS(s,"fS",C.amber);el("path",{d:"M220 110 C300 130 360 120 362 82",fill:"none",stroke:C.amber,"stroke-width":2.4,"marker-end":"url(#fS)"},s);
+  mkS(s,"fS",C.amber);el("path",{d:"M220 110 H348 Q362 110 362 98 V82",fill:"none",stroke:C.amber,"stroke-width":2.4,"marker-end":"url(#fS)"},s);
   tS(s,362,134,"n = 16.71 → 17",{fw:800,fs:12,c:C.amberInk});
 });
 

@@ -741,7 +741,8 @@ on("m33-ov",function(s){
   mkB(s,"oB",C.navy3);
   bxB(s,150,8,140,44,C.navy);tB(s,220,35,"기계학습",{fw:800,fs:13.5,c:"#fff"});
   [[10,"비지도 학습","정답 없음","#EEF4FB","#1C6EA4"],[155,"지도 학습","정답 y 있음","#FCF3D9",C.amberInk],[300,"강화학습","보상과 상태","#E3F1EA",GRN]].forEach(function(b){bxB(s,b[0],84,130,52,b[3]);tB(s,b[0]+65,106,b[1],{fw:800,fs:12,c:b[4]});tB(s,b[0]+65,124,b[2],{fs:10});
-    el("path",{d:"M220 54 C220 70 "+(b[0]+65)+" 66 "+(b[0]+65)+" 80",fill:"none",stroke:C.navy3,"stroke-width":2,"marker-end":"url(#oB)"},s);});
+    var cx=b[0]+65,d=cx===220?"M220 54 V80":"M220 54 V56 Q220 60 "+(cx<220?216:224)+" 60 H"+(cx<220?cx+4:cx-4)+" Q"+cx+" 60 "+cx+" 62 V80";
+    el("path",{d:d,fill:"none",stroke:C.navy3,"stroke-width":2,"marker-end":"url(#oB)"},s);});
   bxB(s,10,170,130,40,"#fff","#D5D9E0");tB(s,75,195,"군집분석",{fw:800,fs:11.5,c:"#1C6EA4"});bxB(s,10,216,130,38,"#fff","#D5D9E0");tB(s,75,240,"차원 축소",{fw:800,fs:11.5,c:"#1C6EA4"});
   arB(s,75,138,75,166,"oB");tB(s,160,196,"k평균 · 계층적 군집화",{a:"start",fw:700,fs:10.5});tB(s,160,240,"PCA · t-SNE · UMAP",{a:"start",fw:700,fs:10.5});
 });
@@ -758,8 +759,8 @@ on("m33-types",function(s){
   tB(s,209,172,"회귀",{fs:10,fw:700});tB(s,209,190,"분류",{fs:10,fw:700});
   bxB(s,284,4,132,200,"#E3F1EA");tB(s,350,26,"강화학습",{fw:800,fs:11.5,c:GRN});mkB(s,"tB",GRN);
   bxB(s,296,56,108,30,"#fff",GRN);tB(s,350,76,"에이전트",{fw:800,fs:10.5});bxB(s,296,126,108,30,"#fff",GRN);tB(s,350,146,"환경",{fw:800,fs:10.5});
-  el("path",{d:"M310 88 C300 105 300 108 310 124",fill:"none",stroke:GRN,"stroke-width":2,"marker-end":"url(#tB)"},s);tB(s,296,110,"행동",{a:"end",fs:9.5,fw:700});
-  el("path",{d:"M390 124 C400 108 400 105 390 88",fill:"none",stroke:GRN,"stroke-width":2,"marker-end":"url(#tB)"},s);tB(s,404,104,"보상",{a:"start",fs:9.5,fw:700});tB(s,404,118,"상태",{a:"start",fs:9.5,fw:700});
+  el("line",{x1:310,y1:88,x2:310,y2:124,stroke:GRN,"stroke-width":2,"marker-end":"url(#tB)"},s);tB(s,296,110,"행동",{a:"end",fs:9.5,fw:700});
+  el("line",{x1:390,y1:124,x2:390,y2:88,stroke:GRN,"stroke-width":2,"marker-end":"url(#tB)"},s);tB(s,404,104,"보상",{a:"start",fs:9.5,fw:700});tB(s,404,118,"상태",{a:"start",fs:9.5,fw:700});
   bxB(s,4,214,412,52,"#F3F5F9");tB(s,210,236,"차이: 정답 데이터(교사)의 유무 · 강화학습은 정답 대신 보상",{fw:800,fs:11});tB(s,210,255,"x = 입력 데이터, y = 정답 데이터",{fs:10,c:C.gray,fw:700});
 });
 

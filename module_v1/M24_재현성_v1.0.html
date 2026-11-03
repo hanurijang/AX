@@ -797,7 +797,7 @@ on("m24-ov",function(s){
   arR(s,212,38,226,38,"oR");
   bxR(s,40,108,160,56,"#FBE4E1");tR(s,120,132,"p-해킹",{fw:800,fs:13.5,c:RED});tR(s,120,151,"p값이 작아지게 조작",{fs:10.5,c:"#22262E"});
   bxR(s,240,108,160,56,"#FBE4E1");tR(s,320,132,"출판 편향",{fw:800,fs:13.5,c:RED});tR(s,320,151,"유의한 결과만 게재",{fs:10.5,c:"#22262E"});
-  el("path",{d:"M300 68 C300 86 140 84 128 104",fill:"none",stroke:C.navy3,"stroke-width":2,"marker-end":"url(#oR)"},s);arR(s,320,68,320,104,"oR");
+  el("path",{d:"M300 68 V76 Q300 84 288 84 H136 Q128 84 128 88 V104",fill:"none",stroke:C.navy3,"stroke-width":2,"marker-end":"url(#oR)"},s);arR(s,320,68,320,104,"oR");
   bxR(s,110,200,220,52,C.navy);tR(s,220,223,"재현성 위기",{fw:800,fs:14,c:"#fff"});tR(s,220,241,"같은 방법으로 해도 같은 결과가 안 나옴",{fs:10.5,c:"#C9D3E6"});
   arR(s,120,166,190,196,"oR");arR(s,320,166,250,196,"oR");
 });
@@ -856,8 +856,8 @@ on("m24-hack",function(s){
   bxR(s,120,100,76,44,"#EEF4FB",BLU);tR(s,158,127,"데이터",{fw:800,fs:11.5});arR(s,98,122,116,122,"hR");
   bxR(s,250,14,164,64,"#fff",GRN);tR(s,262,36,"p ≥ 0.05",{a:"start",fw:800,fs:12,c:GRN});tR(s,262,54,"해당 검정에서 비기각",{a:"start",fs:10.5});tR(s,262,70,"선택적으로 누락될 위험",{a:"start",fs:10.5});
   bxR(s,250,160,164,64,"#fff",RED);tR(s,262,182,"p < 0.05",{a:"start",fw:800,fs:12,c:RED});tR(s,262,200,"가설의 참을 증명하지 않음",{a:"start",fs:10.5});tR(s,262,216,"선호되어 공개될 수 있음",{a:"start",fs:10.5});
-  el("path",{d:"M198 114 C226 100 226 60 246 50",fill:"none",stroke:C.navy3,"stroke-width":2,"marker-end":"url(#hR)"},s);
-  el("path",{d:"M198 130 C226 146 226 182 246 190",fill:"none",stroke:C.navy3,"stroke-width":2,"marker-end":"url(#hR)"},s);
+  el("path",{d:"M198 114 H210 Q218 114 218 100 V62 Q218 50 230 50 H246",fill:"none",stroke:C.navy3,"stroke-width":2,"marker-end":"url(#hR)"},s);
+  el("path",{d:"M198 130 H210 Q218 130 218 144 V178 Q218 190 230 190 H246",fill:"none",stroke:C.navy3,"stroke-width":2,"marker-end":"url(#hR)"},s);
   el("path",{d:"M300 82 C300 120 300 130 300 154",fill:"none",stroke:RED,"stroke-width":3,"stroke-dasharray":"7 4","marker-end":"url(#hR)"},s);
   tR(s,308,124,"p-해킹",{a:"start",fw:800,fs:12.5,c:RED,halo:true});
   bxR(s,40,190,150,46,C.navy);tR(s,115,212,"재현성 저하",{fw:800,fs:13,c:"#fff"});tR(s,115,228,"제1종 오류 확률 > α",{fs:10,c:"#C9D3E6"});

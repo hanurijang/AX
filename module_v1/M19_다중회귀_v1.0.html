@@ -764,9 +764,9 @@ on("m19-ov",function(s){
   bxL(s,150,10,140,50,"#F3F5F9");tL(s,220,32,"단순선형회귀",{fw:800,fs:13});tL(s,220,50,"y = a + bx + ε",{fs:10.5,c:C.gray});
   bxL(s,20,100,170,58,C.navy);tL(s,105,124,"다중회귀",{fw:800,fs:13.5,c:"#fff"});tL(s,105,144,"양적 설명변수 여러 개",{fs:10.5,c:"#C9D3E6"});
   bxL(s,250,100,170,58,C.navy);tL(s,335,124,"가변수",{fw:800,fs:13.5,c:"#fff"});tL(s,335,144,"범주형 설명변수 0/1",{fs:10.5,c:"#C9D3E6"});
-  el("path",{d:"M190 62 C170 80 120 80 105 96",fill:"none",stroke:C.navy3,"stroke-width":2,"marker-end":"url(#oL)"},s);el("path",{d:"M250 62 C270 80 320 80 335 96",fill:"none",stroke:C.navy3,"stroke-width":2,"marker-end":"url(#oL)"},s);
+  el("path",{d:"M190 62 V68 Q190 74 178 74 H111 Q105 74 105 80 V96",fill:"none",stroke:C.navy3,"stroke-width":2,"marker-end":"url(#oL)"},s);el("path",{d:"M250 62 V68 Q250 74 262 74 H329 Q335 74 335 80 V96",fill:"none",stroke:C.navy3,"stroke-width":2,"marker-end":"url(#oL)"},s);
   bxL(s,110,194,220,58,"#FCF3D9");tL(s,220,218,"공분산분석",{fw:800,fs:13.5,c:C.amberInk});tL(s,220,238,"가변수(집단) + 공변량(양적)",{fs:10.5,c:C.amberInk});
-  el("path",{d:"M105 160 C110 180 160 190 170 192",fill:"none",stroke:C.amber,"stroke-width":2,"marker-end":"url(#oL)"},s);el("path",{d:"M335 160 C330 180 280 190 270 192",fill:"none",stroke:C.amber,"stroke-width":2,"marker-end":"url(#oL)"},s);
+  el("path",{d:"M105 160 V166 Q105 172 113 172 H152 Q160 172 160 176 V192",fill:"none",stroke:C.amber,"stroke-width":2,"marker-end":"url(#oL)"},s);el("path",{d:"M335 160 V166 Q335 172 327 172 H288 Q280 172 280 176 V192",fill:"none",stroke:C.amber,"stroke-width":2,"marker-end":"url(#oL)"},s);
 });
 
 on("m19-case",function(s){
@@ -783,7 +783,8 @@ on("m19-ext",function(s){
   bxL(s,120,8,180,50,"#FBE4F0");tL(s,210,30,"단순선형회귀",{fw:800,fs:12});tL(s,210,48,"y = a + bx + ε",{fw:800,fs:13,c:"#C2416E"});
   var B=[[6,"설명변수","개수 늘리기","유형 바꾸기(범주형)","#23704F","#E3F1EA"],[144,"반응변수","오차 분포 바꾸기","이항 · 푸아송 → GLM","#C2416E","#FBE4F0"],[282,"모형 형태","상호작용 · 비선형","일반화선형혼합모형","#B35A1F","#FDF4EC"]];
   B.forEach(function(b){bxL(s,b[0],100,132,124,b[5],b[4]);tL(s,b[0]+66,124,b[1],{fw:800,fs:13,c:b[4]});tL(s,b[0]+66,156,b[2],{fs:10,fw:700});tL(s,b[0]+66,180,b[3],{fs:10,fw:700});
-    el("path",{d:"M210 60 C210 80 "+(b[0]+66)+" 76 "+(b[0]+66)+" 96",fill:"none",stroke:C.navy3,"stroke-width":2,"marker-end":"url(#eL)"},s);});
+    var cx=b[0]+66,d=cx===210?"M210 60 V96":"M210 60 V64 Q210 70 "+(cx<210?204:216)+" 70 H"+(cx<210?cx+6:cx-6)+" Q"+cx+" 70 "+cx+" 76 V96";
+    el("path",{d:d,fill:"none",stroke:C.navy3,"stroke-width":2,"marker-end":"url(#eL)"},s);});
   tL(s,210,252,"다양한 데이터에 적용 가능한 원리로 확장",{fw:800,fs:11.5,c:C.navy});
 });
 

@@ -767,7 +767,7 @@ on("m9-ov",function(s){
   B.forEach(function(b,i){var d=i===3;el("rect",{x:b[0],y:b[1],width:120,height:70,rx:10,fill:d?C.navy:"#fff",stroke:d?"none":"#D5D9E0","stroke-width":1.5},s);
     t9(s,b[0]+60,b[1]+30,b[2],{fw:800,fs:13.5,c:d?"#fff":C.navy});t9(s,b[0]+60,b[1]+52,b[3],{fs:11.5,c:d?"#FCF3D9":C.gray});});
   [[132,55,158,55],[282,55,308,55]].forEach(function(l){el("line",{x1:l[0],y1:l[1],x2:l[2],y2:l[3],stroke:C.navy3,"stroke-width":2,"marker-end":"url(#o9)"},s);});
-  el("path",{d:"M370 92 C370 130 300 150 284 168",fill:"none",stroke:C.navy3,"stroke-width":2,"marker-end":"url(#o9)"},s);
+  el("path",{d:"M370 92 V110 Q370 122 358 122 H262 Q250 122 250 130 V146",fill:"none",stroke:C.navy3,"stroke-width":2,"marker-end":"url(#o9)"},s);
   t9(s,220,244,"표본평균이 모평균과 얼마나 어긋날 수 있는가",{fs:11.5,c:C.gray});
 });
 

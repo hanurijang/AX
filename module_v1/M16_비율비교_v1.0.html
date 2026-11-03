@@ -777,7 +777,8 @@ on("m16-ov",function(s){
   bxH(s,140,10,160,50,C.navy);tH(s,220,32,"범주형 데이터",{fw:800,fs:13.5,c:"#fff"});tH(s,220,50,"범주별 개수",{fs:10.5,c:"#C9D3E6"});
   var B=[[10,"범주 2개","이항검정","동전 앞·뒤"],[155,"범주 여러 개","χ² 적합도검정","주사위 눈 6개"],[300,"범주형 변수 2개","χ² 독립성검정","나무 × 암수"]];
   B.forEach(function(b,i){tH(s,b[0]+65,104,b[1],{fw:700,fs:11,c:C.gray});bxH(s,b[0],114,130,70,i===0?"#FCF3D9":"#EEF4FB");tH(s,b[0]+65,144,b[2],{fw:800,fs:13,c:i===0?C.amberInk:"#1C6EA4"});tH(s,b[0]+65,166,b[3],{fs:10.5,c:C.gray});
-    el("path",{d:"M220 62 C220 80 "+(b[0]+65)+" 76 "+(b[0]+65)+" 90",fill:"none",stroke:C.navy3,"stroke-width":1.8,"marker-end":"url(#oH)"},s);});
+    var cx=b[0]+65,d=cx===220?"M220 62 V90":"M220 62 V64 Q220 68 "+(cx<220?214:226)+" 68 H"+(cx<220?cx+6:cx-6)+" Q"+cx+" 68 "+cx+" 72 V90";
+    el("path",{d:d,fill:"none",stroke:C.navy3,"stroke-width":1.8,"marker-end":"url(#oH)"},s);});
   bxH(s,150,200,280,44,"#F3F5F9");tH(s,290,226,"χ² = Σ (관측도수 − 기대도수)² ÷ 기대도수",{fw:800,fs:11.5});
   el("path",{d:"M220 186 L220 196",stroke:"#2B8CC4","stroke-width":1.5},s);el("path",{d:"M365 186 L365 196",stroke:"#2B8CC4","stroke-width":1.5},s);
   tH(s,75,226,"이항분포로 p값",{fw:700,fs:10.5,c:C.amberInk});

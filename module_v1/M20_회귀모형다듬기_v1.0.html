@@ -799,7 +799,8 @@ on("m20-ov",function(s){
   bxM(s,150,8,140,48,"#F3F5F9");tM(s,220,30,"다중회귀",{fw:800,fs:13});tM(s,220,48,"y = a + b₁x₁ + … + ε",{fs:10,c:C.gray});
   var B=[[8,"점검","차원의 저주","다중공선성 · VIF","#B42318","#FBE4E1"],[154,"형태 ①","상호작용 c·x₁x₂","이원배치 분산분석","#1C6EA4","#EEF4FB"],[300,"형태 ②","곡선 관계","비선형회귀","#23704F","#E3F1EA"]];
   B.forEach(function(b){bxM(s,b[0],100,132,104,b[5]);tM(s,b[0]+66,124,b[1],{fw:800,fs:12,c:b[4]});tM(s,b[0]+66,152,b[2],{fw:800,fs:12});tM(s,b[0]+66,176,b[3],{fs:10.5,c:C.gray});
-    el("path",{d:"M220 58 C220 80 "+(b[0]+66)+" 76 "+(b[0]+66)+" 96",fill:"none",stroke:C.navy3,"stroke-width":2,"marker-end":"url(#oM)"},s);});
+    var cx=b[0]+66,d=cx===220?"M220 58 V96":"M220 58 V64 Q220 70 "+(cx<220?214:226)+" 70 H"+(cx<220?cx+6:cx-6)+" Q"+cx+" 70 "+cx+" 76 V96";
+    el("path",{d:d,fill:"none",stroke:C.navy3,"stroke-width":2,"marker-end":"url(#oM)"},s);});
   tM(s,220,236,"근거가 있을 때만 모형을 복잡하게",{fw:800,fs:12,c:C.amberInk});
 });
 
