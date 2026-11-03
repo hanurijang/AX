@@ -64,6 +64,14 @@ h2.big{font-size:30px;line-height:1.32}
 .ov-main{min-height:0;display:flex;flex-direction:column;gap:12px;padding:16px 24px 10px 36px}
 .ov-main .fig{flex:1 1 auto}
 .fig.plain{background:none;padding:0}
+.slide.bdpage{padding:0;gap:0}
+.slide.bdpage.on{display:grid;grid-template-columns:1fr 1fr;grid-template-rows:auto minmax(0,1fr);height:100%}
+.slide.bdpage .sh{grid-column:1;grid-row:1;padding:16px 24px 0 36px;min-width:0}
+.slide.bdpage .body{display:contents}
+.slide.bdpage .body>.fig,.slide.bdpage .body>.figcol{grid-column:1;grid-row:2;min-width:0;min-height:0}
+.slide.bdpage .fig{background:none;border-radius:0;padding:0}
+.slide.bdpage .body>.fig,.slide.bdpage .body>.figcol{padding:12px 24px 10px 36px}
+.slide.bdpage .side{grid-column:2;grid-row:1 / span 2;align-self:stretch;background:var(--panel);border-radius:0;padding:28px 36px 28px 28px}
 .ovpage .side.shade{background:var(--panel);border-radius:0;padding:28px 36px 28px 28px;height:100%}
 .ovpage .side.shade{gap:22px}
 .ovpage .bridge{display:flex;flex-direction:column;gap:28px}
@@ -393,7 +401,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
     </section>
 
     <!-- ④ 본문 ─────────────────────────────── -->
-    <section class="slide" data-step="3" id="s-4-1a">
+    <section class="slide bdpage" data-step="3" id="s-4-1a">
       <div class="sh"><div class="sec">4-1 지도 학습이란?</div><h2><span class="q">Q</span>지도 학습은 무엇을 학습할까요?</h2></div>
       <div class="body split even">
         <div class="fig"><svg id="m34-sup" viewBox="0 0 420 270" role="img" aria-label="양적 y를 예측하는 회귀와 질적 y를 예측하는 분류, 그리고 출력과 실제 y의 차이를 손실함수로 최소화하는 학습"></svg></div>
@@ -405,7 +413,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
       </div>
     </section>
 
-    <section class="slide" data-step="3" id="s-4-1b">
+    <section class="slide bdpage" data-step="3" id="s-4-1b">
       <div class="sh"><div class="sec">4-1 지도 학습이란?</div><h2><span class="q">Q</span>예측이 좋은지는 어떤 데이터로 확인할까요?</h2></div>
       <div class="body split even">
         <div class="fig"><svg id="m34-cv" viewBox="0 0 420 270" role="img" aria-label="코일 200개를 5묶음으로 나눠 매번 한 묶음 40개를 검증, 나머지 160개를 학습에 쓰고 5번 반복해 성능을 평균하는 5-분할 교차검증"></svg></div>
@@ -417,7 +425,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
       </div>
     </section>
 
-    <section class="slide" data-step="3" id="s-4-1c">
+    <section class="slide bdpage" data-step="3" id="s-4-1c">
       <div class="sh"><div class="sec">4-1 지도 학습이란?</div><h2><span class="q">Q</span>학습 데이터만 잘 맞히는 모형은 무엇이 문제일까요?</h2></div>
       <div class="body split even">
         <div class="fig"><svg id="m34-over" viewBox="0 0 420 270" role="img" aria-label="결정 트리 깊이가 깊어질수록 학습 정답률은 계속 오르지만 검증 정답률은 깊이 4에서 가장 높고 이후 떨어지는 그래프"></svg></div>
@@ -429,7 +437,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
       </div>
     </section>
 
-    <section class="slide" data-step="3" id="s-4-1d">
+    <section class="slide bdpage" data-step="3" id="s-4-1d">
       <div class="sh"><div class="sec">4-1 지도 학습 · 실무 보충</div><h2><span class="q">Q</span>모형을 고를 자료와 최종 점수를 낼 자료는 같아도 될까요?</h2></div>
       <div class="body split even">
         <div class="fig"><svg viewBox="0 0 420 270" role="img" aria-label="학습 자료: 계수·전처리·표준화·PCA를 학습 부분에서 적합; 검증 자료: 모형·복잡도·역치를 선택하고 비교; 최종 시험 자료: 선택이 끝난 뒤 별도 자료에서 성능 보고"><rect x="8" y="8" width="404" height="76" rx="10" fill="#EEF4FB"/><text x="210" y="37" text-anchor="middle" fill="#1B2A4A" font-size="13" font-weight="800">학습 자료</text><text x="210" y="63" text-anchor="middle" fill="#6B7280" font-size="11">계수·전처리·표준화·PCA를 학습 부분에서 적합</text><rect x="8" y="94" width="404" height="76" rx="10" fill="#FCF3D9"/><text x="210" y="123" text-anchor="middle" fill="#1B2A4A" font-size="13" font-weight="800">검증 자료</text><text x="210" y="149" text-anchor="middle" fill="#6B7280" font-size="11">모형·복잡도·역치를 선택하고 비교</text><rect x="8" y="180" width="404" height="76" rx="10" fill="#E3F1EA"/><text x="210" y="209" text-anchor="middle" fill="#1B2A4A" font-size="13" font-weight="800">최종 시험 자료</text><text x="210" y="235" text-anchor="middle" fill="#6B7280" font-size="11">선택이 끝난 뒤 별도 자료에서 성능 보고</text></svg></div>
@@ -440,7 +448,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
       </div>
     </section>
 
-    <section class="slide" data-step="3" id="s-4-2a">
+    <section class="slide bdpage" data-step="3" id="s-4-2a">
       <div class="sh"><div class="sec">4-2 이진 클래스 분류의 성능</div><h2><span class="q">Q</span>결함 판정의 맞고 틀림은 몇 가지로 나뉠까요?</h2></div>
       <div class="body split even">
         <div class="figcol">
@@ -460,7 +468,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
       </div>
     </section>
 
-    <section class="slide" data-step="3" id="s-4-2b">
+    <section class="slide bdpage" data-step="3" id="s-4-2b">
       <div class="sh"><div class="sec">4-2 이진 클래스 분류의 성능</div><h2><span class="q">Q</span>판정 기준을 바꿔 가며 모형을 비교하려면?</h2></div>
       <div class="body split even">
         <div class="fig"><svg id="m34-roc" viewBox="0 0 420 270" role="img" aria-label="모형 A와 모형 B의 ROC 곡선, 대각선은 무작위 판정, AUC는 모형 A 0.92, 모형 B 0.77"></svg></div>
@@ -472,7 +480,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
       </div>
     </section>
 
-    <section class="slide" data-step="3" id="s-4-3a">
+    <section class="slide bdpage" data-step="3" id="s-4-3a">
       <div class="sh"><div class="sec">4-3 회귀의 예측 성능</div><h2><span class="q">Q</span>인장강도 예측이 얼마나 빗나갔는지 어떻게 잴까요?</h2></div>
       <div class="body split even">
         <div class="figcol">
@@ -492,7 +500,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
       </div>
     </section>
 
-    <section class="slide" data-step="3" id="s-4-4a">
+    <section class="slide bdpage" data-step="3" id="s-4-4a">
       <div class="sh"><div class="sec">4-4 지도 학습의 여러 방법</div><h2><span class="q">Q</span>결함을 분류하는 방법에는 어떤 것들이 있을까요?</h2></div>
       <div class="body split even">
         <div class="fig"><svg id="m34-meth" viewBox="0 0 420 270" role="img" aria-label="로지스틱 회귀는 직선 경계, 결정 트리는 조건 분기, SVM은 거리가 최대인 경계, 신경망은 입력층·은닉층·출력층"></svg></div>
@@ -504,7 +512,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
       </div>
     </section>
 
-    <section class="slide" data-step="3" id="s-4-4b">
+    <section class="slide bdpage" data-step="3" id="s-4-4b">
       <div class="sh"><div class="sec">4-4 지도 학습의 여러 방법</div><h2><span class="q">Q</span>직선 하나로 나눌 수 없는 데이터는 어떻게 분류할까요?</h2></div>
       <div class="body split even">
         <div class="fig"><svg id="m34-sep" viewBox="0 0 420 270" role="img" aria-label="결함과 정상이 대각선 양쪽에 모인 선형분리 가능 데이터와, 대각 방향으로 엇갈려 모인 선형분리 불가능 데이터의 분리 경계 비교"></svg></div>

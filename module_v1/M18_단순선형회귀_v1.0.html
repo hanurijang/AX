@@ -64,6 +64,14 @@ h2.big{font-size:30px;line-height:1.32}
 .ov-main{min-height:0;display:flex;flex-direction:column;gap:12px;padding:16px 24px 10px 36px}
 .ov-main .fig{flex:1 1 auto}
 .fig.plain{background:none;padding:0}
+.slide.bdpage{padding:0;gap:0}
+.slide.bdpage.on{display:grid;grid-template-columns:1fr 1fr;grid-template-rows:auto minmax(0,1fr);height:100%}
+.slide.bdpage .sh{grid-column:1;grid-row:1;padding:16px 24px 0 36px;min-width:0}
+.slide.bdpage .body{display:contents}
+.slide.bdpage .body>.fig,.slide.bdpage .body>.figcol{grid-column:1;grid-row:2;min-width:0;min-height:0}
+.slide.bdpage .fig{background:none;border-radius:0;padding:0}
+.slide.bdpage .body>.fig,.slide.bdpage .body>.figcol{padding:12px 24px 10px 36px}
+.slide.bdpage .side{grid-column:2;grid-row:1 / span 2;align-self:stretch;background:var(--panel);border-radius:0;padding:28px 36px 28px 28px}
 .ovpage .side.shade{background:var(--panel);border-radius:0;padding:28px 36px 28px 28px;height:100%}
 .ovpage .side.shade{gap:22px}
 .ovpage .bridge{display:flex;flex-direction:column;gap:28px}
@@ -380,7 +388,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
     </section>
 
     <!-- ④ 본문 ─────────────────────────────── -->
-    <section class="slide" data-step="3" id="s-4-1a">
+    <section class="slide bdpage" data-step="3" id="s-4-1a">
       <div class="sh"><div class="sec">4-1 회귀분석과 회귀계수</div><h2><span class="q">Q</span>회귀모형은 어떤 식으로 나타낼까요?</h2></div>
       <div class="body split even">
         <div class="fig"><svg id="m18-model" viewBox="0 0 420 270" role="img" aria-label="회귀직선 a + bx와 각 데이터의 확률오차 ε, 절편 a와 기울기 b"></svg></div>
@@ -392,7 +400,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
       </div>
     </section>
 
-    <section class="slide" data-step="3" id="s-4-1b">
+    <section class="slide bdpage" data-step="3" id="s-4-1b">
       <div class="sh"><div class="sec">4-1 회귀분석과 회귀계수</div><h2><span class="q">Q</span>수많은 직선 중 가장 알맞은 a와 b는 어떻게 정할까요?</h2></div>
       <div class="body split even">
         <div class="figcol">
@@ -412,7 +420,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
       </div>
     </section>
 
-    <section class="slide" data-step="3" id="s-4-1c">
+    <section class="slide bdpage" data-step="3" id="s-4-1c">
       <div class="sh"><div class="sec">4-1 회귀분석과 회귀계수</div><h2><span class="q">Q</span>구한 기울기는 우연이 아닌 의미 있는 값일까요?</h2></div>
       <div class="body split even">
         <div class="figcol">
@@ -432,7 +440,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
       </div>
     </section>
 
-    <section class="slide" data-step="3" id="s-4-1d">
+    <section class="slide bdpage" data-step="3" id="s-4-1d">
       <div class="sh"><div class="sec">4-1 회귀분석과 회귀계수</div><h2><span class="q">Q</span>회귀식의 불확실성은 어떤 구간으로 나타낼까요?</h2></div>
       <div class="body split even">
         <div class="fig"><svg id="m18-band" viewBox="0 0 420 270" role="img" aria-label="각 x의 평균에 대한 점별 95% 신뢰구간과 새 관측값의 95% 예측구간"></svg></div>
@@ -444,7 +452,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
       </div>
     </section>
 
-    <section class="slide" data-step="3" id="s-4-2a">
+    <section class="slide bdpage" data-step="3" id="s-4-2a">
       <div class="sh"><div class="sec">4-2 결정계수</div><h2><span class="q">Q</span>회귀식이 데이터에 얼마나 잘 들어맞는지는 어떻게 잴까요?</h2></div>
       <div class="body split even">
         <div class="figcol">
@@ -464,7 +472,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
       </div>
     </section>
 
-    <section class="slide" data-step="3" id="s-4-2b">
+    <section class="slide bdpage" data-step="3" id="s-4-2b">
       <div class="sh"><div class="sec">4-2 결정계수</div><h2><span class="q">Q</span>의미 없는 변수를 더해도 R²가 커진다면?</h2></div>
       <div class="body split even">
         <div class="fig"><svg id="m18-adj" viewBox="0 0 420 270" role="img" aria-label="의미 없는 변수를 1개씩 더할 때 결정계수는 오르지만 조정 결정계수는 오르지 않음"></svg></div>
@@ -476,7 +484,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
       </div>
     </section>
 
-    <section class="slide" data-step="3" id="s-4-2c">
+    <section class="slide bdpage" data-step="3" id="s-4-2c">
       <div class="sh"><div class="sec">4-2 결정계수 · 적용 범위 보충</div><h2><span class="q">Q</span>R²가 높으면 새 자료도 잘 예측할까요?</h2></div>
       <div class="body split even">
         <div class="fig"><svg viewBox="0 0 420 270" role="img" aria-label="같은 적합 자료·절편 포함 단순 OLS: SST &gt; 0, x의 변동 &gt; 0이면 R² = r(x,y)²; 새 자료의 R²는 음수일 수도 있음: 실제 y = [0, 2], 예측 = [3, 3] → 1 − 10/2 = −4; 적합도와 예측 성능은 구별: 조정 R²도 보장 아님 · 새 자료의 오차·잔차 점검"><rect x="8" y="8" width="404" height="76" rx="10" fill="#EEF4FB"/><text x="210" y="37" text-anchor="middle" fill="#1B2A4A" font-size="13" font-weight="800">같은 적합 자료·절편 포함 단순 OLS</text><text x="210" y="63" text-anchor="middle" fill="#6B7280" font-size="11">SST &gt; 0, x의 변동 &gt; 0이면 R² = r(x,y)²</text><rect x="8" y="94" width="404" height="76" rx="10" fill="#FCF3D9"/><text x="210" y="123" text-anchor="middle" fill="#1B2A4A" font-size="13" font-weight="800">새 자료의 R²는 음수일 수도 있음</text><text x="210" y="149" text-anchor="middle" fill="#6B7280" font-size="11">실제 y = [0, 2], 예측 = [3, 3] → 1 − 10/2 = −4</text><rect x="8" y="180" width="404" height="76" rx="10" fill="#E3F1EA"/><text x="210" y="209" text-anchor="middle" fill="#1B2A4A" font-size="13" font-weight="800">적합도와 예측 성능은 구별</text><text x="210" y="235" text-anchor="middle" fill="#6B7280" font-size="11">조정 R²도 보장 아님 · 새 자료의 오차·잔차 점검</text></svg></div>
@@ -487,7 +495,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
       </div>
     </section>
 
-    <section class="slide" data-step="3" id="s-4-3a">
+    <section class="slide bdpage" data-step="3" id="s-4-3a">
       <div class="sh"><div class="sec">4-3 오차의 등분산성과 정규성</div><h2><span class="q">Q</span>가설검정과 구간을 쓰려면 오차에 어떤 가정이 필요할까요?</h2></div>
       <div class="body split even">
         <div class="fig"><svg id="m18-assume" viewBox="0 0 420 270" role="img" aria-label="정규성과 등분산성을 모두 만족, 정규성 위반, 등분산성 위반인 세 경우"></svg></div>
@@ -499,7 +507,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
       </div>
     </section>
 
-    <section class="slide" data-step="3" id="s-4-3b">
+    <section class="slide bdpage" data-step="3" id="s-4-3b">
       <div class="sh"><div class="sec">4-3 오차의 등분산성과 정규성</div><h2><span class="q">Q</span>오차의 가정은 무엇으로 확인할까요?</h2></div>
       <div class="body split even">
         <div class="fig"><svg id="m18-resid" viewBox="0 0 420 270" role="img" aria-label="학생 10명의 잔차를 수학 점수에 따라 그린 그림과 정규성·등분산성 검정 결과"></svg></div>
@@ -511,7 +519,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
       </div>
     </section>
 
-    <section class="slide" data-step="3" id="s-4-4a">
+    <section class="slide bdpage" data-step="3" id="s-4-4a">
       <div class="sh"><div class="sec">4-4 설명변수와 반응변수</div><h2><span class="q">Q</span>x와 y를 바꾸면 회귀식도 그냥 뒤집힐까요?</h2></div>
       <div class="body split even">
         <div class="fig"><svg id="m18-swap" viewBox="0 0 420 270" role="img" aria-label="과학을 수학으로 회귀한 직선과 수학을 과학으로 회귀한 직선이 다름"></svg></div>
@@ -523,7 +531,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
       </div>
     </section>
 
-    <section class="slide" data-step="3" id="s-4-4b">
+    <section class="slide bdpage" data-step="3" id="s-4-4b">
       <div class="sh"><div class="sec">4-4 설명변수와 반응변수</div><h2><span class="q">Q</span>목적에 따라 설명변수는 어떻게 정할까요?</h2></div>
       <div class="body split even">
         <div class="fig"><svg id="m18-purpose" viewBox="0 0 420 270" role="img" aria-label="설명, 인과효과, 예측이라는 세 가지 목적과 설명변수 설정"></svg></div>

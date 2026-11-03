@@ -64,6 +64,14 @@ h2.big{font-size:30px;line-height:1.32}
 .ov-main{min-height:0;display:flex;flex-direction:column;gap:12px;padding:16px 24px 10px 36px}
 .ov-main .fig{flex:1 1 auto}
 .fig.plain{background:none;padding:0}
+.slide.bdpage{padding:0;gap:0}
+.slide.bdpage.on{display:grid;grid-template-columns:1fr 1fr;grid-template-rows:auto minmax(0,1fr);height:100%}
+.slide.bdpage .sh{grid-column:1;grid-row:1;padding:16px 24px 0 36px;min-width:0}
+.slide.bdpage .body{display:contents}
+.slide.bdpage .body>.fig,.slide.bdpage .body>.figcol{grid-column:1;grid-row:2;min-width:0;min-height:0}
+.slide.bdpage .fig{background:none;border-radius:0;padding:0}
+.slide.bdpage .body>.fig,.slide.bdpage .body>.figcol{padding:12px 24px 10px 36px}
+.slide.bdpage .side{grid-column:2;grid-row:1 / span 2;align-self:stretch;background:var(--panel);border-radius:0;padding:28px 36px 28px 28px}
 .ovpage .side.shade{background:var(--panel);border-radius:0;padding:28px 36px 28px 28px;height:100%}
 .ovpage .side.shade{gap:22px}
 .ovpage .bridge{display:flex;flex-direction:column;gap:28px}
@@ -362,7 +370,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
     </section>
 
     <!-- ④ 본문 ─────────────────────────────── -->
-    <section class="slide" data-step="3" id="s-4-1a">
+    <section class="slide bdpage" data-step="3" id="s-4-1a">
       <div class="sh"><div class="sec">4-1 베이즈 인수</div><h2><span class="q">Q</span>p ≥ 0.05라면 ‘차이가 없다’고 말할 수 있을까요?</h2></div>
       <div class="body split even">
         <div class="figcol">
@@ -382,7 +390,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
       </div>
     </section>
 
-    <section class="slide" data-step="3" id="s-4-1d">
+    <section class="slide bdpage" data-step="3" id="s-4-1d">
       <div class="sh"><div class="sec">4-1 베이즈 인수 · 확률 갱신 보충</div><h2><span class="q">Q</span>같은 베이즈 인수면 사후 모형확률도 같을까요?</h2></div>
       <div class="body split even">
         <div class="fig"><svg viewBox="0 0 420 270" role="img" aria-label="사후 오즈 = B10 × 사전 오즈: P(M1|x)/P(M0|x) = B10 × P(M1)/P(M0); B10 = 3, 사전 P(M1) = 50%: 사전 1:1 → 사후 3:1 → P(M1|x) = 75%; B10 = 3, 사전 P(M1) = 10%: 사전 1:9 → 사후 1:3 → P(M1|x) = 25%"><rect x="8" y="8" width="404" height="76" rx="10" fill="#EEF4FB"/><text x="210" y="37" text-anchor="middle" fill="#1B2A4A" font-size="13" font-weight="800">사후 오즈 = B10 × 사전 오즈</text><text x="210" y="63" text-anchor="middle" fill="#6B7280" font-size="11">P(M1|x)/P(M0|x) = B10 × P(M1)/P(M0)</text><rect x="8" y="94" width="404" height="76" rx="10" fill="#FCF3D9"/><text x="210" y="123" text-anchor="middle" fill="#1B2A4A" font-size="13" font-weight="800">B10 = 3, 사전 P(M1) = 50%</text><text x="210" y="149" text-anchor="middle" fill="#6B7280" font-size="11">사전 1:1 → 사후 3:1 → P(M1|x) = 75%</text><rect x="8" y="180" width="404" height="76" rx="10" fill="#E3F1EA"/><text x="210" y="209" text-anchor="middle" fill="#1B2A4A" font-size="13" font-weight="800">B10 = 3, 사전 P(M1) = 10%</text><text x="210" y="235" text-anchor="middle" fill="#6B7280" font-size="11">사전 1:9 → 사후 1:3 → P(M1|x) = 25%</text></svg></div>
@@ -393,7 +401,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
       </div>
     </section>
 
-    <section class="slide" data-step="3" id="s-4-1b">
+    <section class="slide bdpage" data-step="3" id="s-4-1b">
       <div class="sh"><div class="sec">4-1 베이즈 인수</div><h2><span class="q">Q</span>베이즈 인수가 얼마면 실질적인 증거일까요?</h2></div>
       <div class="body split even">
         <div class="fig"><svg id="m26-scale" viewBox="0 0 420 270" role="img" aria-label="베이즈 인수의 관례적 해석 눈금; 같은 자료도 사전분포에 따라 값이 달라짐"></svg></div>
@@ -405,7 +413,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
       </div>
     </section>
 
-    <section class="slide" data-step="3" id="s-4-1c">
+    <section class="slide bdpage" data-step="3" id="s-4-1c">
       <div class="sh"><div class="sec">4-1 베이즈 인수</div><h2><span class="q">Q</span>베이즈 인수는 언제나 p값보다 나을까요?</h2></div>
       <div class="body split even">
         <div class="fig"><svg id="m26-pro" viewBox="0 0 420 270" role="img" aria-label="베이즈 인수의 장점 세 가지와 주의점 세 가지, 사전분포 폭에 따라 3.08, 2.80, 1.70로 달라짐"></svg></div>
@@ -417,7 +425,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
       </div>
     </section>
 
-    <section class="slide" data-step="3" id="s-4-2a">
+    <section class="slide bdpage" data-step="3" id="s-4-2a">
       <div class="sh"><div class="sec">4-2 논문이 옳지 않을 확률</div><h2><span class="q">Q</span>‘유의하다’고 보고된 가설은 얼마나 옳을까요?</h2></div>
       <div class="body split even">
         <div class="figcol">
@@ -437,7 +445,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
       </div>
     </section>
 
-    <section class="slide" data-step="3" id="s-4-2b">
+    <section class="slide bdpage" data-step="3" id="s-4-2b">
       <div class="sh"><div class="sec">4-2 논문이 옳지 않을 확률</div><h2><span class="q">Q</span>허위발견율은 무엇에 따라 달라질까요?</h2></div>
       <div class="body split even">
         <div class="fig"><svg id="m26-fdr" viewBox="0 0 420 270" role="img" aria-label="가설이 옳을 확률 Q에 따른 허위발견율 곡선 네 개, 유의수준 0.05와 0.005, 검정력 0.8과 0.4"></svg></div>
@@ -449,7 +457,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
       </div>
     </section>
 
-    <section class="slide" data-step="3" id="s-4-3a">
+    <section class="slide bdpage" data-step="3" id="s-4-3a">
       <div class="sh"><div class="sec">4-3 좋은 가설 세우기</div><h2><span class="q">Q</span>어떤 가설이 ‘좋은 가설’일까요?</h2></div>
       <div class="body split even">
         <div class="fig"><svg id="m26-good" viewBox="0 0 420 270" role="img" aria-label="근거 없는 가설을 여러 개 검증하면 허위발견율이 오르고, 메커니즘으로 뒷받침되는 가설은 옳을 확률이 높음"></svg></div>
@@ -461,7 +469,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
       </div>
     </section>
 
-    <section class="slide" data-step="3" id="s-4-3b">
+    <section class="slide bdpage" data-step="3" id="s-4-3b">
       <div class="sh"><div class="sec">4-3 좋은 가설 세우기</div><h2><span class="q">Q</span>왜 나쁜 가설이 자주 검증될까요?</h2></div>
       <div class="body split even">
         <div class="fig"><svg id="m26-skill" viewBox="0 0 420 270" role="img" aria-label="예상 밖이면서 좋은 가설이 연구자의 실력, 강한 인상만 노린 나쁜 가설은 허위발견율을 높임"></svg></div>

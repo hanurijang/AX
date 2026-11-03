@@ -64,6 +64,14 @@ h2.big{font-size:30px;line-height:1.32}
 .ov-main{min-height:0;display:flex;flex-direction:column;gap:12px;padding:16px 24px 10px 36px}
 .ov-main .fig{flex:1 1 auto}
 .fig.plain{background:none;padding:0}
+.slide.bdpage{padding:0;gap:0}
+.slide.bdpage.on{display:grid;grid-template-columns:1fr 1fr;grid-template-rows:auto minmax(0,1fr);height:100%}
+.slide.bdpage .sh{grid-column:1;grid-row:1;padding:16px 24px 0 36px;min-width:0}
+.slide.bdpage .body{display:contents}
+.slide.bdpage .body>.fig,.slide.bdpage .body>.figcol{grid-column:1;grid-row:2;min-width:0;min-height:0}
+.slide.bdpage .fig{background:none;border-radius:0;padding:0}
+.slide.bdpage .body>.fig,.slide.bdpage .body>.figcol{padding:12px 24px 10px 36px}
+.slide.bdpage .side{grid-column:2;grid-row:1 / span 2;align-self:stretch;background:var(--panel);border-radius:0;padding:28px 36px 28px 28px}
 .ovpage .side.shade{background:var(--panel);border-radius:0;padding:28px 36px 28px 28px;height:100%}
 .ovpage .side.shade{gap:22px}
 .ovpage .bridge{display:flex;flex-direction:column;gap:28px}
@@ -380,7 +388,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
     </section>
 
     <!-- ④ 본문 ─────────────────────────────── -->
-    <section class="slide" data-step="3" id="s-4-1a">
+    <section class="slide bdpage" data-step="3" id="s-4-1a">
       <div class="sh"><div class="sec">4-1 인과관계를 밝히려면</div><h2><span class="q">Q</span>이수자와 비이수자를 그대로 비교하면 무엇이 문제일까요?</h2></div>
       <div class="body split even">
         <div class="fig"><svg id="m29-conf" viewBox="0 0 420 270" role="img" aria-label="이수자의 근속 평균 13.2년, 비이수자 7.2년으로 달라 불량률 차이 −0.77%p가 교육 때문인지 근속 때문인지 구분할 수 없음"></svg></div>
@@ -392,7 +400,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
       </div>
     </section>
 
-    <section class="slide" data-step="3" id="s-4-2a">
+    <section class="slide bdpage" data-step="3" id="s-4-2a">
       <div class="sh"><div class="sec">4-2 무작위 통제 실험</div><h2><span class="q">Q</span>중첩요인을 모두 몰라도 효과를 알 수 있을까요?</h2></div>
       <div class="body split even">
         <div class="fig"><svg id="m29-rct" viewBox="0 0 420 270" role="img" aria-label="작업자 300명을 무작위로 두 집단에 나누면 근속 평균이 9.8년으로 같아지고, 불량률 차이는 −0.29%p"></svg></div>
@@ -404,7 +412,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
       </div>
     </section>
 
-    <section class="slide" data-step="3" id="s-4-3a">
+    <section class="slide bdpage" data-step="3" id="s-4-3a">
       <div class="sh"><div class="sec">4-3 인과효과의 이론적 배경</div><h2><span class="q">Q</span>한 사람에 대한 교육 효과는 정확히 무엇일까요?</h2></div>
       <div class="body split even">
         <div class="figcol">
@@ -424,7 +432,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
       </div>
     </section>
 
-    <section class="slide" data-step="3" id="s-4-3b">
+    <section class="slide bdpage" data-step="3" id="s-4-3b">
       <div class="sh"><div class="sec">4-3 인과효과의 이론적 배경</div><h2><span class="q">Q</span>관찰한 평균 차이에는 무엇이 섞여 있을까요?</h2></div>
       <div class="body split even">
         <div class="figcol">
@@ -444,7 +452,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
       </div>
     </section>
 
-    <section class="slide" data-step="3" id="s-4-3c">
+    <section class="slide bdpage" data-step="3" id="s-4-3c">
       <div class="sh"><div class="sec">4-3 평균 효과의 대상</div><h2><span class="q">Q</span>이수자에게 효과가 크면 전체 평균 효과도 같을까요?</h2></div>
       <div class="body split even">
         <div class="fig"><svg viewBox="0 0 420 270" role="img" aria-label="전체 평균 효과 ATE: E[Y(1)−Y(0)]: 교육 여부와 무관하게 정한 전체 대상의 평균; 이수자 평균 효과 ATT: E[Y(1)−Y(0)|X=1]: 실제 이수한 대상에 한정한 평균; 예: 두 유형 반반 · 효과 −0.6 / −0.2%p: 첫 유형만 이수 → ATE −0.4 / ATT −0.6%p"><rect x="8" y="8" width="404" height="76" rx="10" fill="#EEF4FB"/><text x="210" y="37" text-anchor="middle" fill="#1B2A4A" font-size="13" font-weight="800">전체 평균 효과 ATE: E[Y(1)−Y(0)]</text><text x="210" y="63" text-anchor="middle" fill="#6B7280" font-size="11">교육 여부와 무관하게 정한 전체 대상의 평균</text><rect x="8" y="94" width="404" height="76" rx="10" fill="#FCF3D9"/><text x="210" y="123" text-anchor="middle" fill="#1B2A4A" font-size="13" font-weight="800">이수자 평균 효과 ATT: E[Y(1)−Y(0)|X=1]</text><text x="210" y="149" text-anchor="middle" fill="#6B7280" font-size="11">실제 이수한 대상에 한정한 평균</text><rect x="8" y="180" width="404" height="76" rx="10" fill="#E3F1EA"/><text x="210" y="209" text-anchor="middle" fill="#1B2A4A" font-size="13" font-weight="800">예: 두 유형 반반 · 효과 −0.6 / −0.2%p</text><text x="210" y="235" text-anchor="middle" fill="#6B7280" font-size="11">첫 유형만 이수 → ATE −0.4 / ATT −0.6%p</text></svg></div>
@@ -455,7 +463,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
       </div>
     </section>
 
-    <section class="slide" data-step="3" id="s-4-4a">
+    <section class="slide bdpage" data-step="3" id="s-4-4a">
       <div class="sh"><div class="sec">4-4 통계적 인과 추론</div><h2><span class="q">Q</span>무작위 통제 실험을 할 수 없을 때는 어떻게 할까요?</h2></div>
       <div class="body split even">
         <div class="figcol">
@@ -475,7 +483,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
       </div>
     </section>
 
-    <section class="slide" data-step="3" id="s-4-4b">
+    <section class="slide bdpage" data-step="3" id="s-4-4b">
       <div class="sh"><div class="sec">4-4 통계적 인과 추론</div><h2><span class="q">Q</span>근속 구간별로 나눠 비교하면 어떻게 될까요?</h2></div>
       <div class="body split even">
         <div class="fig"><svg id="m29-strat" viewBox="0 0 420 270" role="img" aria-label="근속 5구간별 이수자와 비이수자의 불량률 차이와 가중평균 −0.30"></svg></div>
@@ -487,7 +495,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
       </div>
     </section>
 
-    <section class="slide" data-step="3" id="s-4-4c">
+    <section class="slide bdpage" data-step="3" id="s-4-4c">
       <div class="sh"><div class="sec">4-4 통계적 인과 추론</div><h2><span class="q">Q</span>조건이 비슷한 사람끼리 짝지어 비교하면 어떨까요?</h2></div>
       <div class="body split even">
         <div class="fig"><svg id="m29-psm" viewBox="0 0 420 270" role="img" aria-label="근속에 따른 경향 점수 곡선 위에 이수자와 비이수자를 놓고, 경향 점수가 비슷한 쌍 69개를 짝지어 평균 차 −0.30"></svg></div>
@@ -499,7 +507,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
       </div>
     </section>
 
-    <section class="slide" data-step="3" id="s-4-4d">
+    <section class="slide bdpage" data-step="3" id="s-4-4d">
       <div class="sh"><div class="sec">4-4 통계적 인과 추론</div><h2><span class="q">Q</span>교육을 도입한 라인과 안 한 라인의 전후 변화를 어떻게 비교할까요?</h2></div>
       <div class="body split even">
         <div class="figcol">

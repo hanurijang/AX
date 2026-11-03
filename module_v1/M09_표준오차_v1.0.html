@@ -64,6 +64,14 @@ h2.big{font-size:30px;line-height:1.32}
 .ov-main{min-height:0;display:flex;flex-direction:column;gap:12px;padding:16px 24px 10px 36px}
 .ov-main .fig{flex:1 1 auto}
 .fig.plain{background:none;padding:0}
+.slide.bdpage{padding:0;gap:0}
+.slide.bdpage.on{display:grid;grid-template-columns:1fr 1fr;grid-template-rows:auto minmax(0,1fr);height:100%}
+.slide.bdpage .sh{grid-column:1;grid-row:1;padding:16px 24px 0 36px;min-width:0}
+.slide.bdpage .body{display:contents}
+.slide.bdpage .body>.fig,.slide.bdpage .body>.figcol{grid-column:1;grid-row:2;min-width:0;min-height:0}
+.slide.bdpage .fig{background:none;border-radius:0;padding:0}
+.slide.bdpage .body>.fig,.slide.bdpage .body>.figcol{padding:12px 24px 10px 36px}
+.slide.bdpage .side{grid-column:2;grid-row:1 / span 2;align-self:stretch;background:var(--panel);border-radius:0;padding:28px 36px 28px 28px}
 .ovpage .side.shade{background:var(--panel);border-radius:0;padding:28px 36px 28px 28px;height:100%}
 .ovpage .side.shade{gap:22px}
 .ovpage .bridge{display:flex;flex-direction:column;gap:28px}
@@ -361,7 +369,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
     </section>
 
     <!-- ④ 본문 ─────────────────────────────── -->
-    <section class="slide" data-step="3" id="s-4-1a">
+    <section class="slide bdpage" data-step="3" id="s-4-1a">
       <div class="sh"><div class="sec">4-1 표본오차</div><h2><span class="q">Q</span>표본평균은 모평균과 일치할까요?</h2></div>
       <div class="body split even">
         <div class="fig"><svg id="m9-gap" viewBox="0 0 420 270" role="img" aria-label="알고 싶은 모평균 μ와 손에 있는 표본평균 x̄ 사이의 어긋남"></svg></div>
@@ -373,7 +381,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
       </div>
     </section>
 
-    <section class="slide" data-step="3" id="s-4-1b">
+    <section class="slide bdpage" data-step="3" id="s-4-1b">
       <div class="sh"><div class="sec">4-1 표본오차</div><h2><span class="q">Q</span>표본오차는 매번 같을까요?</h2></div>
       <div class="body split even">
         <div class="figcol">
@@ -393,7 +401,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
       </div>
     </section>
 
-    <section class="slide" data-step="3" id="s-4-2a">
+    <section class="slide bdpage" data-step="3" id="s-4-2a">
       <div class="sh"><div class="sec">4-2 큰 수의 법칙</div><h2><span class="q">Q</span>표본크기를 키우면 표본평균은 어떻게 될까요?</h2></div>
       <div class="body split even">
         <div class="fig"><svg id="m9-lln" viewBox="0 0 420 270" role="img" aria-label="표본크기를 5,000까지 늘리면 주사위와 키의 표본평균이 모평균에 가까워짐"></svg></div>
@@ -405,7 +413,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
       </div>
     </section>
 
-    <section class="slide" data-step="3" id="s-4-3a">
+    <section class="slide bdpage" data-step="3" id="s-4-3a">
       <div class="sh"><div class="sec">4-3 중심극한정리</div><h2><span class="q">Q</span>표본평균을 수없이 모으면 어떤 분포가 될까요?</h2></div>
       <div class="body split even">
         <div class="fig"><svg id="m9-clt" viewBox="0 0 420 270" role="img" aria-label="정규 모집단에서 크기 100인 표본을 1만 번 뽑은 표본평균 히스토그램"></svg></div>
@@ -417,7 +425,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
       </div>
     </section>
 
-    <section class="slide" data-step="3" id="s-4-3b">
+    <section class="slide bdpage" data-step="3" id="s-4-3b">
       <div class="sh"><div class="sec">4-3 중심극한정리</div><h2><span class="q">Q</span>표본평균 분포의 평균과 표준편차는 얼마일까요?</h2></div>
       <div class="body split even">
         <div class="figcol">
@@ -437,7 +445,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
       </div>
     </section>
 
-    <section class="slide" data-step="3" id="s-4-4a">
+    <section class="slide bdpage" data-step="3" id="s-4-4a">
       <div class="sh"><div class="sec">4-4 추정량과 표준오차</div><h2><span class="q">Q</span>좋은 추정량이란 무엇일까요?</h2></div>
       <div class="body split even">
         <div class="fig"><svg id="m9-unbias" viewBox="0 0 420 270" role="img" aria-label="과소평가, 치우침 없음, 과대평가하는 추정량의 점 모음"></svg></div>
@@ -449,7 +457,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
       </div>
     </section>
 
-    <section class="slide" data-step="3" id="s-4-4b">
+    <section class="slide bdpage" data-step="3" id="s-4-4b">
       <div class="sh"><div class="sec">4-4 추정량과 표준오차</div><h2><span class="q">Q</span>모분산을 비편향 추정할 때 왜 n−1로 나눌까요?</h2></div>
       <div class="body split even">
         <div class="figcol">
@@ -469,7 +477,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
       </div>
     </section>
 
-    <section class="slide" data-step="3" id="s-4-4c">
+    <section class="slide bdpage" data-step="3" id="s-4-4c">
       <div class="sh"><div class="sec">4-4 추정량과 표준오차</div><h2><span class="q">Q</span>표본으로 표준오차를 어떻게 구할까요?</h2></div>
       <div class="body split even">
         <div class="figcol">
@@ -489,7 +497,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
       </div>
     </section>
 
-    <section class="slide" data-step="3" id="s-4-4d">
+    <section class="slide bdpage" data-step="3" id="s-4-4d">
       <div class="sh"><div class="sec">4-4 추정량과 표준오차</div><h2><span class="q">Q</span>개인의 SD, 평균의 SE, t값은 어떻게 다를까요?</h2></div>
       <div class="body split even">
         <div class="fig"><svg viewBox="0 0 420 270" role="img" aria-label="모형: 개인 키 SD σ = 7cm, n = 10: 평균의 실제 SE = 7 ÷ √10 ≈ 2.214cm; 고정 표본: 평균 167.9cm, 제곱합 426.9: s ≈ 6.887cm / 추정 SE = s ÷ √10 ≈ 2.178cm; 독립 정규표본에서 정확한 t분포: T = (x̄ − μ) ÷ (s/√n) ~ tₙ₋₁"><rect x="8" y="8" width="404" height="76" rx="10" fill="#EEF4FB"/><text x="210" y="37" text-anchor="middle" fill="#1B2A4A" font-size="13" font-weight="800">모형: 개인 키 SD σ = 7cm, n = 10</text><text x="210" y="63" text-anchor="middle" fill="#6B7280" font-size="11">평균의 실제 SE = 7 ÷ √10 ≈ 2.214cm</text><rect x="8" y="94" width="404" height="76" rx="10" fill="#FCF3D9"/><text x="210" y="123" text-anchor="middle" fill="#1B2A4A" font-size="13" font-weight="800">고정 표본: 평균 167.9cm, 제곱합 426.9</text><text x="210" y="149" text-anchor="middle" fill="#6B7280" font-size="11">s ≈ 6.887cm / 추정 SE = s ÷ √10 ≈ 2.178cm</text><rect x="8" y="180" width="404" height="76" rx="10" fill="#E3F1EA"/><text x="210" y="209" text-anchor="middle" fill="#1B2A4A" font-size="13" font-weight="800">독립 정규표본에서 정확한 t분포</text><text x="210" y="235" text-anchor="middle" fill="#6B7280" font-size="11">T = (x̄ − μ) ÷ (s/√n) ~ tₙ₋₁</text></svg></div>

@@ -64,6 +64,14 @@ h2.big{font-size:30px;line-height:1.32}
 .ov-main{min-height:0;display:flex;flex-direction:column;gap:12px;padding:16px 24px 10px 36px}
 .ov-main .fig{flex:1 1 auto}
 .fig.plain{background:none;padding:0}
+.slide.bdpage{padding:0;gap:0}
+.slide.bdpage.on{display:grid;grid-template-columns:1fr 1fr;grid-template-rows:auto minmax(0,1fr);height:100%}
+.slide.bdpage .sh{grid-column:1;grid-row:1;padding:16px 24px 0 36px;min-width:0}
+.slide.bdpage .body{display:contents}
+.slide.bdpage .body>.fig,.slide.bdpage .body>.figcol{grid-column:1;grid-row:2;min-width:0;min-height:0}
+.slide.bdpage .fig{background:none;border-radius:0;padding:0}
+.slide.bdpage .body>.fig,.slide.bdpage .body>.figcol{padding:12px 24px 10px 36px}
+.slide.bdpage .side{grid-column:2;grid-row:1 / span 2;align-self:stretch;background:var(--panel);border-radius:0;padding:28px 36px 28px 28px}
 .ovpage .side.shade{background:var(--panel);border-radius:0;padding:28px 36px 28px 28px;height:100%}
 .ovpage .side.shade{gap:22px}
 .ovpage .bridge{display:flex;flex-direction:column;gap:28px}
@@ -381,7 +389,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
     </section>
 
     <!-- ④ 본문 ─────────────────────────────── -->
-    <section class="slide" data-step="3" id="s-4-1a">
+    <section class="slide bdpage" data-step="3" id="s-4-1a">
       <div class="sh"><div class="sec">4-1 기계학습이란?</div><h2><span class="q">Q</span>기계학습은 어떤 종류로 나뉠까요?</h2></div>
       <div class="body split even">
         <div class="fig"><svg id="m33-types" viewBox="0 0 420 270" role="img" aria-label="비지도 학습은 입력 x만, 지도 학습은 입력 x와 정답 y, 강화학습은 에이전트와 환경이 행동·보상·상태를 주고받음"></svg></div>
@@ -393,7 +401,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
       </div>
     </section>
 
-    <section class="slide" data-step="3" id="s-4-2a">
+    <section class="slide bdpage" data-step="3" id="s-4-2a">
       <div class="sh"><div class="sec">4-2 통계학과 기계학습의 차이</div><h2><span class="q">Q</span>통계학과 기계학습은 무엇을 더 중시할까요?</h2></div>
       <div class="body split even">
         <div class="fig"><svg id="m33-vs" viewBox="0 0 420 270" role="img" aria-label="통계학은 추론과 해석을, 기계학습은 예측 성능을 더 강조하는 경향. 둘은 배타적이지 않음"></svg></div>
@@ -405,7 +413,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
       </div>
     </section>
 
-    <section class="slide" data-step="3" id="s-4-3a">
+    <section class="slide bdpage" data-step="3" id="s-4-3a">
       <div class="sh"><div class="sec">4-3 비지도 학습: 군집분석</div><h2><span class="q">Q</span>라벨 없는 운전 기록을 어떻게 무리로 나눌까요?</h2></div>
       <div class="body split even">
         <div class="fig"><svg id="m33-km" viewBox="0 0 420 270" role="img" aria-label="k평균 k = 3으로 운전 기록 60건을 세 군집으로 나눈 결과와 중심. 정상·고하중·과열 의심은 확인이 필요한 임시 해석"></svg></div>
@@ -417,7 +425,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
       </div>
     </section>
 
-    <section class="slide" data-step="3" id="s-4-3c">
+    <section class="slide bdpage" data-step="3" id="s-4-3c">
       <div class="sh"><div class="sec">4-3 거리와 표준화</div><h2><span class="q">Q</span>표준화하면 가장 가까운 점도 달라질까요?</h2></div>
       <div class="body split even">
         <div class="fig"><svg viewBox="0 0 420 270" role="img" aria-label="가상 점 A=(2,45), B=(4,46), C=(2.5,55): 좌표 단위: 진동 mm/s · 온도 ℃; 원래 수치의 유클리드 거리: A–B ≈ 2.24 / A–C ≈ 10.01 → B가 가까움; 60건의 SD로 나눈 표준화 거리: A–B ≈ 1.77 / A–C ≈ 1.11 → C가 가까움"><rect x="8" y="8" width="404" height="76" rx="10" fill="#EEF4FB"/><text x="210" y="37" text-anchor="middle" fill="#1B2A4A" font-size="13" font-weight="800">가상 점 A=(2,45), B=(4,46), C=(2.5,55)</text><text x="210" y="63" text-anchor="middle" fill="#6B7280" font-size="11">좌표 단위: 진동 mm/s · 온도 ℃</text><rect x="8" y="94" width="404" height="76" rx="10" fill="#FCF3D9"/><text x="210" y="123" text-anchor="middle" fill="#1B2A4A" font-size="13" font-weight="800">원래 수치의 유클리드 거리</text><text x="210" y="149" text-anchor="middle" fill="#6B7280" font-size="11">A–B ≈ 2.24 / A–C ≈ 10.01 → B가 가까움</text><rect x="8" y="180" width="404" height="76" rx="10" fill="#E3F1EA"/><text x="210" y="209" text-anchor="middle" fill="#1B2A4A" font-size="13" font-weight="800">60건의 SD로 나눈 표준화 거리</text><text x="210" y="235" text-anchor="middle" fill="#6B7280" font-size="11">A–B ≈ 1.77 / A–C ≈ 1.11 → C가 가까움</text></svg></div>
@@ -428,7 +436,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
       </div>
     </section>
 
-    <section class="slide" data-step="3" id="s-4-3b">
+    <section class="slide bdpage" data-step="3" id="s-4-3b">
       <div class="sh"><div class="sec">4-3 비지도 학습: 군집분석</div><h2><span class="q">Q</span>군집 개수를 미리 정하지 않고 나눌 수 있을까요?</h2></div>
       <div class="body split even">
         <div class="fig"><svg id="m33-dend" viewBox="0 0 420 270" role="img" aria-label="운전 기록 12건의 덴드로그램, 높이 1.6에서 자르면 3개, 0.7에서 자르면 5개 군집"></svg></div>
@@ -440,7 +448,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
       </div>
     </section>
 
-    <section class="slide" data-step="3" id="s-4-4a">
+    <section class="slide bdpage" data-step="3" id="s-4-4a">
       <div class="sh"><div class="sec">4-4 PCA 이외의 차원 축소 방법</div><h2><span class="q">Q</span>주성분분석으로 구분되지 않는 구조도 있을까요?</h2></div>
       <div class="body split even">
         <div class="fig"><svg id="m33-tsne" viewBox="0 0 420 270" role="img" aria-label="선형·비선형 차원 축소 결과가 달라질 수 있음을 보이는 합성 개념도. 실제 알고리즘 비교 결과나 군집 존재의 증거가 아님"></svg></div>

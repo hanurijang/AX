@@ -64,6 +64,14 @@ h2.big{font-size:30px;line-height:1.32}
 .ov-main{min-height:0;display:flex;flex-direction:column;gap:12px;padding:16px 24px 10px 36px}
 .ov-main .fig{flex:1 1 auto}
 .fig.plain{background:none;padding:0}
+.slide.bdpage{padding:0;gap:0}
+.slide.bdpage.on{display:grid;grid-template-columns:1fr 1fr;grid-template-rows:auto minmax(0,1fr);height:100%}
+.slide.bdpage .sh{grid-column:1;grid-row:1;padding:16px 24px 0 36px;min-width:0}
+.slide.bdpage .body{display:contents}
+.slide.bdpage .body>.fig,.slide.bdpage .body>.figcol{grid-column:1;grid-row:2;min-width:0;min-height:0}
+.slide.bdpage .fig{background:none;border-radius:0;padding:0}
+.slide.bdpage .body>.fig,.slide.bdpage .body>.figcol{padding:12px 24px 10px 36px}
+.slide.bdpage .side{grid-column:2;grid-row:1 / span 2;align-self:stretch;background:var(--panel);border-radius:0;padding:28px 36px 28px 28px}
 .ovpage .side.shade{background:var(--panel);border-radius:0;padding:28px 36px 28px 28px;height:100%}
 .ovpage .side.shade{gap:22px}
 .ovpage .bridge{display:flex;flex-direction:column;gap:28px}
@@ -386,7 +394,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
     </section>
 
     <!-- ④ 본문 ─────────────────────────────── -->
-    <section class="slide" data-step="3" id="s-4-1a">
+    <section class="slide bdpage" data-step="3" id="s-4-1a">
       <div class="sh"><div class="sec">4-1 인과관계와 상관관계</div><h2><span class="q">Q</span>원인과 결과의 관계는 어떻게 나타낼까요?</h2></div>
       <div class="body split even">
         <div class="fig"><svg id="m28-graph" viewBox="0 0 420 270" role="img" aria-label="근속연수, 교육 시간, 숙련도, 설비 상태, 불량률 사이의 인과 그래프"></svg></div>
@@ -398,7 +406,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
       </div>
     </section>
 
-    <section class="slide" data-step="3" id="s-4-1b">
+    <section class="slide bdpage" data-step="3" id="s-4-1b">
       <div class="sh"><div class="sec">4-1 인과관계와 상관관계</div><h2><span class="q">Q</span>인과관계와 상관관계는 무엇이 다를까요?</h2></div>
       <div class="body split even">
         <div class="fig"><svg id="m28-def" viewBox="0 0 420 270" role="img" aria-label="인과관계는 원인을 바꾸면 결과가 바뀌는 방향성 있는 관계, 상관관계는 방향성 없는 관련성"></svg></div>
@@ -410,7 +418,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
       </div>
     </section>
 
-    <section class="slide" data-step="3" id="s-4-2a">
+    <section class="slide bdpage" data-step="3" id="s-4-2a">
       <div class="sh"><div class="sec">4-2 인과와 상관의 차이</div><h2><span class="q">Q</span>교육 시간과 불량률의 강한 상관은 교육 효과일까요?</h2></div>
       <div class="body split even">
         <div class="fig"><svg id="m28-obs" viewBox="0 0 420 270" role="img" aria-label="관찰 데이터 산점도를 근속연수로 색칠하면 근속이 교육과 불량률 모두에 영향을 주는 것이 보임"></svg></div>
@@ -422,7 +430,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
       </div>
     </section>
 
-    <section class="slide" data-step="3" id="s-4-2b">
+    <section class="slide bdpage" data-step="3" id="s-4-2b">
       <div class="sh"><div class="sec">4-2 인과와 상관의 차이</div><h2><span class="q">Q</span>교육 시간을 무작위로 배정하면 무엇이 달라질까요?</h2></div>
       <div class="body split even">
         <div class="fig"><svg id="m28-rct" viewBox="0 0 420 270" role="img" aria-label="관찰 데이터는 r −0.80, 교육 시간을 무작위로 배정한 실험 데이터는 r −0.18로 관계가 사라짐"></svg></div>
@@ -434,7 +442,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
       </div>
     </section>
 
-    <section class="slide" data-step="3" id="s-4-2c">
+    <section class="slide bdpage" data-step="3" id="s-4-2c">
       <div class="sh"><div class="sec">4-2 인과와 상관의 차이</div><h2><span class="q">Q</span>피어슨 r=0이면 독립이거나 인과가 없을까요?</h2></div>
       <div class="body split even">
         <div class="fig"><svg id="m28-venn" viewBox="0 0 420 270" role="img" aria-label="대칭 X와 Y=X²에서 r=0이지만 의존성이 있는 비선형 생성모형"></svg></div>
@@ -446,7 +454,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
       </div>
     </section>
 
-    <section class="slide" data-step="3" id="s-4-3a">
+    <section class="slide bdpage" data-step="3" id="s-4-3a">
       <div class="sh"><div class="sec">4-3 인과와 상관을 알면 할 수 있는 일</div><h2><span class="q">Q</span>인과를 알 때와 상관만 알 때, 할 수 있는 일은 어떻게 다를까요?</h2></div>
       <div class="body split even">
         <div class="fig"><svg id="m28-use" viewBox="0 0 420 270" role="img" aria-label="인과관계를 알면 개입으로 결과를 바꿀 수 있고, 상관관계를 알면 관찰한 값으로 다른 값을 예측할 수 있음"></svg></div>
@@ -458,7 +466,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
       </div>
     </section>
 
-    <section class="slide" data-step="3" id="s-4-4a">
+    <section class="slide bdpage" data-step="3" id="s-4-4a">
       <div class="sh"><div class="sec">4-4 인과와 상관의 다양한 사례</div><h2><span class="q">Q</span>기온과 시간은 왜 중첩요인이 되기 쉬울까요?</h2></div>
       <div class="body split even">
         <div class="fig"><svg id="m28-temp" viewBox="0 0 420 270" role="img" aria-label="기온이 에어컨 판매량과 냉각수 사용량 모두에 영향, 시간과 함께 증가하는 두 변수는 서로 상관"></svg></div>
@@ -470,7 +478,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
       </div>
     </section>
 
-    <section class="slide" data-step="3" id="s-4-4b">
+    <section class="slide bdpage" data-step="3" id="s-4-4b">
       <div class="sh"><div class="sec">4-4 인과와 상관의 다양한 사례</div><h2><span class="q">Q</span>초콜릿을 많이 먹는 나라는 노벨상을 많이 받을까요?</h2></div>
       <div class="body split even">
         <div class="fig"><svg id="m28-choc" viewBox="0 0 420 270" role="img" aria-label="나라별 초콜릿 소비량과 노벨상 수상자 수의 상관 r 0.791, GDP가 두 변수 모두에 영향"></svg></div>
@@ -482,7 +490,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
       </div>
     </section>
 
-    <section class="slide" data-step="3" id="s-4-4c">
+    <section class="slide bdpage" data-step="3" id="s-4-4c">
       <div class="sh"><div class="sec">4-4 인과와 상관의 다양한 사례</div><h2><span class="q">Q</span>변수가 아주 많으면 어떤 상관이 생길까요?</h2></div>
       <div class="body split even">
         <div class="figcol">

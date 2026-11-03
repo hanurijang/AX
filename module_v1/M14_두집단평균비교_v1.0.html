@@ -64,6 +64,14 @@ h2.big{font-size:30px;line-height:1.32}
 .ov-main{min-height:0;display:flex;flex-direction:column;gap:12px;padding:16px 24px 10px 36px}
 .ov-main .fig{flex:1 1 auto}
 .fig.plain{background:none;padding:0}
+.slide.bdpage{padding:0;gap:0}
+.slide.bdpage.on{display:grid;grid-template-columns:1fr 1fr;grid-template-rows:auto minmax(0,1fr);height:100%}
+.slide.bdpage .sh{grid-column:1;grid-row:1;padding:16px 24px 0 36px;min-width:0}
+.slide.bdpage .body{display:contents}
+.slide.bdpage .body>.fig,.slide.bdpage .body>.figcol{grid-column:1;grid-row:2;min-width:0;min-height:0}
+.slide.bdpage .fig{background:none;border-radius:0;padding:0}
+.slide.bdpage .body>.fig,.slide.bdpage .body>.figcol{padding:12px 24px 10px 36px}
+.slide.bdpage .side{grid-column:2;grid-row:1 / span 2;align-self:stretch;background:var(--panel);border-radius:0;padding:28px 36px 28px 28px}
 .ovpage .side.shade{background:var(--panel);border-radius:0;padding:28px 36px 28px 28px;height:100%}
 .ovpage .side.shade{gap:22px}
 .ovpage .bridge{display:flex;flex-direction:column;gap:28px}
@@ -405,7 +413,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
     </section>
 
     <!-- ④ 본문 ─────────────────────────────── -->
-    <section class="slide" data-step="3" id="s-4-1a">
+    <section class="slide bdpage" data-step="3" id="s-4-1a">
       <div class="sh"><div class="sec">4-1 검정 방법 고르기</div><h2><span class="q">Q</span>가설검정 방법은 여러 가지인데, 해석하는 흐름도 다를까요?</h2></div>
       <div class="body split even">
         <div class="fig"><svg id="m14-flow" viewBox="0 0 420 270" role="img" aria-label="가설 설정, 검정통계량 계산, 이론 분포에서 위치를 보고 p값 계산의 3단계는 공통이고 검정통계량만 방법마다 다름"></svg></div>
@@ -417,7 +425,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
       </div>
     </section>
 
-    <section class="slide" data-step="3" id="s-4-1b">
+    <section class="slide bdpage" data-step="3" id="s-4-1b">
       <div class="sh"><div class="sec">4-1 검정 방법 고르기</div><h2><span class="q">Q</span>데이터 유형에 따라 분석 방법은 어떻게 달라질까요?</h2></div>
       <div class="body split even">
         <div class="fig"><svg id="m14-types" viewBox="0 0 420 270" role="img" aria-label="범주형과 양적 변수는 막대그래프, 범주형끼리는 분할표, 양적 변수끼리는 산점도"></svg></div>
@@ -429,7 +437,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
       </div>
     </section>
 
-    <section class="slide" data-step="3" id="s-4-1c">
+    <section class="slide bdpage" data-step="3" id="s-4-1c">
       <div class="sh"><div class="sec">4-1 검정 방법 고르기</div><h2><span class="q">Q</span>비교할 표본이 1개, 2개, 3개 이상이면 무엇이 달라질까요?</h2></div>
       <div class="body split even">
         <div class="fig"><svg id="m14-nsample" viewBox="0 0 420 270" role="img" aria-label="1표본은 기준값과, 2표본은 서로, 3표본 이상은 여러 쌍을 비교"></svg></div>
@@ -441,7 +449,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
       </div>
     </section>
 
-    <section class="slide" data-step="3" id="s-4-1d">
+    <section class="slide bdpage" data-step="3" id="s-4-1d">
       <div class="sh"><div class="sec">4-1 검정 방법 고르기</div><h2><span class="q">Q</span>양적 변수가 어떤 분포를 따르는지는 왜 중요할까요?</h2></div>
       <div class="body split even">
         <div class="fig"><svg id="m14-param" viewBox="0 0 420 270" role="img" aria-label="분포 가정과 표본크기, 이상치를 함께 확인하고 모수·비모수 방법을 검토"></svg></div>
@@ -453,7 +461,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
       </div>
     </section>
 
-    <section class="slide" data-step="3" id="s-4-2a">
+    <section class="slide bdpage" data-step="3" id="s-4-2a">
       <div class="sh"><div class="sec">4-2 전제 조건 확인</div><h2><span class="q">Q</span>데이터가 정규분포에서 왔는지 어떻게 확인할까요?</h2></div>
       <div class="body split even">
         <div class="fig"><svg id="m14-qq" viewBox="0 0 420 270" role="img" aria-label="신약군과 위약군 혈압의 Q-Q 플롯과 샤피로-윌크 검정 결과"></svg></div>
@@ -465,7 +473,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
       </div>
     </section>
 
-    <section class="slide" data-step="3" id="s-4-2b">
+    <section class="slide bdpage" data-step="3" id="s-4-2b">
       <div class="sh"><div class="sec">4-2 전제 조건 확인</div><h2><span class="q">Q</span>정규성 검정에서 p ≥ 0.05가 나오면 정규분포가 증명된 걸까요?</h2></div>
       <div class="body split even">
         <div class="fig"><svg id="m14-trap" viewBox="0 0 420 270" role="img" aria-label="정규성 검정의 주의점: 비기각은 증명이 아니며 p값만으로 방법을 선택하지 않고 표본크기도 고려"></svg></div>
@@ -477,7 +485,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
       </div>
     </section>
 
-    <section class="slide" data-step="3" id="s-4-2c">
+    <section class="slide bdpage" data-step="3" id="s-4-2c">
       <div class="sh"><div class="sec">4-2 전제 조건 확인</div><h2><span class="q">Q</span>두 집단의 분산이 같은지는 어떻게 확인할까요?</h2></div>
       <div class="body split even">
         <div class="fig"><svg id="m14-var" viewBox="0 0 420 270" role="img" aria-label="평균은 다르지만 퍼짐이 비슷한 두 분포와, 평균과 퍼짐이 모두 다른 두 분포, 예 1의 레빈·바틀렛 검정 결과"></svg></div>
@@ -489,7 +497,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
       </div>
     </section>
 
-    <section class="slide" data-step="3" id="s-4-3a">
+    <section class="slide bdpage" data-step="3" id="s-4-3a">
       <div class="sh"><div class="sec">4-3 일표본 · 이표본 t검정</div><h2><span class="q">Q</span>표본이 하나뿐일 때는 무엇과 비교할까요?</h2></div>
       <div class="body split even">
         <div class="figcol">
@@ -510,7 +518,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
       </div>
     </section>
 
-    <section class="slide" data-step="3" id="s-4-3b">
+    <section class="slide bdpage" data-step="3" id="s-4-3b">
       <div class="sh"><div class="sec">4-3 일표본 · 이표본 t검정</div><h2><span class="q">Q</span>두 집단의 분산이 다르면 이표본 t검정을 못 쓸까요?</h2></div>
       <div class="body split even">
         <div class="fig"><svg id="m14-welch" viewBox="0 0 420 270" role="img" aria-label="예 1을 일반적인 t검정과 웰치의 t검정으로 분석한 결과 비교"></svg></div>
@@ -522,7 +530,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
       </div>
     </section>
 
-    <section class="slide" data-step="3" id="s-4-4a">
+    <section class="slide bdpage" data-step="3" id="s-4-4a">
       <div class="sh"><div class="sec">4-4 대응 있는 t검정</div><h2><span class="q">Q</span>같은 환자를 복용 전후로 재면 무엇이 달라질까요?</h2></div>
       <div class="body split even">
         <div class="fig"><svg id="m14-pair" viewBox="0 0 420 270" role="img" aria-label="신약군 7명의 복용 전후 혈압을 선으로 이은 그림과 차이"></svg></div>
@@ -534,7 +542,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
       </div>
     </section>
 
-    <section class="slide" data-step="3" id="s-4-4b">
+    <section class="slide bdpage" data-step="3" id="s-4-4b">
       <div class="sh"><div class="sec">4-4 대응 있는 t검정</div><h2><span class="q">Q</span>대응을 살려 분석하면 무엇이 좋을까요?</h2></div>
       <div class="body split even">
         <div class="figcol">
@@ -555,7 +563,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
       </div>
     </section>
 
-    <section class="slide" data-step="3" id="s-4-5a">
+    <section class="slide bdpage" data-step="3" id="s-4-5a">
       <div class="sh"><div class="sec">4-5 비모수검정</div><h2><span class="q">Q</span>정규성이 없을 때는 두 집단을 어떻게 비교할까요?</h2></div>
       <div class="body split even">
         <div class="figcol">
@@ -576,7 +584,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
       </div>
     </section>
 
-    <section class="slide" data-step="3" id="s-4-5b">
+    <section class="slide bdpage" data-step="3" id="s-4-5b">
       <div class="sh"><div class="sec">4-5 비모수검정</div><h2><span class="q">Q</span>분포 모양이 다르거나 맞지 않는 검정을 쓰면 어떻게 될까요?</h2></div>
       <div class="body split even">
         <div class="fig"><svg id="m14-shape" viewBox="0 0 420 270" role="img" aria-label="순위합 검정의 위치 차이 해석은 같은 모양일 때 가능하며, 다른 모양이면 분포 차이와 위치 차이를 구별"></svg></div>
@@ -588,7 +596,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
       </div>
     </section>
 
-    <section class="slide" data-step="3" id="s-4-5c">
+    <section class="slide bdpage" data-step="3" id="s-4-5c">
       <div class="sh"><div class="sec">4-5 비모수검정</div><h2><span class="q">Q</span>같은 순위합인데 p값이 달라질 수 있을까요?</h2></div>
       <div class="body split even">
         <div class="fig"><svg viewBox="0 0 420 270" role="img" aria-label="이 모듈: 두 집단 7명씩 · 동점은 평균 순위: 신약군 순위합 33.5 / U = 5.5; 동점·연속성 보정을 한 양측 정규근사: p ≈ 0.01733; 집단 표지를 모두 바꾸어 보는 정확 순열 계산: 3,432가지 중 양측 꼬리 48가지 / p ≈ 0.01399"><rect x="8" y="8" width="404" height="76" rx="10" fill="#EEF4FB"/><text x="210" y="37" text-anchor="middle" fill="#1B2A4A" font-size="13" font-weight="800">이 모듈: 두 집단 7명씩 · 동점은 평균 순위</text><text x="210" y="63" text-anchor="middle" fill="#6B7280" font-size="11">신약군 순위합 33.5 / U = 5.5</text><rect x="8" y="94" width="404" height="76" rx="10" fill="#FCF3D9"/><text x="210" y="123" text-anchor="middle" fill="#1B2A4A" font-size="13" font-weight="800">동점·연속성 보정을 한 양측 정규근사</text><text x="210" y="149" text-anchor="middle" fill="#6B7280" font-size="11">p ≈ 0.01733</text><rect x="8" y="180" width="404" height="76" rx="10" fill="#E3F1EA"/><text x="210" y="209" text-anchor="middle" fill="#1B2A4A" font-size="13" font-weight="800">집단 표지를 모두 바꾸어 보는 정확 순열 계산</text><text x="210" y="235" text-anchor="middle" fill="#6B7280" font-size="11">3,432가지 중 양측 꼬리 48가지 / p ≈ 0.01399</text></svg></div>

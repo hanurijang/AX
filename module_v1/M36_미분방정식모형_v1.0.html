@@ -64,6 +64,14 @@ h2.big{font-size:30px;line-height:1.32}
 .ov-main{min-height:0;display:flex;flex-direction:column;gap:12px;padding:16px 24px 10px 36px}
 .ov-main .fig{flex:1 1 auto}
 .fig.plain{background:none;padding:0}
+.slide.bdpage{padding:0;gap:0}
+.slide.bdpage.on{display:grid;grid-template-columns:1fr 1fr;grid-template-rows:auto minmax(0,1fr);height:100%}
+.slide.bdpage .sh{grid-column:1;grid-row:1;padding:16px 24px 0 36px;min-width:0}
+.slide.bdpage .body{display:contents}
+.slide.bdpage .body>.fig,.slide.bdpage .body>.figcol{grid-column:1;grid-row:2;min-width:0;min-height:0}
+.slide.bdpage .fig{background:none;border-radius:0;padding:0}
+.slide.bdpage .body>.fig,.slide.bdpage .body>.figcol{padding:12px 24px 10px 36px}
+.slide.bdpage .side{grid-column:2;grid-row:1 / span 2;align-self:stretch;background:var(--panel);border-radius:0;padding:28px 36px 28px 28px}
 .ovpage .side.shade{background:var(--panel);border-radius:0;padding:28px 36px 28px 28px;height:100%}
 .ovpage .side.shade{gap:22px}
 .ovpage .bridge{display:flex;flex-direction:column;gap:28px}
@@ -395,7 +403,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
     </section>
 
     <!-- ④ 본문 ─────────────────────────────── -->
-    <section class="slide" data-step="3" id="s-4-1a">
+    <section class="slide bdpage" data-step="3" id="s-4-1a">
       <div class="sh"><div class="sec">4-1 차분 방정식과 지수함수 증가 · 기초</div><h2><span class="q">Q</span>5일마다 2배로 늘어나는 규칙은 어떻게 쓸까요?</h2></div>
       <div class="body split even">
         <div class="figcol">
@@ -415,7 +423,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
       </div>
     </section>
 
-    <section class="slide" data-step="3" id="s-4-1b">
+    <section class="slide bdpage" data-step="3" id="s-4-1b">
       <div class="sh"><div class="sec">4-1 차분 방정식과 지수함수 증가 · 기초</div><h2><span class="q">Q</span>배율 r을 바꾸면 움직임은 어떻게 달라질까요?</h2></div>
       <div class="body split even">
         <div class="fig"><svg id="m36-bif" viewBox="0 0 420 270" role="img" aria-label="x(t+1) = r x(t)에서 r 1.2는 증가, 1.0은 유지, 0.8은 감소하는 곡선과, r = 1을 경계로 소멸과 증식이 나뉘는 분기 다이어그램"></svg></div>
@@ -427,7 +435,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
       </div>
     </section>
 
-    <section class="slide" data-step="3" id="s-4-2a">
+    <section class="slide bdpage" data-step="3" id="s-4-2a">
       <div class="sh"><div class="sec">4-2 미분 방정식과 밀도 효과 · 기초</div><h2><span class="q">Q</span>시간 간격을 아주 작게 하면 규칙은 어떻게 쓸까요?</h2></div>
       <div class="body split even">
         <div class="figcol">
@@ -447,7 +455,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
       </div>
     </section>
 
-    <section class="slide" data-step="3" id="s-4-2b">
+    <section class="slide bdpage" data-step="3" id="s-4-2b">
       <div class="sh"><div class="sec">4-2 미분 방정식과 밀도 효과 · 기초</div><h2><span class="q">Q</span>지수적 증가가 끝없이 이어지는 것이 현실적일까요?</h2></div>
       <div class="body split even">
         <div class="fig"><svg id="m36-logi" viewBox="0 0 420 270" role="img" aria-label="지수적 증가는 직원 수를 넘어 계속 커지지만, 로지스틱 방정식은 K = 1,000에 가까워지며 포화하는 S자 곡선"></svg></div>
@@ -459,7 +467,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
       </div>
     </section>
 
-    <section class="slide" data-step="3" id="s-4-2c">
+    <section class="slide bdpage" data-step="3" id="s-4-2c">
       <div class="sh"><div class="sec">4-2 평형점 · 추가 읽기</div><h2><span class="q">Q</span>더 변하지 않는 상태는 어디이고, 그곳은 안정할까요?</h2></div>
       <div class="body split even">
         <div class="fig"><svg id="m36-eq" viewBox="0 0 420 270" role="img" aria-label="로지스틱 방정식의 변화율 그래프와 평형점, x = 0은 불안정평형점, x = K는 안정평형점이며 화살표가 K로 모임"></svg></div>
@@ -471,7 +479,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
       </div>
     </section>
 
-    <section class="slide" data-step="3" id="s-4-3a">
+    <section class="slide bdpage" data-step="3" id="s-4-3a">
       <div class="sh"><div class="sec">4-3 감염병 모형 · 기초</div><h2><span class="q">Q</span>감염되고 회복하는 흐름은 어떻게 식으로 쓸까요?</h2></div>
       <div class="body split even">
         <div class="figcol">
@@ -491,7 +499,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
       </div>
     </section>
 
-    <section class="slide" data-step="3" id="s-4-3b">
+    <section class="slide bdpage" data-step="3" id="s-4-3b">
       <div class="sh"><div class="sec">4-3 감염병 모형 · 기초</div><h2><span class="q">Q</span>감염자 한 명이 유행으로 번질지는 무엇으로 알 수 있을까요?</h2></div>
       <div class="body split even">
         <div class="fig"><svg id="m36-r0" viewBox="0 0 420 270" role="img" aria-label="초기 S=999 I=1 R=0인 SIR의 최종 누적 비율. R0가 1 이하라도 초기 감염자를 포함하며 R0 1.7에서 약 69%"></svg></div>
@@ -503,7 +511,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
       </div>
     </section>
 
-    <section class="slide" data-step="3" id="s-4-3c">
+    <section class="slide bdpage" data-step="3" id="s-4-3c">
       <div class="sh"><div class="sec">4-3 현재 증가 조건</div><h2><span class="q">Q</span>R₀가 1보다 크면 언제나 감염자가 늘어날까요?</h2></div>
       <div class="body split even">
         <div class="fig"><svg viewBox="0 0 420 270" role="img" aria-label="기초값 R₀ = β/γ = 1.7: 대부분 감수성인 조건의 전파 가능성; 현재 감수성 비율 S/N = 0.4라면: Rₜ = 1.7 × 0.4 = 0.68 &lt; 1; I&gt;0이면 dI/dt = γI(Rₜ−1): 현재 I는 감소 / 누적 감염 I+R은 감소하지 않음"><rect x="8" y="8" width="404" height="76" rx="10" fill="#EEF4FB"/><text x="210" y="37" text-anchor="middle" fill="#1B2A4A" font-size="13" font-weight="800">기초값 R₀ = β/γ = 1.7</text><text x="210" y="63" text-anchor="middle" fill="#6B7280" font-size="11">대부분 감수성인 조건의 전파 가능성</text><rect x="8" y="94" width="404" height="76" rx="10" fill="#FCF3D9"/><text x="210" y="123" text-anchor="middle" fill="#1B2A4A" font-size="13" font-weight="800">현재 감수성 비율 S/N = 0.4라면</text><text x="210" y="149" text-anchor="middle" fill="#6B7280" font-size="11">Rₜ = 1.7 × 0.4 = 0.68 &lt; 1</text><rect x="8" y="180" width="404" height="76" rx="10" fill="#E3F1EA"/><text x="210" y="209" text-anchor="middle" fill="#1B2A4A" font-size="13" font-weight="800">I&gt;0이면 dI/dt = γI(Rₜ−1)</text><text x="210" y="235" text-anchor="middle" fill="#6B7280" font-size="11">현재 I는 감소 / 누적 감염 I+R은 감소하지 않음</text></svg></div>
@@ -514,7 +522,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
       </div>
     </section>
 
-    <section class="slide" data-step="3" id="s-4-4a">
+    <section class="slide bdpage" data-step="3" id="s-4-4a">
       <div class="sh"><div class="sec">4-4 예측과 통제 · 기초</div><h2><span class="q">Q</span>30일째에 대책을 쓰면 유행은 어떻게 달라질까요?</h2></div>
       <div class="body split even">
         <div class="fig"><svg id="m36-ctrl" viewBox="0 0 420 270" role="img" aria-label="30일까지 관측한 감염자 수 이후 대책 없음 Rt 1.48, 마스크 Rt 1.05, 접촉 절반 Rt 0.74의 감염자 수 시나리오"></svg></div>
@@ -526,7 +534,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
       </div>
     </section>
 
-    <section class="slide" data-step="3" id="s-4-4b">
+    <section class="slide bdpage" data-step="3" id="s-4-4b">
       <div class="sh"><div class="sec">4-4 가정 확장 · 추가 읽기</div><h2><span class="q">Q</span>SIR 모형의 가정을 바꾸면 무엇을 더 알 수 있을까요?</h2></div>
       <div class="body split even">
         <div class="fig"><svg id="m36-ext" viewBox="0 0 420 270" role="img" aria-label="SIR 모형의 가정인 사람의 동질성, 무작위 접촉, 백신 없음을 연령 구조, 네트워크 구조, 백신 효과로 확장"></svg></div>

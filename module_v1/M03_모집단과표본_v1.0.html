@@ -64,6 +64,14 @@ h2.big{font-size:30px;line-height:1.32}
 .ov-main{min-height:0;display:flex;flex-direction:column;gap:12px;padding:16px 24px 10px 36px}
 .ov-main .fig{flex:1 1 auto}
 .fig.plain{background:none;padding:0}
+.slide.bdpage{padding:0;gap:0}
+.slide.bdpage.on{display:grid;grid-template-columns:1fr 1fr;grid-template-rows:auto minmax(0,1fr);height:100%}
+.slide.bdpage .sh{grid-column:1;grid-row:1;padding:16px 24px 0 36px;min-width:0}
+.slide.bdpage .body{display:contents}
+.slide.bdpage .body>.fig,.slide.bdpage .body>.figcol{grid-column:1;grid-row:2;min-width:0;min-height:0}
+.slide.bdpage .fig{background:none;border-radius:0;padding:0}
+.slide.bdpage .body>.fig,.slide.bdpage .body>.figcol{padding:12px 24px 10px 36px}
+.slide.bdpage .side{grid-column:2;grid-row:1 / span 2;align-self:stretch;background:var(--panel);border-radius:0;padding:28px 36px 28px 28px}
 .ovpage .side.shade{background:var(--panel);border-radius:0;padding:28px 36px 28px 28px;height:100%}
 .ovpage .side.shade{gap:22px}
 .ovpage .bridge{display:flex;flex-direction:column;gap:28px}
@@ -411,16 +419,16 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
     </section>
 
     <!-- ④ 본문 ─────────────────────────────── -->
-    <section class="slide" data-step="3" id="s-4-1a">
+    <section class="slide bdpage" data-step="3" id="s-4-1a">
       <div class="sh"><div class="sec">4-1 분석 목적과 알고자 하는 대상</div><h2><span class="q">Q</span>분석을 시작할 때 가장 먼저 무엇을 정할까요?</h2></div>
       <div class="body split even">
         <div class="fig"><svg viewBox="0 0 420 270" role="img" aria-label="분석 목적에 따라 데이터를 얻는 방법과 분석 방법이 달라짐">
           <defs><marker id="b3" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10z" fill="#5B6E97"/></marker></defs>
           <text x="20" y="28" font-size="13" font-weight="800" fill="#1B2A4A">분석 목적의 예</text>
           <g font-size="12.5" font-weight="700" fill="#22262E">
-            <rect x="14" y="40" width="392" height="38" rx="8" fill="#fff"/><text x="28" y="64">신약의 효과 유무와 효과의 크기를 알고 싶다</text>
-            <rect x="14" y="84" width="392" height="38" rx="8" fill="#fff"/><text x="28" y="108">소득과 행복도 사이에 어떤 관계가 있는지 알고 싶다</text>
-            <rect x="14" y="128" width="392" height="38" rx="8" fill="#fff"/><text x="28" y="152">기온으로 올해 농작물 수확량을 예측하고 싶다</text>
+            <rect x="14" y="40" width="392" height="38" rx="8" fill="#fff" stroke="#D5D9E0" stroke-width="1.5"/><text x="28" y="64">신약의 효과 유무와 효과의 크기를 알고 싶다</text>
+            <rect x="14" y="84" width="392" height="38" rx="8" fill="#fff" stroke="#D5D9E0" stroke-width="1.5"/><text x="28" y="108">소득과 행복도 사이에 어떤 관계가 있는지 알고 싶다</text>
+            <rect x="14" y="128" width="392" height="38" rx="8" fill="#fff" stroke="#D5D9E0" stroke-width="1.5"/><text x="28" y="152">기온으로 올해 농작물 수확량을 예측하고 싶다</text>
           </g>
           <rect x="14" y="196" width="112" height="56" rx="10" fill="#FCF3D9" stroke="#E0A100" stroke-width="2"/><text x="70" y="229" text-anchor="middle" font-size="13.5" font-weight="800" fill="#6E4F00">분석 목적</text>
           <line x1="128" y1="224" x2="152" y2="224" stroke="#5B6E97" stroke-width="2" marker-end="url(#b3)"/>
@@ -436,17 +444,17 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
       </div>
     </section>
 
-    <section class="slide" data-step="3" id="s-4-1b">
+    <section class="slide bdpage" data-step="3" id="s-4-1b">
       <div class="sh"><div class="sec">4-1 분석 목적과 알고자 하는 대상</div><h2><span class="q">Q</span>같은 80명이라도 알고자 하는 대상은 같을까요?</h2></div>
       <div class="body split even">
         <div class="fig"><svg viewBox="0 0 420 270" role="img" aria-label="신약 실험의 대상은 모든 고혈압 환자, 반 대항의 대상은 80명">
-          <rect x="6" y="6" width="200" height="258" rx="12" fill="#fff"/>
+          <rect x="6" y="6" width="200" height="258" rx="12" fill="#fff" stroke="#D5D9E0" stroke-width="1.5"/>
           <text x="106" y="30" text-anchor="middle" font-size="13" font-weight="800" fill="#1B2A4A">신약 실험</text>
           <circle cx="106" cy="138" r="88" fill="#E4E9F2" stroke="#2C4170" stroke-width="2" stroke-dasharray="6 4"/>
           <g fill="#A9B8D4"><circle cx="60" cy="96" r="5"/><circle cx="150" cy="92" r="5"/><circle cx="48" cy="140" r="5"/><circle cx="164" cy="140" r="5"/><circle cx="66" cy="186" r="5"/><circle cx="146" cy="190" r="5"/><circle cx="106" cy="70" r="5"/><circle cx="106" cy="206" r="5"/></g>
           <circle cx="106" cy="138" r="30" fill="#FCF3D9" stroke="#E0A100" stroke-width="2"/><text x="106" y="135" text-anchor="middle" font-size="12" font-weight="800" fill="#6E4F00">실험</text><text x="106" y="151" text-anchor="middle" font-size="12" font-weight="800" fill="#6E4F00">80명</text>
           <text x="106" y="248" text-anchor="middle" font-size="12" font-weight="800" fill="#1B2A4A">대상: 모든 고혈압 환자</text>
-          <rect x="214" y="6" width="200" height="258" rx="12" fill="#fff"/>
+          <rect x="214" y="6" width="200" height="258" rx="12" fill="#fff" stroke="#D5D9E0" stroke-width="1.5"/>
           <text x="314" y="30" text-anchor="middle" font-size="13" font-weight="800" fill="#1B2A4A">반 대항 영어 시험</text>
           <circle cx="314" cy="138" r="56" fill="#FCF3D9" stroke="#E0A100" stroke-width="2.5"/>
           <text x="314" y="132" text-anchor="middle" font-size="12.5" font-weight="800" fill="#6E4F00">1반 40명</text><text x="314" y="152" text-anchor="middle" font-size="12.5" font-weight="800" fill="#6E4F00">2반 40명</text>
@@ -460,7 +468,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
       </div>
     </section>
 
-    <section class="slide" data-step="3" id="s-4-2a">
+    <section class="slide bdpage" data-step="3" id="s-4-2a">
       <div class="sh"><div class="sec">4-2 모집단</div><h2><span class="q">Q</span>알고자 하는 대상 전체를 무엇이라 할까요?</h2></div>
       <div class="body split even">
         <div class="fig"><svg viewBox="0 0 420 270" role="img" aria-label="여성 자료가 없는 경우: 목표모집단은 모든 고혈압 환자, 조사가능집단은 남성 환자, 실제 표본은 조사한 일부 남성 환자">
@@ -483,18 +491,18 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
       </div>
     </section>
 
-    <section class="slide" data-step="3" id="s-4-2b">
+    <section class="slide bdpage" data-step="3" id="s-4-2b">
       <div class="sh"><div class="sec">4-2 모집단</div><h2><span class="q">Q</span>모집단은 얼마나 클까요?</h2></div>
       <div class="body split even">
         <div class="fig"><svg viewBox="0 0 420 270" role="img" aria-label="유한모집단과 무한모집단의 예">
-          <rect x="6" y="6" width="408" height="150" rx="12" fill="#fff"/>
+          <rect x="6" y="6" width="408" height="150" rx="12" fill="#fff" stroke="#D5D9E0" stroke-width="1.5"/>
           <text x="22" y="32" font-size="13.5" font-weight="800" fill="#1B2A4A">유한모집단</text><text x="110" y="32" font-size="11.5" fill="#6B7280">요소의 수가 정해져 있음</text>
           <g font-size="12" font-weight="700" fill="#22262E" text-anchor="middle">
             <circle cx="70" cy="94" r="22" fill="#FCF3D9" stroke="#E0A100" stroke-width="2"/><text x="70" y="99">80명</text><text x="70" y="140" font-size="11.5" fill="#6B7280">1·2반 학생</text>
             <circle cx="250" cy="94" r="46" fill="#E4E9F2" stroke="#2C4170" stroke-width="2"/><text x="250" y="90">5,183만</text><text x="250" y="106">명</text><text x="250" y="152" font-size="11.5" fill="#6B7280">한국인(교재의 2020년 예시)</text>
           </g>
           <text x="380" y="98" text-anchor="end" font-size="11" fill="#B42318">시점이 달라도</text><text x="380" y="114" text-anchor="end" font-size="11" fill="#B42318">각 시점은 유한</text>
-          <rect x="6" y="166" width="408" height="98" rx="12" fill="#fff"/>
+          <rect x="6" y="166" width="408" height="98" rx="12" fill="#fff" stroke="#D5D9E0" stroke-width="1.5"/>
           <text x="22" y="192" font-size="13.5" font-weight="800" fill="#1B2A4A">무한모집단</text><text x="110" y="192" font-size="11.5" fill="#6B7280">요소의 수에 제한이 없음</text>
           <g font-size="12" font-weight="700" fill="#22262E"><text x="40" y="226">· 앞으로 신약을 먹을 미래의 환자까지</text><text x="40" y="250">· 주사위를 몇 번이든 던져 나오는 눈</text></g>
           <text x="384" y="244" text-anchor="end" font-size="30" font-weight="800" fill="#5B6E97">∞</text>
@@ -507,14 +515,14 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
       </div>
     </section>
 
-    <section class="slide" data-step="3" id="s-4-3a">
+    <section class="slide bdpage" data-step="3" id="s-4-3a">
       <div class="sh"><div class="sec">4-3 전수조사와 그 어려움</div><h2><span class="q">Q</span>모집단의 성질을 알면 무엇을 할 수 있을까요?</h2></div>
       <div class="body split even">
         <div class="fig"><svg viewBox="0 0 420 270" role="img" aria-label="모집단의 성질 예와 전수조사">
-          <rect x="6" y="6" width="408" height="128" rx="12" fill="#fff"/>
+          <rect x="6" y="6" width="408" height="128" rx="12" fill="#fff" stroke="#D5D9E0" stroke-width="1.5"/>
           <text x="22" y="30" font-size="13" font-weight="800" fill="#1B2A4A">모집단의 성질 예</text>
           <g font-size="12" fill="#22262E"><text x="22" y="54">· 한국인 남성의 평균 키는 172.5cm</text><text x="22" y="74">· 한국인 여성의 평균 키는 159.6cm</text><text x="22" y="94">· 신약을 먹은 사람의 최고 혈압 평균은 120mmHg</text><text x="22" y="114">· 이 주사위는 6의 눈이 1/4 확률로 나온다</text></g>
-          <rect x="6" y="144" width="408" height="120" rx="12" fill="#fff"/>
+          <rect x="6" y="144" width="408" height="120" rx="12" fill="#fff" stroke="#D5D9E0" stroke-width="1.5"/>
           <text x="22" y="168" font-size="13" font-weight="800" fill="#1B2A4A">전수조사</text>
           <circle cx="120" cy="212" r="42" fill="#E4E9F2" stroke="#2C4170" stroke-width="2.5"/>
           <g fill="#2C4170"><circle cx="100" cy="196" r="4"/><circle cx="124" cy="190" r="4"/><circle cx="142" cy="204" r="4"/><circle cx="104" cy="220" r="4"/><circle cx="128" cy="226" r="4"/><circle cx="146" cy="226" r="4"/><circle cx="92" cy="208" r="4"/><circle cx="116" cy="240" r="4"/></g>
@@ -530,7 +538,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
       </div>
     </section>
 
-    <section class="slide" data-step="3" id="s-4-3b">
+    <section class="slide bdpage" data-step="3" id="s-4-3b">
       <div class="sh"><div class="sec">4-3 전수조사와 그 어려움</div><h2><span class="q">Q</span>모두 조사하면 가장 좋지 않을까요?</h2></div>
       <div class="body split even">
         <div class="figcol">
@@ -550,17 +558,17 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
       </div>
     </section>
 
-    <section class="slide" data-step="3" id="s-4-4a">
+    <section class="slide bdpage" data-step="3" id="s-4-4a">
       <div class="sh"><div class="sec">4-4 표본조사와 표본크기</div><h2><span class="q">Q</span>전부 조사하지 않고 모집단을 알 수 있을까요?</h2></div>
       <div class="body split even">
         <div class="fig"><svg viewBox="0 0 420 270" role="img" aria-label="전수조사와 표본조사 비교">
           <defs><marker id="b4" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10z" fill="#E0A100"/></marker></defs>
-          <rect x="6" y="6" width="196" height="258" rx="12" fill="#fff"/>
+          <rect x="6" y="6" width="196" height="258" rx="12" fill="#fff" stroke="#D5D9E0" stroke-width="1.5"/>
           <text x="104" y="30" text-anchor="middle" font-size="13" font-weight="800" fill="#1B2A4A">전수조사 (기술통계)</text>
           <circle cx="104" cy="140" r="78" fill="#E4E9F2" stroke="#2C4170" stroke-width="2.5"/>
           <rect x="22" y="58" width="164" height="164" rx="12" fill="none" stroke="#E0A100" stroke-width="2" stroke-dasharray="5 4"/>
           <text x="104" y="246" text-anchor="middle" font-size="11.5" fill="#6B7280">모집단 전체가 분석할 데이터</text>
-          <rect x="218" y="6" width="196" height="258" rx="12" fill="#fff"/>
+          <rect x="218" y="6" width="196" height="258" rx="12" fill="#fff" stroke="#D5D9E0" stroke-width="1.5"/>
           <text x="316" y="30" text-anchor="middle" font-size="13" font-weight="800" fill="#1B2A4A">표본조사 (추론통계)</text>
           <circle cx="316" cy="104" r="62" fill="#E4E9F2" stroke="#2C4170" stroke-width="2.5"/><text x="316" y="80" text-anchor="middle" font-size="11.5" font-weight="700" fill="#1B2A4A">모집단</text>
           <circle cx="316" cy="114" r="20" fill="#fff" stroke="#2C4170" stroke-width="1.5"/>
@@ -576,11 +584,11 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
       </div>
     </section>
 
-    <section class="slide" data-step="3" id="s-4-4b">
+    <section class="slide bdpage" data-step="3" id="s-4-4b">
       <div class="sh"><div class="sec">4-4 표본조사와 표본크기</div><h2><span class="q">Q</span>표본크기와 샘플 수는 어떻게 다를까요?</h2></div>
       <div class="body split even">
         <div class="fig"><svg viewBox="0 0 420 270" role="img" aria-label="표본크기와 샘플 수의 차이">
-          <rect x="6" y="6" width="408" height="258" rx="12" fill="#fff"/>
+          <rect x="6" y="6" width="408" height="258" rx="12" fill="#fff" stroke="#D5D9E0" stroke-width="1.5"/>
           <circle cx="110" cy="128" r="80" fill="#FCF3D9" stroke="#E0A100" stroke-width="2.5"/>
           <text x="110" y="62" text-anchor="middle" font-size="12.5" font-weight="800" fill="#6E4F00">표본 A</text>
           <g id="m3-dotsA"></g>

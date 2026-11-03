@@ -64,6 +64,14 @@ h2.big{font-size:30px;line-height:1.32}
 .ov-main{min-height:0;display:flex;flex-direction:column;gap:12px;padding:16px 24px 10px 36px}
 .ov-main .fig{flex:1 1 auto}
 .fig.plain{background:none;padding:0}
+.slide.bdpage{padding:0;gap:0}
+.slide.bdpage.on{display:grid;grid-template-columns:1fr 1fr;grid-template-rows:auto minmax(0,1fr);height:100%}
+.slide.bdpage .sh{grid-column:1;grid-row:1;padding:16px 24px 0 36px;min-width:0}
+.slide.bdpage .body{display:contents}
+.slide.bdpage .body>.fig,.slide.bdpage .body>.figcol{grid-column:1;grid-row:2;min-width:0;min-height:0}
+.slide.bdpage .fig{background:none;border-radius:0;padding:0}
+.slide.bdpage .body>.fig,.slide.bdpage .body>.figcol{padding:12px 24px 10px 36px}
+.slide.bdpage .side{grid-column:2;grid-row:1 / span 2;align-self:stretch;background:var(--panel);border-radius:0;padding:28px 36px 28px 28px}
 .ovpage .side.shade{background:var(--panel);border-radius:0;padding:28px 36px 28px 28px;height:100%}
 .ovpage .side.shade{gap:22px}
 .ovpage .bridge{display:flex;flex-direction:column;gap:28px}
@@ -377,7 +385,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
     </section>
 
     <!-- ④ 본문 ─────────────────────────────── -->
-    <section class="slide" data-step="3" id="s-4-1a">
+    <section class="slide bdpage" data-step="3" id="s-4-1a">
       <div class="sh"><div class="sec">4-1 고차원 데이터와 다중공선성</div><h2><span class="q">Q</span>설명변수를 많이 넣으면 무엇이 문제일까요?</h2></div>
       <div class="body split even">
         <div class="fig"><svg id="m20-dim" viewBox="0 0 420 270" role="img" aria-label="1차원 점 5개, 2차원 25개, 3차원 125개와 같은 데이터 10개의 듬성듬성함"></svg></div>
@@ -389,7 +397,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
       </div>
     </section>
 
-    <section class="slide" data-step="3" id="s-4-1b">
+    <section class="slide bdpage" data-step="3" id="s-4-1b">
       <div class="sh"><div class="sec">4-1 고차원 데이터와 다중공선성</div><h2><span class="q">Q</span>설명변수끼리 상관이 강하면 회귀계수는 어떻게 될까요?</h2></div>
       <div class="body split even">
         <div class="fig"><svg id="m20-mc" viewBox="0 0 420 270" role="img" aria-label="두 설명변수의 상관 r이 0, 0.5, 0.9, 0.99일 때 추정한 b1의 흔들림"></svg></div>
@@ -401,7 +409,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
       </div>
     </section>
 
-    <section class="slide" data-step="3" id="s-4-1c">
+    <section class="slide bdpage" data-step="3" id="s-4-1c">
       <div class="sh"><div class="sec">4-1 고차원 데이터와 다중공선성</div><h2><span class="q">Q</span>다중공선성의 정도는 어떻게 재고, 어떻게 대처할까요?</h2></div>
       <div class="body split even">
         <div class="figcol">
@@ -421,7 +429,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
       </div>
     </section>
 
-    <section class="slide" data-step="3" id="s-4-2a">
+    <section class="slide bdpage" data-step="3" id="s-4-2a">
       <div class="sh"><div class="sec">4-2 상호작용</div><h2><span class="q">Q</span>한 변수의 효과가 다른 변수에 따라 달라지면?</h2></div>
       <div class="body split even">
         <div class="figcol">
@@ -441,7 +449,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
       </div>
     </section>
 
-    <section class="slide" data-step="3" id="s-4-2b">
+    <section class="slide bdpage" data-step="3" id="s-4-2b">
       <div class="sh"><div class="sec">4-2 상호작용</div><h2><span class="q">Q</span>상호작용항은 언제 넣는 것이 좋을까요?</h2></div>
       <div class="body split even">
         <div class="fig"><svg id="m20-when" viewBox="0 0 420 270" role="img" aria-label="상호작용항을 넣을 때의 문제 4가지와 넣는 것이 좋은 경우 3가지"></svg></div>
@@ -453,7 +461,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
       </div>
     </section>
 
-    <section class="slide" data-step="3" id="s-4-2c">
+    <section class="slide bdpage" data-step="3" id="s-4-2c">
       <div class="sh"><div class="sec">4-2 상호작용</div><h2><span class="q">Q</span>주효과 계수는 어느 조건에서의 차이일까요?</h2></div>
       <div class="body split even">
         <div class="fig"><svg viewBox="0 0 420 270" role="img" aria-label="0/1 코딩: F = 비료, T = 고온: 평균 = 13 + 19F + 17T − 14FT; 온도 차이: 17 − 14F: 비료 없음 +17cm / 비료 있음 +3cm; 온도 중심화: Tc = T − 0.5: 평균 = 21.5 + 12F + 17Tc − 14F·Tc"><rect x="8" y="8" width="404" height="76" rx="10" fill="#EEF4FB"/><text x="210" y="37" text-anchor="middle" fill="#1B2A4A" font-size="13" font-weight="800">0/1 코딩: F = 비료, T = 고온</text><text x="210" y="63" text-anchor="middle" fill="#6B7280" font-size="11">평균 = 13 + 19F + 17T − 14FT</text><rect x="8" y="94" width="404" height="76" rx="10" fill="#FCF3D9"/><text x="210" y="123" text-anchor="middle" fill="#1B2A4A" font-size="13" font-weight="800">온도 차이: 17 − 14F</text><text x="210" y="149" text-anchor="middle" fill="#6B7280" font-size="11">비료 없음 +17cm / 비료 있음 +3cm</text><rect x="8" y="180" width="404" height="76" rx="10" fill="#E3F1EA"/><text x="210" y="209" text-anchor="middle" fill="#1B2A4A" font-size="13" font-weight="800">온도 중심화: Tc = T − 0.5</text><text x="210" y="235" text-anchor="middle" fill="#6B7280" font-size="11">평균 = 21.5 + 12F + 17Tc − 14F·Tc</text></svg></div>
@@ -464,7 +472,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
       </div>
     </section>
 
-    <section class="slide" data-step="3" id="s-4-3a">
+    <section class="slide bdpage" data-step="3" id="s-4-3a">
       <div class="sh"><div class="sec">4-3 이원배치 분산분석</div><h2><span class="q">Q</span>두 요인이 줄기 길이에 주는 영향은 어떻게 분석할까요?</h2></div>
       <div class="body split even">
         <div class="fig"><svg id="m20-two" viewBox="0 0 420 270" role="img" aria-label="비료 유무와 온도 조합 네 칸의 줄기 길이와 평균, 비료 없음에서 온도 효과가 큼"></svg></div>
@@ -476,7 +484,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
       </div>
     </section>
 
-    <section class="slide" data-step="3" id="s-4-3b">
+    <section class="slide bdpage" data-step="3" id="s-4-3b">
       <div class="sh"><div class="sec">4-3 이원배치 분산분석</div><h2><span class="q">Q</span>주효과와 상호작용은 어떤 순서로 해석할까요?</h2></div>
       <div class="body split even">
         <div class="figcol">
@@ -496,7 +504,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
       </div>
     </section>
 
-    <section class="slide" data-step="3" id="s-4-4a">
+    <section class="slide bdpage" data-step="3" id="s-4-4a">
       <div class="sh"><div class="sec">4-4 비선형회귀</div><h2><span class="q">Q</span>곡선을 적용하면 모두 비선형회귀일까요?</h2></div>
       <div class="body split even">
         <div class="fig"><svg id="m20-curve" viewBox="0 0 420 270" role="img" aria-label="같은 데이터에 1차, 2차, 6차 함수를 적용한 결과와 선형모형·비선형모형 구분"></svg></div>
@@ -508,7 +516,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
       </div>
     </section>
 
-    <section class="slide" data-step="3" id="s-4-4b">
+    <section class="slide bdpage" data-step="3" id="s-4-4b">
       <div class="sh"><div class="sec">4-4 비선형회귀</div><h2><span class="q">Q</span>파라미터에 관해 비선형인 모형은 언제 쓸까요?</h2></div>
       <div class="body split even">
         <div class="figcol">

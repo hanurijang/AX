@@ -64,6 +64,14 @@ h2.big{font-size:30px;line-height:1.32}
 .ov-main{min-height:0;display:flex;flex-direction:column;gap:12px;padding:16px 24px 10px 36px}
 .ov-main .fig{flex:1 1 auto}
 .fig.plain{background:none;padding:0}
+.slide.bdpage{padding:0;gap:0}
+.slide.bdpage.on{display:grid;grid-template-columns:1fr 1fr;grid-template-rows:auto minmax(0,1fr);height:100%}
+.slide.bdpage .sh{grid-column:1;grid-row:1;padding:16px 24px 0 36px;min-width:0}
+.slide.bdpage .body{display:contents}
+.slide.bdpage .body>.fig,.slide.bdpage .body>.figcol{grid-column:1;grid-row:2;min-width:0;min-height:0}
+.slide.bdpage .fig{background:none;border-radius:0;padding:0}
+.slide.bdpage .body>.fig,.slide.bdpage .body>.figcol{padding:12px 24px 10px 36px}
+.slide.bdpage .side{grid-column:2;grid-row:1 / span 2;align-self:stretch;background:var(--panel);border-radius:0;padding:28px 36px 28px 28px}
 .ovpage .side.shade{background:var(--panel);border-radius:0;padding:28px 36px 28px 28px;height:100%}
 .ovpage .side.shade{gap:22px}
 .ovpage .bridge{display:flex;flex-direction:column;gap:28px}
@@ -386,7 +394,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
     </section>
 
     <!-- ④ 본문 ─────────────────────────────── -->
-    <section class="slide" data-step="3" id="s-4-1a">
+    <section class="slide bdpage" data-step="3" id="s-4-1a">
       <div class="sh"><div class="sec">4-1 통계 모형·기계학습 모형·수리 모형</div><h2><span class="q">Q</span>세 가지 모형은 어디에서 출발할까요?</h2></div>
       <div class="body split even">
         <div class="fig"><svg id="m35-three" viewBox="0 0 420 270" role="img" aria-label="통계 모형과 기계학습 모형은 데이터에서 출발하는 귀납적 방법, 수리 모형은 메커니즘에서 출발하는 연역적 방법인 세 원 그림"></svg></div>
@@ -398,7 +406,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
       </div>
     </section>
 
-    <section class="slide" data-step="3" id="s-4-1b">
+    <section class="slide bdpage" data-step="3" id="s-4-1b">
       <div class="sh"><div class="sec">4-1 통계 모형·기계학습 모형·수리 모형</div><h2><span class="q">Q</span>측정하지 않은 48시간 뒤 온도는 어느 모형으로 내다볼까요?</h2></div>
       <div class="body split even">
         <div class="fig"><svg id="m35-extra" viewBox="0 0 420 270" role="img" aria-label="0~12시간 측정값에 맞춘 직선은 48시간에 영하 292℃를 가리키지만, 냉각 원리를 가정한 수리 모형은 109℃로 나중 측정값 112℃에 가까움"></svg></div>
@@ -410,7 +418,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
       </div>
     </section>
 
-    <section class="slide" data-step="3" id="s-4-1c">
+    <section class="slide bdpage" data-step="3" id="s-4-1c">
       <div class="sh"><div class="sec">4-1 세 모형의 연결</div><h2><span class="q">Q</span>냉각식을 자료에 맞추면 어떤 모형일까요?</h2></div>
       <div class="body split even">
         <div class="fig"><svg viewBox="0 0 420 270" role="img" aria-label="메커니즘에서 도출: μ(t;k) = Ta + (T₀−Ta) exp(−kt); 관측 오차의 통계 모형 결합: Yᵢ = μ(tᵢ;k) + εᵢ / 예: 독립 정규 오차; 자료로 k를 적합하고 새 관측으로 검증: 메커니즘 + 통계 추정 + 예측 평가를 함께 사용"><rect x="8" y="8" width="404" height="76" rx="10" fill="#EEF4FB"/><text x="210" y="37" text-anchor="middle" fill="#1B2A4A" font-size="13" font-weight="800">메커니즘에서 도출</text><text x="210" y="63" text-anchor="middle" fill="#6B7280" font-size="11">μ(t;k) = Ta + (T₀−Ta) exp(−kt)</text><rect x="8" y="94" width="404" height="76" rx="10" fill="#FCF3D9"/><text x="210" y="123" text-anchor="middle" fill="#1B2A4A" font-size="13" font-weight="800">관측 오차의 통계 모형 결합</text><text x="210" y="149" text-anchor="middle" fill="#6B7280" font-size="11">Yᵢ = μ(tᵢ;k) + εᵢ / 예: 독립 정규 오차</text><rect x="8" y="180" width="404" height="76" rx="10" fill="#E3F1EA"/><text x="210" y="209" text-anchor="middle" fill="#1B2A4A" font-size="13" font-weight="800">자료로 k를 적합하고 새 관측으로 검증</text><text x="210" y="235" text-anchor="middle" fill="#6B7280" font-size="11">메커니즘 + 통계 추정 + 예측 평가를 함께 사용</text></svg></div>
@@ -421,7 +429,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
       </div>
     </section>
 
-    <section class="slide" data-step="3" id="s-4-2a">
+    <section class="slide bdpage" data-step="3" id="s-4-2a">
       <div class="sh"><div class="sec">4-2 모형은 현상을 이해하는 도구</div><h2><span class="q">Q</span>모형을 만든다는 것은 무엇을 하는 일일까요?</h2></div>
       <div class="body split even">
         <div class="fig"><svg id="m35-simp" viewBox="0 0 420 270" role="img" aria-label="복잡한 실제 코일 냉각 현상에서 중요한 요소만 남겨 간략화한 모형으로 가는 그림, 남긴 것과 버린 것"></svg></div>
@@ -433,7 +441,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
       </div>
     </section>
 
-    <section class="slide" data-step="3" id="s-4-2b">
+    <section class="slide bdpage" data-step="3" id="s-4-2b">
       <div class="sh"><div class="sec">4-2 모형은 현상을 이해하는 도구</div><h2><span class="q">Q</span>현실과 다른 가정을 둔 모형도 쓸모가 있을까요?</h2></div>
       <div class="body split even">
         <div class="figcol">
@@ -453,7 +461,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
       </div>
     </section>
 
-    <section class="slide" data-step="3" id="s-4-2c">
+    <section class="slide bdpage" data-step="3" id="s-4-2c">
       <div class="sh"><div class="sec">4-2 모형의 평가와 환류</div><h2><span class="q">Q</span>예측과 관측이 다르면 곧바로 폐기할까요?</h2></div>
       <div class="body split even">
         <div class="fig"><svg viewBox="0 0 420 270" role="img" aria-label="목적·적용 범위와 가정 정하기: 초기 온도 · 주변 온도 · 일정한 냉각 계수; 관측과 예측 비교: 적합 자료의 잔차 + 새 자료의 예측 오차; 차이의 원인 점검 → 보완 → 다시 검증: 측정 문제 · 파라미터 오차 · 생략한 메커니즘"><rect x="8" y="8" width="404" height="76" rx="10" fill="#EEF4FB"/><text x="210" y="37" text-anchor="middle" fill="#1B2A4A" font-size="13" font-weight="800">목적·적용 범위와 가정 정하기</text><text x="210" y="63" text-anchor="middle" fill="#6B7280" font-size="11">초기 온도 · 주변 온도 · 일정한 냉각 계수</text><rect x="8" y="94" width="404" height="76" rx="10" fill="#FCF3D9"/><text x="210" y="123" text-anchor="middle" fill="#1B2A4A" font-size="13" font-weight="800">관측과 예측 비교</text><text x="210" y="149" text-anchor="middle" fill="#6B7280" font-size="11">적합 자료의 잔차 + 새 자료의 예측 오차</text><rect x="8" y="180" width="404" height="76" rx="10" fill="#E3F1EA"/><text x="210" y="209" text-anchor="middle" fill="#1B2A4A" font-size="13" font-weight="800">차이의 원인 점검 → 보완 → 다시 검증</text><text x="210" y="235" text-anchor="middle" fill="#6B7280" font-size="11">측정 문제 · 파라미터 오차 · 생략한 메커니즘</text></svg></div>
@@ -464,7 +472,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
       </div>
     </section>
 
-    <section class="slide" data-step="3" id="s-4-3a">
+    <section class="slide bdpage" data-step="3" id="s-4-3a">
       <div class="sh"><div class="sec">4-3 수리 모형이란?</div><h2><span class="q">Q</span>수리 모형은 규칙을 어떻게 나타낼까요?</h2></div>
       <div class="body split even">
         <div class="figcol">
@@ -484,7 +492,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
       </div>
     </section>
 
-    <section class="slide" data-step="3" id="s-4-4a">
+    <section class="slide bdpage" data-step="3" id="s-4-4a">
       <div class="sh"><div class="sec">4-4 수리 모형의 종류와 분석</div><h2><span class="q">Q</span>결과가 하나로 정해지는 현상과 그렇지 않은 현상은 어떻게 다룰까요?</h2></div>
       <div class="body split even">
         <div class="fig"><svg id="m35-kind" viewBox="0 0 420 270" role="img" aria-label="결정론 모형은 같은 시작에서 하나의 곡선, 확률 모형은 같은 시작에서 여러 갈래의 경로"></svg></div>
@@ -496,7 +504,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
       </div>
     </section>
 
-    <section class="slide" data-step="3" id="s-4-4b">
+    <section class="slide bdpage" data-step="3" id="s-4-4b">
       <div class="sh"><div class="sec">4-4 수리 모형의 종류와 분석</div><h2><span class="q">Q</span>모형이 복잡해지면 어떻게 분석할까요?</h2></div>
       <div class="body split even">
         <div class="fig"><svg id="m35-solve" viewBox="0 0 420 270" role="img" aria-label="해석적으로 풀기, 수치 계산, 시뮬레이션 순으로 모형은 복잡해지고 이해는 어려워지는 상충 관계"></svg></div>

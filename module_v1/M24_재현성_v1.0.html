@@ -64,6 +64,14 @@ h2.big{font-size:30px;line-height:1.32}
 .ov-main{min-height:0;display:flex;flex-direction:column;gap:12px;padding:16px 24px 10px 36px}
 .ov-main .fig{flex:1 1 auto}
 .fig.plain{background:none;padding:0}
+.slide.bdpage{padding:0;gap:0}
+.slide.bdpage.on{display:grid;grid-template-columns:1fr 1fr;grid-template-rows:auto minmax(0,1fr);height:100%}
+.slide.bdpage .sh{grid-column:1;grid-row:1;padding:16px 24px 0 36px;min-width:0}
+.slide.bdpage .body{display:contents}
+.slide.bdpage .body>.fig,.slide.bdpage .body>.figcol{grid-column:1;grid-row:2;min-width:0;min-height:0}
+.slide.bdpage .fig{background:none;border-radius:0;padding:0}
+.slide.bdpage .body>.fig,.slide.bdpage .body>.figcol{padding:12px 24px 10px 36px}
+.slide.bdpage .side{grid-column:2;grid-row:1 / span 2;align-self:stretch;background:var(--panel);border-radius:0;padding:28px 36px 28px 28px}
 .ovpage .side.shade{background:var(--panel);border-radius:0;padding:28px 36px 28px 28px;height:100%}
 .ovpage .side.shade{gap:22px}
 .ovpage .bridge{display:flex;flex-direction:column;gap:28px}
@@ -384,7 +392,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
     </section>
 
     <!-- ④ 본문 ─────────────────────────────── -->
-    <section class="slide" data-step="3" id="s-4-1a">
+    <section class="slide bdpage" data-step="3" id="s-4-1a">
       <div class="sh"><div class="sec">4-1 재현성과 재현성 위기</div><h2><span class="q">Q</span>계산 재현과 새 자료 추시는 어떻게 다를까요?</h2></div>
       <div class="body split even">
         <div class="fig"><svg id="m24-rep" viewBox="0 0 420 270" role="img" aria-label="같은 조건이면 같은 결과가 나와야 재현성이 있음, A공장과 B공장 결과 비교"></svg></div>
@@ -396,7 +404,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
       </div>
     </section>
 
-    <section class="slide" data-step="3" id="s-4-1b">
+    <section class="slide bdpage" data-step="3" id="s-4-1b">
       <div class="sh"><div class="sec">4-1 재현성과 재현성 위기</div><h2><span class="q">Q</span>재현성 위기 이후 p값을 둘러싸고 무슨 일이 있었을까요?</h2></div>
       <div class="body split even">
         <div class="fig"><svg id="m24-time" viewBox="0 0 420 270" role="img" aria-label="2014년부터 2018년까지 p값과 관련된 사건 연표"></svg></div>
@@ -408,7 +416,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
       </div>
     </section>
 
-    <section class="slide" data-step="3" id="s-4-2a">
+    <section class="slide bdpage" data-step="3" id="s-4-2a">
       <div class="sh"><div class="sec">4-2 심리학의 재현성 조사</div><h2><span class="q">Q</span>발표된 연구를 다시 해 보면 몇 건이나 재현될까요?</h2></div>
       <div class="body split even">
         <div class="figcol">
@@ -428,7 +436,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
       </div>
     </section>
 
-    <section class="slide" data-step="3" id="s-4-2b">
+    <section class="slide bdpage" data-step="3" id="s-4-2b">
       <div class="sh"><div class="sec">4-2 심리학의 재현성 조사</div><h2><span class="q">Q</span>추시에서는 p값과 효과의 크기가 어떻게 달라졌을까요?</h2></div>
       <div class="body split even">
         <div class="fig"><svg id="m24-es" viewBox="0 0 420 270" role="img" aria-label="원래 연구의 p값은 대부분 0.05 아래에 몰렸지만 추시는 넓게 퍼짐, 효과크기는 절반 정도"></svg></div>
@@ -440,7 +448,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
       </div>
     </section>
 
-    <section class="slide" data-step="3" id="s-4-3a">
+    <section class="slide bdpage" data-step="3" id="s-4-3a">
       <div class="sh"><div class="sec">4-3 재현되지 않는 원인</div><h2><span class="q">Q</span>정직하게 실험해도 재현되지 않을 수 있을까요?</h2></div>
       <div class="body split even">
         <div class="fig"><svg id="m24-cause" viewBox="0 0 420 270" role="img" aria-label="재현되지 않는 원인 두 가지: 실험 조건을 똑같이 만들기 어려움, 검정력이 100%가 아님"></svg></div>
@@ -452,7 +460,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
       </div>
     </section>
 
-    <section class="slide" data-step="3" id="s-4-3b">
+    <section class="slide bdpage" data-step="3" id="s-4-3b">
       <div class="sh"><div class="sec">4-3 재현되지 않는 원인</div><h2><span class="q">Q</span>p &lt; 0.05에 매달리면 어떤 일이 생길까요?</h2></div>
       <div class="body split even">
         <div class="fig"><svg id="m24-hack" viewBox="0 0 420 270" role="img" aria-label="데이터의 p값이 0.05 이상이면 발표할 수 없고 미만이면 발표할 수 있어, p-해킹으로 결과를 밀어 넣으면 재현성이 낮아짐"></svg></div>
@@ -464,7 +472,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
       </div>
     </section>
 
-    <section class="slide" data-step="3" id="s-4-3c">
+    <section class="slide bdpage" data-step="3" id="s-4-3c">
       <div class="sh"><div class="sec">4-3 재현되지 않는 원인</div><h2><span class="q">Q</span>여러 번 시도하면 ‘틀린 유의’가 얼마나 늘어날까요?</h2></div>
       <div class="body split even">
         <div class="figcol">
@@ -484,7 +492,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
       </div>
     </section>
 
-    <section class="slide" data-step="3" id="s-4-4a">
+    <section class="slide bdpage" data-step="3" id="s-4-4a">
       <div class="sh"><div class="sec">4-4 논문 게재 과정과 출판 편향</div><h2><span class="q">Q</span>논문은 어떤 과정을 거쳐 저널에 실릴까요?</h2></div>
       <div class="body split even">
         <div class="fig"><svg id="m24-flow" viewBox="0 0 420 270" role="img" aria-label="연구자가 투고하면 편집자가 동료평가자에게 평가를 의뢰하고 그 의견으로 승낙, 수정, 거절을 판단"></svg></div>
@@ -496,7 +504,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
       </div>
     </section>
 
-    <section class="slide" data-step="3" id="s-4-4b">
+    <section class="slide bdpage" data-step="3" id="s-4-4b">
       <div class="sh"><div class="sec">4-4 논문 게재 과정과 출판 편향</div><h2><span class="q">Q</span>유의한 결과만 실리면 무엇이 달라질까요?</h2></div>
       <div class="body split even">
         <div class="fig"><svg id="m24-pub" viewBox="0 0 420 270" role="img" aria-label="실제 효과 4 MPa인 연구 1,000건 중 p가 0.05 미만인 129건만 게재되면 게재된 결과의 평균은 12.5 MPa"></svg></div>
@@ -508,7 +516,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
       </div>
     </section>
 
-    <section class="slide" data-step="3" id="s-4-4d">
+    <section class="slide bdpage" data-step="3" id="s-4-4d">
       <div class="sh"><div class="sec">4-4 출판 편향</div><h2><span class="q">Q</span>양측 유의 결과만 고르면 평균은 항상 양수가 될까요?</h2></div>
       <div class="body split even">
         <div class="fig"><svg viewBox="0 0 420 270" role="img" aria-label="실제 효과 0 · 추정 분포와 검정 규칙이 대칭: 양의 결과와 음의 결과가 모두 존재; 양쪽 유의 결과를 같은 규칙으로 공개: 부호 있는 기대 평균 = 0 / 절대크기는 커질 수 있음; 양의 차이 + 양측 유의 결과만 공개: 양의 꼬리만 남음 / 실습 저장 예 평균 +11.0 MPa"><rect x="8" y="8" width="404" height="76" rx="10" fill="#EEF4FB"/><text x="210" y="37" text-anchor="middle" fill="#1B2A4A" font-size="13" font-weight="800">실제 효과 0 · 추정 분포와 검정 규칙이 대칭</text><text x="210" y="63" text-anchor="middle" fill="#6B7280" font-size="11">양의 결과와 음의 결과가 모두 존재</text><rect x="8" y="94" width="404" height="76" rx="10" fill="#FCF3D9"/><text x="210" y="123" text-anchor="middle" fill="#1B2A4A" font-size="13" font-weight="800">양쪽 유의 결과를 같은 규칙으로 공개</text><text x="210" y="149" text-anchor="middle" fill="#6B7280" font-size="11">부호 있는 기대 평균 = 0 / 절대크기는 커질 수 있음</text><rect x="8" y="180" width="404" height="76" rx="10" fill="#E3F1EA"/><text x="210" y="209" text-anchor="middle" fill="#1B2A4A" font-size="13" font-weight="800">양의 차이 + 양측 유의 결과만 공개</text><text x="210" y="235" text-anchor="middle" fill="#6B7280" font-size="11">양의 꼬리만 남음 / 실습 저장 예 평균 +11.0 MPa</text></svg></div>
@@ -519,7 +527,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
       </div>
     </section>
 
-    <section class="slide" data-step="3" id="s-4-4c">
+    <section class="slide bdpage" data-step="3" id="s-4-4c">
       <div class="sh"><div class="sec">4-4 논문 게재 과정과 출판 편향</div><h2><span class="q">Q</span>연구 현장의 구조가 p-해킹을 부추기는 이유는 무엇일까요?</h2></div>
       <div class="body split even">
         <div class="fig"><svg id="m24-cycle" viewBox="0 0 420 270" role="img" aria-label="발표 압박, p가 0.05 미만인지가 사활 문제, p-해킹, 출판 편향, 재현성 저하로 이어지는 고리"></svg></div>

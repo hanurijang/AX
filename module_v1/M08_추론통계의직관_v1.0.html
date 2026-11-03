@@ -64,6 +64,14 @@ h2.big{font-size:30px;line-height:1.32}
 .ov-main{min-height:0;display:flex;flex-direction:column;gap:12px;padding:16px 24px 10px 36px}
 .ov-main .fig{flex:1 1 auto}
 .fig.plain{background:none;padding:0}
+.slide.bdpage{padding:0;gap:0}
+.slide.bdpage.on{display:grid;grid-template-columns:1fr 1fr;grid-template-rows:auto minmax(0,1fr);height:100%}
+.slide.bdpage .sh{grid-column:1;grid-row:1;padding:16px 24px 0 36px;min-width:0}
+.slide.bdpage .body{display:contents}
+.slide.bdpage .body>.fig,.slide.bdpage .body>.figcol{grid-column:1;grid-row:2;min-width:0;min-height:0}
+.slide.bdpage .fig{background:none;border-radius:0;padding:0}
+.slide.bdpage .body>.fig,.slide.bdpage .body>.figcol{padding:12px 24px 10px 36px}
+.slide.bdpage .side{grid-column:2;grid-row:1 / span 2;align-self:stretch;background:var(--panel);border-radius:0;padding:28px 36px 28px 28px}
 .ovpage .side.shade{background:var(--panel);border-radius:0;padding:28px 36px 28px 28px;height:100%}
 .ovpage .side.shade{gap:22px}
 .ovpage .bridge{display:flex;flex-direction:column;gap:28px}
@@ -380,7 +388,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
     </section>
 
     <!-- ④ 본문 ─────────────────────────────── -->
-    <section class="slide" data-step="3" id="s-4-1a">
+    <section class="slide bdpage" data-step="3" id="s-4-1a">
       <div class="sh"><div class="sec">4-1 모집단분포와 모수</div><h2><span class="q">Q</span>데이터를 얻는다는 것은 무엇일까요?</h2></div>
       <div class="body split even">
         <div class="fig"><svg id="m8-popdist" viewBox="0 0 420 270" role="img" aria-label="성인 남성 전체 키의 모집단분포에서 10명의 표본을 추출"></svg></div>
@@ -392,7 +400,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
       </div>
     </section>
 
-    <section class="slide" data-step="3" id="s-4-1b">
+    <section class="slide bdpage" data-step="3" id="s-4-1b">
       <div class="sh"><div class="sec">4-1 모집단분포와 모수</div><h2><span class="q">Q</span>모집단분포를 특징 짓는 값은 무엇이라 부를까요?</h2></div>
       <div class="body split even">
         <div class="fig"><svg id="m8-param" viewBox="0 0 420 270" role="img" aria-label="모평균과 모분산은 모수, 표본평균은 표본에서 계산한 값"></svg></div>
@@ -404,7 +412,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
       </div>
     </section>
 
-    <section class="slide" data-step="3" id="s-4-2a">
+    <section class="slide bdpage" data-step="3" id="s-4-2a">
       <div class="sh"><div class="sec">4-2 확률분포와 실현값</div><h2><span class="q">Q</span>표본과 모집단을 수학으로는 어떻게 다룰까요?</h2></div>
       <div class="body split even">
         <div class="fig"><svg id="m8-map" viewBox="0 0 420 270" role="img" aria-label="모집단은 확률분포, 표본은 확률분포를 따르는 실현값으로 대응"></svg></div>
@@ -416,7 +424,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
       </div>
     </section>
 
-    <section class="slide" data-step="3" id="s-4-2b">
+    <section class="slide bdpage" data-step="3" id="s-4-2b">
       <div class="sh"><div class="sec">4-2 확률분포와 실현값</div><h2><span class="q">Q</span>들쭉날쭉한 실제 모집단분포는 어떻게 다룰까요?</h2></div>
       <div class="body split even">
         <div class="fig"><svg id="m8-model" viewBox="0 0 420 270" role="img" aria-label="현실 세계의 들쭉날쭉한 모집단분포를 수학 세계의 정규분포로 모형화"></svg></div>
@@ -428,7 +436,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
       </div>
     </section>
 
-    <section class="slide" data-step="3" id="s-4-3a">
+    <section class="slide bdpage" data-step="3" id="s-4-3a">
       <div class="sh"><div class="sec">4-3 무작위추출과 편향</div><h2><span class="q">Q</span>표본은 어떻게 뽑아야 할까요?</h2></div>
       <div class="body split even">
         <div class="fig"><svg id="m8-rand" viewBox="0 0 420 270" role="img" aria-label="단순무작위추출법과 층화추출법"></svg></div>
@@ -440,7 +448,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
       </div>
     </section>
 
-    <section class="slide" data-step="3" id="s-4-3b">
+    <section class="slide bdpage" data-step="3" id="s-4-3b">
       <div class="sh"><div class="sec">4-3 무작위추출과 편향</div><h2><span class="q">Q</span>표본이 치우치면 어떻게 될까요?</h2></div>
       <div class="body split even">
         <div class="fig"><svg id="m8-poll" viewBox="0 0 420 270" role="img" aria-label="전화 조사 800명 지지율 28퍼센트와 인터넷 조사 10만 명 80퍼센트 이상 비교"></svg></div>
@@ -452,7 +460,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
       </div>
     </section>
 
-    <section class="slide" data-step="3" id="s-4-3c">
+    <section class="slide bdpage" data-step="3" id="s-4-3c">
       <div class="sh"><div class="sec">4-3 무작위추출과 편향</div><h2><span class="q">Q</span>얻은 결과는 어디까지 일반화할 수 있을까요?</h2></div>
       <div class="body split even">
         <div class="fig"><svg id="m8-gen" viewBox="0 0 420 270" role="img" aria-label="한국인 표본의 백신 효과와 한 대학 학생 설문의 일반화 범위"></svg></div>
@@ -464,7 +472,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
       </div>
     </section>
 
-    <section class="slide" data-step="3" id="s-4-3d">
+    <section class="slide bdpage" data-step="3" id="s-4-3d">
       <div class="sh"><div class="sec">4-3 표집틀과 편향 · 보충</div><h2><span class="q">Q</span>빠진 집단은 표본수를 늘리면 돌아올까요?</h2></div>
       <div class="body split even">
         <div class="fig"><svg viewBox="0 0 420 270" role="img" aria-label="목표: 가상 1,000명 전체 평균 167.6cm: 전원의 값은 143.1~186.6cm; 키 175cm 이상인 149명만 접근: 그 집단 평균은 약 178.1cm; 그 149명을 전부 조사해도 전체와 약 10.5cm 차이: 해당 집단의 전수 조사와 원래 목표 전체의 조사는 다름"><rect x="8" y="8" width="404" height="76" rx="10" fill="#EEF4FB"/><text x="210" y="37" text-anchor="middle" fill="#1B2A4A" font-size="13" font-weight="800">목표: 가상 1,000명 전체 평균 167.6cm</text><text x="210" y="63" text-anchor="middle" fill="#6B7280" font-size="11">전원의 값은 143.1~186.6cm</text><rect x="8" y="94" width="404" height="76" rx="10" fill="#FCF3D9"/><text x="210" y="123" text-anchor="middle" fill="#1B2A4A" font-size="13" font-weight="800">키 175cm 이상인 149명만 접근</text><text x="210" y="149" text-anchor="middle" fill="#6B7280" font-size="11">그 집단 평균은 약 178.1cm</text><rect x="8" y="180" width="404" height="76" rx="10" fill="#E3F1EA"/><text x="210" y="209" text-anchor="middle" fill="#1B2A4A" font-size="13" font-weight="800">그 149명을 전부 조사해도 전체와 약 10.5cm 차이</text><text x="210" y="235" text-anchor="middle" fill="#6B7280" font-size="11">해당 집단의 전수 조사와 원래 목표 전체의 조사는 다름</text></svg></div>
@@ -475,7 +483,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
       </div>
     </section>
 
-    <section class="slide" data-step="3" id="s-4-4a">
+    <section class="slide bdpage" data-step="3" id="s-4-4a">
       <div class="sh"><div class="sec">4-4 된장국으로 보는 추론통계</div><h2><span class="q">Q</span>된장국 맛보기는 추론통계와 어떻게 닮았을까요?</h2></div>
       <div class="body split even">
         <div class="fig"><svg id="m8-soup" viewBox="0 0 420 270" role="img" aria-label="냄비 안 된장국은 모집단, 국자로 뜬 국은 표본, 맛보기는 추정"></svg></div>
@@ -487,7 +495,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
       </div>
     </section>
 
-    <section class="slide" data-step="3" id="s-4-4b">
+    <section class="slide bdpage" data-step="3" id="s-4-4b">
       <div class="sh"><div class="sec">4-4 된장국으로 보는 추론통계</div><h2><span class="q">Q</span>국은 얼마나, 어떻게 떠야 할까요?</h2></div>
       <div class="body split even">
         <div class="fig"><svg id="m8-ladle" viewBox="0 0 420 270" role="img" aria-label="한 방울, 국자 하나, 한 그릇의 양 비교와 섞지 않고 위쪽만 뜬 경우"></svg></div>

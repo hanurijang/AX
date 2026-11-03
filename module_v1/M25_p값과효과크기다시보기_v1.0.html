@@ -64,6 +64,14 @@ h2.big{font-size:30px;line-height:1.32}
 .ov-main{min-height:0;display:flex;flex-direction:column;gap:12px;padding:16px 24px 10px 36px}
 .ov-main .fig{flex:1 1 auto}
 .fig.plain{background:none;padding:0}
+.slide.bdpage{padding:0;gap:0}
+.slide.bdpage.on{display:grid;grid-template-columns:1fr 1fr;grid-template-rows:auto minmax(0,1fr);height:100%}
+.slide.bdpage .sh{grid-column:1;grid-row:1;padding:16px 24px 0 36px;min-width:0}
+.slide.bdpage .body{display:contents}
+.slide.bdpage .body>.fig,.slide.bdpage .body>.figcol{grid-column:1;grid-row:2;min-width:0;min-height:0}
+.slide.bdpage .fig{background:none;border-radius:0;padding:0}
+.slide.bdpage .body>.fig,.slide.bdpage .body>.figcol{padding:12px 24px 10px 36px}
+.slide.bdpage .side{grid-column:2;grid-row:1 / span 2;align-self:stretch;background:var(--panel);border-radius:0;padding:28px 36px 28px 28px}
 .ovpage .side.shade{background:var(--panel);border-radius:0;padding:28px 36px 28px 28px;height:100%}
 .ovpage .side.shade{gap:22px}
 .ovpage .bridge{display:flex;flex-direction:column;gap:28px}
@@ -375,7 +383,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
     </section>
 
     <!-- ④ 본문 ─────────────────────────────── -->
-    <section class="slide" data-step="3" id="s-4-1a">
+    <section class="slide bdpage" data-step="3" id="s-4-1a">
       <div class="sh"><div class="sec">4-1 p값 되돌아보기</div><h2><span class="q">Q</span>귀무가설이 옳다면 p값은 어떻게 나올까요?</h2></div>
       <div class="body split even">
         <div class="fig"><svg id="m25-h0" viewBox="0 0 420 270" role="img" aria-label="귀무가설 모형의 저장 예: t검정 100번의 p값 산점도와 10,000번의 p값 히스토그램, 고르게 퍼지고 5% 정도가 0.05 미만"></svg></div>
@@ -387,7 +395,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
       </div>
     </section>
 
-    <section class="slide" data-step="3" id="s-4-1b">
+    <section class="slide bdpage" data-step="3" id="s-4-1b">
       <div class="sh"><div class="sec">4-1 p값 되돌아보기</div><h2><span class="q">Q</span>유의한 결과 중 귀무가설이 옳았던 것은 얼마나 될까요?</h2></div>
       <div class="body split even">
         <div class="figcol">
@@ -407,7 +415,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
       </div>
     </section>
 
-    <section class="slide" data-step="3" id="s-4-2a">
+    <section class="slide bdpage" data-step="3" id="s-4-2a">
       <div class="sh"><div class="sec">4-2 피셔류와 네이만-피어슨류 검정</div><h2><span class="q">Q</span>p = 0.01과 p = 0.001은 다른 결과일까요?</h2></div>
       <div class="body split even">
         <div class="fig"><svg id="m25-fnp" viewBox="0 0 420 270" role="img" aria-label="피셔류는 p값 크기로 증거의 강력함을 평가, 네이만-피어슨류는 α 미만인지로 기각과 비기각을 결정"></svg></div>
@@ -419,7 +427,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
       </div>
     </section>
 
-    <section class="slide" data-step="3" id="s-4-2b">
+    <section class="slide bdpage" data-step="3" id="s-4-2b">
       <div class="sh"><div class="sec">4-2 피셔류와 네이만-피어슨류 검정</div><h2><span class="q">Q</span>필요한 표본크기는 어떻게 정할까요?</h2></div>
       <div class="body split even">
         <div class="figcol">
@@ -439,7 +447,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
       </div>
     </section>
 
-    <section class="slide" data-step="3" id="s-4-3a">
+    <section class="slide bdpage" data-step="3" id="s-4-3a">
       <div class="sh"><div class="sec">4-3 표본크기와 p값</div><h2><span class="q">Q</span>p가 작으면 차이도 클까요?</h2></div>
       <div class="body split even">
         <div class="fig"><svg id="m25-big" viewBox="0 0 420 270" role="img" aria-label="실험 17개씩은 9 MPa 차이로 p 0.0124, 품질 데이터베이스 1만 개씩은 0.5 MPa 차이로 p 0.0004"></svg></div>
@@ -451,7 +459,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
       </div>
     </section>
 
-    <section class="slide" data-step="3" id="s-4-3b">
+    <section class="slide bdpage" data-step="3" id="s-4-3b">
       <div class="sh"><div class="sec">4-3 표본크기와 p값</div><h2><span class="q">Q</span>같은 차이에서 표본크기만 늘리면 무엇이 바뀔까요?</h2></div>
       <div class="body split even">
         <div class="fig"><svg id="m25-curve" viewBox="0 0 420 270" role="img" aria-label="효과크기 d가 1일 때 표본크기에 따른 평균 p값 곡선과 검정력 곡선, n 17에서 검정력 0.8"></svg></div>
@@ -463,7 +471,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
       </div>
     </section>
 
-    <section class="slide" data-step="3" id="s-4-3c">
+    <section class="slide bdpage" data-step="3" id="s-4-3c">
       <div class="sh"><div class="sec">4-3 유의성과 실무 기준</div><h2><span class="q">Q</span>p값이 작으면 신규 조건을 바로 채택해도 될까요?</h2></div>
       <div class="body split even">
         <div class="fig"><svg viewBox="0 0 420 270" role="img" aria-label="가상 DB: B−A = +0.5 MPa · 집단당 n=10,000: 공통 SD 10 MPa · 독립 정규·등분산 t모형; 양측 p ≈ 0.0004 · 차이의 95% 구간: 약 +0.223 ~ +0.777 MPa; 예시 채택 기준: 적어도 +1 MPa 개선: 이 구간은 기준보다 낮음 / 비용·품질 조건도 검토"><rect x="8" y="8" width="404" height="76" rx="10" fill="#EEF4FB"/><text x="210" y="37" text-anchor="middle" fill="#1B2A4A" font-size="13" font-weight="800">가상 DB: B−A = +0.5 MPa · 집단당 n=10,000</text><text x="210" y="63" text-anchor="middle" fill="#6B7280" font-size="11">공통 SD 10 MPa · 독립 정규·등분산 t모형</text><rect x="8" y="94" width="404" height="76" rx="10" fill="#FCF3D9"/><text x="210" y="123" text-anchor="middle" fill="#1B2A4A" font-size="13" font-weight="800">양측 p ≈ 0.0004 · 차이의 95% 구간</text><text x="210" y="149" text-anchor="middle" fill="#6B7280" font-size="11">약 +0.223 ~ +0.777 MPa</text><rect x="8" y="180" width="404" height="76" rx="10" fill="#E3F1EA"/><text x="210" y="209" text-anchor="middle" fill="#1B2A4A" font-size="13" font-weight="800">예시 채택 기준: 적어도 +1 MPa 개선</text><text x="210" y="235" text-anchor="middle" fill="#6B7280" font-size="11">이 구간은 기준보다 낮음 / 비용·품질 조건도 검토</text></svg></div>
@@ -474,7 +482,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
       </div>
     </section>
 
-    <section class="slide" data-step="3" id="s-4-4a">
+    <section class="slide bdpage" data-step="3" id="s-4-4a">
       <div class="sh"><div class="sec">4-4 효과크기</div><h2><span class="q">Q</span>차이가 얼마나 큰지는 어떻게 나타낼까요?</h2></div>
       <div class="body split even">
         <div class="figcol">
@@ -494,7 +502,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
       </div>
     </section>
 
-    <section class="slide" data-step="3" id="s-4-4b">
+    <section class="slide bdpage" data-step="3" id="s-4-4b">
       <div class="sh"><div class="sec">4-4 효과크기</div><h2><span class="q">Q</span>왜 평균 차이를 표준편차로 나눌까요?</h2></div>
       <div class="body split even">
         <div class="fig"><svg id="m25-dgrid" viewBox="0 0 420 270" role="img" aria-label="표준편차 1일 때 평균 차이 2, 1, 0.2는 d 2, 1, 0.2이고, 표준편차 0.5일 때는 d 4, 2, 0.4"></svg></div>
@@ -506,7 +514,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
       </div>
     </section>
 
-    <section class="slide" data-step="3" id="s-4-4c">
+    <section class="slide bdpage" data-step="3" id="s-4-4c">
       <div class="sh"><div class="sec">4-4 효과크기</div><h2><span class="q">Q</span>분석 방법마다 효과크기와 그 기준은 어떻게 다를까요?</h2></div>
       <div class="body split even">
         <div class="fig"><svg id="m25-tbl" viewBox="0 0 420 270" role="img" aria-label="검정 방법별 효과크기 지표와 소, 중, 대 기준값 표"></svg></div>

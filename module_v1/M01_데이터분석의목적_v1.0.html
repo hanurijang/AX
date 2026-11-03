@@ -58,6 +58,14 @@ h2.big{font-size:30px;line-height:1.32}
 .fig{background:var(--panel);border-radius:12px;padding:12px;min-height:0;display:flex;align-items:center;justify-content:center}
 .fig.fit{padding:6px}
 .fig.plain{background:none;padding:0}
+.slide.bdpage{padding:0;gap:0}
+.slide.bdpage.on{display:grid;grid-template-columns:1fr 1fr;grid-template-rows:auto minmax(0,1fr);height:100%}
+.slide.bdpage .sh{grid-column:1;grid-row:1;padding:16px 24px 0 36px;min-width:0}
+.slide.bdpage .body{display:contents}
+.slide.bdpage .body>.fig,.slide.bdpage .body>.figcol{grid-column:1;grid-row:2;min-width:0;min-height:0}
+.slide.bdpage .fig{background:none;border-radius:0;padding:0}
+.slide.bdpage .body>.fig,.slide.bdpage .body>.figcol{padding:12px 24px 10px 36px}
+.slide.bdpage .side{grid-column:2;grid-row:1 / span 2;align-self:stretch;background:var(--panel);border-radius:0;padding:28px 36px 28px 28px}
 .fig svg{width:100%;height:100%;display:block}
 .figcol{min-height:0;display:flex;flex-direction:column;gap:10px}
 .figcol .fig{flex:1 1 auto}
@@ -469,7 +477,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
     </section>
 
     <!-- ④ 본문 ─────────────────────────────── -->
-    <section class="slide" data-step="3" id="s-4-1a">
+    <section class="slide bdpage" data-step="3" id="s-4-1a">
       <div class="sh"><div class="sec">4-1 데이터와 통계학</div><h2><span class="q">Q</span>데이터는 어디서 올까요?</h2></div>
       <div class="body split even">
         <div class="fig"><svg viewBox="0 0 420 270" role="img" aria-label="실험과 설문조사로 데이터를 얻는 그림">
@@ -494,7 +502,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
       </div>
     </section>
 
-    <section class="slide" data-step="3" id="s-4-1b">
+    <section class="slide bdpage" data-step="3" id="s-4-1b">
       <div class="sh"><div class="sec">4-1 데이터와 통계학</div><h2><span class="q">Q</span>데이터를 분석하는 목적은 무엇일까요?</h2></div>
       <div class="body split even">
         <div class="fig"><svg viewBox="0 0 420 270" role="img" aria-label="데이터 분석의 세 가지 목적">
@@ -532,7 +540,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
       </div>
     </section>
 
-    <section class="slide" data-step="3" id="s-4-2a">
+    <section class="slide bdpage" data-step="3" id="s-4-2a">
       <div class="sh"><div class="sec">4-2 데이터 요약</div><h2><span class="q">Q</span>숫자 12개, 한눈에 보이나요?</h2></div>
       <div class="body split even">
         <div class="fig"><svg viewBox="0 0 420 270" role="img" aria-label="원자료 12개가 평균값 1.7로 요약되는 그림">
@@ -558,7 +566,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
       </div>
     </section>
 
-    <section class="slide" data-step="3" id="s-4-2b">
+    <section class="slide bdpage" data-step="3" id="s-4-2b">
       <div class="sh"><div class="sec">4-2 데이터 요약</div><h2><span class="q">Q</span>평균선을 그으면 무엇이 보일까요?</h2></div>
       <div class="body split even">
         <div class="figcol">
@@ -579,7 +587,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
       </div>
     </section>
 
-    <section class="slide" data-step="3" id="s-4-3a">
+    <section class="slide bdpage" data-step="3" id="s-4-3a">
       <div class="sh"><div class="sec">4-3 대상 설명</div><h2><span class="q">Q</span>두 가지 사이에 정말 관계가 있을까요?</h2></div>
       <div class="body split even">
         <div class="fig"><svg id="fig-explain" viewBox="0 0 420 260" role="img" aria-label="신약과 위약의 혈압 비교, 연소득과 행복도의 산점도"></svg></div>
@@ -592,7 +600,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
       <p class="foot">두 그래프의 값은 관계를 보여 주려고 만든 값입니다 <span class="tag-v">가상 데이터</span></p>
     </section>
 
-    <section class="slide" data-step="3" id="s-4-3b">
+    <section class="slide bdpage" data-step="3" id="s-4-3b">
       <div class="sh"><div class="sec">4-3 대상 설명</div><h2><span class="q">Q</span>신약의 효과를 비교하려면 무엇이 필요할까요?</h2></div>
       <div class="body split even">
         <div class="fig"><svg viewBox="0 0 420 270" role="img" aria-label="환자를 실험군과 대조군으로 나눠 혈압을 비교하는 실험">
@@ -619,19 +627,19 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
       </div>
     </section>
 
-    <section class="slide" data-step="3" id="s-4-3c">
+    <section class="slide bdpage" data-step="3" id="s-4-3c">
       <div class="sh"><div class="sec">4-3 대상 설명</div><h2><span class="q">Q</span>관계라면 모두 같은 관계일까요?</h2></div>
       <div class="body split even">
         <div class="fig"><svg viewBox="0 0 420 270" role="img" aria-label="인과관계와 상관관계의 차이">
           <defs><marker id="m-ar7" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#1B2A4A"/></marker><marker id="m-ar8" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#9AA0AA"/></marker></defs>
-          <rect x="10" y="8" width="400" height="116" rx="12" fill="#fff"/>
+          <rect x="10" y="8" width="400" height="116" rx="12" fill="#fff" stroke="#D5D9E0" stroke-width="1.5"/>
           <text x="26" y="32" font-size="13.5" font-weight="800" fill="#1B2A4A">인과관계 · 개입의 효과</text>
           <rect x="40" y="48" width="110" height="44" rx="10" fill="#1B2A4A"/><text x="95" y="68" text-anchor="middle" font-size="11.5" fill="#C9D3E6">원인</text><text x="95" y="84" text-anchor="middle" font-size="13.5" font-weight="800" fill="#fff">신약 복용</text>
           <rect x="270" y="48" width="110" height="44" rx="10" fill="#1B2A4A"/><text x="325" y="68" text-anchor="middle" font-size="11.5" fill="#C9D3E6">결과</text><text x="325" y="84" text-anchor="middle" font-size="13.5" font-weight="800" fill="#fff">혈압 하강</text>
           <line x1="154" y1="70" x2="264" y2="70" stroke="#1B2A4A" stroke-width="3" marker-end="url(#m-ar7)"/>
           <rect x="182" y="96" width="54" height="22" rx="11" fill="#E0A100"/><text x="209" y="112" text-anchor="middle" font-size="12" font-weight="800" fill="#1B2A4A">개입</text>
           <text x="209" y="58" text-anchor="middle" font-size="11.5" fill="#6B7280">바꾸면 바뀐다</text>
-          <rect x="10" y="136" width="400" height="126" rx="12" fill="#fff"/>
+          <rect x="10" y="136" width="400" height="126" rx="12" fill="#fff" stroke="#D5D9E0" stroke-width="1.5"/>
           <text x="26" y="160" font-size="13.5" font-weight="800" fill="#6B7280">관찰된 연관 · 함께 변하는 경향</text>
           <rect x="40" y="172" width="110" height="40" rx="10" fill="#fff" stroke="#9AA0AA" stroke-width="2"/><text x="95" y="197" text-anchor="middle" font-size="13.5" font-weight="800" fill="#22262E">연소득</text>
           <rect x="270" y="172" width="110" height="40" rx="10" fill="#fff" stroke="#9AA0AA" stroke-width="2"/><text x="325" y="197" text-anchor="middle" font-size="13.5" font-weight="800" fill="#22262E">행복도</text>
@@ -649,7 +657,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
       </div>
     </section>
 
-    <section class="slide" data-step="3" id="s-4-3d">
+    <section class="slide bdpage" data-step="3" id="s-4-3d">
       <div class="sh"><div class="sec">4-3 설명과 인과 · 보충</div><h2><span class="q">Q</span>관찰·실험·예측은 무엇을 다르게 묻나요?</h2></div>
       <div class="body split even">
         <div class="fig"><svg viewBox="0 0 420 270" role="img" aria-label="관찰: 신약군의 혈압이 더 낮았다: 나이·기존 상태·다른 치료의 차이도 확인; 실험: 처치를 무작위로 배정해 비교한다: 배정·눈가림·측정·탈락을 관리해 효과를 평가; 예측: 새 환자나 다음 해의 값을 가늠한다: 원인을 확정하지 않아도 예측할 수 있으나 새 자료로 검증"><rect x="8" y="8" width="404" height="76" rx="10" fill="#EEF4FB"/><text x="210" y="37" text-anchor="middle" fill="#1B2A4A" font-size="13" font-weight="800">관찰: 신약군의 혈압이 더 낮았다</text><text x="210" y="63" text-anchor="middle" fill="#6B7280" font-size="11">나이·기존 상태·다른 치료의 차이도 확인</text><rect x="8" y="94" width="404" height="76" rx="10" fill="#FCF3D9"/><text x="210" y="123" text-anchor="middle" fill="#1B2A4A" font-size="13" font-weight="800">실험: 처치를 무작위로 배정해 비교한다</text><text x="210" y="149" text-anchor="middle" fill="#6B7280" font-size="11">배정·눈가림·측정·탈락을 관리해 효과를 평가</text><rect x="8" y="180" width="404" height="76" rx="10" fill="#E3F1EA"/><text x="210" y="209" text-anchor="middle" fill="#1B2A4A" font-size="13" font-weight="800">예측: 새 환자나 다음 해의 값을 가늠한다</text><text x="210" y="235" text-anchor="middle" fill="#6B7280" font-size="11">원인을 확정하지 않아도 예측할 수 있으나 새 자료로 검증</text></svg></div>
@@ -660,7 +668,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
       </div>
     </section>
 
-    <section class="slide" data-step="3" id="s-4-4a">
+    <section class="slide bdpage" data-step="3" id="s-4-4a">
       <div class="sh"><div class="sec">4-4 미지의 데이터 예측</div><h2><span class="q">Q</span>지난 기록으로 올가을 수확량을 맞힐 수 있을까요?</h2></div>
       <div class="body split even">
         <div class="fig"><svg id="fig-scatter" viewBox="0 0 420 260" role="img" aria-label="여름 평균기온과 가을 수확량의 산점도와 예측 직선"></svg></div>
@@ -673,7 +681,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
       <p class="foot">점의 값은 관계를 보여 주려고 만든 값입니다 <span class="tag-v">가상 데이터</span></p>
     </section>
 
-    <section class="slide" data-step="3" id="s-4-4b">
+    <section class="slide bdpage" data-step="3" id="s-4-4b">
       <div class="sh"><div class="sec">4-4 미지의 데이터 예측</div><h2><span class="q">Q</span>예측은 실제와 딱 맞을까요?</h2></div>
       <div class="body split even">
         <div class="fig"><svg id="fig-error" viewBox="0 0 420 260" role="img" aria-label="각 점과 예측 직선 사이의 오차"></svg></div>

@@ -64,6 +64,14 @@ h2.big{font-size:30px;line-height:1.32}
 .ov-main{min-height:0;display:flex;flex-direction:column;gap:12px;padding:16px 24px 10px 36px}
 .ov-main .fig{flex:1 1 auto}
 .fig.plain{background:none;padding:0}
+.slide.bdpage{padding:0;gap:0}
+.slide.bdpage.on{display:grid;grid-template-columns:1fr 1fr;grid-template-rows:auto minmax(0,1fr);height:100%}
+.slide.bdpage .sh{grid-column:1;grid-row:1;padding:16px 24px 0 36px;min-width:0}
+.slide.bdpage .body{display:contents}
+.slide.bdpage .body>.fig,.slide.bdpage .body>.figcol{grid-column:1;grid-row:2;min-width:0;min-height:0}
+.slide.bdpage .fig{background:none;border-radius:0;padding:0}
+.slide.bdpage .body>.fig,.slide.bdpage .body>.figcol{padding:12px 24px 10px 36px}
+.slide.bdpage .side{grid-column:2;grid-row:1 / span 2;align-self:stretch;background:var(--panel);border-radius:0;padding:28px 36px 28px 28px}
 .ovpage .side.shade{background:var(--panel);border-radius:0;padding:28px 36px 28px 28px;height:100%}
 .ovpage .side.shade{gap:22px}
 .ovpage .bridge{display:flex;flex-direction:column;gap:28px}
@@ -421,7 +429,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
     </section>
 
     <!-- ④ 본문 ─────────────────────────────── -->
-    <section class="slide" data-step="3" id="s-4-1a">
+    <section class="slide bdpage" data-step="3" id="s-4-1a">
       <div class="sh"><div class="sec">4-1 데이터의 퍼짐</div><h2><span class="q">Q</span>같은 약을 먹어도 효과는 왜 다를까요?</h2></div>
       <div class="body split even">
         <div class="fig"><svg viewBox="0 0 420 270" role="img" aria-label="사람마다 다른 키와 약 효과">
@@ -449,7 +457,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
       </div>
     </section>
 
-    <section class="slide" data-step="3" id="s-4-1b">
+    <section class="slide bdpage" data-step="3" id="s-4-1b">
       <div class="sh"><div class="sec">4-1 데이터의 퍼짐</div><h2><span class="q">Q</span>퍼짐이 없다면 신약의 효과는 어떻게 보일까요?</h2></div>
       <div class="body split even">
         <div class="figcol">
@@ -469,7 +477,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
       </div>
     </section>
 
-    <section class="slide" data-step="3" id="s-4-1c">
+    <section class="slide bdpage" data-step="3" id="s-4-1c">
       <div class="sh"><div class="sec">4-1 데이터의 퍼짐</div><h2><span class="q">Q</span>퍼짐은 어떤 판단 실수를 부를까요?</h2></div>
       <div class="body split even">
         <div class="fig"><svg viewBox="0 0 420 270" role="img" aria-label="퍼짐이 부르는 두 가지 판단 실수">
@@ -492,12 +500,12 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
       </div>
     </section>
 
-    <section class="slide" data-step="3" id="s-4-2a">
+    <section class="slide bdpage" data-step="3" id="s-4-2a">
       <div class="sh"><div class="sec">4-2 확률로 다루기</div><h2><span class="q">Q</span>불확실성은 무엇으로 다룰까요?</h2></div>
       <div class="body split even">
         <div class="fig"><svg viewBox="0 0 420 270" role="img" aria-label="퍼짐이 큰 현상은 확률로, 퍼짐이 작은 현상은 수리 모형으로">
           <defs><marker id="a3" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10z" fill="#5B6E97"/></marker></defs>
-          <rect x="8" y="8" width="196" height="254" rx="12" fill="#fff"/>
+          <rect x="8" y="8" width="196" height="254" rx="12" fill="#fff" stroke="#D5D9E0" stroke-width="1.5"/>
           <text x="106" y="34" text-anchor="middle" font-size="13" font-weight="800" fill="#1B2A4A">퍼짐이 큰 현상</text>
           <text x="106" y="54" text-anchor="middle" font-size="11.5" fill="#6B7280">약의 효과, 키, 몸무게</text>
           <g fill="#5B6E97"><circle cx="50" cy="96" r="5"/><circle cx="74" cy="80" r="5"/><circle cx="96" cy="104" r="5"/><circle cx="118" cy="84" r="5"/><circle cx="140" cy="100" r="5"/><circle cx="160" cy="78" r="5"/><circle cx="84" cy="116" r="5"/><circle cx="130" cy="118" r="5"/></g>
@@ -505,7 +513,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
           <rect x="40" y="160" width="132" height="34" rx="8" fill="#FCF3D9" stroke="#E0A100" stroke-width="2"/><text x="106" y="182" text-anchor="middle" font-size="13" font-weight="800" fill="#6E4F00">확률론</text>
           <line x1="106" y1="196" x2="106" y2="216" stroke="#5B6E97" stroke-width="2" marker-end="url(#a3)"/>
           <rect x="40" y="220" width="132" height="34" rx="8" fill="#1B2A4A"/><text x="106" y="242" text-anchor="middle" font-size="13" font-weight="800" fill="#fff">통계학</text>
-          <rect x="216" y="8" width="196" height="254" rx="12" fill="#fff"/>
+          <rect x="216" y="8" width="196" height="254" rx="12" fill="#fff" stroke="#D5D9E0" stroke-width="1.5"/>
           <text x="314" y="34" text-anchor="middle" font-size="13" font-weight="800" fill="#1B2A4A">퍼짐이 아주 작은 현상</text>
           <text x="314" y="54" text-anchor="middle" font-size="11.5" fill="#6B7280">던진 공의 궤도</text>
           <path d="M240 124 Q314 40 388 124" fill="none" stroke="#2C4170" stroke-width="2.5" stroke-dasharray="5 4"/><circle cx="240" cy="124" r="7" fill="#E0A100"/>
@@ -522,12 +530,12 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
       </div>
     </section>
 
-    <section class="slide" data-step="3" id="s-4-3a">
+    <section class="slide bdpage" data-step="3" id="s-4-3a">
       <div class="sh"><div class="sec">4-3 기술통계와 추론통계</div><h2><span class="q">Q</span>데이터를 정리하는 일과 추정하는 일은 어떻게 다를까요?</h2></div>
       <div class="body split even">
         <div class="fig"><svg viewBox="0 0 420 270" role="img" aria-label="기술통계와 추론통계 비교">
           <defs><marker id="a4" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10z" fill="#5B6E97"/></marker><marker id="a5" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10z" fill="#E0A100"/></marker></defs>
-          <rect x="8" y="8" width="196" height="254" rx="12" fill="#fff"/>
+          <rect x="8" y="8" width="196" height="254" rx="12" fill="#fff" stroke="#D5D9E0" stroke-width="1.5"/>
           <text x="24" y="34" font-size="13.5" font-weight="800" fill="#1B2A4A">기술통계</text>
           <rect x="66" y="48" width="80" height="58" rx="6" fill="#fff" stroke="#5B6E97" stroke-width="2"/><text x="106" y="64" text-anchor="middle" font-size="11" fill="#6B7280">데이터</text>
           <g stroke="#A9B8D4" stroke-width="3"><line x1="78" y1="76" x2="134" y2="76"/><line x1="78" y1="88" x2="128" y2="88"/><line x1="78" y1="100" x2="132" y2="100"/></g>
@@ -535,7 +543,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
           <g fill="#A9B8D4"><rect x="70" y="204" width="12" height="26"/><rect x="84" y="186" width="12" height="44"/><rect x="98" y="160" width="12" height="70"/><rect x="112" y="150" width="12" height="80"/><rect x="126" y="176" width="12" height="54"/><rect x="140" y="200" width="12" height="30"/></g>
           <line x1="62" y1="230" x2="160" y2="230" stroke="#9AA0AA"/>
           <text x="106" y="252" text-anchor="middle" font-size="12" font-weight="700" fill="#22262E">평균·분산 계산</text>
-          <rect x="216" y="8" width="196" height="254" rx="12" fill="#fff"/>
+          <rect x="216" y="8" width="196" height="254" rx="12" fill="#fff" stroke="#D5D9E0" stroke-width="1.5"/>
           <text x="232" y="34" font-size="13.5" font-weight="800" fill="#1B2A4A">추론통계</text>
           <circle cx="314" cy="104" r="56" fill="#E4E9F2" stroke="#2C4170" stroke-width="3"/>
           <text x="314" y="100" text-anchor="middle" font-size="12.5" font-weight="800" fill="#1B2A4A">데이터의</text><text x="314" y="118" text-anchor="middle" font-size="12.5" font-weight="800" fill="#1B2A4A">발생원</text>
@@ -553,7 +561,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
       </div>
     </section>
 
-    <section class="slide" data-step="3" id="s-4-3b">
+    <section class="slide bdpage" data-step="3" id="s-4-3b">
       <div class="sh"><div class="sec">4-3 기술통계와 추론통계</div><h2><span class="q">Q</span>볼 수 없는 대상을 어떻게 수학으로 다룰까요?</h2></div>
       <div class="body split even">
         <div class="fig"><svg viewBox="0 0 420 270" role="img" aria-label="주사위와 확률 모형, 데이터의 생성과 추정">
@@ -583,7 +591,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
       </div>
     </section>
 
-    <section class="slide" data-step="3" id="s-4-3c">
+    <section class="slide bdpage" data-step="3" id="s-4-3c">
       <div class="sh"><div class="sec">4-3 기술과 추론 · 보충</div><h2><span class="q">Q</span>같은 평균 125·150도 쓰임이 다를까요?</h2></div>
       <div class="body split even">
         <div class="fig"><svg viewBox="0 0 420 270" role="img" aria-label="관측한 신약 5명·위약 5명의 평균: 125·150: 그 10명 자료의 기술 · 평균차 신약−위약 = −25; 환자 모집단의 평균차는 얼마인가?: 표본추출·배정·측정과 추정의 불확실성을 확인; 다음 환자의 혈압은 얼마인가?: 개인 값의 퍼짐도 남으므로 관측 평균으로 확정하지 않음"><rect x="8" y="8" width="404" height="76" rx="10" fill="#EEF4FB"/><text x="210" y="37" text-anchor="middle" fill="#1B2A4A" font-size="13" font-weight="800">관측한 신약 5명·위약 5명의 평균: 125·150</text><text x="210" y="63" text-anchor="middle" fill="#6B7280" font-size="11">그 10명 자료의 기술 · 평균차 신약−위약 = −25</text><rect x="8" y="94" width="404" height="76" rx="10" fill="#FCF3D9"/><text x="210" y="123" text-anchor="middle" fill="#1B2A4A" font-size="13" font-weight="800">환자 모집단의 평균차는 얼마인가?</text><text x="210" y="149" text-anchor="middle" fill="#6B7280" font-size="11">표본추출·배정·측정과 추정의 불확실성을 확인</text><rect x="8" y="180" width="404" height="76" rx="10" fill="#E3F1EA"/><text x="210" y="209" text-anchor="middle" fill="#1B2A4A" font-size="13" font-weight="800">다음 환자의 혈압은 얼마인가?</text><text x="210" y="235" text-anchor="middle" fill="#6B7280" font-size="11">개인 값의 퍼짐도 남으므로 관측 평균으로 확정하지 않음</text></svg></div>
@@ -594,18 +602,18 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
       </div>
     </section>
 
-    <section class="slide" data-step="3" id="s-4-4a">
+    <section class="slide bdpage" data-step="3" id="s-4-4a">
       <div class="sh"><div class="sec">4-4 모수 추정과 가설검정</div><h2><span class="q">Q</span>추론통계로 무엇을 할 수 있을까요?</h2></div>
       <div class="body split even">
         <div class="figcol">
           <div class="fig"><svg viewBox="0 0 420 170" role="img" aria-label="모수 추정과 가설검정 비교">
-            <rect x="6" y="6" width="200" height="158" rx="10" fill="#fff"/>
+            <rect x="6" y="6" width="200" height="158" rx="10" fill="#fff" stroke="#D5D9E0" stroke-width="1.5"/>
             <text x="106" y="30" text-anchor="middle" font-size="13" font-weight="800" fill="#1B2A4A">모수 추정</text>
             <rect x="28" y="46" width="40" height="40" rx="10" fill="#fff" stroke="#1B2A4A" stroke-width="2.5" stroke-dasharray="3 2"/><text x="48" y="72" text-anchor="middle" font-size="12" font-weight="800" fill="#1B2A4A">?</text>
             <text x="80" y="62" font-size="11.5" fill="#22262E">모서리가 닳은</text><text x="80" y="80" font-size="11.5" fill="#22262E">주사위</text>
             <text x="106" y="118" text-anchor="middle" font-size="12" font-weight="700" fill="#22262E">던진 결과로</text>
             <text x="106" y="140" text-anchor="middle" font-size="12" font-weight="800" fill="#6E4F00">각 눈의 확률을 추정</text>
-            <rect x="214" y="6" width="200" height="158" rx="10" fill="#fff"/>
+            <rect x="214" y="6" width="200" height="158" rx="10" fill="#fff" stroke="#D5D9E0" stroke-width="1.5"/>
             <text x="314" y="30" text-anchor="middle" font-size="13" font-weight="800" fill="#1B2A4A">가설검정</text>
             <text x="230" y="58" font-size="11.5" fill="#6B7280">가설</text><text x="270" y="58" font-size="12" font-weight="700" fill="#22262E">각 눈 1/6</text>
             <text x="230" y="82" font-size="11.5" fill="#6B7280">데이터</text><text x="270" y="82" font-size="12" font-weight="700" fill="#22262E">100번 중 1이 50번</text>
@@ -627,11 +635,11 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
       </div>
     </section>
 
-    <section class="slide" data-step="3" id="s-4-4b">
+    <section class="slide bdpage" data-step="3" id="s-4-4b">
       <div class="sh"><div class="sec">4-4 모수 추정과 가설검정</div><h2><span class="q">Q</span>통계분석 방법은 왜 이렇게 다양할까요?</h2></div>
       <div class="body split even">
         <div class="fig"><svg viewBox="0 0 420 270" role="img" aria-label="데이터 유형과 변수 개수에 따른 분류">
-          <rect x="6" y="6" width="408" height="118" rx="10" fill="#fff"/>
+          <rect x="6" y="6" width="408" height="118" rx="10" fill="#fff" stroke="#D5D9E0" stroke-width="1.5"/>
           <text x="20" y="30" font-size="13" font-weight="800" fill="#1B2A4A">데이터 유형</text>
           <text x="20" y="62" font-size="12.5" font-weight="700" fill="#22262E">범주형 변수</text>
           <g font-size="12" font-weight="800" fill="#1B2A4A" text-anchor="middle"><rect x="120" y="46" width="36" height="24" rx="12" fill="#E4E9F2"/><text x="138" y="63">A</text><rect x="162" y="46" width="36" height="24" rx="12" fill="#E4E9F2"/><text x="180" y="63">B</text><rect x="204" y="46" width="36" height="24" rx="12" fill="#E4E9F2"/><text x="222" y="63">O</text><rect x="246" y="46" width="36" height="24" rx="12" fill="#E4E9F2"/><text x="264" y="63">AB</text></g>
@@ -639,7 +647,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
           <text x="20" y="104" font-size="12.5" font-weight="700" fill="#22262E">양적 변수</text>
           <line x1="120" y1="98" x2="282" y2="98" stroke="#2C4170" stroke-width="2"/><g fill="#2C4170"><circle cx="140" cy="98" r="4"/><circle cx="176" cy="98" r="4"/><circle cx="198" cy="98" r="4"/><circle cx="240" cy="98" r="4"/><circle cx="262" cy="98" r="4"/></g>
           <text x="294" y="104" font-size="11.5" fill="#6B7280">키(수치)</text>
-          <rect x="6" y="134" width="408" height="130" rx="10" fill="#fff"/>
+          <rect x="6" y="134" width="408" height="130" rx="10" fill="#fff" stroke="#D5D9E0" stroke-width="1.5"/>
           <text x="20" y="158" font-size="13" font-weight="800" fill="#1B2A4A">변수의 개수</text>
           <g font-size="12" fill="#22262E">
             <rect x="20" y="172" width="118" height="78" rx="8" fill="#F3F4F6"/><text x="79" y="196" text-anchor="middle" font-weight="800" fill="#1B2A4A">1변수</text><text x="79" y="222" text-anchor="middle">키</text>

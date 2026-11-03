@@ -64,6 +64,14 @@ h2.big{font-size:30px;line-height:1.32}
 .ov-main{min-height:0;display:flex;flex-direction:column;gap:12px;padding:16px 24px 10px 36px}
 .ov-main .fig{flex:1 1 auto}
 .fig.plain{background:none;padding:0}
+.slide.bdpage{padding:0;gap:0}
+.slide.bdpage.on{display:grid;grid-template-columns:1fr 1fr;grid-template-rows:auto minmax(0,1fr);height:100%}
+.slide.bdpage .sh{grid-column:1;grid-row:1;padding:16px 24px 0 36px;min-width:0}
+.slide.bdpage .body{display:contents}
+.slide.bdpage .body>.fig,.slide.bdpage .body>.figcol{grid-column:1;grid-row:2;min-width:0;min-height:0}
+.slide.bdpage .fig{background:none;border-radius:0;padding:0}
+.slide.bdpage .body>.fig,.slide.bdpage .body>.figcol{padding:12px 24px 10px 36px}
+.slide.bdpage .side{grid-column:2;grid-row:1 / span 2;align-self:stretch;background:var(--panel);border-radius:0;padding:28px 36px 28px 28px}
 .ovpage .side.shade{background:var(--panel);border-radius:0;padding:28px 36px 28px 28px;height:100%}
 .ovpage .side.shade{gap:22px}
 .ovpage .bridge{display:flex;flex-direction:column;gap:28px}
@@ -374,7 +382,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
     </section>
 
     <!-- ④ 본문 ─────────────────────────────── -->
-    <section class="slide" data-step="3" id="s-4-1a">
+    <section class="slide bdpage" data-step="3" id="s-4-1a">
       <div class="sh"><div class="sec">4-1 산점도와 상관</div><h2><span class="q">Q</span>두 양적 변수의 관계는 어떻게 그림으로 나타낼까요?</h2></div>
       <div class="body split even">
         <div class="fig"><svg id="m17-scatter" viewBox="0 0 420 270" role="img" aria-label="학생 10명의 수학 점수를 x축, 과학 점수를 y축으로 한 산점도"></svg></div>
@@ -386,7 +394,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
       </div>
     </section>
 
-    <section class="slide" data-step="3" id="s-4-1b">
+    <section class="slide bdpage" data-step="3" id="s-4-1b">
       <div class="sh"><div class="sec">4-1 산점도와 상관</div><h2><span class="q">Q</span>산점도에는 어떤 관계들이 나타날까요?</h2></div>
       <div class="body split even">
         <div class="fig"><svg id="m17-three" viewBox="0 0 420 270" role="img" aria-label="증가 관계, 관계 없음, 감소 관계 세 가지 산점도"></svg></div>
@@ -398,7 +406,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
       </div>
     </section>
 
-    <section class="slide" data-step="3" id="s-4-1c">
+    <section class="slide bdpage" data-step="3" id="s-4-1c">
       <div class="sh"><div class="sec">4-1 산점도와 상관</div><h2><span class="q">Q</span>관계를 식으로 나타내면 무엇을 할 수 있을까요?</h2></div>
       <div class="body split even">
         <div class="fig"><svg id="m17-reg" viewBox="0 0 420 270" role="img" aria-label="광고비와 판매 개수의 산점도와 회귀직선 y = 0.001x, 광고비 500만 원이면 판매 5,000개 예측"></svg></div>
@@ -410,7 +418,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
       </div>
     </section>
 
-    <section class="slide" data-step="3" id="s-4-2a">
+    <section class="slide bdpage" data-step="3" id="s-4-2a">
       <div class="sh"><div class="sec">4-2 피어슨 상관계수</div><h2><span class="q">Q</span>두 변수 관계의 강도는 어떻게 수치로 나타낼까요?</h2></div>
       <div class="body split even">
         <div class="figcol">
@@ -430,7 +438,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
       </div>
     </section>
 
-    <section class="slide" data-step="3" id="s-4-2b">
+    <section class="slide bdpage" data-step="3" id="s-4-2b">
       <div class="sh"><div class="sec">4-2 피어슨 상관계수</div><h2><span class="q">Q</span>r의 부호와 크기는 각각 무엇을 뜻할까요?</h2></div>
       <div class="body split even">
         <div class="fig"><svg id="m17-grid" viewBox="0 0 420 270" role="img" aria-label="r이 1, 0.8, 0.5, 0.3, 0, −0.3, −0.5, −0.8, −1인 산점도 9개"></svg></div>
@@ -442,7 +450,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
       </div>
     </section>
 
-    <section class="slide" data-step="3" id="s-4-2c">
+    <section class="slide bdpage" data-step="3" id="s-4-2c">
       <div class="sh"><div class="sec">4-2 피어슨 상관계수</div><h2><span class="q">Q</span>r이 0에 가까우면 정말 아무 관계도 없을까요?</h2></div>
       <div class="body split even">
         <div class="fig"><svg id="m17-nonlin" viewBox="0 0 420 270" role="img" aria-label="2차 함수 모양 데이터의 r은 거의 0, 기울기가 다른 두 직선 데이터의 r은 같음"></svg></div>
@@ -454,7 +462,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
       </div>
     </section>
 
-    <section class="slide" data-step="3" id="s-4-2d">
+    <section class="slide bdpage" data-step="3" id="s-4-2d">
       <div class="sh"><div class="sec">4-2 피어슨 상관계수</div><h2><span class="q">Q</span>상관계수가 같으면 데이터 모양도 비슷할까요?</h2></div>
       <div class="body split even">
         <div class="fig"><svg id="m17-ans" viewBox="0 0 420 270" role="img" aria-label="상관계수가 모두 약 0.82인데 모양이 전혀 다른 네 데이터"></svg></div>
@@ -466,7 +474,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
       </div>
     </section>
 
-    <section class="slide" data-step="3" id="s-4-2e">
+    <section class="slide bdpage" data-step="3" id="s-4-2e">
       <div class="sh"><div class="sec">4-2 지표의 적용 범위 · 보충</div><h2><span class="q">Q</span>r=0·순위상관·계산 불가를 구분할까요?</h2></div>
       <div class="body split even">
         <div class="fig"><svg viewBox="0 0 420 270" role="img" aria-label="대칭 자료: X=−2,−1,0,1,2와 Y=X²: Pearson r=0: 뚜렷한 U자 의존성은 존재; 같은 X와 Y=X³: 휘어진 단조 증가 관계: Spearman 순위상관=1: 단조 곡선도 파악; X가 전부 1인 자료: X의 표준편차=0: r은 0이 아니라 정의되지 않음"><rect x="8" y="8" width="404" height="76" rx="10" fill="#EEF4FB"/><text x="210" y="37" text-anchor="middle" fill="#1B2A4A" font-size="13" font-weight="800">대칭 자료: X=−2,−1,0,1,2와 Y=X²</text><text x="210" y="63" text-anchor="middle" fill="#6B7280" font-size="11">Pearson r=0: 뚜렷한 U자 의존성은 존재</text><rect x="8" y="94" width="404" height="76" rx="10" fill="#FCF3D9"/><text x="210" y="123" text-anchor="middle" fill="#1B2A4A" font-size="13" font-weight="800">같은 X와 Y=X³: 휘어진 단조 증가 관계</text><text x="210" y="149" text-anchor="middle" fill="#6B7280" font-size="11">Spearman 순위상관=1: 단조 곡선도 파악</text><rect x="8" y="180" width="404" height="76" rx="10" fill="#E3F1EA"/><text x="210" y="209" text-anchor="middle" fill="#1B2A4A" font-size="13" font-weight="800">X가 전부 1인 자료</text><text x="210" y="235" text-anchor="middle" fill="#6B7280" font-size="11">X의 표준편차=0: r은 0이 아니라 정의되지 않음</text></svg></div>
@@ -477,7 +485,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
       </div>
     </section>
 
-    <section class="slide" data-step="3" id="s-4-3a">
+    <section class="slide bdpage" data-step="3" id="s-4-3a">
       <div class="sh"><div class="sec">4-3 비모수 상관계수</div><h2><span class="q">Q</span>이상값이 하나 끼어들면 r은 어떻게 될까요?</h2></div>
       <div class="body split even">
         <div class="fig"><svg id="m17-outlier" viewBox="0 0 420 270" role="img" aria-label="무상관 데이터에 이상값 하나를 더하면 r은 0.001에서 0.83, ρ는 0.012에서 0.082"></svg></div>
@@ -489,7 +497,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
       </div>
     </section>
 
-    <section class="slide" data-step="3" id="s-4-3b">
+    <section class="slide bdpage" data-step="3" id="s-4-3b">
       <div class="sh"><div class="sec">4-3 비모수 상관계수</div><h2><span class="q">Q</span>순위상관계수는 어떻게 계산할까요?</h2></div>
       <div class="body split even">
         <div class="figcol">
@@ -509,7 +517,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
       </div>
     </section>
 
-    <section class="slide" data-step="3" id="s-4-3c">
+    <section class="slide bdpage" data-step="3" id="s-4-3c">
       <div class="sh"><div class="sec">4-3 비모수 상관계수</div><h2><span class="q">Q</span>처음부터 엮여 있는 두 변수의 상관은 믿을 수 있을까요?</h2></div>
       <div class="body split even">
         <div class="fig"><svg id="m17-ratio" viewBox="0 0 420 270" role="img" aria-label="X와 Y는 무상관인데 X와 Y/X는 음의 상관이 나타남"></svg></div>
@@ -521,7 +529,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
       </div>
     </section>
 
-    <section class="slide" data-step="3" id="s-4-4a">
+    <section class="slide bdpage" data-step="3" id="s-4-4a">
       <div class="sh"><div class="sec">4-4 상관계수와 가설</div><h2><span class="q">Q</span>무상관인 모집단에서도 큰 r이 나올 수 있을까요?</h2></div>
       <div class="body split even">
         <div class="figcol">
@@ -541,7 +549,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
       </div>
     </section>
 
-    <section class="slide" data-step="3" id="s-4-4b">
+    <section class="slide bdpage" data-step="3" id="s-4-4b">
       <div class="sh"><div class="sec">4-4 상관계수와 가설</div><h2><span class="q">Q</span>표본이 아주 크면 아주 약한 상관도 유의할까요?</h2></div>
       <div class="body split even">
         <div class="fig"><svg id="m17-bign" viewBox="0 0 420 270" role="img" aria-label="r = 0.03일 때 표본크기가 커질수록 p값이 작아져 n이 1만 근처에서 0.01 아래로 내려감"></svg></div>
@@ -553,7 +561,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
       </div>
     </section>
 
-    <section class="slide" data-step="3" id="s-4-4c">
+    <section class="slide bdpage" data-step="3" id="s-4-4c">
       <div class="sh"><div class="sec">4-4 상관계수와 가설</div><h2><span class="q">Q</span>곡선 같은 비선형 관계는 무엇으로 잴 수 있을까요?</h2></div>
       <div class="body split even">
         <div class="fig"><svg id="m17-info" viewBox="0 0 420 270" role="img" aria-label="X를 알면 Y를 얼마나 알 수 있는가의 관점: 직선, 곡선, 무관계"></svg></div>

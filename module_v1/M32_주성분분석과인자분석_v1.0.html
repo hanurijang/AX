@@ -64,6 +64,14 @@ h2.big{font-size:30px;line-height:1.32}
 .ov-main{min-height:0;display:flex;flex-direction:column;gap:12px;padding:16px 24px 10px 36px}
 .ov-main .fig{flex:1 1 auto}
 .fig.plain{background:none;padding:0}
+.slide.bdpage{padding:0;gap:0}
+.slide.bdpage.on{display:grid;grid-template-columns:1fr 1fr;grid-template-rows:auto minmax(0,1fr);height:100%}
+.slide.bdpage .sh{grid-column:1;grid-row:1;padding:16px 24px 0 36px;min-width:0}
+.slide.bdpage .body{display:contents}
+.slide.bdpage .body>.fig,.slide.bdpage .body>.figcol{grid-column:1;grid-row:2;min-width:0;min-height:0}
+.slide.bdpage .fig{background:none;border-radius:0;padding:0}
+.slide.bdpage .body>.fig,.slide.bdpage .body>.figcol{padding:12px 24px 10px 36px}
+.slide.bdpage .side{grid-column:2;grid-row:1 / span 2;align-self:stretch;background:var(--panel);border-radius:0;padding:28px 36px 28px 28px}
 .ovpage .side.shade{background:var(--panel);border-radius:0;padding:28px 36px 28px 28px;height:100%}
 .ovpage .side.shade{gap:22px}
 .ovpage .bridge{display:flex;flex-direction:column;gap:28px}
@@ -363,7 +371,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
     </section>
 
     <!-- ④ 본문 ─────────────────────────────── -->
-    <section class="slide" data-step="3" id="s-4-1a">
+    <section class="slide bdpage" data-step="3" id="s-4-1a">
       <div class="sh"><div class="sec">4-1 변수의 차원 · 기초</div><h2><span class="q">Q</span>변수가 많으면 정보도 그만큼 많을까요?</h2></div>
       <div class="body split even">
         <div class="fig"><svg id="m32-dim" viewBox="0 0 420 270" role="img" aria-label="두께 mm와 μm는 완전 상관이라 하나로 충분, 인장강도와 항복강도는 강한 상관이라 강도 하나로 요약 가능"></svg></div>
@@ -375,7 +383,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
       </div>
     </section>
 
-    <section class="slide" data-step="3" id="s-4-1b">
+    <section class="slide bdpage" data-step="3" id="s-4-1b">
       <div class="sh"><div class="sec">4-1 변수의 차원 · 기초</div><h2><span class="q">Q</span>변수가 많으면 분석에서 어떤 문제가 생길까요?</h2></div>
       <div class="body split even">
         <div class="fig"><svg id="m32-why" viewBox="0 0 420 270" role="img" aria-label="변수의 수를 줄이는 세 가지 이유: 고차원 해석의 어려움, 다중공선성, 차원의 저주"></svg></div>
@@ -387,7 +395,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
       </div>
     </section>
 
-    <section class="slide" data-step="3" id="s-4-2a">
+    <section class="slide bdpage" data-step="3" id="s-4-2a">
       <div class="sh"><div class="sec">4-2 주성분분석 · 기초</div><h2><span class="q">Q</span>새로운 축은 어느 방향으로 잡아야 할까요?</h2></div>
       <div class="body split even">
         <div class="fig"><svg id="m32-axis" viewBox="0 0 420 270" role="img" aria-label="표준화한 인장강도와 경도의 산점도에 데이터 퍼짐이 가장 큰 방향 PC1과 수직인 PC2를 그림, 분산이 PC1에 몰림"></svg></div>
@@ -399,7 +407,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
       </div>
     </section>
 
-    <section class="slide" data-step="3" id="s-4-2b">
+    <section class="slide bdpage" data-step="3" id="s-4-2b">
       <div class="sh"><div class="sec">4-2 주성분분석 · 기초</div><h2><span class="q">Q</span>주성분 몇 개로 정보를 얼마나 담을 수 있을까요?</h2></div>
       <div class="body split even">
         <div class="figcol">
@@ -419,7 +427,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
       </div>
     </section>
 
-    <section class="slide" data-step="3" id="s-4-2c">
+    <section class="slide bdpage" data-step="3" id="s-4-2c">
       <div class="sh"><div class="sec">4-2 주성분분석 · 기초</div><h2><span class="q">Q</span>PC1과 PC2는 각각 어떤 축일까요?</h2></div>
       <div class="body split even">
         <div class="fig"><svg id="m32-load" viewBox="0 0 420 270" role="img" aria-label="주성분부하량 표와 시편 50개의 주성분점수 산점도, PC1은 강도, PC2는 인성"></svg></div>
@@ -431,7 +439,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
       </div>
     </section>
 
-    <section class="slide" data-step="3" id="s-4-2d">
+    <section class="slide bdpage" data-step="3" id="s-4-2d">
       <div class="sh"><div class="sec">4-2 주성분분석 · 척도 보충</div><h2><span class="q">Q</span>단위를 바꾸면 같은 자료의 주성분도 달라질까요?</h2></div>
       <div class="body split even">
         <div class="fig"><svg viewBox="0 0 420 270" role="img" aria-label="원래 척도의 공분산행렬: 무상관 두 변수의 분산이 100, 1이면 PC1 약 99%; 표준화한 상관행렬: 같은 두 변수의 분산을 1, 1로 맞추면 PC1 50%; 분산을 설명하는 비율 ≠ 예측 중요도: 원하는 목적에 맞는 척도와 남길 축을 선택"><rect x="8" y="8" width="404" height="76" rx="10" fill="#EEF4FB"/><text x="210" y="37" text-anchor="middle" fill="#1B2A4A" font-size="13" font-weight="800">원래 척도의 공분산행렬</text><text x="210" y="63" text-anchor="middle" fill="#6B7280" font-size="11">무상관 두 변수의 분산이 100, 1이면 PC1 약 99%</text><rect x="8" y="94" width="404" height="76" rx="10" fill="#FCF3D9"/><text x="210" y="123" text-anchor="middle" fill="#1B2A4A" font-size="13" font-weight="800">표준화한 상관행렬</text><text x="210" y="149" text-anchor="middle" fill="#6B7280" font-size="11">같은 두 변수의 분산을 1, 1로 맞추면 PC1 50%</text><rect x="8" y="180" width="404" height="76" rx="10" fill="#E3F1EA"/><text x="210" y="209" text-anchor="middle" fill="#1B2A4A" font-size="13" font-weight="800">분산을 설명하는 비율 ≠ 예측 중요도</text><text x="210" y="235" text-anchor="middle" fill="#6B7280" font-size="11">원하는 목적에 맞는 척도와 남길 축을 선택</text></svg></div>
@@ -442,7 +450,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
       </div>
     </section>
 
-    <section class="slide" data-step="3" id="s-4-3a">
+    <section class="slide bdpage" data-step="3" id="s-4-3a">
       <div class="sh"><div class="sec">4-3 인자분석 · 추가 읽기</div><h2><span class="q">Q</span>검사 항목 뒤에 보이지 않는 공통 요인이 있다면?</h2></div>
       <div class="body split even">
         <div class="fig"><svg id="m32-fa" viewBox="0 0 420 270" role="img" aria-label="공통인자 강도와 인성이 다섯 검사 항목을 만들고, 각 항목에 독립인자가 작용하는 인자분석 구조"></svg></div>

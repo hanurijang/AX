@@ -64,6 +64,14 @@ h2.big{font-size:30px;line-height:1.32}
 .ov-main{min-height:0;display:flex;flex-direction:column;gap:12px;padding:16px 24px 10px 36px}
 .ov-main .fig{flex:1 1 auto}
 .fig.plain{background:none;padding:0}
+.slide.bdpage{padding:0;gap:0}
+.slide.bdpage.on{display:grid;grid-template-columns:1fr 1fr;grid-template-rows:auto minmax(0,1fr);height:100%}
+.slide.bdpage .sh{grid-column:1;grid-row:1;padding:16px 24px 0 36px;min-width:0}
+.slide.bdpage .body{display:contents}
+.slide.bdpage .body>.fig,.slide.bdpage .body>.figcol{grid-column:1;grid-row:2;min-width:0;min-height:0}
+.slide.bdpage .fig{background:none;border-radius:0;padding:0}
+.slide.bdpage .body>.fig,.slide.bdpage .body>.figcol{padding:12px 24px 10px 36px}
+.slide.bdpage .side{grid-column:2;grid-row:1 / span 2;align-self:stretch;background:var(--panel);border-radius:0;padding:28px 36px 28px 28px}
 .ovpage .side.shade{background:var(--panel);border-radius:0;padding:28px 36px 28px 28px;height:100%}
 .ovpage .side.shade{gap:22px}
 .ovpage .bridge{display:flex;flex-direction:column;gap:28px}
@@ -365,7 +373,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
     </section>
 
     <!-- ④ 본문 ─────────────────────────────── -->
-    <section class="slide" data-step="3" id="s-4-1a">
+    <section class="slide bdpage" data-step="3" id="s-4-1a">
       <div class="sh"><div class="sec">4-1 확률 모형과 무작위 행보</div><h2><span class="q">Q</span>불확실한 변동이 본질인 현상은 어떻게 모형으로 쓸까요?</h2></div>
       <div class="body split even">
         <div class="fig"><svg id="m37-rw" viewBox="0 0 420 270" role="img" aria-label="처음 100개에서 시작한 버퍼 재고 20번의 무작위 행보 시행, 시간이 지날수록 넓게 퍼짐"></svg></div>
@@ -377,7 +385,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
       </div>
     </section>
 
-    <section class="slide" data-step="3" id="s-4-1b">
+    <section class="slide bdpage" data-step="3" id="s-4-1b">
       <div class="sh"><div class="sec">4-1 확률 모형과 무작위 행보</div><h2><span class="q">Q</span>기댓값이 0인데도 재고는 왜 처음 값에서 멀어질까요?</h2></div>
       <div class="body split even">
         <div class="figcol">
@@ -397,7 +405,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
       </div>
     </section>
 
-    <section class="slide" data-step="3" id="s-4-2a">
+    <section class="slide bdpage" data-step="3" id="s-4-2a">
       <div class="sh"><div class="sec">4-2 마르코프 과정</div><h2><span class="q">Q</span>내일 설비 상태를 오늘 상태로 확률적으로 정할 수 있을까요?</h2></div>
       <div class="body split even">
         <div class="fig"><svg id="m37-state" viewBox="0 0 420 270" role="img" aria-label="설비 상태 정상, 주의, 고장 세 원 사이의 전이확률 화살표, 정상 유지 0.90, 정상에서 고장 0.02, 주의에서 고장 0.15"></svg></div>
@@ -409,7 +417,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
       </div>
     </section>
 
-    <section class="slide" data-step="3" id="s-4-2b">
+    <section class="slide bdpage" data-step="3" id="s-4-2b">
       <div class="sh"><div class="sec">4-2 마르코프 과정</div><h2><span class="q">Q</span>오늘 정상인 설비가 모레 고장일 확률은 얼마일까요?</h2></div>
       <div class="body split even">
         <div class="figcol">
@@ -429,7 +437,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
       </div>
     </section>
 
-    <section class="slide" data-step="3" id="s-4-2c">
+    <section class="slide bdpage" data-step="3" id="s-4-2c">
       <div class="sh"><div class="sec">4-2 마르코프 과정</div><h2><span class="q">Q</span>오래 지나면 고장 확률은 어디에 자리 잡을까요?</h2></div>
       <div class="body split even">
         <div class="fig"><svg id="m37-stat" viewBox="0 0 420 270" role="img" aria-label="오늘 정상에서 시작하든 고장에서 시작하든 며칠 뒤 고장 확률이 0.038로 수렴하는 그래프와 정상 상태 막대"></svg></div>
@@ -441,7 +449,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
       </div>
     </section>
 
-    <section class="slide" data-step="3" id="s-4-2d">
+    <section class="slide bdpage" data-step="3" id="s-4-2d">
       <div class="sh"><div class="sec">4-2 마르코프 과정 · 조건 보충</div><h2><span class="q">Q</span>정상분포가 있으면 언제나 그 분포로 수렴할까요?</h2></div>
       <div class="body split even">
         <div class="fig"><svg viewBox="0 0 420 270" role="img" aria-label="반례：A → B → A를 확실히 반복: 전이행렬 Q = [[0, 1], [1, 0]]; 정상분포는 존재: π = (0.5, 0.5)이면 πQ = π; A에서 시작하면 매일의 분포는 진동: (1, 0) → (0, 1) → (1, 0) → …"><rect x="8" y="8" width="404" height="76" rx="10" fill="#EEF4FB"/><text x="210" y="37" text-anchor="middle" fill="#1B2A4A" font-size="13" font-weight="800">반례：A → B → A를 확실히 반복</text><text x="210" y="63" text-anchor="middle" fill="#6B7280" font-size="11">전이행렬 Q = [[0, 1], [1, 0]]</text><rect x="8" y="94" width="404" height="76" rx="10" fill="#FCF3D9"/><text x="210" y="123" text-anchor="middle" fill="#1B2A4A" font-size="13" font-weight="800">정상분포는 존재</text><text x="210" y="149" text-anchor="middle" fill="#6B7280" font-size="11">π = (0.5, 0.5)이면 πQ = π</text><rect x="8" y="180" width="404" height="76" rx="10" fill="#E3F1EA"/><text x="210" y="209" text-anchor="middle" fill="#1B2A4A" font-size="13" font-weight="800">A에서 시작하면 매일의 분포는 진동</text><text x="210" y="235" text-anchor="middle" fill="#6B7280" font-size="11">(1, 0) → (0, 1) → (1, 0) → …</text></svg></div>
@@ -452,7 +460,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
       </div>
     </section>
 
-    <section class="slide" data-step="3" id="s-4-3a">
+    <section class="slide bdpage" data-step="3" id="s-4-3a">
       <div class="sh"><div class="sec">4-3 수리 모형의 역할</div><h2><span class="q">Q</span>수리 모형은 우리에게 무엇을 해 주고, 무엇을 조심해야 할까요?</h2></div>
       <div class="body split even">
         <div class="fig"><svg id="m37-role" viewBox="0 0 420 270" role="img" aria-label="수리 모형은 만약 ~라면을 따지는 엄밀한 사고 실험이고, 직감이 닿지 못하는 곳을 보여 주지만 현상의 일부만 취한 가정이므로 평가와 개선을 반복해야 함"></svg></div>

@@ -64,6 +64,14 @@ h2.big{font-size:30px;line-height:1.32}
 .ov-main{min-height:0;display:flex;flex-direction:column;gap:12px;padding:16px 24px 10px 36px}
 .ov-main .fig{flex:1 1 auto}
 .fig.plain{background:none;padding:0}
+.slide.bdpage{padding:0;gap:0}
+.slide.bdpage.on{display:grid;grid-template-columns:1fr 1fr;grid-template-rows:auto minmax(0,1fr);height:100%}
+.slide.bdpage .sh{grid-column:1;grid-row:1;padding:16px 24px 0 36px;min-width:0}
+.slide.bdpage .body{display:contents}
+.slide.bdpage .body>.fig,.slide.bdpage .body>.figcol{grid-column:1;grid-row:2;min-width:0;min-height:0}
+.slide.bdpage .fig{background:none;border-radius:0;padding:0}
+.slide.bdpage .body>.fig,.slide.bdpage .body>.figcol{padding:12px 24px 10px 36px}
+.slide.bdpage .side{grid-column:2;grid-row:1 / span 2;align-self:stretch;background:var(--panel);border-radius:0;padding:28px 36px 28px 28px}
 .ovpage .side.shade{background:var(--panel);border-radius:0;padding:28px 36px 28px 28px;height:100%}
 .ovpage .side.shade{gap:22px}
 .ovpage .bridge{display:flex;flex-direction:column;gap:28px}
@@ -375,7 +383,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
     </section>
 
     <!-- ④ 본문 ─────────────────────────────── -->
-    <section class="slide" data-step="3" id="s-4-1a">
+    <section class="slide bdpage" data-step="3" id="s-4-1a">
       <div class="sh"><div class="sec">4-1 선형회귀 원리 확장하기</div><h2><span class="q">Q</span>일반선형모형과 일반화선형모형은 무엇이 다를까요?</h2></div>
       <div class="body split even">
         <div class="fig"><svg id="m21-glm" viewBox="0 0 420 270" role="img" aria-label="GLM의 세 구성 요소와 예, 무작위 효과와 베이즈 추론의 서로 다른 확장 방향"></svg></div>
@@ -387,7 +395,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
       </div>
     </section>
 
-    <section class="slide" data-step="3" id="s-4-1b">
+    <section class="slide bdpage" data-step="3" id="s-4-1b">
       <div class="sh"><div class="sec">4-1 선형회귀 원리 확장하기</div><h2><span class="q">Q</span>0/1 데이터나 개수 데이터에 직선을 그으면 어떻게 될까요?</h2></div>
       <div class="body split even">
         <div class="fig"><svg id="m21-bad" viewBox="0 0 420 270" role="img" aria-label="생존 사망 데이터에 그은 직선은 0보다 작거나 1보다 커지고, 꽃 개수 데이터의 직선은 음수로 뻗음"></svg></div>
@@ -399,7 +407,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
       </div>
     </section>
 
-    <section class="slide" data-step="3" id="s-4-2a">
+    <section class="slide bdpage" data-step="3" id="s-4-2a">
       <div class="sh"><div class="sec">4-2 가능도와 최대가능도 방법</div><h2><span class="q">Q</span>잔차 대신 무엇으로 모형과 데이터의 적합도를 잴까요?</h2></div>
       <div class="body split even">
         <div class="figcol">
@@ -419,7 +427,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
       </div>
     </section>
 
-    <section class="slide" data-step="3" id="s-4-2b">
+    <section class="slide bdpage" data-step="3" id="s-4-2b">
       <div class="sh"><div class="sec">4-2 가능도와 최대가능도 방법</div><h2><span class="q">Q</span>가능도를 이용해 파라미터를 어떻게 정할까요?</h2></div>
       <div class="body split even">
         <div class="fig"><svg id="m21-mle" viewBox="0 0 420 270" role="img" aria-label="μ가 40, 50, 60인 정규분포와 데이터 히스토그램, μ에 따른 로그 가능도 곡선과 최댓값 49.4"></svg></div>
@@ -431,7 +439,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
       </div>
     </section>
 
-    <section class="slide" data-step="3" id="s-4-3a">
+    <section class="slide bdpage" data-step="3" id="s-4-3a">
       <div class="sh"><div class="sec">4-3 로지스틱 회귀</div><h2><span class="q">Q</span>생존/사망 데이터는 어떤 모형으로 나타낼까요?</h2></div>
       <div class="body split even">
         <div class="fig"><svg id="m21-logit" viewBox="0 0 420 270" role="img" aria-label="벌레 30마리의 생존 사망 데이터와 최대가능도로 추정한 로지스틱 곡선"></svg></div>
@@ -443,7 +451,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
       </div>
     </section>
 
-    <section class="slide" data-step="3" id="s-4-3b">
+    <section class="slide bdpage" data-step="3" id="s-4-3b">
       <div class="sh"><div class="sec">4-3 로지스틱 회귀</div><h2><span class="q">Q</span>a + bx는 어떻게 0~1 사이의 확률로 바뀔까요?</h2></div>
       <div class="body split even">
         <div class="figcol">
@@ -463,7 +471,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
       </div>
     </section>
 
-    <section class="slide" data-step="3" id="s-4-3c">
+    <section class="slide bdpage" data-step="3" id="s-4-3c">
       <div class="sh"><div class="sec">4-3 로지스틱 회귀</div><h2><span class="q">Q</span>일반화선형모형은 어떤 부분으로 이루어질까요?</h2></div>
       <div class="body split even">
         <div class="fig"><svg id="m21-parts" viewBox="0 0 420 270" role="img" aria-label="선형예측변수 a + bx, 연결함수 로짓, 확률분포 이항분포의 세 부분"></svg></div>
@@ -475,7 +483,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
       </div>
     </section>
 
-    <section class="slide" data-step="3" id="s-4-4a">
+    <section class="slide bdpage" data-step="3" id="s-4-4a">
       <div class="sh"><div class="sec">4-4 오즈비</div><h2><span class="q">Q</span>‘얼마나 더 일어나기 쉬운가’는 어떻게 나타낼까요?</h2></div>
       <div class="body split even">
         <div class="figcol">
@@ -495,7 +503,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
       </div>
     </section>
 
-    <section class="slide" data-step="3" id="s-4-4d">
+    <section class="slide bdpage" data-step="3" id="s-4-4d">
       <div class="sh"><div class="sec">4-4 오즈비</div><h2><span class="q">Q</span>같은 오즈비라도 확률의 변화는 같을까요?</h2></div>
       <div class="body split even">
         <div class="fig"><svg viewBox="0 0 420 270" role="img" aria-label="오즈비 R에서 확률로 환산: p₁ = R·p₀ ÷ (1 − p₀ + R·p₀); OR = 2, 기준 확률 p₀ = 0.10: p₁ ≈ 0.182 / 위험비 ≈ 1.82; OR = 2, 기준 확률 p₀ = 0.50: p₁ ≈ 0.667 / 위험비 ≈ 1.33"><rect x="8" y="8" width="404" height="76" rx="10" fill="#EEF4FB"/><text x="210" y="37" text-anchor="middle" fill="#1B2A4A" font-size="13" font-weight="800">오즈비 R에서 확률로 환산</text><text x="210" y="63" text-anchor="middle" fill="#6B7280" font-size="11">p₁ = R·p₀ ÷ (1 − p₀ + R·p₀)</text><rect x="8" y="94" width="404" height="76" rx="10" fill="#FCF3D9"/><text x="210" y="123" text-anchor="middle" fill="#1B2A4A" font-size="13" font-weight="800">OR = 2, 기준 확률 p₀ = 0.10</text><text x="210" y="149" text-anchor="middle" fill="#6B7280" font-size="11">p₁ ≈ 0.182 / 위험비 ≈ 1.82</text><rect x="8" y="180" width="404" height="76" rx="10" fill="#E3F1EA"/><text x="210" y="209" text-anchor="middle" fill="#1B2A4A" font-size="13" font-weight="800">OR = 2, 기준 확률 p₀ = 0.50</text><text x="210" y="235" text-anchor="middle" fill="#6B7280" font-size="11">p₁ ≈ 0.667 / 위험비 ≈ 1.33</text></svg></div>
@@ -506,7 +514,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
       </div>
     </section>
 
-    <section class="slide" data-step="3" id="s-4-4b">
+    <section class="slide bdpage" data-step="3" id="s-4-4b">
       <div class="sh"><div class="sec">4-4 오즈비</div><h2><span class="q">Q</span>로지스틱 회귀의 계수와 오즈비는 어떤 관계일까요?</h2></div>
       <div class="body split even">
         <div class="fig"><svg id="m21-orci" viewBox="0 0 420 270" role="img" aria-label="벌레 데이터의 오즈비 2.40과 95% 신뢰구간 1.33~4.34, 1을 포함하지 않음"></svg></div>
@@ -518,7 +526,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
       </div>
     </section>
 
-    <section class="slide" data-step="3" id="s-4-4c">
+    <section class="slide bdpage" data-step="3" id="s-4-4c">
       <div class="sh"><div class="sec">4-4 오즈비</div><h2><span class="q">Q</span>사례-대조 연구에서는 왜 오즈비를 쓸까요?</h2></div>
       <div class="body split even">
         <div class="fig"><svg id="m21-cc" viewBox="0 0 420 270" role="img" aria-label="대조군 흡연 비율을 고정한 예: 표 안 비율비는 1.83에서 2.25로 바뀌고 오즈비는 3.5로 같음"></svg></div>

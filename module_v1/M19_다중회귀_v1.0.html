@@ -64,6 +64,14 @@ h2.big{font-size:30px;line-height:1.32}
 .ov-main{min-height:0;display:flex;flex-direction:column;gap:12px;padding:16px 24px 10px 36px}
 .ov-main .fig{flex:1 1 auto}
 .fig.plain{background:none;padding:0}
+.slide.bdpage{padding:0;gap:0}
+.slide.bdpage.on{display:grid;grid-template-columns:1fr 1fr;grid-template-rows:auto minmax(0,1fr);height:100%}
+.slide.bdpage .sh{grid-column:1;grid-row:1;padding:16px 24px 0 36px;min-width:0}
+.slide.bdpage .body{display:contents}
+.slide.bdpage .body>.fig,.slide.bdpage .body>.figcol{grid-column:1;grid-row:2;min-width:0;min-height:0}
+.slide.bdpage .fig{background:none;border-radius:0;padding:0}
+.slide.bdpage .body>.fig,.slide.bdpage .body>.figcol{padding:12px 24px 10px 36px}
+.slide.bdpage .side{grid-column:2;grid-row:1 / span 2;align-self:stretch;background:var(--panel);border-radius:0;padding:28px 36px 28px 28px}
 .ovpage .side.shade{background:var(--panel);border-radius:0;padding:28px 36px 28px 28px;height:100%}
 .ovpage .side.shade{gap:22px}
 .ovpage .bridge{display:flex;flex-direction:column;gap:28px}
@@ -377,7 +385,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
     </section>
 
     <!-- ④ 본문 ─────────────────────────────── -->
-    <section class="slide" data-step="3" id="s-4-1a">
+    <section class="slide bdpage" data-step="3" id="s-4-1a">
       <div class="sh"><div class="sec">4-1 선형회귀의 확장</div><h2><span class="q">Q</span>단순선형회귀는 어떤 방향으로 넓힐 수 있을까요?</h2></div>
       <div class="body split even">
         <div class="fig"><svg id="m19-ext" viewBox="0 0 420 270" role="img" aria-label="설명변수 늘리기와 유형 바꾸기, 반응변수의 오차 분포 바꾸기, 모형 형태 바꾸기의 세 방향"></svg></div>
@@ -389,7 +397,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
       </div>
     </section>
 
-    <section class="slide" data-step="3" id="s-4-2a">
+    <section class="slide bdpage" data-step="3" id="s-4-2a">
       <div class="sh"><div class="sec">4-2 다중회귀와 편회귀계수</div><h2><span class="q">Q</span>설명변수가 여러 개이면 회귀식은 어떻게 될까요?</h2></div>
       <div class="body split even">
         <div class="figcol">
@@ -409,7 +417,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
       </div>
     </section>
 
-    <section class="slide" data-step="3" id="s-4-2b">
+    <section class="slide bdpage" data-step="3" id="s-4-2b">
       <div class="sh"><div class="sec">4-2 다중회귀와 편회귀계수</div><h2><span class="q">Q</span>다중회귀 결과표에서는 무엇을 봐야 할까요?</h2></div>
       <div class="body split even">
         <div class="fig"><svg id="m19-table" viewBox="0 0 420 270" role="img" aria-label="편회귀계수, 표준오차, p값, R², 조정 R², F통계량이 담긴 다중회귀 결과표"></svg></div>
@@ -421,7 +429,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
       </div>
     </section>
 
-    <section class="slide" data-step="3" id="s-4-2c">
+    <section class="slide bdpage" data-step="3" id="s-4-2c">
       <div class="sh"><div class="sec">4-2 다중회귀와 편회귀계수</div><h2><span class="q">Q</span>편회귀계수끼리 크기를 비교해도 될까요?</h2></div>
       <div class="body split even">
         <div class="figcol">
@@ -441,7 +449,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
       </div>
     </section>
 
-    <section class="slide" data-step="3" id="s-4-2d">
+    <section class="slide bdpage" data-step="3" id="s-4-2d">
       <div class="sh"><div class="sec">4-2 다중회귀와 편회귀계수</div><h2><span class="q">Q</span>설명변수끼리 상관이 있으면 계수는 어떻게 해석할까요?</h2></div>
       <div class="body split even">
         <div class="fig"><svg id="m19-path" viewBox="0 0 420 270" role="img" aria-label="키와 허리의 상관 0.49와 조건부 연관을 표현한 모형도. 기울기 0.724와 0.538의 차이가 인과효과를 뜻하지는 않음"></svg></div>
@@ -453,7 +461,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
       </div>
     </section>
 
-    <section class="slide" data-step="3" id="s-4-3a">
+    <section class="slide bdpage" data-step="3" id="s-4-3a">
       <div class="sh"><div class="sec">4-3 범주형 설명변수</div><h2><span class="q">Q</span>운동 여부 같은 범주형 변수는 어떻게 회귀에 넣을까요?</h2></div>
       <div class="body split even">
         <div class="fig"><svg id="m19-dummy" viewBox="0 0 420 270" role="img" aria-label="운동 안 함 0, 함 1의 가변수와 두 집단 평균, 기울기 b가 평균 차이"></svg></div>
@@ -465,7 +473,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
       </div>
     </section>
 
-    <section class="slide" data-step="3" id="s-4-3b">
+    <section class="slide bdpage" data-step="3" id="s-4-3b">
       <div class="sh"><div class="sec">4-3 범주형 설명변수</div><h2><span class="q">Q</span>혈액형처럼 범주가 4개이면 가변수는 몇 개일까요?</h2></div>
       <div class="body split even">
         <div class="fig"><svg id="m19-blood" viewBox="0 0 420 270" role="img" aria-label="혈액형 A, B, O, AB에 가변수 3개를 할당한 표와 A형 기준 차이 b1, b2, b3"></svg></div>
@@ -477,7 +485,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
       </div>
     </section>
 
-    <section class="slide" data-step="3" id="s-4-4a">
+    <section class="slide bdpage" data-step="3" id="s-4-4a">
       <div class="sh"><div class="sec">4-4 공분산분석</div><h2><span class="q">Q</span>키를 고려하면 운동 여부와 몸무게의 관련성은 어떻게 달라질까요?</h2></div>
       <div class="body split even">
         <div class="fig"><svg id="m19-ancova" viewBox="0 0 420 270" role="img" aria-label="운동 여부별로 키와 몸무게의 평행한 회귀직선, 직선 간 차이 −3.60kg"></svg></div>
@@ -489,7 +497,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
       </div>
     </section>
 
-    <section class="slide" data-step="3" id="s-4-4b">
+    <section class="slide bdpage" data-step="3" id="s-4-4b">
       <div class="sh"><div class="sec">4-4 공분산분석</div><h2><span class="q">Q</span>공분산분석은 언제 쓸 수 있을까요?</h2></div>
       <div class="body split even">
         <div class="fig"><svg id="m19-cond" viewBox="0 0 420 270" role="img" aria-label="공통 기울기 모형, 기울기가 다를 때의 상호작용 확장, 공변량 연관이 약할 때 설계에 따른 선택"></svg></div>

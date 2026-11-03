@@ -64,6 +64,14 @@ h2.big{font-size:30px;line-height:1.32}
 .ov-main{min-height:0;display:flex;flex-direction:column;gap:12px;padding:16px 24px 10px 36px}
 .ov-main .fig{flex:1 1 auto}
 .fig.plain{background:none;padding:0}
+.slide.bdpage{padding:0;gap:0}
+.slide.bdpage.on{display:grid;grid-template-columns:1fr 1fr;grid-template-rows:auto minmax(0,1fr);height:100%}
+.slide.bdpage .sh{grid-column:1;grid-row:1;padding:16px 24px 0 36px;min-width:0}
+.slide.bdpage .body{display:contents}
+.slide.bdpage .body>.fig,.slide.bdpage .body>.figcol{grid-column:1;grid-row:2;min-width:0;min-height:0}
+.slide.bdpage .fig{background:none;border-radius:0;padding:0}
+.slide.bdpage .body>.fig,.slide.bdpage .body>.figcol{padding:12px 24px 10px 36px}
+.slide.bdpage .side{grid-column:2;grid-row:1 / span 2;align-self:stretch;background:var(--panel);border-radius:0;padding:28px 36px 28px 28px}
 .ovpage .side.shade{background:var(--panel);border-radius:0;padding:28px 36px 28px 28px;height:100%}
 .ovpage .side.shade{gap:22px}
 .ovpage .bridge{display:flex;flex-direction:column;gap:28px}
@@ -377,7 +385,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
     </section>
 
     <!-- ④ 본문 ─────────────────────────────── -->
-    <section class="slide" data-step="3" id="s-4-1a">
+    <section class="slide bdpage" data-step="3" id="s-4-1a">
       <div class="sh"><div class="sec">4-1 범주형 데이터</div><h2><span class="q">Q</span>범주별 개수로 어떤 확률을 추정할까요?</h2></div>
       <div class="body split even">
         <div class="fig"><svg id="m16-cat" viewBox="0 0 420 270" role="img" aria-label="양적 데이터는 평균, 범주형 데이터는 각 범주가 나올 확률 P가 모수"></svg></div>
@@ -389,7 +397,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
       </div>
     </section>
 
-    <section class="slide" data-step="3" id="s-4-1b">
+    <section class="slide bdpage" data-step="3" id="s-4-1b">
       <div class="sh"><div class="sec">4-1 범주형 데이터 · 보충</div><h2><span class="q">Q</span>개수·비율·백분율·%p는 어떻게 다를까요?</h2></div>
       <div class="body split even">
         <div class="fig"><svg viewBox="0 0 420 270" role="img" aria-label="별도 가상 예: A 70/100, B 90/150: A는 70%, B는 60%: 전체 수가 다릅니다.; A−B의 비율 차이: 0.70−0.60 = 0.10: 백분율 차이는 10%p; B를 기준으로 한 상대 증가: (0.70−0.60)/0.60: 약 16.7% 증가: 10%p와 다른 값"><rect x="8" y="8" width="404" height="76" rx="10" fill="#EEF4FB"/><text x="210" y="37" text-anchor="middle" fill="#1B2A4A" font-size="13" font-weight="800">별도 가상 예: A 70/100, B 90/150</text><text x="210" y="63" text-anchor="middle" fill="#6B7280" font-size="11">A는 70%, B는 60%: 전체 수가 다릅니다.</text><rect x="8" y="94" width="404" height="76" rx="10" fill="#FCF3D9"/><text x="210" y="123" text-anchor="middle" fill="#1B2A4A" font-size="13" font-weight="800">A−B의 비율 차이: 0.70−0.60 = 0.10</text><text x="210" y="149" text-anchor="middle" fill="#6B7280" font-size="11">백분율 차이는 10%p</text><rect x="8" y="180" width="404" height="76" rx="10" fill="#E3F1EA"/><text x="210" y="209" text-anchor="middle" fill="#1B2A4A" font-size="13" font-weight="800">B를 기준으로 한 상대 증가: (0.70−0.60)/0.60</text><text x="210" y="235" text-anchor="middle" fill="#6B7280" font-size="11">약 16.7% 증가: 10%p와 다른 값</text></svg></div>
@@ -400,7 +408,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
       </div>
     </section>
 
-    <section class="slide" data-step="3" id="s-4-2a">
+    <section class="slide bdpage" data-step="3" id="s-4-2a">
       <div class="sh"><div class="sec">4-2 이항검정</div><h2><span class="q">Q</span>30번 중 앞면 21번, 치우친 동전일까요?</h2></div>
       <div class="body split even">
         <div class="fig"><svg id="m16-coin" viewBox="0 0 420 270" role="img" aria-label="앞면 21번, 뒷면 9번. 귀무가설 앞면 확률 1/2, 대립가설 1/2이 아님"></svg></div>
@@ -412,7 +420,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
       </div>
     </section>
 
-    <section class="slide" data-step="3" id="s-4-2b">
+    <section class="slide bdpage" data-step="3" id="s-4-2b">
       <div class="sh"><div class="sec">4-2 이항검정</div><h2><span class="q">Q</span>앞면 21번 이상으로 극단적인 결과는 얼마나 드물까요?</h2></div>
       <div class="body split even">
         <div class="figcol">
@@ -432,7 +440,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
       </div>
     </section>
 
-    <section class="slide" data-step="3" id="s-4-3a">
+    <section class="slide bdpage" data-step="3" id="s-4-3a">
       <div class="sh"><div class="sec">4-3 카이제곱 적합도검정</div><h2><span class="q">Q</span>범주가 6개인 주사위는 어떻게 검정할까요?</h2></div>
       <div class="body split even">
         <div class="fig"><svg id="m16-dice" viewBox="0 0 420 270" role="img" aria-label="주사위 60번 던진 눈별 관측도수 5, 8, 10, 20, 7, 10과 기대도수 10"></svg></div>
@@ -444,7 +452,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
       </div>
     </section>
 
-    <section class="slide" data-step="3" id="s-4-3b">
+    <section class="slide bdpage" data-step="3" id="s-4-3b">
       <div class="sh"><div class="sec">4-3 카이제곱 적합도검정</div><h2><span class="q">Q</span>예상과 벗어난 정도는 어떻게 하나의 값으로 모을까요?</h2></div>
       <div class="body split even">
         <div class="figcol">
@@ -464,7 +472,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
       </div>
     </section>
 
-    <section class="slide" data-step="3" id="s-4-4a">
+    <section class="slide bdpage" data-step="3" id="s-4-4a">
       <div class="sh"><div class="sec">4-4 카이제곱 독립성검정</div><h2><span class="q">Q</span>나무 종류에 따라 사슴벌레 암수 비율이 다를까요?</h2></div>
       <div class="body split even">
         <div class="fig"><svg id="m16-indep" viewBox="0 0 420 270" role="img" aria-label="굴밤나무 수컷 14 암컷 9, 상수리나무 수컷 6 암컷 17 분할표와 독립의 뜻"></svg></div>
@@ -476,7 +484,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
       </div>
     </section>
 
-    <section class="slide" data-step="3" id="s-4-4b">
+    <section class="slide bdpage" data-step="3" id="s-4-4b">
       <div class="sh"><div class="sec">4-4 카이제곱 독립성검정</div><h2><span class="q">Q</span>독립이라면 각 칸에 몇 마리씩 기대될까요?</h2></div>
       <div class="body split even">
         <div class="fig"><svg id="m16-exp" viewBox="0 0 420 270" role="img" aria-label="관측도수 표와 행·열 합계로 구한 기대도수 표 10, 13, 10, 13"></svg></div>
@@ -488,7 +496,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
       </div>
     </section>
 
-    <section class="slide" data-step="3" id="s-4-4c">
+    <section class="slide bdpage" data-step="3" id="s-4-4c">
       <div class="sh"><div class="sec">4-4 카이제곱 독립성검정</div><h2><span class="q">Q</span>χ²값은 얼마이고, 결론은 무엇일까요?</h2></div>
       <div class="body split even">
         <div class="fig"><svg id="m16-res" viewBox="0 0 420 270" role="img" aria-label="보정 없는 χ² 5.66 p 0.017, 연속성 보정 χ² 4.33 p 0.037, 피셔의 정확검정 p 0.036"></svg></div>
@@ -500,7 +508,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
       </div>
     </section>
 
-    <section class="slide" data-step="3" id="s-4-4d">
+    <section class="slide bdpage" data-step="3" id="s-4-4d">
       <div class="sh"><div class="sec">4-4 검정 조건 · 보충</div><h2><span class="q">Q</span>기대도수가 작으면 어떻게 할까요?</h2></div>
       <div class="body split even">
         <div class="fig"><svg viewBox="0 0 420 270" role="img" aria-label="별도 2×2 표: [4,6], [0,10] · 전체 20건: 독립성 아래 기대도수: [2,8], [2,8]; Pearson χ² = 5, 근사 양측 p≈0.025: 작은 기대도수 때문에 근사가 부정확할 수 있음; 주변합을 조건으로 한 양측 Fisher p≈0.087: 방법을 사전에 정하고, 도수·비율·방법을 함께 보고"><rect x="8" y="8" width="404" height="76" rx="10" fill="#EEF4FB"/><text x="210" y="37" text-anchor="middle" fill="#1B2A4A" font-size="13" font-weight="800">별도 2×2 표: [4,6], [0,10] · 전체 20건</text><text x="210" y="63" text-anchor="middle" fill="#6B7280" font-size="11">독립성 아래 기대도수: [2,8], [2,8]</text><rect x="8" y="94" width="404" height="76" rx="10" fill="#FCF3D9"/><text x="210" y="123" text-anchor="middle" fill="#1B2A4A" font-size="13" font-weight="800">Pearson χ² = 5, 근사 양측 p≈0.025</text><text x="210" y="149" text-anchor="middle" fill="#6B7280" font-size="11">작은 기대도수 때문에 근사가 부정확할 수 있음</text><rect x="8" y="180" width="404" height="76" rx="10" fill="#E3F1EA"/><text x="210" y="209" text-anchor="middle" fill="#1B2A4A" font-size="13" font-weight="800">주변합을 조건으로 한 양측 Fisher p≈0.087</text><text x="210" y="235" text-anchor="middle" fill="#6B7280" font-size="11">방법을 사전에 정하고, 도수·비율·방법을 함께 보고</text></svg></div>

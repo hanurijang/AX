@@ -64,6 +64,14 @@ h2.big{font-size:30px;line-height:1.32}
 .ov-main{min-height:0;display:flex;flex-direction:column;gap:12px;padding:16px 24px 10px 36px}
 .ov-main .fig{flex:1 1 auto}
 .fig.plain{background:none;padding:0}
+.slide.bdpage{padding:0;gap:0}
+.slide.bdpage.on{display:grid;grid-template-columns:1fr 1fr;grid-template-rows:auto minmax(0,1fr);height:100%}
+.slide.bdpage .sh{grid-column:1;grid-row:1;padding:16px 24px 0 36px;min-width:0}
+.slide.bdpage .body{display:contents}
+.slide.bdpage .body>.fig,.slide.bdpage .body>.figcol{grid-column:1;grid-row:2;min-width:0;min-height:0}
+.slide.bdpage .fig{background:none;border-radius:0;padding:0}
+.slide.bdpage .body>.fig,.slide.bdpage .body>.figcol{padding:12px 24px 10px 36px}
+.slide.bdpage .side{grid-column:2;grid-row:1 / span 2;align-self:stretch;background:var(--panel);border-radius:0;padding:28px 36px 28px 28px}
 .ovpage .side.shade{background:var(--panel);border-radius:0;padding:28px 36px 28px 28px;height:100%}
 .ovpage .side.shade{gap:22px}
 .ovpage .bridge{display:flex;flex-direction:column;gap:28px}
@@ -379,7 +387,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
     </section>
 
     <!-- ④ 본문 ─────────────────────────────── -->
-    <section class="slide" data-step="3" id="s-4-1a">
+    <section class="slide bdpage" data-step="3" id="s-4-1a">
       <div class="sh"><div class="sec">4-1 확률분포와 파라미터</div><h2><span class="q">Q</span>이론적인 확률분포는 무엇으로 정해질까요?</h2></div>
       <div class="body split even">
         <div class="fig"><svg id="m7-param" viewBox="0 0 420 270" role="img" aria-label="정규분포라는 틀에 μ와 σ 두 파라미터를 넣으면 분포 형태가 정해짐"></svg></div>
@@ -391,7 +399,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
       </div>
     </section>
 
-    <section class="slide" data-step="3" id="s-4-2a">
+    <section class="slide bdpage" data-step="3" id="s-4-2a">
       <div class="sh"><div class="sec">4-2 정규분포</div><h2><span class="q">Q</span>가장 자주 쓰는 확률분포는 어떤 모양일까요?</h2></div>
       <div class="body split even">
         <div class="fig"><svg id="m7-norm" viewBox="0 0 420 270" role="img" aria-label="평균 167.6, 표준편차 7.0인 정규분포의 확률밀도함수와 수식"></svg></div>
@@ -403,7 +411,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
       </div>
     </section>
 
-    <section class="slide" data-step="3" id="s-4-2b">
+    <section class="slide bdpage" data-step="3" id="s-4-2b">
       <div class="sh"><div class="sec">4-2 정규분포</div><h2><span class="q">Q</span>μ와 σ를 바꾸면 분포는 어떻게 될까요?</h2></div>
       <div class="body split even">
         <div class="fig"><svg id="m7-four" viewBox="0 0 420 270" role="img" aria-label="μ와 σ를 바꾼 네 개의 정규분포 곡선"></svg></div>
@@ -415,7 +423,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
       </div>
     </section>
 
-    <section class="slide" data-step="3" id="s-4-2c">
+    <section class="slide bdpage" data-step="3" id="s-4-2c">
       <div class="sh"><div class="sec">4-2 정규분포</div><h2><span class="q">Q</span>값은 어느 범위에 얼마나 들어갈까요?</h2></div>
       <div class="body split even">
         <div class="figcol">
@@ -435,7 +443,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
       </div>
     </section>
 
-    <section class="slide" data-step="3" id="s-4-3a">
+    <section class="slide bdpage" data-step="3" id="s-4-3a">
       <div class="sh"><div class="sec">4-3 표준화</div><h2><span class="q">Q</span>180cm 남성과 170cm 여성, 누가 더 드물까요?</h2></div>
       <div class="body split even">
         <div class="figcol">
@@ -455,7 +463,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
       </div>
     </section>
 
-    <section class="slide" data-step="3" id="s-4-3b">
+    <section class="slide bdpage" data-step="3" id="s-4-3b">
       <div class="sh"><div class="sec">4-3 표준화</div><h2><span class="q">Q</span>시험 점수에서는 표준화를 어떻게 쓸까요?</h2></div>
       <div class="body split even">
         <div class="figcol">
@@ -475,7 +483,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
       </div>
     </section>
 
-    <section class="slide" data-step="3" id="s-4-3c">
+    <section class="slide bdpage" data-step="3" id="s-4-3c">
       <div class="sh"><div class="sec">4-3 표준화</div><h2><span class="q">Q</span>표준화하면 어떤 자료든 정규분포가 될까요?</h2></div>
       <div class="body split even">
         <div class="fig"><svg viewBox="0 0 420 270" role="img" aria-label="표준화: z = (x − μ) ÷ σ: 위치와 척도 변환 / 유한 분산·σ &gt; 0 필요; 평균 0·분산 1인 균등분포도 있음: 구간 [−√3, √3] / 표준화해도 균등분포; 같은 평균·분산이어도 꼬리 확률은 다름: |z| ≤ 2: 위 균등분포 100% / 정규분포 약 95.45%"><rect x="8" y="8" width="404" height="76" rx="10" fill="#EEF4FB"/><text x="210" y="37" text-anchor="middle" fill="#1B2A4A" font-size="13" font-weight="800">표준화: z = (x − μ) ÷ σ</text><text x="210" y="63" text-anchor="middle" fill="#6B7280" font-size="11">위치와 척도 변환 / 유한 분산·σ &gt; 0 필요</text><rect x="8" y="94" width="404" height="76" rx="10" fill="#FCF3D9"/><text x="210" y="123" text-anchor="middle" fill="#1B2A4A" font-size="13" font-weight="800">평균 0·분산 1인 균등분포도 있음</text><text x="210" y="149" text-anchor="middle" fill="#6B7280" font-size="11">구간 [−√3, √3] / 표준화해도 균등분포</text><rect x="8" y="180" width="404" height="76" rx="10" fill="#E3F1EA"/><text x="210" y="209" text-anchor="middle" fill="#1B2A4A" font-size="13" font-weight="800">같은 평균·분산이어도 꼬리 확률은 다름</text><text x="210" y="235" text-anchor="middle" fill="#6B7280" font-size="11">|z| ≤ 2: 위 균등분포 100% / 정규분포 약 95.45%</text></svg></div>
@@ -486,7 +494,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
       </div>
     </section>
 
-    <section class="slide" data-step="3" id="s-4-4a">
+    <section class="slide bdpage" data-step="3" id="s-4-4a">
       <div class="sh"><div class="sec">4-4 다양한 확률분포</div><h2><span class="q">Q</span>정규분포 말고 어떤 확률분포가 있을까요?</h2></div>
       <div class="body split even">
         <div class="fig"><svg id="m7-zoo" viewBox="0 0 420 270" role="img" aria-label="이산형, 연속형, 둘 다인 확률분포와 검정통계량이 따르는 확률분포"></svg></div>

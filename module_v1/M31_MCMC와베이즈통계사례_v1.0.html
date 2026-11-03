@@ -64,6 +64,14 @@ h2.big{font-size:30px;line-height:1.32}
 .ov-main{min-height:0;display:flex;flex-direction:column;gap:12px;padding:16px 24px 10px 36px}
 .ov-main .fig{flex:1 1 auto}
 .fig.plain{background:none;padding:0}
+.slide.bdpage{padding:0;gap:0}
+.slide.bdpage.on{display:grid;grid-template-columns:1fr 1fr;grid-template-rows:auto minmax(0,1fr);height:100%}
+.slide.bdpage .sh{grid-column:1;grid-row:1;padding:16px 24px 0 36px;min-width:0}
+.slide.bdpage .body{display:contents}
+.slide.bdpage .body>.fig,.slide.bdpage .body>.figcol{grid-column:1;grid-row:2;min-width:0;min-height:0}
+.slide.bdpage .fig{background:none;border-radius:0;padding:0}
+.slide.bdpage .body>.fig,.slide.bdpage .body>.figcol{padding:12px 24px 10px 36px}
+.slide.bdpage .side{grid-column:2;grid-row:1 / span 2;align-self:stretch;background:var(--panel);border-radius:0;padding:28px 36px 28px 28px}
 .ovpage .side.shade{background:var(--panel);border-radius:0;padding:28px 36px 28px 28px;height:100%}
 .ovpage .side.shade{gap:22px}
 .ovpage .bridge{display:flex;flex-direction:column;gap:28px}
@@ -388,7 +396,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
     </section>
 
     <!-- ④ 본문 ─────────────────────────────── -->
-    <section class="slide" data-step="3" id="s-4-1a">
+    <section class="slide bdpage" data-step="3" id="s-4-1a">
       <div class="sh"><div class="sec">4-1 MCMC 방법 · 기초</div><h2><span class="q">Q</span>난수만으로 원주율을 구할 수 있을까요?</h2></div>
       <div class="body split even">
         <div class="figcol">
@@ -408,7 +416,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
       </div>
     </section>
 
-    <section class="slide" data-step="3" id="s-4-1b">
+    <section class="slide bdpage" data-step="3" id="s-4-1b">
       <div class="sh"><div class="sec">4-1 MCMC 방법 · 기초</div><h2><span class="q">Q</span>내일의 상태가 오늘에만 달려 있다면 어떻게 될까요?</h2></div>
       <div class="body split even">
         <div class="fig"><svg id="m31-mk" viewBox="0 0 420 270" role="img" aria-label="설비 상태 정상과 고장의 전이 확률, 오래 지나면 정상 비율이 0.857로 수렴"></svg></div>
@@ -420,7 +428,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
       </div>
     </section>
 
-    <section class="slide" data-step="3" id="s-4-1c">
+    <section class="slide bdpage" data-step="3" id="s-4-1c">
       <div class="sh"><div class="sec">4-1 MCMC 방법 · 기초</div><h2><span class="q">Q</span>처음 뽑은 값들도 사후분포로 써도 될까요?</h2></div>
       <div class="body split even">
         <div class="fig"><svg id="m31-gibbs" viewBox="0 0 420 270" role="img" aria-label="상관계수 0.7인 2차원 정규분포에서 초기 상태 (5, 5)부터 깁스 표집이 가로·세로로 번갈아 움직이며 중앙으로 모여 듦"></svg></div>
@@ -432,7 +440,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
       </div>
     </section>
 
-    <section class="slide" data-step="3" id="s-4-1d">
+    <section class="slide bdpage" data-step="3" id="s-4-1d">
       <div class="sh"><div class="sec">4-1 MCMC · 진단 보충</div><h2><span class="q">Q</span>오래 실행하고 번인을 버리면 충분할까요?</h2></div>
       <div class="body split even">
         <div class="fig"><svg viewBox="0 0 420 270" role="img" aria-label="여러 초기값과 체인: 같은 영역을 탐색하는지, 분포가 안정적인지 확인; R̂와 자기상관: 체인 간 차이·체인 내 의존성을 함께 점검; 저장 개수 ≠ 유효표본크기: ESS와 몬테카를로 오차는 요약량별로 확인"><rect x="8" y="8" width="404" height="76" rx="10" fill="#EEF4FB"/><text x="210" y="37" text-anchor="middle" fill="#1B2A4A" font-size="13" font-weight="800">여러 초기값과 체인</text><text x="210" y="63" text-anchor="middle" fill="#6B7280" font-size="11">같은 영역을 탐색하는지, 분포가 안정적인지 확인</text><rect x="8" y="94" width="404" height="76" rx="10" fill="#FCF3D9"/><text x="210" y="123" text-anchor="middle" fill="#1B2A4A" font-size="13" font-weight="800">R̂와 자기상관</text><text x="210" y="149" text-anchor="middle" fill="#6B7280" font-size="11">체인 간 차이·체인 내 의존성을 함께 점검</text><rect x="8" y="180" width="404" height="76" rx="10" fill="#E3F1EA"/><text x="210" y="209" text-anchor="middle" fill="#1B2A4A" font-size="13" font-weight="800">저장 개수 ≠ 유효표본크기</text><text x="210" y="235" text-anchor="middle" fill="#6B7280" font-size="11">ESS와 몬테카를로 오차는 요약량별로 확인</text></svg></div>
@@ -443,7 +451,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
       </div>
     </section>
 
-    <section class="slide" data-step="3" id="s-4-2a">
+    <section class="slide bdpage" data-step="3" id="s-4-2a">
       <div class="sh"><div class="sec">4-2 이표본 평균값 비교 · 기초</div><h2><span class="q">Q</span>MCMC로 두 조건의 평균을 추정하면 어떻게 움직일까요?</h2></div>
       <div class="body split even">
         <div class="fig"><svg id="m31-trace" viewBox="0 0 420 270" role="img" aria-label="5개 체인의 μA, μB 추정치가 초기에는 크게 흔들리다 단계를 거듭할수록 550과 565 주변에서만 움직임"></svg></div>
@@ -455,7 +463,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
       </div>
     </section>
 
-    <section class="slide" data-step="3" id="s-4-2b">
+    <section class="slide bdpage" data-step="3" id="s-4-2b">
       <div class="sh"><div class="sec">4-2 이표본 평균값 비교 · 기초</div><h2><span class="q">Q</span>평균값 차이의 사후분포는 어떻게 요약할까요?</h2></div>
       <div class="body split even">
         <div class="figcol">
@@ -475,7 +483,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
       </div>
     </section>
 
-    <section class="slide" data-step="3" id="s-4-3a">
+    <section class="slide bdpage" data-step="3" id="s-4-3a">
       <div class="sh"><div class="sec">4-3 푸아송 회귀의 예 · 추가 읽기</div><h2><span class="q">Q</span>회귀계수도 분포로 얻을 수 있을까요?</h2></div>
       <div class="body split even">
         <div class="fig"><svg id="m31-pois" viewBox="0 0 420 270" role="img" aria-label="꽃 20그루 데이터와 푸아송 회귀의 절편 a, 기울기 b의 사후분포, a EAP −2.65, b EAP 0.589"></svg></div>
@@ -487,7 +495,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
       </div>
     </section>
 
-    <section class="slide" data-step="3" id="s-4-4a">
+    <section class="slide bdpage" data-step="3" id="s-4-4a">
       <div class="sh"><div class="sec">4-4 계층적 베이지안 모형 · 추가 읽기</div><h2><span class="q">Q</span>개체 차이의 퍼짐까지 추정하려면 어떻게 할까요?</h2></div>
       <div class="body split even">
         <div class="fig"><svg id="m31-hier" viewBox="0 0 420 270" role="img" aria-label="초사전분포 p(s), 계층적 사전분포 p(ri|s), 라인별 차이 ri, 데이터로 이어지는 계층 구조"></svg></div>

@@ -64,6 +64,14 @@ h2.big{font-size:30px;line-height:1.32}
 .ov-main{min-height:0;display:flex;flex-direction:column;gap:12px;padding:16px 24px 10px 36px}
 .ov-main .fig{flex:1 1 auto}
 .fig.plain{background:none;padding:0}
+.slide.bdpage{padding:0;gap:0}
+.slide.bdpage.on{display:grid;grid-template-columns:1fr 1fr;grid-template-rows:auto minmax(0,1fr);height:100%}
+.slide.bdpage .sh{grid-column:1;grid-row:1;padding:16px 24px 0 36px;min-width:0}
+.slide.bdpage .body{display:contents}
+.slide.bdpage .body>.fig,.slide.bdpage .body>.figcol{grid-column:1;grid-row:2;min-width:0;min-height:0}
+.slide.bdpage .fig{background:none;border-radius:0;padding:0}
+.slide.bdpage .body>.fig,.slide.bdpage .body>.figcol{padding:12px 24px 10px 36px}
+.slide.bdpage .side{grid-column:2;grid-row:1 / span 2;align-self:stretch;background:var(--panel);border-radius:0;padding:28px 36px 28px 28px}
 .ovpage .side.shade{background:var(--panel);border-radius:0;padding:28px 36px 28px 28px;height:100%}
 .ovpage .side.shade{gap:22px}
 .ovpage .bridge{display:flex;flex-direction:column;gap:28px}
@@ -410,7 +418,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
     </section>
 
     <!-- ④ 본문 ─────────────────────────────── -->
-    <section class="slide" data-step="3" id="s-4-1a">
+    <section class="slide bdpage" data-step="3" id="s-4-1a">
       <div class="sh"><div class="sec">4-1 분산분석의 가설</div><h2><span class="q">Q</span>세 집단 이상의 평균값은 어떤 가설로 비교할까요?</h2></div>
       <div class="body split even">
         <div class="fig"><svg id="m15-hyp" viewBox="0 0 420 270" role="img" aria-label="귀무가설 모든 집단의 평균이 같다, 대립가설 적어도 한 쌍에는 차이가 있다, A·B·C 세 쌍"></svg></div>
@@ -422,7 +430,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
       </div>
     </section>
 
-    <section class="slide" data-step="3" id="s-4-2a">
+    <section class="slide bdpage" data-step="3" id="s-4-2a">
       <div class="sh"><div class="sec">4-2 분산분석의 원리</div><h2><span class="q">Q</span>데이터의 흩어짐은 어떻게 두 부분으로 나뉠까요?</h2></div>
       <div class="body split even">
         <div class="fig"><svg id="m15-split" viewBox="0 0 420 270" role="img" aria-label="18개 데이터와 집단 평균, 전체 평균. 집단 내 변동과 집단 간 변동"></svg></div>
@@ -434,7 +442,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
       </div>
     </section>
 
-    <section class="slide" data-step="3" id="s-4-2b">
+    <section class="slide bdpage" data-step="3" id="s-4-2b">
       <div class="sh"><div class="sec">4-2 분산분석의 원리</div><h2><span class="q">Q</span>두 변동의 비율로 어떻게 판단할까요?</h2></div>
       <div class="body split even">
         <div class="figcol">
@@ -454,7 +462,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
       </div>
     </section>
 
-    <section class="slide" data-step="3" id="s-4-2c">
+    <section class="slide bdpage" data-step="3" id="s-4-2c">
       <div class="sh"><div class="sec">4-2 분산분석의 원리</div><h2><span class="q">Q</span>F값 계산에서 나눈 2와 15는 무엇일까요?</h2></div>
       <div class="body split even">
         <div class="fig"><svg id="m15-df" viewBox="0 0 420 270" role="img" aria-label="표본 10개의 평균이 정해지면 9개만 자유롭게 정할 수 있음. 비료 예시의 자유도 2와 15"></svg></div>
@@ -466,7 +474,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
       </div>
     </section>
 
-    <section class="slide" data-step="3" id="s-4-3a">
+    <section class="slide bdpage" data-step="3" id="s-4-3a">
       <div class="sh"><div class="sec">4-3 검정 다중성</div><h2><span class="q">Q</span>t검정을 쌍마다 반복하면 왜 안 될까요?</h2></div>
       <div class="body split even">
         <div class="figcol">
@@ -486,7 +494,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
       </div>
     </section>
 
-    <section class="slide" data-step="3" id="s-4-3b">
+    <section class="slide bdpage" data-step="3" id="s-4-3b">
       <div class="sh"><div class="sec">4-3 검정 다중성</div><h2><span class="q">Q</span>검정을 반복하면서 전체 유의수준을 지키려면?</h2></div>
       <div class="body split even">
         <div class="figcol">
@@ -506,7 +514,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
       </div>
     </section>
 
-    <section class="slide" data-step="3" id="s-4-4a">
+    <section class="slide bdpage" data-step="3" id="s-4-4a">
       <div class="sh"><div class="sec">4-4 다중비교 방법</div><h2><span class="q">Q</span>모든 쌍을 비교하면서 검정력도 지키려면?</h2></div>
       <div class="body split even">
         <div class="fig"><svg id="m15-tukey" viewBox="0 0 420 270" role="img" aria-label="비료 A, B, C 평균과 표준오차 막대그래프, 튜키 검정 결과 A–B 별 1개, A–C와 B–C 별 3개"></svg></div>
@@ -518,7 +526,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
       </div>
     </section>
 
-    <section class="slide" data-step="3" id="s-4-4b">
+    <section class="slide bdpage" data-step="3" id="s-4-4b">
       <div class="sh"><div class="sec">4-4 다중비교 방법</div><h2><span class="q">Q</span>비교하고 싶은 쌍이 정해져 있다면 어떤 방법을 쓸까요?</h2></div>
       <div class="body split even">
         <div class="fig"><svg id="m15-three" viewBox="0 0 420 270" role="img" aria-label="튜키는 모든 쌍, 던넷은 대조군과 각 실험군, 윌리엄스는 처리량에 따른 단조 증가"></svg></div>
@@ -530,7 +538,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
       </div>
     </section>
 
-    <section class="slide" data-step="3" id="s-4-4c">
+    <section class="slide bdpage" data-step="3" id="s-4-4c">
       <div class="sh"><div class="sec">4-4 다중비교 방법</div><h2><span class="q">Q</span>다중비교 전에 언제나 분산분석이 필요할까요?</h2></div>
       <div class="body split even">
         <div class="fig"><svg id="m15-order" viewBox="0 0 420 270" role="img" aria-label="전체 F검정과 개별 비교는 다른 질문. 사전 계획한 다중비교는 단독 수행도 가능하며 F검정 후 수행 자체가 오류율을 증가시키지는 않음"></svg></div>
@@ -542,7 +550,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
       </div>
     </section>
 
-    <section class="slide" data-step="3" id="s-4-5a">
+    <section class="slide bdpage" data-step="3" id="s-4-5a">
       <div class="sh"><div class="sec">4-5 세 집단 이상의 비모수검정</div><h2><span class="q">Q</span>정규성이 없는 집단이 있으면 어떻게 비교할까요?</h2></div>
       <div class="body split even">
         <div class="fig"><svg id="m15-np" viewBox="0 0 420 270" role="img" aria-label="18개 데이터 순위와 집단별 순위합 25, 53, 93, 순위 검정별 비교 범위"></svg></div>
@@ -554,7 +562,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
       </div>
     </section>
 
-    <section class="slide" data-step="3" id="s-4-5b">
+    <section class="slide bdpage" data-step="3" id="s-4-5b">
       <div class="sh"><div class="sec">4-5 질문과 가정</div><h2><span class="q">Q</span>정규성 검정이 유의하면 곧바로 순위검정으로 바꿀까요?</h2></div>
       <div class="body split even">
         <div class="fig"><svg viewBox="0 0 420 270" role="img" aria-label="먼저 연구 질문과 표집 설계를 확인: 평균 차이인가 / 분포·위치 차이인가 / 독립인가; 평균이 질문이고 집단 분산이 다르다면: Welch 분산분석 등 이분산 방법 검토; 순위 비교도 적용 조건과 근사 정확도 확인: 동일 분포 검정 ≠ 언제나 평균·중앙값 검정"><rect x="8" y="8" width="404" height="76" rx="10" fill="#EEF4FB"/><text x="210" y="37" text-anchor="middle" fill="#1B2A4A" font-size="13" font-weight="800">먼저 연구 질문과 표집 설계를 확인</text><text x="210" y="63" text-anchor="middle" fill="#6B7280" font-size="11">평균 차이인가 / 분포·위치 차이인가 / 독립인가</text><rect x="8" y="94" width="404" height="76" rx="10" fill="#FCF3D9"/><text x="210" y="123" text-anchor="middle" fill="#1B2A4A" font-size="13" font-weight="800">평균이 질문이고 집단 분산이 다르다면</text><text x="210" y="149" text-anchor="middle" fill="#6B7280" font-size="11">Welch 분산분석 등 이분산 방법 검토</text><rect x="8" y="180" width="404" height="76" rx="10" fill="#E3F1EA"/><text x="210" y="209" text-anchor="middle" fill="#1B2A4A" font-size="13" font-weight="800">순위 비교도 적용 조건과 근사 정확도 확인</text><text x="210" y="235" text-anchor="middle" fill="#6B7280" font-size="11">동일 분포 검정 ≠ 언제나 평균·중앙값 검정</text></svg></div>

@@ -64,6 +64,14 @@ h2.big{font-size:30px;line-height:1.32}
 .ov-main{min-height:0;display:flex;flex-direction:column;gap:12px;padding:16px 24px 10px 36px}
 .ov-main .fig{flex:1 1 auto}
 .fig.plain{background:none;padding:0}
+.slide.bdpage{padding:0;gap:0}
+.slide.bdpage.on{display:grid;grid-template-columns:1fr 1fr;grid-template-rows:auto minmax(0,1fr);height:100%}
+.slide.bdpage .sh{grid-column:1;grid-row:1;padding:16px 24px 0 36px;min-width:0}
+.slide.bdpage .body{display:contents}
+.slide.bdpage .body>.fig,.slide.bdpage .body>.figcol{grid-column:1;grid-row:2;min-width:0;min-height:0}
+.slide.bdpage .fig{background:none;border-radius:0;padding:0}
+.slide.bdpage .body>.fig,.slide.bdpage .body>.figcol{padding:12px 24px 10px 36px}
+.slide.bdpage .side{grid-column:2;grid-row:1 / span 2;align-self:stretch;background:var(--panel);border-radius:0;padding:28px 36px 28px 28px}
 .ovpage .side.shade{background:var(--panel);border-radius:0;padding:28px 36px 28px 28px;height:100%}
 .ovpage .side.shade{gap:22px}
 .ovpage .bridge{display:flex;flex-direction:column;gap:28px}
@@ -384,7 +392,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
     </section>
 
     <!-- ④ 본문 ─────────────────────────────── -->
-    <section class="slide" data-step="3" id="s-4-1a">
+    <section class="slide bdpage" data-step="3" id="s-4-1a">
       <div class="sh"><div class="sec">4-1 확률과 확률변수</div><h2><span class="q">Q</span>확률이란 정확히 무엇일까요?</h2></div>
       <div class="body split even">
         <div class="fig"><svg id="m6-bag" viewBox="0 0 420 270" role="img" aria-label="붉은 구슬 4개, 흰 구슬 1개가 든 주머니에서 하나를 꺼낼 때의 확률"></svg></div>
@@ -396,7 +404,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
       </div>
     </section>
 
-    <section class="slide" data-step="3" id="s-4-1b">
+    <section class="slide bdpage" data-step="3" id="s-4-1b">
       <div class="sh"><div class="sec">4-1 확률과 확률변수</div><h2><span class="q">Q</span>확률이 붙은 변수는 무엇이라 부를까요?</h2></div>
       <div class="body split even">
         <div class="fig"><svg id="m6-rv" viewBox="0 0 420 270" role="img" aria-label="확률변수 X와 실현값, 이산형과 연속형 확률변수의 예"></svg></div>
@@ -408,7 +416,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
       </div>
     </section>
 
-    <section class="slide" data-step="3" id="s-4-2a">
+    <section class="slide bdpage" data-step="3" id="s-4-2a">
       <div class="sh"><div class="sec">4-2 확률분포</div><h2><span class="q">Q</span>확률변수의 확률은 어떻게 그릴까요?</h2></div>
       <div class="body split even">
         <div class="fig"><svg id="m6-disc" viewBox="0 0 420 270" role="img" aria-label="구슬과 주사위의 이산형 확률분포 막대그래프"></svg></div>
@@ -420,7 +428,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
       </div>
     </section>
 
-    <section class="slide" data-step="3" id="s-4-2b">
+    <section class="slide bdpage" data-step="3" id="s-4-2b">
       <div class="sh"><div class="sec">4-2 확률분포</div><h2><span class="q">Q</span>연속형 확률변수의 확률은 어떻게 구할까요?</h2></div>
       <div class="body split even">
         <div class="figcol">
@@ -440,7 +448,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
       </div>
     </section>
 
-    <section class="slide" data-step="3" id="s-4-3a">
+    <section class="slide bdpage" data-step="3" id="s-4-3a">
       <div class="sh"><div class="sec">4-3 추론통계와 기댓값</div><h2><span class="q">Q</span>통계학에서 확률분포는 왜 중요할까요?</h2></div>
       <div class="body split even">
         <div class="fig"><svg id="m6-infer" viewBox="0 0 420 270" role="img" aria-label="현실 세계의 모집단을 수학 세계의 확률분포로 가정하고 표본을 실현값으로 봄"></svg></div>
@@ -452,7 +460,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
       </div>
     </section>
 
-    <section class="slide" data-step="3" id="s-4-3b">
+    <section class="slide bdpage" data-step="3" id="s-4-3b">
       <div class="sh"><div class="sec">4-3 추론통계와 기댓값</div><h2><span class="q">Q</span>확률분포의 ‘평균’은 어떻게 구할까요?</h2></div>
       <div class="body split even">
         <div class="figcol">
@@ -472,7 +480,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
       </div>
     </section>
 
-    <section class="slide" data-step="3" id="s-4-3d">
+    <section class="slide bdpage" data-step="3" id="s-4-3d">
       <div class="sh"><div class="sec">4-3 기댓값 · 보충</div><h2><span class="q">Q</span>기댓값과 이번 실험의 평균은 같을까요?</h2></div>
       <div class="body split even">
         <div class="fig"><svg viewBox="0 0 420 270" role="img" aria-label="분포의 평균: E(X) = 3.5: 공정한 주사위라는 모형으로 결정; 실현값의 평균: x̄ = (x₁ + … + xₙ)/n: 관측한 결과에 따라 매번 달라짐; 독립 반복에서 평균의 분산 = (35/12)/n: 횟수가 늘면 변동이 작아지지만 매번 더 가까워지지는 않음"><rect x="8" y="8" width="404" height="76" rx="10" fill="#EEF4FB"/><text x="210" y="37" text-anchor="middle" fill="#1B2A4A" font-size="13" font-weight="800">분포의 평균: E(X) = 3.5</text><text x="210" y="63" text-anchor="middle" fill="#6B7280" font-size="11">공정한 주사위라는 모형으로 결정</text><rect x="8" y="94" width="404" height="76" rx="10" fill="#FCF3D9"/><text x="210" y="123" text-anchor="middle" fill="#1B2A4A" font-size="13" font-weight="800">실현값의 평균: x̄ = (x₁ + … + xₙ)/n</text><text x="210" y="149" text-anchor="middle" fill="#6B7280" font-size="11">관측한 결과에 따라 매번 달라짐</text><rect x="8" y="180" width="404" height="76" rx="10" fill="#E3F1EA"/><text x="210" y="209" text-anchor="middle" fill="#1B2A4A" font-size="13" font-weight="800">독립 반복에서 평균의 분산 = (35/12)/n</text><text x="210" y="235" text-anchor="middle" fill="#6B7280" font-size="11">횟수가 늘면 변동이 작아지지만 매번 더 가까워지지는 않음</text></svg></div>
@@ -483,7 +491,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
       </div>
     </section>
 
-    <section class="slide" data-step="3" id="s-4-3c">
+    <section class="slide bdpage" data-step="3" id="s-4-3c">
       <div class="sh"><div class="sec">4-3 추론통계와 기댓값</div><h2><span class="q">Q</span>확률분포의 퍼짐과 모양은 어떻게 나타낼까요?</h2></div>
       <div class="body split even">
         <div class="figcol">
@@ -503,7 +511,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
       </div>
     </section>
 
-    <section class="slide" data-step="3" id="s-4-4a">
+    <section class="slide bdpage" data-step="3" id="s-4-4a">
       <div class="sh"><div class="sec">4-4 확률변수가 2개일 때</div><h2><span class="q">Q</span>두 주사위를 함께 던지면 확률은 어떻게 될까요?</h2></div>
       <div class="body split even">
         <div class="figcol">
@@ -523,7 +531,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
       </div>
     </section>
 
-    <section class="slide" data-step="3" id="s-4-4b">
+    <section class="slide bdpage" data-step="3" id="s-4-4b">
       <div class="sh"><div class="sec">4-4 확률변수가 2개일 때</div><h2><span class="q">Q</span>독립이 아닌 경우는 어떤 모습일까요?</h2></div>
       <div class="body split even">
         <div class="fig"><svg id="m6-outfit" viewBox="0 0 420 270" role="img" aria-label="티셔츠와 바지를 아무렇게나 고를 때 9가지 조합, 맞춰 입을 때 3가지 조합"></svg></div>
@@ -535,7 +543,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
       </div>
     </section>
 
-    <section class="slide" data-step="3" id="s-4-4c">
+    <section class="slide bdpage" data-step="3" id="s-4-4c">
       <div class="sh"><div class="sec">4-4 확률변수가 2개일 때</div><h2><span class="q">Q</span>한쪽을 알면 다른 쪽의 확률은 어떻게 바뀔까요?</h2></div>
       <div class="body split even">
         <div class="fig"><svg id="m6-cond" viewBox="0 0 420 270" role="img" aria-label="바지 색을 알 때 티셔츠 색의 조건부확률 표"></svg></div>

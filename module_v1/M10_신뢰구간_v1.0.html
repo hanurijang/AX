@@ -64,6 +64,14 @@ h2.big{font-size:30px;line-height:1.32}
 .ov-main{min-height:0;display:flex;flex-direction:column;gap:12px;padding:16px 24px 10px 36px}
 .ov-main .fig{flex:1 1 auto}
 .fig.plain{background:none;padding:0}
+.slide.bdpage{padding:0;gap:0}
+.slide.bdpage.on{display:grid;grid-template-columns:1fr 1fr;grid-template-rows:auto minmax(0,1fr);height:100%}
+.slide.bdpage .sh{grid-column:1;grid-row:1;padding:16px 24px 0 36px;min-width:0}
+.slide.bdpage .body{display:contents}
+.slide.bdpage .body>.fig,.slide.bdpage .body>.figcol{grid-column:1;grid-row:2;min-width:0;min-height:0}
+.slide.bdpage .fig{background:none;border-radius:0;padding:0}
+.slide.bdpage .body>.fig,.slide.bdpage .body>.figcol{padding:12px 24px 10px 36px}
+.slide.bdpage .side{grid-column:2;grid-row:1 / span 2;align-self:stretch;background:var(--panel);border-radius:0;padding:28px 36px 28px 28px}
 .ovpage .side.shade{background:var(--panel);border-radius:0;padding:28px 36px 28px 28px;height:100%}
 .ovpage .side.shade{gap:22px}
 .ovpage .bridge{display:flex;flex-direction:column;gap:28px}
@@ -381,7 +389,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
     </section>
 
     <!-- ④ 본문 ─────────────────────────────── -->
-    <section class="slide" data-step="3" id="s-4-1a">
+    <section class="slide bdpage" data-step="3" id="s-4-1a">
       <div class="sh"><div class="sec">4-1 신뢰구간이란</div><h2><span class="q">Q</span>표준오차로 모평균의 범위를 어떻게 구할까요?</h2></div>
       <div class="body split even">
         <div class="fig"><svg id="m10-derive" viewBox="0 0 420 270" role="img" aria-label="표본오차 분포의 약 95퍼센트 범위를 μ에 관한 범위로 바꾸는 과정"></svg></div>
@@ -393,7 +401,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
       </div>
     </section>
 
-    <section class="slide" data-step="3" id="s-4-1b">
+    <section class="slide bdpage" data-step="3" id="s-4-1b">
       <div class="sh"><div class="sec">4-1 신뢰구간이란</div><h2><span class="q">Q</span>10명의 키로 신뢰구간을 구하면 얼마일까요?</h2></div>
       <div class="body split even">
         <div class="figcol">
@@ -413,7 +421,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
       </div>
     </section>
 
-    <section class="slide" data-step="3" id="s-4-2a">
+    <section class="slide bdpage" data-step="3" id="s-4-2a">
       <div class="sh"><div class="sec">4-2 신뢰구간의 해석</div><h2><span class="q">Q</span>‘95%’는 정확히 무슨 뜻일까요?</h2></div>
       <div class="body split even">
         <div class="fig"><svg id="m10-twenty" viewBox="0 0 420 270" role="img" aria-label="같은 모집단에서 10명씩 20번 뽑아 그린 95퍼센트 신뢰구간, 1개가 모평균을 포함하지 않음"></svg></div>
@@ -425,7 +433,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
       </div>
     </section>
 
-    <section class="slide" data-step="3" id="s-4-2b">
+    <section class="slide bdpage" data-step="3" id="s-4-2b">
       <div class="sh"><div class="sec">4-2 신뢰구간의 해석</div><h2><span class="q">Q</span>신뢰구간의 폭은 무엇을 알려 줄까요?</h2></div>
       <div class="body split even">
         <div class="fig"><svg id="m10-width" viewBox="0 0 420 270" role="img" aria-label="좁은 신뢰구간과 넓은 신뢰구간, 95퍼센트와 99퍼센트"></svg></div>
@@ -437,7 +445,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
       </div>
     </section>
 
-    <section class="slide" data-step="3" id="s-4-3a">
+    <section class="slide bdpage" data-step="3" id="s-4-3a">
       <div class="sh"><div class="sec">4-3 t분포와 95% 신뢰구간</div><h2><span class="q">Q</span>정규표본에서 95% 신뢰구간은 어떻게 구할까요?</h2></div>
       <div class="body split even">
         <div class="fig"><svg id="m10-tdist" viewBox="0 0 420 270" role="img" aria-label="표준정규분포의 ±1.96과 n이 10인 t분포의 ±2.26"></svg></div>
@@ -449,7 +457,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
       </div>
     </section>
 
-    <section class="slide" data-step="3" id="s-4-3b">
+    <section class="slide bdpage" data-step="3" id="s-4-3b">
       <div class="sh"><div class="sec">4-3 t분포와 95% 신뢰구간</div><h2><span class="q">Q</span>t분포로 구한 10명의 95% 신뢰구간은 얼마일까요?</h2></div>
       <div class="body split even">
         <div class="figcol">
@@ -469,7 +477,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
       </div>
     </section>
 
-    <section class="slide" data-step="3" id="s-4-4a">
+    <section class="slide bdpage" data-step="3" id="s-4-4a">
       <div class="sh"><div class="sec">4-4 정밀도를 높이려면</div><h2><span class="q">Q</span>신뢰구간을 좁히려면 어떻게 해야 할까요?</h2></div>
       <div class="body split even">
         <div class="figcol">
@@ -489,7 +497,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
       </div>
     </section>
 
-    <section class="slide" data-step="3" id="s-4-4b">
+    <section class="slide bdpage" data-step="3" id="s-4-4b">
       <div class="sh"><div class="sec">4-4 정밀도를 높이려면</div><h2><span class="q">Q</span>t분포를 쓸 때 주의할 점은 무엇일까요?</h2></div>
       <div class="body split even">
         <div class="fig"><svg id="m10-caution" viewBox="0 0 420 270" role="img" aria-label="t분포는 정규분포 가정이 필요하고, 같은 모형의 양측검정과 구간을 대응 관계"></svg></div>

@@ -64,6 +64,14 @@ h2.big{font-size:30px;line-height:1.32}
 .ov-main{min-height:0;display:flex;flex-direction:column;gap:12px;padding:16px 24px 10px 36px}
 .ov-main .fig{flex:1 1 auto}
 .fig.plain{background:none;padding:0}
+.slide.bdpage{padding:0;gap:0}
+.slide.bdpage.on{display:grid;grid-template-columns:1fr 1fr;grid-template-rows:auto minmax(0,1fr);height:100%}
+.slide.bdpage .sh{grid-column:1;grid-row:1;padding:16px 24px 0 36px;min-width:0}
+.slide.bdpage .body{display:contents}
+.slide.bdpage .body>.fig,.slide.bdpage .body>.figcol{grid-column:1;grid-row:2;min-width:0;min-height:0}
+.slide.bdpage .fig{background:none;border-radius:0;padding:0}
+.slide.bdpage .body>.fig,.slide.bdpage .body>.figcol{padding:12px 24px 10px 36px}
+.slide.bdpage .side{grid-column:2;grid-row:1 / span 2;align-self:stretch;background:var(--panel);border-radius:0;padding:28px 36px 28px 28px}
 .ovpage .side.shade{background:var(--panel);border-radius:0;padding:28px 36px 28px 28px;height:100%}
 .ovpage .side.shade{gap:22px}
 .ovpage .bridge{display:flex;flex-direction:column;gap:28px}
@@ -381,7 +389,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
     </section>
 
     <!-- ④ 본문 ─────────────────────────────── -->
-    <section class="slide" data-step="3" id="s-4-1a">
+    <section class="slide bdpage" data-step="3" id="s-4-1a">
       <div class="sh"><div class="sec">4-1 가설을 검증하는 분석</div><h2><span class="q">Q</span>가설을 검증하는 분석이란 무엇일까요?</h2></div>
       <div class="body split even">
         <div class="fig"><svg id="m11-cfa" viewBox="0 0 420 270" role="img" aria-label="확증적 자료분석과 탐색적 자료분석 비교"></svg></div>
@@ -393,7 +401,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
       </div>
     </section>
 
-    <section class="slide" data-step="3" id="s-4-1b">
+    <section class="slide bdpage" data-step="3" id="s-4-1b">
       <div class="sh"><div class="sec">4-1 가설을 검증하는 분석</div><h2><span class="q">Q</span>신약의 효과는 어떻게 검증할까요?</h2></div>
       <div class="body split even">
         <div class="fig"><svg id="m11-groups" viewBox="0 0 420 270" role="img" aria-label="고혈압 환자를 실험군과 대조군으로 나눠 최고 혈압을 비교"></svg></div>
@@ -405,7 +413,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
       </div>
     </section>
 
-    <section class="slide" data-step="3" id="s-4-2a">
+    <section class="slide bdpage" data-step="3" id="s-4-2a">
       <div class="sh"><div class="sec">4-2 귀무가설과 대립가설</div><h2><span class="q">Q</span>‘신약에 효과가 있다’를 통계학으로는 어떻게 쓸까요?</h2></div>
       <div class="body split even">
         <div class="fig"><svg id="m11-hyp" viewBox="0 0 420 270" role="img" aria-label="신약 모집단 A의 평균과 위약 모집단 B의 평균이 다르다는 가설"></svg></div>
@@ -417,7 +425,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
       </div>
     </section>
 
-    <section class="slide" data-step="3" id="s-4-2b">
+    <section class="slide bdpage" data-step="3" id="s-4-2b">
       <div class="sh"><div class="sec">4-2 귀무가설과 대립가설</div><h2><span class="q">Q</span>귀무가설의 기각과 비기각은 무슨 뜻일까요?</h2></div>
       <div class="body split even">
         <div class="fig"><svg id="m11-logic" viewBox="0 0 420 270" role="img" aria-label="귀무가설이 틀렸음을 보여 대립가설을 지지하는 흐름과 반대 방향은 불가능"></svg></div>
@@ -429,7 +437,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
       </div>
     </section>
 
-    <section class="slide" data-step="3" id="s-4-3a">
+    <section class="slide bdpage" data-step="3" id="s-4-3a">
       <div class="sh"><div class="sec">4-3 귀무가설이 옳은 세계</div><h2><span class="q">Q</span>효과가 없어도 표본평균에 차이가 생길까요?</h2></div>
       <div class="body split even">
         <div class="figcol">
@@ -449,7 +457,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
       </div>
     </section>
 
-    <section class="slide" data-step="3" id="s-4-3b">
+    <section class="slide bdpage" data-step="3" id="s-4-3b">
       <div class="sh"><div class="sec">4-3 귀무가설이 옳은 세계</div><h2><span class="q">Q</span>귀무가설이 옳은 세계에서는 어떤 차이가 나타날까요?</h2></div>
       <div class="body split even">
         <div class="fig"><svg id="m11-null" viewBox="0 0 420 270" role="img" aria-label="14명의 값을 7명씩 나누는 3,432가지 방법으로 만든 표본평균 차이의 분포"></svg></div>
@@ -461,7 +469,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
       </div>
     </section>
 
-    <section class="slide" data-step="3" id="s-4-4a">
+    <section class="slide bdpage" data-step="3" id="s-4-4a">
       <div class="sh"><div class="sec">4-4 p값과 유의수준</div><h2><span class="q">Q</span>현실의 −10.9은 가상 세계에서 얼마나 드물까요?</h2></div>
       <div class="body split even">
         <div class="figcol">
@@ -481,7 +489,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
       </div>
     </section>
 
-    <section class="slide" data-step="3" id="s-4-4b">
+    <section class="slide bdpage" data-step="3" id="s-4-4b">
       <div class="sh"><div class="sec">4-4 p값과 유의수준</div><h2><span class="q">Q</span>p값이 얼마면 귀무가설을 버릴까요?</h2></div>
       <div class="body split even">
         <div class="fig"><svg id="m11-alpha" viewBox="0 0 420 270" role="img" aria-label="p값이 0.05 이하이면 귀무가설 기각, 0.05를 넘으면 판단 보류"></svg></div>
@@ -493,7 +501,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
       </div>
     </section>
 
-    <section class="slide" data-step="3" id="s-4-4c">
+    <section class="slide bdpage" data-step="3" id="s-4-4c">
       <div class="sh"><div class="sec">4-4 p값과 유의수준</div><h2><span class="q">Q</span>가설검정의 흐름을 한 번에 정리하면 어떻게 될까요?</h2></div>
       <div class="body split even">
         <div class="fig"><svg id="m11-flow" viewBox="0 0 420 270" role="img" aria-label="가설 설정, 귀무가설 세계 상상, p값 계산, 유의수준과 비교하는 흐름"></svg></div>

@@ -64,6 +64,14 @@ h2.big{font-size:30px;line-height:1.32}
 .ov-main{min-height:0;display:flex;flex-direction:column;gap:12px;padding:16px 24px 10px 36px}
 .ov-main .fig{flex:1 1 auto}
 .fig.plain{background:none;padding:0}
+.slide.bdpage{padding:0;gap:0}
+.slide.bdpage.on{display:grid;grid-template-columns:1fr 1fr;grid-template-rows:auto minmax(0,1fr);height:100%}
+.slide.bdpage .sh{grid-column:1;grid-row:1;padding:16px 24px 0 36px;min-width:0}
+.slide.bdpage .body{display:contents}
+.slide.bdpage .body>.fig,.slide.bdpage .body>.figcol{grid-column:1;grid-row:2;min-width:0;min-height:0}
+.slide.bdpage .fig{background:none;border-radius:0;padding:0}
+.slide.bdpage .body>.fig,.slide.bdpage .body>.figcol{padding:12px 24px 10px 36px}
+.slide.bdpage .side{grid-column:2;grid-row:1 / span 2;align-self:stretch;background:var(--panel);border-radius:0;padding:28px 36px 28px 28px}
 .ovpage .side.shade{background:var(--panel);border-radius:0;padding:28px 36px 28px 28px;height:100%}
 .ovpage .side.shade{gap:22px}
 .ovpage .bridge{display:flex;flex-direction:column;gap:28px}
@@ -404,7 +412,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
     </section>
 
     <!-- ④ 본문 ─────────────────────────────── -->
-    <section class="slide" data-step="3" id="s-4-1a">
+    <section class="slide bdpage" data-step="3" id="s-4-1a">
       <div class="sh"><div class="sec">4-1 통계학의 두 흐름</div><h2><span class="q">Q</span>모르는 평균 μ의 불확실성은 어디에서 생길까요?</h2></div>
       <div class="body split even">
         <div class="fig"><svg id="m30-two" viewBox="0 0 420 270" role="img" aria-label="빈도주의는 θ를 고정된 값으로 보고 표본추출에서 불확실성이 생김, 베이즈는 θ의 불확실성을 사전분포와 사후분포로 나타냄"></svg></div>
@@ -416,7 +424,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
       </div>
     </section>
 
-    <section class="slide" data-step="3" id="s-4-2a">
+    <section class="slide bdpage" data-step="3" id="s-4-2a">
       <div class="sh"><div class="sec">4-2 베이즈 통계의 이미지</div><h2><span class="q">Q</span>측정값이 들어오면 μ에 대한 생각은 어떻게 바뀔까요?</h2></div>
       <div class="body split even">
         <div class="fig"><svg id="m30-img" viewBox="0 0 420 270" role="img" aria-label="데이터를 알기 전 400~700 MPa 균등분포에서, 측정값 583, 567, 533을 얻은 뒤 561 근처로 좁아진 분포"></svg></div>
@@ -428,7 +436,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
       </div>
     </section>
 
-    <section class="slide" data-step="3" id="s-4-3a">
+    <section class="slide bdpage" data-step="3" id="s-4-3a">
       <div class="sh"><div class="sec">4-3 통계 모형과 최대가능도 방법</div><h2><span class="q">Q</span>보이지 않는 모집단분포는 어떻게 다룰까요?</h2></div>
       <div class="body split even">
         <div class="fig"><svg id="m30-model" viewBox="0 0 420 270" role="img" aria-label="모집단의 실제 분포 q(x)에서 데이터를 얻고, 통계 모형 p(x|θ)의 θ를 추정해 예측분포 p*(x)를 만든 뒤 q(x)와 비교"></svg></div>
@@ -440,7 +448,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
       </div>
     </section>
 
-    <section class="slide" data-step="3" id="s-4-3b">
+    <section class="slide bdpage" data-step="3" id="s-4-3b">
       <div class="sh"><div class="sec">4-3 통계 모형과 최대가능도 방법</div><h2><span class="q">Q</span>데이터가 가장 나타나기 쉬운 μ는 얼마일까요?</h2></div>
       <div class="body split even">
         <div class="figcol">
@@ -460,7 +468,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
       </div>
     </section>
 
-    <section class="slide" data-step="3" id="s-4-4a">
+    <section class="slide bdpage" data-step="3" id="s-4-4a">
       <div class="sh"><div class="sec">4-4 베이즈 통계의 사고방식</div><h2><span class="q">Q</span>데이터를 얻기 전과 후의 분포는 어떻게 이어질까요?</h2></div>
       <div class="body split even">
         <div class="figcol">
@@ -480,7 +488,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
       </div>
     </section>
 
-    <section class="slide" data-step="3" id="s-4-4b">
+    <section class="slide bdpage" data-step="3" id="s-4-4b">
       <div class="sh"><div class="sec">4-4 베이즈 통계의 사고방식</div><h2><span class="q">Q</span>사전분포는 분석자가 마음대로 정해도 될까요?</h2></div>
       <div class="body split even">
         <div class="fig"><svg id="m30-prior" viewBox="0 0 420 270" role="img" aria-label="400~700 MPa 균등 사전분포와 기존 강종 정보를 담은 정규분포 사전분포에 같은 데이터 5장으로 구한 사후분포 비교"></svg></div>
@@ -492,7 +500,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
       </div>
     </section>
 
-    <section class="slide" data-step="3" id="s-4-4c">
+    <section class="slide bdpage" data-step="3" id="s-4-4c">
       <div class="sh"><div class="sec">4-4 베이즈 통계의 사고방식</div><h2><span class="q">Q</span>예측분포가 실제 분포와 얼마나 맞는지는 어떻게 잴까요?</h2></div>
       <div class="body split even">
         <div class="figcol">
@@ -512,7 +520,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
       </div>
     </section>
 
-    <section class="slide" data-step="3" id="s-4-4d">
+    <section class="slide bdpage" data-step="3" id="s-4-4d">
       <div class="sh"><div class="sec">4-4 사후분포와 예측</div><h2><span class="q">Q</span>평균이 기준 이상일 확률과 새 시험편의 통과 확률은 같을까요?</h2></div>
       <div class="body split even">
         <div class="fig"><svg viewBox="0 0 420 270" role="img" aria-label="평균 μ의 사후 불확실성: 5장 후 평균 555.4 / SD 약 8.94 MPa; 새 시험편의 사후 예측 불확실성: SD ≈ √(20² + 8.94²) ≈ 21.91 MPa; 550 MPa 이상일 확률 비교: P(μ ≥ 550 | 자료) ≈ 72.7% / P(x새 ≥ 550 | 자료) ≈ 59.7%"><rect x="8" y="8" width="404" height="76" rx="10" fill="#EEF4FB"/><text x="210" y="37" text-anchor="middle" fill="#1B2A4A" font-size="13" font-weight="800">평균 μ의 사후 불확실성</text><text x="210" y="63" text-anchor="middle" fill="#6B7280" font-size="11">5장 후 평균 555.4 / SD 약 8.94 MPa</text><rect x="8" y="94" width="404" height="76" rx="10" fill="#FCF3D9"/><text x="210" y="123" text-anchor="middle" fill="#1B2A4A" font-size="13" font-weight="800">새 시험편의 사후 예측 불확실성</text><text x="210" y="149" text-anchor="middle" fill="#6B7280" font-size="11">SD ≈ √(20² + 8.94²) ≈ 21.91 MPa</text><rect x="8" y="180" width="404" height="76" rx="10" fill="#E3F1EA"/><text x="210" y="209" text-anchor="middle" fill="#1B2A4A" font-size="13" font-weight="800">550 MPa 이상일 확률 비교</text><text x="210" y="235" text-anchor="middle" fill="#6B7280" font-size="11">P(μ ≥ 550 | 자료) ≈ 72.7% / P(x새 ≥ 550 | 자료) ≈ 59.7%</text></svg></div>
@@ -523,7 +531,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
       </div>
     </section>
 
-    <section class="slide" data-step="3" id="s-4-5a">
+    <section class="slide bdpage" data-step="3" id="s-4-5a">
       <div class="sh"><div class="sec">4-5 베이즈 통계의 이점</div><h2><span class="q">Q</span>파라미터를 분포로 얻으면 무엇이 좋을까요?</h2></div>
       <div class="body split even">
         <div class="fig"><svg id="m30-adv" viewBox="0 0 420 270" role="img" aria-label="시험편 5장 후 사후분포에서 μ가 550 이상일 확률 0.73을 색칠, 이점과 주의점"></svg></div>

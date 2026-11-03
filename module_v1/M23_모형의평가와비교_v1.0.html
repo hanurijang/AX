@@ -64,6 +64,14 @@ h2.big{font-size:30px;line-height:1.32}
 .ov-main{min-height:0;display:flex;flex-direction:column;gap:12px;padding:16px 24px 10px 36px}
 .ov-main .fig{flex:1 1 auto}
 .fig.plain{background:none;padding:0}
+.slide.bdpage{padding:0;gap:0}
+.slide.bdpage.on{display:grid;grid-template-columns:1fr 1fr;grid-template-rows:auto minmax(0,1fr);height:100%}
+.slide.bdpage .sh{grid-column:1;grid-row:1;padding:16px 24px 0 36px;min-width:0}
+.slide.bdpage .body{display:contents}
+.slide.bdpage .body>.fig,.slide.bdpage .body>.figcol{grid-column:1;grid-row:2;min-width:0;min-height:0}
+.slide.bdpage .fig{background:none;border-radius:0;padding:0}
+.slide.bdpage .body>.fig,.slide.bdpage .body>.figcol{padding:12px 24px 10px 36px}
+.slide.bdpage .side{grid-column:2;grid-row:1 / span 2;align-self:stretch;background:var(--panel);border-radius:0;padding:28px 36px 28px 28px}
 .ovpage .side.shade{background:var(--panel);border-radius:0;padding:28px 36px 28px 28px;height:100%}
 .ovpage .side.shade{gap:22px}
 .ovpage .bridge{display:flex;flex-direction:column;gap:28px}
@@ -379,7 +387,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
     </section>
 
     <!-- ④ 본문 ─────────────────────────────── -->
-    <section class="slide" data-step="3" id="s-4-1a">
+    <section class="slide bdpage" data-step="3" id="s-4-1a">
       <div class="sh"><div class="sec">4-1 왈드 검정과 가능도비 검정</div><h2><span class="q">Q</span>일반화선형모형의 회귀계수는 어떻게 검정할까요?</h2></div>
       <div class="body split even">
         <div class="figcol">
@@ -399,7 +407,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
       </div>
     </section>
 
-    <section class="slide" data-step="3" id="s-4-1b">
+    <section class="slide bdpage" data-step="3" id="s-4-1b">
       <div class="sh"><div class="sec">4-1 왈드 검정과 가능도비 검정</div><h2><span class="q">Q</span>항을 더한 모형이 정말 더 잘 들어맞을까요?</h2></div>
       <div class="body split even">
         <div class="figcol">
@@ -419,7 +427,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
       </div>
     </section>
 
-    <section class="slide" data-step="3" id="s-4-1c">
+    <section class="slide bdpage" data-step="3" id="s-4-1c">
       <div class="sh"><div class="sec">4-1 왈드 검정과 가능도비 검정</div><h2><span class="q">Q</span>ΔD가 충분히 큰지는 어떻게 판단할까요?</h2></div>
       <div class="body split even">
         <div class="fig"><svg id="m23-boot" viewBox="0 0 420 270" role="img" aria-label="귀무가설 모형에서 1,000번 데이터를 만들어 얻은 ΔD 히스토그램과 상위 5% 경계 3.82, 관찰값 0.16"></svg></div>
@@ -431,7 +439,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
       </div>
     </section>
 
-    <section class="slide" data-step="3" id="s-4-2a">
+    <section class="slide bdpage" data-step="3" id="s-4-2a">
       <div class="sh"><div class="sec">4-2 AIC</div><h2><span class="q">Q</span>잘 맞음과 복잡함을 함께 고려하는 기준은 무엇일까요?</h2></div>
       <div class="body split even">
         <div class="figcol">
@@ -451,7 +459,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
       </div>
     </section>
 
-    <section class="slide" data-step="3" id="s-4-2b">
+    <section class="slide bdpage" data-step="3" id="s-4-2b">
       <div class="sh"><div class="sec">4-2 AIC</div><h2><span class="q">Q</span>파라미터가 많은 모형은 왜 조심해야 할까요?</h2></div>
       <div class="body split even">
         <div class="fig"><svg id="m23-ovf" viewBox="0 0 420 270" role="img" aria-label="실제 모형은 직선인데 점 9개를 지나는 7차식은 새 데이터를 크게 빗나감, 차수별 잔차제곱합과 새 데이터 오차"></svg></div>
@@ -463,7 +471,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
       </div>
     </section>
 
-    <section class="slide" data-step="3" id="s-4-2c">
+    <section class="slide bdpage" data-step="3" id="s-4-2c">
       <div class="sh"><div class="sec">4-2 AIC</div><h2><span class="q">Q</span>AIC가 최소인 모형이 곧 실제 모형일까요?</h2></div>
       <div class="body split even">
         <div class="fig"><svg id="m23-caution" viewBox="0 0 420 270" role="img" aria-label="AIC 최소는 참모형 보장이 아니며, 선택 후 검정에는 선택 과정 고려가 필요"></svg></div>
@@ -475,7 +483,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
       </div>
     </section>
 
-    <section class="slide" data-step="3" id="s-4-3a">
+    <section class="slide bdpage" data-step="3" id="s-4-3a">
       <div class="sh"><div class="sec">4-3 BIC</div><h2><span class="q">Q</span>후보 중 실제 모형을 고르려면 어떤 기준을 쓸까요?</h2></div>
       <div class="body split even">
         <div class="figcol">
@@ -495,7 +503,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
       </div>
     </section>
 
-    <section class="slide" data-step="3" id="s-4-3b">
+    <section class="slide bdpage" data-step="3" id="s-4-3b">
       <div class="sh"><div class="sec">4-3 BIC</div><h2><span class="q">Q</span>AIC와 BIC는 언제 무엇을 쓸까요?</h2></div>
       <div class="body split even">
         <div class="fig"><svg id="m23-vs" viewBox="0 0 420 270" role="img" aria-label="AIC와 BIC의 관점, 벌점, 성질, 쓰는 상황 비교표"></svg></div>
@@ -507,7 +515,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
       </div>
     </section>
 
-    <section class="slide" data-step="3" id="s-4-4a">
+    <section class="slide bdpage" data-step="3" id="s-4-4a">
       <div class="sh"><div class="sec">4-4 그 밖의 정보기준</div><h2><span class="q">Q</span>AIC와 BIC를 쓰기 어려운 경우에는 무엇을 쓸까요?</h2></div>
       <div class="body split even">
         <div class="fig"><svg id="m23-other" viewBox="0 0 420 270" role="img" aria-label="AICc의 적용 조건, DIC의 주의점, WAIC의 예측 평가와 WBIC의 모형 증거 비교"></svg></div>
@@ -519,7 +527,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
       </div>
     </section>
 
-    <section class="slide" data-step="3" id="s-4-4b">
+    <section class="slide bdpage" data-step="3" id="s-4-4b">
       <div class="sh"><div class="sec">4-4 그 밖의 정보기준</div><h2><span class="q">Q</span>표본이 작으면 AICc로 항상 해결될까요?</h2></div>
       <div class="body split even">
         <div class="fig"><svg viewBox="0 0 420 270" role="img" aria-label="정규회귀의 표준 AICc: AICc = AIC + 2k(k+1) ÷ (n−k−1); 적용 조건: n &gt; k + 1: k = 회귀계수 수 + 오차분산 1개; n = 9: 1차식 k = 3 / 7차식 k = 9: 1차식 AICc ≈ 61.1 / 7차식은 정의되지 않음"><rect x="8" y="8" width="404" height="76" rx="10" fill="#EEF4FB"/><text x="210" y="37" text-anchor="middle" fill="#1B2A4A" font-size="13" font-weight="800">정규회귀의 표준 AICc</text><text x="210" y="63" text-anchor="middle" fill="#6B7280" font-size="11">AICc = AIC + 2k(k+1) ÷ (n−k−1)</text><rect x="8" y="94" width="404" height="76" rx="10" fill="#FCF3D9"/><text x="210" y="123" text-anchor="middle" fill="#1B2A4A" font-size="13" font-weight="800">적용 조건: n &gt; k + 1</text><text x="210" y="149" text-anchor="middle" fill="#6B7280" font-size="11">k = 회귀계수 수 + 오차분산 1개</text><rect x="8" y="180" width="404" height="76" rx="10" fill="#E3F1EA"/><text x="210" y="209" text-anchor="middle" fill="#1B2A4A" font-size="13" font-weight="800">n = 9: 1차식 k = 3 / 7차식 k = 9</text><text x="210" y="235" text-anchor="middle" fill="#6B7280" font-size="11">1차식 AICc ≈ 61.1 / 7차식은 정의되지 않음</text></svg></div>

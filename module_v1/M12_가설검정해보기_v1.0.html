@@ -64,6 +64,14 @@ h2.big{font-size:30px;line-height:1.32}
 .ov-main{min-height:0;display:flex;flex-direction:column;gap:12px;padding:16px 24px 10px 36px}
 .ov-main .fig{flex:1 1 auto}
 .fig.plain{background:none;padding:0}
+.slide.bdpage{padding:0;gap:0}
+.slide.bdpage.on{display:grid;grid-template-columns:1fr 1fr;grid-template-rows:auto minmax(0,1fr);height:100%}
+.slide.bdpage .sh{grid-column:1;grid-row:1;padding:16px 24px 0 36px;min-width:0}
+.slide.bdpage .body{display:contents}
+.slide.bdpage .body>.fig,.slide.bdpage .body>.figcol{grid-column:1;grid-row:2;min-width:0;min-height:0}
+.slide.bdpage .fig{background:none;border-radius:0;padding:0}
+.slide.bdpage .body>.fig,.slide.bdpage .body>.figcol{padding:12px 24px 10px 36px}
+.slide.bdpage .side{grid-column:2;grid-row:1 / span 2;align-self:stretch;background:var(--panel);border-radius:0;padding:28px 36px 28px 28px}
 .ovpage .side.shade{background:var(--panel);border-radius:0;padding:28px 36px 28px 28px;height:100%}
 .ovpage .side.shade{gap:22px}
 .ovpage .bridge{display:flex;flex-direction:column;gap:28px}
@@ -379,7 +387,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
     </section>
 
     <!-- ④ 본문 ─────────────────────────────── -->
-    <section class="slide" data-step="3" id="s-4-1a">
+    <section class="slide bdpage" data-step="3" id="s-4-1a">
       <div class="sh"><div class="sec">4-1 이표본 t검정의 계산</div><h2><span class="q">Q</span>두 집단의 차이를 어떤 값으로 바꿔 판단할까요?</h2></div>
       <div class="body split even">
         <div class="fig"><svg id="m12-std" viewBox="0 0 420 270" role="img" aria-label="표본평균 차이의 분포를 표준오차로 나눠 t분포로 바꾸는 과정"></svg></div>
@@ -391,7 +399,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
       </div>
     </section>
 
-    <section class="slide" data-step="3" id="s-4-1b">
+    <section class="slide bdpage" data-step="3" id="s-4-1b">
       <div class="sh"><div class="sec">4-1 이표본 t검정의 계산</div><h2><span class="q">Q</span>예 ①의 t값은 얼마일까요?</h2></div>
       <div class="body split even">
         <div class="figcol">
@@ -411,7 +419,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
       </div>
     </section>
 
-    <section class="slide" data-step="3" id="s-4-1c">
+    <section class="slide bdpage" data-step="3" id="s-4-1c">
       <div class="sh"><div class="sec">4-1 이표본 t검정 · 방법 비교 보충</div><h2><span class="q">Q</span>같은 혈압 자료인데 p값이 조금 다른 이유는 무엇일까요?</h2></div>
       <div class="body split even">
         <div class="fig"><svg viewBox="0 0 420 270" role="img" aria-label="M11: 순열검정: 개인별 효과 없음·7명씩 무작위 배정 → p ≈ 0.020; M12: 등분산 양측 t검정: 독립 정규·공통 모분산, 자유도 12 → p ≈ 0.018; 검정법과 가정도 결과의 일부: 모형·설계에 맞춰 사전에 선택하고 차이·구간도 보고"><rect x="8" y="8" width="404" height="76" rx="10" fill="#EEF4FB"/><text x="210" y="37" text-anchor="middle" fill="#1B2A4A" font-size="13" font-weight="800">M11: 순열검정</text><text x="210" y="63" text-anchor="middle" fill="#6B7280" font-size="11">개인별 효과 없음·7명씩 무작위 배정 → p ≈ 0.020</text><rect x="8" y="94" width="404" height="76" rx="10" fill="#FCF3D9"/><text x="210" y="123" text-anchor="middle" fill="#1B2A4A" font-size="13" font-weight="800">M12: 등분산 양측 t검정</text><text x="210" y="149" text-anchor="middle" fill="#6B7280" font-size="11">독립 정규·공통 모분산, 자유도 12 → p ≈ 0.018</text><rect x="8" y="180" width="404" height="76" rx="10" fill="#E3F1EA"/><text x="210" y="209" text-anchor="middle" fill="#1B2A4A" font-size="13" font-weight="800">검정법과 가정도 결과의 일부</text><text x="210" y="235" text-anchor="middle" fill="#6B7280" font-size="11">모형·설계에 맞춰 사전에 선택하고 차이·구간도 보고</text></svg></div>
@@ -422,7 +430,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
       </div>
     </section>
 
-    <section class="slide" data-step="3" id="s-4-2a">
+    <section class="slide bdpage" data-step="3" id="s-4-2a">
       <div class="sh"><div class="sec">4-2 기각역과 p값</div><h2><span class="q">Q</span>t값이 어디에 있으면 귀무가설을 기각할까요?</h2></div>
       <div class="body split even">
         <div class="fig"><svg id="m12-reject" viewBox="0 0 420 270" role="img" aria-label="자유도 12인 t분포의 양 끝 2.5퍼센트씩 기각역과 2.5퍼센트 지점 ±2.18"></svg></div>
@@ -434,7 +442,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
       </div>
     </section>
 
-    <section class="slide" data-step="3" id="s-4-2b">
+    <section class="slide bdpage" data-step="3" id="s-4-2b">
       <div class="sh"><div class="sec">4-2 기각역과 p값</div><h2><span class="q">Q</span>t = −2.73의 p값은 어떻게 구할까요?</h2></div>
       <div class="body split even">
         <div class="figcol">
@@ -454,7 +462,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
       </div>
     </section>
 
-    <section class="slide" data-step="3" id="s-4-3a">
+    <section class="slide bdpage" data-step="3" id="s-4-3a">
       <div class="sh"><div class="sec">4-3 신뢰구간과 가설검정</div><h2><span class="q">Q</span>신뢰구간과 가설검정은 어떤 관계일까요?</h2></div>
       <div class="body split even">
         <div class="fig"><svg id="m12-ci" viewBox="0 0 420 270" role="img" aria-label="μA−μB의 95퍼센트 신뢰구간이 0을 포함하는지와 p값이 0.05보다 작은지의 대응"></svg></div>
@@ -466,7 +474,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
       </div>
     </section>
 
-    <section class="slide" data-step="3" id="s-4-4a">
+    <section class="slide bdpage" data-step="3" id="s-4-4a">
       <div class="sh"><div class="sec">4-4 구체적인 예</div><h2><span class="q">Q</span>예 ①의 결론은 무엇이고, 어떻게 적을까요?</h2></div>
       <div class="body split even">
         <div class="fig"><svg id="m12-ex1" viewBox="0 0 420 270" role="img" aria-label="예 1의 표, s 7.44, t -2.73, p 0.018"></svg></div>
@@ -478,7 +486,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
       </div>
     </section>
 
-    <section class="slide" data-step="3" id="s-4-4b">
+    <section class="slide bdpage" data-step="3" id="s-4-4b">
       <div class="sh"><div class="sec">4-4 구체적인 예</div><h2><span class="q">Q</span>신약군이 6씩 높은 예 ②의 결론은 무엇일까요?</h2></div>
       <div class="body split even">
         <div class="fig"><svg id="m12-ex2" viewBox="0 0 420 270" role="img" aria-label="예 2의 표, t -1.22, p 0.246, 넓은 꼬리 넓이"></svg></div>
