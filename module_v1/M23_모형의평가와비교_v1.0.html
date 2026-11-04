@@ -243,6 +243,18 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
 .refs .refsource small{font-size:11px;font-weight:600;white-space:nowrap}
 .refs .refmeta{font-size:12px;color:var(--gray);line-height:1.45;margin-top:2px}
 .refs a:focus-visible{outline:2px solid var(--navy);outline-offset:2px;border-radius:2px}
+/* V3_VISUAL_TOOLS: all styles stay inside each standalone module. */
+.v3-sr{position:absolute!important;width:1px!important;height:1px!important;padding:0!important;margin:-1px!important;overflow:hidden!important;clip:rect(0,0,0,0)!important;white-space:nowrap!important;border:0!important}
+.v3-data{border-collapse:collapse;width:100%;font-size:13px;line-height:1.35;color:var(--navy);font-variant-numeric:tabular-nums}
+.v3-data caption{text-align:left;font-size:12px;font-weight:800;padding:0 0 6px}.v3-data th,.v3-data td{padding:6px 8px;border-bottom:1px solid var(--line);text-align:right}.v3-data th:first-child,.v3-data td:first-child{text-align:left}.v3-data thead{background:#EEF2F7}.v3-data tbody th{font-weight:700}.v3-compact th,.v3-compact td{padding:2px 4px;line-height:1.25}
+.sumtbl tbody th{background:none;color:var(--navy);font-weight:800;padding:10px 14px;border-bottom:1px solid var(--line);vertical-align:top;border-radius:0!important}.sumtbl tbody td{padding:10px 14px}.sumtbl tbody tr:nth-child(even) th{background:#F8F9FB}
+.v3-controls{display:flex;flex-wrap:wrap;gap:6px;flex:0 0 auto}.v3-controls button{font:inherit;font-size:12px;border:1px solid #CBD2DD;background:white;color:#1B2A4A;padding:4px 9px;border-radius:6px;cursor:pointer}.v3-controls button[aria-pressed="true"]{background:#1B2A4A;color:white}
+.v3-open{font:inherit;font-size:12px;padding:6px 10px;color:#1B2A4A;background:white;border:1px solid #CBD2DD;border-radius:7px;cursor:pointer}.v3-open:disabled{opacity:.45;cursor:default}
+.v3-dialog{box-sizing:border-box;width:min(96vw,1100px);max-width:96vw;max-height:94vh;padding:18px;border:1px solid #CBD2DD;border-radius:12px;background:white;color:#1B2A4A;font-size:16px;font-family:"Noto Sans KR","Malgun Gothic",sans-serif}.v3-dialog::backdrop{background:rgba(15,23,42,.65)}
+.v3-dialog h2{display:block;font-size:20px;margin:0 0 14px;line-height:1.4}.v3-toolbar{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin:8px 0 12px}.v3-toolbar label{display:flex;align-items:center;gap:6px}.v3-toolbar select{max-width:min(70vw,500px);padding:6px;font:inherit}.v3-toolbar button{font:inherit;font-size:14px;padding:7px 12px;border:1px solid #94A3B8;border-radius:6px;background:white;color:#1B2A4A;cursor:pointer}.v3-toolbar input{width:120px}
+.v3-canvas{overflow:auto;border:1px solid #D6DBE5;border-radius:8px;max-height:62vh;background:white}.v3-sheet{box-sizing:border-box;padding:18px}.v3-sheet svg{display:block;width:100%;height:auto;background:white}.v3-sheet table{width:100%;font-size:16px!important;line-height:1.5}.v3-sheet th,.v3-sheet td{font-size:16px!important;line-height:1.5;padding:8px 10px}.v3-sheet caption{font-size:16px!important;line-height:1.5;text-align:left;margin-bottom:8px}.v3-dialog p{font-size:14px;line-height:1.5;margin:10px 0 0}.v3-dialog :focus-visible,.v3-open:focus-visible,.v3-controls button:focus-visible{outline:3px solid #225B85;outline-offset:3px}
+
+/* END_V3_VISUAL_CSS */
 </style>
 </head>
 <body>
@@ -391,7 +403,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
       <div class="sh"><div class="sec">4-1 왈드 검정과 가능도비 검정</div><h2><span class="q">Q</span>일반화선형모형의 회귀계수는 어떻게 검정할까요?</h2></div>
       <div class="body split even">
         <div class="figcol">
-          <div class="fig"><svg id="m23-wald" viewBox="0 0 420 150" role="img" aria-label="M2와 M3 회귀계수의 추정값, 표준오차, 왈드 통계량, p값 표"></svg></div>
+          <div class="fig"><table class="v3-data " id="m23-wald"></table></div>
           <div class="math">
             <div class="mt">핵심 수학 개념 · 왈드 통계량</div>
             <div class="f">z = 추정값 ÷ 표준오차</div>
@@ -443,7 +455,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
       <div class="sh"><div class="sec">4-2 AIC</div><h2><span class="q">Q</span>잘 맞음과 복잡함을 함께 고려하는 기준은 무엇일까요?</h2></div>
       <div class="body split even">
         <div class="figcol">
-          <div class="fig"><svg id="m23-aic" viewBox="0 0 420 150" role="img" aria-label="세 모형의 AIC를 −2 log L 부분과 2k 부분으로 나눈 막대, M2가 가장 작음"></svg></div>
+          <div class="fig"><table class="v3-data " id="m23-aic"></table></div>
           <div class="math">
             <div class="mt">핵심 수학 개념 · AIC</div>
             <div class="f">AIC = −2 log L* + 2k</div>
@@ -506,7 +518,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
     <section class="slide bdpage" data-step="3" id="s-4-3b">
       <div class="sh"><div class="sec">4-3 BIC</div><h2><span class="q">Q</span>AIC와 BIC는 언제 무엇을 쓸까요?</h2></div>
       <div class="body split even">
-        <div class="fig"><svg id="m23-vs" viewBox="0 0 420 270" role="img" aria-label="AIC와 BIC의 관점, 벌점, 성질, 쓰는 상황 비교표"></svg></div>
+        <div class="fig"><table class="v3-data " id="m23-vs"></table></div>
         <div class="side">
           <ul class="key"><li>예측 분포의 성능 → AIC의 관점</li><li>후보 모형의 증거 → BIC의 관점</li></ul>
           <p class="exp">새 자료의 예측 분포를 중시하는지, 정해 둔 후보 사이의 모형 증거를 비교하는지에 따라 기준을 정합니다. 현상이 단순하면 BIC, 복잡하면 AIC라는 구분은 경향을 설명하는 직관일 뿐 규칙이 아닙니다<span class="cite">[1]</span>. 후보 구성과 각 기준의 가정, 검증 자료의 예측 성능을 함께 봅니다. 꽃 자료에서는 두 기준이 모두 M2를 골랐지만, 그 선택만으로 참모형이나 인과관계를 확인한 것은 아닙니다.</p>
@@ -541,13 +553,13 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
     <section class="slide" data-step="3" id="s-4-sum">
       <div class="sh"><div class="sec">4-5 정리</div><h2>검정으로 개선을 확인하고, 정보기준으로 목적에 맞는 모형을 고릅니다</h2></div>
       <div class="body full" style="align-content:center">
-        <table class="sumtbl">
-          <thead><tr><th>방법</th><th>핵심</th><th>꽃 데이터 예시</th></tr></thead>
+        <table class="sumtbl"><caption class="v3-sr">모형의 평가와 비교 · 본문 핵심 요약</caption>
+          <thead><tr><th scope="col">방법</th><th scope="col">핵심</th><th scope="col">꽃 데이터 예시</th></tr></thead>
           <tbody>
-            <tr><td>왈드 검정</td><td>추정값 ÷ 표준오차. 표본이 작으면 신뢰도가 떨어짐</td><td>b의 z = 9.41</td></tr>
-            <tr><td>가능도비 검정</td><td>내포 관계인 두 모형, ΔD = −2(log L₁ − log L₂)</td><td>M2 vs M3 ΔD = 0.16, p = 0.69</td></tr>
-            <tr><td>AIC</td><td>−2 log L + 2k. 예측 로그 손실 관점, 비교 가능한 가능도 필요</td><td>M1 219.1 · M2 68.3 · M3 70.1</td></tr>
-            <tr><td>BIC</td><td>−2 log L + k log n. 주변가능도 근사, 조건부 일치성</td><td>M1 220.1 · M2 70.3 · M3 73.1</td></tr>
+            <tr><th scope="row">왈드 검정</th><td>추정값 ÷ 표준오차. 표본이 작으면 신뢰도가 떨어짐</td><td>b의 z = 9.41</td></tr>
+            <tr><th scope="row">가능도비 검정</th><td>내포 관계인 두 모형, ΔD = −2(log L₁ − log L₂)</td><td>M2 vs M3 ΔD = 0.16, p = 0.69</td></tr>
+            <tr><th scope="row">AIC</th><td>−2 log L + 2k. 예측 로그 손실 관점, 비교 가능한 가능도 필요</td><td>M1 219.1 · M2 68.3 · M3 70.1</td></tr>
+            <tr><th scope="row">BIC</th><td>−2 log L + k log n. 주변가능도 근사, 조건부 일치성</td><td>M1 220.1 · M2 70.3 · M3 73.1</td></tr>
           </tbody>
         </table>
       </div>
@@ -771,6 +783,12 @@ function flow(svg,names){
   el("text",{x:220,y:200,"text-anchor":"middle","font-size":12,fill:C.gray},svg,"본문 소단원을 배우는 순서");
 }
 /* 화면에 해당 id가 있을 때만 그립니다(모듈마다 쓰지 않는 그림은 건너뜀) */
+/* V3: drawings use logical coordinates; data tables remain native HTML. */
+function v3text(s,x,y,t,o){o=o||{};return el("text",{x:x,y:y,"font-size":o.fs||12,"font-weight":o.bold?800:600,"text-anchor":o.a||"start",fill:o.c||C.navy,stroke:o.halo?"white":"none","stroke-width":o.halo?3:0,"paint-order":"stroke"},s,t);}
+function v3line(s,x1,y1,x2,y2,col,dash){return el("line",{x1:x1,x2:x2,y1:y1,y2:y2,stroke:col||C.navy3,"stroke-width":1.7,"stroke-dasharray":dash||"none"},s);}
+function v3desc(s,text){el("title",{},s,s.getAttribute("aria-label")||"그림");el("desc",{},s,text);}
+function v3table(root,caption,heads,rows){var table=root.tagName.toLowerCase()==="table"?root:document.createElement("table");table.classList.add("v3-data");table.replaceChildren();var cap=table.createCaption();cap.textContent=caption;var head=table.createTHead().insertRow();heads.forEach(function(h){var th=document.createElement("th");th.scope="col";th.textContent=h;head.appendChild(th);});var body=table.createTBody();rows.forEach(function(values){var tr=body.insertRow();values.forEach(function(v,j){var cell=document.createElement(j?"td":"th");if(!j)cell.scope="row";cell.textContent=v;tr.appendChild(cell);});});if(table!==root)root.appendChild(table);return table;}
+
 function on(id,fn){var e=document.getElementById(id);if(e)fn(e);}
 on("fig-flow",function(s){flow(s,["소단원 1","소단원 2","정리"]);});
 on("fig-case",function(s){barChart(s,CASE.values,{labels:true});});
@@ -826,12 +844,7 @@ on("m23-case",function(s){
 });
 
 on("m23-wald",function(s){
-  var cx=[54,140,222,300,374];el("rect",{x:4,y:4,width:412,height:28,rx:6,fill:C.navy},s);
-  ["계수","추정값","표준오차","왈드 z","p값"].forEach(function(h,i){tQ(s,cx[i],23,h,{fw:800,fs:11,c:"#fff"});});
-  var R=[["M2의 a","−2.54","0.532","−4.78","< 0.001"],["M2의 b","0.577","0.0614","9.41","< 0.001"],["M3의 c","−0.0102","0.0264","−0.38","0.70"]];
-  R.forEach(function(r,j){var y=56+j*32;el("rect",{x:4,y:y-19,width:412,height:28,rx:4,fill:j===1?"#EEF4FB":j===2?"#FBE4E1":"#F8F9FB"},s);
-    r.forEach(function(v,i){tQ(s,cx[i],y,v,{fw:i===0||i===3?800:600,fs:11.5,c:i===3&&j===2?"#B42318":C.navy});});});
-  tQ(s,210,146,"|z| > 1.96이면 유의수준 5%에서 ‘계수 = 0’ 기각",{fw:700,fs:10.5,c:C.gray});
+  v3table(s,"Poisson 모형 계수의 Wald 정규근사 검정",["계수","추정값","SE","z","양측 p"],[["M2 a", "-2.54119", "0.5320", "-4.78", "<0.001"], ["M2 b", "0.57734", "0.0614", "9.41", "<0.001"], ["M3 c", "-0.01016", "0.0264", "-0.38", "0.700"]]);
 });
 
 on("m23-lr",function(s){
@@ -861,14 +874,8 @@ on("m23-boot",function(s){
 });
 
 on("m23-aic",function(s){
-  var X=linQ(0,230,70,370);
-  ["M1","M2","M3"].forEach(function(m,j){var y=10+j*36,a=-2*MS[m].ll,b=2*MS[m].k,hi=m==="M2";
-    if(hi)el("rect",{x:2,y:y-4,width:416,height:34,rx:6,fill:"#EEF4FB"},s);
-    tQ(s,12,y+18,m,{a:"start",fw:800,fs:12,c:MCQ[m]==="#9AA0AA"?C.navy:MCQ[m]});
-    el("rect",{x:X(0),y:y,width:X(a)-X(0),height:24,fill:C.navy3},s);el("rect",{x:X(a),y:y,width:X(a+b)-X(a),height:24,fill:C.amber},s);
-    tQ(s,X(a+b)+6,y+17,MS[m].aic.toFixed(1)+(hi?"  최소":""),{a:"start",fw:800,fs:11.5,c:hi?"#1C6EA4":C.navy});});
-  el("rect",{x:70,y:124,width:12,height:12,fill:C.navy3},s);tQ(s,88,134,"−2 log L* (잘 맞을수록 작음)",{a:"start",fs:10,fw:700});
-  el("rect",{x:256,y:124,width:12,height:12,fill:C.amber},s);tQ(s,274,134,"2k (간단할수록 작음)",{a:"start",fs:10,fw:700});
+  var names=["M1","M2","M3"],aics=names.map(function(name){return -2*MS[name].ll+2*MS[name].k;}),best=Math.min.apply(null,aics);
+  v3table(s,"같은 꽃 20그루 · Poisson 가능도 · k=회귀계수 수",["모형","−2 log L","2k","AIC","ΔAIC"],names.map(function(name,i){var m=MS[name];return [name,(-2*m.ll).toFixed(2),2*m.k,aics[i].toFixed(2),(aics[i]-best).toFixed(2)];}));
 });
 
 on("m23-ovf",function(s){
@@ -910,10 +917,7 @@ on("m23-bic",function(s){
 });
 
 on("m23-vs",function(s){
-  var cx=[66,196,336];el("rect",{x:4,y:6,width:412,height:30,rx:6,fill:C.navy},s);["","AIC","BIC"].forEach(function(h,i){tQ(s,cx[i],26,h,{fw:800,fs:12.5,c:"#fff"});});
-  var R=[["둘째 항(벌점)","2k","k log n"],["관점","예측 로그 손실","주변가능도 근사"],["n이 커지면","벌점 그대로","벌점이 커짐"],["일치성","일반적 보장 없음","정칙조건 아래"],["주요 목적","예측 분포 비교","후보 모형 증거 비교"],["꽃 데이터 선택","M2 (68.3)","M2 (70.3)"]];
-  R.forEach(function(r,j){var y=60+j*35;el("rect",{x:4,y:y-20,width:412,height:31,rx:4,fill:j===4?"#FCF3D9":j%2?"#F8F9FB":"#fff"},s);
-    r.forEach(function(v,i){tQ(s,cx[i],y,v,{fw:i===0?800:700,fs:i===0?10.5:11,c:i===1?"#1C6EA4":i===2?C.amberInk:C.navy});});});
+  v3table(s,"같은 자료·반응·가능도를 사용한 후보 비교",["구분","AIC","BIC"],[["벌점", "2k", "k log n"], ["비교 관점", "예측 로그 손실", "주변가능도 근사"], ["정칙조건/참모형", "참모형 보장 없음", "정칙조건 등 필요"], ["이 자료 선택", "M2", "M2"]]);
 });
 
 on("m23-other",function(s){
@@ -1182,6 +1186,54 @@ p3d();
 })();
 show(0);
 })();
+</script>
+<script data-visual-tools="3">
+/* V3_VISUAL_TOOLS: current-state snapshots; no external resources or requests. */
+(function(){
+"use strict";
+var stage=document.querySelector('.stage'),vp=document.querySelector('.viewport'),footer=document.querySelector('.bottombar');
+if(!stage||!vp||!footer)return;
+vp.querySelectorAll('.slide svg:not([aria-hidden="true"])').forEach(function(svg,i){svg.setAttribute('role','img');if(!svg.getAttribute('aria-label')&&!svg.getAttribute('aria-labelledby')){var title=svg.closest('.slide').querySelector('h2');svg.setAttribute('aria-label',(title?title.textContent.replace(/^Q\s*/, ''):'학습 그림')+' · 그림 '+(i+1));}});
+var opener=document.createElement('button');opener.type='button';opener.className='v3-open';opener.textContent='그림·표 크게 보기';opener.setAttribute('aria-haspopup','dialog');opener.setAttribute('aria-controls','v3-visual-dialog');footer.insertBefore(opener,footer.querySelector('.spacer'));
+var dialog=document.createElement('dialog');dialog.id='v3-visual-dialog';dialog.className='v3-dialog';dialog.setAttribute('aria-labelledby','v3-visual-heading');
+dialog.innerHTML='<h2 id="v3-visual-heading">그림·표 크게 보기</h2><div class="v3-toolbar"><label>대상 <select id="v3-visual-select"></select></label><label>배율 <input id="v3-visual-zoom" type="range" min="100" max="250" step="25" value="100"><output id="v3-visual-scale">100%</output></label><button type="button" id="v3-visual-close">닫기</button></div><div class="v3-canvas" tabindex="0" aria-label="확대한 그림·표. 내용이 넓으면 가로로 스크롤하세요"><div class="v3-sheet"></div></div><div class="v3-toolbar"><button type="button" id="v3-visual-svg">SVG 저장</button><button type="button" id="v3-visual-png">고해상도 PNG 저장</button></div><p id="v3-visual-note" role="status" aria-live="polite"></p>';
+document.body.appendChild(dialog);
+var select=dialog.querySelector('select'),zoom=dialog.querySelector('input'),sheet=dialog.querySelector('.v3-sheet'),canvas=dialog.querySelector('.v3-canvas'),note=dialog.querySelector('#v3-visual-note'),svgButton=dialog.querySelector('#v3-visual-svg'),pngButton=dialog.querySelector('#v3-visual-png'),items=[],snapshot=null,busy=false;
+function activeItems(){var slide=vp.querySelector('.slide.on');return slide?[].slice.call(slide.querySelectorAll('svg,table')):[];}
+function update(){opener.disabled=!activeItems().length;}
+function label(e,i){return (e.getAttribute('aria-label')||(e.querySelector('caption')&&e.querySelector('caption').textContent)||((e.tagName.toLowerCase()==='svg'?'그림 ':'표 ')+(i+1))).trim();}
+function snapshotOf(source){
+ var clone=source.cloneNode(true),original=[source].concat([].slice.call(source.querySelectorAll('*'))),copies=[clone].concat([].slice.call(clone.querySelectorAll('*'))),ids={};
+ original.forEach(function(e,i){var c=copies[i];if(e.id)ids[e.id]='v3-copy-'+i+'-'+e.id;
+  if(source.tagName.toLowerCase()==='svg'){var cs=getComputedStyle(e);['font-family','font-size','font-weight','font-style','fill','fill-opacity','stroke','stroke-width','stroke-opacity','stroke-dasharray','text-anchor','paint-order'].forEach(function(k){c.style.setProperty(k,cs.getPropertyValue(k));});}
+ });
+ copies.forEach(function(e){if(e.id)e.id=ids[e.id];if(e.getAttribute('role')==='button'){e.removeAttribute('role');e.removeAttribute('tabindex');e.style.cursor='default';}[].slice.call(e.attributes).forEach(function(a){var value=a.value.replace(/url\(["']?#([^)'"\s]+)["']?\)/g,function(m,id){return 'url(#'+(ids[id]||id)+')';});
+  if(a.name==='href'||a.name==='xlink:href')value=value.replace(/^#(.+)$/,function(m,id){return '#'+(ids[id]||id);});
+  if(a.name==='aria-labelledby'||a.name==='aria-describedby')value=value.split(/\s+/).map(function(id){return ids[id]||id;}).join(' ');e.setAttribute(a.name,value);});
+ });
+ if(source.tagName.toLowerCase()==='svg'){var box=source.viewBox.baseVal;clone.setAttribute('xmlns','http://www.w3.org/2000/svg');clone.setAttribute('width',box.width);clone.setAttribute('height',box.height);clone.style.background='white';}
+ else{var caption=clone.querySelector('caption');if(caption){caption.classList.remove('v3-sr');caption.removeAttribute('style');}}
+ return clone;
+}
+function resize(){sheet.style.width=Math.max(640,canvas.clientWidth)*Number(zoom.value)/100+'px';dialog.querySelector('output').textContent=zoom.value+'%';}
+function render(){sheet.replaceChildren();snapshot=snapshotOf(items[Number(select.value)]);sheet.appendChild(snapshot);var isSVG=snapshot.tagName.toLowerCase()==='svg';svgButton.disabled=!isSVG;pngButton.disabled=!isSVG;note.textContent=isSVG?'현재 그림의 상태입니다. SVG는 벡터 원본이며, PNG는 가로·세로 중 긴 변을 3,840픽셀로 저장합니다.':'현재 표의 상태입니다. 표의 제목·행·열 머리글과 값을 크게 읽거나 복사할 수 있습니다.';resize();}
+opener.onclick=function(){items=activeItems();if(!items.length)return;select.replaceChildren();items.forEach(function(e,i){var option=document.createElement('option');option.value=i;option.textContent=label(e,i);select.appendChild(option);});zoom.value='100';dialog.showModal();render();select.focus();};
+function cleanup(){sheet.replaceChildren();snapshot=null;opener.focus();}
+function closeViewer(){dialog.close();cleanup();}
+select.onchange=render;zoom.oninput=resize;dialog.querySelector('#v3-visual-close').onclick=function(){closeViewer();};
+document.addEventListener('keydown',function(e){if(dialog.open&&!dialog.contains(e.target)){e.stopImmediatePropagation();if(e.key==='Escape'){e.preventDefault();closeViewer();}else{if(['Tab','ArrowRight','ArrowLeft','PageDown','PageUp'].indexOf(e.key)>=0)e.preventDefault();select.focus();}}},true);
+dialog.addEventListener('keydown',function(e){e.stopPropagation();if(e.key==='Tab'){var focusable=[].slice.call(dialog.querySelectorAll('button:not(:disabled),select:not(:disabled),input:not(:disabled),[tabindex="0"]')),first=focusable[0],last=focusable[focusable.length-1];if(e.shiftKey&&document.activeElement===first){e.preventDefault();last.focus();}else if(!e.shiftKey&&document.activeElement===last){e.preventDefault();first.focus();}}if(e.key==='Escape'){e.preventDefault();closeViewer();}});
+dialog.addEventListener('close',function(){if(!dialog.open&&snapshot)cleanup();});
+function download(blob,suffix,index){var url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download=document.title.replace(/[\\/:*?"<>|]/g,'-')+'-figure-'+(index==null?Number(select.value)+1:index)+suffix;a.click();setTimeout(function(){URL.revokeObjectURL(url);},1500);}
+function xml(){return new XMLSerializer().serializeToString(snapshot);}
+svgButton.onclick=function(){if(snapshot)download(new Blob([xml()],{type:'image/svg+xml;charset=utf-8'}),'.svg');};
+pngButton.onclick=function(){if(!snapshot||busy)return;busy=true;pngButton.disabled=true;select.focus();var exportIndex=Number(select.value)+1,saved=snapshot.cloneNode(true),box=saved.viewBox.baseVal,scale=3840/Math.max(box.width,box.height),width=Math.round(box.width*scale),height=Math.round(box.height*scale);saved.setAttribute('width',width);saved.setAttribute('height',height);var url=URL.createObjectURL(new Blob([new XMLSerializer().serializeToString(saved)],{type:'image/svg+xml;charset=utf-8'})),img=new Image();
+ img.onload=function(){var out=document.createElement('canvas');out.width=width;out.height=height;var context=out.getContext('2d');context.fillStyle='white';context.fillRect(0,0,width,height);context.drawImage(img,0,0,width,height);out.toBlob(function(blob){if(blob)download(blob,'.png',exportIndex);note.textContent='PNG '+width+' × '+height+'픽셀을 저장했습니다.';busy=false;pngButton.disabled=!(snapshot&&snapshot.tagName.toLowerCase()==='svg');URL.revokeObjectURL(url);},'image/png');};
+ img.onerror=function(){URL.revokeObjectURL(url);busy=false;pngButton.disabled=false;note.textContent='PNG를 만들지 못했습니다. SVG 저장을 이용해 주세요.';};img.src=url;
+};
+new MutationObserver(update).observe(vp,{subtree:true,attributes:true,attributeFilter:['class']});update();
+})();
+
 </script>
 </body>
 </html>

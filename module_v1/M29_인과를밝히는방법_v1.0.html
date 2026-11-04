@@ -252,7 +252,18 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
 .v2-table th:first-child{text-align:left}.v2-table thead{background:#EEF2F7}
 .v2-controls{display:flex;gap:6px;flex-wrap:wrap;flex:0 0 auto}.v2-controls .mbtn{font-size:12px;padding:4px 10px}
 .v2-note{margin:0;font-size:12px;line-height:1.45;color:var(--gray)}
+/* V3_VISUAL_TOOLS: all styles stay inside each standalone module. */
+.v3-sr{position:absolute!important;width:1px!important;height:1px!important;padding:0!important;margin:-1px!important;overflow:hidden!important;clip:rect(0,0,0,0)!important;white-space:nowrap!important;border:0!important}
+.v3-data{border-collapse:collapse;width:100%;font-size:13px;line-height:1.35;color:var(--navy);font-variant-numeric:tabular-nums}
+.v3-data caption{text-align:left;font-size:12px;font-weight:800;padding:0 0 6px}.v3-data th,.v3-data td{padding:6px 8px;border-bottom:1px solid var(--line);text-align:right}.v3-data th:first-child,.v3-data td:first-child{text-align:left}.v3-data thead{background:#EEF2F7}.v3-data tbody th{font-weight:700}.v3-compact th,.v3-compact td{padding:2px 4px;line-height:1.25}
+.sumtbl tbody th{background:none;color:var(--navy);font-weight:800;padding:10px 14px;border-bottom:1px solid var(--line);vertical-align:top;border-radius:0!important}.sumtbl tbody td{padding:10px 14px}.sumtbl tbody tr:nth-child(even) th{background:#F8F9FB}
+.v3-controls{display:flex;flex-wrap:wrap;gap:6px;flex:0 0 auto}.v3-controls button{font:inherit;font-size:12px;border:1px solid #CBD2DD;background:white;color:#1B2A4A;padding:4px 9px;border-radius:6px;cursor:pointer}.v3-controls button[aria-pressed="true"]{background:#1B2A4A;color:white}
+.v3-open{font:inherit;font-size:12px;padding:6px 10px;color:#1B2A4A;background:white;border:1px solid #CBD2DD;border-radius:7px;cursor:pointer}.v3-open:disabled{opacity:.45;cursor:default}
+.v3-dialog{box-sizing:border-box;width:min(96vw,1100px);max-width:96vw;max-height:94vh;padding:18px;border:1px solid #CBD2DD;border-radius:12px;background:white;color:#1B2A4A;font-size:16px;font-family:"Noto Sans KR","Malgun Gothic",sans-serif}.v3-dialog::backdrop{background:rgba(15,23,42,.65)}
+.v3-dialog h2{display:block;font-size:20px;margin:0 0 14px;line-height:1.4}.v3-toolbar{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin:8px 0 12px}.v3-toolbar label{display:flex;align-items:center;gap:6px}.v3-toolbar select{max-width:min(70vw,500px);padding:6px;font:inherit}.v3-toolbar button{font:inherit;font-size:14px;padding:7px 12px;border:1px solid #94A3B8;border-radius:6px;background:white;color:#1B2A4A;cursor:pointer}.v3-toolbar input{width:120px}
+.v3-canvas{overflow:auto;border:1px solid #D6DBE5;border-radius:8px;max-height:62vh;background:white}.v3-sheet{box-sizing:border-box;padding:18px}.v3-sheet svg{display:block;width:100%;height:auto;background:white}.v3-sheet table{width:100%;font-size:16px!important;line-height:1.5}.v3-sheet th,.v3-sheet td{font-size:16px!important;line-height:1.5;padding:8px 10px}.v3-sheet caption{font-size:16px!important;line-height:1.5;text-align:left;margin-bottom:8px}.v3-dialog p{font-size:14px;line-height:1.5;margin:10px 0 0}.v3-dialog :focus-visible,.v3-open:focus-visible,.v3-controls button:focus-visible{outline:3px solid #225B85;outline-offset:3px}
 
+/* END_V3_VISUAL_CSS */
 </style>
 </head>
 <body>
@@ -507,7 +518,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
     <section class="slide bdpage" data-step="3" id="s-4-4c">
       <div class="sh"><div class="sec">4-4 통계적 인과 추론</div><h2><span class="q">Q</span>조건이 비슷한 사람끼리 짝지어 비교하면 어떨까요?</h2></div>
       <div class="body split even">
-        <div class="fig"><svg id="m29-psm" viewBox="0 0 420 270" role="img" aria-label="근속에 따른 경향 점수 곡선 위에 이수자와 비이수자를 놓고, 경향 점수가 비슷한 쌍 69개를 짝지어 평균 차 −0.30"></svg></div>
+        <div class="figcol"><div class="v3-controls" id="m29-match-view"><button type="button">경향 점수 분포</button><button type="button">근속 균형</button></div><div class="fig"><svg id="m29-psm" viewBox="0 0 420 180" role="img" aria-label="매칭 전 경향점수 분포와 같은 분모로 계산한 매칭 전후 근속 균형을 선택해 비교"></svg></div><table class="v3-data v3-compact" id="m29-balance"></table></div>
         <div class="side">
           <ul class="key"><li><b>경향 점수 짝짓기</b>: 이수 확률이 비슷한 쌍</li><li>여러 중첩요인을 동시에 다룰 수 있습니다.</li></ul>
           <p class="exp">경향 점수는 교육 전 특성이 주어졌을 때 이수할 조건부 확률 P(X=1|Z)입니다. 로지스틱 회귀 등으로 추정하고 비슷한 점수의 이수자·비이수자를 짝짓습니다. 점수가 가깝다는 것만으로 실제 공변량 균형이나 인과가 보장되지는 않습니다. 교육 전 특성의 균형과 두 집단의 점수 중첩을 확인합니다. 관측 특성으로 조건화한 뒤 미측정 교란이 없다는 등의 가정도 필요합니다. 짝짓기에서 제외된 사람이 있으면 추정 대상은 전체 작업자와 달라질 수 있습니다.</p>
@@ -539,13 +550,13 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
     <section class="slide" data-step="3" id="s-4-sum">
       <div class="sh"><div class="sec">4-5 정리</div><h2>추정 대상과 설계·교란·가정을 확인해 평균 효과를 추정합니다</h2></div>
       <div class="body full" style="align-content:center">
-        <table class="sumtbl">
-          <thead><tr><th>방법</th><th>핵심 아이디어</th><th>예시 추정값 (실제 −0.30)</th></tr></thead>
+        <table class="sumtbl"><caption class="v3-sr">인과를 밝히는 방법 · 본문 핵심 요약</caption>
+          <thead><tr><th scope="col">방법</th><th scope="col">핵심 아이디어</th><th scope="col">예시 추정값 (실제 −0.30)</th></tr></thead>
           <tbody>
-            <tr><td>단순 비교</td><td>집단 차 = ATT + 기저 집단 차 (표본 변동 별도)</td><td>−0.77%p (참효과와 차이 약 −0.47)</td></tr>
-            <tr><td>무작위 통제 실험</td><td>무작위 할당으로 중첩요인을 무효화</td><td>−0.29%p</td></tr>
-            <tr><td>다중회귀 · 층별 해석</td><td>중첩요인을 모형에 넣거나 층으로 나눔</td><td>−0.30%p · −0.30%p</td></tr>
-            <tr><td>경향 점수 짝짓기 · 이중차분법</td><td>할당 확률이 비슷한 쌍 · 전후 차분의 차이</td><td>−0.30%p · −0.3%p</td></tr>
+            <tr><th scope="row">단순 비교</th><td>집단 차 = ATT + 기저 집단 차 (표본 변동 별도)</td><td>−0.77%p (참효과와 차이 약 −0.47)</td></tr>
+            <tr><th scope="row">무작위 통제 실험</th><td>무작위 할당으로 중첩요인을 무효화</td><td>−0.29%p</td></tr>
+            <tr><th scope="row">다중회귀 · 층별 해석</th><td>중첩요인을 모형에 넣거나 층으로 나눔</td><td>−0.30%p · −0.30%p</td></tr>
+            <tr><th scope="row">경향 점수 짝짓기 · 이중차분법</th><td>할당 확률이 비슷한 쌍 · 전후 차분의 차이</td><td>−0.30%p · −0.3%p</td></tr>
           </tbody>
         </table>
       </div>
@@ -781,6 +792,12 @@ function v2text(s,x,y,text,opts){opts=opts||{};return el("text",{x:x,y:y,"text-a
 function v2line(s,x1,y1,x2,y2,color,dash){return el("line",{x1:x1,y1:y1,x2:x2,y2:y2,stroke:color||C.gray2,"stroke-width":1.6,"stroke-dasharray":dash||"none"},s);}
 function v2desc(s,text){if(s.getAttribute("aria-label"))el("title",{},s,s.getAttribute("aria-label"));el("desc",{},s,text);}
 
+/* V3: drawings use logical coordinates; data tables remain native HTML. */
+function v3text(s,x,y,t,o){o=o||{};return el("text",{x:x,y:y,"font-size":o.fs||12,"font-weight":o.bold?800:600,"text-anchor":o.a||"start",fill:o.c||C.navy,stroke:o.halo?"white":"none","stroke-width":o.halo?3:0,"paint-order":"stroke"},s,t);}
+function v3line(s,x1,y1,x2,y2,col,dash){return el("line",{x1:x1,x2:x2,y1:y1,y2:y2,stroke:col||C.navy3,"stroke-width":1.7,"stroke-dasharray":dash||"none"},s);}
+function v3desc(s,text){el("title",{},s,s.getAttribute("aria-label")||"그림");el("desc",{},s,text);}
+function v3table(root,caption,heads,rows){var table=root.tagName.toLowerCase()==="table"?root:document.createElement("table");table.classList.add("v3-data");table.replaceChildren();var cap=table.createCaption();cap.textContent=caption;var head=table.createTHead().insertRow();heads.forEach(function(h){var th=document.createElement("th");th.scope="col";th.textContent=h;head.appendChild(th);});var body=table.createTBody();rows.forEach(function(values){var tr=body.insertRow();values.forEach(function(v,j){var cell=document.createElement(j?"td":"th");if(!j)cell.scope="row";cell.textContent=v;tr.appendChild(cell);});});if(table!==root)root.appendChild(table);return table;}
+
 function on(id,fn){var e=document.getElementById(id);if(e)fn(e);}
 on("fig-flow",function(s){flow(s,["소단원 1","소단원 2","정리"]);});
 on("fig-case",function(s){barChart(s,CASE.values,{labels:true});});
@@ -886,14 +903,14 @@ on("m29-strat",function(s){
 });
 
 on("m29-psm",function(s){
-  bxW(s,4,4,412,200,"#F3F5F9");var X=linW(1,20,40,404),Y=linW(0,1,170,24);
-  [0,.5,1].forEach(function(t){el("line",{x1:40,x2:404,y1:Y(t),y2:Y(t),stroke:C.grid},s);tW(s,34,Y(t)+4,t,{a:"end",fs:9,c:C.gray2,fw:500});});
-  var p=[];for(var z=1;z<=20;z+=0.25)p.push(X(z).toFixed(1)+" "+Y(1/(1+Math.exp(3.2692-0.2935*z))).toFixed(1));el("path",{d:"M"+p.join(" L"),fill:"none",stroke:C.navy3,"stroke-width":2.4},s);
-  for(var i=0;i<DZ.length;i++){el("line",{x1:X(DZ[i]),x2:X(DZ[i]),y1:DT[i]?18:176,y2:DT[i]?26:184,stroke:DT[i]?BLU:"#9AA0AA","stroke-width":1.4},s);}
-  DPR.slice(0,69).forEach(function(pr,k){if(k%4)return;var a=pr[0],b=pr[1];el("line",{x1:X(DZ[a]),y1:26,x2:X(DZ[b]),y2:176,stroke:PNK,"stroke-width":.9,"stroke-opacity":.6},s);});
-  tW(s,40,14,"이수자(위 눈금) · 비이수자(아래 눈금) · 분홍선: 짝지은 쌍 일부",{a:"start",fs:9.5,fw:800});tW(s,404,198,"근속(년) →",{a:"end",fs:9,c:C.gray,fw:700});
-  tW(s,X(4),Y(.35),"경향 점수 = 이수 확률",{a:"start",fw:800,fs:10.5,c:C.navy3,halo:true});
-  bxW(s,4,212,412,54,C.navy);tW(s,210,234,"저장 69쌍: 평균 차이 약 −0.30%p / 추정 대상 확인",{fw:800,fs:11.5,c:"#fff"});tW(s,210,253,"로지스틱 회귀: logit(이수 확률) = −3.27 + 0.293 × 근속",{fs:9.5,c:"#C9D3E6"});
+  var mode=1,groups=[[],[]];DZ.forEach(function(v,i){groups[DT[i]].push(v);});function mean(a){return a.reduce(function(x,y){return x+y;},0)/a.length;}function variance(a){var m=mean(a);return a.reduce(function(s,v){return s+(v-m)*(v-m);},0)/(a.length-1);}
+  var denom=Math.sqrt((variance(groups[1])+variance(groups[0]))/2),pairs=DPR.slice(0,69),matched=[pairs.map(function(p){return DZ[p[1]];}),pairs.map(function(p){return DZ[p[0]];})],before=(mean(groups[1])-mean(groups[0]))/denom,after=(mean(matched[1])-mean(matched[0]))/denom;
+  v3table(document.getElementById("m29-balance"),"근속 표준차 분모: 매칭 전 √((s₁²+s₀²)/2)",["시점","이수/비이수 수","근속 평균 차(년)","표준차"],[["매칭 전",groups[1].length+"/"+groups[0].length,(mean(groups[1])-mean(groups[0])).toFixed(2),before.toFixed(3)],["69쌍 매칭 후","69/69",(mean(matched[1])-mean(matched[0])).toFixed(2),after.toFixed(3)]]);
+  function draw(){clear(s);v3desc(s,"저장된 69쌍의 실제 근속 균형과 매칭 전 점수 중첩을 확인합니다. 균형은 매칭 전 SD를 같은 분모로 사용합니다. 한 공변량의 균형만으로 미측정 교란이 제거됐다고 결론짓지 않습니다.");
+    if(mode===1){var max=Math.max(1.5,Math.abs(before)*1.15),X=linW(-.2,max,65,394);v3text(s,12,17,"근속의 표준차 · 같은 분모",{bold:true});v3line(s,X(0),35,X(0),127,C.gray2,"4 3");[[before,60,"매칭 전"],[after,108,"매칭 후"]].forEach(function(r,i){v3text(s,12,r[1]+4,r[2]);el(i?"rect":"circle",i?{x:X(r[0])-4,y:r[1]-4,width:8,height:8,fill:C.navy}:{cx:X(r[0]),cy:r[1],r:5,fill:C.navy},s);v3text(s,X(r[0])+9,r[1]+4,r[0].toFixed(3));});[0,1].forEach(function(v){v3text(s,X(v),156,v,{a:"middle"});});}
+    else{var hist=[[0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0]],ns=[0,0];DPS.forEach(function(p,i){hist[DT[i]][Math.min(9,Math.floor(p*10))]++;ns[DT[i]]++;});var density=hist.map(function(h,g){return h.map(function(n){return n/(ns[g]*.1);});}),max=Math.max.apply(null,density[0].concat(density[1]))*1.1,X=linW(0,1,48,394),Y=linW(0,max,128,31);v3text(s,12,17,"매칭 전 점수 분포 · 군별 확률밀도",{bold:true});density.forEach(function(h,g){var pts=[X(0)+","+Y(0)];h.forEach(function(v,i){pts.push(X(i/10)+","+Y(v));pts.push(X((i+1)/10)+","+Y(v));});pts.push(X(1)+","+Y(0));el("polyline",{points:pts.join(" "),fill:"none",stroke:g?"#225B85":"#9E2F59","stroke-width":2,"stroke-dasharray":g?"none":"5 3"},s);});[0,.5,1].forEach(function(v){v3text(s,X(v),153,v,{a:"middle"});});v3text(s,394,169,"실선: 이수 · 점선: 비이수",{a:"end"});}
+    s.dataset.before=before;s.dataset.after=after;s.dataset.denominator=denom;s.dataset.mode=mode;document.querySelectorAll("#m29-match-view button").forEach(function(b,i){b.setAttribute("aria-pressed",i===mode);});}
+  document.querySelectorAll("#m29-match-view button").forEach(function(b,i){b.onclick=function(){mode=i;draw();};});draw();
 });
 
 function didW(s,v,X,Y,show){var A=[v[0],v[1]],B=[v[2],v[3]];
@@ -1169,6 +1186,54 @@ p3d();
 })();
 show(0);
 })();
+</script>
+<script data-visual-tools="3">
+/* V3_VISUAL_TOOLS: current-state snapshots; no external resources or requests. */
+(function(){
+"use strict";
+var stage=document.querySelector('.stage'),vp=document.querySelector('.viewport'),footer=document.querySelector('.bottombar');
+if(!stage||!vp||!footer)return;
+vp.querySelectorAll('.slide svg:not([aria-hidden="true"])').forEach(function(svg,i){svg.setAttribute('role','img');if(!svg.getAttribute('aria-label')&&!svg.getAttribute('aria-labelledby')){var title=svg.closest('.slide').querySelector('h2');svg.setAttribute('aria-label',(title?title.textContent.replace(/^Q\s*/, ''):'학습 그림')+' · 그림 '+(i+1));}});
+var opener=document.createElement('button');opener.type='button';opener.className='v3-open';opener.textContent='그림·표 크게 보기';opener.setAttribute('aria-haspopup','dialog');opener.setAttribute('aria-controls','v3-visual-dialog');footer.insertBefore(opener,footer.querySelector('.spacer'));
+var dialog=document.createElement('dialog');dialog.id='v3-visual-dialog';dialog.className='v3-dialog';dialog.setAttribute('aria-labelledby','v3-visual-heading');
+dialog.innerHTML='<h2 id="v3-visual-heading">그림·표 크게 보기</h2><div class="v3-toolbar"><label>대상 <select id="v3-visual-select"></select></label><label>배율 <input id="v3-visual-zoom" type="range" min="100" max="250" step="25" value="100"><output id="v3-visual-scale">100%</output></label><button type="button" id="v3-visual-close">닫기</button></div><div class="v3-canvas" tabindex="0" aria-label="확대한 그림·표. 내용이 넓으면 가로로 스크롤하세요"><div class="v3-sheet"></div></div><div class="v3-toolbar"><button type="button" id="v3-visual-svg">SVG 저장</button><button type="button" id="v3-visual-png">고해상도 PNG 저장</button></div><p id="v3-visual-note" role="status" aria-live="polite"></p>';
+document.body.appendChild(dialog);
+var select=dialog.querySelector('select'),zoom=dialog.querySelector('input'),sheet=dialog.querySelector('.v3-sheet'),canvas=dialog.querySelector('.v3-canvas'),note=dialog.querySelector('#v3-visual-note'),svgButton=dialog.querySelector('#v3-visual-svg'),pngButton=dialog.querySelector('#v3-visual-png'),items=[],snapshot=null,busy=false;
+function activeItems(){var slide=vp.querySelector('.slide.on');return slide?[].slice.call(slide.querySelectorAll('svg,table')):[];}
+function update(){opener.disabled=!activeItems().length;}
+function label(e,i){return (e.getAttribute('aria-label')||(e.querySelector('caption')&&e.querySelector('caption').textContent)||((e.tagName.toLowerCase()==='svg'?'그림 ':'표 ')+(i+1))).trim();}
+function snapshotOf(source){
+ var clone=source.cloneNode(true),original=[source].concat([].slice.call(source.querySelectorAll('*'))),copies=[clone].concat([].slice.call(clone.querySelectorAll('*'))),ids={};
+ original.forEach(function(e,i){var c=copies[i];if(e.id)ids[e.id]='v3-copy-'+i+'-'+e.id;
+  if(source.tagName.toLowerCase()==='svg'){var cs=getComputedStyle(e);['font-family','font-size','font-weight','font-style','fill','fill-opacity','stroke','stroke-width','stroke-opacity','stroke-dasharray','text-anchor','paint-order'].forEach(function(k){c.style.setProperty(k,cs.getPropertyValue(k));});}
+ });
+ copies.forEach(function(e){if(e.id)e.id=ids[e.id];if(e.getAttribute('role')==='button'){e.removeAttribute('role');e.removeAttribute('tabindex');e.style.cursor='default';}[].slice.call(e.attributes).forEach(function(a){var value=a.value.replace(/url\(["']?#([^)'"\s]+)["']?\)/g,function(m,id){return 'url(#'+(ids[id]||id)+')';});
+  if(a.name==='href'||a.name==='xlink:href')value=value.replace(/^#(.+)$/,function(m,id){return '#'+(ids[id]||id);});
+  if(a.name==='aria-labelledby'||a.name==='aria-describedby')value=value.split(/\s+/).map(function(id){return ids[id]||id;}).join(' ');e.setAttribute(a.name,value);});
+ });
+ if(source.tagName.toLowerCase()==='svg'){var box=source.viewBox.baseVal;clone.setAttribute('xmlns','http://www.w3.org/2000/svg');clone.setAttribute('width',box.width);clone.setAttribute('height',box.height);clone.style.background='white';}
+ else{var caption=clone.querySelector('caption');if(caption){caption.classList.remove('v3-sr');caption.removeAttribute('style');}}
+ return clone;
+}
+function resize(){sheet.style.width=Math.max(640,canvas.clientWidth)*Number(zoom.value)/100+'px';dialog.querySelector('output').textContent=zoom.value+'%';}
+function render(){sheet.replaceChildren();snapshot=snapshotOf(items[Number(select.value)]);sheet.appendChild(snapshot);var isSVG=snapshot.tagName.toLowerCase()==='svg';svgButton.disabled=!isSVG;pngButton.disabled=!isSVG;note.textContent=isSVG?'현재 그림의 상태입니다. SVG는 벡터 원본이며, PNG는 가로·세로 중 긴 변을 3,840픽셀로 저장합니다.':'현재 표의 상태입니다. 표의 제목·행·열 머리글과 값을 크게 읽거나 복사할 수 있습니다.';resize();}
+opener.onclick=function(){items=activeItems();if(!items.length)return;select.replaceChildren();items.forEach(function(e,i){var option=document.createElement('option');option.value=i;option.textContent=label(e,i);select.appendChild(option);});zoom.value='100';dialog.showModal();render();select.focus();};
+function cleanup(){sheet.replaceChildren();snapshot=null;opener.focus();}
+function closeViewer(){dialog.close();cleanup();}
+select.onchange=render;zoom.oninput=resize;dialog.querySelector('#v3-visual-close').onclick=function(){closeViewer();};
+document.addEventListener('keydown',function(e){if(dialog.open&&!dialog.contains(e.target)){e.stopImmediatePropagation();if(e.key==='Escape'){e.preventDefault();closeViewer();}else{if(['Tab','ArrowRight','ArrowLeft','PageDown','PageUp'].indexOf(e.key)>=0)e.preventDefault();select.focus();}}},true);
+dialog.addEventListener('keydown',function(e){e.stopPropagation();if(e.key==='Tab'){var focusable=[].slice.call(dialog.querySelectorAll('button:not(:disabled),select:not(:disabled),input:not(:disabled),[tabindex="0"]')),first=focusable[0],last=focusable[focusable.length-1];if(e.shiftKey&&document.activeElement===first){e.preventDefault();last.focus();}else if(!e.shiftKey&&document.activeElement===last){e.preventDefault();first.focus();}}if(e.key==='Escape'){e.preventDefault();closeViewer();}});
+dialog.addEventListener('close',function(){if(!dialog.open&&snapshot)cleanup();});
+function download(blob,suffix,index){var url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download=document.title.replace(/[\\/:*?"<>|]/g,'-')+'-figure-'+(index==null?Number(select.value)+1:index)+suffix;a.click();setTimeout(function(){URL.revokeObjectURL(url);},1500);}
+function xml(){return new XMLSerializer().serializeToString(snapshot);}
+svgButton.onclick=function(){if(snapshot)download(new Blob([xml()],{type:'image/svg+xml;charset=utf-8'}),'.svg');};
+pngButton.onclick=function(){if(!snapshot||busy)return;busy=true;pngButton.disabled=true;select.focus();var exportIndex=Number(select.value)+1,saved=snapshot.cloneNode(true),box=saved.viewBox.baseVal,scale=3840/Math.max(box.width,box.height),width=Math.round(box.width*scale),height=Math.round(box.height*scale);saved.setAttribute('width',width);saved.setAttribute('height',height);var url=URL.createObjectURL(new Blob([new XMLSerializer().serializeToString(saved)],{type:'image/svg+xml;charset=utf-8'})),img=new Image();
+ img.onload=function(){var out=document.createElement('canvas');out.width=width;out.height=height;var context=out.getContext('2d');context.fillStyle='white';context.fillRect(0,0,width,height);context.drawImage(img,0,0,width,height);out.toBlob(function(blob){if(blob)download(blob,'.png',exportIndex);note.textContent='PNG '+width+' × '+height+'픽셀을 저장했습니다.';busy=false;pngButton.disabled=!(snapshot&&snapshot.tagName.toLowerCase()==='svg');URL.revokeObjectURL(url);},'image/png');};
+ img.onerror=function(){URL.revokeObjectURL(url);busy=false;pngButton.disabled=false;note.textContent='PNG를 만들지 못했습니다. SVG 저장을 이용해 주세요.';};img.src=url;
+};
+new MutationObserver(update).observe(vp,{subtree:true,attributes:true,attributeFilter:['class']});update();
+})();
+
 </script>
 </body>
 </html>

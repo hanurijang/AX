@@ -1,0 +1,741 @@
+{
+  "base_commit": "e3e895e",
+  "browser": "Chromium",
+  "viewports": [
+    [
+      1280,
+      800
+    ],
+    [
+      1920,
+      1080
+    ]
+  ],
+  "stage4": {
+    "counts": {
+      "modules": 13,
+      "views": 50,
+      "states": 104,
+      "viewer_assets": 56,
+      "export_files": 2,
+      "tables": 31,
+      "SVGs": 231,
+      "keyboard_events": 901,
+      "reference_snapshots": 1
+    },
+    "failures": [],
+    "pageerrors": []
+  },
+  "full_regression": {
+    "viewport": [
+      1280,
+      800
+    ],
+    "counts": {
+      "slides": 1134,
+      "svgs": 699,
+      "quizzes": 222,
+      "range_states": 162,
+      "expanded_help": 74
+    },
+    "modules": [
+      {
+        "module": "M01",
+        "slides": 31,
+        "quizzes": 6
+      },
+      {
+        "module": "M02",
+        "slides": 30,
+        "quizzes": 6
+      },
+      {
+        "module": "M03",
+        "slides": 29,
+        "quizzes": 6
+      },
+      {
+        "module": "M04",
+        "slides": 33,
+        "quizzes": 6
+      },
+      {
+        "module": "M05",
+        "slides": 35,
+        "quizzes": 6
+      },
+      {
+        "module": "M06",
+        "slides": 32,
+        "quizzes": 6
+      },
+      {
+        "module": "M07",
+        "slides": 29,
+        "quizzes": 6
+      },
+      {
+        "module": "M08",
+        "slides": 31,
+        "quizzes": 6
+      },
+      {
+        "module": "M09",
+        "slides": 30,
+        "quizzes": 6
+      },
+      {
+        "module": "M10",
+        "slides": 28,
+        "quizzes": 6
+      },
+      {
+        "module": "M11",
+        "slides": 30,
+        "quizzes": 6
+      },
+      {
+        "module": "M12",
+        "slides": 28,
+        "quizzes": 6
+      },
+      {
+        "module": "M13",
+        "slides": 30,
+        "quizzes": 6
+      },
+      {
+        "module": "M14",
+        "slides": 36,
+        "quizzes": 6
+      },
+      {
+        "module": "M15",
+        "slides": 33,
+        "quizzes": 6
+      },
+      {
+        "module": "M16",
+        "slides": 31,
+        "quizzes": 6
+      },
+      {
+        "module": "M17",
+        "slides": 35,
+        "quizzes": 6
+      },
+      {
+        "module": "M18",
+        "slides": 32,
+        "quizzes": 6
+      },
+      {
+        "module": "M19",
+        "slides": 30,
+        "quizzes": 6
+      },
+      {
+        "module": "M20",
+        "slides": 31,
+        "quizzes": 6
+      },
+      {
+        "module": "M21",
+        "slides": 32,
+        "quizzes": 6
+      },
+      {
+        "module": "M22",
+        "slides": 30,
+        "quizzes": 6
+      },
+      {
+        "module": "M23",
+        "slides": 31,
+        "quizzes": 6
+      },
+      {
+        "module": "M24",
+        "slides": 32,
+        "quizzes": 6
+      },
+      {
+        "module": "M25",
+        "slides": 31,
+        "quizzes": 6
+      },
+      {
+        "module": "M26",
+        "slides": 28,
+        "quizzes": 6
+      },
+      {
+        "module": "M27",
+        "slides": 30,
+        "quizzes": 6
+      },
+      {
+        "module": "M28",
+        "slides": 30,
+        "quizzes": 6
+      },
+      {
+        "module": "M29",
+        "slides": 30,
+        "quizzes": 6
+      },
+      {
+        "module": "M30",
+        "slides": 31,
+        "quizzes": 6
+      },
+      {
+        "module": "M31",
+        "slides": 30,
+        "quizzes": 6
+      },
+      {
+        "module": "M32",
+        "slides": 29,
+        "quizzes": 6
+      },
+      {
+        "module": "M33",
+        "slides": 27,
+        "quizzes": 6
+      },
+      {
+        "module": "M34",
+        "slides": 31,
+        "quizzes": 6
+      },
+      {
+        "module": "M35",
+        "slides": 30,
+        "quizzes": 6
+      },
+      {
+        "module": "M36",
+        "slides": 31,
+        "quizzes": 6
+      },
+      {
+        "module": "M37",
+        "slides": 27,
+        "quizzes": 6
+      }
+    ],
+    "failures": [],
+    "pageerrors": [],
+    "svg_collisions": []
+  },
+  "independent_numbers": [
+    {
+      "module": "M01",
+      "check": "12 values mean",
+      "actual": 1.6916666666666667,
+      "expected": 1.6916666666666667,
+      "tolerance": 1e-12
+    },
+    {
+      "module": "M02",
+      "check": "blood pressure means",
+      "actual": [
+        125.0,
+        150.0
+      ],
+      "expected": [
+        125,
+        150
+      ],
+      "tolerance": 1e-12
+    },
+    {
+      "module": "M03",
+      "check": "census cost and days",
+      "actual": [
+        5000000000.0,
+        1000.0
+      ],
+      "expected": [
+        5000000000,
+        1000
+      ],
+      "tolerance": 0
+    },
+    {
+      "module": "M04",
+      "check": "165<=height<170 count",
+      "actual": 33,
+      "expected": 33,
+      "tolerance": 0
+    },
+    {
+      "module": "M05",
+      "check": "defined town mean/median before and after",
+      "actual": [
+        5088.0,
+        5088.0,
+        6027.722772277228,
+        5091.0
+      ],
+      "expected": [
+        5088.0,
+        5088.0,
+        6027.722772277,
+        5091.0
+      ],
+      "tolerance": 1e-06
+    },
+    {
+      "module": "M05",
+      "check": "100 income observations",
+      "actual": 100,
+      "expected": 100,
+      "tolerance": 0
+    },
+    {
+      "module": "M06",
+      "check": "two-value payout mean/variance",
+      "actual": [
+        180.0,
+        25600.0
+      ],
+      "expected": [
+        180,
+        25600
+      ],
+      "tolerance": 1e-12
+    },
+    {
+      "module": "M07",
+      "check": "normal mass within 1,2,3 SD",
+      "actual": [
+        0.6826894921370859,
+        0.9544997361036416,
+        0.9973002039367398
+      ],
+      "expected": [
+        0.682689,
+        0.9545,
+        0.9973
+      ],
+      "tolerance": 1e-06
+    },
+    {
+      "module": "M08–10",
+      "check": "sample mean, centered SS, sample SD",
+      "actual": [
+        167.9,
+        426.9,
+        6.887186169498639
+      ],
+      "expected": [
+        167.9,
+        426.9,
+        6.887186
+      ],
+      "tolerance": 1e-05
+    },
+    {
+      "module": "M10",
+      "check": "coverage of +/-2SE at df9",
+      "actual": 0.9234471762292991,
+      "expected": 0.923447,
+      "tolerance": 1e-06
+    },
+    {
+      "module": "M11",
+      "check": "exact randomization tail count",
+      "actual": 70,
+      "expected": 70,
+      "tolerance": 0
+    },
+    {
+      "module": "M12",
+      "check": "pooled t and two-sided p",
+      "actual": [
+        -2.7288271540062365,
+        0.018306202581332226
+      ],
+      "expected": [
+        -2.729,
+        0.0183
+      ],
+      "tolerance": 0.0005
+    },
+    {
+      "module": "M13",
+      "check": "minimum group sizes for 80% power",
+      "actual": [
+        64,
+        17,
+        6
+      ],
+      "expected": [
+        64,
+        17,
+        6
+      ],
+      "tolerance": 0
+    },
+    {
+      "module": "M14",
+      "check": "Shapiro p values",
+      "actual": [
+        0.13489471826350002,
+        0.48923956839167815
+      ],
+      "expected": [
+        0.135,
+        0.489
+      ],
+      "tolerance": 0.001
+    },
+    {
+      "module": "M14",
+      "check": "paired t",
+      "actual": -7.771554466355454,
+      "expected": -7.77,
+      "tolerance": 0.01
+    },
+    {
+      "module": "M15",
+      "check": "ANOVA F",
+      "actual": 60.67498203469865,
+      "expected": 60.675,
+      "tolerance": 0.002
+    },
+    {
+      "module": "M16",
+      "check": "binomial exact two-sided p",
+      "actual": 0.042773945257067694,
+      "expected": 0.04277,
+      "tolerance": 1e-05
+    },
+    {
+      "module": "M16",
+      "check": "die chi-square",
+      "actual": [
+        13.8,
+        0.016931016026148323
+      ],
+      "expected": [
+        13.8,
+        0.01693
+      ],
+      "tolerance": 2e-05
+    },
+    {
+      "module": "M17",
+      "check": "Pearson, Spearman, Kendall",
+      "actual": [
+        0.9271497992547129,
+        0.9118583155200968,
+        0.8090398349558905
+      ],
+      "expected": [
+        0.927,
+        0.91,
+        0.81
+      ],
+      "tolerance": 0.005
+    },
+    {
+      "module": "M18",
+      "check": "OLS coefficients, SSE, R2",
+      "actual": [
+        16.139564729158874,
+        0.7291053954333991,
+        162.36479332656018,
+        0.8596067502580543
+      ],
+      "expected": [
+        16.1396,
+        0.72911,
+        162.365,
+        0.859607
+      ],
+      "tolerance": 0.001
+    },
+    {
+      "module": "M19",
+      "check": "multiple regression coefficients",
+      "actual": [
+        -66.77202472113335,
+        0.5377320092836094,
+        0.534550565512179
+      ],
+      "expected": [
+        -66.8,
+        0.538,
+        0.535
+      ],
+      "tolerance": 0.05
+    },
+    {
+      "module": "M20",
+      "check": "interaction contrasts",
+      "actual": [
+        19,
+        5,
+        -14
+      ],
+      "expected": [
+        19,
+        5,
+        -14
+      ],
+      "tolerance": 0
+    },
+    {
+      "module": "M21",
+      "check": "logistic MLE",
+      "actual": [
+        -4.477383249681774,
+        0.8766270892526651
+      ],
+      "expected": [
+        -4.48,
+        0.877
+      ],
+      "tolerance": 0.005
+    },
+    {
+      "module": "M22",
+      "check": "Poisson MLE",
+      "actual": [
+        -2.5411937905243507,
+        0.577342284006468
+      ],
+      "expected": [
+        -2.54,
+        0.577
+      ],
+      "tolerance": 0.005
+    },
+    {
+      "module": "M23",
+      "check": "Poisson log likelihood, AIC, BIC",
+      "actual": [
+        -32.1451232867787,
+        68.2902465735574,
+        70.28171112066538
+      ],
+      "expected": [
+        -32.15,
+        68.3,
+        70.3
+      ],
+      "tolerance": 0.04
+    },
+    {
+      "module": "M24",
+      "check": "significance re-detection ratio",
+      "actual": 0.36082474226804123,
+      "expected": 0.360825,
+      "tolerance": 1e-06
+    },
+    {
+      "module": "M25",
+      "check": "d and approximate Hedges g",
+      "actual": [
+        0.908673799223074,
+        0.8872090638083557
+      ],
+      "expected": [
+        0.91,
+        0.89
+      ],
+      "tolerance": 0.005
+    },
+    {
+      "module": "M26",
+      "check": "normal-prior Bayes factor",
+      "actual": 2.7963782307199283,
+      "expected": 2.8,
+      "tolerance": 0.01
+    },
+    {
+      "module": "M26",
+      "check": "mixture false positive probability",
+      "actual": 0.36,
+      "expected": 0.36,
+      "tolerance": 1e-12
+    },
+    {
+      "module": "M27",
+      "check": "FWER for 20 independent null tests",
+      "actual": 0.6415140775914581,
+      "expected": 0.641514,
+      "tolerance": 1e-06
+    },
+    {
+      "module": "M28",
+      "check": "adjusted education coefficient",
+      "actual": -7.224604548428798e-05,
+      "expected": -7e-05,
+      "tolerance": 2e-05
+    },
+    {
+      "module": "M29",
+      "check": "adjusted education effect",
+      "actual": -0.29541267698236584,
+      "expected": -0.3,
+      "tolerance": 0.015
+    },
+    {
+      "module": "M29",
+      "check": "DID",
+      "actual": -0.30000000000000004,
+      "expected": -0.3,
+      "tolerance": 1e-12
+    },
+    {
+      "module": "M30",
+      "check": "posterior mean and P(mu>=550)",
+      "actual": [
+        555.4,
+        0.726991194826207
+      ],
+      "expected": [
+        555.4,
+        0.727
+      ],
+      "tolerance": 0.0006
+    },
+    {
+      "module": "M31",
+      "check": "regenerated histogram contains every retained draw",
+      "actual": 25000.0,
+      "expected": 25000,
+      "tolerance": 0
+    },
+    {
+      "module": "M31",
+      "check": "grouped posterior mean approximation",
+      "actual": 15.03684,
+      "expected": 15.03808083825089,
+      "tolerance": 0.05
+    },
+    {
+      "module": "M32",
+      "check": "first two eigenvalues and explained fraction",
+      "actual": [
+        2.655088250251783,
+        1.7599231634326475,
+        0.8830022827368861
+      ],
+      "expected": [
+        2.657,
+        1.758,
+        0.883
+      ],
+      "tolerance": 0.003
+    },
+    {
+      "module": "M33",
+      "check": "population denominator SD for standardization",
+      "actual": [
+        1.1303359751271596,
+        9.776575604758323
+      ],
+      "expected": [
+        1.13,
+        9.777
+      ],
+      "tolerance": 0.001
+    },
+    {
+      "module": "M34",
+      "check": "sensitivity, specificity, PPV, accuracy",
+      "actual": [
+        0.8,
+        0.9,
+        0.6666666666666666,
+        0.88
+      ],
+      "expected": [
+        0.8,
+        0.9,
+        0.6666666666666666,
+        0.88
+      ],
+      "tolerance": 1e-12
+    },
+    {
+      "module": "M34",
+      "check": "MSE, RMSE, MAE",
+      "actual": [
+        12.6,
+        3.5496478698597698,
+        3.0
+      ],
+      "expected": [
+        12.6,
+        3.549648,
+        3.0
+      ],
+      "tolerance": 1e-06
+    },
+    {
+      "module": "M35",
+      "check": "Newton cooling at 48 hours",
+      "actual": 109.29900322495133,
+      "expected": 109.3,
+      "tolerance": 0.05
+    },
+    {
+      "module": "M36",
+      "check": "SIR peak and final cumulative",
+      "actual": [
+        100.13504721776444,
+        691.835048646941
+      ],
+      "expected": [
+        100,
+        692
+      ],
+      "tolerance": 0.6
+    },
+    {
+      "module": "M37",
+      "check": "two-day failure probability and stationary vector",
+      "actual": [
+        0.032,
+        0.8460365853658532,
+        0.11585365853658537,
+        0.03810975609756095
+      ],
+      "expected": [
+        0.032,
+        0.846,
+        0.116,
+        0.038
+      ],
+      "tolerance": 0.0006
+    }
+  ],
+  "geometry_regression": {
+    "counts": {
+      "ci_batches": 72,
+      "intervals": 1488,
+      "regression_settings": 9,
+      "residuals": 90,
+      "likelihood_settings": 9,
+      "polynomial_points": 1687
+    },
+    "intervals_beyond_old_axis": 1,
+    "failures": [],
+    "pageerrors": []
+  },
+  "common_tools_idempotence": {
+    "modules": 13,
+    "unchanged_on_second_application": true
+  },
+  "limits": [
+    "Automated checks and selected visual inspection; no learner usability study.",
+    "Only selected main visuals rebuilt; supplementary SVGs retained with common viewer.",
+    "Textbook references are conceptual, not a claim to recover unavailable raw observations."
+  ]
+}
