@@ -246,6 +246,18 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
 .refs .refsource small{font-size:11px;font-weight:600;white-space:nowrap}
 .refs .refmeta{font-size:12px;color:var(--gray);line-height:1.45;margin-top:2px}
 .refs a:focus-visible{outline:2px solid var(--navy);outline-offset:2px;border-radius:2px}
+/* V3_VISUAL_TOOLS: all styles stay inside each standalone module. */
+.v3-sr{position:absolute!important;width:1px!important;height:1px!important;padding:0!important;margin:-1px!important;overflow:hidden!important;clip:rect(0,0,0,0)!important;white-space:nowrap!important;border:0!important}
+.v3-data{border-collapse:collapse;width:100%;font-size:13px;line-height:1.35;color:var(--navy);font-variant-numeric:tabular-nums}
+.v3-data caption{text-align:left;font-size:12px;font-weight:800;padding:0 0 6px}.v3-data th,.v3-data td{padding:6px 8px;border-bottom:1px solid var(--line);text-align:right}.v3-data th:first-child,.v3-data td:first-child{text-align:left}.v3-data thead{background:#EEF2F7}.v3-data tbody th{font-weight:700}.v3-compact th,.v3-compact td{padding:2px 4px;line-height:1.25}
+.sumtbl tbody th{background:none;color:var(--navy);font-weight:800;padding:10px 14px;border-bottom:1px solid var(--line);vertical-align:top;border-radius:0!important}.sumtbl tbody td{padding:10px 14px}.sumtbl tbody tr:nth-child(even) th{background:#F8F9FB}
+.v3-controls{display:flex;flex-wrap:wrap;gap:6px;flex:0 0 auto}.v3-controls button{font:inherit;font-size:12px;border:1px solid #CBD2DD;background:white;color:#1B2A4A;padding:4px 9px;border-radius:6px;cursor:pointer}.v3-controls button[aria-pressed="true"]{background:#1B2A4A;color:white}
+.v3-open{font:inherit;font-size:12px;padding:6px 10px;color:#1B2A4A;background:white;border:1px solid #CBD2DD;border-radius:7px;cursor:pointer}.v3-open:disabled{opacity:.45;cursor:default}
+.v3-dialog{box-sizing:border-box;width:min(96vw,1100px);max-width:96vw;max-height:94vh;padding:18px;border:1px solid #CBD2DD;border-radius:12px;background:white;color:#1B2A4A;font-size:16px;font-family:"Noto Sans KR","Malgun Gothic",sans-serif}.v3-dialog::backdrop{background:rgba(15,23,42,.65)}
+.v3-dialog h2{display:block;font-size:20px;margin:0 0 14px;line-height:1.4}.v3-toolbar{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin:8px 0 12px}.v3-toolbar label{display:flex;align-items:center;gap:6px}.v3-toolbar select{max-width:min(70vw,500px);padding:6px;font:inherit}.v3-toolbar button{font:inherit;font-size:14px;padding:7px 12px;border:1px solid #94A3B8;border-radius:6px;background:white;color:#1B2A4A;cursor:pointer}.v3-toolbar input{width:120px}
+.v3-canvas{overflow:auto;border:1px solid #D6DBE5;border-radius:8px;max-height:62vh;background:white}.v3-sheet{box-sizing:border-box;padding:18px}.v3-sheet svg{display:block;width:100%;height:auto;background:white}.v3-sheet table{width:100%;font-size:16px!important;line-height:1.5}.v3-sheet th,.v3-sheet td{font-size:16px!important;line-height:1.5;padding:8px 10px}.v3-sheet caption{font-size:16px!important;line-height:1.5;text-align:left;margin-bottom:8px}.v3-dialog p{font-size:14px;line-height:1.5;margin:10px 0 0}.v3-dialog :focus-visible,.v3-open:focus-visible,.v3-controls button:focus-visible{outline:3px solid #225B85;outline-offset:3px}
+
+/* END_V3_VISUAL_CSS */
 </style>
 </head>
 <body>
@@ -275,7 +287,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
       <div class="ov">
       <div class="ov-main">
       <div class="sh"><div class="sec">학습개요 · 이 모듈의 예시</div><h2>혈압 예 ①에 ‘복용 전’ 혈압을 더해 여러 검정을 해 봅니다</h2></div>
-        <div class="fig plain"><svg id="m14-case" viewBox="0 0 440 250" role="img" aria-label="신약군 7명의 복용 전후 혈압과 위약군 7명의 혈압 표"></svg></div>
+        <div class="fig plain"><table class="v3-data" id="m14-case" ></table></div>
       </div>
         <div class="side shade">
           <ul class="key"><li>같은 14명의 데이터로 검정을 바꿔 봅니다.</li></ul>
@@ -610,13 +622,13 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
     <section class="slide" data-step="3" id="s-4-sum">
       <div class="sh"><div class="sec">4-6 정리</div><h2>비교 목적과 자료의 구조를 먼저 정하고 검정법을 고릅니다</h2></div>
       <div class="body full" style="align-content:center">
-        <table class="sumtbl">
-          <thead><tr><th>상황</th><th>알맞은 검정</th><th>이 모듈의 예시</th></tr></thead>
+        <table class="sumtbl"><caption class="v3-sr">두 집단 평균 비교 · 본문 핵심 요약</caption>
+          <thead><tr><th scope="col">상황</th><th scope="col">알맞은 검정</th><th scope="col">이 모듈의 예시</th></tr></thead>
           <tbody>
-            <tr><td>표본 1개 · 정한 값과 비교</td><td>일표본 t검정 (μ는 의미 있는 값)</td><td>위약군 145.0 vs 140 → t = 1.69, p = 0.142</td></tr>
-            <tr><td>서로 다른 두 집단 · 평균 비교</td><td>Welch 우선 검토 (작은 표본은 분포 확인)</td><td>신약 vs 위약 → t = −2.73, p = 0.018</td></tr>
-            <tr><td>같은 대상을 두 번 측정</td><td>대응 있는 t검정 (차이의 평균 = 0)</td><td>복용 전 vs 후 → t = −7.77, p = 0.0002</td></tr>
-            <tr><td>독립 두 집단 · 순위 기반 비교</td><td>윌콕슨 순위합 검정 (맨-휘트니 U검정)</td><td>순위합 33.5 vs 71.5 → 근사 p ≈ 0.017</td></tr>
+            <tr><th scope="row">표본 1개 · 정한 값과 비교</th><td>일표본 t검정 (μ는 의미 있는 값)</td><td>위약군 145.0 vs 140 → t = 1.69, p = 0.142</td></tr>
+            <tr><th scope="row">서로 다른 두 집단 · 평균 비교</th><td>Welch 우선 검토 (작은 표본은 분포 확인)</td><td>신약 vs 위약 → t = −2.73, p = 0.018</td></tr>
+            <tr><th scope="row">같은 대상을 두 번 측정</th><td>대응 있는 t검정 (차이의 평균 = 0)</td><td>복용 전 vs 후 → t = −7.77, p = 0.0002</td></tr>
+            <tr><th scope="row">독립 두 집단 · 순위 기반 비교</th><td>윌콕슨 순위합 검정 (맨-휘트니 U검정)</td><td>순위합 33.5 vs 71.5 → 근사 p ≈ 0.017</td></tr>
           </tbody>
         </table>
       </div>
@@ -841,6 +853,13 @@ function flow(svg,names){
   el("text",{x:220,y:200,"text-anchor":"middle","font-size":12,fill:C.gray},svg,"본문 소단원을 배우는 순서");
 }
 /* 화면에 해당 id가 있을 때만 그립니다(모듈마다 쓰지 않는 그림은 건너뜀) */
+
+/* V3: drawings use logical coordinates; data tables remain native HTML. */
+function v3text(s,x,y,t,o){o=o||{};return el("text",{x:x,y:y,"font-size":o.fs||12,"font-weight":o.bold?800:600,"text-anchor":o.a||"start",fill:o.c||C.navy,stroke:o.halo?"white":"none","stroke-width":o.halo?3:0,"paint-order":"stroke"},s,t);}
+function v3line(s,x1,y1,x2,y2,col,dash){return el("line",{x1:x1,x2:x2,y1:y1,y2:y2,stroke:col||C.navy3,"stroke-width":1.7,"stroke-dasharray":dash||"none"},s);}
+function v3desc(s,text){el("title",{},s,s.getAttribute("aria-label")||"그림");el("desc",{},s,text);}
+function v3table(root,caption,heads,rows){var table=root.tagName.toLowerCase()==="table"?root:document.createElement("table");table.classList.add("v3-data");table.replaceChildren();var cap=table.createCaption();cap.textContent=caption;var head=table.createTHead().insertRow();heads.forEach(function(h){var th=document.createElement("th");th.scope="col";th.textContent=h;head.appendChild(th);});var body=table.createTBody();rows.forEach(function(values){var tr=body.insertRow();values.forEach(function(v,j){var cell=document.createElement(j?"td":"th");if(!j)cell.scope="row";cell.textContent=v;tr.appendChild(cell);});});if(table!==root)root.appendChild(table);return table;}
+
 function on(id,fn){var e=document.getElementById(id);if(e)fn(e);}
 on("fig-flow",function(s){flow(s,["소단원 1","소단원 2","정리"]);});
 on("fig-case",function(s){barChart(s,CASE.values,{labels:true});});
@@ -898,13 +917,9 @@ on("m14-ov",function(s){
 });
 
 on("m14-case",function(s){
-  bxF(s,4,4,432,242,"#fff","#D5D9E0");var cols=[["환자",48],["복용 전",130],["복용 후",210],["차이",284],["위약군",380]];
-  el("rect",{x:14,y:12,width:412,height:26,rx:6,fill:C.navy},s);cols.forEach(function(c){tF(s,c[1],30,c[0],{fw:800,fs:11.5,c:"#fff"});});
-  el("rect",{x:94,y:40,width:236,height:180,rx:6,fill:"#FDF4EC"},s);el("rect",{x:338,y:40,width:84,height:180,rx:6,fill:"#EEF6EA"},s);
-  tF(s,212,52,"신약군 같은 7명",{fs:9.5,c:C.amberInk,fw:700});tF(s,380,52,"다른 7명",{fs:9.5,c:C.ok,fw:700});
-  for(var i=0;i<7;i++){var y=72+i*21;tF(s,48,y,i+1,{fs:11.5,c:C.gray});tF(s,130,y,BEFORE[i],{fs:12});tF(s,210,y,DRUG[i],{fs:12});tF(s,284,y,(DIFF[i]>0?"+":"")+DIFF[i],{fs:12,fw:800,c:"#B42318"});tF(s,380,y,PLAC[i],{fs:12});}
-  el("line",{x1:14,x2:426,y1:216,y2:216,stroke:C.gray2},s);
-  tF(s,48,234,"평균",{fw:800});tF(s,130,234,MB.toFixed(1),{fw:800});tF(s,210,234,MD.toFixed(1),{fw:800});tF(s,284,234,meanF(DIFF).toFixed(2),{fw:800,c:"#B42318"});tF(s,380,234,MP.toFixed(1),{fw:800});
+  s.parentNode.style.flexDirection="column";s.parentNode.style.alignItems="stretch";
+  v3table(s,"신약군 같은 7명의 전후 혈압 · mmHg",["환자 ID","복용 전","복용 후","후−전"],BEFORE.map(function(v,i){return ["A"+(i+1),v,DRUG[i],DRUG[i]-v];}));
+  var cap=s.caption;cap.textContent+=" · 위약군은 별도 7명";var note=document.createElement("p");note.className="v3-case-note";note.style.cssText="font-size:12px;line-height:1.5;margin:10px 0 0";note.textContent="별도 위약군(행끼리 짝이 아님): "+PLAC.join(", ")+" mmHg";s.parentNode.appendChild(note);
 });
 
 on("m14-flow",function(s){
@@ -1292,6 +1307,54 @@ p3d();
 })();
 show(0);
 })();
+</script>
+<script data-visual-tools="3">
+/* V3_VISUAL_TOOLS: current-state snapshots; no external resources or requests. */
+(function(){
+"use strict";
+var stage=document.querySelector('.stage'),vp=document.querySelector('.viewport'),footer=document.querySelector('.bottombar');
+if(!stage||!vp||!footer)return;
+vp.querySelectorAll('.slide svg:not([aria-hidden="true"])').forEach(function(svg,i){svg.setAttribute('role','img');if(!svg.getAttribute('aria-label')&&!svg.getAttribute('aria-labelledby')){var title=svg.closest('.slide').querySelector('h2');svg.setAttribute('aria-label',(title?title.textContent.replace(/^Q\s*/, ''):'학습 그림')+' · 그림 '+(i+1));}});
+var opener=document.createElement('button');opener.type='button';opener.className='v3-open';opener.textContent='그림·표 크게 보기';opener.setAttribute('aria-haspopup','dialog');opener.setAttribute('aria-controls','v3-visual-dialog');footer.insertBefore(opener,footer.querySelector('.spacer'));
+var dialog=document.createElement('dialog');dialog.id='v3-visual-dialog';dialog.className='v3-dialog';dialog.setAttribute('aria-labelledby','v3-visual-heading');
+dialog.innerHTML='<h2 id="v3-visual-heading">그림·표 크게 보기</h2><div class="v3-toolbar"><label>대상 <select id="v3-visual-select"></select></label><label>배율 <input id="v3-visual-zoom" type="range" min="100" max="250" step="25" value="100"><output id="v3-visual-scale">100%</output></label><button type="button" id="v3-visual-close">닫기</button></div><div class="v3-canvas" tabindex="0" aria-label="확대한 그림·표. 내용이 넓으면 가로로 스크롤하세요"><div class="v3-sheet"></div></div><div class="v3-toolbar"><button type="button" id="v3-visual-svg">SVG 저장</button><button type="button" id="v3-visual-png">고해상도 PNG 저장</button></div><p id="v3-visual-note" role="status" aria-live="polite"></p>';
+document.body.appendChild(dialog);
+var select=dialog.querySelector('select'),zoom=dialog.querySelector('input'),sheet=dialog.querySelector('.v3-sheet'),canvas=dialog.querySelector('.v3-canvas'),note=dialog.querySelector('#v3-visual-note'),svgButton=dialog.querySelector('#v3-visual-svg'),pngButton=dialog.querySelector('#v3-visual-png'),items=[],snapshot=null,busy=false;
+function activeItems(){var slide=vp.querySelector('.slide.on');return slide?[].slice.call(slide.querySelectorAll('svg,table')):[];}
+function update(){opener.disabled=!activeItems().length;}
+function label(e,i){return (e.getAttribute('aria-label')||(e.querySelector('caption')&&e.querySelector('caption').textContent)||((e.tagName.toLowerCase()==='svg'?'그림 ':'표 ')+(i+1))).trim();}
+function snapshotOf(source){
+ var clone=source.cloneNode(true),original=[source].concat([].slice.call(source.querySelectorAll('*'))),copies=[clone].concat([].slice.call(clone.querySelectorAll('*'))),ids={};
+ original.forEach(function(e,i){var c=copies[i];if(e.id)ids[e.id]='v3-copy-'+i+'-'+e.id;
+  if(source.tagName.toLowerCase()==='svg'){var cs=getComputedStyle(e);['font-family','font-size','font-weight','font-style','fill','fill-opacity','stroke','stroke-width','stroke-opacity','stroke-dasharray','text-anchor','paint-order'].forEach(function(k){c.style.setProperty(k,cs.getPropertyValue(k));});}
+ });
+ copies.forEach(function(e){if(e.id)e.id=ids[e.id];if(e.getAttribute('role')==='button'){e.removeAttribute('role');e.removeAttribute('tabindex');e.style.cursor='default';}[].slice.call(e.attributes).forEach(function(a){var value=a.value.replace(/url\(["']?#([^)'"\s]+)["']?\)/g,function(m,id){return 'url(#'+(ids[id]||id)+')';});
+  if(a.name==='href'||a.name==='xlink:href')value=value.replace(/^#(.+)$/,function(m,id){return '#'+(ids[id]||id);});
+  if(a.name==='aria-labelledby'||a.name==='aria-describedby')value=value.split(/\s+/).map(function(id){return ids[id]||id;}).join(' ');e.setAttribute(a.name,value);});
+ });
+ if(source.tagName.toLowerCase()==='svg'){var box=source.viewBox.baseVal;clone.setAttribute('xmlns','http://www.w3.org/2000/svg');clone.setAttribute('width',box.width);clone.setAttribute('height',box.height);clone.style.background='white';}
+ else{var caption=clone.querySelector('caption');if(caption){caption.classList.remove('v3-sr');caption.removeAttribute('style');}}
+ return clone;
+}
+function resize(){sheet.style.width=Math.max(640,canvas.clientWidth)*Number(zoom.value)/100+'px';dialog.querySelector('output').textContent=zoom.value+'%';}
+function render(){sheet.replaceChildren();snapshot=snapshotOf(items[Number(select.value)]);sheet.appendChild(snapshot);var isSVG=snapshot.tagName.toLowerCase()==='svg';svgButton.disabled=!isSVG;pngButton.disabled=!isSVG;note.textContent=isSVG?'현재 그림의 상태입니다. SVG는 벡터 원본이며, PNG는 가로·세로 중 긴 변을 3,840픽셀로 저장합니다.':'현재 표의 상태입니다. 표의 제목·행·열 머리글과 값을 크게 읽거나 복사할 수 있습니다.';resize();}
+opener.onclick=function(){items=activeItems();if(!items.length)return;select.replaceChildren();items.forEach(function(e,i){var option=document.createElement('option');option.value=i;option.textContent=label(e,i);select.appendChild(option);});zoom.value='100';dialog.showModal();render();select.focus();};
+function cleanup(){sheet.replaceChildren();snapshot=null;opener.focus();}
+function closeViewer(){dialog.close();cleanup();}
+select.onchange=render;zoom.oninput=resize;dialog.querySelector('#v3-visual-close').onclick=function(){closeViewer();};
+document.addEventListener('keydown',function(e){if(dialog.open&&!dialog.contains(e.target)){e.stopImmediatePropagation();if(e.key==='Escape'){e.preventDefault();closeViewer();}else{if(['Tab','ArrowRight','ArrowLeft','PageDown','PageUp'].indexOf(e.key)>=0)e.preventDefault();select.focus();}}},true);
+dialog.addEventListener('keydown',function(e){e.stopPropagation();if(e.key==='Tab'){var focusable=[].slice.call(dialog.querySelectorAll('button:not(:disabled),select:not(:disabled),input:not(:disabled),[tabindex="0"]')),first=focusable[0],last=focusable[focusable.length-1];if(e.shiftKey&&document.activeElement===first){e.preventDefault();last.focus();}else if(!e.shiftKey&&document.activeElement===last){e.preventDefault();first.focus();}}if(e.key==='Escape'){e.preventDefault();closeViewer();}});
+dialog.addEventListener('close',function(){if(!dialog.open&&snapshot)cleanup();});
+function download(blob,suffix,index){var url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download=document.title.replace(/[\\/:*?"<>|]/g,'-')+'-figure-'+(index==null?Number(select.value)+1:index)+suffix;a.click();setTimeout(function(){URL.revokeObjectURL(url);},1500);}
+function xml(){return new XMLSerializer().serializeToString(snapshot);}
+svgButton.onclick=function(){if(snapshot)download(new Blob([xml()],{type:'image/svg+xml;charset=utf-8'}),'.svg');};
+pngButton.onclick=function(){if(!snapshot||busy)return;busy=true;pngButton.disabled=true;select.focus();var exportIndex=Number(select.value)+1,saved=snapshot.cloneNode(true),box=saved.viewBox.baseVal,scale=3840/Math.max(box.width,box.height),width=Math.round(box.width*scale),height=Math.round(box.height*scale);saved.setAttribute('width',width);saved.setAttribute('height',height);var url=URL.createObjectURL(new Blob([new XMLSerializer().serializeToString(saved)],{type:'image/svg+xml;charset=utf-8'})),img=new Image();
+ img.onload=function(){var out=document.createElement('canvas');out.width=width;out.height=height;var context=out.getContext('2d');context.fillStyle='white';context.fillRect(0,0,width,height);context.drawImage(img,0,0,width,height);out.toBlob(function(blob){if(blob)download(blob,'.png',exportIndex);note.textContent='PNG '+width+' × '+height+'픽셀을 저장했습니다.';busy=false;pngButton.disabled=!(snapshot&&snapshot.tagName.toLowerCase()==='svg');URL.revokeObjectURL(url);},'image/png');};
+ img.onerror=function(){URL.revokeObjectURL(url);busy=false;pngButton.disabled=false;note.textContent='PNG를 만들지 못했습니다. SVG 저장을 이용해 주세요.';};img.src=url;
+};
+new MutationObserver(update).observe(vp,{subtree:true,attributes:true,attributeFilter:['class']});update();
+})();
+
 </script>
 </body>
 </html>

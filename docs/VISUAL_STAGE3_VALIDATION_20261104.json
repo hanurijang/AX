@@ -1,0 +1,37 @@
+{
+  "counts": {
+    "modules": 16,
+    "views": 32,
+    "states": 46,
+    "viewer_assets": 36,
+    "export_files": 2,
+    "tables": 27,
+    "SVGs": 295,
+    "keyboard_events": 577,
+    "reference_snapshots": 1
+  },
+  "failures": [],
+  "pageerrors": [],
+  "full_regression": {
+    "counts": {
+      "slides": 1134,
+      "svgs": 714,
+      "quizzes": 222,
+      "range_states": 162,
+      "expanded_help": 74
+    },
+    "failures": 0,
+    "pageerrors": 0,
+    "svg_text_collisions": 0,
+    "checked_after_final_m16_label_change": true
+  },
+  "independent_legacy_number_checks": 43,
+  "template_idempotence": "16 files unchanged after repeat application",
+  "legacy_p25_note": "Existing audit assumes .gmap [data-jump] in M01, which is absent in baseline 3182cd8 too. It is not counted as a passed check. New viewer keyboard and closed-slide navigation are verified by review_visual_stage3.py.",
+  "supplemental_m16_method_check": {
+    "viewport_sizes": 2,
+    "pearson_yates_fisher_pvalues": "matched scipy",
+    "fisher_column": "chi-square not used",
+    "failures": 0
+  }
+}
