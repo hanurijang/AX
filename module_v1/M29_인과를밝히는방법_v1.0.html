@@ -244,6 +244,15 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
 .refs .refsource small{font-size:11px;font-weight:600;white-space:nowrap}
 .refs .refmeta{font-size:12px;color:var(--gray);line-height:1.45;margin-top:2px}
 .refs a:focus-visible{outline:2px solid var(--navy);outline-offset:2px;border-radius:2px}
+
+/* 그림·표 재작성 2단계: 벡터 그림과 의미 구조를 가진 수치표 */
+.v2-table{border-collapse:collapse;width:100%;font-size:13px;line-height:1.4;color:var(--navy);font-variant-numeric:tabular-nums}
+.v2-table caption{text-align:left;font-size:12px;font-weight:700;padding:0 0 5px}
+.v2-table th,.v2-table td{padding:5px 8px;border-bottom:1px solid var(--line);text-align:right}
+.v2-table th:first-child{text-align:left}.v2-table thead{background:#EEF2F7}
+.v2-controls{display:flex;gap:6px;flex-wrap:wrap;flex:0 0 auto}.v2-controls .mbtn{font-size:12px;padding:4px 10px}
+.v2-note{margin:0;font-size:12px;line-height:1.45;color:var(--gray)}
+
 </style>
 </head>
 <body>
@@ -511,7 +520,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
       <div class="sh"><div class="sec">4-4 통계적 인과 추론</div><h2><span class="q">Q</span>교육을 도입한 라인과 안 한 라인의 전후 변화를 어떻게 비교할까요?</h2></div>
       <div class="body split even">
         <div class="figcol">
-          <div class="fig"><svg id="m29-did" viewBox="0 0 420 150" role="img" aria-label="라인 A는 2.4에서 1.9로, 라인 B는 2.0에서 1.8로 변해 이중차분 −0.3"></svg></div>
+          <div class="v2-controls" id="m29-counterfactual"><button class="mbtn" type="button" aria-pressed="true">반사실 표시</button></div><div class="fig"><svg id="m29-did" viewBox="0 0 420 180" role="img" aria-label="라인 A는 2.4에서 1.9로, 라인 B는 2.0에서 1.8로 변해 이중차분 −0.3"></svg></div>
           <div class="math">
             <div class="mt">핵심 수학 개념 · 이중차분법(DID)</div>
             <div class="f">효과 = (A<sub>후</sub> − B<sub>후</sub>) − (A<sub>전</sub> − B<sub>전</sub>)</div>
@@ -766,6 +775,12 @@ function flow(svg,names){
   el("text",{x:220,y:200,"text-anchor":"middle","font-size":12,fill:C.gray},svg,"본문 소단원을 배우는 순서");
 }
 /* 화면에 해당 id가 있을 때만 그립니다(모듈마다 쓰지 않는 그림은 건너뜀) */
+
+/* 이 그림군의 글자는 논리 크기 12px 이상으로 작성합니다. */
+function v2text(s,x,y,text,opts){opts=opts||{};return el("text",{x:x,y:y,"text-anchor":opts.anchor||"start","font-size":opts.size||12,"font-weight":opts.bold?800:600,fill:opts.color||C.navy,stroke:opts.halo?"#fff":"none","stroke-width":opts.halo?3:0,"paint-order":"stroke"},s,text);}
+function v2line(s,x1,y1,x2,y2,color,dash){return el("line",{x1:x1,y1:y1,x2:x2,y2:y2,stroke:color||C.gray2,"stroke-width":1.6,"stroke-dasharray":dash||"none"},s);}
+function v2desc(s,text){if(s.getAttribute("aria-label"))el("title",{},s,s.getAttribute("aria-label"));el("desc",{},s,text);}
+
 function on(id,fn){var e=document.getElementById(id);if(e)fn(e);}
 on("fig-flow",function(s){flow(s,["소단원 1","소단원 2","정리"]);});
 on("fig-case",function(s){barChart(s,CASE.values,{labels:true});});
@@ -887,9 +902,20 @@ function didW(s,v,X,Y,show){var A=[v[0],v[1]],B=[v[2],v[3]];
   if(show){var cf=A[0]+(B[1]-B[0]);el("line",{x1:X(0),x2:X(1),y1:Y(A[0]),y2:Y(cf),stroke:PNK,"stroke-width":1.6,"stroke-dasharray":"5 4"},s);el("circle",{cx:X(1),cy:Y(cf),r:4,fill:"#fff",stroke:PNK,"stroke-width":1.5},s);
     tW(s,X(1)+8,Y(cf)+4,cf.toFixed(1),{a:"start",fw:700,fs:9.5,c:PNK});tW(s,X(0.5),Y(Math.max(A[0],cf))-12,"점선: 도입 안 했다면 (B와 평행)",{fw:700,fs:9,c:PNK,halo:true});}}
 on("m29-did",function(s){
-  var X=linW(0,1,60,250),Y=linW(1.6,2.6,136,14);el("line",{x1:40,x2:270,y1:136,y2:136,stroke:C.gray2},s);tW(s,X(0),148,"도입 전",{fs:9.5,c:C.gray,fw:700});tW(s,X(1),148,"도입 후",{fs:9.5,c:C.gray,fw:700});
-  didW(s,[2.4,1.9,2.0,1.8],X,Y,true);
-  bxW(s,300,14,116,108,"#F3F5F9");tW(s,358,36,"라인 A(도입)",{fw:800,fs:10.5,c:PNK});tW(s,358,56,"라인 B(미도입)",{fw:800,fs:10.5,c:"#1C6EA4"});tW(s,358,84,"A 전후 차 −0.5",{fw:700,fs:10});tW(s,358,104,"DID = −0.3",{fw:800,fs:11.5,c:GRN});
+  var counterfactual=true,X=function(i){return i?302:100;},Y=linW(1.6,2.6,136,30);
+  function draw(){clear(s);v2desc(s,"실선 원은 교육 도입 A, 실선 사각형은 미도입 B의 관측값입니다. 점선 빈 원은 평행추세를 가정한 A의 반사실 2.2%이며 관측된 값이 아닙니다. DID는 −0.3%p입니다.");
+    v2text(s,12,16,"불량률(%) · 가상 자료");[1.8,2.1,2.4].forEach(function(v){v2line(s,54,Y(v),385,Y(v),C.grid);v2text(s,45,Y(v)+4,v.toFixed(1),{anchor:"end"});});
+    v2line(s,X(0),Y(2.4),X(1),Y(1.9),"#9E2F59");v2line(s,X(0),Y(2),X(1),Y(1.8),"#225B85");
+    [2.4,1.9].forEach(function(v,i){el("circle",{cx:X(i),cy:Y(v),r:5,fill:"#9E2F59"},s);});
+    [2,1.8].forEach(function(v,i){el("rect",{x:X(i)-4.5,y:Y(v)-4.5,width:9,height:9,fill:"#225B85"},s);});
+    v2text(s,88,Y(2.4)-10,"A 2.4",{anchor:"end",color:"#9E2F59"});v2text(s,88,Y(2)+4,"B 2.0",{anchor:"end",color:"#225B85"});
+    v2text(s,314,Y(1.9)-1,"A 1.9",{color:"#9E2F59"});v2text(s,314,Y(1.8)+16,"B 1.8",{color:"#225B85"});
+    if(counterfactual){v2line(s,X(0),Y(2.4),X(1),Y(2.2),"#9E2F59","5 4");el("circle",{cx:X(1),cy:Y(2.2),r:5,fill:"#fff",stroke:"#9E2F59","stroke-width":2},s);
+      v2text(s,302,Y(2.2)-13,"반사실 2.2",{anchor:"middle",color:"#9E2F59"});v2line(s,282,Y(2.2),282,Y(1.9),C.navy);v2text(s,270,Y(2.05)+4,"−0.3%p",{anchor:"end",bold:true,halo:true});}
+    v2text(s,X(0),163,"도입 전",{anchor:"middle"});v2text(s,X(1),163,"도입 후",{anchor:"middle"});
+    var b=document.querySelector("#m29-counterfactual button");b.classList.toggle("on",counterfactual);b.setAttribute("aria-pressed",counterfactual);b.textContent=counterfactual?"반사실 숨기기":"평행추세 아래 반사실 표시";s.dataset.did=(1.9-2.4)-(1.8-2.0);
+  }
+  document.querySelector("#m29-counterfactual button").onclick=function(){counterfactual=!counterfactual;draw();};draw();
 });
 
 /* 실습 1 · 선택편향(조작형) */

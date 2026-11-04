@@ -238,6 +238,15 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
 .refs .refsource small{font-size:11px;font-weight:600;white-space:nowrap}
 .refs .refmeta{font-size:12px;color:var(--gray);line-height:1.45;margin-top:2px}
 .refs a:focus-visible{outline:2px solid var(--navy);outline-offset:2px;border-radius:2px}
+
+/* 그림·표 재작성 2단계: 벡터 그림과 의미 구조를 가진 수치표 */
+.v2-table{border-collapse:collapse;width:100%;font-size:13px;line-height:1.4;color:var(--navy);font-variant-numeric:tabular-nums}
+.v2-table caption{text-align:left;font-size:12px;font-weight:700;padding:0 0 5px}
+.v2-table th,.v2-table td{padding:5px 8px;border-bottom:1px solid var(--line);text-align:right}
+.v2-table th:first-child{text-align:left}.v2-table thead{background:#EEF2F7}
+.v2-controls{display:flex;gap:6px;flex-wrap:wrap;flex:0 0 auto}.v2-controls .mbtn{font-size:12px;padding:4px 10px}
+.v2-note{margin:0;font-size:12px;line-height:1.45;color:var(--gray)}
+
 </style>
 </head>
 <body>
@@ -461,7 +470,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
       <div class="sh"><div class="sec">4-3 t분포와 95% 신뢰구간</div><h2><span class="q">Q</span>t분포로 구한 10명의 95% 신뢰구간은 얼마일까요?</h2></div>
       <div class="body split even">
         <div class="figcol">
-          <div class="fig"><svg id="m10-tci" viewBox="0 0 420 150" role="img" aria-label="±2SE 도입 구간 163.54~172.26과 t분포로 구한 95% 구간 162.97~172.83 비교"></svg></div>
+          <div class="fig"><svg id="m10-tci" viewBox="0 0 420 180" role="img" aria-label="±2SE 도입 구간 163.54~172.26과 t분포로 구한 95% 구간 162.97~172.83 비교"></svg></div>
           <div class="math">
             <div class="mt">핵심 수학 개념 · t분포로 구한 95% 신뢰구간</div>
             <div class="f">x̄ ± t × s/√n &nbsp;(n = 10이면 t ≈ 2.26)</div>
@@ -726,6 +735,12 @@ function flow(svg,names){
   el("text",{x:220,y:200,"text-anchor":"middle","font-size":12,fill:C.gray},svg,"본문 소단원을 배우는 순서");
 }
 /* 화면에 해당 id가 있을 때만 그립니다(모듈마다 쓰지 않는 그림은 건너뜀) */
+
+/* 이 그림군의 글자는 논리 크기 12px 이상으로 작성합니다. */
+function v2text(s,x,y,text,opts){opts=opts||{};return el("text",{x:x,y:y,"text-anchor":opts.anchor||"start","font-size":opts.size||12,"font-weight":opts.bold?800:600,fill:opts.color||C.navy,stroke:opts.halo?"#fff":"none","stroke-width":opts.halo?3:0,"paint-order":"stroke"},s,text);}
+function v2line(s,x1,y1,x2,y2,color,dash){return el("line",{x1:x1,y1:y1,x2:x2,y2:y2,stroke:color||C.gray2,"stroke-width":1.6,"stroke-dasharray":dash||"none"},s);}
+function v2desc(s,text){if(s.getAttribute("aria-label"))el("title",{},s,s.getAttribute("aria-label"));el("desc",{},s,text);}
+
 function on(id,fn){var e=document.getElementById(id);if(e)fn(e);}
 on("fig-flow",function(s){flow(s,["소단원 1","소단원 2","정리"]);});
 on("fig-case",function(s){barChart(s,CASE.values,{labels:true});});
@@ -845,12 +860,16 @@ on("m10-tdist",function(s){
 });
 
 on("m10-tci",function(s){
-  var X=linA(160,176,30,400);el("line",{x1:30,x2:400,y1:118,y2:118,stroke:C.gray2},s);
-  for(var t=160;t<=176;t+=2)tA(s,X(t),134,t,{fs:10,c:C.gray,fw:500});
-  [[38,163.54,172.26,"±2SE 도입값",C.navy3],[80,162.97,172.83,"95% (t, ±2.26)",C.amberInk]].forEach(function(r){
-    el("rect",{x:X(r[1]),y:r[0]-10,width:X(r[2])-X(r[1]),height:20,rx:4,fill:r[4]===C.amberInk?"#FCF3D9":"#E4E9F2",stroke:r[4],"stroke-width":1.8},s);
-    el("circle",{cx:X(167.9),cy:r[0],r:4.5,fill:C.navy},s);tA(s,X(r[1])-4,r[0]+4,r[1].toFixed(2),{a:"end",fs:10,fw:800,c:r[4]});tA(s,X(r[2])+4,r[0]+4,r[2].toFixed(2),{a:"start",fs:10,fw:800,c:r[4]});
-    tA(s,X(167.9),r[0]-15,r[3],{fs:10,fw:800,c:r[4]});});
+  var X=linA(160,176,44,394);
+  v2desc(s,"두 구간은 같은 표본평균 167.9cm를 중심으로 합니다. ±2SE는 도입용 근사이며 n=10 정규표본의 95% 구간은 자유도 9의 t값을 사용합니다.");
+  [[18,44,163.54,172.26,"±2SE · 도입용 근사",C.navy3],[94,120,162.97,172.83,"95% t구간 · 자유도 9",C.amberInk]].forEach(function(r){
+    v2text(s,18,r[0],r[4],{bold:true,color:r[5]});
+    v2line(s,X(r[2]),r[1],X(r[3]),r[1],r[5],r[0]===18?"6 3":null);
+    [r[2],r[3]].forEach(function(v){v2line(s,X(v),r[1]-7,X(v),r[1]+7,r[5]);v2text(s,X(v),r[1]+25,v.toFixed(2),{anchor:"middle",color:r[5]});});
+    el("circle",{cx:X(167.9),cy:r[1],r:5,fill:C.navy},s);
+  });
+  v2line(s,44,158,394,158);[160,164,168,172,176].forEach(function(v){v2text(s,X(v),176,v,{anchor:"middle"});});
+
 });
 
 on("m10-grid",function(s){

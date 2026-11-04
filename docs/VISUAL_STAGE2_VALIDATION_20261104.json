@@ -1,0 +1,60 @@
+{
+  "numerical": {
+    "retained_count": 25000,
+    "exact_delta_ci": [
+      4.648868009350086,
+      25.35113199064993
+    ],
+    "empirical_delta_ci": [
+      4.687906434156452,
+      25.486941681414123
+    ],
+    "poisson_quadrature": {
+      "a": {
+        "mean": -2.594259441591406,
+        "ci": [
+          -3.6996323312187918,
+          -1.6003282617592163
+        ]
+      },
+      "b": {
+        "mean": 0.5823979643741347,
+        "ci": [
+          0.4657068911777811,
+          0.7076687151305595
+        ]
+      }
+    },
+    "AR1_ess": 2801.673500785649,
+    "AR1_expected_ess": 2777.7777777777774,
+    "PCA_points": 50,
+    "max_rhat": 1.0020813290986885,
+    "min_bulk_ess": 2918.899689911425
+  },
+  "viewport_states": 102,
+  "failures": [],
+  "pageerrors": [],
+  "scope": "Representative visual states plus independent calculations; not all devices or all user inputs.",
+  "full_regression": {
+    "counts": {
+      "slides": 1134,
+      "svgs": 722,
+      "quizzes": 222,
+      "range_states": 162,
+      "expanded_help": 74
+    },
+    "failures": 0,
+    "pageerrors": 0,
+    "svg_collision_screens": 0
+  },
+  "geometry_regression": {
+    "ci_batches": 72,
+    "intervals": 1488,
+    "regression_settings": 9,
+    "residuals": 90,
+    "likelihood_settings": 9,
+    "polynomial_points": 1687
+  },
+  "legacy_independent_checks": 43,
+  "reproducibility": "All three MCMC generation files reproduced with identical SHA-256 in the same environment."
+}

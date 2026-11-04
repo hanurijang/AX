@@ -239,6 +239,15 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
 /* 25차: 키보드로 펼친 도움말과 피드백의 공간 확보 */
 .slide[data-step="5"] .pmsg{margin:0;flex-shrink:0}
 .slide[data-step="5"] .think{font-size:13px;line-height:1.35;padding:7px 10px;gap:6px}
+
+/* 그림·표 재작성 2단계: 벡터 그림과 의미 구조를 가진 수치표 */
+.v2-table{border-collapse:collapse;width:100%;font-size:13px;line-height:1.4;color:var(--navy);font-variant-numeric:tabular-nums}
+.v2-table caption{text-align:left;font-size:12px;font-weight:700;padding:0 0 5px}
+.v2-table th,.v2-table td{padding:5px 8px;border-bottom:1px solid var(--line);text-align:right}
+.v2-table th:first-child{text-align:left}.v2-table thead{background:#EEF2F7}
+.v2-controls{display:flex;gap:6px;flex-wrap:wrap;flex:0 0 auto}.v2-controls .mbtn{font-size:12px;padding:4px 10px}
+.v2-note{margin:0;font-size:12px;line-height:1.45;color:var(--gray)}
+
 </style>
 </head>
 <body>
@@ -502,17 +511,12 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
       <div class="sh"><div class="sec">4-2 대푯값</div><h2><span class="q">Q</span>극단적인 값 하나는 대푯값을 얼마나 바꿀까요?</h2></div>
       <div class="body split even">
         <div class="figcol">
-          <div class="fig"><svg id="m5-town" viewBox="0 0 420 150" role="img" aria-label="연소득 10억 원인 사람이 이사 오기 전후의 평균값과 중앙값"></svg></div>
-          <div class="math">
-            <div class="mt">핵심 수학 개념 · 이상값과 평균 <span class="tag-v">가상 데이터</span></div>
-            <div class="f">새 평균 = (기존 합계 + 새 값) ÷ (n + 1)</div>
-            <div class="r"><span>계산</span><span>(5,088만 × 100 + 10억) ÷ 101 = 60.88억 ÷ 101 ≈ 6,028만 원</span></div>
-            <div class="r"><span>해석</span><span>한 명 때문에 평균은 940만 원 오르지만 중앙값은 3만 원만 바뀝니다.</span></div>
-          </div>
+          <div class="fig"><svg id="m5-town" viewBox="0 0 420 210" role="img" aria-label="연소득 전체 범위와 기존 주민 구간을 확대한 분포. 전후 요약값은 아래 표에 제공"></svg></div>
+          <table class="v2-table" id="m5-town-table"><caption>가상 주민의 전후 요약 · 연소득(만 원)</caption><thead><tr><th scope="col">시점</th><th scope="col">인원</th><th scope="col">평균</th><th scope="col">중앙값</th></tr></thead><tbody></tbody></table>
         </div>
         <div class="side">
           <ul class="key"><li><b>이상값</b>: 극단적으로 크거나 작은 값</li><li>평균은 크게, 중앙값은 거의 움직이지 않습니다.</li></ul>
-          <p class="exp">그림의 가상 주민 100명은 연소득의 평균과 중앙값이 모두 5,088만 원입니다. 여기에 연소득 10억 원인 주민 한 명이 이사 오면 평균값은 약 6,028만 원으로 뛰지만 중앙값은 5,091만 원으로 거의 그대로입니다. 평균값은 모든 값을 계산에 넣기 때문입니다. 이 예에서는 새 값이 한 번 추가되어 최빈 구간은 그대로지만, 최빈값이 언제나 유지되는 것은 아닙니다.</p>
+          <p class="exp">그림의 가상 주민 100명은 연소득의 평균과 중앙값이 모두 5,088만 원입니다. 여기에 연소득 10억 원인 주민 한 명이 이사 오면 평균값은 약 6,028만 원으로 뛰지만 중앙값은 5,091만 원으로 거의 그대로입니다. 평균값은 모든 값을 계산에 넣기 때문입니다. 아래 확대 그림에는 기존 주민 100명만 표시했습니다. 새 평균은 (기존 소득 합계 + 10억 원) ÷ 101로 계산합니다. 원교재의 개념을 바탕으로 새로 정한 가상 자료입니다.</p>
           <p class="next"><span>다음 질문</span>대푯값만 보면 충분할까?</p>
         </div>
       </div>
@@ -857,6 +861,12 @@ function flow(svg,names){
   el("text",{x:220,y:200,"text-anchor":"middle","font-size":12,fill:C.gray},svg,"본문 소단원을 배우는 순서");
 }
 /* 화면에 해당 id가 있을 때만 그립니다(모듈마다 쓰지 않는 그림은 건너뜀) */
+
+/* 이 그림군의 글자는 논리 크기 12px 이상으로 작성합니다. */
+function v2text(s,x,y,text,opts){opts=opts||{};return el("text",{x:x,y:y,"text-anchor":opts.anchor||"start","font-size":opts.size||12,"font-weight":opts.bold?800:600,fill:opts.color||C.navy,stroke:opts.halo?"#fff":"none","stroke-width":opts.halo?3:0,"paint-order":"stroke"},s,text);}
+function v2line(s,x1,y1,x2,y2,color,dash){return el("line",{x1:x1,y1:y1,x2:x2,y2:y2,stroke:color||C.gray2,"stroke-width":1.6,"stroke-dasharray":dash||"none"},s);}
+function v2desc(s,text){if(s.getAttribute("aria-label"))el("title",{},s,s.getAttribute("aria-label"));el("desc",{},s,text);}
+
 function on(id,fn){var e=document.getElementById(id);if(e)fn(e);}
 on("fig-flow",function(s){flow(s,["소단원 1","소단원 2","정리"]);});
 on("fig-case",function(s){barChart(s,CASE.values,{labels:true});});
@@ -966,22 +976,25 @@ on("m5-shape",function(s){
 /* 4-2 마을 소득과 이상값 */
 on("m5-town",function(s){
   var incomes=[3800, 4003, 4108, 4182, 4240, 4289, 4331, 4368, 4402, 4433, 4461, 4488, 4513, 4536, 4559, 4580, 4601, 4621, 4640, 4658, 4676, 4693, 4710, 4727, 4743, 4759, 4774, 4789, 4804, 4819, 4833, 4847, 4861, 4875, 4889, 4902, 4915, 4929, 4942, 4955, 4968, 4981, 4993, 5006, 5019, 5031, 5044, 5057, 5069, 5085, 5091, 5107, 5119, 5132, 5145, 5157, 5170, 5183, 5195, 5208, 5221, 5234, 5247, 5261, 5274, 5287, 5301, 5315, 5329, 5343, 5357, 5372, 5387, 5402, 5417, 5433, 5449, 5466, 5483, 5500, 5518, 5536, 5555, 5575, 5596, 5617, 5640, 5663, 5688, 5715, 5743, 5774, 5808, 5845, 5887, 5936, 5994, 6068, 6173, 6376];
-  var cnt=Array(7).fill(0);incomes.forEach(function(v){cnt[Math.floor((v-3500)/500)]++;});
-  var barScale=90/Math.max.apply(null,cnt);
-  var beforeMean=sum(incomes)/incomes.length, beforeMedian=(incomes[49]+incomes[50])/2;
-  var afterMean=(sum(incomes)+100000)/101, afterMedian=incomes[50];
-  function panel(x0,title,after){
-    el("text",{x:x0,y:14,"font-size":11.5,"font-weight":800,fill:C.navy},s,title);
-    var X=lin(3500,7000,x0,x0+(after?150:172));
-    cnt.forEach(function(c,i){el("rect",{x:X(3500+i*500)+1,y:128-c*barScale,width:X(4000)-X(3500)-2,height:c*barScale,fill:C.soft},s);});
-    el("line",{x1:x0,x2:x0+(after?190:176),y1:128,y2:128,stroke:C.gray2},s);
-    [4000,5000,6000,7000].forEach(function(t){el("text",{x:X(t),y:142,"text-anchor":"middle","font-size":9.5,fill:C.gray},s,nf(t));});
-    if(!after){vline(s,X(beforeMean),26,128,C.amberInk,"중앙값·평균 ≈ 5,088만",30,"start");}
-    else{vline(s,X(afterMedian),40,128,C.amberInk,"중앙값 5,091만",44,"end");vline(s,X(afterMean),26,128,"#B42318","평균 6,028만",30,"start");
-      el("text",{x:x0+164,y:124,"font-size":10,fill:C.gray},s,"//");el("rect",{x:x0+178,y:124,width:12,height:4,fill:"#B42318"},s);el("text",{x:x0+184,y:116,"text-anchor":"middle","font-size":9.5,"font-weight":800,fill:"#B42318"},s,"10억");}
-  }
-  function nf(v){return v.toLocaleString("ko-KR");}
-  panel(22,"주민 100명 · 소득(만 원)",false);panel(226,"10억 원 1명 이사 후",true);
+  var after=incomes.concat([100000]),X=function(v){return 40+v/100000*350;},Z=function(v){return 40+(v-3500)/3500*350;};
+  v2desc(s,"전체 축은 0~100,000만 원입니다. 기존 100명은 3,800~6,376만 원에 있고 추가한 한 명은 100,000만 원입니다. 아래 그림은 기존 주민 구간만 확대했습니다.");
+  v2text(s,12,16,"전체 범위 · 연소득(만 원)",{bold:true});
+  v2line(s,40,58,390,58);el("rect",{x:X(incomes[0]),y:48,width:X(incomes[99])-X(incomes[0]),height:10,fill:C.navy3},s);
+  el("circle",{cx:X(100000),cy:53,r:5,fill:"#B42318"},s);
+  v2line(s,X(5100),47,100,32);v2text(s,104,34,"기존 100명");v2text(s,390,34,"추가 1명: 10억 원",{anchor:"end",color:"#B42318"});
+  [0,50000,100000].forEach(function(v){v2text(s,X(v),77,v.toLocaleString("ko-KR"),{anchor:v===100000?"end":"middle"});});
+  v2text(s,12,109,"기존 주민 구간 확대 · 이사 전후 도수는 같음",{bold:true});
+  var bins=Array(7).fill(0);incomes.forEach(function(v){bins[Math.floor((v-3500)/500)]++;});
+  var H=function(n){return n/Math.max.apply(null,bins)*50;};
+  v2text(s,30,132,Math.max.apply(null,bins),{anchor:"end"});v2text(s,30,182,"0",{anchor:"end"});v2text(s,390,128,"명",{anchor:"end"});
+  bins.forEach(function(n,i){el("rect",{x:Z(3500+i*500)+1,y:178-H(n),width:48,height:H(n),fill:"#667CA3","data-count":n},s);});
+  v2line(s,40,178,390,178);
+  [3500,5000,7000].forEach(function(v){v2text(s,Z(v),198,v.toLocaleString("ko-KR"),{anchor:v===7000?"end":"middle"});});
+  var tbody=document.querySelector("#m5-town-table tbody");
+  [incomes,after].forEach(function(data,i){var sorted=data.slice().sort(function(a,b){return a-b;}),n=data.length,med=n%2?sorted[(n-1)/2]:(sorted[n/2-1]+sorted[n/2])/2,m=sum(data)/n;
+    var row=tbody.insertRow();[i?"이사 후":"이사 전",n,m.toLocaleString("ko-KR",{maximumFractionDigits:0}),med.toLocaleString("ko-KR")].forEach(function(v,j){var cell=document.createElement(j?"td":"th");if(!j)cell.scope="row";cell.textContent=v;row.appendChild(cell);});
+    row.dataset.mean=m;row.dataset.median=med;row.dataset.count=n;
+  });
 });
 
 /* 4-2 공원 이용자 연령(쌍봉형) */

@@ -82,6 +82,8 @@ def main():
         d=html.fromstring(p.read_text());docs[p.name[:3]]=d;sources[p.name[:3]]=p.read_text()
         for typ in ['svg','table','img']:
             for i,e in enumerate(d.xpath('//'+typ),1):elements[(p.name[:3],f'{typ}:{i}')]=e
+    assert len(elements)==len(inventory), "Source changed since the stage-1 inventory; use its baseline checkout or regenerate the inventory before classification."
+    assert all(elements[(r['module'], f"{r['type']}:{r['type_source_order_1based']}")].get('id','')==r['element_id'] for r in inventory), "Element IDs no longer match the baseline inventory."
     result=[]
     for r in inventory:
         m=r['module'];number=int(m[1:]);key=f"{r['type']}:{r['type_source_order_1based']}";e=elements[(m,key)]

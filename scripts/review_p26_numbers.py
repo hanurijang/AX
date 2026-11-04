@@ -61,8 +61,10 @@ def main():
  z=arr(29,'DZ');t=arr(29,'DT');y=arr(29,'DY');b,r,X=ols(y,t,z);check('M29','adjusted education effect',b[1],-.30,.015)
  check('M29','DID',(1.9-2.4)-(1.8-2),-.3,1e-12)
  xs=arr(30,'XS')[:5];sd=20/np.sqrt(5);check('M30','posterior mean and P(mu>=550)',[xs.mean(),stats.norm.sf(550,xs.mean(),sd)],[555.4,.727],.0006)
- dh=arr(31,'DH');results.append({'module':'M31','check':'stored histogram vs reported original draws','histogram_count':int(dh.sum()),'reported_original_draws':25000,'status':'1 draw unresolved without original chains'})
- check('M31','grouped posterior mean approximation',np.average(np.arange(-10,40)+.5,weights=dh),14.9,.05)
+ dh=arr(31,'DH');posterior=json.loads((ROOT/'data/visual_stage2/m31_summary.json').read_text())
+ check('M31','regenerated histogram contains every retained draw',dh.sum(),posterior['retained_count'],0)
+ edges=np.array(posterior['delta']['edges']);centers=(edges[:-1]+edges[1:])/2
+ check('M31','grouped posterior mean approximation',np.average(centers,weights=dh),posterior['diagnostics']['delta']['mean'],.05)
  dx=arr(32,'DX');ev=np.linalg.eigvalsh(np.corrcoef(dx,rowvar=False))[::-1];check('M32','first two eigenvalues and explained fraction',[ev[0],ev[1],sum(ev[:2])/5],[2.657,1.758,.883],.003)
  cp=arr(33,'CP');check('M33','population denominator SD for standardization',cp.std(axis=0),[1.130,9.777],.001)
  check('M34','sensitivity, specificity, PPV, accuracy',[32/40,144/160,32/48,176/200],[.8,.9,2/3,.88],1e-12)
@@ -74,5 +76,5 @@ def main():
  grid=sol.sol(np.arange(501));check('M36','SIR peak and final cumulative',[max(grid[1]),1000-grid[0,-1]],[100,692],.6)
  q=arr(37,'MQ');st=np.linalg.lstsq(np.vstack([q.T-np.eye(3),np.ones(3)]),[0,0,0,1],rcond=None)[0]
  check('M37','two-day failure probability and stationary vector',[(q@q)[0,2],*st],[.032,.846,.116,.038],.0006)
- args.output.parent.mkdir(parents=True,exist_ok=True);args.output.write_text(json.dumps(results,ensure_ascii=False,indent=2));print(len(results),'independent checks; M31 original draw discrepancy recorded')
+ args.output.parent.mkdir(parents=True,exist_ok=True);args.output.write_text(json.dumps(results,ensure_ascii=False,indent=2));print(len(results),'independent checks; M31 regenerated histogram count verified')
 if __name__=='__main__':main()

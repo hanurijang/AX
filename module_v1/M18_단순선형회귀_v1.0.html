@@ -238,6 +238,15 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
 .refs .refsource small{font-size:11px;font-weight:600;white-space:nowrap}
 .refs .refmeta{font-size:12px;color:var(--gray);line-height:1.45;margin-top:2px}
 .refs a:focus-visible{outline:2px solid var(--navy);outline-offset:2px;border-radius:2px}
+
+/* 그림·표 재작성 2단계: 벡터 그림과 의미 구조를 가진 수치표 */
+.v2-table{border-collapse:collapse;width:100%;font-size:13px;line-height:1.4;color:var(--navy);font-variant-numeric:tabular-nums}
+.v2-table caption{text-align:left;font-size:12px;font-weight:700;padding:0 0 5px}
+.v2-table th,.v2-table td{padding:5px 8px;border-bottom:1px solid var(--line);text-align:right}
+.v2-table th:first-child{text-align:left}.v2-table thead{background:#EEF2F7}
+.v2-controls{display:flex;gap:6px;flex-wrap:wrap;flex:0 0 auto}.v2-controls .mbtn{font-size:12px;padding:4px 10px}
+.v2-note{margin:0;font-size:12px;line-height:1.45;color:var(--gray)}
+
 </style>
 </head>
 <body>
@@ -443,10 +452,10 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
     <section class="slide bdpage" data-step="3" id="s-4-1d">
       <div class="sh"><div class="sec">4-1 회귀분석과 회귀계수</div><h2><span class="q">Q</span>회귀식의 불확실성은 어떤 구간으로 나타낼까요?</h2></div>
       <div class="body split even">
-        <div class="fig"><svg id="m18-band" viewBox="0 0 420 270" role="img" aria-label="각 x의 평균에 대한 점별 95% 신뢰구간과 새 관측값의 95% 예측구간"></svg></div>
+        <div class="figcol"><div class="v2-controls" id="m18-bands" aria-label="표시할 구간"><button type="button" class="mbtn" data-mode="0">평균의 신뢰구간</button><button type="button" class="mbtn" data-mode="1">새 관측의 예측구간</button><button type="button" class="mbtn" data-mode="2">함께 비교</button></div><div class="fig"><svg id="m18-band" viewBox="0 0 420 270" role="img" aria-label="평균의 점별 95% 신뢰구간과 새 관측 1개의 95% 예측구간. 버튼으로 각 구간을 선택할 수 있음"></svg></div><p class="v2-note" id="m18-band-summary" aria-live="polite"></p></div>
         <div class="side">
           <ul class="key"><li>신뢰구간: 특정 x에서의 모집단 평균 범위</li><li><b>예측구간</b>: 새 데이터가 들어갈 범위</li></ul>
-          <p class="exp">그림은 각 x의 모집단 평균에 대한 점별 95% 신뢰구간입니다. 고정한 x에서 같은 표집·계산을 반복할 때의 포함률이지, 직선 전체를 동시에 95%로 덮는 신뢰띠는 아닙니다. 예측구간은 같은 x에서 새 관측값 하나의 변동까지 더해 더 넓습니다. 정규·독립·등분산 등 모형 가정 아래 수학 80점의 평균 구간은 70.0~78.9점, 새 학생의 예측구간은 63.2~85.8점입니다.</p>
+          <p class="exp">그림은 각 x의 모집단 평균에 대한 점별 95% 신뢰구간입니다. 고정한 x에서 같은 표집·계산을 반복할 때의 포함률이지, 직선 전체를 동시에 95%로 덮는 신뢰띠는 아닙니다. 예측구간은 같은 x에서 새 관측값 하나의 변동까지 더해 더 넓습니다. 정규·독립·등분산 등 모형 가정 아래 수학 80점의 평균 구간은 70.0~78.9점, 새 학생의 예측구간은 63.2~85.8점입니다. 회색 부분은 관측한 수학 점수 범위(45~90점) 밖입니다.</p>
           <p class="next"><span>다음 질문</span>회귀식이 얼마나 잘 들어맞는지는?</p>
         </div>
       </div>
@@ -776,6 +785,12 @@ function flow(svg,names){
   el("text",{x:220,y:200,"text-anchor":"middle","font-size":12,fill:C.gray},svg,"본문 소단원을 배우는 순서");
 }
 /* 화면에 해당 id가 있을 때만 그립니다(모듈마다 쓰지 않는 그림은 건너뜀) */
+
+/* 이 그림군의 글자는 논리 크기 12px 이상으로 작성합니다. */
+function v2text(s,x,y,text,opts){opts=opts||{};return el("text",{x:x,y:y,"text-anchor":opts.anchor||"start","font-size":opts.size||12,"font-weight":opts.bold?800:600,fill:opts.color||C.navy,stroke:opts.halo?"#fff":"none","stroke-width":opts.halo?3:0,"paint-order":"stroke"},s,text);}
+function v2line(s,x1,y1,x2,y2,color,dash){return el("line",{x1:x1,y1:y1,x2:x2,y2:y2,stroke:color||C.gray2,"stroke-width":1.6,"stroke-dasharray":dash||"none"},s);}
+function v2desc(s,text){if(s.getAttribute("aria-label"))el("title",{},s,s.getAttribute("aria-label"));el("desc",{},s,text);}
+
 function on(id,fn){var e=document.getElementById(id);if(e)fn(e);}
 on("fig-flow",function(s){flow(s,["소단원 1","소단원 2","정리"]);});
 on("fig-case",function(s){barChart(s,CASE.values,{labels:true});});
@@ -862,14 +877,27 @@ on("m18-coef",function(s){
 });
 
 on("m18-band",function(s){
-  bxK(s,6,6,408,258);var X=linK(40,95,56,396),Y=linK(35,105,226,26);axesK(s,X,Y,40,95,35,105,[40,50,60,70,80,90],[40,60,80,100],"수학 x","과학 y");
-  function band(pred,fill){var up=[],lo=[];for(var i=0;i<=40;i++){var x=40+55*i/40,yh=yhK(x),h=TC8*seK(x,pred);up.push(X(x).toFixed(1)+" "+Y(yh+h).toFixed(1));lo.unshift(X(x).toFixed(1)+" "+Y(yh-h).toFixed(1));}
-    el("path",{d:"M"+up.concat(lo).join(" L")+"z",fill:fill,"fill-opacity":.55},s);}
-  band(true,"#D6E8F7");band(false,"#8CC0E6");
-  el("line",{x1:X(40),y1:Y(yhK(40)),x2:X(95),y2:Y(yhK(95)),stroke:"#C2416E","stroke-width":2.2},s);stuK(s,X,Y,C.navy,4.2);
-  el("line",{x1:X(80),x2:X(80),y1:Y(yhK(80)-TC8*seK(80,true)),y2:Y(yhK(80)+TC8*seK(80,true)),stroke:C.amber,"stroke-width":2},s);
-  tK(s,X(79),Y(48),"수학 80점 예측구간 63.2 ~ 85.8",{a:"end",fw:800,fs:10,c:C.amberInk,halo:true});
-  bxK(s,64,30,160,44,"#fff");el("rect",{x:72,y:38,width:14,height:10,fill:"#8CC0E6"},s);tK(s,92,47,"평균의 점별 95% 신뢰구간",{a:"start",fs:10,fw:700});el("rect",{x:72,y:56,width:14,height:10,fill:"#D6E8F7"},s);tK(s,92,65,"데이터의 95% 예측구간",{a:"start",fs:10,fw:700});
+  var mode=2,X=linK(40,95,50,396),Y=linK(25,110,226,28);
+  function draw(){clear(s);v2desc(s,"같은 회귀선에서 평균의 점별 신뢰구간보다 새 관측의 예측구간이 넓습니다. 강조한 수학 80점에서의 두 구간은 그림 아래 문장에 제공합니다.");
+    var clip=el("clipPath",{id:"v2-regression-clip"},el("defs",{},s));el("rect",{x:50,y:28,width:346,height:198},clip);
+    var obsMin=Math.min.apply(null,MATH),obsMax=Math.max.apply(null,MATH);
+    [[40,obsMin],[obsMax,95]].forEach(function(range){el("rect",{x:X(range[0]),y:28,width:X(range[1])-X(range[0]),height:198,fill:"#F0F1F3"},s);});
+    [obsMin,obsMax].forEach(function(v){v2line(s,X(v),28,X(v),226,C.gray2,"3 3");});
+    [40,60,80,100].forEach(function(v){v2line(s,50,Y(v),396,Y(v),C.grid);v2text(s,42,Y(v)+4,v,{anchor:"end"});});
+    [40,60,80,95].forEach(function(v){v2line(s,X(v),28,X(v),226,C.grid);v2text(s,X(v),245,v,{anchor:"middle"});});
+    v2text(s,12,15,"과학 점수 y");v2text(s,396,15,mode===2?"진한 띠: 평균 · 점선: 새 관측":mode===0?"평균의 점별 95% 구간":"새 관측의 95% 예측구간",{anchor:"end"});v2text(s,396,266,"수학 점수 x",{anchor:"end"});
+    var plot=el("g",{"clip-path":"url(#v2-regression-clip)"},s);
+    function band(pred){var upper=[],lower=[];for(var i=0;i<=100;i++){var x=40+55*i/100,y=yhK(x),h=TC8*seK(x,pred);upper.push([X(x),Y(y+h)].join(","));lower.unshift([X(x),Y(y-h)].join(","));}
+      el("path",{d:"M"+upper.concat(lower).join(" L")+"z",fill:pred?"#E2EAF5":"#9DB7D8",stroke:pred?"#667CA3":"#294B76","stroke-width":1.3,"stroke-dasharray":pred?"5 3":"none","data-band":pred?"prediction":"mean"},plot);}
+    if(mode!==0)band(true);if(mode!==1)band(false);
+    v2line(plot,X(40),Y(yhK(40)),X(95),Y(yhK(95)),"#9E2F59");stuK(plot,X,Y,C.navy,4.2);
+    v2line(plot,X(80),28,X(80),226,C.amberInk,"3 3");
+    var meanLo=yhK(80)-TC8*seK(80,false),meanHi=yhK(80)+TC8*seK(80,false),predLo=yhK(80)-TC8*seK(80,true),predHi=yhK(80)+TC8*seK(80,true);
+    document.getElementById("m18-band-summary").textContent="수학 80점: 평균의 점별 95% 구간 "+meanLo.toFixed(1)+"~"+meanHi.toFixed(1)+"점 · 새 관측의 95% 예측구간 "+predLo.toFixed(1)+"~"+predHi.toFixed(1)+"점";
+    s.dataset.meanLow=meanLo;s.dataset.meanHigh=meanHi;s.dataset.predLow=predLo;s.dataset.predHigh=predHi;
+    document.querySelectorAll("#m18-bands button").forEach(function(b,i){b.classList.toggle("on",mode===i);b.setAttribute("aria-pressed",mode===i);});
+  }
+  document.querySelectorAll("#m18-bands button").forEach(function(b,i){b.onclick=function(){mode=i;draw();};});draw();
 });
 
 on("m18-r2",function(s){
