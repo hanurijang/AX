@@ -246,6 +246,18 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
 .refs .refsource small{font-size:11px;font-weight:600;white-space:nowrap}
 .refs .refmeta{font-size:12px;color:var(--gray);line-height:1.45;margin-top:2px}
 .refs a:focus-visible{outline:2px solid var(--navy);outline-offset:2px;border-radius:2px}
+/* V3_VISUAL_TOOLS: all styles stay inside each standalone module. */
+.v3-sr{position:absolute!important;width:1px!important;height:1px!important;padding:0!important;margin:-1px!important;overflow:hidden!important;clip:rect(0,0,0,0)!important;white-space:nowrap!important;border:0!important}
+.v3-data{border-collapse:collapse;width:100%;font-size:13px;line-height:1.35;color:var(--navy);font-variant-numeric:tabular-nums}
+.v3-data caption{text-align:left;font-size:12px;font-weight:800;padding:0 0 6px}.v3-data th,.v3-data td{padding:6px 8px;border-bottom:1px solid var(--line);text-align:right}.v3-data th:first-child,.v3-data td:first-child{text-align:left}.v3-data thead{background:#EEF2F7}.v3-data tbody th{font-weight:700}.v3-compact th,.v3-compact td{padding:2px 4px;line-height:1.25}
+.sumtbl tbody th{background:none;color:var(--navy);font-weight:800;padding:10px 14px;border-bottom:1px solid var(--line);vertical-align:top;border-radius:0!important}.sumtbl tbody td{padding:10px 14px}.sumtbl tbody tr:nth-child(even) th{background:#F8F9FB}
+.v3-controls{display:flex;flex-wrap:wrap;gap:6px;flex:0 0 auto}.v3-controls button{font:inherit;font-size:12px;border:1px solid #CBD2DD;background:white;color:#1B2A4A;padding:4px 9px;border-radius:6px;cursor:pointer}.v3-controls button[aria-pressed="true"]{background:#1B2A4A;color:white}
+.v3-open{font:inherit;font-size:12px;padding:6px 10px;color:#1B2A4A;background:white;border:1px solid #CBD2DD;border-radius:7px;cursor:pointer}.v3-open:disabled{opacity:.45;cursor:default}
+.v3-dialog{box-sizing:border-box;width:min(96vw,1100px);max-width:96vw;max-height:94vh;padding:18px;border:1px solid #CBD2DD;border-radius:12px;background:white;color:#1B2A4A;font-size:16px;font-family:"Noto Sans KR","Malgun Gothic",sans-serif}.v3-dialog::backdrop{background:rgba(15,23,42,.65)}
+.v3-dialog h2{display:block;font-size:20px;margin:0 0 14px;line-height:1.4}.v3-toolbar{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin:8px 0 12px}.v3-toolbar label{display:flex;align-items:center;gap:6px}.v3-toolbar select{max-width:min(70vw,500px);padding:6px;font:inherit}.v3-toolbar button{font:inherit;font-size:14px;padding:7px 12px;border:1px solid #94A3B8;border-radius:6px;background:white;color:#1B2A4A;cursor:pointer}.v3-toolbar input{width:120px}
+.v3-canvas{overflow:auto;border:1px solid #D6DBE5;border-radius:8px;max-height:62vh;background:white}.v3-sheet{box-sizing:border-box;padding:18px}.v3-sheet svg{display:block;width:100%;height:auto;background:white}.v3-sheet table{width:100%;font-size:16px!important;line-height:1.5}.v3-sheet th,.v3-sheet td{font-size:16px!important;line-height:1.5;padding:8px 10px}.v3-sheet caption{font-size:16px!important;line-height:1.5;text-align:left;margin-bottom:8px}.v3-dialog p{font-size:14px;line-height:1.5;margin:10px 0 0}.v3-dialog :focus-visible,.v3-open:focus-visible,.v3-controls button:focus-visible{outline:3px solid #225B85;outline-offset:3px}
+
+/* END_V3_VISUAL_CSS */
 </style>
 </head>
 <body>
@@ -537,7 +549,7 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
     <section class="slide bdpage" data-step="3" id="s-4-4b">
       <div class="sh"><div class="sec">4-4 가정 확장 · 추가 읽기</div><h2><span class="q">Q</span>SIR 모형의 가정을 바꾸면 무엇을 더 알 수 있을까요?</h2></div>
       <div class="body split even">
-        <div class="fig"><svg id="m36-ext" viewBox="0 0 420 270" role="img" aria-label="SIR 모형의 가정인 사람의 동질성, 무작위 접촉, 백신 없음을 연령 구조, 네트워크 구조, 백신 효과로 확장"></svg></div>
+        <div class="fig"><table class="v3-data v3-compact" id="m36-ext"></table></div>
         <div class="side">
           <ul class="key"><li>SIR은 가정한 조건에서 유행 경로를 계산합니다.</li><li>가정을 바꿔 현실 요소를 더함</li></ul>
           <p class="exp">SIR은 가정한 접촉·감염·이탈 구조 아래 시나리오를 비교하는 단순 모형입니다. 모형이 간단하거나 복잡하다는 이유만으로 현실 예측이 검증되지는 않습니다. 자료로 β·γ를 추정했다면 추정 불확실성과 새로운 자료에서의 적합성도 봅니다. 연령·교대조·네트워크·백신 구조를 추가할 수 있지만 더 많은 가정·자료·검증이 필요합니다. 이 모듈의 고정 계수 결과는 가상 시나리오이며 현장 대책의 실제 효과를 보장하지 않습니다.</p>
@@ -549,13 +561,13 @@ input[type=range]{flex:1;accent-color:var(--navy2);min-width:0;height:26px}
     <section class="slide" data-step="3" id="s-4-sum">
       <div class="sh"><div class="sec">4-5 정리</div><h2>규칙을 식으로 세우면 파라미터를 바꿔 미래를 탐색할 수 있습니다</h2></div>
       <div class="body full" style="align-content:center">
-        <table class="sumtbl">
-          <thead><tr><th>개념</th><th>핵심</th><th>이 모듈의 예</th></tr></thead>
+        <table class="sumtbl"><caption class="v3-sr">미분 방정식 모형 핵심 정리</caption>
+          <thead><tr><th scope="col">개념</th><th scope="col">핵심</th><th scope="col">이 모듈의 예</th></tr></thead>
           <tbody>
-            <tr><td>차분 방정식</td><td>x(k+1) = r·x(k), x(0)&gt;0, r≥0에서 r=1이 경계</td><td>5일마다 2배 → 50일 1,024명</td></tr>
-            <tr><td>미분 방정식·밀도 효과</td><td>a&gt;0, K&gt;0의 로지스틱: K는 안정, 0은 불안정</td><td>회복 없는 SI 가정에서 K = 1,000명</td></tr>
-            <tr><td>SIR 모형</td><td>S → I → R. I&gt;0에서 현재 증가 조건은 Rₜ=(β/γ)S/N&gt;1</td><td>R₀ 1.7, 정점 약 100명, 최종 약 692명</td></tr>
-            <tr><td>예측과 통제</td><td>Rₜ를 1 아래로, 규칙이 같다는 전제의 예측</td><td>접촉 절반 → Rₜ 0.74, 최종 236명</td></tr>
+            <tr><th scope="row">차분 방정식</th><td>x(k+1) = r·x(k), x(0)&gt;0, r≥0에서 r=1이 경계</td><td>5일마다 2배 → 50일 1,024명</td></tr>
+            <tr><th scope="row">미분 방정식·밀도 효과</th><td>a&gt;0, K&gt;0의 로지스틱: K는 안정, 0은 불안정</td><td>회복 없는 SI 가정에서 K = 1,000명</td></tr>
+            <tr><th scope="row">SIR 모형</th><td>S → I → R. I&gt;0에서 현재 증가 조건은 Rₜ=(β/γ)S/N&gt;1</td><td>R₀ 1.7, 정점 약 100명, 최종 약 692명</td></tr>
+            <tr><th scope="row">예측과 통제</th><td>Rₜ를 1 아래로, 규칙이 같다는 전제의 예측</td><td>접촉 절반 → Rₜ 0.74, 최종 236명</td></tr>
           </tbody>
         </table>
       </div>
@@ -777,6 +789,12 @@ function flow(svg,names){
   el("text",{x:220,y:200,"text-anchor":"middle","font-size":12,fill:C.gray},svg,"본문 소단원을 배우는 순서");
 }
 /* 화면에 해당 id가 있을 때만 그립니다(모듈마다 쓰지 않는 그림은 건너뜀) */
+/* V3: drawings use logical coordinates; data tables remain native HTML. */
+function v3text(s,x,y,t,o){o=o||{};return el("text",{x:x,y:y,"font-size":o.fs||12,"font-weight":o.bold?800:600,"text-anchor":o.a||"start",fill:o.c||C.navy,stroke:o.halo?"white":"none","stroke-width":o.halo?3:0,"paint-order":"stroke"},s,t);}
+function v3line(s,x1,y1,x2,y2,col,dash){return el("line",{x1:x1,x2:x2,y1:y1,y2:y2,stroke:col||C.navy3,"stroke-width":1.7,"stroke-dasharray":dash||"none"},s);}
+function v3desc(s,text){el("title",{},s,s.getAttribute("aria-label")||"그림");el("desc",{},s,text);}
+function v3table(root,caption,heads,rows){var table=root.tagName.toLowerCase()==="table"?root:document.createElement("table");table.classList.add("v3-data");table.replaceChildren();var cap=table.createCaption();cap.textContent=caption;var head=table.createTHead().insertRow();heads.forEach(function(h){var th=document.createElement("th");th.scope="col";th.textContent=h;head.appendChild(th);});var body=table.createTBody();rows.forEach(function(values){var tr=body.insertRow();values.forEach(function(v,j){var cell=document.createElement(j?"td":"th");if(!j)cell.scope="row";cell.textContent=v;tr.appendChild(cell);});});if(table!==root)root.appendChild(table);return table;}
+
 function on(id,fn){var e=document.getElementById(id);if(e)fn(e);}
 on("fig-flow",function(s){flow(s,["소단원 1","소단원 2","정리"]);});
 on("fig-case",function(s){barChart(s,CASE.values,{labels:true});});
@@ -804,7 +822,7 @@ function bxG(s,x,y,w,h,fill,stroke,rx){return el("rect",{x:x,y:y,width:w,height:
 function mkG(s,id,col){el("defs",{},s).innerHTML='<marker id="'+id+'" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10z" fill="'+col+'"/></marker>';}
 function arG(s,x1,y1,x2,y2,id,col){return el("line",{x1:x1,y1:y1,x2:x2,y2:y2,stroke:col||C.navy3,"stroke-width":2,"marker-end":"url(#"+id+")"},s);}
 var REDG="#B42318",GRNG="#23704F",BLUG="#2B8CC4",ORGG="#E0A100",PRPG="#7C3AED";
-function plG(pts,X,Y,cl){return pts.map(function(p,i){var y=p[1];if(cl!=null)y=Math.min(y,cl);return(i?"L":"M")+X(p[0]).toFixed(1)+" "+Y(y).toFixed(1);}).join(" ");}
+function plG(pts,X,Y){return pts.map(function(p,i){var y=p[1];return(i?"L":"M")+X(p[0]).toFixed(1)+" "+Y(y).toFixed(1);}).join(" ");}
 function fnG(f,a,b,n){var o=[];for(var i=0;i<=n;i++){var t=a+(b-a)*i/n;o.push([t,f(t)]);}return o;}
 /* SIR: RK4, dt 0.1, 하루 단위로 기록 */
 function sirG(b,g,T,sw){var S=NW-I0,I=I0,R=0,dt=0.1,out=[[0,S,I,R]],n=Math.round(1/dt);
@@ -851,8 +869,8 @@ on("m36-diff",function(s){
 
 on("m36-bif",function(s){
   bxG(s,4,4,204,262,"#F8F9FB");tG(s,106,24,"x(t+1) = r·x(t), x(0) = 10",{fw:800,fs:10});
-  var X=linG(0,15,24,198),Y=linG(0,40,232,40);[0,10,20,30,40].forEach(function(v){el("line",{x1:24,x2:198,y1:Y(v),y2:Y(v),stroke:C.grid},s);});
-  [[1.1,REDG,"r = 1.1"],[1.0,GRNG,"r = 1.0"],[0.8,BLUG,"r = 0.8"]].forEach(function(c,i){var p=[];for(var t=0;t<=15;t++)p.push([t,10*Math.pow(c[0],t)]);el("path",{d:plG(p,X,Y,40),fill:"none",stroke:c[1],"stroke-width":2.4},s);tG(s,198,[Y(40)+14,Y(10)-5,Y(0.35)-4][i],c[2],{a:"end",fs:9.5,fw:800,c:c[1],halo:true});});
+  var X=linG(0,15,24,198),Y=linG(0,50,232,40);[0,10,20,30,40,50].forEach(function(v){el("line",{x1:24,x2:198,y1:Y(v),y2:Y(v),stroke:C.grid},s);});
+  [[1.1,REDG,"r = 1.1"],[1.0,GRNG,"r = 1.0"],[0.8,BLUG,"r = 0.8"]].forEach(function(c,i){var p=[];for(var t=0;t<=15;t++)p.push([t,10*Math.pow(c[0],t)]);el("path",{d:plG(p,X,Y),fill:"none",stroke:c[1],"stroke-width":2.4},s);tG(s,198,[Y(42)+14,Y(10)-5,Y(0.35)-4][i],c[2],{a:"end",fs:9.5,fw:800,c:c[1],halo:true});});
   tG(s,106,252,"시각 t →",{fs:9.5,c:C.gray,fw:700});
   bxG(s,212,4,204,262,"#F8F9FB");tG(s,314,24,"분기 다이어그램",{fw:800,fs:11});
   var X2=linG(0,2,232,400);el("line",{x1:232,x2:400,y1:200,y2:200,stroke:C.navy},s);el("line",{x1:232,x2:232,y1:40,y2:200,stroke:C.navy},s);
@@ -865,9 +883,9 @@ on("m36-bif",function(s){
 });
 
 on("m36-ode",function(s){
-  var X=linG(0,20,44,250),Y=linG(0,30,124,10);[0,10,20,30].forEach(function(v){el("line",{x1:44,x2:250,y1:Y(v),y2:Y(v),stroke:C.grid},s);tG(s,39,Y(v)+3,v,{a:"end",fs:9,c:C.gray2,fw:500});});
+  var X=linG(0,20,44,250),Y=linG(0,90,124,10);[0,30,60,90].forEach(function(v){el("line",{x1:44,x2:250,y1:Y(v),y2:Y(v),stroke:C.grid},s);tG(s,39,Y(v)+3,v,{a:"end",fs:9,c:C.gray2,fw:500});});
   [0,10,20].forEach(function(t){tG(s,X(t),138,t,{fs:9,c:C.gray2,fw:500});});tG(s,250,148,"일",{a:"end",fs:9,c:C.gray,fw:700});
-  [[0.139,REDG,"a = 0.139"],[0,GRNG,"a = 0"],[-0.1,BLUG,"a = −0.1"]].forEach(function(c,i){el("path",{d:plG(fnG(function(t){return 5*Math.exp(c[0]*t);},0,20,60),X,Y,30),fill:"none",stroke:c[1],"stroke-width":2.4},s);tG(s,[X(13)-4,X(20)-2,X(20)-2][i],[Y(30)+12,Y(5)-5,Y(0.7)-3][i],c[2],{a:"end",fs:9.5,fw:800,c:c[1],halo:true});});
+  [[0.139,REDG,"a = 0.139"],[0,GRNG,"a = 0"],[-0.1,BLUG,"a = −0.1"]].forEach(function(c,i){el("path",{d:plG(fnG(function(t){return 5*Math.exp(c[0]*t);},0,20,60),X,Y),fill:"none",stroke:c[1],"stroke-width":2.4},s);tG(s,[X(13)-4,X(20)-2,X(20)-2][i],[Y(80)+12,Y(5)-22,Y(0.7)-3][i],c[2],{a:"end",fs:9.5,fw:800,c:c[1],halo:true});});
   bxG(s,264,10,152,124,"#F3F5F9");tG(s,340,32,"x(t) = x(0)e^(at)",{fw:800,fs:11});
   tG(s,340,58,"a > 0 → 지수적 증가",{fs:10,fw:700,c:REDG});tG(s,340,80,"a = 0 → 변하지 않음",{fs:10,fw:700,c:GRNG});tG(s,340,102,"a < 0 → 지수적 감소",{fs:10,fw:700,c:BLUG});tG(s,340,124,"x(0) = 5",{fs:9.5,fw:700,c:C.gray});
 });
@@ -875,7 +893,7 @@ on("m36-ode",function(s){
 on("m36-logi",function(s){
   var A=axG(s,50,410,20,226,100,20,1400,200),X=A[0],Y=A[1];tG(s,410,252,"경과 일수",{a:"end",fs:9.5,c:C.gray,fw:700});
   el("line",{x1:50,x2:410,y1:Y(1000),y2:Y(1000),stroke:GRNG,"stroke-width":1.5,"stroke-dasharray":"5 4"},s);tG(s,408,Y(1000)-5,"K = 1,000",{a:"end",fs:10,c:GRNG,fw:800,halo:true});
-  el("path",{d:plG(fnG(function(t){return Math.exp(A_EXP*t);},0,52.3,80),X,Y,1400),fill:"none",stroke:REDG,"stroke-width":2.6},s);
+  el("path",{d:plG(fnG(function(t){return Math.exp(A_EXP*t);},0,Math.log(1400)/A_EXP,80),X,Y),fill:"none",stroke:REDG,"stroke-width":2.6},s);
   el("path",{d:plG(fnG(logiG,0,100,100),X,Y),fill:"none",stroke:BLUG,"stroke-width":2.6},s);
   tG(s,X(50),Y(1300),"지수적 증가",{a:"end",fs:10.5,fw:800,c:REDG,halo:true});tG(s,X(74),Y(780),"로지스틱 방정식",{fs:10.5,fw:800,c:"#1C6EA4",halo:true});
   [40,50,70].map(function(t){return[t,Math.round(logiG(t))];}).forEach(function(p){el("circle",{cx:X(p[0]),cy:Y(p[1]),r:3.5,fill:BLUG},s);tG(s,X(p[0])+6,Y(p[1])+12,p[1]+"명",{a:"start",fs:9.5,fw:800,c:"#1C6EA4",halo:true});});
@@ -883,7 +901,7 @@ on("m36-logi",function(s){
 });
 
 on("m36-eq",function(s){
-  var X=linG(0,1300,40,300),Y=linG(-40,40,210,40),f=function(x){return A_EXP*x*(1-x/1000);};
+  var X=linG(0,1300,40,300),Y=linG(-60,40,210,40),f=function(x){return A_EXP*x*(1-x/1000);};
   el("line",{x1:40,x2:300,y1:Y(0),y2:Y(0),stroke:C.navy,"stroke-width":1.5},s);el("line",{x1:40,x2:40,y1:40,y2:210,stroke:C.navy},s);
   el("path",{d:plG(fnG(f,0,1300,80),X,Y),fill:"none",stroke:BLUG,"stroke-width":2.6},s);
   tG(s,44,50,"dx/dt",{a:"start",fs:10,fw:800});tG(s,300,Y(0)+16,"x",{a:"end",fs:10,fw:800});
@@ -930,11 +948,7 @@ on("m36-ctrl",function(s){
 });
 
 on("m36-ext",function(s){
-  mkG(s,"xG",C.navy3);
-  bxG(s,4,98,120,74,C.navy);tG(s,64,128,"SIR 모형",{fw:800,fs:13,c:"#fff"});tG(s,64,150,"가정을 검증하는 출발점",{fs:9.5,c:"#C9D3E6",fw:700});
-  var R=[["모두 동질하다","연령 구조","연령별 감염률·회복률",18],["접촉은 무작위","네트워크 구조","교대조·부서별 접촉",104],["대책 요소 없음","백신 효과","접종률에 따른 변화",190]];
-  R.forEach(function(r){arG(s,126,135,154,r[3]+30,"xG");bxG(s,158,r[3],100,60,"#F3F5F9");tG(s,208,r[3]+22,"가정",{fs:9,fw:700,c:C.gray});tG(s,208,r[3]+42,r[0],{fs:10,fw:800});
-    arG(s,260,r[3]+30,282,r[3]+30,"xG");bxG(s,286,r[3],130,60,"#E3F1EA");tG(s,351,r[3]+24,r[1],{fs:11,fw:800,c:GRNG});tG(s,351,r[3]+44,r[2],{fs:9.5,fw:700});});
+  v3table(s,'SIR 가정을 바꾸면 상태·식·필요 자료도 달라짐',['기본 가정','확장 방향','추가로 필요한 정보'],[['동질적인 사람','연령·집단별 구분','집단별 전파·회복률'],['무작위 접촉','접촉망 모형','누가 누구와 접촉하는가'],['백신 효과 없음','접종·면역 상태 추가','접종률·효과·면역 지속']]);
 });
 
 /* 실습 1 · SIR 조작(조작형) */
@@ -1188,6 +1202,54 @@ p3d();
 })();
 show(0);
 })();
+</script>
+<script data-visual-tools="3">
+/* V3_VISUAL_TOOLS: current-state snapshots; no external resources or requests. */
+(function(){
+"use strict";
+var stage=document.querySelector('.stage'),vp=document.querySelector('.viewport'),footer=document.querySelector('.bottombar');
+if(!stage||!vp||!footer)return;
+vp.querySelectorAll('.slide svg:not([aria-hidden="true"])').forEach(function(svg,i){svg.setAttribute('role','img');if(!svg.getAttribute('aria-label')&&!svg.getAttribute('aria-labelledby')){var title=svg.closest('.slide').querySelector('h2');svg.setAttribute('aria-label',(title?title.textContent.replace(/^Q\s*/, ''):'학습 그림')+' · 그림 '+(i+1));}});
+var opener=document.createElement('button');opener.type='button';opener.className='v3-open';opener.textContent='그림·표 크게 보기';opener.setAttribute('aria-haspopup','dialog');opener.setAttribute('aria-controls','v3-visual-dialog');footer.insertBefore(opener,footer.querySelector('.spacer'));
+var dialog=document.createElement('dialog');dialog.id='v3-visual-dialog';dialog.className='v3-dialog';dialog.setAttribute('aria-labelledby','v3-visual-heading');
+dialog.innerHTML='<h2 id="v3-visual-heading">그림·표 크게 보기</h2><div class="v3-toolbar"><label>대상 <select id="v3-visual-select"></select></label><label>배율 <input id="v3-visual-zoom" type="range" min="100" max="250" step="25" value="100"><output id="v3-visual-scale">100%</output></label><button type="button" id="v3-visual-close">닫기</button></div><div class="v3-canvas" tabindex="0" aria-label="확대한 그림·표. 내용이 넓으면 가로로 스크롤하세요"><div class="v3-sheet"></div></div><div class="v3-toolbar"><button type="button" id="v3-visual-svg">SVG 저장</button><button type="button" id="v3-visual-png">고해상도 PNG 저장</button></div><p id="v3-visual-note" role="status" aria-live="polite"></p>';
+document.body.appendChild(dialog);
+var select=dialog.querySelector('select'),zoom=dialog.querySelector('input'),sheet=dialog.querySelector('.v3-sheet'),canvas=dialog.querySelector('.v3-canvas'),note=dialog.querySelector('#v3-visual-note'),svgButton=dialog.querySelector('#v3-visual-svg'),pngButton=dialog.querySelector('#v3-visual-png'),items=[],snapshot=null,busy=false;
+function activeItems(){var slide=vp.querySelector('.slide.on');return slide?[].slice.call(slide.querySelectorAll('svg,table')):[];}
+function update(){opener.disabled=!activeItems().length;}
+function label(e,i){return (e.getAttribute('aria-label')||(e.querySelector('caption')&&e.querySelector('caption').textContent)||((e.tagName.toLowerCase()==='svg'?'그림 ':'표 ')+(i+1))).trim();}
+function snapshotOf(source){
+ var clone=source.cloneNode(true),original=[source].concat([].slice.call(source.querySelectorAll('*'))),copies=[clone].concat([].slice.call(clone.querySelectorAll('*'))),ids={};
+ original.forEach(function(e,i){var c=copies[i];if(e.id)ids[e.id]='v3-copy-'+i+'-'+e.id;
+  if(source.tagName.toLowerCase()==='svg'){var cs=getComputedStyle(e);['font-family','font-size','font-weight','font-style','fill','fill-opacity','stroke','stroke-width','stroke-opacity','stroke-dasharray','text-anchor','paint-order'].forEach(function(k){c.style.setProperty(k,cs.getPropertyValue(k));});}
+ });
+ copies.forEach(function(e){if(e.id)e.id=ids[e.id];if(e.getAttribute('role')==='button'){e.removeAttribute('role');e.removeAttribute('tabindex');e.style.cursor='default';}[].slice.call(e.attributes).forEach(function(a){var value=a.value.replace(/url\(["']?#([^)'"\s]+)["']?\)/g,function(m,id){return 'url(#'+(ids[id]||id)+')';});
+  if(a.name==='href'||a.name==='xlink:href')value=value.replace(/^#(.+)$/,function(m,id){return '#'+(ids[id]||id);});
+  if(a.name==='aria-labelledby'||a.name==='aria-describedby')value=value.split(/\s+/).map(function(id){return ids[id]||id;}).join(' ');e.setAttribute(a.name,value);});
+ });
+ if(source.tagName.toLowerCase()==='svg'){var box=source.viewBox.baseVal;clone.setAttribute('xmlns','http://www.w3.org/2000/svg');clone.setAttribute('width',box.width);clone.setAttribute('height',box.height);clone.style.background='white';}
+ else{var caption=clone.querySelector('caption');if(caption){caption.classList.remove('v3-sr');caption.removeAttribute('style');}}
+ return clone;
+}
+function resize(){sheet.style.width=Math.max(640,canvas.clientWidth)*Number(zoom.value)/100+'px';dialog.querySelector('output').textContent=zoom.value+'%';}
+function render(){sheet.replaceChildren();snapshot=snapshotOf(items[Number(select.value)]);sheet.appendChild(snapshot);var isSVG=snapshot.tagName.toLowerCase()==='svg';svgButton.disabled=!isSVG;pngButton.disabled=!isSVG;note.textContent=isSVG?'현재 그림의 상태입니다. SVG는 벡터 원본이며, PNG는 가로·세로 중 긴 변을 3,840픽셀로 저장합니다.':'현재 표의 상태입니다. 표의 제목·행·열 머리글과 값을 크게 읽거나 복사할 수 있습니다.';resize();}
+opener.onclick=function(){items=activeItems();if(!items.length)return;select.replaceChildren();items.forEach(function(e,i){var option=document.createElement('option');option.value=i;option.textContent=label(e,i);select.appendChild(option);});zoom.value='100';dialog.showModal();render();select.focus();};
+function cleanup(){sheet.replaceChildren();snapshot=null;opener.focus();}
+function closeViewer(){dialog.close();cleanup();}
+select.onchange=render;zoom.oninput=resize;dialog.querySelector('#v3-visual-close').onclick=function(){closeViewer();};
+document.addEventListener('keydown',function(e){if(dialog.open&&!dialog.contains(e.target)){e.stopImmediatePropagation();if(e.key==='Escape'){e.preventDefault();closeViewer();}else{if(['Tab','ArrowRight','ArrowLeft','PageDown','PageUp'].indexOf(e.key)>=0)e.preventDefault();select.focus();}}},true);
+dialog.addEventListener('keydown',function(e){e.stopPropagation();if(e.key==='Tab'){var focusable=[].slice.call(dialog.querySelectorAll('button:not(:disabled),select:not(:disabled),input:not(:disabled),[tabindex="0"]')),first=focusable[0],last=focusable[focusable.length-1];if(e.shiftKey&&document.activeElement===first){e.preventDefault();last.focus();}else if(!e.shiftKey&&document.activeElement===last){e.preventDefault();first.focus();}}if(e.key==='Escape'){e.preventDefault();closeViewer();}});
+dialog.addEventListener('close',function(){if(!dialog.open&&snapshot)cleanup();});
+function download(blob,suffix,index){var url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download=document.title.replace(/[\\/:*?"<>|]/g,'-')+'-figure-'+(index==null?Number(select.value)+1:index)+suffix;a.click();setTimeout(function(){URL.revokeObjectURL(url);},1500);}
+function xml(){return new XMLSerializer().serializeToString(snapshot);}
+svgButton.onclick=function(){if(snapshot)download(new Blob([xml()],{type:'image/svg+xml;charset=utf-8'}),'.svg');};
+pngButton.onclick=function(){if(!snapshot||busy)return;busy=true;pngButton.disabled=true;select.focus();var exportIndex=Number(select.value)+1,saved=snapshot.cloneNode(true),box=saved.viewBox.baseVal,scale=3840/Math.max(box.width,box.height),width=Math.round(box.width*scale),height=Math.round(box.height*scale);saved.setAttribute('width',width);saved.setAttribute('height',height);var url=URL.createObjectURL(new Blob([new XMLSerializer().serializeToString(saved)],{type:'image/svg+xml;charset=utf-8'})),img=new Image();
+ img.onload=function(){var out=document.createElement('canvas');out.width=width;out.height=height;var context=out.getContext('2d');context.fillStyle='white';context.fillRect(0,0,width,height);context.drawImage(img,0,0,width,height);out.toBlob(function(blob){if(blob)download(blob,'.png',exportIndex);note.textContent='PNG '+width+' × '+height+'픽셀을 저장했습니다.';busy=false;pngButton.disabled=!(snapshot&&snapshot.tagName.toLowerCase()==='svg');URL.revokeObjectURL(url);},'image/png');};
+ img.onerror=function(){URL.revokeObjectURL(url);busy=false;pngButton.disabled=false;note.textContent='PNG를 만들지 못했습니다. SVG 저장을 이용해 주세요.';};img.src=url;
+};
+new MutationObserver(update).observe(vp,{subtree:true,attributes:true,attributeFilter:['class']});update();
+})();
+
 </script>
 </body>
 </html>
